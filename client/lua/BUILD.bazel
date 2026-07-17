@@ -3,6 +3,8 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:lua.bzl", "lua_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
+exports_files(["CHANGES.txt"])
+
 pkg_zip(
     name = "lua",
     out = "krpc-lua-%s.zip" % version,

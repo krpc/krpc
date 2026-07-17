@@ -16,8 +16,10 @@ This document details the steps necessary to make a release of kRPC.
 1. Do the release on Github:
    1. Use `tools/dist/changes.py github` to get changelog to include with the release
    1. Upload the assets from the `assets` directory (11 files in total)
-1. Update the documentation website by merging the vx.x.x commit into the docs branch.
-   Push it to GitHub. The docs GitHub workflow should automatically build and deploy the new website.
+1. Update the documentation website by pushing the `vx.x.x` tag (done above). The docs GitHub
+   workflow builds the docs and freezes them under `/<version>/`, then regenerates the version
+   dropdown so the new release appears in every already-published page. Merges to `main` separately
+   refresh the rolling `/dev/` build. No manual `docs`-branch merge is needed any more.
 1. Do a release on Curse
 1. Do a release on SpaceDock
 1. Bump the version number on [KSP AVC online](https://ksp-avc.cybutek.net/)

@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+#if NET
+using System.IO.Ports;
+#else
 using KRPC.IO.Ports;
+#endif
 using KRPC.Utils;
 
 namespace KRPC.Server.SerialIO

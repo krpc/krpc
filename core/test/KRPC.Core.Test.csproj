@@ -1,48 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\NUnit.3.13.3\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{960F5B49-BB1D-476B-8B60-99BEBAA83CB2}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>KRPC.Test</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>KRPC.Core.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <NoStdLib>true</NoStdLib>
-    <DebugType>portable</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <RootNamespace>KRPC.Test</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
   <ItemGroup>
     <ProjectReference Include="..\src\KRPC.Core.csproj">
       <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
       <Name>KRPC.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\ksplibs.props" />
   <ItemGroup>
     <Reference Include="Google.Protobuf">
       <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
       <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>$(bazel-external)\+http_archive+csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
-      <Package>nunit</Package>
     </Reference>
     <Reference Include="Moq">
       <HintPath>$(bazel-external)\+http_archive+csharp_moq\lib\net462\Moq.dll</HintPath>
@@ -110,8 +92,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\KRPC\" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

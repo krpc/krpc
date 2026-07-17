@@ -1,3 +1,21 @@
+v3.9.1
+ * Add python-is-python3, providing a `python` executable for the CI
+   version-stamping step in the build-setup action
+
+v3.9.0
+ * Replace mono with a system .NET SDK (the KRPC.sln consumer build now uses
+   `dotnet build`)
+ * Remove dotnet SDK/runtime (rules_dotnet is hermetic)
+ * Remove cppcheck (replaced by clang-tidy), maven and openjdk-11-jdk
+   (rules_jvm_external + remotejdk_11)
+ * Remove python3 dev/venv and python-is-python3 (hermetic rules_python)
+ * Install system LLVM (clang-20 from apt.llvm.org) and build the C/C++ clients
+   against it in CI (--config=system-llvm) instead of downloading the ~2 GB
+   hermetic LLVM release; dev keeps the hermetic toolchain by default
+ * Cache Bazel's downloaded archives (a small --repository_cache) between CI jobs
+   instead of the huge extracted output base, to stay under the GitHub Actions
+   10 GB cache cap
+
 v3.8.1
  * Add graphviz for dot graph generation in documentation
 

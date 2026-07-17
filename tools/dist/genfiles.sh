@@ -18,13 +18,9 @@ zip -r -MM $FILE \
     bazel-bin/client/csharp/Services/ \
     bazel-bin/service/*/AssemblyInfo.cs \
     bazel-bin/tools/*/AssemblyInfo.cs \
-    bazel-krpc/external/+http_archive+csharp_protobuf_unity \
-    bazel-krpc/external/+http_archive+csharp_protobuf \
-    bazel-krpc/external/+http_archive+csharp_nunit \
-    bazel-krpc/external/+http_archive+csharp_moq \
     bazel-krpc/external/+http_archive+csharp_json \
+    bazel-krpc/external/+http_archive+csharp_moq \
     bazel-krpc/external/+http_archive+csharp_options \
-    bazel-krpc/external/+http_archive+csharp_castle_core \
+    bazel-krpc/external/+http_archive+ksp/KSP_Data/Managed \
     bazel-bin/tools/build/ksp/Google.Protobuf.dll \
-    bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll \
-    bazel-bin/tools/build/mono-4.5/Google.Protobuf.dll
+    bazel-bin/tools/build/ksp/KRPC.IO.Ports.dll

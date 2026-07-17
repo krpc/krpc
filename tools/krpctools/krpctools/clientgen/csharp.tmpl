@@ -170,12 +170,14 @@ namespace KRPC.Client.Services.{{ service_name }}
         {
         }
 
+#if !NET
         /// <summary>
         /// Construct an {{ exception_name }} with the given serialization info and streaming context.
         /// </summary>
         protected {{ exception_name }} (SerializationInfo info, StreamingContext context) : base (info, context)
         {
         }
+#endif
     }
     {% endfor %}
     {% for class_name,cls in classes.items() %}

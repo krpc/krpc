@@ -1,6 +1,5 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
-
 #include <krpc_cnano.h>
 #include <krpc_cnano/decoder.h>
 #include <krpc_cnano/encoder.h>
@@ -15,97 +14,115 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-
 #include "services/test_service.h"
 #include "testing_tools.hpp"
 
-static pb_istream_t create_istream(uint8_t * buffer, std::string data) {
+static pb_istream_t create_istream(uint8_t* buffer, std::string data) {
   unhexlify(buffer, data);
-  return pb_istream_from_buffer(buffer, data.size()/2);
+  return pb_istream_from_buffer(buffer, data.size() / 2);
 }
 
-static pb_ostream_t create_ostream(uint8_t * buffer, size_t size) {
+static pb_ostream_t create_ostream(uint8_t* buffer, size_t size) {
   return pb_ostream_from_buffer(buffer, size);
 }
 
-template <typename T> krpc_error_t encode_value(pb_ostream_t * stream, T value) {
+template <typename T>
+krpc_error_t encode_value(pb_ostream_t* stream, T value) {
   return KRPC_ERROR_ENCODING_FAILED;
 }
 
-template <> krpc_error_t encode_value<int32_t>(pb_ostream_t * stream, int32_t value) {
+template <>
+krpc_error_t encode_value<int32_t>(pb_ostream_t* stream, int32_t value) {
   return krpc_encode_int32(stream, value);
 }
 
-template <> krpc_error_t encode_value<int64_t>(pb_ostream_t * stream, int64_t value) {
+template <>
+krpc_error_t encode_value<int64_t>(pb_ostream_t* stream, int64_t value) {
   return krpc_encode_int64(stream, value);
 }
 
-template <> krpc_error_t encode_value<uint32_t>(pb_ostream_t * stream, uint32_t value) {
+template <>
+krpc_error_t encode_value<uint32_t>(pb_ostream_t* stream, uint32_t value) {
   return krpc_encode_uint32(stream, value);
 }
 
-template <> krpc_error_t encode_value<uint64_t>(pb_ostream_t * stream, uint64_t value) {
+template <>
+krpc_error_t encode_value<uint64_t>(pb_ostream_t* stream, uint64_t value) {
   return krpc_encode_uint64(stream, value);
 }
 
-template <> krpc_error_t encode_value<bool>(pb_ostream_t * stream, bool value) {
+template <>
+krpc_error_t encode_value<bool>(pb_ostream_t* stream, bool value) {
   return krpc_encode_bool(stream, value);
 }
 
-template <typename T> krpc_error_t encode_size_value(size_t * size, T value) {
+template <typename T>
+krpc_error_t encode_size_value(size_t* size, T value) {
   return KRPC_ERROR_ENCODING_FAILED;
 }
 
-template <> krpc_error_t encode_size_value<int32_t>(size_t * size, int32_t value) {
+template <>
+krpc_error_t encode_size_value<int32_t>(size_t* size, int32_t value) {
   return krpc_encode_size_int32(size, value);
 }
 
-template <> krpc_error_t encode_size_value<int64_t>(size_t * size, int64_t value) {
+template <>
+krpc_error_t encode_size_value<int64_t>(size_t* size, int64_t value) {
   return krpc_encode_size_int64(size, value);
 }
 
-template <> krpc_error_t encode_size_value<uint32_t>(size_t * size, uint32_t value) {
+template <>
+krpc_error_t encode_size_value<uint32_t>(size_t* size, uint32_t value) {
   return krpc_encode_size_uint32(size, value);
 }
 
-template <> krpc_error_t encode_size_value<uint64_t>(size_t * size, uint64_t value) {
+template <>
+krpc_error_t encode_size_value<uint64_t>(size_t* size, uint64_t value) {
   return krpc_encode_size_uint64(size, value);
 }
 
-template <> krpc_error_t encode_size_value<bool>(size_t * size, bool value) {
+template <>
+krpc_error_t encode_size_value<bool>(size_t* size, bool value) {
   return krpc_encode_size_bool(size, value);
 }
 
-template <typename T> krpc_error_t decode_value(pb_istream_t * stream, T * value) {
+template <typename T>
+krpc_error_t decode_value(pb_istream_t* stream, T* value) {
   return KRPC_ERROR_ENCODING_FAILED;
 }
 
-template <> krpc_error_t decode_value<int32_t>(pb_istream_t * stream, int32_t * value) {
+template <>
+krpc_error_t decode_value<int32_t>(pb_istream_t* stream, int32_t* value) {
   return krpc_decode_int32(stream, value);
 }
 
-template <> krpc_error_t decode_value<int64_t>(pb_istream_t * stream, int64_t * value) {
+template <>
+krpc_error_t decode_value<int64_t>(pb_istream_t* stream, int64_t* value) {
   return krpc_decode_int64(stream, value);
 }
 
-template <> krpc_error_t decode_value<uint32_t>(pb_istream_t * stream, uint32_t * value) {
+template <>
+krpc_error_t decode_value<uint32_t>(pb_istream_t* stream, uint32_t* value) {
   return krpc_decode_uint32(stream, value);
 }
 
-template <> krpc_error_t decode_value<uint64_t>(pb_istream_t * stream, uint64_t * value) {
+template <>
+krpc_error_t decode_value<uint64_t>(pb_istream_t* stream, uint64_t* value) {
   return krpc_decode_uint64(stream, value);
 }
 
-template <> krpc_error_t decode_value<bool>(pb_istream_t * stream, bool * value) {
+template <>
+krpc_error_t decode_value<bool>(pb_istream_t* stream, bool* value) {
   return krpc_decode_bool(stream, value);
 }
 
-template<typename T> void test_value(T decoded, std::string encoded) {
+template <typename T>
+void test_value(T decoded, std::string encoded) {
   uint8_t data[8];
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, encode_size_value<T>(&size, decoded));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
   }
   {
     pb_ostream_t stream = create_ostream(data, sizeof(data));
@@ -125,7 +142,7 @@ void test_float(float decoded, std::string encoded) {
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_float(&size, decoded));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
   }
   {
     pb_ostream_t stream = create_ostream(data, sizeof(data));
@@ -148,7 +165,7 @@ void test_double(double decoded, std::string encoded) {
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_double(&size, decoded));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
   }
   {
     pb_ostream_t stream = create_ostream(data, sizeof(data));
@@ -167,12 +184,12 @@ void test_double(double decoded, std::string encoded) {
 }
 
 void test_string(std::string decoded, std::string encoded) {
-  const char * string = decoded.c_str();
+  const char* string = decoded.c_str();
   uint8_t data[256];
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_string(&size, string));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
   }
   {
     pb_ostream_t stream = create_ostream(data, sizeof(data));
@@ -181,7 +198,7 @@ void test_string(std::string decoded, std::string encoded) {
   }
   {
     pb_istream_t stream = create_istream(data, encoded);
-    char * value = nullptr;
+    char* value = nullptr;
     ASSERT_EQ(KRPC_OK, krpc_decode_string(&stream, &value));
     ASSERT_STREQ(decoded.c_str(), value);
     krpc_free(value);
@@ -194,7 +211,7 @@ void test_bytes(std::string decoded, std::string encoded) {
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_bytes(&size, bytes));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
   }
   {
     pb_ostream_t stream = create_ostream(data, sizeof(data));
@@ -209,29 +226,29 @@ void test_bytes(std::string decoded, std::string encoded) {
     if (decoded.size() == 0) {
       ASSERT_EQ(0u, value.size);
     } else {
-      for (size_t i = 0; i < decoded.size(); i++)
-        ASSERT_EQ((uint8_t)(decoded[i]), value.data[i]);
+      for (size_t i = 0; i < decoded.size(); i++) ASSERT_EQ((uint8_t)(decoded[i]), value.data[i]);
     }
     KRPC_FREE_BYTES(value);
   }
 }
 
-template <typename T> void test_list(const std::vector<T>& decoded, std::string encoded) {
+template <typename T>
+void test_list(const std::vector<T>& decoded, std::string encoded) {
   assert(false);
 }
 
-template <> void test_list(const std::vector<int32_t>& decoded, std::string encoded) {
+template <>
+void test_list(const std::vector<int32_t>& decoded, std::string encoded) {
   uint8_t data[256];
   {
     krpc_list_int32_t value;
     value.size = decoded.size();
     value.items = new int32_t[decoded.size()];
-    for (size_t i = 0; i < value.size; i++)
-      value.items[i] = decoded[i];
+    for (size_t i = 0; i < value.size; i++) value.items[i] = decoded[i];
 
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_list_int32(&size, &value));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
 
     pb_ostream_t stream = create_ostream(data, sizeof(data));
     ASSERT_EQ(KRPC_OK, krpc_encode_list_int32(&stream, &value));
@@ -245,25 +262,23 @@ template <> void test_list(const std::vector<int32_t>& decoded, std::string enco
     krpc_list_int32_t value = KRPC_NULL_LIST;
     ASSERT_EQ(KRPC_OK, krpc_decode_list_int32(&stream, &value));
     ASSERT_EQ(decoded.size(), value.size);
-    for (size_t i = 0; i < decoded.size(); i++)
-      ASSERT_EQ(decoded[i], value.items[i]);
+    for (size_t i = 0; i < decoded.size(); i++) ASSERT_EQ(decoded[i], value.items[i]);
     KRPC_FREE_LIST(value);
   }
 }
 
-template <> void test_list(
-  const std::vector<krpc_TestService_TestClass_t>& decoded, std::string encoded) {
+template <>
+void test_list(const std::vector<krpc_TestService_TestClass_t>& decoded, std::string encoded) {
   uint8_t data[256];
   {
     krpc_list_object_t value;
     value.size = decoded.size();
     value.items = new krpc_TestService_TestClass_t[decoded.size()];
-    for (size_t i = 0; i < value.size; i++)
-      value.items[i] = decoded[i];
+    for (size_t i = 0; i < value.size; i++) value.items[i] = decoded[i];
 
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_list_object(&size, &value));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
 
     pb_ostream_t stream = create_ostream(data, sizeof(data));
     ASSERT_EQ(KRPC_OK, krpc_encode_list_object(&stream, &value));
@@ -276,19 +291,18 @@ template <> void test_list(
     krpc_list_object_t value = KRPC_NULL_LIST;
     ASSERT_EQ(KRPC_OK, krpc_decode_list_object(&stream, &value));
     ASSERT_EQ(decoded.size(), value.size);
-    for (size_t i = 0; i < decoded.size(); i++)
-      ASSERT_EQ(decoded[i], value.items[i]);
+    for (size_t i = 0; i < decoded.size(); i++) ASSERT_EQ(decoded[i], value.items[i]);
     KRPC_FREE_LIST(value);
   }
 }
 
-template <typename K, typename V> void test_dictionary(
-  const std::map<K, V>& decoded, std::string encoded) {
+template <typename K, typename V>
+void test_dictionary(const std::map<K, V>& decoded, std::string encoded) {
   assert(false);
 }
 
-template <> void test_dictionary(
-  const std::map<std::string, int32_t>& decoded, std::string encoded) {
+template <>
+void test_dictionary(const std::map<std::string, int32_t>& decoded, std::string encoded) {
   uint8_t data[256];
   {
     krpc_dictionary_string_int32_t value;
@@ -296,7 +310,7 @@ template <> void test_dictionary(
     value.entries = new krpc_dictionary_entry_string_int32_t[decoded.size()];
     size_t i = 0;
     for (auto entry : decoded) {
-      auto str = new char[entry.first.size()+1];
+      auto str = new char[entry.first.size() + 1];
       strncpy(str, entry.first.c_str(), entry.first.size());
       str[entry.first.size()] = '\0';
       value.entries[i].key = str;
@@ -306,14 +320,13 @@ template <> void test_dictionary(
 
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_dictionary_string_int32(&size, &value));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
 
     pb_ostream_t stream = create_ostream(data, sizeof(data));
     ASSERT_EQ(KRPC_OK, krpc_encode_dictionary_string_int32(&stream, &value));
     ASSERT_EQ(encoded, hexlify(data, stream.bytes_written));
 
-    for (i = 0; i < decoded.size(); i++)
-      delete[] value.entries[i].key;
+    for (i = 0; i < decoded.size(); i++) delete[] value.entries[i].key;
     delete[] value.entries;
   }
   {
@@ -323,22 +336,23 @@ template <> void test_dictionary(
     ASSERT_EQ(decoded.size(), value.size);
     std::map<std::string, int32_t> actual;
     for (size_t i = 0; i < value.size; i++) {
-      auto entry = value.entries+i;
+      auto entry = value.entries + i;
       actual[std::string(entry->key)] = entry->value;
     }
     ASSERT_EQ(decoded.size(), actual.size());
     ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), actual.begin()));
-    for (size_t i = 0; i < value.size; i++)
-      krpc_free(value.entries[i].key);
+    for (size_t i = 0; i < value.size; i++) krpc_free(value.entries[i].key);
     KRPC_FREE_DICTIONARY(value);
   }
 }
 
-template <typename T> void test_set(const std::set<T>& decoded, std::string encoded) {
+template <typename T>
+void test_set(const std::set<T>& decoded, std::string encoded) {
   assert(false);
 }
 
-template <> void test_set(const std::set<int32_t>& decoded, std::string encoded) {
+template <>
+void test_set(const std::set<int32_t>& decoded, std::string encoded) {
   uint8_t data[256];
   {
     krpc_set_int32_t value;
@@ -352,7 +366,7 @@ template <> void test_set(const std::set<int32_t>& decoded, std::string encoded)
 
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_set_int32(&size, &value));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
 
     pb_ostream_t stream = create_ostream(data, sizeof(data));
     ASSERT_EQ(KRPC_OK, krpc_encode_set_int32(&stream, &value));
@@ -366,8 +380,7 @@ template <> void test_set(const std::set<int32_t>& decoded, std::string encoded)
     ASSERT_EQ(KRPC_OK, krpc_decode_set_int32(&stream, &value));
     ASSERT_EQ(decoded.size(), value.size);
     std::set<int32_t> actual;
-    for (size_t i = 0; i < value.size; i++)
-      actual.insert(value.items[i]);
+    for (size_t i = 0; i < value.size; i++) actual.insert(value.items[i]);
     ASSERT_EQ(decoded.size(), actual.size());
     ASSERT_TRUE(std::equal(decoded.begin(), decoded.end(), actual.begin()));
     KRPC_FREE_SET(value);
@@ -379,7 +392,7 @@ void test_tuple_int32_int64(const krpc_tuple_int32_int64_t& decoded, std::string
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_tuple_int32_int64(&size, &decoded));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
 
     pb_ostream_t stream = create_ostream(data, sizeof(data));
     ASSERT_EQ(KRPC_OK, krpc_encode_tuple_int32_int64(&stream, &decoded));
@@ -387,7 +400,7 @@ void test_tuple_int32_int64(const krpc_tuple_int32_int64_t& decoded, std::string
   }
   {
     pb_istream_t stream = create_istream(data, encoded);
-    krpc_tuple_int32_int64_t value = { 0, 0 };
+    krpc_tuple_int32_int64_t value = {0, 0};
     ASSERT_EQ(KRPC_OK, krpc_decode_tuple_int32_int64(&stream, &value));
     ASSERT_EQ(decoded.e0, value.e0);
     ASSERT_EQ(decoded.e1, value.e1);
@@ -399,7 +412,7 @@ void test_tuple_int32_bool(const krpc_tuple_int32_bool_t& decoded, std::string e
   {
     size_t size = 0;
     ASSERT_EQ(KRPC_OK, krpc_encode_size_tuple_int32_bool(&size, &decoded));
-    ASSERT_EQ(size, encoded.size()/2);
+    ASSERT_EQ(size, encoded.size() / 2);
 
     pb_ostream_t stream = create_ostream(data, sizeof(data));
     ASSERT_EQ(KRPC_OK, krpc_encode_tuple_int32_bool(&stream, &decoded));
@@ -407,7 +420,7 @@ void test_tuple_int32_bool(const krpc_tuple_int32_bool_t& decoded, std::string e
   }
   {
     pb_istream_t stream = create_istream(data, encoded);
-    krpc_tuple_int32_bool_t value = { 0, false };
+    krpc_tuple_int32_bool_t value = {0, false};
     ASSERT_EQ(KRPC_OK, krpc_decode_tuple_int32_bool(&stream, &value));
     ASSERT_EQ(decoded.e0, value.e0);
     ASSERT_EQ(decoded.e1, value.e1);
@@ -470,7 +483,7 @@ TEST(test_encode_decode, test_uint64) {
 }
 
 TEST(test_encode_decode, test_bool) {
-  test_value<bool>(true,  "01");
+  test_value<bool>(true, "01");
   test_value<bool>(false, "00");
 }
 

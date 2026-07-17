@@ -248,7 +248,10 @@ public class ConnectionTest {
   public void testArgumentNullException() {
     IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
         () -> TestService.newInstance(connection).throwArgumentNullException(""));
-    assertTrue(e.getMessage().contains("Value cannot be null.\nParameter name: foo"));
+    // The parameter name formatting differs between .NET Framework/mono
+    // ("Parameter name: foo") and modern .NET ("(Parameter 'foo')")
+    assertTrue(e.getMessage().contains("Value cannot be null."));
+    assertTrue(e.getMessage().contains("foo"));
   }
 
   @Test
@@ -256,7 +259,8 @@ public class ConnectionTest {
     IndexOutOfBoundsException e = assertThrows(IndexOutOfBoundsException.class,
         () -> TestService.newInstance(connection).throwArgumentOutOfRangeException(0));
     assertTrue(e.getMessage().contains(
-        "Specified argument was out of the range of valid values.\nParameter name: foo"));
+        "Specified argument was out of the range of valid values."));
+    assertTrue(e.getMessage().contains("foo"));
   }
 
   @Test

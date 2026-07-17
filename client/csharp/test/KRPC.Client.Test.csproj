@@ -1,55 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\packages\NUnit.3.13.3\build\NUnit.props" Condition="Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2E186057-56B2-499B-BFE8-C414FF24E55F}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>KRPC.Client.Test</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>KRPC.Client.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <DebugType>portable</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <RootNamespace>KRPC.Client.Test</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-  </PropertyGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Google.Protobuf" Version="3.35.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.CompilerServices.Unsafe">
-      <HintPath>..\..\..\lib\mono-4.5\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Memory">
-      <HintPath>..\..\..\lib\mono-4.5\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>$(bazel-bin)\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>$(bazel-external)\+http_archive+csharp_nunit\lib\net45\nunit.framework.dll</HintPath>
-      <Package>nunit</Package>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>$(bazel-external)\+http_archive+csharp_moq\lib\net462\Moq.dll</HintPath>
-      <Package>Moq</Package>
-    </Reference>
-    <Reference Include="Castle.Core">
-      <HintPath>$(bazel-external)\+http_archive+csharp_castle_core\lib\net462\Castle.Core.dll</HintPath>
-      <Package>Castle.Core</Package>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\src\KRPC.Client.csproj">
@@ -57,7 +26,6 @@
       <Name>KRPC.Client</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="ConnectionTest.cs" />
     <Compile Include="EncoderTest.cs" />
@@ -70,8 +38,5 @@
     <Compile Include="$(bazel-bin)\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

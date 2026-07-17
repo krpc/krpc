@@ -1,7 +1,10 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//:config.bzl", "assembly_version", "author")
 load("//service:build.bzl", "service_deps")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+exports_files(["CHANGES.txt"])
 
 filegroup(
     name = "LiDAR",
@@ -32,7 +35,10 @@ deps = service_deps + ["//service/SpaceCenter:KRPC.SpaceCenter"]
 csharp_library(
     name = "KRPC.LiDAR",
     srcs = srcs,
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
+    warning_level = 4,
     deps = deps,
 )
 

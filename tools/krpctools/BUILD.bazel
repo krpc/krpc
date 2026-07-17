@@ -1,11 +1,10 @@
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
-load("//tools/build:python.bzl", "py_lint_test", "py_script", "py_sdist", "py_test")
-load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
+load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
+
+exports_files(["CHANGES.txt"])
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
-
-  - krpctools/bin/{mscorlib.dll,System.*.dll} are from the Mono project.
-    See http://www.mono-project.com/docs/faq/licensing/
 
   - krpctools/bin/Newtonsoft.Json.dll is under the MIT license.
     See https://www.nuget.org/packages/Newtonsoft.Json/
@@ -15,6 +14,9 @@ license_text = """This license (GPL v3) applies to all parts of krpc.clientgen e
 
   - krpctools/bin/Google.Protobuf.dll is from Google's protobuf project.
     See https://github.com/google/protobuf
+
+  - krpctools/bin/System.IO.Ports.dll is from the .NET project.
+    See https://github.com/dotnet/runtime
 
 Copyright 2015-2023 kRPC Org
 
@@ -49,15 +51,10 @@ py_sdist(
         "//:COPYING",
         "//:python_version",
         "//:version",
-        "//tools/ServiceDefinitions",
-        "//tools/ServiceDefinitions:KRPC.Core",
+        "//tools/ServiceDefinitions:publish",
         "//tools/TestServer:ServiceDefinitions",
         "//tools/TestServer:archive",
-        "//tools/build/ksp:Google.Protobuf.dll",
-        "//tools/build/ksp:KRPC.IO.Ports.dll",
-        "//tools/build/mono-4.5:NDesk.Options.dll",
-        "//tools/build/mono-4.5:Newtonsoft.Json.dll",
-    ] + mono_net_libs + glob([
+    ] + glob([
         "krpctools/**/*.py",
         "krpctools/**/*.tmpl",
         "krpctools/test/*.json",
@@ -67,37 +64,54 @@ py_sdist(
     path_map = {
         "version.py": "krpctools/version.py",
         "tools/krpctools/": "",
-        "tools/ServiceDefinitions/ServiceDefinitions.exe": "krpctools/bin/ServiceDefinitions.exe",
-        "tools/ServiceDefinitions/KRPC.Core.dll": "krpctools/bin/KRPC.Core.dll",
-        "tools/ServiceDefinitions/KRPC.Core.xml": "krpctools/bin/KRPC.Core.xml",
+        "tools/ServiceDefinitions/publish/publish/linux-x64/": "krpctools/bin/",
         "tools/TestServer/TestService.json": "krpctools/test/TestService.json",
-        "tools/build/mono-4.5/": "krpctools/bin/",
-        "tools/build/ksp/": "krpctools/bin/",
         "tools/TestServer/": "krpctools/bin/",
     },
 )
 
-deps = [
-    "//client/python:python_base",
-    "@python_protobuf//file",
-    "@python_jinja2//file",
-    "@python_markupsafe//file",
-]
-
-py_script(
-    name = "clientgen",
-    pkg = ":krpctools",
-    script = "krpc-clientgen",
-    visibility = ["//visibility:public"],
-    deps = deps,
+# The krpctools package as an importable python library
+py_library(
+    name = "krpctools_lib",
+    srcs = glob(["krpctools/**/*.py"]) + [":version-py"],
+    data = glob(["krpctools/**/*.tmpl"]),
+    imports = ["."],
+    deps = [
+        "//client/python:krpc_base_lib",
+        "@pypi//jinja2",
+        "@pypi//protobuf",
+    ],
 )
 
-py_script(
-    name = "docgen",
-    pkg = ":krpctools",
-    script = "krpc-docgen",
+genrule(
+    name = "version-py",
+    srcs = ["//:python_version"],
+    outs = ["krpctools/version.py"],
+    cmd = 'cp "$<" "$@"',
+)
+
+py_binary(
+    name = "clientgen",
+    srcs = ["clientgen_main.py"],
+    main = "clientgen_main.py",
     visibility = ["//visibility:public"],
-    deps = deps,
+    deps = [":krpctools_lib"],
+)
+
+py_binary(
+    name = "docgen",
+    srcs = ["docgen_main.py"],
+    main = "docgen_main.py",
+    visibility = ["//visibility:public"],
+    deps = [":krpctools_lib"],
+)
+
+py_binary(
+    name = "changeloggen",
+    srcs = ["changeloggen_main.py"],
+    main = "changeloggen_main.py",
+    visibility = ["//visibility:public"],
+    deps = [":krpctools_lib"],
 )
 
 test_suite(
@@ -107,6 +121,12 @@ test_suite(
         ":lint",
     ],
 )
+
+deps = [
+    "//client/python:krpc_lib",
+    "@pypi//jinja2",
+    "@pypi//protobuf",
+]
 
 py_test(
     name = "krpctoolstest",

@@ -9,6 +9,11 @@ using KRPC.Server.TCP;
 using KRPC.Service;
 using KRPC.Utils;
 using NDesk.Options;
+#if NET
+using SerialPorts = System.IO.Ports;
+#else
+using SerialPorts = KRPC.IO.Ports;
+#endif
 
 namespace TestServer
 {
@@ -42,8 +47,8 @@ namespace TestServer
             string portName = string.Empty;
             uint baudRate = 9600;
             ushort dataBits = 8;
-            KRPC.IO.Ports.Parity parity = KRPC.IO.Ports.Parity.None;
-            KRPC.IO.Ports.StopBits stopBits = KRPC.IO.Ports.StopBits.One;
+            SerialPorts.Parity parity = SerialPorts.Parity.None;
+            SerialPorts.StopBits stopBits = SerialPorts.StopBits.One;
 
             var options = new OptionSet { {
                     "h|help", "show this help message and exit",
@@ -74,10 +79,10 @@ namespace TestServer
                     (ushort v) => dataBits = v
                 }, {
                     "parity=", "For SerialIO based protocols, the parity.",
-                    (KRPC.IO.Ports.Parity v) => parity = v
+                    (SerialPorts.Parity v) => parity = v
                 }, {
                     "stop-bits=", "For SerialIO based protocols, the number of stop bits.",
-                    (KRPC.IO.Ports.StopBits v) => stopBits = v
+                    (SerialPorts.StopBits v) => stopBits = v
                 }, {
                     "debug", "Set log level to 'debug', defaults to 'info'",
                     v => {

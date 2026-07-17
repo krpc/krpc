@@ -4,8 +4,6 @@ http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "ht
 
 http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
 
-maven_jar = use_repo_rule("//tools/build:maven.bzl", "maven_jar")
-
 bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "rules_cc", version = "0.2.19")
@@ -13,12 +11,97 @@ bazel_dep(name = "rules_pkg", version = "1.2.0")
 bazel_dep(name = "rules_python", version = "2.0.3")
 bazel_dep(name = "rules_java", version = "9.6.1")
 bazel_dep(name = "protobuf", version = "35.1")
+bazel_dep(name = "rules_dotnet", version = "0.22.1")
+
+dotnet = use_extension("@rules_dotnet//dotnet:extensions.bzl", "dotnet")
+dotnet.toolchain(dotnet_version = "8.0.422")
+use_repo(dotnet, "dotnet_toolchains")
+
+register_toolchains("@dotnet_toolchains//:all")
+
+# LLVM toolchain for the C/C++ clients (compiler + clang-format/clang-tidy). Two
+# variants: a hermetic download (the default, used on dev) and a system install
+# (used in CI via `--config=system-llvm`, which avoids the ~2 GB download). Switch
+# with `--//tools/build/llvm:toolchain=system` (see .bazelrc + tools/build/llvm).
+bazel_dep(name = "toolchains_llvm", version = "1.8.0")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+
+# Hermetic (downloads the LLVM release) -- registered as the default toolchain.
+llvm.toolchain(
+    name = "llvm_toolchain",
+    llvm_version = "20.1.3",
+)
+
+# System (no download; toolchains_llvm resolves clang from an existing install).
+# The path is the apt.llvm.org clang-20 layout baked into the buildenv image; it
+# only exists inside the container, and is only used when `--config=system-llvm`
+# opts in via --extra_toolchains, so dev checkouts are unaffected.
+llvm.toolchain(
+    name = "llvm_system",
+    llvm_version = "20.1.3",
+)
+llvm.toolchain_root(
+    name = "llvm_system",
+    path = "/usr/lib/llvm-20",
+)
+
+# Path-mode generates only the config repo (@llvm_system); there is no downloaded
+# @llvm_system_llvm binaries repo, so the clang-tidy/clang-format labels for system
+# mode come from wrapper scripts in //tools/build/llvm, not from here.
+use_repo(llvm, "llvm_system", "llvm_toolchain", "llvm_toolchain_llvm")
+
+register_toolchains("@llvm_toolchain//:all")
+
+bazel_dep(name = "rules_jvm_external", version = "7.0")
+
+maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
+maven.install(
+    artifacts = [
+        "com.google.protobuf:protobuf-java:4.35.1",
+        "com.puppycrawl.tools:checkstyle:10.26.1",
+        "junit:junit:4.13.2",
+        "org.hamcrest:hamcrest:3.0",
+        "org.javatuples:javatuples:1.2",
+    ],
+    known_contributing_modules = ["protobuf"],
+    lock_file = "//:maven_install.json",
+    repositories = ["https://repo1.maven.org/maven2"],
+)
+use_repo(maven, "maven", "unpinned_maven")
+
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    is_default = True,
+    python_version = "3.12",
+)
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pypi",
+    python_version = "3.12",
+    requirements_lock = "//tools/build/python:requirements_lock.txt",
+)
+use_repo(pip, "pypi")
 
 http_archive(
     name = "com_google_googletest",
     sha256 = "65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c",
     strip_prefix = "googletest-1.17.0",
     url = "https://github.com/google/googletest/archive/refs/tags/v1.17.0.tar.gz",
+)
+
+# ----------------------- KSP libraries --------------------------------------------------
+
+# Stripped KSP assemblies to compile the mod against, downloaded from the ksp-lib
+# repo. The archive lays the managed DLLs out under KSP_Data/Managed/; the build
+# references them via //tools/build/ksp. Keep the version in step with
+# config.bzl's ksp_version_*.
+http_archive(
+    name = "ksp",
+    build_file_content = "exports_files(glob(['KSP_Data/Managed/*.dll']))",
+    sha256 = "e3de286fd4bf2993e23cc996a8fe3426aa575ea0a296376b43dd2fe289826ad8",
+    url = "https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip",
 )
 
 # ----------------------- Protobuf Compiler ----------------------------------------------
@@ -104,15 +187,9 @@ filegroup(
 
 # ----------------------- C# dependencies ------------------------------------------------
 
-http_file(
-    name = "csharp_nuget",
-    sha256 = "751ee5e79481626a428c1241dc7f94bca2739b32588e669715bc5fb54d8fb8a2",
-    url = "https://dist.nuget.org/win-x86-commandline/v7.6.0/nuget.exe",
-)
-
 http_archive(
     name = "csharp_protobuf",
-    build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll'])",
+    build_file_content = "exports_files(['lib/net45/Google.Protobuf.dll', 'lib/net5.0/Google.Protobuf.dll'])",
     sha256 = "6ba51589915e3640e1ffdd384863dd0d73f0ca6a8aac591ec81c42c6a3ee55ce",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Google.Protobuf/3.35.1",
@@ -167,24 +244,8 @@ http_file(
 )
 
 http_archive(
-    name = "csharp_nunit",
-    build_file_content = "exports_files(['lib/net45/nunit.framework.dll'])",
-    sha256 = "0ae3ffab91e8bcf59f016dc2b72fd0c518bb5698f2909dd30cbab94c4348e8a6",
-    type = "zip",
-    url = "https://www.nuget.org/api/v2/package/NUnit/3.14.0",
-)
-
-http_archive(
-    name = "csharp_nunit_consolerunner",
-    build_file_content = "exports_files(['tools/nunit3-console.exe', 'tools/nunit.engine.dll', 'tools/nunit.engine.core.dll', 'tools/nunit.engine.api.dll', 'tools/testcentric.engine.metadata.dll'])",
-    sha256 = "65188ab35fc4276cba2d38ec1399b088b48f7a4827d575d4d0aaa9428e9c08ab",
-    type = "zip",
-    url = "https://www.nuget.org/api/v2/package/NUnit.ConsoleRunner/3.22.0",
-)
-
-http_archive(
     name = "csharp_moq",
-    build_file_content = "exports_files(['lib/net462/Moq.dll'])",
+    build_file_content = "exports_files(['lib/net462/Moq.dll', 'lib/net6.0/Moq.dll'])",
     sha256 = "fae01cffac6dce28fd627999ae167073ee2f520c7a729a59b164258b708643ca",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Moq/4.20.72",
@@ -192,7 +253,7 @@ http_archive(
 
 http_archive(
     name = "csharp_castle_core",
-    build_file_content = "exports_files(['lib/net462/Castle.Core.dll'])",
+    build_file_content = "exports_files(['lib/net462/Castle.Core.dll', 'lib/net6.0/Castle.Core.dll'])",
     sha256 = "b8d7bffcf0a76062e1c714292c3c9342ea081f9bbb7460e5ca3736c2a010e03e",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Castle.Core/5.2.1",
@@ -200,10 +261,29 @@ http_archive(
 
 http_archive(
     name = "csharp_json",
-    build_file_content = "exports_files(['lib/net45/Newtonsoft.Json.dll'])",
+    build_file_content = "exports_files(['lib/net45/Newtonsoft.Json.dll', 'lib/net6.0/Newtonsoft.Json.dll'])",
     sha256 = "f09081d457405baf35a973fa0c50d6bf272ed683f2568c5a620a49da952f6529",
     type = "zip",
     url = "https://www.nuget.org/api/v2/package/Newtonsoft.Json/13.0.4",
+)
+
+# System.IO.Ports is the serial port implementation used on modern .NET
+# (net8.0 builds of the server core and TestServer). The mod's net472 build
+# uses KRPC.IO.Ports, as mono inside KSP has no System.IO.Ports support.
+http_archive(
+    name = "csharp_system_io_ports",
+    build_file_content = "exports_files(['lib/net8.0/System.IO.Ports.dll', 'runtimes/unix/lib/net8.0/System.IO.Ports.dll', 'runtimes/win/lib/net8.0/System.IO.Ports.dll'])",
+    sha256 = "1bc8fd7347ab07365f2405655b4f17a04e7c80f862356244efcb056815767b84",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/System.IO.Ports/8.0.0",
+)
+
+http_archive(
+    name = "csharp_system_io_ports_native_linux_x64",
+    build_file_content = "exports_files(['runtimes/linux-x64/native/libSystem.IO.Ports.Native.so'])",
+    sha256 = "e38a2e8d21e1734365d960af2d891272b032a8d0256c67ce9e5ccfc02a1fc250",
+    type = "zip",
+    url = "https://www.nuget.org/api/v2/package/runtime.linux-x64.runtime.native.System.IO.Ports/8.0.0",
 )
 
 http_archive(
@@ -248,7 +328,10 @@ cc_library(
         'googletest/include',
         'include'
     ],
-    linkopts = ['-pthread'],
+    linkopts = select({
+        '@platforms//os:windows': [],
+        '//conditions:default': ['-pthread'],
+    }),
     visibility = ['//visibility:public'],
 )
 
@@ -263,7 +346,10 @@ cc_library(
         'include'
     ],
     deps = [':gtest'],
-    linkopts = ['-pthread'],
+    linkopts = select({
+        '@platforms//os:windows': [],
+        '//conditions:default': ['-pthread'],
+    }),
     visibility = ['//visibility:public'],
 )
 """,
@@ -304,114 +390,10 @@ filegroup(
 )
 
 # ----------------------- Java dependencies ----------------------------------------------
-
-maven_jar(
-    name = "java_protobuf",
-    artifact = "com.google.protobuf:protobuf-java:4.35.1",
-    sha256 = "a4345ba2aa009912ff6f90467fea2d104605256b72c50840d75f13256638a472",
-)
-
-maven_jar(
-    name = "java_junit",
-    artifact = "junit:junit:4.13.2",
-    sha256 = "8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3",
-)
-
-maven_jar(
-    name = "java_hamcrest",
-    artifact = "org.hamcrest:hamcrest:3.0",
-    sha256 = "5d66b6a4a680755cb6ed7cb104fa7835ef644667586ff0737adeb977c39ecdbc",
-)
-
-maven_jar(
-    name = "java_checkstyle",
-    artifact = "com.puppycrawl.tools:checkstyle:10.26.1",
-    sha256 = "231f1fab0e44e87118ab26c6624e99a8d5148793411aab9e21428552fc1e91b7",
-)
-
-maven_jar(
-    name = "java_apache_commons_beanutils",
-    artifact = "commons-beanutils:commons-beanutils:1.11.0",
-    sha256 = "9e44ba68ec9a3f21286fa2a8bbb003b735c0f69101bb43144b79f4f8aaa74709",
-)
-
-maven_jar(
-    name = "java_apache_commons_collections",
-    artifact = "commons-collections:commons-collections:3.2.2",
-    sha256 = "eeeae917917144a68a741d4c0dff66aa5c5c5fd85593ff217bced3fc8ca783b8",
-)
-
-maven_jar(
-    name = "java_apache_commons_logging",
-    artifact = "commons-logging:commons-logging:1.3.6",
-    sha256 = "f8ead8943401081dea0aa824b5b1ba40a0e4ed297a572a0f02258150a0b62357",
-)
-
-maven_jar(
-    name = "java_antlr4_runtime",
-    artifact = "org.antlr:antlr4-runtime:4.13.2",
-    sha256 = "dd3e8a13a2d669bf84fb8d834de35ce4875f27157698d206241ec8488aadcaf7",
-)
-
-maven_jar(
-    name = "java_guava",
-    artifact = "com.google.guava:guava:33.4.8-jre",
-    sha256 = "f3d7f57f67fd622f4d468dfdd692b3a5e3909246c28017ac3263405f0fe617ed",
-)
-
-maven_jar(
-    name = "java_guava_failureaccess",
-    artifact = "com.google.guava:failureaccess:1.0.3",
-    sha256 = "cbfc3906b19b8f55dd7cfd6dfe0aa4532e834250d7f080bd8d211a3e246b59cb",
-)
-
-maven_jar(
-    name = "java_picocli",
-    artifact = "info.picocli:picocli:4.7.7",
-    sha256 = "f86e30fffd10d2b13b8caa8d4b237a7ee61f2ffccf5b1941de718b765d235bf8",
-)
-
-maven_jar(
-    name = "java_reflections",
-    artifact = "org.reflections:reflections:0.10.2",
-    sha256 = "938a2d08fe54050d7610b944d8ddc3a09355710d9e6be0aac838dbc04e9a2825",
-)
-
-maven_jar(
-    name = "java_javassist",
-    artifact = "org.javassist:javassist:3.28.0-GA",
-    sha256 = "57d0a9e9286f82f4eaa851125186997f811befce0e2060ff0a15a77f5a9dd9a7",
-)
-
-maven_jar(
-    name = "java_jsr305",
-    artifact = "com.google.code.findbugs:jsr305:3.0.2",
-    sha256 = "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
-)
-
-maven_jar(
-    name = "java_slf4j_api",
-    artifact = "org.slf4j:slf4j-api:1.7.32",
-    sha256 = "3624f8474c1af46d75f98bc097d7864a323c81b3808aa43689a6e1c601c027be",
-)
-
-maven_jar(
-    name = "java_saxon_he",
-    artifact = "net.sf.saxon:Saxon-HE:12.5",
-    sha256 = "98c3a91e6e5aaf9b3e2b37601e04b214a6e67098493cdd8232fcb705fddcb674",
-)
-
-maven_jar(
-    name = "java_xmlresolver",
-    artifact = "org.xmlresolver:xmlresolver:5.2.2",
-    sha256 = "efc92bd7ed32b3e57095e0b3e872051ccfbbdcc980831ef33e89e38161a85222",
-)
-
-maven_jar(
-    name = "java_javatuples",
-    artifact = "org.javatuples:javatuples:1.2",
-    sha256 = "2eda5b19d9820e1cc2f69fcd01639a715a673c11f8507e3d1ed593cf765d5e0a",
-)
+#
+# Java dependencies come from rules_jvm_external (see maven.install above),
+# locked in maven_install.json; repin with:
+#   RULES_JVM_EXTERNAL_REPIN=1 bazel run @unpinned_maven//:pin
 
 # ----------------------- Lua packages ---------------------------------------------------
 
@@ -448,396 +430,6 @@ http_file(
     downloaded_file_path = "luaunit-3.3-1.src.rock",
     sha256 = "dd0629d14f63b00774f3e2808d980a98912eabbae10422a3b3c2884e0c7182bf",
     url = "https://luarocks.org/manifests/bluebird75/luaunit-3.3-1.src.rock",
-)
-
-# ----------------------- Python packages ------------------------------------------------
-#
-# Direct dependencies:
-#   black, pylint, cpplint, pycodestyle  — code quality tools
-#   sphinx                               — documentation builder
-#   sphinx_rtd_theme, sphinx_tabs,
-#   sphinx_csharp, sphinxcontrib_luadomain,
-#   sphinxcontrib_spelling               — sphinx extensions we explicitly use
-#   javasphinx, javalang                 — Java API docs (custom builds, hosted on S3)
-#   protobuf                             — protocol buffers runtime
-#   websocket_client                     — WebSocket client library
-#   pyserial                             — serial port client library
-#   jinja2                               — templates (used by krpctools)
-#   requests                             — HTTP (used by sphinx linkcheck)
-#
-# All other packages are transitive dependencies pulled in by those above.
-
-http_file(
-    name = "python_alabaster",
-    downloaded_file_path = "alabaster-1.0.0.tar.gz",
-    sha256 = "c00dca57bca26fa62a6d7d0a9fcce65f3e026e9bfe33e9c538fd3fbb2144fd9e",
-    url = "https://files.pythonhosted.org/packages/a6/f8/d9c74d0daf3f742840fd818d69cfae176fa332022fd44e3469487d5a9420/alabaster-1.0.0.tar.gz",
-)
-
-http_file(
-    name = "python_astroid",
-    downloaded_file_path = "astroid-4.1.2.tar.gz",
-    sha256 = "d6c4a52bfcda4bbeb7359dead642b0248b90f7d9a07e690230bd86fefd6d37f1",
-    url = "https://files.pythonhosted.org/packages/da/fd/24475b7cfb70298e8921bc077adb46a3fe77887422545d8a061573e130ee/astroid-4.1.2.tar.gz",
-)
-
-http_file(
-    name = "python_babel",
-    downloaded_file_path = "babel-2.18.0.tar.gz",
-    sha256 = "b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d",
-    url = "https://files.pythonhosted.org/packages/7d/b2/51899539b6ceeeb420d40ed3cd4b7a40519404f9baf3d4ac99dc413a834b/babel-2.18.0.tar.gz",
-)
-
-http_file(
-    name = "python_black",
-    downloaded_file_path = "black-26.5.1.tar.gz",
-    sha256 = "dd321f668053961824bcc1be1cc1df748b2d7e4fa28086b08331e577b0100a73",
-    url = "https://files.pythonhosted.org/packages/c0/37/5628dd55bf2b34257fc7603f0fe97c40e3aaf24265f416a9c85c95ca1436/black-26.5.1.tar.gz",
-)
-
-http_file(
-    name = "python_certifi",
-    downloaded_file_path = "certifi-2026.6.17.tar.gz",
-    sha256 = "024c88eeec92ca068db80f02b8b07c9cef7b9fe261d1d535abfd5abd6f6af432",
-    url = "https://files.pythonhosted.org/packages/c9/c7/424b75da314c1045981bd9777432fad05a9e0c69daa4ed7e308bbaffe405/certifi-2026.6.17.tar.gz",
-)
-
-http_file(
-    name = "python_charset_normalizer",
-    downloaded_file_path = "charset_normalizer-3.4.7.tar.gz",
-    sha256 = "ae89db9e5f98a11a4bf50407d4363e7b09b31e55bc117b4f7d80aab97ba009e5",
-    url = "https://files.pythonhosted.org/packages/e7/a1/67fe25fac3c7642725500a3f6cfe5821ad557c3abb11c9d20d12c7008d3e/charset_normalizer-3.4.7.tar.gz",
-)
-
-http_file(
-    name = "python_click",
-    downloaded_file_path = "click-8.4.1.tar.gz",
-    sha256 = "918b5633eddf6b41c32d4f454bf0de810065c74e3f7dbf8ee5452f8be88d3e96",
-    url = "https://files.pythonhosted.org/packages/9b/98/518d8e5081007684232226f475082b30087d0f585e8457db087298259f49/click-8.4.1.tar.gz",
-)
-
-http_file(
-    name = "python_cpplint",
-    downloaded_file_path = "cpplint-2.0.2.tar.gz",
-    sha256 = "8a5971e4b5490133e425284f0c566c7ade0b959e61018d2c9af3ff7f357ddc57",
-    url = "https://files.pythonhosted.org/packages/c5/83/47a9e7513ba4d943a9dac2f6752b444377c91880f4f4968799b4f42d89cc/cpplint-2.0.2.tar.gz",
-)
-
-http_file(
-    name = "python_dill",
-    downloaded_file_path = "dill-0.4.1.tar.gz",
-    sha256 = "423092df4182177d4d8ba8290c8a5b640c66ab35ec7da59ccfa00f6fa3eea5fa",
-    url = "https://files.pythonhosted.org/packages/81/e1/56027a71e31b02ddc53c7d65b01e68edf64dea2932122fe7746a516f75d5/dill-0.4.1.tar.gz",
-)
-
-http_file(
-    name = "python_docutils",
-    downloaded_file_path = "docutils-0.23.tar.gz",
-    sha256 = "746f5060322511280a1e50eb76846ed6bf2342984b2ac04dc42caa1a8d78799e",
-    url = "https://files.pythonhosted.org/packages/39/a4/5180d9afc57e8fca05601dd652bdff19604c218814037fe90ffc7625a50a/docutils-0.23.tar.gz",
-)
-
-http_file(
-    name = "python_idna",
-    downloaded_file_path = "idna-3.18.tar.gz",
-    sha256 = "ffb385a7e039654cef1ab9ef32c6fafe283c0c0467bba1d9029738ce4a14a848",
-    url = "https://files.pythonhosted.org/packages/cd/63/9496c57188a2ee585e0f1db071d75089a11e98aa86eb99d9d7618fc1edce/idna-3.18.tar.gz",
-)
-
-http_file(
-    name = "python_imagesize",
-    downloaded_file_path = "imagesize-2.0.0.tar.gz",
-    sha256 = "8e8358c4a05c304f1fccf7ff96f036e7243a189e9e42e90851993c558cfe9ee3",
-    url = "https://files.pythonhosted.org/packages/6c/e6/7bf14eeb8f8b7251141944835abd42eb20a658d89084b7e1f3e5fe394090/imagesize-2.0.0.tar.gz",
-)
-
-http_file(
-    name = "python_isort",
-    downloaded_file_path = "isort-8.0.1.tar.gz",
-    sha256 = "171ac4ff559cdc060bcfff550bc8404a486fee0caab245679c2abe7cb253c78d",
-    url = "https://files.pythonhosted.org/packages/ef/7c/ec4ab396d31b3b395e2e999c8f46dec78c5e29209fac49d1f4dace04041d/isort-8.0.1.tar.gz",
-)
-
-http_file(
-    name = "python_javalang",
-    downloaded_file_path = "javalang-0.13.1.tar.gz",
-    sha256 = "d7e95268fff9e7a88091d5e5c95307cda1fcaf3bac3aba1d1ece6c1bcba91dd1",
-    # Custom build of javasphinx to remove six dependency
-    url = "https://krpc.s3.amazonaws.com/lib/javasphinx/javalang-0.13.1.tar.gz",
-)
-
-http_file(
-    name = "python_javasphinx",
-    downloaded_file_path = "javasphinx-0.9.16.tar.gz",
-    sha256 = "97de0522b584fe2ba7d9ef5981f494509fd1a0a1fe7bf1d07c045a5f7d8f5287",
-    # Built from https://github.com/mathijs81/javasphinx
-    url = "https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz",
-)
-
-http_file(
-    name = "python_jinja2",
-    downloaded_file_path = "jinja2-3.1.6.tar.gz",
-    sha256 = "0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d",
-    url = "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c72f3e33cef02e048281fec7ecec5f032d4aac52226b/jinja2-3.1.6.tar.gz",
-)
-
-http_file(
-    name = "python_lazy_object_proxy",
-    downloaded_file_path = "lazy_object_proxy-1.12.0.tar.gz",
-    sha256 = "1f5a462d92fd0cfb82f1fab28b51bfb209fabbe6aabf7f0d51472c0c124c0c61",
-    url = "https://files.pythonhosted.org/packages/08/a2/69df9c6ba6d316cfd81fe2381e464db3e6de5db45f8c43c6a23504abf8cb/lazy_object_proxy-1.12.0.tar.gz",
-)
-
-http_file(
-    name = "python_markupsafe",
-    downloaded_file_path = "markupsafe-3.0.3.tar.gz",
-    sha256 = "722695808f4b6457b320fdc131280796bdceb04ab50fe1795cd540799ebe1698",
-    url = "https://files.pythonhosted.org/packages/7e/99/7690b6d4034fffd95959cbe0c02de8deb3098cc577c67bb6a24fe5d7caa7/markupsafe-3.0.3.tar.gz",
-)
-
-http_file(
-    name = "python_mccabe",
-    downloaded_file_path = "mccabe-0.7.0.tar.gz",
-    sha256 = "348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325",
-    url = "https://files.pythonhosted.org/packages/e7/ff/0ffefdcac38932a54d2b5eed4e0ba8a408f215002cd178ad1df0f2806ff8/mccabe-0.7.0.tar.gz",
-)
-
-http_file(
-    name = "python_mypy_extensions",
-    downloaded_file_path = "mypy_extensions-1.1.0.tar.gz",
-    sha256 = "52e68efc3284861e772bbcd66823fde5ae21fd2fdb51c62a211403730b916558",
-    url = "https://files.pythonhosted.org/packages/a2/6e/371856a3fb9d31ca8dac321cda606860fa4548858c0cc45d9d1d4ca2628b/mypy_extensions-1.1.0.tar.gz",
-)
-
-http_file(
-    name = "python_packaging",
-    downloaded_file_path = "packaging-26.2.tar.gz",
-    sha256 = "ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661",
-    url = "https://files.pythonhosted.org/packages/d7/f1/e7a6dd94a8d4a5626c03e4e99c87f241ba9e350cd9e6d75123f992427270/packaging-26.2.tar.gz",
-)
-
-http_file(
-    name = "python_pathspec",
-    downloaded_file_path = "pathspec-1.1.1.tar.gz",
-    sha256 = "17db5ecd524104a120e173814c90367a96a98d07c45b2e10c2f3919fff91bf5a",
-    url = "https://files.pythonhosted.org/packages/5a/82/42f767fc1c1143d6fd36efb827202a2d997a375e160a71eb2888a925aac1/pathspec-1.1.1.tar.gz",
-)
-
-http_file(
-    name = "python_platformdirs",
-    downloaded_file_path = "platformdirs-4.10.0.tar.gz",
-    sha256 = "31e761a6a0ca04faf7353ea759bdba55652be214725111e5aac52dfa29d4bef7",
-    url = "https://files.pythonhosted.org/packages/d7/47/e4501f49c178ae1d9f4a75073fda4204f52647993f075a9db4d14930e0c5/platformdirs-4.10.0.tar.gz",
-)
-
-http_file(
-    name = "python_protobuf",
-    downloaded_file_path = "protobuf-7.35.1.tar.gz",
-    sha256 = "ce115a26fe0c39a2c29973d914d327e516a6455464489fe3cd1e51a1b354f81a",
-    url = "https://files.pythonhosted.org/packages/da/01/9ef0afd7999eb9badb3a768b4aedd78c86d4c65cfaf1958ab276199e76b4/protobuf-7.35.1.tar.gz",
-)
-
-http_file(
-    name = "python_pyserial",
-    downloaded_file_path = "pyserial-3.5-py2.py3-none-any.whl",
-    sha256 = "c4451db6ba391ca6ca299fb3ec7bae67a5c55dde170964c7a14ceefec02f2cf0",
-    url = "https://files.pythonhosted.org/packages/07/bc/587a445451b253b285629263eb51c2d8e9bcea4fc97826266d186f96f558/pyserial-3.5-py2.py3-none-any.whl",
-)
-
-http_file(
-    name = "python_pycodestyle",
-    downloaded_file_path = "pycodestyle-2.14.0.tar.gz",
-    sha256 = "c4b5b517d278089ff9d0abdec919cd97262a3367449ea1c8b49b91529167b783",
-    url = "https://files.pythonhosted.org/packages/11/e0/abfd2a0d2efe47670df87f3e3a0e2edda42f055053c85361f19c0e2c1ca8/pycodestyle-2.14.0.tar.gz",
-)
-
-http_file(
-    name = "python_pyenchant",
-    downloaded_file_path = "pyenchant-3.3.0.tar.gz",
-    sha256 = "825288246b5debc9436f91967650974ef0d5636458502619e322c476f1283891",
-    url = "https://files.pythonhosted.org/packages/36/ad/64925c937e41be75c7067c85757b3d45b148e9111187b37693269f583156/pyenchant-3.3.0.tar.gz",
-)
-
-http_file(
-    name = "python_pygments",
-    downloaded_file_path = "pygments-2.20.0.tar.gz",
-    sha256 = "6757cd03768053ff99f3039c1a36d6c0aa0b263438fcab17520b30a303a82b5f",
-    url = "https://files.pythonhosted.org/packages/c3/b2/bc9c9196916376152d655522fdcebac55e66de6603a76a02bca1b6414f6c/pygments-2.20.0.tar.gz",
-)
-
-http_file(
-    name = "python_pylint",
-    downloaded_file_path = "pylint-4.0.6.tar.gz",
-    sha256 = "52f19191bee08bf103f9705ad1a0ece4aa5a0a4ef2bdcbd969375a1e6f6579d5",
-    url = "https://files.pythonhosted.org/packages/7d/1d/3bb57f303701549550d74bf7ced2b07412be97125c167a0c9d216aa9f762/pylint-4.0.6.tar.gz",
-)
-
-http_file(
-    name = "python_pytokens",
-    downloaded_file_path = "pytokens-0.4.1.tar.gz",
-    sha256 = "292052fe80923aae2260c073f822ceba21f3872ced9a68bb7953b348e561179a",
-    url = "https://files.pythonhosted.org/packages/b6/34/b4e015b99031667a7b960f888889c5bd34ef585c85e1cb56a594b92836ac/pytokens-0.4.1.tar.gz",
-)
-
-http_file(
-    name = "python_pytz",
-    downloaded_file_path = "pytz-2026.2.tar.gz",
-    sha256 = "0e60b47b29f21574376f218fe21abc009894a2321ea16c6754f3cad6eb7cdd6a",
-    url = "https://files.pythonhosted.org/packages/ff/46/dd499ec9038423421951e4fad73051febaa13d2df82b4064f87af8b8c0c3/pytz-2026.2.tar.gz",
-)
-
-http_file(
-    name = "python_requests",
-    downloaded_file_path = "requests-2.34.2.tar.gz",
-    sha256 = "f288924cae4e29463698d6d60bc6a4da69c89185ad1e0bcc4104f584e960b9ed",
-    url = "https://files.pythonhosted.org/packages/ac/c3/e2a2b89f2d3e2179abd6d00ebd70bff6273f37fb3e0cc209f48b39d00cbf/requests-2.34.2.tar.gz",
-)
-
-http_file(
-    name = "python_roman_numerals",
-    downloaded_file_path = "roman_numerals-4.1.0.tar.gz",
-    sha256 = "1af8b147eb1405d5839e78aeb93131690495fe9da5c91856cb33ad55a7f1e5b2",
-    url = "https://files.pythonhosted.org/packages/ae/f9/41dc953bbeb056c17d5f7a519f50fdf010bd0553be2d630bc69d1e022703/roman_numerals-4.1.0.tar.gz",
-)
-
-http_file(
-    name = "python_snowballstemmer",
-    downloaded_file_path = "snowballstemmer-3.1.1.tar.gz",
-    sha256 = "e07bbc54a0d798fe6010a12398422e62a8bfbba95c394fd0956ef58cb4d3e260",
-    url = "https://files.pythonhosted.org/packages/43/f8/0a71edf031f03c40db17503cb8ca78a69a171254e568e7db241b0ab57ea1/snowballstemmer-3.1.1.tar.gz",
-)
-
-http_file(
-    name = "python_sphinx",
-    downloaded_file_path = "sphinx-9.1.0.tar.gz",
-    sha256 = "7741722357dd75f8190766926071fed3bdc211c74dd2d7d4df5404da95930ddb",
-    url = "https://files.pythonhosted.org/packages/cd/bd/f08eb0f4eed5c83f1ba2a3bd18f7745a2b1525fad70660a1c00224ec468a/sphinx-9.1.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinx_csharp",
-    downloaded_file_path = "sphinx-csharp-0.1.8.tar.gz",
-    sha256 = "b6aaab9057187f3e8a0c83c400d2d16ca21254a0d2f9af1d141d7f1cf7cfaf34",
-    url = "https://files.pythonhosted.org/packages/a1/b4/4fd40fafe1c6ba3ade17e4e26e301691db890db0f4ead43467d8f69d0e3d/sphinx-csharp-0.1.8.tar.gz",
-)
-
-http_file(
-    name = "python_sphinx_rtd_theme",
-    downloaded_file_path = "sphinx_rtd_theme-3.1.0.tar.gz",
-    sha256 = "b44276f2c276e909239a4f6c955aa667aaafeb78597923b1c60babc76db78e4c",
-    url = "https://files.pythonhosted.org/packages/84/68/a1bfbf38c0f7bccc9b10bbf76b94606f64acb1552ae394f0b8285bfaea25/sphinx_rtd_theme-3.1.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinx_tabs",
-    downloaded_file_path = "sphinx_tabs-3.5.0.tar.gz",
-    sha256 = "91dba1187e4c35fd37380a56ac228bbd54c6c649b2351829f3bf033718277537",
-    url = "https://files.pythonhosted.org/packages/ce/30/ca5b0de830f369968d8e3483dd45a8908fd10169c05cd9837f0bd075982e/sphinx_tabs-3.5.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_applehelp",
-    downloaded_file_path = "sphinxcontrib_applehelp-2.0.0.tar.gz",
-    sha256 = "2f29ef331735ce958efa4734873f084941970894c6090408b079c61b2e1c06d1",
-    url = "https://files.pythonhosted.org/packages/ba/6e/b837e84a1a704953c62ef8776d45c3e8d759876b4a84fe14eba2859106fe/sphinxcontrib_applehelp-2.0.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_devhelp",
-    downloaded_file_path = "sphinxcontrib_devhelp-2.0.0.tar.gz",
-    sha256 = "411f5d96d445d1d73bb5d52133377b4248ec79db5c793ce7dbe59e074b4dd1ad",
-    url = "https://files.pythonhosted.org/packages/f6/d2/5beee64d3e4e747f316bae86b55943f51e82bb86ecd325883ef65741e7da/sphinxcontrib_devhelp-2.0.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_htmlhelp",
-    downloaded_file_path = "sphinxcontrib_htmlhelp-2.1.0.tar.gz",
-    sha256 = "c9e2916ace8aad64cc13a0d233ee22317f2b9025b9cf3295249fa985cc7082e9",
-    url = "https://files.pythonhosted.org/packages/43/93/983afd9aa001e5201eab16b5a444ed5b9b0a7a010541e0ddfbbfd0b2470c/sphinxcontrib_htmlhelp-2.1.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_jquery",
-    downloaded_file_path = "sphinxcontrib-jquery-4.1.tar.gz",
-    sha256 = "1620739f04e36a2c779f1a131a2dfd49b2fd07351bf1968ced074365933abc7a",
-    url = "https://files.pythonhosted.org/packages/de/f3/aa67467e051df70a6330fe7770894b3e4f09436dea6881ae0b4f3d87cad8/sphinxcontrib-jquery-4.1.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_jsmath",
-    downloaded_file_path = "sphinxcontrib-jsmath-1.0.1.tar.gz",
-    sha256 = "a9925e4a4587247ed2191a22df5f6970656cb8ca2bd6284309578f2153e0c4b8",
-    url = "https://files.pythonhosted.org/packages/b2/e8/9ed3830aeed71f17c026a07a5097edcf44b692850ef215b161b8ad875729/sphinxcontrib-jsmath-1.0.1.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_luadomain",
-    downloaded_file_path = "sphinxcontrib-luadomain-1.1.2.tar.gz",
-    sha256 = "c3286ffdb3157350ca7a345addc3b4a6531008b9d8b2b03ead2d64943b33d141",
-    url = "https://files.pythonhosted.org/packages/54/15/eb8f5c1b2d8cbdbc9eb0444a5aa72b564b1640573b5132b1ec1b79efc06d/sphinxcontrib-luadomain-1.1.2.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_qthelp",
-    downloaded_file_path = "sphinxcontrib_qthelp-2.0.0.tar.gz",
-    sha256 = "4fe7d0ac8fc171045be623aba3e2a8f613f8682731f9153bb2e40ece16b9bbab",
-    url = "https://files.pythonhosted.org/packages/68/bc/9104308fc285eb3e0b31b67688235db556cd5b0ef31d96f30e45f2e51cae/sphinxcontrib_qthelp-2.0.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_serializinghtml",
-    downloaded_file_path = "sphinxcontrib_serializinghtml-2.0.0.tar.gz",
-    sha256 = "e9d912827f872c029017a53f0ef2180b327c3f7fd23c87229f7a8e8b70031d4d",
-    url = "https://files.pythonhosted.org/packages/3b/44/6716b257b0aa6bfd51a1b31665d1c205fb12cb5ad56de752dfa15657de2f/sphinxcontrib_serializinghtml-2.0.0.tar.gz",
-)
-
-http_file(
-    name = "python_sphinxcontrib_spelling",
-    downloaded_file_path = "sphinxcontrib_spelling-8.0.2.tar.gz",
-    sha256 = "afbc7b8e93721ab88f12bdd39d848b92017b3763b9ed6226b4b0e54b06664fea",
-    url = "https://files.pythonhosted.org/packages/4b/cd/fa8039cedce6295644ff5f03367742d21e7922da426e8c666b7f5a213682/sphinxcontrib_spelling-8.0.2.tar.gz",
-)
-
-http_file(
-    name = "python_tomli",
-    downloaded_file_path = "tomli-2.4.1.tar.gz",
-    sha256 = "7c7e1a961a0b2f2472c1ac5b69affa0ae1132c39adcb67aba98568702b9cc23f",
-    url = "https://files.pythonhosted.org/packages/22/de/48c59722572767841493b26183a0d1cc411d54fd759c5607c4590b6563a6/tomli-2.4.1.tar.gz",
-)
-
-http_file(
-    name = "python_tomlkit",
-    downloaded_file_path = "tomlkit-0.15.0.tar.gz",
-    sha256 = "7d1a9ecba3086638211b13814ea79c90dd54dd11993564376f3aa92271f5c7a3",
-    url = "https://files.pythonhosted.org/packages/51/db/03eaf4331631ef6b27d6e3c9b68c54dc6f0d63d87201fed600cc409307fd/tomlkit-0.15.0.tar.gz",
-)
-
-http_file(
-    name = "python_typing_extensions",
-    downloaded_file_path = "typing_extensions-4.15.0.tar.gz",
-    sha256 = "0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466",
-    url = "https://files.pythonhosted.org/packages/72/94/1a15dd82efb362ac84269196e94cf00f187f7ed21c242792a923cdb1c61f/typing_extensions-4.15.0.tar.gz",
-)
-
-http_file(
-    name = "python_urllib3",
-    downloaded_file_path = "urllib3-2.7.0.tar.gz",
-    sha256 = "231e0ec3b63ceb14667c67be60f2f2c40a518cb38b03af60abc813da26505f4c",
-    url = "https://files.pythonhosted.org/packages/53/0c/06f8b233b8fd13b9e5ee11424ef85419ba0d8ba0b3138bf360be2ff56953/urllib3-2.7.0.tar.gz",
-)
-
-http_file(
-    name = "python_wrapt",
-    downloaded_file_path = "wrapt-2.2.1.tar.gz",
-    sha256 = "6744f504375775d7609c82c8d3d94af1c9a6f05586984536905908ba905277b9",
-    url = "https://files.pythonhosted.org/packages/2d/9f/06263fcd8ad6c405f05a3905fd7a84dd3176eb5ad46e44bccc0cd16348bb/wrapt-2.2.1.tar.gz",
-)
-
-http_file(
-    name = "python_websocket_client",
-    downloaded_file_path = "websocket_client-1.9.0.tar.gz",
-    sha256 = "9e813624b6eb619999a97dc7958469217c3176312b3a16a4bd1bc7e08a46ec98",
-    url = "https://files.pythonhosted.org/packages/2c/41/aa4bf9664e4cda14c3b39865b12251e8e7d239f4cd0e3cc1b6c2ccde25c1/websocket_client-1.9.0.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------

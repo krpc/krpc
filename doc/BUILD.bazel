@@ -1,10 +1,13 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
 load("//:config.bzl", "version")
-load("//doc:macros.bzl", "cc_binary_multiple", "csharp_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
-load("//doc:test.bzl", "check_documented_test")
+load("//doc:check_documented.bzl", "check_documented_test")
+load("//doc:macros.bzl", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build:pkg.bzl", "stage_files")
-load("//tools/build:python.bzl", "py_lint_test", "py_script")
+load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
+load("//tools/krpctools:changelog.bzl", "changeloggen")
 load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
 filegroup(
@@ -31,8 +34,10 @@ stage_files(
         "src/scripts/**/*.js",
     ]) + [
         "src/_static/custom.css",
-        "src/_templates/layout.html",
+        "src/_static/external-links.js",
+        "src/_templates/build-info.html",
         "src/dictionary.txt",
+        ":changelog",
         ":cnano-api",
         ":conf",
         ":cpp-api",
@@ -47,51 +52,89 @@ stage_files(
     },
 )
 
-py_script(
+# Unified changelog page, merged from every component's CHANGES.txt. The dict
+# order below sets the per-version component order on the rendered page.
+changeloggen(
+    name = "changelog",
+    out = "src/changelog.rst",
+    components = {
+        "//server:CHANGES.txt": "Server",
+        "//core:CHANGES.txt": "Core",
+        "//service/SpaceCenter:CHANGES.txt": "SpaceCenter service",
+        "//service/Drawing:CHANGES.txt": "Drawing service",
+        "//service/UI:CHANGES.txt": "UI service",
+        "//service/InfernalRobotics:CHANGES.txt": "InfernalRobotics service",
+        "//service/KerbalAlarmClock:CHANGES.txt": "KerbalAlarmClock service",
+        "//service/RemoteTech:CHANGES.txt": "RemoteTech service",
+        "//service/LiDAR:CHANGES.txt": "LiDAR service",
+        "//service/DockingCamera:CHANGES.txt": "DockingCamera service",
+        "//client/python:CHANGES.txt": "Python client",
+        "//client/csharp:CHANGES.txt": "C# client",
+        "//client/cpp:CHANGES.txt": "C++ client",
+        "//client/cnano:CHANGES.txt": "C-nano client",
+        "//client/java:CHANGES.txt": "Java client",
+        "//client/lua:CHANGES.txt": "Lua client",
+        "//tools/krpctools:CHANGES.txt": "krpctools",
+    },
+)
+
+py_console_script_binary(
     name = "sphinx-build",
-    pkg = "@python_sphinx//file",
+    pkg = "@pypi//sphinx",
     script = "sphinx-build",
     visibility = ["//visibility:public"],
     deps = [
-        "@python_alabaster//file",
-        "@python_babel//file",
-        "@python_certifi//file",
-        "@python_charset_normalizer//file",
-        "@python_docutils//file",
-        "@python_idna//file",
-        "@python_imagesize//file",
-        "@python_javalang//file",
-        "@python_javasphinx//file",
-        "@python_jinja2//file",
-        "@python_markupsafe//file",
-        "@python_packaging//file",
-        "@python_pyenchant//file",
-        "@python_pygments//file",
-        "@python_pytz//file",
-        "@python_requests//file",
-        "@python_roman_numerals//file",
-        "@python_snowballstemmer//file",
-        "@python_sphinx_csharp//file",
-        "@python_sphinx_rtd_theme//file",
-        "@python_sphinx_tabs//file",
-        "@python_sphinxcontrib_applehelp//file",
-        "@python_sphinxcontrib_devhelp//file",
-        "@python_sphinxcontrib_htmlhelp//file",
-        "@python_sphinxcontrib_jquery//file",
-        "@python_sphinxcontrib_jsmath//file",
-        "@python_sphinxcontrib_luadomain//file",
-        "@python_sphinxcontrib_qthelp//file",
-        "@python_sphinxcontrib_serializinghtml//file",
-        "@python_sphinxcontrib_spelling//file",
-        "@python_urllib3//file",
+        "@pypi//javalang",
+        "@pypi//javasphinx",
+        "@pypi//pydata_sphinx_theme",
+        "@pypi//pyenchant",
+        "@pypi//requests",
+        "@pypi//sphinx_csharp",
+        "@pypi//sphinx_tabs",
+        "@pypi//sphinxcontrib_luadomain",
+        "@pypi//sphinxcontrib_spelling",
     ],
 )
+
+# Live-build and serve the documentation website: `bazel run //doc:serve`.
+# Bundles sphinx-autobuild + watchdog and the same sphinx extension set as the
+# sphinx-build binary above, so the served rebuild finds every extension.
+py_binary(
+    name = "serve",
+    srcs = ["serve_docs.py"],
+    main = "serve_docs.py",
+    deps = [
+        "@pypi//javalang",
+        "@pypi//javasphinx",
+        "@pypi//pydata_sphinx_theme",
+        "@pypi//pyenchant",
+        "@pypi//requests",
+        "@pypi//sphinx",
+        "@pypi//sphinx_autobuild",
+        "@pypi//sphinx_csharp",
+        "@pypi//sphinx_tabs",
+        "@pypi//sphinxcontrib_luadomain",
+        "@pypi//sphinxcontrib_spelling",
+        "@pypi//watchdog",
+    ],
+)
+
+# Release builds carry a plain "x.y.z" version; CI stamps dev builds with a
+# "-<build>-<sha>" suffix (the build-setup action's version step). A dev build is
+# published under /dev/ and stamped "dev" so the theme's version switcher and
+# old-version warning banner flag it as unreleased; a release publishes under
+# /<version>/ stamped with its number. Deriving the channel from the version
+# string keeps the docs in step with the version everything else builds with.
+docs_version = "dev" if "-" in version else version
 
 genrule(
     name = "conf",
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
-    cmd = "sed 's/%VERSION%/" + version + '/g\' "$<" > "$@"',
+    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number);
+    # %BUILDVERSION% keeps the full version, including a dev build's commit-sha
+    # suffix, which conf.py turns into the footer commit link.
+    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%BUILDVERSION%/" + version + "/g' \"$<\" > \"$@\"",
 )
 
 sphinx_build(
@@ -99,7 +142,9 @@ sphinx_build(
     srcs = [":srcs"],
     out = "html.zip",
     builder = "html",
-    opts = {"version": version},
+    # Stamp -Dversion to match conf.py's version, so DOCUMENTATION_OPTIONS.VERSION
+    # is "dev" for a dev build and the release number otherwise.
+    opts = {"version": docs_version},
     sphinx_build = ":sphinx-build",
 )
 
@@ -110,6 +155,8 @@ sphinx_build(
     builder = "latex",
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
+    # The latex->pdf step needs `make` and a LaTeX toolchain (texlive).
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = ["//:__pkg__"],
 )
 
@@ -193,6 +240,9 @@ sphinx_spelling_test(
     srcs = [":srcs"],
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
+    # Generated bash test wrapper (grep + writable-dictionary hack); convertible
+    # to python later, but Linux-only for now.
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 sphinx_linkcheck_test(
@@ -201,6 +251,8 @@ sphinx_linkcheck_test(
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
     tags = ["requires-network"],
+    # Generated bash test wrapper; convertible to python later, Linux-only now.
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 test_suite(
@@ -275,13 +327,19 @@ filegroup(
     ],
 )
 
+# The C example scripts include <unistd.h> for sleep(), so they only compile on
+# POSIX hosts; the compile check is Linux-only. The C++ examples use portable
+# <thread>, so compile-scripts-cpp stays cross-platform.
 cc_binary_multiple(
     name = "compile-scripts-cnano",
     srcs = glob(["src/scripts/**/*.c"]),
+    target_compatible_with = ["@platforms//os:linux"],
     deps = ["//client/cnano:krpc_cnano"],
 )
 
-csharp_binary_multiple(
+# The example scripts are compiled as libraries; this only checks that they
+# compile, they are never executed
+csharp_library_multiple(
     name = "compile-scripts-csharp-exes",
     srcs = glob(
         ["src/scripts/**/*.cs"],
@@ -289,13 +347,7 @@ csharp_binary_multiple(
     ),
     deps = [
         "//client/csharp:KRPC.Client",
-        "//tools/build/mono-4.5:Google.Protobuf",
-        "//tools/build/mono-4.5:System",
-        "//tools/build/mono-4.5:System.Core",
-        "//tools/build/mono-4.5:System.IO",
-        "//tools/build/mono-4.5:System.Runtime",
-        "//tools/build/mono-4.5:System.Xml",
-        "//tools/build/mono-4.5:mscorlib",
+        "//tools/build/dotnet:Google.Protobuf.net45",
     ],
 )
 
@@ -307,16 +359,12 @@ csharp_library_multiple(
         "//tools/build/ksp:Assembly-CSharp",
         "//tools/build/ksp:Assembly-CSharp-firstpass",
         "//tools/build/ksp:Google.Protobuf",
-        "//tools/build/ksp:System",
-        "//tools/build/ksp:System.Core",
-        "//tools/build/ksp:System.Xml",
         "//tools/build/ksp:UnityEngine",
         "//tools/build/ksp:UnityEngine.AnimationModule",
         "//tools/build/ksp:UnityEngine.CoreModule",
         "//tools/build/ksp:UnityEngine.IMGUIModule",
         "//tools/build/ksp:UnityEngine.InputLegacyModule",
         "//tools/build/ksp:UnityEngine.UI",
-        "//tools/build/ksp:mscorlib",
     ],
 )
 
@@ -337,8 +385,8 @@ java_binary_multiple(
     ],
     deps = [
         "//client/java:krpc-jar",
-        "@java_javatuples//jar",
-        "@java_protobuf//jar",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
     ],
 )
 

@@ -1,7 +1,10 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//:config.bzl", "assembly_version", "author", "ksp_version_max", "ksp_version_min")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:image.bzl", "png_images")
-load("//tools/build/ksp:build.bzl", "ksp_libs")
+load("//tools/build/ksp:build.bzl", "ksp_unity_libs")
+
+exports_files(["CHANGES.txt"])
 
 filegroup(
     name = "server",
@@ -20,10 +23,6 @@ csharp_assembly_info(
     copyright = author,
     custom = {"AssemblyKSPVersion": '"%s", "%s"' % (ksp_version_max, ksp_version_min)},
     description = "RPC server for Kerbal Space Program",
-    internals_visible_to = [
-        "KRPC.Test",
-        "DynamicProxyGenAssembly2",
-    ],
     title = "KRPC",
     version = assembly_version,
     visibility = [
@@ -48,12 +47,19 @@ deps = [
     "//core:KRPC.Core",
     "//tools/build/ksp:Google.Protobuf",
     "//tools/build/ksp:KRPC.IO.Ports",
-] + ksp_libs
+] + ksp_unity_libs
 
 csharp_library(
     name = "KRPC",
     srcs = srcs,
+    internals_visible_to = [
+        "KRPC.Test",
+        "DynamicProxyGenAssembly2",
+    ],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
+    warning_level = 4,
     deps = deps,
 )
 

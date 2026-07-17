@@ -1,28 +1,25 @@
 #include <krpc_cnano.h>
-
-#include <stdbool.h>
-#include <stddef.h>
-#include <stdint.h>
-
 #include <krpc_cnano/encoder.h>
-
 #include <krpc_cnano/pb.h>
 #include <krpc_cnano/pb_decode.h>
 #include <krpc_cnano/pb_encode.h>
+#include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count);
 static bool read_callback(pb_istream_t *stream, uint8_t *buf, size_t count);
 static pb_ostream_t krpc_pb_ostream_from_connection(krpc_connection_t connection);
 static pb_istream_t krpc_pb_istream_from_connection(krpc_connection_t connection);
 
-krpc_error_t krpc_connect(krpc_connection_t connection, const char * client_name) {
+krpc_error_t krpc_connect(krpc_connection_t connection, const char *client_name) {
   {
     // Send connection request message
     krpc_schema_MultiplexedRequest request = krpc_schema_MultiplexedRequest_init_default;
     request.has_connection_request = true;
     request.connection_request.type = krpc_schema_ConnectionRequest_Type_RPC;
     request.connection_request.client_name.funcs.encode = &krpc_encode_callback_cstring;
-    request.connection_request.client_name.arg = (void*)client_name;
+    request.connection_request.client_name.arg = (void *)client_name;
     pb_ostream_t stream = krpc_pb_ostream_from_connection(connection);
     if (!pb_encode_delimited(&stream, krpc_schema_MultiplexedRequest_fields, &request)) {
       krpc_close(connection);
@@ -48,9 +45,8 @@ krpc_error_t krpc_connect(krpc_connection_t connection, const char * client_name
   return KRPC_OK;
 }
 
-static bool krpc_decode_callback_error(
-  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  krpc_error_t * error_code = (krpc_error_t*)(*arg);
+static bool krpc_decode_callback_error(pb_istream_t *stream, const pb_field_t *field, void **arg) {
+  krpc_error_t *error_code = (krpc_error_t *)(*arg);
   *error_code = KRPC_ERROR_RPC_FAILED;
   krpc_schema_Error error = krpc_schema_Error_init_default;
   if (!pb_decode(stream, krpc_schema_Error_fields, &error))
@@ -58,8 +54,8 @@ static bool krpc_decode_callback_error(
   return true;
 }
 
-krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResult * result,
-                         krpc_schema_ProcedureCall * call) {
+krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResult *result,
+                         krpc_schema_ProcedureCall *call) {
   {
     pb_ostream_t ostream = krpc_pb_ostream_from_connection(connection);
 
@@ -91,11 +87,10 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
     if (!pb_decode_delimited(&istream, krpc_schema_MultiplexedResponse_fields, &m_response))
       KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode response message", &istream);
 
-    if (rpc_error != KRPC_OK)
-      KRPC_RETURN_ERROR(RPC_FAILED, "rpc returned an error");
+    if (rpc_error != KRPC_OK) KRPC_RETURN_ERROR(RPC_FAILED, "rpc returned an error");
 
     // Extract the procedure result message from the response
-    krpc_schema_Response * response = &m_response.response;
+    krpc_schema_Response *response = &m_response.response;
     if (response->results_count != 1)
       KRPC_RETURN_ERROR(NO_RESULTS, "response message does not contain a single result");
     *result = response->results[0];
@@ -103,27 +98,26 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
   return KRPC_OK;
 }
 
-static bool write_callback(pb_ostream_t * stream, const uint8_t * buf, size_t count) {
+static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count) {
   krpc_connection_t connection = (krpc_connection_t)(intptr_t)stream->state;
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_write(connection, buf, count))
   return true;
 }
 
-static bool read_callback(pb_istream_t * stream, uint8_t * buf, size_t count) {
+static bool read_callback(pb_istream_t *stream, uint8_t *buf, size_t count) {
   krpc_connection_t connection = (krpc_connection_t)(intptr_t)stream->state;
   krpc_error_t result = krpc_read(connection, buf, count);
-  if (result == KRPC_ERROR_EOF)
-    stream->bytes_left = 0;
+  if (result == KRPC_ERROR_EOF) stream->bytes_left = 0;
   KRPC_CALLBACK_RETURN_ON_ERROR(result);
   return true;
 }
 
 static pb_ostream_t krpc_pb_ostream_from_connection(krpc_connection_t connection) {
-  pb_ostream_t stream = {&write_callback, (void*)(intptr_t)connection, SIZE_MAX, 0};
+  pb_ostream_t stream = {&write_callback, (void *)(intptr_t)connection, SIZE_MAX, 0};
   return stream;
 }
 
 static pb_istream_t krpc_pb_istream_from_connection(krpc_connection_t connection) {
-  pb_istream_t stream = {&read_callback, (void*)(intptr_t)connection, SIZE_MAX};
+  pb_istream_t stream = {&read_callback, (void *)(intptr_t)connection, SIZE_MAX};
   return stream;
 }

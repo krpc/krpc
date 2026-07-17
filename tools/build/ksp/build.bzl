@@ -17,12 +17,3 @@ ksp_unity_libs = [
     "//tools/build/ksp:UnityEngine.UIModule",
     "//tools/build/ksp:UnityEngine.UnityWebRequestWWWModule",
 ]
-
-ksp_net_libs = [
-    "//tools/build/ksp:mscorlib",
-    "//tools/build/ksp:System",
-    "//tools/build/ksp:System.Core",
-    "//tools/build/ksp:System.Xml",
-]
-
-ksp_libs = ksp_unity_libs + ksp_net_libs

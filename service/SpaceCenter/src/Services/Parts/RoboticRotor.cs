@@ -60,8 +60,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get { return servo.rpmLimit; }
             set {
-                var field = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(servo);
-                field.SetValue(value, field.module);
+                var axisField = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(servo);
+                axisField.SetValue(value, axisField.module);
             }
         }
 

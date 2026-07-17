@@ -1,7 +1,11 @@
+import datetime
+import os
+
 project = 'kRPC'
 version = '%VERSION%'
 release = version
-copyright = '2015-2023, kRPC Org'
+# End year is the build year, so the footer stays current without edits.
+copyright = '2015-%d, kRPC Org' % datetime.date.today().year
 author = ''
 
 master_doc = 'index'
@@ -12,22 +16,76 @@ extensions = [
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
     'sphinxcontrib.spelling',
-    'sphinxcontrib.jquery',
     'sphinx_tabs.tabs',
     'sphinxcontrib.luadomain',
     'sphinx_csharp.csharp',
     'javasphinx'
 ]
-templates_path = ['_templates']
 
 # Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
 graphviz_output_format = 'svg'
 
-pygments_style = 'sphinx'
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'pydata_sphinx_theme'
 htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
+templates_path = ['_templates']
 html_css_files = ['custom.css']
+html_js_files = ['external-links.js']
+
+# A dev build's version carries a "-<build>-<sha>" suffix (set-version.py); a
+# release version does not. Surface that commit sha as a footer link so a dev
+# page shows which commit it was built from. %BUILDVERSION% is the full
+# config.bzl version, substituted by the :conf genrule.
+build_version = '%BUILDVERSION%'
+html_context = {}
+if '-' in build_version:
+    html_context['build_commit'] = build_version.rsplit('-', 1)[-1]
+
+# Per-version publishing. %SUBPATH% is
+# the path this build is published under: a release version (e.g. '0.5.4') or
+# 'dev'. The :conf genrule substitutes it with 'dev' when config.bzl's version
+# carries a dev suffix and with the release number otherwise. html_baseurl
+# gives correct canonical links per subpath.
+html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
+
+html_theme_options = {
+    # Runtime version switcher. Each version's HTML is built once and frozen, so
+    # the version list is not baked into the pages: every page fetches
+    # switcher.json from a stable absolute URL at page-load time, and
+    # regenerating that one file (doc/gen_docs_index.py) makes new versions
+    # appear in the dropdown of already-published builds.
+    'switcher': {
+        'json_url': 'https://krpc.github.io/krpc/switcher.json',
+        'version_match': '%SUBPATH%',
+    },
+    # The build sandbox has no network access and builds run with -W, so the
+    # theme must not try to fetch json_url at build time.
+    'check_switcher': False,
+    # Banner on pages that are not the preferred (newest release) version.
+    'show_version_warning_banner': True,
+    # Show all six client languages in the header (getting-started, tutorials
+    # and the languages); the remaining sections collapse into "More".
+    'header_links_before_dropdown': 8,
+    # Footer commit link, rendered by _templates/build-info.html for dev builds.
+    'footer_center': ['build-info'],
+    'navbar_end': ['version-switcher', 'theme-switcher', 'navbar-icon-links'],
+    'icon_links': [
+        {
+            'name': 'GitHub',
+            'url': 'https://github.com/krpc/krpc',
+            'icon': 'fa-brands fa-github',
+        },
+    ],
+}
+
+# The version switcher fetches switcher.json from the published documentation
+# site, which a local `bazel run //doc:serve` build cannot reach; rather than
+# render a broken single-entry dropdown, drop the switcher and the old-version
+# warning banner when serving locally. serve_docs.py sets this variable.
+if os.environ.get('KRPC_DOCS_LOCAL_SERVE'):
+    html_theme_options.pop('switcher', None)
+    html_theme_options['show_version_warning_banner'] = False
+    html_theme_options['navbar_end'] = ['theme-switcher', 'navbar-icon-links']
 
 toc_object_entries = False
 
@@ -36,11 +94,23 @@ todo_include_todos = True
 spelling_word_list_filename = 'dictionary.txt'
 spelling_ignore_contributor_names = True
 
+# The changelog page is generated verbatim from the CHANGES.txt files and is
+# dense with API identifiers; exclude it from the spell checker (only -- it is
+# still built and rendered) rather than listing every identifier in dictionary.txt.
+spelling_exclude_patterns = ['changelog.rst']
+
 javadoc_url_map = {
     'org.javatuples' : ('http://www.javatuples.org/apidocs/', 'javadoc')
 }
 
 add_module_names = False
+
+# Clickable (#NNN) issue/PR references on the changelog page. GitHub redirects
+# /issues/N to /pull/N (and vice versa), so `issue` resolves either kind.
+extlinks = {
+    'issue': ('https://github.com/krpc/krpc/issues/%s', '#%s'),
+    'pr': ('https://github.com/krpc/krpc/pull/%s', '#%s'),
+}
 
 sphinx_tabs_disable_tab_closing = True
 

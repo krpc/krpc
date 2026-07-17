@@ -16,7 +16,7 @@ class Event;
 class Event {
  public:
   Event();
-  Event(Client * client, const krpc::schema::Event& message);
+  Event(Client* client, const krpc::schema::Event& message);
   /** Start the event */
   void start();
   /** Condition variable that is notified when the event occurs */

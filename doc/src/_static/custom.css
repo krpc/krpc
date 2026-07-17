@@ -1,12 +1,48 @@
+/* Site-specific tweaks on top of pydata-sphinx-theme. */
+
 .clearer {
     clear: both !important;
 }
 
-.rst-content code.literal {
-    color: #404040 !important;
+/* pydata-sphinx-theme's heading scale is subtle and puts no rule under section
+   headings, so h2 sections and h3 subsections read almost the same. Rule off
+   each section heading and widen the size/weight/spacing gap between the levels
+   so the section -> subsection boundary is clear. */
+.bd-article h2 {
+    margin-top: 2.5rem;
+    padding-bottom: 0.3rem;
+    font-size: 1.9rem;
+    font-weight: 700;
+    border-bottom: 1px solid var(--pst-color-border);
 }
 
-.rst-content dl:not(.docutils) .property {
-    display: inline !important;
-    padding-right: 0 !important;
+.bd-article h3 {
+    margin-top: 2rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+/* Key sphinx-tabs' colors to the theme's light/dark mode. Its stock tabs.css
+   only reacts to body[data-theme], but pydata-sphinx-theme sets data-theme on
+   the html element, so its dark styling never applies; restyle the tabs with
+   the theme's CSS variables, which track the mode toggle in both directions. */
+[role="tablist"] {
+    border-bottom-color: var(--pst-color-border);
+}
+
+.sphinx-tabs-tab {
+    color: var(--pst-color-primary);
+    background-color: transparent;
+}
+
+.sphinx-tabs-tab[aria-selected="true"] {
+    border-color: var(--pst-color-border);
+    border-bottom-color: var(--pst-color-on-background);
+    background-color: var(--pst-color-on-background);
+}
+
+.sphinx-tabs-panel {
+    color: var(--pst-color-text-base);
+    border-color: var(--pst-color-border);
+    background: var(--pst-color-on-background);
 }

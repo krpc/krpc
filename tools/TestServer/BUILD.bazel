@@ -1,7 +1,7 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary", "csharp_library", "publish_binary")
 load("//:config.bzl", "assembly_version", "author", "version")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_binary", "csharp_library")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:pkg.bzl", "pkg_zip")
-load("//tools/build/mono-4.5:build.bzl", "mono_net_libs")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 csharp_assembly_info(
@@ -20,35 +20,40 @@ srcs = [
     ":AssemblyInfo",
 ]
 
-deps = [
-    "//tools/ServiceDefinitions:KRPC.Core",
+# net472 build of TestService, matching the game-facing build of services
+# that the ServiceDefinitions tool reflects over
+lib_deps = [
+    "//core:KRPC.Core",
     "//tools/build/ksp:Google.Protobuf",
     "//tools/build/ksp:KRPC.IO.Ports",
-] + mono_net_libs
+]
 
 exe_srcs = srcs + ["src/Program.cs"]
 
-exe_deps = deps + ["//tools/build/mono-4.5:NDesk.Options"]
+exe_deps = [
+    "//core:KRPC.Core.net8",
+    "//tools/build/dotnet:Google.Protobuf",
+    "//tools/build/dotnet:System.IO.Ports",
+    "//tools/build/dotnet:NDesk.Options",
+]
 
 pkg_zip(
     name = "archive",
     out = "TestServer-%s.zip" % version,
-    exclude = [
-        "*.mdb",
-        "tools/TestServer/TestServer",
-    ],
+    exclude = ["*.pdb"],
     files = [
         ":README.md",
-        ":TestServer",
+        ":publish",
         "//:version",
         "//tools/build/protobuf:LICENSE",
-    ] + exe_deps,
+    ],
+    mode_map = {
+        "TestServer": "755",
+    },
     path_map = {
+        "tools/TestServer/publish/publish/linux-x64/": "",
         "tools/TestServer/": "",
         "tools/build/protobuf/LICENSE": "LICENSE.protobuf",
-        "tools/build/mono-4.5/": "",
-        "tools/build/ksp/": "",
-        "tools/ServiceDefinitions/": "",
     },
     visibility = ["//visibility:public"],
 )
@@ -56,16 +61,36 @@ pkg_zip(
 csharp_binary(
     name = "TestServer",
     srcs = exe_srcs,
-    nowarn = ["1591"],
+    nowarn = [
+        "CS1591",
+        "CS1701",
+    ],
+    target_frameworks = ["net8.0"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
+    warning_level = 4,
     deps = exe_deps,
+)
+
+# Published (framework-dependent) layout of TestServer for the release
+# archive; requires the .NET 8 runtime to be installed to run.
+# TODO: publish per-platform archives when Windows support lands.
+publish_binary(
+    name = "publish",
+    binary = ":TestServer",
+    runtime_identifier = "linux-x64",
+    self_contained = False,
+    target_framework = "net8.0",
 )
 
 csharp_library(
     name = "TestService",
     srcs = srcs,
-    nowarn = ["1591"],
-    deps = deps,
+    nowarn = ["CS1591"],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    warning_level = 4,
+    deps = lib_deps,
 )
 
 service_definitions(
@@ -79,9 +104,14 @@ service_definitions(
 csharp_binary(
     name = "TestServer.Debug",
     srcs = exe_srcs,
-    define = ["CODE_ANALYSIS"],
-    nowarn = ["1591"],
-    optimize = False,
+    defines = ["CODE_ANALYSIS"],
+    nowarn = [
+        "CS1591",
+        "CS1701",
+    ],
+    target_frameworks = ["net8.0"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
+    warning_level = 4,
     deps = exe_deps,
 )

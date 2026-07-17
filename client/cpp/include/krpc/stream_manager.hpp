@@ -6,7 +6,7 @@
 #include <functional>
 #include <map>
 #include <memory>
-#include <mutex>  // NOLINT(build/c++11)
+#include <mutex>   // NOLINT(build/c++11)
 #include <thread>  // NOLINT(build/c++11)
 
 namespace krpc {
@@ -17,7 +17,7 @@ class StreamImpl;
 namespace schema {
 class ProcedureCall;
 class ProcedureResult;
-}
+}  // namespace schema
 
 class StreamManager {
  public:

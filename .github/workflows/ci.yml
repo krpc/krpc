@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -27,7 +27,7 @@ jobs:
   build-krpc:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -63,7 +63,7 @@ jobs:
   build-genfiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -85,7 +85,7 @@ jobs:
     needs: build-genfiles
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -105,14 +105,14 @@ jobs:
           rm krpc-genfiles-*.zip
       - name: build
         run: |
-          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Debug /warnaserror
-          msbuild KRPC.sln /t:Clean,Build -p:Configuration=Release /warnaserror
+          dotnet build KRPC.sln -c Debug -warnaserror
+          dotnet build KRPC.sln -c Release -warnaserror
 
   build-client-cnano-cmake-linux:
     needs: test-client-cnano
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -211,7 +211,7 @@ jobs:
     needs: test-client-cpp
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -309,7 +309,7 @@ jobs:
   build-docs-html:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -330,7 +330,7 @@ jobs:
   build-docs-pdf:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -351,7 +351,7 @@ jobs:
   build-docs-examples:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -367,7 +367,7 @@ jobs:
   test-docs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -383,7 +383,7 @@ jobs:
   test-core:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -399,7 +399,7 @@ jobs:
   test-service:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.0
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -415,7 +415,7 @@ jobs:
   test-client-cnano:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -438,7 +438,7 @@ jobs:
   test-client-cpp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -461,7 +461,7 @@ jobs:
   test-client-csharp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -489,7 +489,7 @@ jobs:
   test-client-java:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -512,7 +512,7 @@ jobs:
   test-client-python:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -535,7 +535,7 @@ jobs:
   test-client-lua:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -558,7 +558,7 @@ jobs:
   test-client-serialio:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -574,7 +574,7 @@ jobs:
   test-client-websockets:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -590,7 +590,7 @@ jobs:
   test-tools:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -605,6 +605,34 @@ jobs:
           bazel test \
             //tools/krpctest:test \
             //tools/krpctools:test
+
+  # Windows / Bazel scaffold (build-system migration, Phase 8). The custom rules
+  # are all OS-independent now and the known blockers have been cleared (e.g. the
+  # protoc select in tools/build/protobuf now keys on the target OS rather than
+  # the C++ `compiler` value), but Windows support is still being validated on a
+  # real runner. Disabled for now (if: false) so it doesn't run in CI; it stays
+  # non-blocking (continue-on-error, and out of the all-checks-passed gate) and
+  # can be re-enabled once it goes reliably green.
+  build-windows:
+    if: false
+    runs-on: windows-latest
+    continue-on-error: true
+    # Git Bash (MSYS2) rewrites arguments that look like POSIX paths, which
+    # mangles Bazel's //pkg:target patterns (e.g. //core:test -> /core:test).
+    # Disable that conversion so the target patterns reach Bazel intact.
+    env:
+      MSYS2_ARG_CONV_EXCL: "*"
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: build
+        shell: bash
+        run: bazelisk build //... --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //core:test //client/csharp:test --config=windows
 
   all-checks-passed:
     runs-on: ubuntu-latest

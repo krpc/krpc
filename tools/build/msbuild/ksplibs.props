@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project>
+  <PropertyGroup>
+    <KSPExecutable Condition="$([MSBuild]::IsOsPlatform('Windows'))">KSP_x64.exe</KSPExecutable>
+    <KSPExecutable Condition="$([MSBuild]::IsOsPlatform('OSX'))">KSP.app</KSPExecutable>
+    <KSPExecutable Condition="$([MSBuild]::IsOsPlatform('Linux'))">KSP.x86_64</KSPExecutable>
+  </PropertyGroup>
+  <!-- include bazeldirs if it hasn't already been-->
+  <Import Condition="'$(bazel-bin)' == ''" Project="bazeldirs.props"/>
+  <PropertyGroup>
+    <!-- KSP's stripped managed assemblies are fetched by Bazel into the @ksp
+         external repo, laid out under KSP_Data/Managed on every host OS. -->
+    <ManagedPath>$(bazel-external)\+http_archive+ksp\KSP_Data\Managed</ManagedPath>
+  </PropertyGroup>
+  <!-- The .NET Framework BCL (mscorlib/System/System.Core) comes from the net472
+       reference assemblies (Microsoft.NETFramework.ReferenceAssemblies); System.Xml
+       is referenced by simple name. Only the KSP/Unity-specific assemblies are
+       referenced from the game install. -->
+  <ItemGroup>
+    <Reference Include="System.Xml" />
+    <Reference Include="$(ManagedPath)\UnityEngine*.dll">
+      <Name>UnityEngine</Name>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="$(ManagedPath)\Assembly-CSharp.dll">
+      <Name>Assembly-CSharp</Name>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="$(ManagedPath)\Assembly-CSharp-firstpass.dll">
+      <Name>Assembly-CSharp-firstpass</Name>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

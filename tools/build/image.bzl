@@ -23,5 +23,12 @@ def png_images(name, srcs, visibility = None):
     for src in srcs:
         png_name = src.replace(".svg", "")
         png_srcs.append(png_name)
-        png_image(name = png_name, src = src)
+
+        # rsvg-convert is a system tool with no hermetic cross-platform Bazel
+        # story, so SVG->PNG rasterisation is Linux-only.
+        png_image(
+            name = png_name,
+            src = src,
+            target_compatible_with = ["@platforms//os:linux"],
+        )
     native.filegroup(name = name, srcs = png_srcs, visibility = visibility)

@@ -1,6 +1,5 @@
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/krpc.h>
 
@@ -13,8 +12,7 @@
 #include "server_test.hpp"
 #include "services/test_service.h"
 
-class test_client: public server_test {
-};
+class test_client : public server_test {};
 
 TEST_F(test_client, test_version) {
   krpc_schema_Status status = krpc_schema_Status_init_default;
@@ -54,7 +52,7 @@ TEST_F(test_client, test_value_parameters) {
 }
 
 TEST_F(test_client, test_string_malloc_and_free) {
-  char * string = nullptr;
+  char* string = nullptr;
   ASSERT_EQ(KRPC_OK, krpc_TestService_FloatToString(conn, &string, 3.14159));
   ASSERT_STREQ("3.14159", string);
   krpc_free(string);
@@ -164,10 +162,9 @@ TEST_F(test_client, test_blocking_procedure) {
   ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 1, 0));
   ASSERT_EQ(value, 1);
   ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 2, 0));
-  ASSERT_EQ(value, 1+2);
+  ASSERT_EQ(value, 1 + 2);
   int expected = 0;
-  for (int i = 1; i <= 42; i++)
-    expected += i;
+  for (int i = 1; i <= 42; i++) expected += i;
   ASSERT_EQ(KRPC_OK, krpc_TestService_BlockingProcedure(conn, &value, 42, 0));
   ASSERT_EQ(value, expected);
 }
@@ -210,8 +207,7 @@ TEST_F(test_client, test_collections) {
     krpc_list_int32_t result = KRPC_NULL_LIST;
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementList(conn, &result, &list));
     ASSERT_EQ(result.size, 3u);
-    for (size_t i = 0; i < result.size; i++)
-      ASSERT_EQ(result.items[i], list.items[i]+1);
+    for (size_t i = 0; i < result.size; i++) ASSERT_EQ(result.items[i], list.items[i] + 1);
     delete[] list.items;
     KRPC_FREE_LIST(result);
   }
@@ -248,8 +244,7 @@ TEST_F(test_client, test_collections) {
         FAIL();
     }
     delete[] dictionary.entries;
-    for (size_t i = 0; i < result.size; i++)
-      krpc_free(result.entries[i].key);
+    for (size_t i = 0; i < result.size; i++) krpc_free(result.entries[i].key);
     KRPC_FREE_DICTIONARY(result);
   }
   {
@@ -274,17 +269,17 @@ TEST_F(test_client, test_collections) {
     for (size_t i = 0; i < result.size; i++) {
       auto& item = result.items[i];
       switch (item) {
-      case 1:
-        found |= 0x1;
-        break;
-      case 2:
-        found |= 0x2;
-        break;
-      case 3:
-        found |= 0x4;
-        break;
-      default:
-        FAIL();
+        case 1:
+          found |= 0x1;
+          break;
+        case 2:
+          found |= 0x2;
+          break;
+        case 3:
+          found |= 0x4;
+          break;
+        default:
+          FAIL();
       }
     }
     ASSERT_EQ(found, 0x1 | 0x2 | 0x4);
@@ -292,8 +287,8 @@ TEST_F(test_client, test_collections) {
     KRPC_FREE_SET(result);
   }
   {
-    krpc_tuple_int32_int64_t tuple = { 1, 2 };
-    krpc_tuple_int32_int64_t result = { 0, 0 };
+    krpc_tuple_int32_int64_t tuple = {1, 2};
+    krpc_tuple_int32_int64_t result = {0, 0};
     ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementTuple(conn, &result, &tuple));
     ASSERT_EQ(result.e0, 2);
     ASSERT_EQ(result.e1, 3);

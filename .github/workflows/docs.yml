@@ -1,21 +1,37 @@
 name: docs
 
+# Publishes the documentation site incrementally into the `gh-pages` branch
+# (GitHub Pages: "Deploy from a branch" -> gh-pages / root). Each run touches
+# only its own subdirectory, so every other version is left untouched:
+#   * a push to `main`   refreshes  gh-pages/dev/       (overwritten each time)
+#   * a push of a `v*` tag freezes  gh-pages/<version>/ (write-once)
+
 on:
   push:
     branches:
-      - docs
+      - main
+    tags:
+      - "v*"
 
 permissions:
-  contents: read
+  contents: write
   packages: read
-  pages: write
-  id-token: write
+  pull-requests: read
+
+# Every run pushes to the same `gh-pages` ref, so serialize them: a release
+# moves a `v*` tag and `main` together, firing two runs that would otherwise
+# race and fail one push on a non-fast-forward. One global group (not keyed on
+# the ref) queues runs; cancel-in-progress is false so a release build is never
+# dropped mid-flight.
+concurrency:
+  group: docs-gh-pages
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.8.1
+      image: ghcr.io/krpc/buildenv:3.9.1
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -26,16 +42,72 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
         with:
-          long-version: "false"
-      - name: build
+          # A tag build is a release: keep the plain version so it publishes
+          # under /<version>/. A main build is a dev build: take the suffixed
+          # version (the build-setup version step) so it publishes under /dev/.
+          long-version: ${{ startsWith(github.ref, 'refs/tags/') && 'false' || 'true' }}
+      - name: determine target
+        id: target
+        # Kept POSIX-sh compatible so it doesn't depend on the container's
+        # shell. The subpath follows the version stamped in config.bzl: a
+        # suffixed (dev) version publishes under /dev/, a plain release version
+        # under /x.y.z/.
         run: |
-          bazel build //doc:html
-          mkdir github-pages
-          echo "" > github-pages/.nojekyll
-          (cd github-pages; unzip -q ../bazel-bin/doc/html.zip)
-      - name: upload-artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: github-pages
-      - name: deploy
-        uses: actions/deploy-pages@v4
+          version=$(sed -n 's/^version = "\(.*\)"$/\1/p' config.bzl)
+          case "$version" in
+            *-*) echo "subpath=dev" >> "$GITHUB_OUTPUT" ;;
+            *) echo "subpath=$version" >> "$GITHUB_OUTPUT" ;;
+          esac
+      - name: build
+        run: bazel build //doc:html
+      - name: publish
+        env:
+          SUBPATH: ${{ steps.target.outputs.subpath }}
+          GH_TOKEN: ${{ secrets.github_token }}
+        run: |
+          set -e
+          git config --global --add safe.directory "$PWD"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          if ! git ls-remote --exit-code origin gh-pages >/dev/null 2>&1; then
+            echo "::error::gh-pages branch does not exist; bootstrap it first"
+            exit 1
+          fi
+          git fetch --no-tags --depth=1 origin gh-pages
+          git worktree add gh-pages FETCH_HEAD
+
+          # Replace only this build's subdirectory; siblings are untouched.
+          rm -rf "gh-pages/${SUBPATH}"
+          mkdir -p "gh-pages/${SUBPATH}"
+          (cd "gh-pages/${SUBPATH}" && unzip -q "${GITHUB_WORKSPACE}/bazel-bin/doc/html.zip")
+
+          # Regenerate the runtime dropdown list and the root redirect.
+          doc/gen_docs_index.py gh-pages
+
+          # Record provenance in the commit message: the triggering ref, and -
+          # when the build came from a merged pull request - its number and
+          # source branch. The PR lookup degrades to nothing on a direct push, a
+          # tag with no associated PR, or any API error.
+          pr_json=$(curl -sf \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/pulls" \
+            || echo '[]')
+          pr_info=$(printf '%s' "$pr_json" | python3 -c 'import json,sys; p=json.load(sys.stdin); print(p[0]["number"], p[0]["head"]["ref"]) if p else print()' || true)
+          pr_number=${pr_info%% *}
+          pr_branch=${pr_info#* }
+
+          msg="Publish docs for ${SUBPATH} (ref ${GITHUB_REF_NAME}, commit ${GITHUB_SHA})"
+          if [ -n "$pr_number" ]; then
+            msg="Publish docs for ${SUBPATH} (ref ${GITHUB_REF_NAME}, PR #${pr_number} from ${pr_branch}, commit ${GITHUB_SHA})"
+          fi
+
+          cd gh-pages
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No documentation changes to publish"
+          else
+            git commit -m "$msg"
+            git push origin HEAD:gh-pages
+          fi

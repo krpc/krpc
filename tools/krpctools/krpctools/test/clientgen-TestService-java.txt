@@ -803,382 +803,157 @@ public class TestService {
     }
 
     public static class _Types {
+        // Procedure return and parameter types are held in lookup maps that are
+        // populated by chunked initializer methods. Emitting them this way keeps
+        // every generated method under the JVM's 64KB bytecode limit as a service
+        // accumulates procedures.
+        private static final java.util.Map<String, krpc.schema.KRPC.Type> RETURN_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type>();
+        private static final java.util.Map<String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type[]>();
+
+        static {
+            initTypes0();
+            initTypes1();
+        }
+
+        private static void initTypes0() {
+            RETURN_TYPES.put("AddMultipleValues", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("AddMultipleValues", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
+            RETURN_TYPES.put("AddToObjectList", krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass")));
+            PARAMETER_TYPES.put("AddToObjectList", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass")), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("BlockingProcedure", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("BlockingProcedure", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("BoolToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("BoolToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL) });
+            RETURN_TYPES.put("BytesToHexString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("BytesToHexString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES) });
+            RETURN_TYPES.put("Counter", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("Counter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("CreateTestObject", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("CreateTestObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("DeprecatedProcedure", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("DeprecatedProcedure", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
+            RETURN_TYPES.put("DeprecatedProcedureNoMessage", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("DeprecatedProcedureNoMessage", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
+            RETURN_TYPES.put("DictionaryDefault", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
+            PARAMETER_TYPES.put("DictionaryDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
+            RETURN_TYPES.put("DoubleToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("DoubleToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
+            RETURN_TYPES.put("EchoTestObject", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("EchoTestObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("EnumDefaultArg", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
+            PARAMETER_TYPES.put("EnumDefaultArg", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("EnumEcho", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
+            PARAMETER_TYPES.put("EnumEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("EnumReturn", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
+            PARAMETER_TYPES.put("EnumReturn", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("FloatToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
+            RETURN_TYPES.put("IncrementDictionary", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("IncrementDictionary", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("IncrementList", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("IncrementList", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("IncrementNestedCollection", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))));
+            PARAMETER_TYPES.put("IncrementNestedCollection", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))) });
+            RETURN_TYPES.put("IncrementSet", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("IncrementSet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("IncrementTuple", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)));
+            PARAMETER_TYPES.put("IncrementTuple", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)) });
+            RETURN_TYPES.put("Int32ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("Int32ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Int64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("Int64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
+            RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("ListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("OnTimer", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
+            PARAMETER_TYPES.put("OnTimer", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
+            RETURN_TYPES.put("OnTimerUsingLambda", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
+            PARAMETER_TYPES.put("OnTimerUsingLambda", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
+            RETURN_TYPES.put("OptionalArguments", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("OptionalArguments", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("ResetCustomExceptionLater", null);
+            PARAMETER_TYPES.put("ResetCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("ResetInvalidOperationExceptionLater", null);
+            PARAMETER_TYPES.put("ResetInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("ReturnNullWhenNotAllowed", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("ReturnNullWhenNotAllowed", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("SetDefault", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("SetDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("StringToInt32", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("StringToInt32", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("ThrowArgumentException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowArgumentException", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("ThrowArgumentNullException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowArgumentNullException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("ThrowArgumentOutOfRangeException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowArgumentOutOfRangeException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowCustomException", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("ThrowCustomExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowCustomExceptionLater", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("ThrowInvalidOperationException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowInvalidOperationException", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("ThrowInvalidOperationExceptionLater", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("ThrowInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
+            PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
+            RETURN_TYPES.put("get_DeprecatedProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("set_DeprecatedProperty", null);
+            PARAMETER_TYPES.put("set_DeprecatedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("get_ObjectProperty", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("set_ObjectProperty", null);
+            PARAMETER_TYPES.put("set_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("get_StringProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("get_StringProperty", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("set_StringProperty", null);
+            PARAMETER_TYPES.put("set_StringProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("set_StringPropertyPrivateGet", null);
+            PARAMETER_TYPES.put("set_StringPropertyPrivateGet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("get_StringPropertyPrivateSet", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("get_StringPropertyPrivateSet", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("DeprecatedClass_DeprecatedMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("DeprecatedClass_DeprecatedMethod", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "DeprecatedClass") });
+            RETURN_TYPES.put("TestClass_FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("TestClass_FloatToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
+        }
+
+        private static void initTypes1() {
+            RETURN_TYPES.put("TestClass_GetValue", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("TestClass_GetValue", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_ObjectToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("TestClass_ObjectToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_OptionalArguments", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("TestClass_OptionalArguments", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_get_IntProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("TestClass_get_IntProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_set_IntProperty", null);
+            PARAMETER_TYPES.put("TestClass_set_IntProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("TestClass_get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("TestClass_get_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_set_ObjectProperty", null);
+            PARAMETER_TYPES.put("TestClass_set_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_set_StringPropertyPrivateGet", null);
+            PARAMETER_TYPES.put("TestClass_set_StringPropertyPrivateGet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("TestClass_get_StringPropertyPrivateSet", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("TestClass_get_StringPropertyPrivateSet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("TestClass_static_StaticMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("TestClass_static_StaticMethod", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+        }
+
         public static krpc.schema.KRPC.Type getReturnType(String procedure) {
-            switch (procedure) {
-            case "AddMultipleValues":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "AddToObjectList":
-                return krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass"));
-            case "BlockingProcedure":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "BoolToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "BytesToHexString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "Counter":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "CreateTestObject":
-                return krpc.client.Types.createClass("TestService", "TestClass");
-            case "DeprecatedProcedure":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "DeprecatedProcedureNoMessage":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "DictionaryDefault":
-                return krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
-            case "DoubleToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "EchoTestObject":
-                return krpc.client.Types.createClass("TestService", "TestClass");
-            case "EnumDefaultArg":
-                return krpc.client.Types.createEnumeration("TestService", "TestEnum");
-            case "EnumEcho":
-                return krpc.client.Types.createEnumeration("TestService", "TestEnum");
-            case "EnumReturn":
-                return krpc.client.Types.createEnumeration("TestService", "TestEnum");
-            case "FloatToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "IncrementDictionary":
-                return krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            case "IncrementList":
-                return krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            case "IncrementNestedCollection":
-                return krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
-            case "IncrementSet":
-                return krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            case "IncrementTuple":
-                return krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64));
-            case "Int32ToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "Int64ToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "ListDefault":
-                return krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            case "OnTimer":
-                return krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT);
-            case "OnTimerUsingLambda":
-                return krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT);
-            case "OptionalArguments":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "ResetCustomExceptionLater":
-                return null;
-            case "ResetInvalidOperationExceptionLater":
-                return null;
-            case "ReturnNullWhenNotAllowed":
-                return krpc.client.Types.createClass("TestService", "TestClass");
-            case "SetDefault":
-                return krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
-            case "StringToInt32":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowArgumentException":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowArgumentNullException":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowArgumentOutOfRangeException":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowCustomException":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowCustomExceptionLater":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowInvalidOperationException":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "ThrowInvalidOperationExceptionLater":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "TupleDefault":
-                return krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL));
-            case "get_DeprecatedProperty":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "set_DeprecatedProperty":
-                return null;
-            case "get_ObjectProperty":
-                return krpc.client.Types.createClass("TestService", "TestClass");
-            case "set_ObjectProperty":
-                return null;
-            case "get_StringProperty":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "set_StringProperty":
-                return null;
-            case "set_StringPropertyPrivateGet":
-                return null;
-            case "get_StringPropertyPrivateSet":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "DeprecatedClass_DeprecatedMethod":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "TestClass_FloatToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "TestClass_GetValue":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "TestClass_ObjectToString":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "TestClass_OptionalArguments":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "TestClass_static_StaticMethod":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            case "TestClass_get_IntProperty":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32);
-            case "TestClass_set_IntProperty":
-                return null;
-            case "TestClass_get_ObjectProperty":
-                return krpc.client.Types.createClass("TestService", "TestClass");
-            case "TestClass_set_ObjectProperty":
-                return null;
-            case "TestClass_set_StringPropertyPrivateGet":
-                return null;
-            case "TestClass_get_StringPropertyPrivateSet":
-                return krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING);
-            }
-            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            if (!RETURN_TYPES.containsKey(procedure))
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return RETURN_TYPES.get(procedure);
         }
 
         public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
-            switch (procedure) {
-            case "AddMultipleValues":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)
-                };
-            case "AddToObjectList":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass")),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "BlockingProcedure":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
-                };
-            case "BoolToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)
-                };
-            case "BytesToHexString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES)
-                };
-            case "Counter":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
-                };
-            case "CreateTestObject":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "DeprecatedProcedure":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
-                };
-            case "DeprecatedProcedureNoMessage":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
-                };
-            case "DictionaryDefault":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
-                };
-            case "DoubleToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)
-                };
-            case "EchoTestObject":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "EnumDefaultArg":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createEnumeration("TestService", "TestEnum")
-                };
-            case "EnumEcho":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createEnumeration("TestService", "TestEnum")
-                };
-            case "EnumReturn":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "FloatToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
-                };
-            case "IncrementDictionary":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
-                };
-            case "IncrementList":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
-                };
-            case "IncrementNestedCollection":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
-                };
-            case "IncrementSet":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
-                };
-            case "IncrementTuple":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
-                };
-            case "Int32ToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
-                };
-            case "Int64ToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)
-                };
-            case "ListDefault":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
-                };
-            case "OnTimer":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
-                };
-            case "OnTimerUsingLambda":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)
-                };
-            case "OptionalArguments":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "ResetCustomExceptionLater":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "ResetInvalidOperationExceptionLater":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "ReturnNullWhenNotAllowed":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "SetDefault":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
-                };
-            case "StringToInt32":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "ThrowArgumentException":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "ThrowArgumentNullException":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "ThrowArgumentOutOfRangeException":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
-                };
-            case "ThrowCustomException":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "ThrowCustomExceptionLater":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "ThrowInvalidOperationException":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "ThrowInvalidOperationExceptionLater":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "TupleDefault":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
-                };
-            case "get_DeprecatedProperty":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "set_DeprecatedProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "get_ObjectProperty":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "set_ObjectProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "get_StringProperty":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "set_StringProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "set_StringPropertyPrivateGet":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "get_StringPropertyPrivateSet":
-                return new krpc.schema.KRPC.Type[] {
-                };
-            case "DeprecatedClass_DeprecatedMethod":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "DeprecatedClass")
-                };
-            case "TestClass_FloatToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass"),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)
-                };
-            case "TestClass_GetValue":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_ObjectToString":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass"),
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_OptionalArguments":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass"),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_get_IntProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_set_IntProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass"),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
-                };
-            case "TestClass_get_ObjectProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_set_ObjectProperty":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass"),
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_set_StringPropertyPrivateGet":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass"),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            case "TestClass_get_StringPropertyPrivateSet":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createClass("TestService", "TestClass")
-                };
-            case "TestClass_static_StaticMethod":
-                return new krpc.schema.KRPC.Type[] {
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
-                    krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
-                };
-            }
-            throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            krpc.schema.KRPC.Type[] parameterTypes = PARAMETER_TYPES.get(procedure);
+            if (parameterTypes == null)
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return parameterTypes;
         }
     }
 }

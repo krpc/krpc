@@ -1,0 +1,37 @@
+# Direct python dependencies of the build.
+#
+# Runtime dependencies of the python packages, build/test tooling, and the
+# sphinx documentation toolchain. Transitive dependencies are resolved into
+# requirements_lock.txt; regenerate it with:
+#
+#   bazel run //tools/build/python:requirements.update
+
+# Runtime dependencies
+jinja2==3.1.6
+protobuf==7.35.1
+pyserial==3.5
+requests==2.34.2
+websocket-client==1.9.0
+
+# Build and test tooling
+black==26.5.1
+hatchling
+pylint==4.0.6
+pytest
+
+# Sphinx and extensions for the documentation
+pydata-sphinx-theme==0.20.0
+pyenchant==3.3.0
+sphinx==9.1.0
+sphinx-csharp==0.1.8
+sphinx-tabs==3.5.0
+sphinxcontrib-luadomain==1.1.2
+sphinxcontrib-spelling==8.0.2
+
+# Live-serving the documentation website (bazel run //doc:serve)
+sphinx-autobuild
+watchdog
+
+# Java API docs; custom builds hosted on S3 (see PYTHON_PACKAGING.md)
+javalang @ https://krpc.s3.amazonaws.com/lib/javasphinx/javalang-0.13.1.tar.gz
+javasphinx @ https://krpc.s3.amazonaws.com/lib/javasphinx/javasphinx-0.9.16.tar.gz

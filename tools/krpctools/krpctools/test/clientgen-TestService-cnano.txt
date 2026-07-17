@@ -37,13 +37,13 @@ struct krpc_dictionary_int32_bool_s {
   krpc_dictionary_entry_int32_bool_t * entries;
 };
 
-krpc_error_t krpc_encode_dictionary_int32_bool(
+static inline krpc_error_t krpc_encode_dictionary_int32_bool(
   pb_ostream_t * stream, const krpc_dictionary_int32_bool_t * value);
-krpc_error_t krpc_encode_size_dictionary_int32_bool(
+static inline krpc_error_t krpc_encode_size_dictionary_int32_bool(
   size_t * size, const krpc_dictionary_int32_bool_t * value);
-bool krpc_encode_callback_dictionary_int32_bool(
+static inline bool krpc_encode_callback_dictionary_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_dictionary_int32_bool(
+static inline krpc_error_t krpc_decode_dictionary_int32_bool(
   pb_istream_t * stream, krpc_dictionary_int32_bool_t * value);
 
 #endif  // KRPC_TYPE_DICTIONARY_INT32_BOOL
@@ -63,13 +63,13 @@ struct krpc_dictionary_string_int32_s {
   krpc_dictionary_entry_string_int32_t * entries;
 };
 
-krpc_error_t krpc_encode_dictionary_string_int32(
+static inline krpc_error_t krpc_encode_dictionary_string_int32(
   pb_ostream_t * stream, const krpc_dictionary_string_int32_t * value);
-krpc_error_t krpc_encode_size_dictionary_string_int32(
+static inline krpc_error_t krpc_encode_size_dictionary_string_int32(
   size_t * size, const krpc_dictionary_string_int32_t * value);
-bool krpc_encode_callback_dictionary_string_int32(
+static inline bool krpc_encode_callback_dictionary_string_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_dictionary_string_int32(
+static inline krpc_error_t krpc_decode_dictionary_string_int32(
   pb_istream_t * stream, krpc_dictionary_string_int32_t * value);
 
 #endif  // KRPC_TYPE_DICTIONARY_STRING_INT32
@@ -83,13 +83,13 @@ struct krpc_list_int32_s {
   int32_t * items;
 };
 
-krpc_error_t krpc_encode_list_int32(
+static inline krpc_error_t krpc_encode_list_int32(
   pb_ostream_t * stream, const krpc_list_int32_t * value);
-krpc_error_t krpc_encode_size_list_int32(
+static inline krpc_error_t krpc_encode_size_list_int32(
   size_t * size, const krpc_list_int32_t * value);
-bool krpc_encode_callback_list_int32(
+static inline bool krpc_encode_callback_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_list_int32(
+static inline krpc_error_t krpc_decode_list_int32(
   pb_istream_t * stream, krpc_list_int32_t * value);
 
 #endif  // KRPC_TYPE_LIST_INT32
@@ -109,13 +109,13 @@ struct krpc_dictionary_string_list_int32_s {
   krpc_dictionary_entry_string_list_int32_t * entries;
 };
 
-krpc_error_t krpc_encode_dictionary_string_list_int32(
+static inline krpc_error_t krpc_encode_dictionary_string_list_int32(
   pb_ostream_t * stream, const krpc_dictionary_string_list_int32_t * value);
-krpc_error_t krpc_encode_size_dictionary_string_list_int32(
+static inline krpc_error_t krpc_encode_size_dictionary_string_list_int32(
   size_t * size, const krpc_dictionary_string_list_int32_t * value);
-bool krpc_encode_callback_dictionary_string_list_int32(
+static inline bool krpc_encode_callback_dictionary_string_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_dictionary_string_list_int32(
+static inline krpc_error_t krpc_decode_dictionary_string_list_int32(
   pb_istream_t * stream, krpc_dictionary_string_list_int32_t * value);
 
 #endif  // KRPC_TYPE_DICTIONARY_STRING_LIST_INT32
@@ -129,13 +129,13 @@ struct krpc_list_object_s {
   krpc_object_t * items;
 };
 
-krpc_error_t krpc_encode_list_object(
+static inline krpc_error_t krpc_encode_list_object(
   pb_ostream_t * stream, const krpc_list_object_t * value);
-krpc_error_t krpc_encode_size_list_object(
+static inline krpc_error_t krpc_encode_size_list_object(
   size_t * size, const krpc_list_object_t * value);
-bool krpc_encode_callback_list_object(
+static inline bool krpc_encode_callback_list_object(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_list_object(
+static inline krpc_error_t krpc_decode_list_object(
   pb_istream_t * stream, krpc_list_object_t * value);
 
 #endif  // KRPC_TYPE_LIST_OBJECT
@@ -149,13 +149,13 @@ struct krpc_set_int32_s {
   int32_t * items;
 };
 
-krpc_error_t krpc_encode_set_int32(
+static inline krpc_error_t krpc_encode_set_int32(
   pb_ostream_t * stream, const krpc_set_int32_t * value);
-krpc_error_t krpc_encode_size_set_int32(
+static inline krpc_error_t krpc_encode_size_set_int32(
   size_t * size, const krpc_set_int32_t * value);
-bool krpc_encode_callback_set_int32(
+static inline bool krpc_encode_callback_set_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_set_int32(
+static inline krpc_error_t krpc_decode_set_int32(
   pb_istream_t * stream, krpc_set_int32_t * value);
 
 #endif  // KRPC_TYPE_SET_INT32
@@ -169,13 +169,13 @@ struct krpc_tuple_int32_bool_s {
   bool e1;
 };
 
-krpc_error_t krpc_encode_tuple_int32_bool(
+static inline krpc_error_t krpc_encode_tuple_int32_bool(
   pb_ostream_t * stream, const krpc_tuple_int32_bool_t * value);
-krpc_error_t krpc_encode_size_tuple_int32_bool(
+static inline krpc_error_t krpc_encode_size_tuple_int32_bool(
   size_t * size, const krpc_tuple_int32_bool_t * value);
-bool krpc_encode_callback_tuple_int32_bool(
+static inline bool krpc_encode_callback_tuple_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_tuple_int32_bool(
+static inline krpc_error_t krpc_decode_tuple_int32_bool(
   pb_istream_t * stream, krpc_tuple_int32_bool_t * value);
 
 #endif  // KRPC_TYPE_TUPLE_INT32_BOOL
@@ -189,13 +189,13 @@ struct krpc_tuple_int32_int64_s {
   int64_t e1;
 };
 
-krpc_error_t krpc_encode_tuple_int32_int64(
+static inline krpc_error_t krpc_encode_tuple_int32_int64(
   pb_ostream_t * stream, const krpc_tuple_int32_int64_t * value);
-krpc_error_t krpc_encode_size_tuple_int32_int64(
+static inline krpc_error_t krpc_encode_size_tuple_int32_int64(
   size_t * size, const krpc_tuple_int32_int64_t * value);
-bool krpc_encode_callback_tuple_int32_int64(
+static inline bool krpc_encode_callback_tuple_int32_int64(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
-krpc_error_t krpc_decode_tuple_int32_int64(
+static inline krpc_error_t krpc_decode_tuple_int32_int64(
   pb_istream_t * stream, krpc_tuple_int32_int64_t * value);
 
 #endif  // KRPC_TYPE_TUPLE_INT32_INT64
@@ -232,170 +232,170 @@ typedef enum {
   KRPC_TESTSERVICE_TESTENUM_VALUEC = 2
 } krpc_TestService_TestEnum_t;
 
-krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z);
+static inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z);
 
-krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * returnValue, const krpc_list_object_t * l, const char * value);
+static inline krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * returnValue, const krpc_list_object_t * l, const char * value);
 
-krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connection, int32_t * returnValue, int32_t n, int32_t sum);
+static inline krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connection, int32_t * returnValue, int32_t n, int32_t sum);
 
-krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * returnValue, bool value);
+static inline krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * returnValue, bool value);
 
-krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connection, char * * returnValue, krpc_bytes_t value);
+static inline krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connection, char * * returnValue, krpc_bytes_t value);
 
-krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * returnValue, const char * id, int32_t divisor);
+static inline krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * returnValue, const char * id, int32_t divisor);
 
-krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value);
+static inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value);
 
 /**
  * Deprecated procedure documentation string.
  */
 KRPC_DEPRECATED("Use FloatToString instead.")
-krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * returnValue, float value);
+static inline krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * returnValue, float value);
 
 /**
  * Deprecated procedure with no reason documentation string.
  */
 KRPC_DEPRECATED("")
-krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * returnValue, float value);
+static inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * returnValue, float value);
 
-krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * returnValue, const krpc_dictionary_int32_bool_t * x);
+static inline krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * returnValue, const krpc_dictionary_int32_bool_t * x);
 
-krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * returnValue, double value);
+static inline krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * returnValue, double value);
 
-krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value);
+static inline krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value);
 
-krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x);
+static inline krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x);
 
-krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x);
+static inline krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x);
 
-krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue);
+static inline krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue);
 
 /**
  * Procedure documentation string.
  */
-krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * returnValue, float value);
+static inline krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * returnValue, float value);
 
-krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * returnValue, const krpc_dictionary_string_int32_t * d);
+static inline krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * returnValue, const krpc_dictionary_string_int32_t * d);
 
-krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l);
+static inline krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l);
 
-krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * returnValue, const krpc_dictionary_string_list_int32_t * d);
+static inline krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * returnValue, const krpc_dictionary_string_list_int32_t * d);
 
-krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * h);
+static inline krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * h);
 
-krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * returnValue, const krpc_tuple_int32_int64_t * t);
+static inline krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * returnValue, const krpc_tuple_int32_int64_t * t);
 
-krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * returnValue, int32_t value);
+static inline krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * returnValue, int32_t value);
 
-krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * returnValue, int64_t value);
+static inline krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * returnValue, int64_t value);
 
-krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x);
+static inline krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x);
 
-krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats);
+static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats);
 
-krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds);
+static inline krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds);
 
-krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj);
+static inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj);
 
-krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t connection);
+static inline krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t connection);
 
-krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_connection_t connection);
+static inline krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_connection_t connection);
 
-krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue);
+static inline krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue);
 
-krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x);
+static inline krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x);
 
-krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * returnValue, const char * value);
+static inline krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * returnValue, const char * value);
 
-krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * returnValue);
+static inline krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * returnValue);
 
-krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_t connection, int32_t * returnValue, const char * foo);
+static inline krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_t connection, int32_t * returnValue, const char * foo);
 
-krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo);
+static inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo);
 
-krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue);
+static inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue);
 
-krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue);
+static inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue);
 
-krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * returnValue);
+static inline krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * returnValue);
 
-krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * returnValue);
+static inline krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * returnValue);
 
-krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * returnValue, const krpc_tuple_int32_bool_t * x);
-
-/**
- * Deprecated property documentation string.
- */
-KRPC_DEPRECATED("Use StringProperty instead.")
-krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * returnValue);
+static inline krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * returnValue, const krpc_tuple_int32_bool_t * x);
 
 /**
  * Deprecated property documentation string.
  */
 KRPC_DEPRECATED("Use StringProperty instead.")
-krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connection_t connection, const char * value);
+static inline krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * returnValue);
 
-krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue);
+/**
+ * Deprecated property documentation string.
+ */
+KRPC_DEPRECATED("Use StringProperty instead.")
+static inline krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connection_t connection, const char * value);
 
-krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t value);
+static inline krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue);
+
+static inline krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t value);
 
 /**
  * Property documentation string.
  */
-krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * returnValue);
+static inline krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * returnValue);
 
 /**
  * Property documentation string.
  */
-krpc_error_t krpc_TestService_set_StringProperty(krpc_connection_t connection, const char * value);
+static inline krpc_error_t krpc_TestService_set_StringProperty(krpc_connection_t connection, const char * value);
 
-krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connection_t connection, const char * value);
+static inline krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connection_t connection, const char * value);
 
-krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue);
+static inline krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue);
 
 /**
  * Deprecated method documentation string.
  */
 KRPC_DEPRECATED("Use TestClass.GetValue instead.")
-krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance);
+static inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance);
 
-krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, float x);
+static inline krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, float x);
 
 /**
  * Method documentation string.
  */
-krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance);
+static inline krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance);
 
-krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t other);
+static inline krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t other);
 
-krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj);
+static inline krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj);
 
-krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b);
-
-/**
- * Property documentation string.
- */
-krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestClass_t instance);
+static inline krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b);
 
 /**
  * Property documentation string.
  */
-krpc_error_t krpc_TestService_TestClass_set_IntProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, int32_t value);
+static inline krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestClass_t instance);
 
-krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance);
+/**
+ * Property documentation string.
+ */
+static inline krpc_error_t krpc_TestService_TestClass_set_IntProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, int32_t value);
 
-krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value);
+static inline krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance);
 
-krpc_error_t krpc_TestService_TestClass_set_StringPropertyPrivateGet(krpc_connection_t connection, krpc_TestService_TestClass_t instance, const char * value);
+static inline krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value);
 
-krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance);
+static inline krpc_error_t krpc_TestService_TestClass_set_StringPropertyPrivateGet(krpc_connection_t connection, krpc_TestService_TestClass_t instance, const char * value);
+
+static inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance);
 
 // Implementation
 
 #ifndef KRPC_IMPL_TYPE_DICTIONARY_INT32_BOOL
 #define KRPC_IMPL_TYPE_DICTIONARY_INT32_BOOL
 
-static bool krpc_encode_callback_key_dictionary_int32_bool(
+static inline bool krpc_encode_callback_key_dictionary_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry key");
@@ -408,7 +408,7 @@ static bool krpc_encode_callback_key_dictionary_int32_bool(
   return true;
 }
 
-static bool krpc_encode_callback_value_dictionary_int32_bool(
+static inline bool krpc_encode_callback_value_dictionary_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry value");
@@ -421,7 +421,7 @@ static bool krpc_encode_callback_value_dictionary_int32_bool(
   return true;
 }
 
-static bool krpc_encode_callback_entry_dictionary_int32_bool(
+static inline bool krpc_encode_callback_entry_dictionary_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_dictionary_int32_bool_t * value = (const krpc_dictionary_int32_bool_t*)(*arg);
   krpc_schema_DictionaryEntry entry = krpc_schema_DictionaryEntry_init_default;
@@ -442,7 +442,7 @@ static bool krpc_encode_callback_entry_dictionary_int32_bool(
   return true;
 }
 
-inline krpc_error_t krpc_encode_dictionary_int32_bool(
+static inline krpc_error_t krpc_encode_dictionary_int32_bool(
   pb_ostream_t * stream, const krpc_dictionary_int32_bool_t * value) {
   krpc_schema_Dictionary message = krpc_schema_Dictionary_init_default;
   message.entries.funcs.encode = &krpc_encode_callback_entry_dictionary_int32_bool;
@@ -451,7 +451,7 @@ inline krpc_error_t krpc_encode_dictionary_int32_bool(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_dictionary_int32_bool(
+static inline krpc_error_t krpc_encode_size_dictionary_int32_bool(
   size_t * size, const krpc_dictionary_int32_bool_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_dictionary_int32_bool(&stream, value));
@@ -459,7 +459,7 @@ inline krpc_error_t krpc_encode_size_dictionary_int32_bool(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_dictionary_int32_bool(
+static inline bool krpc_encode_callback_dictionary_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary_int32_bool");
@@ -472,23 +472,23 @@ inline bool krpc_encode_callback_dictionary_int32_bool(
   return true;
 }
 
-static bool krpc_decode_callback_key_dictionary_int32_bool(
+static inline bool krpc_decode_callback_key_dictionary_int32_bool(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   int32_t * key = (int32_t*)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int32(stream, key));
   return true;
 }
 
-static bool krpc_decode_callback_value_dictionary_int32_bool(
+static inline bool krpc_decode_callback_value_dictionary_int32_bool(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   bool * value = (bool*)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_bool(stream, value));
   return true;
 }
 
-static bool krpc_decode_callback_entry_dictionary_int32_bool(
+static inline bool krpc_decode_callback_entry_dictionary_int32_bool(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
   State * state = (State*)(*arg);
   krpc_dictionary_int32_bool_t * value = state->value;
   size_t i = value->size;
@@ -506,9 +506,9 @@ static bool krpc_decode_callback_entry_dictionary_int32_bool(
   return true;
 }
 
-inline krpc_error_t krpc_decode_dictionary_int32_bool(
+static inline krpc_error_t krpc_decode_dictionary_int32_bool(
   pb_istream_t * stream, krpc_dictionary_int32_bool_t * value) {
-  typedef struct { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_int32_bool_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -527,7 +527,7 @@ inline krpc_error_t krpc_decode_dictionary_int32_bool(
 #ifndef KRPC_IMPL_TYPE_DICTIONARY_STRING_INT32
 #define KRPC_IMPL_TYPE_DICTIONARY_STRING_INT32
 
-static bool krpc_encode_callback_key_dictionary_string_int32(
+static inline bool krpc_encode_callback_key_dictionary_string_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry key");
@@ -540,7 +540,7 @@ static bool krpc_encode_callback_key_dictionary_string_int32(
   return true;
 }
 
-static bool krpc_encode_callback_value_dictionary_string_int32(
+static inline bool krpc_encode_callback_value_dictionary_string_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry value");
@@ -553,7 +553,7 @@ static bool krpc_encode_callback_value_dictionary_string_int32(
   return true;
 }
 
-static bool krpc_encode_callback_entry_dictionary_string_int32(
+static inline bool krpc_encode_callback_entry_dictionary_string_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_dictionary_string_int32_t * value = (const krpc_dictionary_string_int32_t*)(*arg);
   krpc_schema_DictionaryEntry entry = krpc_schema_DictionaryEntry_init_default;
@@ -574,7 +574,7 @@ static bool krpc_encode_callback_entry_dictionary_string_int32(
   return true;
 }
 
-inline krpc_error_t krpc_encode_dictionary_string_int32(
+static inline krpc_error_t krpc_encode_dictionary_string_int32(
   pb_ostream_t * stream, const krpc_dictionary_string_int32_t * value) {
   krpc_schema_Dictionary message = krpc_schema_Dictionary_init_default;
   message.entries.funcs.encode = &krpc_encode_callback_entry_dictionary_string_int32;
@@ -583,7 +583,7 @@ inline krpc_error_t krpc_encode_dictionary_string_int32(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_dictionary_string_int32(
+static inline krpc_error_t krpc_encode_size_dictionary_string_int32(
   size_t * size, const krpc_dictionary_string_int32_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_dictionary_string_int32(&stream, value));
@@ -591,7 +591,7 @@ inline krpc_error_t krpc_encode_size_dictionary_string_int32(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_dictionary_string_int32(
+static inline bool krpc_encode_callback_dictionary_string_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary_string_int32");
@@ -604,23 +604,23 @@ inline bool krpc_encode_callback_dictionary_string_int32(
   return true;
 }
 
-static bool krpc_decode_callback_key_dictionary_string_int32(
+static inline bool krpc_decode_callback_key_dictionary_string_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   char * * key = (char **)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_string(stream, key));
   return true;
 }
 
-static bool krpc_decode_callback_value_dictionary_string_int32(
+static inline bool krpc_decode_callback_value_dictionary_string_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   int32_t * value = (int32_t*)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_int32(stream, value));
   return true;
 }
 
-static bool krpc_decode_callback_entry_dictionary_string_int32(
+static inline bool krpc_decode_callback_entry_dictionary_string_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
   State * state = (State*)(*arg);
   krpc_dictionary_string_int32_t * value = state->value;
   size_t i = value->size;
@@ -638,9 +638,9 @@ static bool krpc_decode_callback_entry_dictionary_string_int32(
   return true;
 }
 
-inline krpc_error_t krpc_decode_dictionary_string_int32(
+static inline krpc_error_t krpc_decode_dictionary_string_int32(
   pb_istream_t * stream, krpc_dictionary_string_int32_t * value) {
-  typedef struct { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -659,7 +659,7 @@ inline krpc_error_t krpc_decode_dictionary_string_int32(
 #ifndef KRPC_IMPL_TYPE_LIST_INT32
 #define KRPC_IMPL_TYPE_LIST_INT32
 
-static bool krpc_encode_callback_items_list_int32(
+static inline bool krpc_encode_callback_items_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_list_int32_t * value = (const krpc_list_int32_t*)(*arg);
   size_t i = 0;
@@ -675,7 +675,7 @@ static bool krpc_encode_callback_items_list_int32(
   return true;
 }
 
-inline krpc_error_t krpc_encode_list_int32(
+static inline krpc_error_t krpc_encode_list_int32(
   pb_ostream_t * stream, const krpc_list_int32_t * value) {
   krpc_schema_List message = krpc_schema_List_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_list_int32;
@@ -684,7 +684,7 @@ inline krpc_error_t krpc_encode_list_int32(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_list_int32(
+static inline krpc_error_t krpc_encode_size_list_int32(
   size_t * size, const krpc_list_int32_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_list_int32(&stream, value));
@@ -692,7 +692,7 @@ inline krpc_error_t krpc_encode_size_list_int32(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_list_int32(
+static inline bool krpc_encode_callback_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_int32");
@@ -705,9 +705,9 @@ inline bool krpc_encode_callback_list_int32(
   return true;
 }
 
-static bool krpc_decode_callback_item_list_int32(
+static inline bool krpc_decode_callback_item_list_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_int32_t * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -719,9 +719,9 @@ static bool krpc_decode_callback_item_list_int32(
   return true;
 }
 
-inline krpc_error_t krpc_decode_list_int32(
+static inline krpc_error_t krpc_decode_list_int32(
   pb_istream_t * stream, krpc_list_int32_t * value) {
-  typedef struct { size_t capacity; krpc_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -740,7 +740,7 @@ inline krpc_error_t krpc_decode_list_int32(
 #ifndef KRPC_IMPL_TYPE_DICTIONARY_STRING_LIST_INT32
 #define KRPC_IMPL_TYPE_DICTIONARY_STRING_LIST_INT32
 
-static bool krpc_encode_callback_key_dictionary_string_list_int32(
+static inline bool krpc_encode_callback_key_dictionary_string_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry key");
@@ -753,7 +753,7 @@ static bool krpc_encode_callback_key_dictionary_string_list_int32(
   return true;
 }
 
-static bool krpc_encode_callback_value_dictionary_string_list_int32(
+static inline bool krpc_encode_callback_value_dictionary_string_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary entry value");
@@ -766,7 +766,7 @@ static bool krpc_encode_callback_value_dictionary_string_list_int32(
   return true;
 }
 
-static bool krpc_encode_callback_entry_dictionary_string_list_int32(
+static inline bool krpc_encode_callback_entry_dictionary_string_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_dictionary_string_list_int32_t * value = (const krpc_dictionary_string_list_int32_t*)(*arg);
   krpc_schema_DictionaryEntry entry = krpc_schema_DictionaryEntry_init_default;
@@ -787,7 +787,7 @@ static bool krpc_encode_callback_entry_dictionary_string_list_int32(
   return true;
 }
 
-inline krpc_error_t krpc_encode_dictionary_string_list_int32(
+static inline krpc_error_t krpc_encode_dictionary_string_list_int32(
   pb_ostream_t * stream, const krpc_dictionary_string_list_int32_t * value) {
   krpc_schema_Dictionary message = krpc_schema_Dictionary_init_default;
   message.entries.funcs.encode = &krpc_encode_callback_entry_dictionary_string_list_int32;
@@ -796,7 +796,7 @@ inline krpc_error_t krpc_encode_dictionary_string_list_int32(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_dictionary_string_list_int32(
+static inline krpc_error_t krpc_encode_size_dictionary_string_list_int32(
   size_t * size, const krpc_dictionary_string_list_int32_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_dictionary_string_list_int32(&stream, value));
@@ -804,7 +804,7 @@ inline krpc_error_t krpc_encode_size_dictionary_string_list_int32(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_dictionary_string_list_int32(
+static inline bool krpc_encode_callback_dictionary_string_list_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for dictionary_string_list_int32");
@@ -817,23 +817,23 @@ inline bool krpc_encode_callback_dictionary_string_list_int32(
   return true;
 }
 
-static bool krpc_decode_callback_key_dictionary_string_list_int32(
+static inline bool krpc_decode_callback_key_dictionary_string_list_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   char * * key = (char **)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_string(stream, key));
   return true;
 }
 
-static bool krpc_decode_callback_value_dictionary_string_list_int32(
+static inline bool krpc_decode_callback_value_dictionary_string_list_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   krpc_list_int32_t * value = (krpc_list_int32_t*)(*arg);
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_list_int32(stream, value));
   return true;
 }
 
-static bool krpc_decode_callback_entry_dictionary_string_list_int32(
+static inline bool krpc_decode_callback_entry_dictionary_string_list_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
   State * state = (State*)(*arg);
   krpc_dictionary_string_list_int32_t * value = state->value;
   size_t i = value->size;
@@ -851,9 +851,9 @@ static bool krpc_decode_callback_entry_dictionary_string_list_int32(
   return true;
 }
 
-inline krpc_error_t krpc_decode_dictionary_string_list_int32(
+static inline krpc_error_t krpc_decode_dictionary_string_list_int32(
   pb_istream_t * stream, krpc_dictionary_string_list_int32_t * value) {
-  typedef struct { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_dictionary_string_list_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->entries == NULL) {
@@ -872,7 +872,7 @@ inline krpc_error_t krpc_decode_dictionary_string_list_int32(
 #ifndef KRPC_IMPL_TYPE_LIST_OBJECT
 #define KRPC_IMPL_TYPE_LIST_OBJECT
 
-static bool krpc_encode_callback_items_list_object(
+static inline bool krpc_encode_callback_items_list_object(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_list_object_t * value = (const krpc_list_object_t*)(*arg);
   size_t i = 0;
@@ -888,7 +888,7 @@ static bool krpc_encode_callback_items_list_object(
   return true;
 }
 
-inline krpc_error_t krpc_encode_list_object(
+static inline krpc_error_t krpc_encode_list_object(
   pb_ostream_t * stream, const krpc_list_object_t * value) {
   krpc_schema_List message = krpc_schema_List_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_list_object;
@@ -897,7 +897,7 @@ inline krpc_error_t krpc_encode_list_object(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_list_object(
+static inline krpc_error_t krpc_encode_size_list_object(
   size_t * size, const krpc_list_object_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_list_object(&stream, value));
@@ -905,7 +905,7 @@ inline krpc_error_t krpc_encode_size_list_object(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_list_object(
+static inline bool krpc_encode_callback_list_object(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_object");
@@ -918,9 +918,9 @@ inline bool krpc_encode_callback_list_object(
   return true;
 }
 
-static bool krpc_decode_callback_item_list_object(
+static inline bool krpc_decode_callback_item_list_object(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_list_object_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -932,9 +932,9 @@ static bool krpc_decode_callback_item_list_object(
   return true;
 }
 
-inline krpc_error_t krpc_decode_list_object(
+static inline krpc_error_t krpc_decode_list_object(
   pb_istream_t * stream, krpc_list_object_t * value) {
-  typedef struct { size_t capacity; krpc_list_object_t * value; } State;
+  typedef struct State { size_t capacity; krpc_list_object_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -953,7 +953,7 @@ inline krpc_error_t krpc_decode_list_object(
 #ifndef KRPC_IMPL_TYPE_SET_INT32
 #define KRPC_IMPL_TYPE_SET_INT32
 
-static bool krpc_encode_callback_items_set_int32(
+static inline bool krpc_encode_callback_items_set_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_set_int32_t * value = (const krpc_set_int32_t*)(*arg);
   size_t i = 0;
@@ -969,7 +969,7 @@ static bool krpc_encode_callback_items_set_int32(
   return true;
 }
 
-inline krpc_error_t krpc_encode_set_int32(
+static inline krpc_error_t krpc_encode_set_int32(
   pb_ostream_t * stream, const krpc_set_int32_t * value) {
   krpc_schema_Set message = krpc_schema_Set_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_set_int32;
@@ -978,7 +978,7 @@ inline krpc_error_t krpc_encode_set_int32(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_set_int32(
+static inline krpc_error_t krpc_encode_size_set_int32(
   size_t * size, const krpc_set_int32_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_set_int32(&stream, value));
@@ -986,7 +986,7 @@ inline krpc_error_t krpc_encode_size_set_int32(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_set_int32(
+static inline bool krpc_encode_callback_set_int32(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for set_int32");
@@ -999,9 +999,9 @@ inline bool krpc_encode_callback_set_int32(
   return true;
 }
 
-static bool krpc_decode_callback_item_set_int32(
+static inline bool krpc_decode_callback_item_set_int32(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct { size_t capacity; krpc_set_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_set_int32_t * value; } State;
   State * state = (State*)(*arg);
   size_t i = state->value->size;
   state->value->size++;
@@ -1013,9 +1013,9 @@ static bool krpc_decode_callback_item_set_int32(
   return true;
 }
 
-inline krpc_error_t krpc_decode_set_int32(
+static inline krpc_error_t krpc_decode_set_int32(
   pb_istream_t * stream, krpc_set_int32_t * value) {
-  typedef struct { size_t capacity; krpc_set_int32_t * value; } State;
+  typedef struct State { size_t capacity; krpc_set_int32_t * value; } State;
   State state = { 0, value };
   value->size = 0;
   if (value->items == NULL) {
@@ -1034,7 +1034,7 @@ inline krpc_error_t krpc_decode_set_int32(
 #ifndef KRPC_IMPL_TYPE_TUPLE_INT32_BOOL
 #define KRPC_IMPL_TYPE_TUPLE_INT32_BOOL
 
-static bool krpc_encode_callback_items_tuple_int32_bool(
+static inline bool krpc_encode_callback_items_tuple_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_tuple_int32_bool_t * value = (const krpc_tuple_int32_bool_t*)(*arg);
   {
@@ -1058,7 +1058,7 @@ static bool krpc_encode_callback_items_tuple_int32_bool(
   return true;
 }
 
-inline krpc_error_t krpc_encode_tuple_int32_bool(
+static inline krpc_error_t krpc_encode_tuple_int32_bool(
   pb_ostream_t * stream, const krpc_tuple_int32_bool_t * value) {
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_tuple_int32_bool;
@@ -1067,7 +1067,7 @@ inline krpc_error_t krpc_encode_tuple_int32_bool(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_tuple_int32_bool(
+static inline krpc_error_t krpc_encode_size_tuple_int32_bool(
   size_t * size, const krpc_tuple_int32_bool_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_tuple_int32_bool(&stream, value));
@@ -1075,7 +1075,7 @@ inline krpc_error_t krpc_encode_size_tuple_int32_bool(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_tuple_int32_bool(
+static inline bool krpc_encode_callback_tuple_int32_bool(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple_int32_bool");
@@ -1088,9 +1088,9 @@ inline bool krpc_encode_callback_tuple_int32_bool(
   return true;
 }
 
-static bool krpc_decode_callback_item_tuple_int32_bool(
+static inline bool krpc_decode_callback_item_tuple_int32_bool(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct {size_t pos; krpc_tuple_int32_bool_t * value;} State;
+  typedef struct State {size_t pos; krpc_tuple_int32_bool_t * value;} State;
   State * state = (State*)(*arg);
   krpc_tuple_int32_bool_t * value = state->value;
   switch (state->pos) {
@@ -1107,11 +1107,11 @@ static bool krpc_decode_callback_item_tuple_int32_bool(
   return true;
 }
 
-inline krpc_error_t krpc_decode_tuple_int32_bool(
+static inline krpc_error_t krpc_decode_tuple_int32_bool(
   pb_istream_t * stream, krpc_tuple_int32_bool_t * value) {
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_tuple_int32_bool;
-  typedef struct { size_t pos; krpc_tuple_int32_bool_t * value; } State;
+  typedef struct State { size_t pos; krpc_tuple_int32_bool_t * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
@@ -1123,7 +1123,7 @@ inline krpc_error_t krpc_decode_tuple_int32_bool(
 #ifndef KRPC_IMPL_TYPE_TUPLE_INT32_INT64
 #define KRPC_IMPL_TYPE_TUPLE_INT32_INT64
 
-static bool krpc_encode_callback_items_tuple_int32_int64(
+static inline bool krpc_encode_callback_items_tuple_int32_int64(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const krpc_tuple_int32_int64_t * value = (const krpc_tuple_int32_int64_t*)(*arg);
   {
@@ -1147,7 +1147,7 @@ static bool krpc_encode_callback_items_tuple_int32_int64(
   return true;
 }
 
-inline krpc_error_t krpc_encode_tuple_int32_int64(
+static inline krpc_error_t krpc_encode_tuple_int32_int64(
   pb_ostream_t * stream, const krpc_tuple_int32_int64_t * value) {
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_tuple_int32_int64;
@@ -1156,7 +1156,7 @@ inline krpc_error_t krpc_encode_tuple_int32_int64(
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_encode_size_tuple_int32_int64(
+static inline krpc_error_t krpc_encode_size_tuple_int32_int64(
   size_t * size, const krpc_tuple_int32_int64_t * value) {
   pb_ostream_t stream = PB_OSTREAM_SIZING;
   KRPC_RETURN_ON_ERROR(krpc_encode_tuple_int32_int64(&stream, value));
@@ -1164,7 +1164,7 @@ inline krpc_error_t krpc_encode_size_tuple_int32_int64(
   return KRPC_OK;
 }
 
-inline bool krpc_encode_callback_tuple_int32_int64(
+static inline bool krpc_encode_callback_tuple_int32_int64(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
     KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple_int32_int64");
@@ -1177,9 +1177,9 @@ inline bool krpc_encode_callback_tuple_int32_int64(
   return true;
 }
 
-static bool krpc_decode_callback_item_tuple_int32_int64(
+static inline bool krpc_decode_callback_item_tuple_int32_int64(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
-  typedef struct {size_t pos; krpc_tuple_int32_int64_t * value;} State;
+  typedef struct State {size_t pos; krpc_tuple_int32_int64_t * value;} State;
   State * state = (State*)(*arg);
   krpc_tuple_int32_int64_t * value = state->value;
   switch (state->pos) {
@@ -1196,11 +1196,11 @@ static bool krpc_decode_callback_item_tuple_int32_int64(
   return true;
 }
 
-inline krpc_error_t krpc_decode_tuple_int32_int64(
+static inline krpc_error_t krpc_decode_tuple_int32_int64(
   pb_istream_t * stream, krpc_tuple_int32_int64_t * value) {
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_tuple_int32_int64;
-  typedef struct { size_t pos; krpc_tuple_int32_int64_t * value; } State;
+  typedef struct State { size_t pos; krpc_tuple_int32_int64_t * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
@@ -1209,7 +1209,7 @@ inline krpc_error_t krpc_decode_tuple_int32_int64(
 
 #endif  // KRPC_IMPL_TYPE_TUPLE_INT32_INT64
 
-inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z) {
+static inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connection, char * * returnValue, float x, int32_t y, int64_t z) {
   krpc_call_t _call;
   krpc_argument_t _arguments[3];
   KRPC_CHECK(krpc_call(&_call, 9999, 8, 3, _arguments));
@@ -1228,7 +1228,7 @@ inline krpc_error_t krpc_TestService_AddMultipleValues(krpc_connection_t connect
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * returnValue, const krpc_list_object_t * l, const char * value) {
+static inline krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connection, krpc_list_object_t * returnValue, const krpc_list_object_t * l, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 26, 2, _arguments));
@@ -1246,7 +1246,7 @@ inline krpc_error_t krpc_TestService_AddToObjectList(krpc_connection_t connectio
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connection, int32_t * returnValue, int32_t n, int32_t sum) {
+static inline krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connection, int32_t * returnValue, int32_t n, int32_t sum) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 16, 2, _arguments));
@@ -1264,7 +1264,7 @@ inline krpc_error_t krpc_TestService_BlockingProcedure(krpc_connection_t connect
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * returnValue, bool value) {
+static inline krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, char * * returnValue, bool value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 5, 1, _arguments));
@@ -1281,7 +1281,7 @@ inline krpc_error_t krpc_TestService_BoolToString(krpc_connection_t connection, 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connection, char * * returnValue, krpc_bytes_t value) {
+static inline krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connection, char * * returnValue, krpc_bytes_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 7, 1, _arguments));
@@ -1298,7 +1298,7 @@ inline krpc_error_t krpc_TestService_BytesToHexString(krpc_connection_t connecti
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * returnValue, const char * id, int32_t divisor) {
+static inline krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32_t * returnValue, const char * id, int32_t divisor) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 27, 2, _arguments));
@@ -1316,7 +1316,7 @@ inline krpc_error_t krpc_TestService_Counter(krpc_connection_t connection, int32
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value) {
+static inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 9, 1, _arguments));
@@ -1333,7 +1333,7 @@ inline krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connecti
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * returnValue, float value) {
+static inline krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t connection, char * * returnValue, float value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 39, 1, _arguments));
@@ -1350,7 +1350,7 @@ inline krpc_error_t krpc_TestService_DeprecatedProcedure(krpc_connection_t conne
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * returnValue, float value) {
+static inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connection_t connection, char * * returnValue, float value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 40, 1, _arguments));
@@ -1367,7 +1367,7 @@ inline krpc_error_t krpc_TestService_DeprecatedProcedureNoMessage(krpc_connectio
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * returnValue, const krpc_dictionary_int32_bool_t * x) {
+static inline krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connection, krpc_dictionary_int32_bool_t * returnValue, const krpc_dictionary_int32_bool_t * x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 25, 1, _arguments));
@@ -1384,7 +1384,7 @@ inline krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t connect
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * returnValue, double value) {
+static inline krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * returnValue, double value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 2, 1, _arguments));
@@ -1401,7 +1401,7 @@ inline krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value) {
+static inline krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 10, 1, _arguments));
@@ -1418,7 +1418,7 @@ inline krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x) {
+static inline krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 15, 1, _arguments));
@@ -1435,7 +1435,7 @@ inline krpc_error_t krpc_TestService_EnumDefaultArg(krpc_connection_t connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x) {
+static inline krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue, krpc_TestService_TestEnum_t x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 14, 1, _arguments));
@@ -1452,7 +1452,7 @@ inline krpc_error_t krpc_TestService_EnumEcho(krpc_connection_t connection, krpc
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue) {
+static inline krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 13, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1467,7 +1467,7 @@ inline krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, kr
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * returnValue, float value) {
+static inline krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * returnValue, float value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 1, 1, _arguments));
@@ -1484,7 +1484,7 @@ inline krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection,
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * returnValue, const krpc_dictionary_string_int32_t * d) {
+static inline krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t connection, krpc_dictionary_string_int32_t * returnValue, const krpc_dictionary_string_int32_t * d) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 18, 1, _arguments));
@@ -1501,7 +1501,7 @@ inline krpc_error_t krpc_TestService_IncrementDictionary(krpc_connection_t conne
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l) {
+static inline krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 17, 1, _arguments));
@@ -1518,7 +1518,7 @@ inline krpc_error_t krpc_TestService_IncrementList(krpc_connection_t connection,
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * returnValue, const krpc_dictionary_string_list_int32_t * d) {
+static inline krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * returnValue, const krpc_dictionary_string_list_int32_t * d) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 21, 1, _arguments));
@@ -1535,7 +1535,7 @@ inline krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * h) {
+static inline krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * h) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 19, 1, _arguments));
@@ -1552,7 +1552,7 @@ inline krpc_error_t krpc_TestService_IncrementSet(krpc_connection_t connection, 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * returnValue, const krpc_tuple_int32_int64_t * t) {
+static inline krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection, krpc_tuple_int32_int64_t * returnValue, const krpc_tuple_int32_int64_t * t) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 20, 1, _arguments));
@@ -1569,7 +1569,7 @@ inline krpc_error_t krpc_TestService_IncrementTuple(krpc_connection_t connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * returnValue, int32_t value) {
+static inline krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * returnValue, int32_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 3, 1, _arguments));
@@ -1586,7 +1586,7 @@ inline krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection,
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * returnValue, int64_t value) {
+static inline krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection, char * * returnValue, int64_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 4, 1, _arguments));
@@ -1603,7 +1603,7 @@ inline krpc_error_t krpc_TestService_Int64ToString(krpc_connection_t connection,
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x) {
+static inline krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 23, 1, _arguments));
@@ -1620,7 +1620,7 @@ inline krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, k
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats) {
+static inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds, uint32_t repeats) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 37, 2, _arguments));
@@ -1638,7 +1638,7 @@ inline krpc_error_t krpc_TestService_OnTimer(krpc_connection_t connection, krpc_
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds) {
+static inline krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connection, krpc_schema_Event * returnValue, uint32_t milliseconds) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 38, 1, _arguments));
@@ -1655,7 +1655,7 @@ inline krpc_error_t krpc_TestService_OnTimerUsingLambda(krpc_connection_t connec
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj) {
+static inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connection, char * * returnValue, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj) {
   krpc_call_t _call;
   krpc_argument_t _arguments[4];
   KRPC_CHECK(krpc_call(&_call, 9999, 12, 4, _arguments));
@@ -1675,7 +1675,7 @@ inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t connect
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t connection) {
+static inline krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t connection) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 35, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1685,7 +1685,7 @@ inline krpc_error_t krpc_TestService_ResetCustomExceptionLater(krpc_connection_t
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_connection_t connection) {
+static inline krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_connection_t connection) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 29, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1695,7 +1695,7 @@ inline krpc_error_t krpc_TestService_ResetInvalidOperationExceptionLater(krpc_co
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 11, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1710,7 +1710,7 @@ inline krpc_error_t krpc_TestService_ReturnNullWhenNotAllowed(krpc_connection_t 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x) {
+static inline krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, krpc_set_int32_t * returnValue, const krpc_set_int32_t * x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 24, 1, _arguments));
@@ -1727,7 +1727,7 @@ inline krpc_error_t krpc_TestService_SetDefault(krpc_connection_t connection, kr
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * returnValue, const char * value) {
+static inline krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * returnValue, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 6, 1, _arguments));
@@ -1744,7 +1744,7 @@ inline krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection,
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 31, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1759,7 +1759,7 @@ inline krpc_error_t krpc_TestService_ThrowArgumentException(krpc_connection_t co
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_t connection, int32_t * returnValue, const char * foo) {
+static inline krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_t connection, int32_t * returnValue, const char * foo) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 32, 1, _arguments));
@@ -1776,7 +1776,7 @@ inline krpc_error_t krpc_TestService_ThrowArgumentNullException(krpc_connection_
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo) {
+static inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_connection_t connection, int32_t * returnValue, int32_t foo) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 33, 1, _arguments));
@@ -1793,7 +1793,7 @@ inline krpc_error_t krpc_TestService_ThrowArgumentOutOfRangeException(krpc_conne
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 34, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1808,7 +1808,7 @@ inline krpc_error_t krpc_TestService_ThrowCustomException(krpc_connection_t conn
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 36, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1823,7 +1823,7 @@ inline krpc_error_t krpc_TestService_ThrowCustomExceptionLater(krpc_connection_t
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 28, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1838,7 +1838,7 @@ inline krpc_error_t krpc_TestService_ThrowInvalidOperationException(krpc_connect
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_connection_t connection, int32_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 30, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1853,7 +1853,7 @@ inline krpc_error_t krpc_TestService_ThrowInvalidOperationExceptionLater(krpc_co
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * returnValue, const krpc_tuple_int32_bool_t * x) {
+static inline krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * returnValue, const krpc_tuple_int32_bool_t * x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 22, 1, _arguments));
@@ -1870,7 +1870,7 @@ inline krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * returnValue) {
+static inline krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connection, char * * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 47, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1885,7 +1885,7 @@ inline krpc_error_t krpc_TestService_DeprecatedProperty(krpc_connection_t connec
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connection_t connection, const char * value) {
+static inline krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connection_t connection, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 48, 1, _arguments));
@@ -1897,7 +1897,7 @@ inline krpc_error_t krpc_TestService_set_DeprecatedProperty(krpc_connection_t co
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue) {
+static inline krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 45, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1912,7 +1912,7 @@ inline krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t value) {
+static inline krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 46, 1, _arguments));
@@ -1924,7 +1924,7 @@ inline krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t connec
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * returnValue) {
+static inline krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection, char * * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 41, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1939,7 +1939,7 @@ inline krpc_error_t krpc_TestService_StringProperty(krpc_connection_t connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_set_StringProperty(krpc_connection_t connection, const char * value) {
+static inline krpc_error_t krpc_TestService_set_StringProperty(krpc_connection_t connection, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 42, 1, _arguments));
@@ -1951,7 +1951,7 @@ inline krpc_error_t krpc_TestService_set_StringProperty(krpc_connection_t connec
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connection_t connection, const char * value) {
+static inline krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connection_t connection, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 43, 1, _arguments));
@@ -1963,7 +1963,7 @@ inline krpc_error_t krpc_TestService_set_StringPropertyPrivateGet(krpc_connectio
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue) {
+static inline krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue) {
   krpc_call_t _call;
   KRPC_CHECK(krpc_call(&_call, 9999, 44, 0, NULL));
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
@@ -1978,7 +1978,7 @@ inline krpc_error_t krpc_TestService_StringPropertyPrivateSet(krpc_connection_t 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance) {
+static inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_connection_t connection, char * * returnValue, krpc_TestService_DeprecatedClass_t instance) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 60, 1, _arguments));
@@ -1995,7 +1995,7 @@ inline krpc_error_t krpc_TestService_DeprecatedClass_DeprecatedMethod(krpc_conne
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, float x) {
+static inline krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, float x) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 50, 2, _arguments));
@@ -2013,7 +2013,7 @@ inline krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t c
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance) {
+static inline krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 49, 1, _arguments));
@@ -2030,7 +2030,7 @@ inline krpc_error_t krpc_TestService_TestClass_GetValue(krpc_connection_t connec
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t other) {
+static inline krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t other) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 51, 2, _arguments));
@@ -2048,7 +2048,7 @@ inline krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connection_t 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj) {
+static inline krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance, const char * x, const char * y, const char * z, krpc_TestService_TestClass_t obj) {
   krpc_call_t _call;
   krpc_argument_t _arguments[5];
   KRPC_CHECK(krpc_call(&_call, 9999, 52, 5, _arguments));
@@ -2069,7 +2069,7 @@ inline krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_connection
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestClass_t instance) {
+static inline krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t connection, int32_t * returnValue, krpc_TestService_TestClass_t instance) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 54, 1, _arguments));
@@ -2086,7 +2086,7 @@ inline krpc_error_t krpc_TestService_TestClass_IntProperty(krpc_connection_t con
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_set_IntProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, int32_t value) {
+static inline krpc_error_t krpc_TestService_TestClass_set_IntProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, int32_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 55, 2, _arguments));
@@ -2099,7 +2099,7 @@ inline krpc_error_t krpc_TestService_TestClass_set_IntProperty(krpc_connection_t
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance) {
+static inline krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t instance) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 56, 1, _arguments));
@@ -2116,7 +2116,7 @@ inline krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connection_t 
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value) {
+static inline krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connection_t connection, krpc_TestService_TestClass_t instance, krpc_TestService_TestClass_t value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 57, 2, _arguments));
@@ -2129,7 +2129,7 @@ inline krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_connectio
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_set_StringPropertyPrivateGet(krpc_connection_t connection, krpc_TestService_TestClass_t instance, const char * value) {
+static inline krpc_error_t krpc_TestService_TestClass_set_StringPropertyPrivateGet(krpc_connection_t connection, krpc_TestService_TestClass_t instance, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 58, 2, _arguments));
@@ -2142,7 +2142,7 @@ inline krpc_error_t krpc_TestService_TestClass_set_StringPropertyPrivateGet(krpc
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance) {
+static inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_connection_t connection, char * * returnValue, krpc_TestService_TestClass_t instance) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 59, 1, _arguments));
@@ -2159,7 +2159,7 @@ inline krpc_error_t krpc_TestService_TestClass_StringPropertyPrivateSet(krpc_con
   return KRPC_OK;
 }
 
-inline krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b) {
+static inline krpc_error_t krpc_TestService_TestClass_StaticMethod(krpc_connection_t connection, char * * returnValue, const char * a, const char * b) {
   krpc_call_t _call;
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 53, 2, _arguments));

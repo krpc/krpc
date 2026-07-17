@@ -5,6 +5,11 @@ using KRPC.Server;
 using KRPC.Server.TCP;
 using KRPC.Utils;
 using Logger = KRPC.Utils.Logger;
+#if NET
+using SerialPorts = System.IO.Ports;
+#else
+using SerialPorts = KRPC.IO.Ports;
+#endif
 
 namespace KRPC
 {
@@ -112,12 +117,12 @@ namespace KRPC
                 } else {
                     uint baudRate = 0;
                     ushort dataBits = 0;
-                    KRPC.IO.Ports.Parity parity;
-                    KRPC.IO.Ports.StopBits stopBits;
+                    SerialPorts.Parity parity;
+                    SerialPorts.StopBits stopBits;
                     uint.TryParse(Settings.GetValueOrDefault("baud_rate", "9600"), out baudRate);
                     ushort.TryParse(Settings.GetValueOrDefault("data_bits", "8"), out dataBits);
-                    Enum.TryParse<KRPC.IO.Ports.Parity>(Settings.GetValueOrDefault("parity", "None"), out parity);
-                    Enum.TryParse<KRPC.IO.Ports.StopBits>(Settings.GetValueOrDefault("stop_bits", "One"), out stopBits);
+                    Enum.TryParse<SerialPorts.Parity>(Settings.GetValueOrDefault("parity", "None"), out parity);
+                    Enum.TryParse<SerialPorts.StopBits>(Settings.GetValueOrDefault("stop_bits", "One"), out stopBits);
                     var serialServer = new KRPC.Server.SerialIO.ByteServer(
                         Settings.GetValueOrDefault("port", string.Empty),
                         baudRate, dataBits, parity, stopBits);

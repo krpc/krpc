@@ -1,8 +1,11 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//:config.bzl", "assembly_version", "author")
 load("//service:build.bzl", "service_deps")
-load("//tools/build:csharp.bzl", "csharp_assembly_info", "csharp_library")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+exports_files(["CHANGES.txt"])
 
 filegroup(
     name = "SpaceCenter",
@@ -22,7 +25,6 @@ csharp_assembly_info(
     cls_compliant = False,
     copyright = author,
     description = "Basic service for kRPC",
-    internals_visible_to = ["TestingTools"],
     title = "KRPC.SpaceCenter",
     version = assembly_version,
     visibility = [
@@ -37,7 +39,11 @@ deps = service_deps
 csharp_library(
     name = "KRPC.SpaceCenter",
     srcs = srcs,
+    internals_visible_to = ["TestingTools"],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
     visibility = ["//visibility:public"],
+    warning_level = 4,
     deps = deps,
 )
 
@@ -72,7 +78,7 @@ py_lint_test(
     srcs = glob(["test/*.py"]),
     pylint_config = "test/pylint.rc",
     deps = [
-        "//client/python",
-        "//tools/krpctest",
+        "//client/python:krpc_lib",
+        "//tools/krpctest:krpctest_lib",
     ],
 )

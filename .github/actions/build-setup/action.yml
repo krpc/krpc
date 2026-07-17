@@ -2,20 +2,29 @@ inputs:
   long-version:
     required: false
     default: "true"
-  ksp-version:
-    required: false
-    default: "1.12.5"
 runs:
   using: composite
   steps:
-    - run: tools/github-actions/set-version.py
-      if: ${{ inputs.long-version == 'true' }}
-      shell: bash
-    - run: |
-        rm -f lib/mono-4.5
-        ln -s /usr/lib/mono/4.5 lib/mono-4.5
-      shell: bash
+    # Suffix the version in config.bzl with a build number derived from the
+    # commit sha, followed by the truncated sha. The build number is kept in
+    # 0-65535 to satisfy the .NET assembly version format.
+    - if: ${{ inputs.long-version == 'true' }}
+      shell: python
+      run: |
+        import os
+
+        with open("config.bzl", "r") as f:
+            lines = f.readlines()
+        for i, line in enumerate(lines):
+            if line.startswith("version = "):
+                version = line.partition("=")[2].strip()[1:-1]
+                sha = os.environ["GITHUB_SHA"][:7]
+                sha_int = int(sha, 16) % 65536
+                version += "-" + str(sha_int) + "-" + sha
+                lines[i] = 'version = "%s"\n' % version
+                break
+        with open("config.bzl", "w") as f:
+            f.write("".join(lines))
+    # Fetches all external repos, including the stripped KSP DLLs (@ksp), which the
+    # Bazel build now compiles against -- no separate ksp-lib download step needed.
     - uses: ./.github/actions/bazel-fetch
-    - uses: ./.github/actions/ksp-lib
-      with:
-        version: ${{ inputs.ksp-version }}

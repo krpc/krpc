@@ -570,12 +570,14 @@ namespace KRPC.Client.Services.TestService
         {
         }
 
+#if !NET
         /// <summary>
         /// Construct an CustomException with the given serialization info and streaming context.
         /// </summary>
         protected CustomException (SerializationInfo info, StreamingContext context) : base (info, context)
         {
         }
+#endif
     }
 
     /// <summary>
@@ -606,12 +608,14 @@ namespace KRPC.Client.Services.TestService
         {
         }
 
+#if !NET
         /// <summary>
         /// Construct an DeprecatedException with the given serialization info and streaming context.
         /// </summary>
         protected DeprecatedException (SerializationInfo info, StreamingContext context) : base (info, context)
         {
         }
+#endif
     }
 
     /// <summary>

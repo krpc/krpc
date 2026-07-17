@@ -1,5 +1,8 @@
 " packaging tools "
 
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_files", "strip_prefix")
+load("@rules_pkg//pkg:zip.bzl", _rules_pkg_zip = "pkg_zip")
+
 # buildifier: disable=function-docstring-header
 def _apply_path_map(path_map, path):
     """ Apply the path mappings to a path.
@@ -25,85 +28,93 @@ def _apply_exclude(exclude, path):
             return path == pattern
     return False
 
-def _get_mode(mode_map, path):
-    """ Get the mode for a file using the mode mapping. """
-    matchlen = 0
-    match = "0644"
-    for x, y in mode_map.items():
-        if path.startswith(x):
-            if len(x) > matchlen:
-                match = y
-                matchlen = len(x)
-    return match
+def _is_executable(mode_map, path):
+    """ Whether the mode mapping marks the given archive path as executable. """
+    return mode_map.get(path) == "755"
 
 def _stage_files_impl(ctx):
     outs = []
+    executable_outs = []
     for src in ctx.files.srcs:
-        path = ctx.label.name + "/" + _apply_path_map(ctx.attr.path_map, src.short_path)
+        mapped = _apply_path_map(ctx.attr.path_map, src.short_path)
+        if _apply_exclude(ctx.attr.exclude, src.short_path):
+            continue
+        if mapped.startswith(".."):
+            fail(("File %s (from an external repository) has no path_map entry; " +
+                  "add a mapping for its path. Note that these paths contain the " +
+                  "repository's canonical name, which can change when bazel or " +
+                  "MODULE.bazel dependencies are upgraded.") % src.short_path)
+        path = ctx.label.name + "/" + mapped
         out = ctx.actions.declare_file(path)
 
-        sub_commands = ['cp "%s" "%s"' % (src.path, out.path)]
-
-        ctx.actions.run_shell(
-            mnemonic = "StageFile",
-            inputs = [src],
-            outputs = [out],
-            use_default_shell_env = True,
-            command = " && ".join(sub_commands),
+        # A symlink rather than a copy keeps staging cheap and OS-independent
+        # (no shell `cp`); rules_pkg follows it when archiving. The archive mode
+        # is set by pkg_files below, not by the staged file, so the executable /
+        # regular split is preserved via the output groups.
+        ctx.actions.symlink(
+            output = out,
+            target_file = src,
         )
-        outs.append(out)
+        if _is_executable(ctx.attr.mode_map, mapped):
+            executable_outs.append(out)
+        else:
+            outs.append(out)
 
-    return DefaultInfo(files = depset(outs))
+    return [
+        DefaultInfo(files = depset(outs + executable_outs)),
+        OutputGroupInfo(
+            executable = depset(executable_outs),
+            regular = depset(outs),
+        ),
+    ]
 
 stage_files = rule(
     implementation = _stage_files_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
         "path_map": attr.string_dict(),
-    },
-)
-
-def _pkg_zip_impl(ctx):
-    output = ctx.outputs.out
-    inputs = ctx.files.files
-    path_map = ctx.attr.path_map
-    mode_map = ctx.attr.mode_map
-    exclude = ctx.attr.exclude
-
-    sub_commands = []
-
-    # Copy and chmod all the files to a staging directory
-    # to get the required directory structure and permissions in the archive
-    # (Note: can't use symlinking as we need to set permissions)
-    staging_dir = output.short_path.replace("/", "-") + ".package-tmp"
-    for input in inputs:
-        if _apply_exclude(exclude, input.short_path):
-            continue
-        staging_path = staging_dir + "/" + _apply_path_map(path_map, input.short_path)
-        mode = _get_mode(mode_map, input.short_path)
-        sub_commands.extend([
-            'mkdir -p `dirname "%s"`' % staging_path,
-            "cp %s %s" % (input.path, staging_path),
-            "chmod %s %s" % (mode, staging_path),
-        ])
-    sub_commands.append("(CWD=`pwd` && cd %s && zip --quiet -r $CWD/%s ./)" % (staging_dir, output.path))
-
-    # Generate a zip file from the staging directory
-    ctx.actions.run_shell(
-        inputs = inputs,
-        outputs = [output],
-        progress_message = "Packaging files into %s" % output.short_path,
-        use_default_shell_env = True,
-        command = "\n".join(sub_commands),
-    )
-
-pkg_zip = rule(
-    implementation = _pkg_zip_impl,
-    attrs = {
-        "files": attr.label_list(allow_files = True, mandatory = True, allow_empty = True),
-        "path_map": attr.string_dict(),
         "mode_map": attr.string_dict(),
         "exclude": attr.string_list(),
-        "out": attr.output(mandatory = True),
     },
 )
+
+# buildifier: disable=function-docstring
+def pkg_zip(name, out, files, path_map = {}, mode_map = {}, exclude = [], visibility = None):
+    stage_files(
+        name = name + "-staged",
+        srcs = files,
+        exclude = exclude,
+        mode_map = mode_map,
+        path_map = path_map,
+    )
+    native.filegroup(
+        name = name + "-staged-regular",
+        srcs = [name + "-staged"],
+        output_group = "regular",
+    )
+    native.filegroup(
+        name = name + "-staged-executable",
+        srcs = [name + "-staged"],
+        output_group = "executable",
+    )
+    pkg_files(
+        name = name + "-files",
+        srcs = [name + "-staged-regular"],
+        attributes = pkg_attributes(mode = "0644"),
+        strip_prefix = strip_prefix.from_pkg(name + "-staged"),
+    )
+    pkg_files(
+        name = name + "-executable-files",
+        srcs = [name + "-staged-executable"],
+        attributes = pkg_attributes(mode = "0755"),
+        strip_prefix = strip_prefix.from_pkg(name + "-staged"),
+    )
+    _rules_pkg_zip(
+        name = name,
+        srcs = [
+            name + "-files",
+            name + "-executable-files",
+        ],
+        out = out,
+        visibility = visibility,
+    )

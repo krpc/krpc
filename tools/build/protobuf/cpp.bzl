@@ -8,21 +8,22 @@ def _impl(ctx):
     proto_path = ctx.attr.src.files.to_list()[0].path
     proto_include = proto_path.replace(".proto", ".pb.h")
 
-    sub_commands = [
-        "rm -rf %s" % proto_output,
-        "mkdir -p %s" % proto_output,
-        "%s --cpp_out=%s %s" % (ctx.file._protoc.path, proto_output, ctx.file.src.path),
-        "cp %s/protobuf/*.pb.h %s" % (proto_output, header.path),
-        "cp %s/protobuf/*.pb.cc %s" % (proto_output, source.path),
-        'sed -i \'s/#include "%s"/#include "%s"/g\' %s' % (proto_include.replace("/", "\\/"), include.replace("/", "\\/"), source.path),
-    ]
+    args = ctx.actions.args()
+    args.add("--protoc", ctx.file._protoc.path)
+    args.add("--mkdir", proto_output)
+    args.add("--copy", proto_output + "/protobuf/*.pb.h=" + header.path)
+    args.add("--copy", proto_output + "/protobuf/*.pb.cc=" + source.path)
+    args.add("--rewrite", "%s=#include \"%s\"=#include \"%s\"" % (source.path, proto_include, include))
+    args.add("--")
+    args.add("--cpp_out=" + proto_output)
+    args.add(ctx.file.src.path)
 
-    ctx.actions.run_shell(
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
         inputs = [ctx.file.src, ctx.file._protoc],
-        command = " && ".join(sub_commands),
         outputs = [header, source],
         mnemonic = "ProtobufCpp",
-        use_default_shell_env = True,
     )
 
 protobuf_cpp = rule(
@@ -33,5 +34,10 @@ protobuf_cpp = rule(
         "source": attr.output(mandatory = True),
         "include": attr.string(mandatory = True),
         "_protoc": attr.label(default = Label("//tools/build/protobuf:protoc"), allow_single_file = True),
+        "_runner": attr.label(
+            default = Label("//tools/build/protobuf:run_protoc"),
+            executable = True,
+            cfg = "exec",
+        ),
     },
 )

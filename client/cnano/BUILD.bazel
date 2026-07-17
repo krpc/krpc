@@ -1,7 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:cpp.bzl", "cpp_check_test", "cpp_lint_test")
+load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cnano")
@@ -152,7 +152,6 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
-        ":check",
         ":client",
         ":lint",
     ],
@@ -186,32 +185,31 @@ cc_binary(
     ],
 )
 
-cpp_check_test(
-    name = "check",
-    size = "small",
-    srcs = srcs + test_srcs,
-    hdrs = hdrs,
-    includes = ["include"],
+test_suite(
+    name = "lint",
+    tests = [
+        ":clangformat",
+        ":clangtidy",
+    ],
 )
 
-cpp_lint_test(
-    name = "lint",
+clang_tidy_test(
+    name = "clangtidy",
+    size = "large",
+    srcs = srcs,
+    copts = ["-std=c99"],
+    deps = [":krpc_cnano"],
+)
+
+clang_format_test(
+    name = "clangformat",
     size = "small",
-    srcs = srcs + test_srcs,
-    hdrs = hdrs,
-    extra_files = [
-        "include/krpc_cnano/services/CPPLINT.cfg",
-        "test/services/CPPLINT.cfg",
-    ],
-    filters = [
-        "+build/include_alpha",
-        "-legal/copyright",
-        "-readability/todo",
-        "-readability/casting",
-        "-build/header_guard",
-        "-build/include_subdir",
-    ],
-    includes = ["include"],
+    srcs = glob([
+        "src/*.c",
+        "include/**/*.h",
+        "test/**/*.cpp",
+        "test/**/*.hpp",
+    ]),
 )
 
 #TODO: use targets in //protobuf:... instead of the following
@@ -224,4 +222,7 @@ protobuf_nanopb(
     source = "src/krpc.pb.c",
 )
 
-exports_files(["src/krpc.options"])
+exports_files([
+    "CHANGES.txt",
+    "src/krpc.options",
+])

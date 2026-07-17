@@ -1,32 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BC3C589C-91A8-472F-B312-3E5512F77CA1}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>KRPC.KerbalAlarmClock</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>KRPC.KerbalAlarmClock</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <NoStdLib>true</NoStdLib>
-    <DebugType>portable</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <RootNamespace>KRPC.KerbalAlarmClock</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
+    <DocumentationFile>bin\$(Configuration)\KRPC.KerbalAlarmClock.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <DocumentationFile>bin\Debug\KRPC.KerbalAlarmClock.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <DocumentationFile>bin\Release\KRPC.KerbalAlarmClock.xml</DocumentationFile>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\ksplibs.props" />
   <ItemGroup>
     <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
       <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
@@ -37,7 +23,6 @@
       <Name>KRPC.SpaceCenter</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\ksplibs.props" />
   <ItemGroup>
     <Reference Include="Google.Protobuf">
       <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>

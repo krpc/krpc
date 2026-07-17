@@ -7,8 +7,8 @@ C-nano Client
 This client provides a C API for interacting with a kRPC server. It is intended for use on embedded
 systems with tight resource constraints, hence the "nano" in its name.
 
-Installing the Library
-----------------------
+Installing
+----------
 
 Manually include the source in your project
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -29,54 +29,40 @@ by searching for and installing "kRPC".
    that they are built using the C++ compiler. This allows the library to use the C++ only
    ``HardwareSerial`` class for communication.
 
-Using vcpkg
-^^^^^^^^^^^
+vcpkg
+^^^^^
 
-The C-nano client can be installed via `vcpkg <https://vcpkg.io>`_. The port files are included in
-the source archive — `download it from the releases page <https://github.com/krpc/krpc/releases>`_,
-extract it, and install using the bundled overlay port:
+The C-nano client is available from `vcpkg <https://vcpkg.io>`_. It can be installed as follows:
 
-On Linux:
+.. tabs::
 
-.. code-block:: bash
+   .. tab:: Linux
 
-   vcpkg install krpc-cnano --overlay-ports=/path/to/krpc-cnano-VERSION/vcpkg-port
+      .. code-block:: bash
 
-On Windows:
+         vcpkg install krpc-cnano
 
-.. code-block:: bash
+   .. tab:: Windows
 
-   vcpkg install krpc-cnano:x64-windows --overlay-ports=C:\path\to\krpc-cnano-VERSION\vcpkg-port
+      .. code-block:: bash
 
-Then integrate with your CMake project by passing the vcpkg toolchain file at configure time:
+         vcpkg install krpc-cnano:x64-windows
 
-.. code-block:: bash
+CMake
+^^^^^
 
-   cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
-
-And link the library in your ``CMakeLists.txt``:
-
-.. code-block:: cmake
-
-   find_package(krpc_cnano CONFIG REQUIRED)
-   target_link_libraries(my_app PRIVATE krpc_cnano::krpc_cnano)
-
-Using CMake
-^^^^^^^^^^^
-
-CMake 3.15 or later is required.
-`Download the source archive <https://github.com/krpc/krpc/releases>`_, extract it and run:
+CMake 3.15 or later is required.  `Download the source archive
+<https://github.com/krpc/krpc/releases>`_, extract it and run:
 
 .. code-block:: bash
 
    cmake -B build
    cmake --build build
-   sudo cmake --install build
-   sudo ldconfig
+   cmake --install build
 
-By default, CMake looks for a system-installed nanopb. To download nanopb automatically at build
-time instead, pass ``-DKRPC_FETCH_DEPS=ON`` (or ``-DKRPC_FETCH_NANOPB=ON``) to the configure
-step. When OFF (the default), the system package is required.
+By default, CMake looks for a system-installed nanopb. To download nanopb automatically
+at build time instead, pass ``-DKRPC_FETCH_DEPS=ON`` (or ``-DKRPC_FETCH_NANOPB=ON``) to
+the configure step. When ``OFF`` (the default) the system package is required.
 
 To install to a custom prefix:
 
@@ -85,13 +71,6 @@ To install to a custom prefix:
    cmake -B build -DCMAKE_INSTALL_PREFIX=/install/path
    cmake --build build
    cmake --install build
-
-After installation, downstream CMake projects can link the library with:
-
-.. code-block:: cmake
-
-   find_package(krpc_cnano CONFIG REQUIRED)
-   target_link_libraries(my_app PRIVATE krpc_cnano::krpc_cnano)
 
 Compilation Options
 ^^^^^^^^^^^^^^^^^^^
@@ -144,36 +123,50 @@ argument to the compiler.
    On embedded systems you probably want to define ``KRPC_NO_PRINT_ERROR`` and ``PB_NO_ERRMSG`` to
    minimize the memory footprint of kRPC.
 
+Getting Started
+---------------
+
 Configuring the Server
-----------------------
+^^^^^^^^^^^^^^^^^^^^^^
 
 The C-nano client library communicates with the server over a serial port using `protobuf messages
 <https://github.com/nanopb/nanopb>`_. The kRPC server, which runs in the game, needs to be
 configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
-done from the in-game server configuration window, which also allows settings such as the port name
-and baud rate to be configured.
+done from the in-game server configuration window, which also allows settings such as
+the port name, baud rate and parity settings.
 
-Using the Library on a POSIX System
------------------------------------
+Linking
+^^^^^^^
+
+After installation, CMake projects can link the library with:
+
+.. code-block:: cmake
+
+   find_package(krpc_cnano CONFIG REQUIRED)
+   target_link_libraries(my_app PRIVATE krpc_cnano::krpc_cnano)
+
+When installed via vcpkg, pass the vcpkg toolchain file at configure time:
+
+.. code-block:: bash
+
+   cmake -B build -DCMAKE_TOOLCHAIN_FILE=/path/to/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+
+POSIX Systems
+^^^^^^^^^^^^^
 
 On POSIX systems (such as Linux) the following example program connects to the server, queries it
 for its version and prints it out:
 
 .. literalinclude:: /scripts/client/cnano/Basic.c
 
-To compile this program using GCC, save the source as ``main.c`` and run the following:
-
-.. code-block:: bash
-
-   gcc main.c -lkrpc_cnano
-
 The :func:`krpc_connect` function is used to open a connection to a server. It takes as its first
 argument a connection object into which the connection information is written. This is passed to
 subsequent calls to interact with the server. The second argument is a name for the connection
 (displayed in game) and the third is the name of the serial port to connect over.
 
-Using the Library on an Arduino
--------------------------------
+Arduino
+^^^^^^^
 
 The following example demonstrates how to connect to the server from an Arduino, through its serial
 port interface:
@@ -201,7 +194,7 @@ The following example demonstrates how to invoke remote procedures using the Cna
 Streams and Events
 ------------------
 
-These features are not yet supported by this client.
+These features are not supported by this client.
 
 Client API Reference
 --------------------

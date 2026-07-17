@@ -220,7 +220,45 @@ class JavaGenerator(Generator):
         for info in deprecatable:
             self.add_deprecated_javadoc(info)
 
+        context["types_table"] = self.build_types_table(context)
+
         return context
+
+    def build_types_table(self, context):
+        # Flat table of every procedure's return and parameter type specs, used
+        # to populate the _Types lookup maps. Instance members take the owning
+        # class as their leading parameter; static members do not.
+        table = [
+            self.make_types_entry(info)
+            for info in list(context["procedures"].values())
+            + list(context["properties"].values())
+        ]
+        for class_name, class_info in context["classes"].items():
+            for info in list(class_info["methods"].values()) + list(
+                class_info["properties"].values()
+            ):
+                table.append(self.make_types_entry(info, class_name))
+            for info in class_info["static_methods"].values():
+                table.append(self.make_types_entry(info))
+        return table
+
+    def make_types_entry(self, info, class_name=None):
+        parameter_specs = []
+        if class_name is not None:
+            parameter_specs.append(
+                'krpc.client.Types.createClass("%s", "%s")'
+                % (self.service_name, class_name)
+            )
+        parameter_specs += [p["type"]["spec"] for p in info["parameters"]]
+        return {
+            "remote_name": info["remote_name"],
+            "return_spec": (
+                info["return_type"]["spec"]
+                if info["return_type"]["name"] != "void"
+                else None
+            ),
+            "parameter_specs": parameter_specs,
+        }
 
     @staticmethod
     def add_deprecated_javadoc(info):

@@ -405,6 +405,7 @@ SpaceCenter.Orbit.TrueAnomalyAtAN
 SpaceCenter.Orbit.TrueAnomalyAtDN
 SpaceCenter.Orbit.OrbitalSpeed
 SpaceCenter.Orbit.OrbitalSpeedAt
+SpaceCenter.Orbit.OrbitalEnergy
 SpaceCenter.Orbit.ReferencePlaneNormal
 SpaceCenter.Orbit.ReferencePlaneDirection
 SpaceCenter.Orbit.RelativeInclination

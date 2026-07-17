@@ -1,43 +1,27 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A75677CB-9D81-4C3F-8B53-C99110B4F124}</ProjectGuid>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Exe</OutputType>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Externalconsole>true</Externalconsole>
-    <RootNamespace>TestServer</RootNamespace>
     <AssemblyName>TestServer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <NoStdLib>true</NoStdLib>
-    <DebugType>portable</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <RootNamespace>TestServer</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
+    <DocumentationFile>bin\$(Configuration)\TestServer.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <DocumentationFile>bin\Debug\TestServer.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <DocumentationFile>bin\Release\TestServer.xml</DocumentationFile>
-  </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props" />
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
     <Reference Include="Google.Protobuf">
-      <HintPath>$(bazel-bin)\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
+      <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
     </Reference>
     <Reference Include="KRPC.IO.Ports">
       <HintPath>$(bazel-bin)\tools\build\ksp\KRPC.IO.Ports.dll</HintPath>

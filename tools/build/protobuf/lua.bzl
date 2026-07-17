@@ -1,52 +1,29 @@
 " Lua protobuf tools "
 
-def _create_py_env(out, install):
-    tmp = out + ".tmp-create-py-env"
-    cmds = [
-        "rm -rf %s" % tmp,
-        "python3 -m venv %s" % tmp,
-    ]
-    for lib in install:
-        cmds.append(
-            "%s/bin/python %s/bin/pip install --quiet --disable-pip-version-check --no-deps --no-cache-dir file:`pwd`/%s" %
-            (tmp, tmp, lib.path),
-        )
-    cmds.extend([
-        "(CWD=`pwd`; cd %s; tar -c -f $CWD/%s *)" % (tmp, out),
-    ])
-    return cmds
-
-def _extract_py_env(env, path):
-    return [
-        "rm -rf %s" % path,
-        "mkdir -p %s" % path,
-        "(CWD=`pwd`; cd %s; tar -xf $CWD/%s)" % (path, env),
-    ]
-
 def _impl(ctx):
     input = ctx.file.src
     output = ctx.outputs.out
     protoc = ctx.file._protoc
-    protoc_lua_env = ctx.file._protoc_lua_env
-    protoc_lua = ctx.files._protoc_lua
-    protoc_lua_dir = protoc_lua[0].dirname
+    plugin = ctx.executable._plugin
 
     protoc_output = output.path + ".tmp-proto-lua"
-    pyenv = output.path + ".tmp-proto-lua-env"
 
-    sub_commands = _extract_py_env(protoc_lua_env.path, pyenv)
-    sub_commands.extend([
-        "rm -rf %s" % protoc_output,
-        "mkdir -p %s" % protoc_output,
-        "PYTHONWARNINGS=ignore::RuntimeWarning PATH=%s/bin:%s:$PATH %s --lua_out=%s %s" % (pyenv, protoc_lua_dir, protoc.path, protoc_output, input.path),
-        "cp %s/protobuf/*.lua %s" % (protoc_output, output.path),
-    ])
+    args = ctx.actions.args()
+    args.add("--protoc", protoc.path)
+    args.add("--mkdir", protoc_output)
+    args.add("--copy", protoc_output + "/protobuf/*.lua=" + output.path)
+    args.add("--")
+    args.add("--plugin=protoc-gen-lua=" + plugin.path)
+    args.add("--lua_out=" + protoc_output)
+    args.add(input.path)
 
-    ctx.actions.run_shell(
-        inputs = [input, protoc, protoc_lua_env] + protoc_lua,
+    ctx.actions.run(
+        executable = ctx.executable._runner,
+        arguments = [args],
+        inputs = [input, protoc],
         outputs = [output],
+        tools = [ctx.attr._plugin[DefaultInfo].files_to_run],
         mnemonic = "ProtobufLua",
-        command = " && \\\n".join(sub_commands) + "\n",
     )
 
 protobuf_lua = rule(
@@ -55,31 +32,15 @@ protobuf_lua = rule(
         "src": attr.label(allow_single_file = [".proto"]),
         "out": attr.output(mandatory = True),
         "_protoc": attr.label(default = Label("//tools/build/protobuf:protoc"), allow_single_file = True),
-        "_protoc_lua": attr.label(default = Label("@protoc_lua//:plugin"), allow_files = True),
-        "_protoc_lua_env": attr.label(default = Label("//tools/build/protobuf:protoc-lua-env"), allow_single_file = True),
+        "_plugin": attr.label(
+            default = Label("//tools/build/protobuf:protoc-gen-lua"),
+            executable = True,
+            cfg = "exec",
+        ),
+        "_runner": attr.label(
+            default = Label("//tools/build/protobuf:run_protoc"),
+            executable = True,
+            cfg = "exec",
+        ),
     },
-)
-
-def _env_impl(ctx):
-    pylibs = [ctx.file._protobuf]
-    setup = ctx.actions.declare_file("protoc-lua-setup")
-    ctx.actions.write(
-        output = setup,
-        content = " && \\\n".join(_create_py_env(ctx.outputs.out.path, pylibs)) + "\n",
-        is_executable = True,
-    )
-    ctx.actions.run(
-        inputs = pylibs,
-        outputs = [ctx.outputs.out],
-        progress_message = "Setting up protoc-lua python environment",
-        executable = setup,
-        use_default_shell_env = True,
-    )
-
-protoc_lua_env = rule(
-    implementation = _env_impl,
-    attrs = {
-        "_protobuf": attr.label(default = Label("@python_protobuf//file"), allow_single_file = True),
-    },
-    outputs = {"out": "%{name}.tar"},
 )

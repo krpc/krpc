@@ -4,6 +4,8 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:java.bzl", "java_checkstyle_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_java")
 
+exports_files(["CHANGES.txt"])
+
 copts = [
     "-Werror",
     "-Xlint:all",
@@ -51,8 +53,8 @@ java_library(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        "@java_javatuples//jar",
-        "@java_protobuf//jar",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:org_javatuples_javatuples",
     ],
 )
 
@@ -62,10 +64,10 @@ java_library(
     javacopts = copts,
     deps = [
         ":krpc",
-        "@java_hamcrest//jar",
-        "@java_javatuples//jar",
-        "@java_junit//jar",
-        "@java_protobuf//jar",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:junit_junit",
+        "@maven//:org_hamcrest_hamcrest",
+        "@maven//:org_javatuples_javatuples",
     ],
 )
 
@@ -78,10 +80,10 @@ java_test(
     runtime_deps = [
         ":krpc",
         ":testlib",
-        "@java_hamcrest//jar",
-        "@java_javatuples//jar",
-        "@java_junit//jar",
-        "@java_protobuf//jar",
+        "@maven//:com_google_protobuf_protobuf_java",
+        "@maven//:junit_junit",
+        "@maven//:org_hamcrest_hamcrest",
+        "@maven//:org_javatuples_javatuples",
     ],
 )
 

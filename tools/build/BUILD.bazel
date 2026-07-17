@@ -1,0 +1,13 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+package(default_visibility = ["//visibility:public"])
+
+py_binary(
+    name = "run_and_stamp",
+    srcs = ["run_and_stamp.py"],
+)
+
+py_binary(
+    name = "write_zip",
+    srcs = ["write_zip.py"],
+)

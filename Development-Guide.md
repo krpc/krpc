@@ -21,7 +21,6 @@ The codebase is structured as follows:
  * `service/...` - C# implementations of the various services that run in the game, and add RPCs to
    the server.
  * `core/...` - C# shared core library used by the server and services.
- * `lib/...` - symlinks (or copies) of DLLs required to build the C# projects.
  * `client/...` - the client libraries, with one directory for each language.
  * `client/serialio/...` and `client/websockets/...` - tests for the serialio and websockets
    communication protocols.
@@ -49,25 +48,28 @@ The codebase is structured as follows:
 kRPC uses the [Bazel build system](https://bazel.build). This provides us with fast, repeatable
 builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
-Note: we don't support building using Bazel on Windows. However, you can build the C# projects
-on Windows. See the section below named "Building the C# projects using an IDE".
-You can also build the project using a docker container running on
-Windows. See the section below named "Building using Docker".
+Note: on Windows, pass `--config=windows` to Bazel. The whole tree builds under MSVC and a
+smoke-test subset (`//core:test`, `//client/csharp:test`) runs in CI, but Windows is not the primary
+build platform — the CI job is non-blocking and the full test suite is only run on Linux. Under Git
+Bash, set `MSYS2_ARG_CONV_EXCL="*"` so it does not rewrite Bazel's `//pkg:target` patterns. On
+Windows you can also build the C# projects using an IDE (see the section below named "Building the C#
+projects using an IDE"), or build the whole project using a docker container (see the section below
+named "Building using Docker").
 
 ### Setting up your Environment
 
-The Bazel build scripts will automatically download most of the required dependencies to build the
-project, but the following needs to be installed on your system:
+The Bazel build is hermetic: it automatically downloads the toolchains and dependencies for C#
+(rules_dotnet), Python (rules_python), Java (rules_jvm_external), C/C++ (an LLVM toolchain) and
+protobuf. You therefore do **not** need Mono, the .NET SDK, a system Python, a JDK, Maven or a C++
+compiler installed to build and test the project with Bazel.
 
- * Bazel
- * C# compiler, runtime and tools (for example [Mono](https://www.mono-project.com/))
- * Python 3.10+
- * CMake 3.15+ and a C++17 compiler (for the C++ client)
- * LuaRocks
- * Maven
- * pdflatex and svg tools (for building the documentation)
+A few components are not hermetic and need supporting packages installed on your system:
 
-On Ubuntu, these can be installed via apt as follows. Install bazel (via bazelisk) using:
+ * Bazel (installed via bazelisk, below)
+ * Lua and LuaRocks (for building the Lua client)
+ * pdflatex, latexmk and svg/graphviz tools (for building the documentation)
+
+On Ubuntu, install bazel (via bazelisk) using:
 
 ```
 wget https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-linux-amd64
@@ -75,34 +77,31 @@ chmod +x bazelisk-linux-amd64
 sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 ```
 
-Then follow the instructions on [Mono's website](http://www.mono-project.com/download) to add
-their apt repository.
-
-Then install packages:
+Then install the supporting packages:
 ```
-sudo apt-get install mono-complete python-is-python3 python3-dev python3-pip \
-  python3-venv gcc g++ cmake luarocks maven openjdk-11-jdk \
+sudo apt-get install luarocks \
   latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
-  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin libenchant-2-2
+  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin graphviz libenchant-2-2
 ```
 
-You also need to set up the necessary libraries in the `lib` directory.
-`lib/ksp` should contain a copy of the game. You can either create this directory, and copy the
-game files into it, or create a symlink to point to an existing copy of the game. For example,
-run the following command from the root of the krpc source to point to KSP installed in the
-default Steam location:
-```ln -s "$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program" lib/ksp```
+By default the Bazel build downloads its own hermetic LLVM toolchain to build the C/C++ clients.
+Pass `--config=system-llvm` to build them against a system LLVM install instead (as CI does; this
+requires an LLVM install at the path in `MODULE.bazel`'s `llvm.toolchain_root`). Building the C/C++
+clients through their standalone CMake build, rather than via Bazel, additionally needs CMake 3.15+,
+a C++17 compiler and the protobuf, nanopb and ASIO development libraries.
 
-`lib/ksp` is used both to build the C# projects against the KSP DLLs, and by the integration-test
-tooling as the KSP install to install the mod into and launch. To point the test tooling at a
-different KSP install without changing `lib/ksp`, set the `KSP_DIR` environment variable to its
-path — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all pick it up (and also accept an
-equivalent `--ksp-dir` option). Note that the Bazel build itself always uses `lib/ksp`, regardless
-of `KSP_DIR`.
+You do **not** need to set up any KSP libraries by hand to build the project. The Bazel build
+downloads a stripped set of KSP assemblies (the `@ksp` archive, from the
+[ksp-lib](https://github.com/krpc/ksp-lib) repository) and compiles the mod against them
+automatically.
 
-You may also need to modify the symlink at `lib/mono-4.5` to point to the correct location of your
-Mono installation. On Ubuntu 24.04 with the latest version of Mono, `lib/mono-4.5` should be a
-symlink pointing to `/usr/lib/mono/4.5`
+To run the **integration tests** (see "Running the Tests" below) you do need a real copy of the
+game, since those launch KSP. Point the test tooling at it by setting the `KSP_DIR` environment
+variable to the KSP install directory — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all
+pick it up (and also accept an equivalent `--ksp-dir` option). For example:
+```
+export KSP_DIR="$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program"
+```
 
 ### Building using Bazel
 
@@ -171,48 +170,30 @@ docker run --user 1001:121 -it ghcr.io/krpc/buildenv:latest
 ```
 Note: the user id and group id are set to match what is used on GitHub Actions, which is what the image expects.
 
-This will drop you into a command line. Next you need to get the KSP DLLs using the following
-commands:
-
-```
-mkdir ksp
-pushd ksp
-wget https://github.com/krpc/ksp-lib/raw/main/ksp/ksp-1.12.5.zip
-unzip ksp-1.12.5.zip
-popd
-```
-
-Note: these KSP DLLs are downloaded from the ksp-lib repository. These DLLs have had their
-implementation stripped out. This is sufficient to build the code, without needing to publicly
-distribute the original KSP DLLs.
-
-You can then clone the repository, set up some symlinks to the libraries, build everything and run
-the tests, using the following commands:
+This will drop you into a command line, from which you can clone the repository, build everything and
+run the tests:
 
 ```
 git clone https://github.com/krpc/krpc.git
 cd krpc
-ln -s `pwd`/../ksp lib/ksp
-ln -s /usr/lib/mono/4.5 lib/mono-4.5
 bazel build //...
 bazel test //:test
 ```
+
+The build downloads a stripped set of KSP assemblies from the
+[ksp-lib](https://github.com/krpc/ksp-lib) repository. These DLLs have had their implementation
+stripped out, which is sufficient to build the code without needing to publicly distribute the
+original KSP DLLs.
 
 ## Running the Tests
 
 kRPC contains a suite of tests for the server plugin, services, client libraries and other parts of
 the project.
 
-To run the tests, the following dependencies need to be installed. Without them, some of the tests
-will fail.
-
- * Python 3.10+ development files
- * CppCheck
- * socat
-
-To install these dependencies via apt on Ubuntu run the following command:
+The SerialIO communication tests need `socat` installed. Without it, those tests will fail. Install
+it via apt on Ubuntu with:
 ```
-sudo apt-get install cppcheck socat
+sudo apt-get install socat
 ```
 
 The unit tests can be run using: `bazel test //:test`
@@ -233,9 +214,9 @@ running. To run these tests:
    provides the `krpc-install` and `krpc-run-ksp` console scripts, and registers a pytest
    plugin so the tests run with `pytest`.
  * Then run the tests using `pytest`. With no arguments it runs every
-   `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset,
-   and `--ksp-dir` (or the `KSP_DIR` environment variable) to point at a KSP install other than
-   `lib/ksp`. KSP is automatically launched (if its not already running) and the required mods are
+   `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset. The KSP
+   install is taken from the `KSP_DIR` environment variable (or the `--ksp-dir` option); one of them
+   must be set. KSP is automatically launched (if its not already running) and the required mods are
    managed automatically.
 
 If the game is already running (via `krpc-run-ksp` - see below) then running `pytest` does not launch
@@ -246,14 +227,14 @@ the wrong mods are installed) then the tests will fail.
 
 Included in the project are various tools to aid development.
 
- * `tools/serve-docs.sh`
-   - Running this script build the documentation website, and starts a local webserver. You can use
-   this to try out building the documentation and then view it by pointing a web browser at
-   `http://localhost:8080`
+ * `bazel run //doc:serve`
+   - Builds the documentation website and starts a local webserver, rebuilding automatically as you
+   edit the sources. A web browser is opened at `http://localhost:8080` once the site is ready; pass
+   `-- --no-browser` to skip that, or `-- --port <PORT>` to serve on a different port.
  * `krpc-install`
    - Console script from the `krpctest` package. It builds the `//:krpc` release archive and the
-   `TestingTools` DLL, and installs them into the GameData directory of the copy of KSP in `lib/ksp`
-   (or the install given by `KSP_DIR` / `--ksp-dir`). Run it from the repository root.
+   `TestingTools` DLL, and installs them into the GameData directory of the KSP install given by
+   `KSP_DIR` (or `--ksp-dir`). Run it from the repository root.
  * `krpc-run-ksp`
    - Console script from the `krpctest` package. It uses `krpc-install` to install the mod (as
    above) and then launches the game. It also pipes the game's log output to the terminal for ease

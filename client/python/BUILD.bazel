@@ -1,7 +1,58 @@
+load("@rules_python//python:defs.bzl", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_python")
+
+exports_files(["CHANGES.txt"])
+
+# The krpc package as an importable python library, for use by other python
+# targets in this workspace (the sdists below are what is released)
+py_library(
+    name = "krpc_lib",
+    srcs = [
+        ":services-dockingcamera",
+        ":services-drawing",
+        ":services-infernalrobotics",
+        ":services-kerbalalarmclock",
+        ":services-krpc",
+        ":services-lidar",
+        ":services-remotetech",
+        ":services-spacecenter",
+        ":services-testservice",
+        ":services-ui",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [":krpc_base_lib"],
+)
+
+# The krpc package without the generated service modules; clientgen (which
+# generates those modules) depends on this, so this must not depend on
+# clientgen's output
+py_library(
+    name = "krpc_base_lib",
+    srcs = glob(["krpc/**/*.py"]) + [
+        ":krpc-version-py",
+        ":schema-py",
+    ],
+    imports = ["."],
+    visibility = ["//visibility:public"],
+    deps = ["@pypi//protobuf"],
+)
+
+genrule(
+    name = "schema-py",
+    srcs = ["//protobuf:python"],
+    outs = ["krpc/schema/KRPC_pb2.py"],
+    cmd = "for f in $(locations //protobuf:python); do case $$f in *KRPC_pb2.py) cp $$f $@;; esac; done",
+)
+
+genrule(
+    name = "krpc-version-py",
+    srcs = ["//:python_version"],
+    outs = ["krpc/version.py"],
+    cmd = 'cp "$<" "$@"',
+)
 
 # Needed as clientgen depends on these files
 genrule(
@@ -169,7 +220,7 @@ client_test(
     test_executable = ":clienttest_base",
 )
 
-deps = ["@python_protobuf//file"]
+deps = ["@pypi//protobuf"]
 
 py_test(
     name = "clienttest",
@@ -192,8 +243,7 @@ py_test(
 py_lint_test(
     name = "lint",
     size = "medium",
-    srcs = glob(["krpc/**/*"]),
-    black_exclude = "\".*(schema|services)/.+\"",
+    black_exclude = ".*(schema|services)/.+",
     pkg = ":python",
     pkg_name = "krpc",
     pylint_config = "pylint.rc",

@@ -1,6 +1,5 @@
 #include <gtest/gtest-message.h>
 #include <gtest/gtest-test-part.h>
-
 #include <krpc_cnano.h>
 #include <krpc_cnano/encoder.h>
 #include <krpc_cnano/services/krpc.h>
@@ -8,13 +7,12 @@
 #include <string>
 
 #include "gtest/gtest.h"
-
 #include "services/test_service.h"
 #include "testing_tools.hpp"
 
-static pb_istream_t create_stream(uint8_t * buffer, std::string data) {
+static pb_istream_t create_stream(uint8_t* buffer, std::string data) {
   unhexlify(buffer, data);
-  return pb_istream_from_buffer(buffer, data.size()/2);
+  return pb_istream_from_buffer(buffer, data.size() / 2);
 }
 
 TEST(test_decoder, test_decode_value) {
@@ -28,7 +26,7 @@ TEST(test_decoder, test_decode_value) {
 TEST(test_decoder, test_decode_unicode_string) {
   uint8_t data[4];
   pb_istream_t stream = create_stream(data, "03e284a2");
-  char * value = nullptr;
+  char* value = nullptr;
   ASSERT_EQ(KRPC_OK, krpc_decode_string(&stream, &value));
   ASSERT_STREQ("\xe2\x84\xa2", value);
   krpc_free(value);

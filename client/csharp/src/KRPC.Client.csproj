@@ -1,41 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5D390973-8F07-4B28-827F-FB3A1E739FD7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>KRPC.Client</RootNamespace>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>KRPC.Client</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <DebugType>portable</DebugType>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <ConsolePause>false</ConsolePause>
+    <RootNamespace>KRPC.Client</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
+    <DocumentationFile>bin\$(Configuration)\KRPC.Client.xml</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
-    <DocumentationFile>bin\Debug\KRPC.Client.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release</OutputPath>
-    <DocumentationFile>bin\Release\KRPC.Client.xml</DocumentationFile>
-  </PropertyGroup>
-  <Import Project="$(SolutionDir)tools\msbuild\bazeldirs.props"/>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="Google.Protobuf" Version="3.35.1" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Memory">
-      <HintPath>..\..\..\lib\mono-4.5\System.Memory.dll</HintPath>
-    </Reference>
-    <Reference Include="Google.Protobuf">
-      <HintPath>$(bazel-bin)\tools\build\mono-4.5\Google.Protobuf.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Attributes\" />
@@ -44,6 +26,9 @@
   <ItemGroup>
     <Compile Include="$(bazel-bin)\client\csharp\AssemblyInfo.cs">
       <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\InternalsVisibleTo.cs">
+      <Link>InternalsVisibleTo.cs</Link>
     </Compile>
     <Compile Include="Attributes\RPCAttribute.cs" />
     <Compile Include="Connection.cs" />
@@ -73,5 +58,4 @@
       <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

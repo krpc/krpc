@@ -16,24 +16,19 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-
 #include "krpc.hpp"
 #include "krpc/platform.hpp"
 #include "krpc/services/krpc.hpp"
-
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 
-class test_client: public server_test {
-};
+class test_client : public server_test {};
 
-TEST_F(test_client, test_default_ctor) {
-  krpc::Client client;
-}
+TEST_F(test_client, test_default_ctor) { krpc::Client client; }
 
 TEST_F(test_client, test_shared_ptr) {
-  auto client = std::make_shared<krpc::Client>(
-    "C++ClientTest", "localhost", get_rpc_port(), get_stream_port());
+  auto client = std::make_shared<krpc::Client>("C++ClientTest", "localhost", get_rpc_port(),
+                                               get_stream_port());
   krpc::services::KRPC krpc(client.get());
   krpc::schema::Status status = krpc.get_status();
   ASSERT_THAT(status.version(), testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
@@ -54,52 +49,50 @@ TEST_F(test_client, test_version) {
 }
 
 TEST_F(test_client, test_wrong_rpc_port) {
-  ASSERT_THROW(
-    krpc::connect("C++ClientTestWrongRpcPort", "localhost",
-                  get_rpc_port() ^ get_stream_port(), get_stream_port()),
-    std::exception);
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost",
+                             get_rpc_port() ^ get_stream_port(), get_stream_port()),
+               std::exception);
 }
 
 TEST_F(test_client, test_wrong_stream_port) {
-  ASSERT_THROW(
-    krpc::connect("C++ClientTestWrongStreamPort", "localhost",
-                  get_rpc_port(), get_rpc_port() ^ get_stream_port()),
-    std::exception);
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(),
+                             get_rpc_port() ^ get_stream_port()),
+               std::exception);
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {
-  auto fn = [this] () {
-    krpc::connect("C++ClientTestWrongRpcServer", "localhost",
-                  get_stream_port(), get_stream_port());
+  auto fn = [this]() {
+    krpc::connect("C++ClientTestWrongRpcServer", "localhost", get_stream_port(), get_stream_port());
   };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
-  } catch(krpc::ConnectionError& e) {
+  } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
-      "Connection request was for the rpc server, but this is the stream server. "
-      "Did you connect to the wrong port number?");
+                 "Connection request was for the rpc server, but this is the stream server. "
+                 "Did you connect to the wrong port number?");
   }
 }
 
 TEST_F(test_client, test_wrong_stream_server) {
-  auto fn = [this] () {
-    krpc::connect("C++ClientTestWrongStreamServer", "localhost",
-                  get_rpc_port(), get_rpc_port());
+  auto fn = [this]() {
+    krpc::connect("C++ClientTestWrongStreamServer", "localhost", get_rpc_port(), get_rpc_port());
   };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
-  } catch(krpc::ConnectionError& e) {
+  } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
-      "Connection request was for the stream server, but this is the rpc server. "
-      "Did you connect to the wrong port number?");
+                 "Connection request was for the stream server, but this is the rpc server. "
+                 "Did you connect to the wrong port number?");
   }
 }
 
 TEST_F(test_client, test_value_parameters) {
   ASSERT_EQ("3.14159", test_service.float_to_string(3.14159f));
-  ASSERT_EQ("3.1415901184082", test_service.double_to_string(3.14159f));
+  // Modern .NET formats doubles with the shortest round-trippable
+  // representation, unlike .NET Framework/mono
+  ASSERT_EQ("3.141590118408203", test_service.double_to_string(3.14159f));
   ASSERT_EQ("42", test_service.int32_to_string(42));
   ASSERT_EQ("123456789000", test_service.int64_to_string(123456789000));
   ASSERT_EQ("True", test_service.bool_to_string(true));
@@ -177,16 +170,14 @@ TEST_F(test_client, test_optional_arguments) {
 TEST_F(test_client, test_blocking_procedure) {
   ASSERT_EQ(0, test_service.blocking_procedure(0, 0));
   ASSERT_EQ(1, test_service.blocking_procedure(1, 0));
-  ASSERT_EQ(1+2, test_service.blocking_procedure(2));
+  ASSERT_EQ(1 + 2, test_service.blocking_procedure(2));
   int expected = 0;
-  for (int i = 1; i <= 42; i++)
-    expected += i;
+  for (int i = 1; i <= 42; i++) expected += i;
   ASSERT_EQ(expected, test_service.blocking_procedure(42));
 }
 
 TEST_F(test_client, test_enums) {
-  ASSERT_EQ(krpc::services::TestService::TestEnum::value_b,
-            test_service.enum_return());
+  ASSERT_EQ(krpc::services::TestService::TestEnum::value_b, test_service.enum_return());
   ASSERT_EQ(krpc::services::TestService::TestEnum::value_a,
             test_service.enum_echo(krpc::services::TestService::TestEnum::value_a));
   ASSERT_EQ(krpc::services::TestService::TestEnum::value_b,
@@ -195,8 +186,7 @@ TEST_F(test_client, test_enums) {
             test_service.enum_echo(krpc::services::TestService::TestEnum::value_c));
   ASSERT_EQ(krpc::services::TestService::TestEnum::value_a,
             test_service.enum_default_arg(krpc::services::TestService::TestEnum::value_a));
-  ASSERT_EQ(krpc::services::TestService::TestEnum::value_c,
-            test_service.enum_default_arg());
+  ASSERT_EQ(krpc::services::TestService::TestEnum::value_c, test_service.enum_default_arg());
   ASSERT_EQ(krpc::services::TestService::TestEnum::value_b,
             test_service.enum_default_arg(krpc::services::TestService::TestEnum::value_b));
 }
@@ -288,13 +278,13 @@ TEST_F(test_client, test_collections_of_objects) {
 }
 
 TEST_F(test_client, test_collections_default_values) {
-  std::tuple<int, bool> t {1, false};
+  std::tuple<int, bool> t{1, false};
   ASSERT_EQ(t, test_service.tuple_default());
-  std::vector<int> l {1, 2, 3};
+  std::vector<int> l{1, 2, 3};
   ASSERT_EQ(l, test_service.list_default());
-  std::set<int> s {1, 2, 3};
+  std::set<int> s{1, 2, 3};
   ASSERT_EQ(s, test_service.set_default());
-  std::map<int, bool> m {{1, false}, {2, true}};
+  std::map<int, bool> m{{1, false}, {2, true}};
   ASSERT_EQ(m, test_service.dictionary_default());
 }
 
@@ -305,57 +295,54 @@ TEST_F(test_client, test_test_service_enum_members) {
 }
 
 TEST_F(test_client, test_invalid_operation_exception) {
-  ASSERT_THROW(
-    test_service.throw_invalid_operation_exception(),
-    krpc::services::KRPC::InvalidOperationException);
+  ASSERT_THROW(test_service.throw_invalid_operation_exception(),
+               krpc::services::KRPC::InvalidOperationException);
   try {
     test_service.throw_invalid_operation_exception();
-  } catch(std::runtime_error& e) {
+  } catch (std::runtime_error& e) {
     EXPECT_THAT(e.what(), testing::HasSubstr("Invalid operation"));
   }
 }
 
 TEST_F(test_client, test_argument_exception) {
-  ASSERT_THROW(
-    test_service.throw_argument_exception(),
-    krpc::services::KRPC::ArgumentException);
+  ASSERT_THROW(test_service.throw_argument_exception(), krpc::services::KRPC::ArgumentException);
   try {
     test_service.throw_argument_exception();
-  } catch(krpc::services::KRPC::ArgumentException& e) {
+  } catch (krpc::services::KRPC::ArgumentException& e) {
     EXPECT_THAT(e.what(), testing::HasSubstr("Invalid argument"));
   }
 }
 
 TEST_F(test_client, test_argument_null_exception) {
-  ASSERT_THROW(
-    test_service.throw_argument_null_exception(""),
-    krpc::services::KRPC::ArgumentNullException);
+  ASSERT_THROW(test_service.throw_argument_null_exception(""),
+               krpc::services::KRPC::ArgumentNullException);
   try {
     test_service.throw_argument_null_exception("");
-  } catch(krpc::services::KRPC::ArgumentNullException& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr("Value cannot be null.\nParameter name: foo"));
+  } catch (krpc::services::KRPC::ArgumentNullException& e) {
+    // The parameter name formatting differs between .NET Framework/mono
+    // ("Parameter name: foo") and modern .NET ("(Parameter 'foo')")
+    EXPECT_THAT(e.what(), testing::HasSubstr("Value cannot be null."));
+    EXPECT_THAT(e.what(), testing::HasSubstr("foo"));
   }
 }
 
 TEST_F(test_client, test_argument_out_of_range_exception) {
-  ASSERT_THROW(
-    test_service.throw_argument_out_of_range_exception(0),
-    krpc::services::KRPC::ArgumentOutOfRangeException);
+  ASSERT_THROW(test_service.throw_argument_out_of_range_exception(0),
+               krpc::services::KRPC::ArgumentOutOfRangeException);
   try {
     test_service.throw_argument_out_of_range_exception(0);
-  } catch(krpc::services::KRPC::ArgumentOutOfRangeException& e) {
-    EXPECT_THAT(e.what(), testing::HasSubstr(
-      "Specified argument was out of the range of valid values.\nParameter name: foo"));
+  } catch (krpc::services::KRPC::ArgumentOutOfRangeException& e) {
+    EXPECT_THAT(e.what(),
+                testing::HasSubstr("Specified argument was out of the range of valid values."));
+    EXPECT_THAT(e.what(), testing::HasSubstr("foo"));
   }
 }
 
 TEST_F(test_client, test_custom_exception) {
-  ASSERT_THROW(
-    test_service.throw_custom_exception(),
-    krpc::services::TestService::CustomException);
+  ASSERT_THROW(test_service.throw_custom_exception(), krpc::services::TestService::CustomException);
   try {
     test_service.throw_custom_exception();
-  } catch(krpc::services::TestService::CustomException& e) {
+  } catch (krpc::services::TestService::CustomException& e) {
     EXPECT_THAT(e.what(), testing::HasSubstr("A custom kRPC exception"));
   }
 }
@@ -366,10 +353,22 @@ TEST_F(test_client, test_line_endings) {
   strings.push_back("foo\rbar");
   strings.push_back("foo\n\rbar");
   strings.push_back("foo\r\nbar");
-  strings.push_back("foo""\x10""bar");
-  strings.push_back("foo""\x13""bar");
-  strings.push_back("foo""\x10\x13""bar");
-  strings.push_back("foo""\x13\x10""bar");
+  strings.push_back(
+      "foo"
+      "\x10"
+      "bar");
+  strings.push_back(
+      "foo"
+      "\x13"
+      "bar");
+  strings.push_back(
+      "foo"
+      "\x10\x13"
+      "bar");
+  strings.push_back(
+      "foo"
+      "\x13\x10"
+      "bar");
   for (std::vector<std::string>::const_iterator i = strings.begin(); i != strings.end(); i++) {
     test_service.set_string_property(*i);
     ASSERT_EQ(*i, test_service.string_property());
@@ -385,9 +384,8 @@ TEST_F(test_client, test_thread_safe) {
 
   std::vector<std::thread> threads;
   for (int i = 0; i < thread_count; i++)
-    threads.push_back(
-      std::thread(
-        [this](std::atomic_int* count) {
+    threads.push_back(std::thread(
+        [this, repeats](std::atomic_int* count) {
           for (int j = 0; j < repeats; j++) {
             ASSERT_EQ("False", test_service.bool_to_string(false));
             ASSERT_EQ(12345, test_service.string_to_int32("12345"));
@@ -396,7 +394,6 @@ TEST_F(test_client, test_thread_safe) {
         },
         &count));
 
-  for (auto& t : threads)
-    t.join();
+  for (auto& t : threads) t.join();
   ASSERT_EQ(count, 0);
 }

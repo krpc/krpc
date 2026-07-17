@@ -109,7 +109,7 @@ def main():
         "--ksp-dir",
         default=None,
         metavar="DIR",
-        help="path to the KSP install (default: $KSP_DIR, or lib/ksp)",
+        help="path to the KSP install (defaults to $KSP_DIR)",
     )
 
     autoload = parser.add_argument_group(

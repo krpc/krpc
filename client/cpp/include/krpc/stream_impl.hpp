@@ -14,8 +14,8 @@ class Client;
 
 class StreamImpl {
  public:
-  StreamImpl(Client * client, uint64_t id, std::recursive_mutex * update_lock);
-  Client * get_client() const;
+  StreamImpl(Client* client, uint64_t id, std::recursive_mutex* update_lock);
+  Client* get_client() const;
   uint64_t get_id() const;
   void start();
   bool has_started() const;
@@ -34,9 +34,9 @@ class StreamImpl {
   void remove();
 
  private:
-  Client * client;
+  Client* client;
   uint64_t id;
-  std::recursive_mutex * update_lock;
+  std::recursive_mutex* update_lock;
   bool started;
   bool updated;
   std::string data;

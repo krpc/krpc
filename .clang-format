@@ -1,0 +1,7 @@
+---
+# Formatting for the C++ (client/cpp) and C (client/cnano) client sources.
+# Google style with a 100-column line length. Generated protobuf and service
+# code is not formatted (see the clang_format_test srcs).
+BasedOnStyle: Google
+ColumnLimit: 100
+...
