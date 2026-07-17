@@ -57,28 +57,31 @@ namespace KRPC.Server.ProtocolBuffers
 
             if (data == null)
                 data = new DynamicBuffer ();
-            byte[] buffer = new byte[ReadChunkSize];
 
-            int read = stream.Read (buffer, 0, buffer.Length);
+            // Read straight into the accumulation buffer, without an intermediate array or copy.
+            var backing = data.Reserve (ReadChunkSize);
+            int read = stream.Read (backing, data.Length, ReadChunkSize);
             if (read == 0)
                 return null;
-            data.Append (buffer, 0, read);
+            data.Length += read;
 
-            var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
-            // Get the protobuf message size
+            // Messages are length-delimited: a varint byte-length prefix followed by the message body.
+            int prefixLength;
             int size;
             try {
-                size = (int)codedStream.ReadUInt32 ();
-            } catch (InvalidProtocolBufferException) {
+                size = DecodeMessageLength (data.GetBuffer (), 0, data.Length, out prefixLength);
+            } catch (InvalidOperationException) {
+                // Malformed length prefix; wait for the receive to time out.
                 return null;
             }
-            int totalSize = (int)codedStream.Position + size;
-            // Check if enough data is available, if not then delay the decoding
-            if (data.Length < totalSize)
-                return null;
-            // Decode the request
+            if (prefixLength == 0)
+                return null; // The length prefix has not been fully received yet.
+            if (data.Length < prefixLength + size)
+                return null; // The message body has not been fully received yet.
+            // Parse the message body straight out of the buffer, with no copy or intermediate stream,
+            // reading exactly the message's own bytes.
             var message = new T ();
-            message.MergeFrom (codedStream);
+            message.MergeFrom (data.GetBuffer (), prefixLength, size);
             return message;
         }
 
