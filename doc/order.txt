@@ -684,6 +684,8 @@ SpaceCenter.Part.BoundingBox
 SpaceCenter.Part.Direction
 SpaceCenter.Part.Velocity
 SpaceCenter.Part.Rotation
+SpaceCenter.Part.Lift
+SpaceCenter.Part.Drag
 SpaceCenter.Part.MomentOfInertia
 SpaceCenter.Part.InertiaTensor
 SpaceCenter.Part.ReferenceFrame
