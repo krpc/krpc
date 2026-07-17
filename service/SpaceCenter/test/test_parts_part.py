@@ -46,6 +46,10 @@ class TestPartsPart(krpctest.TestCase):
         self.assertAlmostEqual(2610, part.dry_mass, places=2)
         self.assertFalse(part.shielded)
         self.assertAlmostEqual(0, part.dynamic_pressure, places=3)
+        if not self.far_available:
+            # Stationary on the pad, so no aerodynamic forces act on the part.
+            self.assertAlmostEqual(0, norm(part.drag(part.reference_frame)), places=3)
+            self.assertAlmostEqual(0, norm(part.lift(part.reference_frame)), places=3)
         self.assertEqual(20, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
