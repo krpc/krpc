@@ -129,5 +129,30 @@ class TestCameraMap(krpctest.TestCase, CameraTestBase):
         cls.wait(1)
 
 
+class TestCameraDistanceDuringSwitch(krpctest.TestCase):
+    # Runs last so its deliberately unsettled camera state does not leak into the
+    # other camera test classes (new_save does not reload when already in flight).
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.set_circular_orbit("Kerbin", 1000000)
+        space_center = cls.connect().space_center
+        cls.camera = space_center.camera
+        cls.mode = space_center.CameraMode
+
+    def test_distance_survives_camera_settle(self):
+        # Regression for #318: while the camera is still settling (as it is just
+        # after the vessel is placed / the scene loads), switch mode and set the
+        # distance with no wait. During the settle the camera drives its distance
+        # back to the default, so without deferral the write is lost; it must be
+        # re-applied and hold once the camera settles.
+        self.set_circular_orbit("Kerbin", 1000000)
+        self.camera.mode = self.mode.chase
+        self.camera.distance = 15
+        self.wait(3)
+        self.assertEqual(self.mode.chase, self.camera.mode)
+        self.assertAlmostEqual(15, self.camera.distance, places=0)
+
+
 if __name__ == "__main__":
     unittest.main()
