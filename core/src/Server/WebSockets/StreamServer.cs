@@ -35,6 +35,9 @@ namespace KRPC.Server.WebSockets
             var request = ConnectionRequest.ReadRequest (args);
             if (args.Request.ShouldDeny)
                 return null;
+            if (request == null)
+                // The request has not been fully received yet; retry on a later update.
+                return null;
             var guid = GetGuid (request);
             if (guid == Guid.Empty) {
                 args.Client.Stream.Write (HTTP.Response.CreateBadRequest ().ToBytes ());

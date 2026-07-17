@@ -45,6 +45,9 @@ namespace KRPC.Server.WebSockets
                 Logger.WriteLine ("WebSockets: client connection denied (" + address + ")", Logger.Severity.Error);
                 return null;
             }
+            if (request == null)
+                // The request has not been fully received yet; retry on a later update.
+                return null;
             var clientName = GetClientName (request);
             clientKeys [args.Client] = request.Headers ["sec-websocket-key"].Single ();
             return new RPCClient (clientName, args.Client, shouldEcho);
