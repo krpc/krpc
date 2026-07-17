@@ -100,6 +100,7 @@
     <Compile Include="Services\AltimeterMode.cs" />
     <Compile Include="Services\CameraMode.cs" />
     <Compile Include="Services\CelestialBody.cs" />
+    <Compile Include="Services\ClosestApproach.cs" />
     <Compile Include="Services\LaunchSite.cs" />
     <Compile Include="Services\CommLink.cs" />
     <Compile Include="Services\CommLinkType.cs" />

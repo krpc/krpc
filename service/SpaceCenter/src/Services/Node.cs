@@ -214,7 +214,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Orbit Orbit {
-            get { return new Orbit (InternalNode.nextPatch); }
+            get { return new Orbit (this); }
         }
 
         void Update () {

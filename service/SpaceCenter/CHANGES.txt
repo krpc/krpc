@@ -117,6 +117,13 @@ v0.6.0
    * Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics
    * On client disconnect the AutoPilot is now disengaged but its settings and target are kept
  * Add Orbit.OrbitalEnergy (#303)
+ * Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach
+   class exposing the time, distance, positions, velocities, relative position/velocity
+   and relative speed at a close approach with a target orbit, plus the vessels or bodies
+   involved (#334)
+ * **Deprecated:** Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and
+   Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and
+   Orbit.ClosestApproaches (#334)
 
 v0.5.4
  * Fix vessel recovery (#782)
