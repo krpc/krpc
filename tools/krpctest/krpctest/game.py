@@ -67,10 +67,10 @@ def _auto_launch_enabled():
     return os.environ.get("KRPC_AUTO_LAUNCH", "1") != "0"
 
 
-def copy_blank_save(name):
+def copy_blank_save(name, ksp_dir=None):
     """Copy the bundled blank save into the KSP install's saves/<name>/persistent.sfs."""
     blank_save = str(files("krpctest").joinpath(name + ".sfs"))
-    save_path = os.path.join(get_ksp_dir(), "saves", name)
+    save_path = os.path.join(get_ksp_dir(ksp_dir), "saves", name)
     if not os.path.exists(save_path):
         os.makedirs(save_path)
     shutil.copy(blank_save, os.path.join(save_path, "persistent.sfs"))
