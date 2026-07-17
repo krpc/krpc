@@ -95,12 +95,11 @@ def _spelling_impl(ctx):
     sub_commands = []
 
     sphinx_commands = [
-        # FIXME: following copy is a hack to fix sphinx not being able to read the
-        #        dictionary from a symlink and requiring the file to be writable
+        # sphinxcontrib-spelling requires the dictionary to be a readable, writable regular file,
+        # but Bazel stages inputs as read-only symlinks. Replace the symlink with a writable copy.
         'cp "`pwd`/doc/srcs/dictionary.txt" "`pwd`/doc/srcs/dictionary.txt.tmp"',
         'rm "`pwd`/doc/srcs/dictionary.txt"',
         'mv "`pwd`/doc/srcs/dictionary.txt.tmp" "`pwd`/doc/srcs/dictionary.txt"',
-        # end of hack
         "chmod 644 `pwd`/doc/srcs/dictionary.txt",
         # FIXME: re-add -W flag. Fails currently as it gets a warning looking for contributors
         "%s -b spelling -E -N -T %s ./out %s 2>&1 | tee stdout" % (sphinx_build.short_path, src_dir, opts),
