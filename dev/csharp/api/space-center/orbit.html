@@ -56,7 +56,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/csharp/api/space-center/orbit.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Control" href="control.html" />
+    <link rel="next" title="Closest Approach" href="closest-approach.html" />
     <link rel="prev" title="Flight" href="flight.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -552,6 +552,7 @@
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
@@ -1246,9 +1247,47 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 </dd></dl>
 
 <dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach">
+<a class="reference internal" href="closest-approach.html#class-KRPC.Client.Services.SpaceCenter.ClosestApproach" title="KRPC.Client.Services.SpaceCenter.ClosestApproach class"><span class="pre">ClosestApproach</span></a> <span class="sig-name descname"><span class="pre">NextClosestApproach</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <em><span class="pre">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach" title="Link to this definition">#</a></dt>
+<dd><p>The next closest approach to a target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="closest-approach.html#class-KRPC.Client.Services.SpaceCenter.ClosestApproach" title="KRPC.Client.Services.SpaceCenter.ClosestApproach class"><span class="pre">ClosestApproach</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">ClosestApproaches</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <em><span class="pre">target</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">orbits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches" title="Link to this definition">#</a></dt>
+<dd><p>A list of the closest approaches to a target orbit, one for each of the next
+<em>orbits</em> orbital periods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+<li><p><strong>orbits</strong> – The number of future orbits to search.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.TimeOfClosestApproach">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">TimeOfClosestApproach</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <em><span class="pre">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.TimeOfClosestApproach" title="Link to this definition">#</a></dt>
-<dd><p>Estimates and returns the time at closest approach to a target orbit.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach" title="KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.NextClosestApproach</span></code></a> and read <a class="reference internal" href="closest-approach.html#property-KRPC.Client.Services.SpaceCenter.ClosestApproach.UT" title="KRPC.Client.Services.SpaceCenter.ClosestApproach.UT property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">ClosestApproach.UT</span></code></a> instead.</p>
+</div>
+<p>Estimates and returns the time at closest approach to a target orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1267,7 +1306,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.DistanceAtClosestApproach">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">DistanceAtClosestApproach</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <em><span class="pre">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.DistanceAtClosestApproach" title="Link to this definition">#</a></dt>
-<dd><p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach" title="KRPC.Client.Services.SpaceCenter.Orbit.NextClosestApproach method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.NextClosestApproach</span></code></a> and read <a class="reference internal" href="closest-approach.html#property-KRPC.Client.Services.SpaceCenter.ClosestApproach.Distance" title="KRPC.Client.Services.SpaceCenter.ClosestApproach.Distance property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">ClosestApproach.Distance</span></code></a> instead.</p>
+</div>
+<p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1283,7 +1326,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.ListClosestApproaches">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">ListClosestApproaches</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <em><span class="pre">target</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">orbits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.ListClosestApproaches" title="Link to this definition">#</a></dt>
-<dd><p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches" title="KRPC.Client.Services.SpaceCenter.Orbit.ClosestApproaches method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.ClosestApproaches</span></code></a> instead.</p>
+</div>
+<p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1324,11 +1371,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
       </div>
     </a>
     <a class="right-next"
-       href="control.html"
+       href="closest-approach.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Control</p>
+        <p class="prev-next-title">Closest Approach</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1399,7 +1446,7 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5452086">5452086</a>
+  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
 </p></div>
       
     </div>

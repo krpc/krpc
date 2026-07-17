@@ -359,7 +359,31 @@ Orbit
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_NextClosestApproach(krpc_connection_t connection, krpc_SpaceCenter_ClosestApproach_t * result, krpc_SpaceCenter_Orbit_t target)
+
+      The next closest approach to a target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ClosestApproaches(krpc_connection_t connection, krpc_list_object_t * result, krpc_SpaceCenter_Orbit_t target, int32_t orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+       * **orbits** -- The number of future orbits to search.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TimeOfClosestApproach(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
+
+      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_NextClosestApproach` and read :func:`krpc_SpaceCenter_ClosestApproach_UT` instead.
 
       Estimates and returns the time at closest approach to a target orbit.
 
@@ -372,6 +396,8 @@ Orbit
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_DistanceAtClosestApproach(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
 
+      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_NextClosestApproach` and read :func:`krpc_SpaceCenter_ClosestApproach_Distance` instead.
+
       Estimates and returns the distance at closest approach to a target orbit, in meters.
 
       :Parameters:
@@ -381,6 +407,8 @@ Orbit
    
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ListClosestApproaches(krpc_connection_t connection, krpc_list_list_double_t * result, krpc_SpaceCenter_Orbit_t target, int32_t orbits)
+
+      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Orbit_ClosestApproaches` instead.
 
       Returns the times at closest approach and corresponding distances, to a target orbit.
 

@@ -1,0 +1,142 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Closest Approach
+================
+
+
+.. class:: ClosestApproach
+
+   A close approach between an orbit and a target orbit. Obtained by calling
+   :meth:`Orbit.next_closest_approach` or :meth:`Orbit.closest_approaches`.
+
+   .. note::
+
+      A close approach is a snapshot: the time of closest approach is estimated once
+      when the object is created, and every member describes the state at that time.
+      Relative quantities are the target relative to the orbiting object (target minus
+      self).
+
+   .. attribute:: ut
+
+      The universal time of the closest approach, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_to
+
+      The time until the closest approach, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: distance
+
+      The distance between the objects at the closest approach, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: relative_speed
+
+      The relative speed of the objects at the closest approach, in meters per
+      second. This is the magnitude of :meth:`ClosestApproach.relative_velocity`, and does
+      not depend on the choice of reference frame.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: vessel
+
+      The vessel doing the approaching, or ``None`` if it is not a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vessel`
+   
+
+   .. attribute:: body
+
+      The celestial body doing the approaching, or ``None`` if it is not a
+      celestial body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CelestialBody`
+   
+
+   .. attribute:: target_vessel
+
+      The vessel being approached, or ``None`` if the target is not a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vessel`
+   
+
+   .. attribute:: target_body
+
+      The celestial body being approached, or ``None`` if the target is not a
+      celestial body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CelestialBody`
+   
+
+   .. method:: position([reference_frame = None])
+
+      The position of the orbiting object at the closest approach.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: target_position([reference_frame = None])
+
+      The position of the target object at the closest approach.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: velocity([reference_frame = None])
+
+      The velocity of the orbiting object at the closest approach.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The velocity as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: target_velocity([reference_frame = None])
+
+      The velocity of the target object at the closest approach.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The velocity as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: relative_position([reference_frame = None])
+
+      The position of the target relative to the orbiting object at the closest
+      approach.
+
+      :param ReferenceFrame reference_frame: The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The relative position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: relative_velocity([reference_frame = None])
+
+      The velocity of the target relative to the orbiting object at the closest
+      approach.
+
+      :param ReferenceFrame reference_frame: The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The relative velocity as a vector.
+      :rtype: tuple(float, float, float)

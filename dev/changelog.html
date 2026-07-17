@@ -603,6 +603,7 @@
 <ul class="simple">
 <li><p><em>(Core)</em> KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
 <li><p><em>(SpaceCenter service)</em> SpaceCenter.LoadSpaceCenter, superseded by setting KRPC.GameScene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
+<li><p><em>(SpaceCenter service)</em> Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/334">#334</a>)</p></li>
 </ul>
 </div>
 <section id="server">
@@ -723,6 +724,8 @@
 <li><p>Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics</p></li>
 <li><p>On client disconnect the AutoPilot is now disengaged but its settings and target are kept</p></li>
 <li><p>Add Orbit.OrbitalEnergy (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/303">#303</a>)</p></li>
+<li><p>Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach class exposing the time, distance, positions, velocities, relative position/velocity and relative speed at a close approach with a target orbit, plus the vessels or bodies involved (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/334">#334</a>)</p></li>
+<li><p>Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/334">#334</a>)</p></li>
 </ul>
 </section>
 <section id="kerbalalarmclock-service">
@@ -3136,7 +3139,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5452086">5452086</a>
+  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
 </p></div>
       
     </div>

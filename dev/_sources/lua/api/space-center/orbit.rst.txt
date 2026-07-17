@@ -342,7 +342,25 @@ Orbit
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Orbit`
 
+   .. method:: next_closest_approach(target)
+
+      The next closest approach to a target orbit.
+
+      :param SpaceCenter.Orbit target: Target orbit.
+      :rtype: :class:`SpaceCenter.ClosestApproach`
+
+   .. method:: closest_approaches(target, orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :param SpaceCenter.Orbit target: Target orbit.
+      :param number orbits: The number of future orbits to search.
+      :rtype: List
+
    .. method:: time_of_closest_approach(target)
+
+      .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.next_closest_approach` and read :attr:`SpaceCenter.ClosestApproach.ut` instead.
 
       Estimates and returns the time at closest approach to a target orbit.
 
@@ -352,12 +370,16 @@ Orbit
 
    .. method:: distance_at_closest_approach(target)
 
+      .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.next_closest_approach` and read :attr:`SpaceCenter.ClosestApproach.distance` instead.
+
       Estimates and returns the distance at closest approach to a target orbit, in meters.
 
       :param SpaceCenter.Orbit target: Target orbit.
       :rtype: number
 
    .. method:: list_closest_approaches(target, orbits)
+
+      .. warning:: Deprecated. Use :meth:`SpaceCenter.Orbit.closest_approaches` instead.
 
       Returns the times at closest approach and corresponding distances, to a target orbit.
 

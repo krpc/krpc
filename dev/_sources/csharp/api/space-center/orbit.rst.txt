@@ -367,7 +367,31 @@ Orbit
 
       :Game Scenes: All
 
+   .. method:: ClosestApproach NextClosestApproach(Orbit target)
+
+      The next closest approach to a target orbit.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<ClosestApproach> ClosestApproaches(Orbit target, int orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+       * **orbits** -- The number of future orbits to search.
+
+      :Game Scenes: All
+
    .. method:: double TimeOfClosestApproach(Orbit target)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.NextClosestApproach` and read :prop:`ClosestApproach.UT` instead.
 
       Estimates and returns the time at closest approach to a target orbit.
 
@@ -380,6 +404,8 @@ Orbit
 
    .. method:: double DistanceAtClosestApproach(Orbit target)
 
+      .. warning:: Deprecated. Use :meth:`Orbit.NextClosestApproach` and read :prop:`ClosestApproach.Distance` instead.
+
       Estimates and returns the distance at closest approach to a target orbit, in meters.
 
       :parameters:
@@ -389,6 +415,8 @@ Orbit
       :Game Scenes: All
 
    .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<double>> ListClosestApproaches(Orbit target, int orbits)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.ClosestApproaches` instead.
 
       Returns the times at closest approach and corresponding distances, to a target orbit.
 

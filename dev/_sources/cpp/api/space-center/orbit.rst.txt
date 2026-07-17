@@ -359,7 +359,31 @@ Orbit
 
    
 
+   .. function:: ClosestApproach next_closest_approach(Orbit target)
+
+      The next closest approach to a target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: std::vector<ClosestApproach> closest_approaches(Orbit target, int32_t orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+       * **orbits** -- The number of future orbits to search.
+
+   
+
    .. function:: double time_of_closest_approach(Orbit target)
+
+      .. warning:: Deprecated. Use :func:`Orbit::next_closest_approach` and read :func:`ClosestApproach::ut` instead.
 
       Estimates and returns the time at closest approach to a target orbit.
 
@@ -372,6 +396,8 @@ Orbit
 
    .. function:: double distance_at_closest_approach(Orbit target)
 
+      .. warning:: Deprecated. Use :func:`Orbit::next_closest_approach` and read :func:`ClosestApproach::distance` instead.
+
       Estimates and returns the distance at closest approach to a target orbit, in meters.
 
       :Parameters:
@@ -381,6 +407,8 @@ Orbit
    
 
    .. function:: std::vector<std::vector<double>> list_closest_approaches(Orbit target, int32_t orbits)
+
+      .. warning:: Deprecated. Use :func:`Orbit::closest_approaches` instead.
 
       Returns the times at closest approach and corresponding distances, to a target orbit.
 

@@ -56,7 +56,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/java/api/space-center/orbit.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Control" href="control.html" />
+    <link rel="next" title="Closest Approach" href="closest-approach.html" />
     <link rel="prev" title="Flight" href="flight.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -552,6 +552,7 @@
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
@@ -1079,9 +1080,41 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)">
+ <a class="reference internal" href="closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach" title="krpc.client.services.SpaceCenter.ClosestApproach"><span class="pre">ClosestApproach</span></a> <span class="sig-name descname"><span class="pre">nextClosestApproach</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><em> <span class="pre">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)" title="Link to this definition">#</a></dt>
+<dd><p>The next closest approach to a target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><code class="xref java java-type docutils literal notranslate"><span class="pre">Orbit</span></code></a></span>) – Target orbit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.closestApproaches(Orbit, int)">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach" title="krpc.client.services.SpaceCenter.ClosestApproach"><span class="pre">ClosestApproach</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">closestApproaches</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><em> <span class="pre">target</span></em>, <span class="pre">int</span><em> <span class="pre">orbits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.closestApproaches(Orbit, int)" title="Link to this definition">#</a></dt>
+<dd><p>A list of the closest approaches to a target orbit, one for each of the next
+<em>orbits</em> orbital periods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><code class="xref java java-type docutils literal notranslate"><span class="pre">Orbit</span></code></a></span>) – Target orbit.</p></li>
+<li><p><strong>orbits</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The number of future orbits to search.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.timeOfClosestApproach(Orbit)">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">timeOfClosestApproach</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><em> <span class="pre">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.timeOfClosestApproach(Orbit)" title="Link to this definition">#</a></dt>
-<dd><p>Estimates and returns the time at closest approach to a target orbit.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)" title="krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.nextClosestApproach(Orbit)</span></code></a> and read <a class="reference internal" href="closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getUT()" title="krpc.client.services.SpaceCenter.ClosestApproach.getUT()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ClosestApproach.getUT()</span></code></a> instead.</p>
+</div>
+<p>Estimates and returns the time at closest approach to a target orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1097,7 +1130,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.distanceAtClosestApproach(Orbit)">
  <span class="pre">double</span> <span class="sig-name descname"><span class="pre">distanceAtClosestApproach</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><em> <span class="pre">target</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.distanceAtClosestApproach(Orbit)" title="Link to this definition">#</a></dt>
-<dd><p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)" title="krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.nextClosestApproach(Orbit)</span></code></a> and read <a class="reference internal" href="closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getDistance()" title="krpc.client.services.SpaceCenter.ClosestApproach.getDistance()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ClosestApproach.getDistance()</span></code></a> instead.</p>
+</div>
+<p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1110,7 +1147,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.listClosestApproaches(Orbit, int)">
  <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">listClosestApproaches</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit" title="krpc.client.services.SpaceCenter.Orbit"><span class="pre">Orbit</span></a><em> <span class="pre">target</span></em>, <span class="pre">int</span><em> <span class="pre">orbits</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.listClosestApproaches(Orbit, int)" title="Link to this definition">#</a></dt>
-<dd><p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.closestApproaches(Orbit, int)" title="krpc.client.services.SpaceCenter.Orbit.closestApproaches(Orbit, int)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.closestApproaches(Orbit,</span> <span class="pre">int)</span></code></a> instead.</p>
+</div>
+<p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1148,11 +1189,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
       </div>
     </a>
     <a class="right-next"
-       href="control.html"
+       href="closest-approach.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Control</p>
+        <p class="prev-next-title">Closest Approach</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1223,7 +1264,7 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5452086">5452086</a>
+  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
 </p></div>
       
     </div>

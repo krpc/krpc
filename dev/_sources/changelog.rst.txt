@@ -10,6 +10,7 @@ Changelog
 
    * *(Core)* KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (:issue:`897`)
    * *(SpaceCenter service)* SpaceCenter.LoadSpaceCenter, superseded by setting KRPC.GameScene (:issue:`897`)
+   * *(SpaceCenter service)* Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (:issue:`334`)
 
 
 
@@ -131,6 +132,8 @@ SpaceCenter service
 * Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics
 * On client disconnect the AutoPilot is now disengaged but its settings and target are kept
 * Add Orbit.OrbitalEnergy (:issue:`303`)
+* Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach class exposing the time, distance, positions, velocities, relative position/velocity and relative speed at a close approach with a target orbit, plus the vessels or bodies involved (:issue:`334`)
+* Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (:issue:`334`)
 
 
 KerbalAlarmClock service

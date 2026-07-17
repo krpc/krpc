@@ -342,7 +342,25 @@ Orbit
 
    
 
+   .. method:: ClosestApproach nextClosestApproach(Orbit target)
+
+      The next closest approach to a target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: java.util.List<ClosestApproach> closestApproaches(Orbit target, int orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :param Orbit target: Target orbit.
+      :param int orbits: The number of future orbits to search.
+   
+
    .. method:: double timeOfClosestApproach(Orbit target)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.nextClosestApproach(Orbit)` and read :meth:`ClosestApproach.getUT()` instead.
 
       Estimates and returns the time at closest approach to a target orbit.
 
@@ -352,12 +370,16 @@ Orbit
 
    .. method:: double distanceAtClosestApproach(Orbit target)
 
+      .. warning:: Deprecated. Use :meth:`Orbit.nextClosestApproach(Orbit)` and read :meth:`ClosestApproach.getDistance()` instead.
+
       Estimates and returns the distance at closest approach to a target orbit, in meters.
 
       :param Orbit target: Target orbit.
    
 
    .. method:: java.util.List<java.util.List<Double>> listClosestApproaches(Orbit target, int orbits)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.closestApproaches(Orbit, int)` instead.
 
       Returns the times at closest approach and corresponding distances, to a target orbit.
 

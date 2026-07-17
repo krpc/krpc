@@ -14,6 +14,7 @@ SpaceCenter API
    space-center/celestial-body
    space-center/flight
    space-center/orbit
+   space-center/closest-approach
    space-center/control
    space-center/comms
    space-center/parts

@@ -56,7 +56,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/cnano/api/space-center/orbit.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Control" href="control.html" />
+    <link rel="next" title="Closest Approach" href="closest-approach.html" />
     <link rel="prev" title="Flight" href="flight.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -552,6 +552,7 @@
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
 <li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
 <li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
 <li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
@@ -1079,9 +1080,41 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_NextClosestApproach">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_NextClosestApproach</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="closest-approach.html#c.krpc_SpaceCenter_ClosestApproach_t" title="krpc_SpaceCenter_ClosestApproach_t"><span class="n"><span class="pre">krpc_SpaceCenter_ClosestApproach_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_NextClosestApproach" title="Link to this definition">#</a><br /></dt>
+<dd><p>The next closest approach to a target orbit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ClosestApproaches">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_ClosestApproaches</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">orbits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ClosestApproaches" title="Link to this definition">#</a><br /></dt>
+<dd><p>A list of the closest approaches to a target orbit, one for each of the next
+<em>orbits</em> orbital periods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>target</strong> – Target orbit.</p></li>
+<li><p><strong>orbits</strong> – The number of future orbits to search.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_TimeOfClosestApproach">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_TimeOfClosestApproach</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_TimeOfClosestApproach" title="Link to this definition">#</a><br /></dt>
-<dd><p>Estimates and returns the time at closest approach to a target orbit.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_NextClosestApproach" title="krpc_SpaceCenter_Orbit_NextClosestApproach"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_NextClosestApproach()</span></code></a> and read <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ClosestApproach_UT()</span></code> instead.</p>
+</div>
+<p>Estimates and returns the time at closest approach to a target orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1097,7 +1130,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_DistanceAtClosestApproach">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_DistanceAtClosestApproach</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_DistanceAtClosestApproach" title="Link to this definition">#</a><br /></dt>
-<dd><p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_NextClosestApproach" title="krpc_SpaceCenter_Orbit_NextClosestApproach"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_NextClosestApproach()</span></code></a> and read <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ClosestApproach_Distance()</span></code> instead.</p>
+</div>
+<p>Estimates and returns the distance at closest approach to a target orbit, in meters.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1110,7 +1147,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ListClosestApproaches">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_ListClosestApproaches</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_list_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t" title="krpc_SpaceCenter_Orbit_t"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">target</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">orbits</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ListClosestApproaches" title="Link to this definition">#</a><br /></dt>
-<dd><p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ClosestApproaches" title="krpc_SpaceCenter_Orbit_ClosestApproaches"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_ClosestApproaches()</span></code></a> instead.</p>
+</div>
+<p>Returns the times at closest approach and corresponding distances, to a target orbit.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1148,11 +1189,11 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
       </div>
     </a>
     <a class="right-next"
-       href="control.html"
+       href="closest-approach.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Control</p>
+        <p class="prev-next-title">Closest Approach</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1223,7 +1264,7 @@ orbit after the change. Otherwise returns <code class="docutils literal notransl
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5452086">5452086</a>
+  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
 </p></div>
       
     </div>

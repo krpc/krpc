@@ -1,0 +1,138 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Closest Approach
+================
+
+
+.. type:: krpc_SpaceCenter_ClosestApproach_t
+
+   A close approach between an orbit and a target orbit. Obtained by calling
+   :func:`krpc_SpaceCenter_Orbit_NextClosestApproach` or :func:`krpc_SpaceCenter_Orbit_ClosestApproaches`.
+
+   .. note::
+
+      A close approach is a snapshot: the time of closest approach is estimated once
+      when the object is created, and every member describes the state at that time.
+      Relative quantities are the target relative to the orbiting object (target minus
+      self).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_UT(krpc_connection_t connection, double * result)
+
+      The universal time of the closest approach, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_TimeTo(krpc_connection_t connection, double * result)
+
+      The time until the closest approach, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_Distance(krpc_connection_t connection, double * result)
+
+      The distance between the objects at the closest approach, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_RelativeSpeed(krpc_connection_t connection, double * result)
+
+      The relative speed of the objects at the closest approach, in meters per
+      second. This is the magnitude of :func:`krpc_SpaceCenter_ClosestApproach_RelativeVelocity`, and does
+      not depend on the choice of reference frame.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      The vessel doing the approaching, or ``nullptr`` if it is not a vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+
+      The celestial body doing the approaching, or ``nullptr`` if it is not a
+      celestial body.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      The vessel being approached, or ``nullptr`` if the target is not a vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+
+      The celestial body being approached, or ``nullptr`` if the target is not a
+      celestial body.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the orbiting object at the closest approach.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_TargetPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the target object at the closest approach.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The velocity of the orbiting object at the closest approach.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The velocity as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_TargetVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The velocity of the target object at the closest approach.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The velocity as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_RelativePosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the target relative to the orbiting object at the closest
+      approach.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The relative position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ClosestApproach_RelativeVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The velocity of the target relative to the orbiting object at the closest
+      approach.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The relative velocity as a vector.
