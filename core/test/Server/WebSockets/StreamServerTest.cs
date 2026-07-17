@@ -60,6 +60,16 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
+        public void GetGuidFromReorderedQuery ()
+        {
+            var guid = new Guid ("1234567890abcdef1234567890abcdef".ToBytes ());
+            var base64 = Convert.ToBase64String (guid.ToByteArray ());
+            var request = KRPC.Server.HTTP.Request.FromString (
+                "GET /?foo=bar&id=" + base64 + " HTTP/1.1\r\nHost: localhost\r\n\r\n");
+            Assert.AreEqual (guid, StreamServer.GetGuid (request));
+        }
+
+        [Test]
         public void InvalidConnectionRequestNoGuid ()
         {
             var ascii = Encoding.ASCII;

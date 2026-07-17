@@ -137,6 +137,15 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
+        public void GetClientNameFromReorderedQuery ()
+        {
+            var request = KRPC.Server.HTTP.Request.FromString (
+                "GET /?foo=bar&name=Jeb%20Kerman HTTP/1.1\r\nHost: localhost\r\n\r\n");
+            Assert.AreEqual (
+                "Jeb Kerman", KRPC.Server.WebSockets.RPCServer.GetClientName (request));
+        }
+
+        [Test]
         public void InvalidConnectionRequestGarbage ()
         {
             var response = CheckInvalidConnectionRequest ("deadbeef\r\n\r\n");

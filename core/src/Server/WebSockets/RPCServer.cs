@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Messages;
@@ -72,14 +71,10 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         public static string GetClientName (HTTP.Request request)
         {
-            string name = string.Empty;
-            var query = request.URI.Query;
-            // TODO: make this name extraction more robust
-            if (query.StartsWith ("?name=", StringComparison.CurrentCulture))
-                name = query.Substring ("?name=".Length);
-            else if (request.Headers.ContainsKey ("origin"))
+            var name = request.QueryParameter ("name");
+            if (name == null && request.Headers.ContainsKey ("origin"))
                 name = request.Headers ["origin"].First ();
-            return Uri.UnescapeDataString (name);
+            return name ?? string.Empty;
         }
     }
 }
