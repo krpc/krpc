@@ -75,6 +75,7 @@
     <Compile Include="ExtensionMethods\VesselSituationExtensions.cs" />
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />
+    <Compile Include="CameraAddon.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\AGX.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
