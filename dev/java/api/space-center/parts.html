@@ -4125,7 +4125,12 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ScienceSubject.getIsComplete()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsComplete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ScienceSubject.getIsComplete()" title="Link to this definition">#</a></dt>
-<dd><p>Whether the experiment has been completed.</p>
+<dd><p>Whether the subject has been fully researched. This is true once the science banked for
+the subject reaches the science cap. As the banked science (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.ScienceSubject.getScience()" title="krpc.client.services.SpaceCenter.ScienceSubject.getScience()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ScienceSubject.getScience()</span></code></a>) is
+only updated after transmission/recovery, this reflects fully mining the subject over
+repeated experiments, not whether a single run has produced data. To check whether a run
+has produced data, and how valuable it is, use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Experiment.getHasData()" title="krpc.client.services.SpaceCenter.Experiment.getHasData()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Experiment.getHasData()</span></code></a> and
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.ScienceData.getTransmitValue()" title="krpc.client.services.SpaceCenter.ScienceData.getTransmitValue()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ScienceData.getTransmitValue()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -6735,7 +6740,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
+  <a href="https://github.com/krpc/krpc/commit/c81d522">c81d522</a>
 </p></div>
       
     </div>

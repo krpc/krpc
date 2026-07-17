@@ -3032,7 +3032,12 @@ Experiment
    .. method:: boolean getIsComplete()
 
 
-      Whether the experiment has been completed.
+      Whether the subject has been fully researched. This is true once the science banked for
+      the subject reaches the science cap. As the banked science (see :meth:`ScienceSubject.getScience()`) is
+      only updated after transmission/recovery, this reflects fully mining the subject over
+      repeated experiments, not whether a single run has produced data. To check whether a run
+      has produced data, and how valuable it is, use :meth:`Experiment.getHasData()` and
+      :meth:`ScienceData.getTransmitValue()`.
 
    
 

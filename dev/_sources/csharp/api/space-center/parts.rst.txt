@@ -2958,7 +2958,12 @@ Experiment
 
    .. property:: bool IsComplete { get; }
 
-      Whether the experiment has been completed.
+      Whether the subject has been fully researched. This is true once the science banked for
+      the subject reaches the science cap. As the banked science (see :prop:`ScienceSubject.Science`) is
+      only updated after transmission/recovery, this reflects fully mining the subject over
+      repeated experiments, not whether a single run has produced data. To check whether a run
+      has produced data, and how valuable it is, use :prop:`Experiment.HasData` and
+      :prop:`ScienceData.TransmitValue`.
 
       :Game Scenes: All
 

@@ -5931,7 +5931,12 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ScienceSubject.is_complete">
 <span class="sig-name descname"><span class="pre">is_complete</span></span><a class="headerlink" href="#SpaceCenter.ScienceSubject.is_complete" title="Link to this definition">#</a></dt>
-<dd><p>Whether the experiment has been completed.</p>
+<dd><p>Whether the subject has been fully researched. This is true once the science banked for
+the subject reaches the science cap. As the banked science (see <a class="reference internal" href="#SpaceCenter.ScienceSubject.science" title="SpaceCenter.ScienceSubject.science"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ScienceSubject.science</span></code></a>) is
+only updated after transmission/recovery, this reflects fully mining the subject over
+repeated experiments, not whether a single run has produced data. To check whether a run
+has produced data, and how valuable it is, use <a class="reference internal" href="#SpaceCenter.Experiment.has_data" title="SpaceCenter.Experiment.has_data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Experiment.has_data</span></code></a> and
+<a class="reference internal" href="#SpaceCenter.ScienceData.transmit_value" title="SpaceCenter.ScienceData.transmit_value"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ScienceData.transmit_value</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -9496,7 +9501,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
+  <a href="https://github.com/krpc/krpc/commit/c81d522">c81d522</a>
 </p></div>
       
     </div>

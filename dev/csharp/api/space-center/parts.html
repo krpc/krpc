@@ -5327,7 +5327,12 @@ conditions. Returns <code class="docutils literal notranslate"><span class="pre"
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.ScienceSubject.IsComplete">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">IsComplete</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.IsComplete" title="Link to this definition">#</a></dt>
-<dd><p>Whether the experiment has been completed.</p>
+<dd><p>Whether the subject has been fully researched. This is true once the science banked for
+the subject reaches the science cap. As the banked science (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.ScienceSubject.Science" title="KRPC.Client.Services.SpaceCenter.ScienceSubject.Science property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">ScienceSubject.Science</span></code></a>) is
+only updated after transmission/recovery, this reflects fully mining the subject over
+repeated experiments, not whether a single run has produced data. To check whether a run
+has produced data, and how valuable it is, use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Experiment.HasData" title="KRPC.Client.Services.SpaceCenter.Experiment.HasData property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Experiment.HasData</span></code></a> and
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.ScienceData.TransmitValue" title="KRPC.Client.Services.SpaceCenter.ScienceData.TransmitValue property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">ScienceData.TransmitValue</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -8502,7 +8507,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/99d9d73">99d9d73</a>
+  <a href="https://github.com/krpc/krpc/commit/c81d522">c81d522</a>
 </p></div>
       
     </div>

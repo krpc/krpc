@@ -2954,7 +2954,12 @@ Experiment
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_IsComplete(krpc_connection_t connection, bool * result)
 
-      Whether the experiment has been completed.
+      Whether the subject has been fully researched. This is true once the science banked for
+      the subject reaches the science cap. As the banked science (see :func:`krpc_SpaceCenter_ScienceSubject_Science`) is
+      only updated after transmission/recovery, this reflects fully mining the subject over
+      repeated experiments, not whether a single run has produced data. To check whether a run
+      has produced data, and how valuable it is, use :func:`krpc_SpaceCenter_Experiment_HasData` and
+      :func:`krpc_SpaceCenter_ScienceData_TransmitValue`.
 
    
 

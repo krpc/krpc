@@ -3278,7 +3278,12 @@ Experiment
 
    .. attribute:: is_complete
 
-      Whether the experiment has been completed.
+      Whether the subject has been fully researched. This is true once the science banked for
+      the subject reaches the science cap. As the banked science (see :attr:`ScienceSubject.science`) is
+      only updated after transmission/recovery, this reflects fully mining the subject over
+      repeated experiments, not whether a single run has produced data. To check whether a run
+      has produced data, and how valuable it is, use :attr:`Experiment.has_data` and
+      :attr:`ScienceData.transmit_value`.
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
