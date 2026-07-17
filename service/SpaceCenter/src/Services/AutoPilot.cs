@@ -24,12 +24,17 @@ namespace KRPC.SpaceCenter.Services
     {
         static readonly HashSet<Guid> showInfoUI = new HashSet<Guid> ();
         readonly Guid vesselId;
-        readonly AttitudeController attitudeController;
 
         internal AutoPilot (global::Vessel vessel)
         {
             vesselId = vessel.id;
-            attitudeController = PilotAddon.GetAttitudeController (vessel);
+        }
+
+        /// <summary>
+        /// The vessel's attitude controller.
+        /// </summary>
+        AttitudeController Controller {
+            get { return PilotAddon.GetAttitudeController (InternalVessel); }
         }
 
         /// <summary>
@@ -123,12 +128,12 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool Engaged {
-            get { return attitudeController.Engaged; }
+            get { return Controller.Engaged; }
             set {
                 if (value)
-                    attitudeController.Engage (CallContext.Client);
+                    Controller.Engage (CallContext.Client);
                 else
-                    attitudeController.Disengage ();
+                    Controller.Disengage ();
             }
         }
 
@@ -193,7 +198,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Reset ()
         {
-            attitudeController.Reset ();
+            Controller.Reset ();
         }
 
         /// <summary>
@@ -206,7 +211,7 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return attitudeController.ReferenceFrame; }
+            get { return Controller.ReferenceFrame; }
             set {
                 if (ReferenceEquals (value, null))
                     throw new ArgumentNullException ("ReferenceFrame");
@@ -227,7 +232,7 @@ namespace KRPC.SpaceCenter.Services
                 if (rotatesWithVessel) {
                     throw new ArgumentException ("Invalid reference frame; must not rotate with the vessel");
                 }
-                attitudeController.ReferenceFrame = value;
+                Controller.ReferenceFrame = value;
             }
         }
 
@@ -242,8 +247,8 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public float TargetPitch {
-            get { return (float)attitudeController.TargetPitch; }
-            set { attitudeController.TargetPitch = value; }
+            get { return (float)Controller.TargetPitch; }
+            set { Controller.TargetPitch = value; }
         }
 
         /// <summary>
@@ -256,8 +261,8 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public float TargetHeading {
-            get { return (float)attitudeController.TargetHeading; }
-            set { attitudeController.TargetHeading = value; }
+            get { return (float)Controller.TargetHeading; }
+            set { Controller.TargetHeading = value; }
         }
 
         /// <summary>
@@ -277,8 +282,8 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public float TargetRoll {
-            get { return (float)attitudeController.TargetRoll; }
-            set { attitudeController.TargetRoll = value; }
+            get { return (float)Controller.TargetRoll; }
+            set { Controller.TargetRoll = value; }
         }
 
         /// <summary>
@@ -297,8 +302,8 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public Tuple3 UpReference {
-            get { return attitudeController.UpReference.ToTuple (); }
-            set { attitudeController.UpReference = value.ToVector (); }
+            get { return Controller.UpReference.ToTuple (); }
+            set { Controller.UpReference = value.ToVector (); }
         }
 
         /// <summary>
@@ -315,8 +320,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void TargetPitchAndHeading (float pitch, float heading)
         {
-            attitudeController.TargetPitch = pitch;
-            attitudeController.TargetHeading = heading;
+            Controller.TargetPitch = pitch;
+            Controller.TargetHeading = heading;
         }
 
         /// <summary>
@@ -345,7 +350,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void SetDirectionAndUp (Tuple3 direction, Tuple3 up, float roll = 0)
         {
-            attitudeController.SetTargetDirectionAndUp (direction.ToVector (), up.ToVector (), roll);
+            Controller.SetTargetDirectionAndUp (direction.ToVector (), up.ToVector (), roll);
         }
 
         /// <summary>
@@ -354,8 +359,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 TargetDirection {
-            get { return attitudeController.TargetDirection.ToTuple (); }
-            set { attitudeController.SetTargetDirection (value.ToVector ()); }
+            get { return Controller.TargetDirection.ToTuple (); }
+            set { Controller.SetTargetDirection (value.ToVector ()); }
         }
 
         /// <summary>
@@ -364,8 +369,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple4 TargetRotation {
-            get { return attitudeController.TargetRotation.ToTuple (); }
-            set { attitudeController.SetTargetRotation (value.ToQuaternion ()); }
+            get { return Controller.TargetRotation.ToTuple (); }
+            set { Controller.SetTargetRotation (value.ToQuaternion ()); }
         }
 
         /// <summary>
@@ -376,7 +381,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetPitch {
-            get { return (float)attitudeController.EffectiveTargetPitch; }
+            get { return (float)Controller.EffectiveTargetPitch; }
         }
 
         /// <summary>
@@ -387,7 +392,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetHeading {
-            get { return (float)attitudeController.EffectiveTargetHeading; }
+            get { return (float)Controller.EffectiveTargetHeading; }
         }
 
         /// <summary>
@@ -398,7 +403,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float CurrentTargetRoll {
-            get { return (float)attitudeController.EffectiveTargetRoll; }
+            get { return (float)Controller.EffectiveTargetRoll; }
         }
 
         /// <summary>
@@ -409,7 +414,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 CurrentTargetDirection {
-            get { return attitudeController.EffectiveTargetDirection.ToTuple (); }
+            get { return Controller.EffectiveTargetDirection.ToTuple (); }
         }
 
         /// <summary>
@@ -419,7 +424,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple4 CurrentTargetRotation {
-            get { return attitudeController.EffectiveTargetRotation.ToTuple (); }
+            get { return Controller.EffectiveTargetRotation.ToTuple (); }
         }
 
         /// <summary>
@@ -436,8 +441,8 @@ namespace KRPC.SpaceCenter.Services
 
         void WaitWithDeadline (DateTime deadline)
         {
-            if (Error > attitudeController.StoppingAngleThreshold ||
-                InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > attitudeController.StoppingVelocityThreshold) {
+            if (Error > Controller.StoppingAngleThreshold ||
+                InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > Controller.StoppingVelocityThreshold) {
                 if (DateTime.UtcNow > deadline)
                     throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
                 throw new YieldException<Action> (() => WaitWithDeadline (deadline));
@@ -450,8 +455,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float StoppingAngleThreshold {
-            get { return attitudeController.StoppingAngleThreshold; }
-            set { attitudeController.StoppingAngleThreshold = value; }
+            get { return Controller.StoppingAngleThreshold; }
+            set { Controller.StoppingAngleThreshold = value; }
         }
 
         /// <summary>
@@ -461,8 +466,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public float StoppingVelocityThreshold {
-            get { return attitudeController.StoppingVelocityThreshold; }
-            set { attitudeController.StoppingVelocityThreshold = value; }
+            get { return Controller.StoppingVelocityThreshold; }
+            set { Controller.StoppingVelocityThreshold = value; }
         }
 
         // The vessel's current attitude, decomposed into pitch/heading/roll in the AP reference frame.
@@ -506,7 +511,7 @@ namespace KRPC.SpaceCenter.Services
         public float Error {
             get {
                 if (Engaged)
-                    return TotalError (attitudeController.TargetRotation, attitudeController.TargetDirection, !double.IsNaN (attitudeController.TargetRoll));
+                    return TotalError (Controller.TargetRotation, Controller.TargetDirection, !double.IsNaN (Controller.TargetRoll));
                 if (SAS && SASMode != SASMode.StabilityAssist)
                     return Math.Abs (GeometryExtensions.NormAngle (Vector3.Angle (InternalVessel.ReferenceTransform.up, SASTargetDirection ())));
                 throw new InvalidOperationException ("The auto-pilot is not engaged");
@@ -527,8 +532,8 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return attitudeController.AttitudeErrorTo (
-                    attitudeController.TargetRotation, attitudeController.TargetDirection).ToTuple ();
+                return Controller.AttitudeErrorTo (
+                    Controller.TargetRotation, Controller.TargetDirection).ToTuple ();
             }
         }
 
@@ -573,10 +578,10 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                if (double.IsNaN (attitudeController.TargetRoll))
+                if (double.IsNaN (Controller.TargetRoll))
                     throw new InvalidOperationException ("No target roll has been set");
-                return (float)attitudeController.RollErrorTo (
-                    attitudeController.TargetRotation, attitudeController.TargetDirection);
+                return (float)Controller.RollErrorTo (
+                    Controller.TargetRotation, Controller.TargetDirection);
             }
         }
 
@@ -593,7 +598,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return TotalError (attitudeController.EffectiveTargetRotation, attitudeController.EffectiveTargetDirection, !double.IsNaN (attitudeController.EffectiveTargetRoll));
+                return TotalError (Controller.EffectiveTargetRotation, Controller.EffectiveTargetDirection, !double.IsNaN (Controller.EffectiveTargetRoll));
             }
         }
 
@@ -610,9 +615,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                return attitudeController.AttitudeErrorTo (
-                    attitudeController.EffectiveTargetRotation,
-                    attitudeController.EffectiveTargetDirection).ToTuple ();
+                return Controller.AttitudeErrorTo (
+                    Controller.EffectiveTargetRotation,
+                    Controller.EffectiveTargetDirection).ToTuple ();
             }
         }
 
@@ -656,10 +661,10 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!Engaged)
                     throw new InvalidOperationException ("The auto-pilot is not engaged");
-                if (double.IsNaN (attitudeController.EffectiveTargetRoll))
+                if (double.IsNaN (Controller.EffectiveTargetRoll))
                     throw new InvalidOperationException ("No target roll has been set");
-                return (float)attitudeController.RollErrorTo (
-                    attitudeController.EffectiveTargetRotation, attitudeController.EffectiveTargetDirection);
+                return (float)Controller.RollErrorTo (
+                    Controller.EffectiveTargetRotation, Controller.EffectiveTargetDirection);
             }
         }
 
@@ -669,8 +674,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RollStartAngle {
-            get { return attitudeController.RollStartAngle; }
-            set { attitudeController.RollStartAngle = value; }
+            get { return Controller.RollStartAngle; }
+            set { Controller.RollStartAngle = value; }
         }
 
         /// <summary>
@@ -680,8 +685,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RollEngageAngle {
-            get { return attitudeController.RollEngageAngle; }
-            set { attitudeController.RollEngageAngle = value; }
+            get { return Controller.RollEngageAngle; }
+            set { Controller.RollEngageAngle = value; }
         }
 
         /// <summary>
@@ -692,8 +697,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 MaxAngularVelocity {
-            get { return attitudeController.MaxAngularVelocity.ToTuple (); }
-            set { attitudeController.MaxAngularVelocity = value.ToVector (); }
+            get { return Controller.MaxAngularVelocity.ToTuple (); }
+            set { Controller.MaxAngularVelocity = value.ToVector (); }
         }
 
         /// <summary>
@@ -705,8 +710,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double PitchYawAttenuationAngle {
-            get { return attitudeController.PitchYawAttenuationAngle; }
-            set { attitudeController.PitchYawAttenuationAngle = value; }
+            get { return Controller.PitchYawAttenuationAngle; }
+            set { Controller.PitchYawAttenuationAngle = value; }
         }
 
         /// <summary>
@@ -717,8 +722,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RollAttenuationAngle {
-            get { return attitudeController.RollAttenuationAngle; }
-            set { attitudeController.RollAttenuationAngle = value; }
+            get { return Controller.RollAttenuationAngle; }
+            set { Controller.RollAttenuationAngle = value; }
         }
 
         /// <summary>
@@ -728,8 +733,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool AutoTune {
-            get { return attitudeController.AutoTune; }
-            set { attitudeController.AutoTune = value; }
+            get { return Controller.AutoTune; }
+            set { Controller.AutoTune = value; }
         }
 
         /// <summary>
@@ -739,8 +744,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 TimeToPeak {
-            get { return attitudeController.TimeToPeak.ToTuple (); }
-            set { attitudeController.TimeToPeak = value.ToVector (); }
+            get { return Controller.TimeToPeak.ToTuple (); }
+            set { Controller.TimeToPeak = value.ToVector (); }
         }
 
         /// <summary>
@@ -752,8 +757,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SoftStartTime {
-            get { return attitudeController.SoftStartTime; }
-            set { attitudeController.SoftStartTime = value; }
+            get { return Controller.SoftStartTime; }
+            set { Controller.SoftStartTime = value; }
         }
 
         /// <summary>
@@ -767,8 +772,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double TargetSmoothingTime {
-            get { return attitudeController.TargetSmoothingTime; }
-            set { attitudeController.TargetSmoothingTime = value; }
+            get { return Controller.TargetSmoothingTime; }
+            set { Controller.TargetSmoothingTime = value; }
         }
 
         /// <summary>
@@ -778,8 +783,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 Overshoot {
-            get { return attitudeController.Overshoot.ToTuple (); }
-            set { attitudeController.Overshoot = value.ToVector (); }
+            get { return Controller.Overshoot.ToTuple (); }
+            set { Controller.Overshoot = value.ToVector (); }
         }
 
         /// <summary>
@@ -792,13 +797,13 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 PitchPIDGains {
             get {
-                var pid = attitudeController.PitchPID;
+                var pid = Controller.PitchPID;
                 return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
             }
             set {
                 if (value == null)
                     throw new ArgumentNullException (nameof (PitchPIDGains));
-                attitudeController.PitchPID.SetParameters (value.Item1, value.Item2, value.Item3);
+                Controller.PitchPID.SetParameters (value.Item1, value.Item2, value.Item3);
             }
         }
 
@@ -812,13 +817,13 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 RollPIDGains {
             get {
-                var pid = attitudeController.RollPID;
+                var pid = Controller.RollPID;
                 return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
             }
             set {
                 if (value == null)
                     throw new ArgumentNullException (nameof (RollPIDGains));
-                attitudeController.RollPID.SetParameters (value.Item1, value.Item2, value.Item3);
+                Controller.RollPID.SetParameters (value.Item1, value.Item2, value.Item3);
             }
         }
 
@@ -832,13 +837,13 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Tuple3 YawPIDGains {
             get {
-                var pid = attitudeController.YawPID;
+                var pid = Controller.YawPID;
                 return new Tuple3 (pid.Kp, pid.Ki, pid.Kd);
             }
             set {
                 if (value == null)
                     throw new ArgumentNullException (nameof (YawPIDGains));
-                attitudeController.YawPID.SetParameters (value.Item1, value.Item2, value.Item3);
+                Controller.YawPID.SetParameters (value.Item1, value.Item2, value.Item3);
             }
         }
 
@@ -856,8 +861,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public RateFilterMode PitchYawRateFilterMode {
-            get { return attitudeController.PitchYawRateFilterMode; }
-            set { attitudeController.PitchYawRateFilterMode = value; }
+            get { return Controller.PitchYawRateFilterMode; }
+            set { Controller.PitchYawRateFilterMode = value; }
         }
 
         /// <summary>
@@ -868,8 +873,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public RateFilterMode RollRateFilterMode {
-            get { return attitudeController.RollRateFilterMode; }
-            set { attitudeController.RollRateFilterMode = value; }
+            get { return Controller.RollRateFilterMode; }
+            set { Controller.RollRateFilterMode = value; }
         }
 
         /// <summary>
@@ -880,8 +885,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double PitchYawOscillationFrequency {
-            get { return attitudeController.PitchYawOscillationFrequency; }
-            set { attitudeController.PitchYawOscillationFrequency = value; }
+            get { return Controller.PitchYawOscillationFrequency; }
+            set { Controller.PitchYawOscillationFrequency = value; }
         }
 
         /// <summary>
@@ -890,8 +895,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RollOscillationFrequency {
-            get { return attitudeController.RollOscillationFrequency; }
-            set { attitudeController.RollOscillationFrequency = value; }
+            get { return Controller.RollOscillationFrequency; }
+            set { Controller.RollOscillationFrequency = value; }
         }
 
         /// <summary>
@@ -902,8 +907,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double OscillationNotchQ {
-            get { return attitudeController.OscillationNotchQ; }
-            set { attitudeController.OscillationNotchQ = value; }
+            get { return Controller.OscillationNotchQ; }
+            set { Controller.OscillationNotchQ = value; }
         }
 
         /// <summary>
@@ -916,8 +921,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public MitigationMode OscillationBandwidthFloorMode {
-            get { return attitudeController.BandwidthFloorMode; }
-            set { attitudeController.BandwidthFloorMode = value; }
+            get { return Controller.BandwidthFloorMode; }
+            set { Controller.BandwidthFloorMode = value; }
         }
 
         /// <summary>
@@ -928,8 +933,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double OscillationBandwidthFloor {
-            get { return attitudeController.OscillationBandwidthFloor; }
-            set { attitudeController.OscillationBandwidthFloor = value; }
+            get { return Controller.OscillationBandwidthFloor; }
+            set { Controller.OscillationBandwidthFloor = value; }
         }
 
         /// <summary>
@@ -941,8 +946,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public MitigationMode OscillationFeedforwardMode {
-            get { return attitudeController.FeedforwardMode; }
-            set { attitudeController.FeedforwardMode = value; }
+            get { return Controller.FeedforwardMode; }
+            set { Controller.FeedforwardMode = value; }
         }
 
         /// <summary>
@@ -955,8 +960,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public MitigationMode OscillationOutputFilterMode {
-            get { return attitudeController.OutputFilterMode; }
-            set { attitudeController.OutputFilterMode = value; }
+            get { return Controller.OutputFilterMode; }
+            set { Controller.OutputFilterMode = value; }
         }
 
         /// <summary>
@@ -966,7 +971,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double PitchYawControlOscillation {
-            get { return attitudeController.PitchYawControlOscillation; }
+            get { return Controller.PitchYawControlOscillation; }
         }
 
         /// <summary>
@@ -976,7 +981,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RollControlOscillation {
-            get { return attitudeController.RollControlOscillation; }
+            get { return Controller.RollControlOscillation; }
         }
 
         /// <summary>
@@ -986,7 +991,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Tuple3 OscillationLevel {
-            get { return attitudeController.OscillationLevel.ToTuple (); }
+            get { return Controller.OscillationLevel.ToTuple (); }
         }
 
         /// <summary>
@@ -996,7 +1001,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool PitchYawOscillationLatched {
-            get { return attitudeController.PitchYawOscillationLatched; }
+            get { return Controller.PitchYawOscillationLatched; }
         }
 
         /// <summary>
@@ -1005,7 +1010,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool RollOscillationLatched {
-            get { return attitudeController.RollOscillationLatched; }
+            get { return Controller.RollOscillationLatched; }
         }
 
         /// <summary>
@@ -1015,7 +1020,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double PitchYawOscillationDetectedFrequency {
-            get { return attitudeController.PitchYawOscillationDetectedFrequency; }
+            get { return Controller.PitchYawOscillationDetectedFrequency; }
         }
 
         /// <summary>
@@ -1025,7 +1030,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RollOscillationDetectedFrequency {
-            get { return attitudeController.RollOscillationDetectedFrequency; }
+            get { return Controller.RollOscillationDetectedFrequency; }
         }
 
         /// <summary>
@@ -1042,8 +1047,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool DiagnosticLogging {
-            get { return attitudeController.DiagnosticLogging; }
-            set { attitudeController.DiagnosticLogging = value; }
+            get { return Controller.DiagnosticLogging; }
+            set { Controller.DiagnosticLogging = value; }
         }
 
         /// <summary>
@@ -1056,14 +1061,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public string DiagnosticLog {
-            get { return attitudeController.GetDiagnosticLog (); }
+            get { return Controller.GetDiagnosticLog (); }
         }
 
         /// <summary>
         /// Measured angular velocity (raw, roll-invariant frame, rad/s) for the in-game info window.
         /// </summary>
         internal Tuple3 MeasuredAngularVelocity {
-            get { return attitudeController.MeasuredAngularVelocity.ToTuple (); }
+            get { return Controller.MeasuredAngularVelocity.ToTuple (); }
         }
 
         /// <summary>
@@ -1071,14 +1076,14 @@ namespace KRPC.SpaceCenter.Services
         /// in-game info window.
         /// </summary>
         internal Tuple3 TargetAngularVelocity {
-            get { return attitudeController.TargetAngularVelocity.ToTuple (); }
+            get { return Controller.TargetAngularVelocity.ToTuple (); }
         }
 
         /// <summary>
         /// Per-axis hold-gated mitigation weight in [0,1] for the in-game info window.
         /// </summary>
         internal Tuple3 MitigationLevel {
-            get { return attitudeController.MitigationLevel.ToTuple (); }
+            get { return Controller.MitigationLevel.ToTuple (); }
         }
 
         /// <summary>
@@ -1086,7 +1091,7 @@ namespace KRPC.SpaceCenter.Services
         /// automatically, for the in-game info window's envelope-readout colouring.
         /// </summary>
         internal double OscillationControlThreshold {
-            get { return attitudeController.OscillationControlThreshold; }
+            get { return Controller.OscillationControlThreshold; }
         }
 
         /// <summary>
@@ -1102,7 +1107,7 @@ namespace KRPC.SpaceCenter.Services
         /// info window (1 = holding, 0 = slewing).
         /// </summary>
         internal double PitchYawHoldFactor {
-            get { return attitudeController.PitchYawHoldFactor; }
+            get { return Controller.PitchYawHoldFactor; }
         }
 
         /// <summary>
@@ -1110,35 +1115,35 @@ namespace KRPC.SpaceCenter.Services
         /// for the in-game info window.
         /// </summary>
         internal double RollHoldFactor {
-            get { return attitudeController.RollHoldFactor; }
+            get { return Controller.RollHoldFactor; }
         }
 
         /// <summary>
         /// Per-axis latch (suppression) ramp in [0,1] for the in-game info window.
         /// </summary>
         internal Tuple3 SuppressionRamp {
-            get { return attitudeController.SuppressionRamp.ToTuple (); }
+            get { return Controller.SuppressionRamp.ToTuple (); }
         }
 
         /// <summary>
         /// Per-axis oscillation-control back-off in [0,1] for the in-game info window.
         /// </summary>
         internal Tuple3 OscillationBackoff {
-            get { return attitudeController.OscillationBackoff.ToTuple (); }
+            get { return Controller.OscillationBackoff.ToTuple (); }
         }
 
         /// <summary>
         /// Per-axis applied feedforward-cut fraction in [0,1] for the in-game info window.
         /// </summary>
         internal Tuple3 FeedforwardCut {
-            get { return attitudeController.FeedforwardCut.ToTuple (); }
+            get { return Controller.FeedforwardCut.ToTuple (); }
         }
 
         /// <summary>
         /// Per-axis output-filter blend weight in [0,1] for the in-game info window.
         /// </summary>
         internal Tuple3 OutputFilterWeight {
-            get { return attitudeController.OutputFilterWeight.ToTuple (); }
+            get { return Controller.OutputFilterWeight.ToTuple (); }
         }
 
         /// <summary>
@@ -1147,14 +1152,14 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         internal int ActiveSuppressionTool (int axis)
         {
-            return attitudeController.ActiveSuppressionTool (axis);
+            return Controller.ActiveSuppressionTool (axis);
         }
 
         /// <summary>
         /// The oscillation level at which an axis latches as flexible, for the in-game info window.
         /// </summary>
         internal double OscillationLatchThreshold {
-            get { return attitudeController.OscillationLatchThreshold; }
+            get { return Controller.OscillationLatchThreshold; }
         }
 
         /// <summary>
