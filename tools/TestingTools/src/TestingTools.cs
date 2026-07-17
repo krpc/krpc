@@ -27,6 +27,18 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Whether a part with the given name is present in the loaded part catalog. Used by the
+        /// test framework to detect mods that add parts but no dedicated kRPC service (e.g.
+        /// RealChute, wrapped by the SpaceCenter Parachute class).
+        /// </summary>
+        /// <param name="name">The internal name of the part, e.g. "RC_stack".</param>
+        [KRPCProcedure]
+        public static bool PartAvailable (string name)
+        {
+            return PartLoader.getPartInfoByName (name) != null;
+        }
+
+        /// <summary>
         /// Quit the game, closing Kerbal Space Program and returning to the desktop.
         /// Works from any scene, including in-flight, and skips the confirmation dialog
         /// that the main-menu quit button normally shows.

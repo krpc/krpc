@@ -23,16 +23,24 @@ import zipfile
 from krpctest.env import get_ksp_dir, get_repo_root
 from krpctest.version import __version__
 
-# Managed third-party mods: name accepted by --mods -> (Bazel target under //tools/mods,
-# GameData subdir it installs as)
+# Managed third-party mods: name accepted by --mods -> list of components it installs, each a
+# (Bazel target under //tools/mods, GameData subdir it installs as) pair. Most mods are a
+# single component; RealChute also pulls in its two runtime dependencies, whose assemblies
+# RealChute hard-depends on (its part modules do not register without them).
 MODS = {
-    "RemoteTech": ("remotetech", "RemoteTech"),
-    "InfernalRobotics": ("infernal_robotics", "MagicSmokeIndustries"),
-    "KerbalAlarmClock": ("kerbal_alarm_clock", "TriggerTech"),
+    "RemoteTech": [("remotetech", "RemoteTech")],
+    "InfernalRobotics": [("infernal_robotics", "MagicSmokeIndustries")],
+    "KerbalAlarmClock": [("kerbal_alarm_clock", "TriggerTech")],
+    "RealChute": [
+        ("realchute", "RealChute"),
+        ("harmony", "000_Harmony"),
+        ("clickthroughblocker", "000_ClickThroughBlocker"),
+        ("toolbarcontrol", "001_ToolbarControl"),
+    ],
 }
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.
-_ALL_MOD_SUBDIRS = [subdir for _, subdir in MODS.values()]
+_ALL_MOD_SUBDIRS = [subdir for comps in MODS.values() for _, subdir in comps]
 
 
 def _mod_archive_src(target, subdir):
@@ -43,6 +51,17 @@ def _mod_archive_src(target, subdir):
         "GameData",
         subdir,
     )
+
+
+def _mod_config_overlay(root, subdir):
+    """Directory of config files layered onto a freshly-installed mod's GameData subdir.
+
+    Mod archives ship no settings, so some mods pop a first-run window that blocks an
+    unattended launch (RealChute's ClickThroughBlocker and ToolbarControl dependencies both
+    do). tools/mods/config/<subdir>/ holds the minimal config that marks those windows
+    already-dismissed; it is copied over the subdir after install. Absent for mods that need
+    no overlay."""
+    return os.path.join(root, "tools", "mods", "config", subdir)
 
 
 def _release_zip(root):
@@ -129,21 +148,25 @@ def install(mods=(), ksp_dir=None):
 
 def _reconcile_mods(mods, root, gamedata_root):
     """Make the managed mods in gamedata_root exactly the requested set."""
-    requested_subdirs = {MODS[m][1] for m in mods}
+    requested = [comp for mod in mods for comp in MODS[mod]]
+    requested_subdirs = {subdir for _, subdir in requested}
 
     # Remove any managed mod that is not requested.
     for subdir in _ALL_MOD_SUBDIRS:
         if subdir not in requested_subdirs:
             shutil.rmtree(os.path.join(gamedata_root, subdir), ignore_errors=True)
 
-    # Install (or refresh) each requested mod from its Bazel-fetched archive.
-    for mod in mods:
-        target, subdir = MODS[mod]
+    # Install (or refresh) each requested mod (and its dependencies) from its Bazel-fetched
+    # archive, then lay any bundled config overlay on top (see _mod_config_overlay).
+    for target, subdir in requested:
         subprocess.check_call(["bazel", "build", "//tools/mods:" + target], cwd=root)
         dst = os.path.join(gamedata_root, subdir)
         if os.path.exists(dst):
             shutil.rmtree(dst)
         shutil.copytree(os.path.join(root, _mod_archive_src(target, subdir)), dst)
+        overlay = _mod_config_overlay(root, subdir)
+        if os.path.isdir(overlay):
+            shutil.copytree(overlay, dst, dirs_exist_ok=True)
         _normalize_permissions(dst)
 
 
