@@ -44,14 +44,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public CameraMode Mode {
             get {
-                if (MapView.MapIsEnabled)
-                    return CameraMode.Map;
-                var mode = CameraManager.Instance.currentCameraMode;
-                if (mode == CameraManager.CameraMode.Flight)
-                    return FlightCamera.fetch.mode.ToCameraMode ();
-                if (mode == CameraManager.CameraMode.IVA)
-                    return CameraMode.IVA;
-                throw new InvalidOperationException ("Unknown camera mode " + CameraManager.Instance.currentCameraMode);
+                return CurrentMode;
             }
             set {
                 if (value == CameraMode.Map && !MapView.MapIsEnabled)
@@ -85,6 +78,24 @@ namespace KRPC.SpaceCenter.Services
                         break;
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// The current mode of the camera, as reported by the game's camera manager.
+        /// Shared with <see cref="CameraAddon"/>, which uses it to tell when a mode
+        /// switch has completed before re-applying a deferred property write.
+        /// </summary>
+        internal static CameraMode CurrentMode {
+            get {
+                if (MapView.MapIsEnabled)
+                    return CameraMode.Map;
+                var mode = CameraManager.Instance.currentCameraMode;
+                if (mode == CameraManager.CameraMode.Flight)
+                    return FlightCamera.fetch.mode.ToCameraMode ();
+                if (mode == CameraManager.CameraMode.IVA)
+                    return CameraMode.IVA;
+                throw new InvalidOperationException ("Unknown camera mode " + CameraManager.Instance.currentCameraMode);
             }
         }
 
@@ -143,36 +154,47 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float Pitch {
             get {
-                switch (Mode) {
-                case CameraMode.Map:
-                    return PlanetariumCamera.fetch.getPitch ();
-                case CameraMode.IVA:
-                    var camera = InternalCamera.Instance;
-                    return (float) InternalCameraExtensions.GetPitch(camera);
-                default:
-                    return FlightCamera.fetch.getPitch ();
-                }
+                return ReadPitch ();
             }
             set {
-                switch (Mode) {
-                case CameraMode.Map:
-                    {
-                        var camera = PlanetariumCamera.fetch;
-                        camera.camPitch = GeometryExtensions.ToRadians (value).Clamp (camera.minPitch, camera.maxPitch);
-                        break;
-                    }
-                case CameraMode.IVA:
-                    {
-                        var camera = InternalCamera.Instance;
-                        InternalCameraExtensions.SetPitch(camera, value.Clamp(camera.minPitch, camera.maxPitch));
-                        break;
-                    }
-                default:
-                    {
-                        var camera = FlightCamera.fetch;
-                        camera.camPitch = GeometryExtensions.ToRadians (value).Clamp (camera.minPitch, camera.maxPitch);
-                        break;
-                    }
+                CameraAddon.Request (CameraProperty.Pitch, CurrentMode, value);
+                ApplyPitch (value);
+            }
+        }
+
+        static float ReadPitch ()
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                return PlanetariumCamera.fetch.getPitch ();
+            case CameraMode.IVA:
+                var camera = InternalCamera.Instance;
+                return (float) InternalCameraExtensions.GetPitch(camera);
+            default:
+                return FlightCamera.fetch.getPitch ();
+            }
+        }
+
+        static void ApplyPitch (float value)
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                {
+                    var camera = PlanetariumCamera.fetch;
+                    camera.camPitch = GeometryExtensions.ToRadians (value).Clamp (camera.minPitch, camera.maxPitch);
+                    break;
+                }
+            case CameraMode.IVA:
+                {
+                    var camera = InternalCamera.Instance;
+                    InternalCameraExtensions.SetPitch(camera, value.Clamp(camera.minPitch, camera.maxPitch));
+                    break;
+                }
+            default:
+                {
+                    var camera = FlightCamera.fetch;
+                    camera.camPitch = GeometryExtensions.ToRadians (value).Clamp (camera.minPitch, camera.maxPitch);
+                    break;
                 }
             }
         }
@@ -183,29 +205,40 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float Heading {
             get {
-                switch (Mode) {
-                case CameraMode.Map:
-                    return PlanetariumCamera.fetch.getYaw ();
-                case CameraMode.IVA:
-                    var camera = InternalCamera.Instance;
-                    return (float) InternalCameraExtensions.GetRot(camera);
-                default:
-                    return FlightCamera.fetch.getYaw ();
-                }
+                return ReadHeading ();
             }
             set {
-                switch (Mode) {
-                case CameraMode.Map:
-                    PlanetariumCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
-                    break;
-                case CameraMode.IVA:
-                    var camera = InternalCamera.Instance;
-                    InternalCameraExtensions.SetRot(camera, value.Clamp(-camera.maxRot, camera.maxRot));
-                    break;
-                default:
-                    FlightCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
-                    break;
-                }
+                CameraAddon.Request (CameraProperty.Heading, CurrentMode, value);
+                ApplyHeading (value);
+            }
+        }
+
+        static float ReadHeading ()
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                return PlanetariumCamera.fetch.getYaw ();
+            case CameraMode.IVA:
+                var camera = InternalCamera.Instance;
+                return (float) InternalCameraExtensions.GetRot(camera);
+            default:
+                return FlightCamera.fetch.getYaw ();
+            }
+        }
+
+        static void ApplyHeading (float value)
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                PlanetariumCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
+                break;
+            case CameraMode.IVA:
+                var camera = InternalCamera.Instance;
+                InternalCameraExtensions.SetRot(camera, value.Clamp(-camera.maxRot, camera.maxRot));
+                break;
+            default:
+                FlightCamera.fetch.camHdg = GeometryExtensions.ToRadians (value);
+                break;
             }
         }
 
@@ -216,31 +249,42 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float Distance {
             get {
-                switch (Mode) {
-                case CameraMode.Map:
-                    return PlanetariumCamera.fetch.Distance * ScaledSpace.ScaleFactor;
-                case CameraMode.IVA:
-                    throw new NotImplementedException ();
-                default:
-                    return FlightCamera.fetch.Distance;
-                }
+                return ReadDistance ();
             }
             set {
-                switch (Mode) {
-                case CameraMode.Map:
-                    {
-                        var camera = PlanetariumCamera.fetch;
-                        camera.SetDistance ((value / ScaledSpace.ScaleFactor).Clamp (camera.minDistance, camera.maxDistance));
-                        break;
-                    }
-                case CameraMode.IVA:
-                    throw new NotImplementedException ();
-                default:
-                    {
-                        var camera = FlightCamera.fetch;
-                        camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance));
-                        break;
-                    }
+                CameraAddon.Request (CameraProperty.Distance, CurrentMode, value);
+                ApplyDistance (value);
+            }
+        }
+
+        static float ReadDistance ()
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                return PlanetariumCamera.fetch.Distance * ScaledSpace.ScaleFactor;
+            case CameraMode.IVA:
+                throw new NotImplementedException ();
+            default:
+                return FlightCamera.fetch.Distance;
+            }
+        }
+
+        static void ApplyDistance (float value)
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                {
+                    var camera = PlanetariumCamera.fetch;
+                    camera.SetDistance ((value / ScaledSpace.ScaleFactor).Clamp (camera.minDistance, camera.maxDistance));
+                    break;
+                }
+            case CameraMode.IVA:
+                throw new NotImplementedException ();
+            default:
+                {
+                    var camera = FlightCamera.fetch;
+                    camera.SetDistance (value.Clamp (camera.minDistance, camera.maxDistance));
+                    break;
                 }
             }
         }
@@ -252,34 +296,96 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public float FoV {
             get {
-                switch (Mode) {
-                case CameraMode.Map:
-                    throw new NotImplementedException ();
-                case CameraMode.IVA:
-                    var camera = InternalCamera.Instance;
-                    return (float) InternalCameraExtensions.GetFoV(camera);
-                default:
-                    return FlightCamera.fetch.FieldOfView;
-                }
+                return ReadFoV ();
             }
             set {
-                switch (Mode) {
-                case CameraMode.Map:
-                    throw new NotImplementedException ();
-                case CameraMode.IVA:
-                    {
-                        var camera = InternalCamera.Instance;
-                        InternalCameraExtensions.SetZoom(camera, (value / (float) InternalCameraExtensions.GetDefaultFoV(camera)).Clamp(camera.maxZoom, camera.minZoom));
-                        break;
-                    }
-                default:
-                    {
-                        var camera = FlightCamera.fetch;
-                        camera.SetFoV(value.Clamp (camera.fovMin, camera.fovMax));
-                        break;
-                    }
+                CameraAddon.Request (CameraProperty.FoV, CurrentMode, value);
+                ApplyFoV (value);
+            }
+        }
+
+        static float ReadFoV ()
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                throw new NotImplementedException ();
+            case CameraMode.IVA:
+                var camera = InternalCamera.Instance;
+                return (float) InternalCameraExtensions.GetFoV(camera);
+            default:
+                return FlightCamera.fetch.FieldOfView;
+            }
+        }
+
+        static void ApplyFoV (float value)
+        {
+            switch (CurrentMode) {
+            case CameraMode.Map:
+                throw new NotImplementedException ();
+            case CameraMode.IVA:
+                {
+                    var camera = InternalCamera.Instance;
+                    InternalCameraExtensions.SetZoom(camera, (value / (float) InternalCameraExtensions.GetDefaultFoV(camera)).Clamp(camera.maxZoom, camera.minZoom));
+                    break;
+                }
+            default:
+                {
+                    var camera = FlightCamera.fetch;
+                    camera.SetFoV(value.Clamp (camera.fovMin, camera.fovMax));
+                    break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Re-apply a deferred property write. Called by <see cref="CameraAddon"/> once
+        /// the camera has reached the mode the write was requested for. Mirrors the
+        /// concrete write each setter performs.
+        /// </summary>
+        internal static void ApplyRaw (CameraProperty property, float value)
+        {
+            switch (property) {
+            case CameraProperty.Distance:
+                ApplyDistance (value);
+                break;
+            case CameraProperty.Pitch:
+                ApplyPitch (value);
+                break;
+            case CameraProperty.Heading:
+                ApplyHeading (value);
+                break;
+            case CameraProperty.FoV:
+                ApplyFoV (value);
+                break;
+            }
+        }
+
+        /// <summary>
+        /// Whether the live camera has reached a requested property value, within a
+        /// per-property tolerance. Distance is compared relatively because the flight
+        /// camera lerps toward its target over several frames; pitch, heading and field
+        /// of view are compared as angles in degrees. Heading wraps at 360 degrees.
+        /// </summary>
+        internal static bool Converged (CameraProperty property, float value)
+        {
+            switch (property) {
+            case CameraProperty.Distance:
+                return Math.Abs (ReadDistance () - value) <= Math.Max (0.1f, 0.01f * Math.Abs (value));
+            case CameraProperty.Pitch:
+                return Math.Abs (ReadPitch () - value) <= 0.1f;
+            case CameraProperty.Heading:
+                return AngleDifference (ReadHeading (), value) <= 0.1f;
+            case CameraProperty.FoV:
+                return Math.Abs (ReadFoV () - value) <= 0.1f;
+            default:
+                return true;
+            }
+        }
+
+        static float AngleDifference (float a, float b)
+        {
+            var difference = Math.Abs (a - b) % 360f;
+            return difference > 180f ? 360f - difference : difference;
         }
 
         /// <summary>
