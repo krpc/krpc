@@ -634,6 +634,7 @@
 <h3>SpaceCenter service<a class="headerlink" href="#spacecenter-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of aerodynamic control surfaces, including deployed airbrakes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/622">#622</a>)</p></li>
+<li><p>Fix Parachute.Deploy being a silent no-op for RealChute parachutes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/382">#382</a>)</p></li>
 <li><p>Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)</p></li>
 <li><p>Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)</p></li>
 <li><p>Fix ControlSurface.AvailableTorque returning inconsistent signs (ModuleControlSurface negates the roll axis); now normalised to positive/negative torque like other parts</p></li>
@@ -3133,7 +3134,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3894013">3894013</a>
+  <a href="https://github.com/krpc/krpc/commit/a610689">a610689</a>
 </p></div>
       
     </div>
