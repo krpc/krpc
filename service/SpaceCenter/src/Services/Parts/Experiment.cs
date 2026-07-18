@@ -82,8 +82,11 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new InvalidOperationException ("Experiment already contains data");
             if (Inoperable)
                 throw new InvalidOperationException ("Experiment is inoperable");
-            // Stock experiments
-            // FIXME: Don't use private API!!!
+            // Stock experiments. KSP has no public method that runs an experiment without
+            // also showing the results dialog: DeployExperiment, DeployAction and
+            // DeployExperimentExternal all start gatherData(showDialog: true), and the only
+            // dialog-free caller, OnActive, is gated on staging configuration. So invoke the
+            // private gatherData coroutine directly, mirroring KSP's own staging path.
             var gatherData = experiment.GetType ().GetMethod ("gatherData", BindingFlags.NonPublic | BindingFlags.Instance);
             if (gatherData != null)
             {
