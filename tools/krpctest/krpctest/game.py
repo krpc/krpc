@@ -49,6 +49,14 @@ _MOD_PARTS = {
     "DMagic": "dmagicSensorTest",
 }
 
+# Some mods add no part and no service, but patch a part module onto existing parts (Action
+# Groups Extended adds a ModuleAGX module to every part via ModuleManager; it is wrapped by the
+# SpaceCenter Control class). Detect these by probing the loaded part prefabs for that module,
+# via the test-only TestingTools helper.
+_MOD_MODULES = {
+    "AGExt": "ModuleAGX",
+}
+
 # The KSP process this test run launched, or None if KSP was started externally (a
 # manually-started game is never killed or reinstalled).
 _owned_ksp = None  # pylint: disable=invalid-name
@@ -76,6 +84,10 @@ connect.connection = None
 
 def _auto_launch_enabled():
     return os.environ.get("KRPC_AUTO_LAUNCH", "1") != "0"
+
+
+def _gamedata_check_enabled():
+    return os.environ.get("KRPC_SKIP_GAMEDATA_CHECK", "0") != "1"
 
 
 def copy_blank_save(name, ksp_dir=None):
@@ -113,11 +125,16 @@ def _installed_mods(conn):
         for name, part in _MOD_PARTS.items()
         if conn.testing_tools.part_available(part)
     }
+    installed |= {
+        name
+        for name, module in _MOD_MODULES.items()
+        if conn.testing_tools.part_module_available(module)
+    }
     return installed
 
 
 def _validate_mods(required):
-    known = set(_MOD_SERVICES) | set(_MOD_PARTS)
+    known = set(_MOD_SERVICES) | set(_MOD_PARTS) | set(_MOD_MODULES)
     unknown = set(required) - known
     if unknown:
         raise ValueError(
@@ -136,7 +153,7 @@ def _install_mods(required):
         "building and installing kRPC (mods: %s)",
         ", ".join(sorted(required)) or "none",
     )
-    install(mods=sorted(required))
+    install(mods=sorted(required), validate_gamedata=_gamedata_check_enabled())
 
 
 def _launch_ksp(required):

@@ -78,7 +78,7 @@
     <Compile Include="ActuatorControlAddon.cs" />
     <Compile Include="CameraAddon.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
-    <Compile Include="ExternalAPI\AGX.cs" />
+    <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="NameTag\Career.cs" />
@@ -156,6 +156,7 @@
     <Compile Include="Services\Parts\PartEvent.cs" />
     <Compile Include="Services\Parts\PartField.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
+    <Compile Include="Services\Parts\PartSeparation.cs" />
     <Compile Include="Services\Parts\Propellant.cs" />
     <Compile Include="Services\Parts\RCS.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />

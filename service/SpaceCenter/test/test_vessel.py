@@ -31,6 +31,12 @@ class TestVessel(krpctest.TestCase):
     def test_situation(self):
         self.assertEqual(self.Situation.orbiting, self.vessel.situation)
 
+    def test_loaded(self):
+        self.assertTrue(self.vessel.loaded)
+
+    def test_packed(self):
+        self.assertFalse(self.vessel.packed)
+
     def test_recoverable(self):
         self.assertFalse(self.vessel.recoverable)
         self.assertRaises(RuntimeError, self.vessel.recover)
