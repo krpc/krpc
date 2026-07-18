@@ -126,6 +126,13 @@ def main():
         metavar="DIR",
         help="path to the KSP install (defaults to $KSP_DIR)",
     )
+    parser.add_argument(
+        "--skip-gamedata-check",
+        action="store_true",
+        default=False,
+        help="skip the check that GameData holds only the known-valid set, to launch "
+        "with an unmanaged mod installed",
+    )
 
     autoload = parser.add_argument_group(
         "auto-load options",
@@ -184,7 +191,7 @@ def main():
             ksp_args.append("%s=%s" % (flag, value))
 
     ksp_dir = get_ksp_dir(args.ksp_dir)
-    install(mods=mods, ksp_dir=ksp_dir)
+    install(mods=mods, ksp_dir=ksp_dir, validate_gamedata=not args.skip_gamedata_check)
     if args.load_game is not None:
         _stage_blank_save(args.load_game, ksp_dir)
 
