@@ -12,6 +12,7 @@ from krpc.types import (
     SetType,
     DictionaryType,
     StaticMethod,
+    WrappedClass,
 )
 from krpc.schema.KRPC_pb2 import Type, ProcedureCall, Stream, Status, Services
 
@@ -295,6 +296,29 @@ class TestStaticMethod(unittest.TestCase):
         instance = self._make_instance(lambda x: x)
         bound = instance.my_static
         self.assertIs(_MyClass, bound.__self__)
+
+
+class TestWrappedClass(unittest.TestCase):
+    def setUp(self) -> None:
+        if hasattr(_MyClass, "_client"):
+            del _MyClass._client  # type: ignore[attr-defined]
+
+    def test_static_methods_use_the_wrapping_client(self) -> None:
+        wrapped1 = WrappedClass(lambda x: x * 2, _MyClass)  # type: ignore[arg-type]
+        wrapped2 = WrappedClass(lambda x: x + 100, _MyClass)  # type: ignore[arg-type]
+        # Retrieve both static methods before calling either: a single _client slot shared on the
+        # class would let the second client's value leak into the first client's call.
+        method1 = wrapped1.my_static
+        method2 = wrapped2.my_static
+        self.assertEqual(6, method1(3))
+        self.assertEqual(103, method2(3))
+        # The shared base class is never mutated.
+        self.assertFalse(hasattr(_MyClass, "_client"))
+
+    def test_construction_through_wrapper(self) -> None:
+        wrapped = WrappedClass(lambda x: x, _MyClass)  # type: ignore[arg-type]
+        instance = wrapped(None, 1)
+        self.assertIsInstance(instance, _MyClass)
 
 
 if __name__ == "__main__":
