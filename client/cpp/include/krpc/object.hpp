@@ -18,9 +18,8 @@ class Object {
   friend bool operator==(const Object<U>&, const Object<U>&);
   template <typename U>
   friend bool operator<(const Object<U>&, const Object<U>&);
-  // TODO: Ideally the following fields should be private, but they are needed by the
-  // encoder and decoder. They can't be a 'friend' due to the circular dependency
-  // that would introduce.
+  // Public because the encoder and decoder need them; they cannot be granted access with 'friend'
+  // without introducing a circular dependency between this header and theirs.
   Client* _client;
   uint64_t _id;
 
