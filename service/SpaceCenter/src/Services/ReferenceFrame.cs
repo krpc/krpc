@@ -407,11 +407,12 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
                     {
-                        // TODO: is there a better way to do this?
-                        // node.patch.getPositionAtUT (node.UT) appears to return a position vector
-                        // in a different space to vessel.GetWorldPos3D()
-                        var vesselPos = FlightGlobals.ActiveVessel.CoM;
-                        var vesselOrbitPos = FlightGlobals.ActiveVessel.orbit.getPositionAtUT (Planetarium.GetUniversalTime ());
+                        // Orbit positions don't exactly coincide with transform world
+                        // positions, so the node's orbit position is corrected by the
+                        // offset between the two spaces, measured on the node's vessel
+                        // whose position is known in both.
+                        var vesselPos = InternalVessel.CoM;
+                        var vesselOrbitPos = InternalVessel.orbit.getPositionAtUT (Planetarium.GetUniversalTime ());
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
