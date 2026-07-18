@@ -884,37 +884,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The lift force acting on the part, in world space, in Newtons.
         /// </summary>
         Vector3d WorldLift {
-            get {
-                var part = InternalPart;
-                Vector3d lift = Vector3d.zero;
-                if (!part.hasLiftModule) {
-                    Vector3 bodyLift = part.transform.rotation * (part.bodyLiftScalar * part.DragCubes.LiftForce);
-                    bodyLift = Vector3.ProjectOnPlane (bodyLift, -part.dragVectorDir);
-                    lift += bodyLift;
-                }
-                foreach (var module in part.Modules) {
-                    var wing = module as ModuleLiftingSurface;
-                    if (wing != null)
-                        lift += wing.liftForce;
-                }
-                return lift * 1000f;
-            }
+            get { return StockAeroReadout.Lift (InternalPart) * 1000d; }
         }
 
         /// <summary>
         /// The drag force acting on the part, in world space, in Newtons.
         /// </summary>
         Vector3d WorldDrag {
-            get {
-                var part = InternalPart;
-                Vector3d drag = -(Vector3d)part.dragVectorDir * part.dragScalar;
-                foreach (var module in part.Modules) {
-                    var wing = module as ModuleLiftingSurface;
-                    if (wing != null)
-                        drag += wing.dragForce;
-                }
-                return drag * 1000f;
-            }
+            get { return StockAeroReadout.Drag (InternalPart) * 1000d; }
         }
 
         /// <summary>
