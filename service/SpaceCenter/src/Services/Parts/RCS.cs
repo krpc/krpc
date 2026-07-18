@@ -62,16 +62,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the RCS thrusters are active.
         /// An RCS thruster is inactive if the RCS action group is disabled
         /// (<see cref="Control.RCS"/>), the RCS thruster itself is not enabled
-        /// (<see cref="Enabled"/>) or it is covered by a fairing (<see cref="Part.Shielded"/>).
+        /// (<see cref="Enabled"/>), or it is covered by a fairing
+        /// (<see cref="Part.Shielded"/>) and cannot thrust while shielded.
         /// </summary>
         [KRPCProperty]
         public bool Active {
             get {
-                // TODO: what about rcs.shieldedCanThrust?
                 var p = Part.InternalPart;
                 return
                 p.vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)] &&
-                !p.ShieldedFromAirstream &&
+                (!p.ShieldedFromAirstream || rcs.shieldedCanThrust) &&
                 rcs.rcsEnabled &&
                 rcs.isEnabled &&
                 !rcs.isJustForShow;
