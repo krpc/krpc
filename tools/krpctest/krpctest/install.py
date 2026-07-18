@@ -43,8 +43,8 @@ MODS = {
 # Mods installed unconditionally on every run, each a (Bazel target under //tools/mods, GameData
 # subdir) pair. KSPCommunityPartModules provides the ModuleNameTag part module that SpaceCenter
 # hard-depends on (a KSPAssemblyDependency), so KSP will not load SpaceCenter without it; its plugin
-# in turn references Harmony, so 000_Harmony must be present alongside it. Unlike MODS these are never
-# reconciled away, so they are available even for a test that requests no managed mods.
+# in turn references Harmony, so 000_Harmony must be present alongside it. Unlike MODS these are
+# never reconciled away, so they are available even for a test that requests no managed mods.
 BASE_MODS = [
     ("kspcommunitypartmodules", "KSPCommunityPartModules"),
     ("harmony", "000_Harmony"),

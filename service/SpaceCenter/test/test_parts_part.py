@@ -463,7 +463,12 @@ class TestPartsPart(krpctest.TestCase):
         self.assertFalse(part.is_fuel_line)
         self.assertEqual([], part.fuel_lines_from)
         self.assertEqual([], part.fuel_lines_to)
-        modules = ["LaunchClamp", "ModuleGenerator", "ModuleTestSubject", "ModuleNameTag"]
+        modules = [
+            "LaunchClamp",
+            "ModuleGenerator",
+            "ModuleTestSubject",
+            "ModuleNameTag",
+        ]
         actual_modules = [x.name for x in part.modules]
         if "ModuleRTAntennaPassive" in actual_modules:
             actual_modules.remove("ModuleRTAntennaPassive")
