@@ -5,7 +5,10 @@ into the KSP install (from ``KSP_DIR`` or ``--ksp-dir``) - exactly as a user
 installs a release - then adds the test-only bits the public release omits (the
 ``TestingTools`` add-on and the test ``settings.cfg``). The optional set of managed
 third-party mods (RemoteTech, InfernalRobotics, KerbalAlarmClock) used by some service
-tests is reconciled so GameData contains exactly the requested set.
+tests is reconciled so GameData contains exactly the requested set. Finally GameData is
+validated against the known-valid set, so an unexpected mod left over from an earlier
+session is reported up front instead of silently stopping the server from starting; a dev
+deliberately running an unmanaged mod can opt out with ``--skip-gamedata-check``.
 
 Run it from the repository root, either as the ``krpc-install`` console script or with
 ``python -m krpctest.install``. It is also called directly by the test framework (see
@@ -49,6 +52,33 @@ MODS = {
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.
 _ALL_MOD_SUBDIRS = [subdir for comps in MODS.values() for _, subdir in comps]
+
+# GameData entries a valid test install always permits, on top of the managed-mod subdirs
+# and whatever mods a test requests. Stock KSP ships Squad and SquadExpansion; install()
+# lays down kRPC and the ModuleManager assembly; ModuleManager writes these cache files
+# into GameData at runtime. The versioned ModuleManager.<ver>.dll is matched separately
+# (see _is_module_manager_dll).
+_BASELINE_GAMEDATA = frozenset(
+    {
+        "Squad",
+        "SquadExpansion",
+        "kRPC",
+        "ModuleManager.ConfigCache",
+        "ModuleManager.ConfigSHA",
+        "ModuleManager.Physics",
+        "ModuleManager.TechTree",
+    }
+)
+
+
+def _is_module_manager_dll(entry):
+    """Whether entry is the ModuleManager assembly, whose filename embeds its version."""
+    return entry.startswith("ModuleManager") and entry.endswith(".dll")
+
+
+def _requested_mod_subdirs(mods):
+    """GameData subdir names the given managed mods install (including dependencies)."""
+    return {subdir for mod in mods for _, subdir in MODS[mod]}
 
 
 def _mod_archive_src(target, subdir):
@@ -104,10 +134,12 @@ def _normalize_permissions(path):
             os.chmod(os.path.join(root, name), 0o644)
 
 
-def install(mods=(), ksp_dir=None):
+def install(mods=(), ksp_dir=None, validate_gamedata=True):
     """Build the mod and install it (plus exactly the requested managed mods) into the KSP
     GameData directory. mods is an iterable of names from MODS; ksp_dir defaults to the
-    KSP install given by KSP_DIR."""
+    KSP install given by KSP_DIR. Set validate_gamedata=False to skip the check that
+    GameData holds only the known-valid set, for a dev deliberately running an unmanaged
+    mod alongside the tests."""
     mods = list(mods)
     unknown = [m for m in mods if m not in MODS]
     if unknown:
@@ -152,12 +184,38 @@ def install(mods=(), ksp_dir=None):
         os.chmod(module_manager, 0o644)
 
     _reconcile_mods(mods, root, gamedata_root)
+    if validate_gamedata:
+        _validate_gamedata(gamedata_root, _requested_mod_subdirs(mods))
+
+
+def _validate_gamedata(gamedata_root, requested_subdirs):
+    """Fail if GameData contains anything outside the known-valid test install.
+
+    A valid install is the stock game plus kRPC, ModuleManager, and exactly the managed
+    mods a test requested. Anything else — a mod left behind by an earlier session, a stray
+    manual install — is reported rather than ignored: an unexpected assembly that fails to
+    load (for example one that needs a Harmony build which is not installed) stops the kRPC
+    server from starting, and KSP then sits at the space center while the test waits forever
+    for a server that never comes up, with nothing pointing at the cause."""
+    allowed = _BASELINE_GAMEDATA | set(requested_subdirs)
+    unexpected = [
+        entry
+        for entry in sorted(os.listdir(gamedata_root))
+        if entry not in allowed and not _is_module_manager_dll(entry)
+    ]
+    if unexpected:
+        raise RuntimeError(
+            "Unexpected entries in %s: %s. The integration tests require a known-clean "
+            "GameData: the stock game plus kRPC, ModuleManager and only the mods a test "
+            "requests. Remove the listed entries and re-run."
+            % (gamedata_root, ", ".join(unexpected))
+        )
 
 
 def _reconcile_mods(mods, root, gamedata_root):
     """Make the managed mods in gamedata_root exactly the requested set."""
     requested = [comp for mod in mods for comp in MODS[mod]]
-    requested_subdirs = {subdir for _, subdir in requested}
+    requested_subdirs = _requested_mod_subdirs(mods)
 
     # Remove any managed mod that is not requested.
     for subdir in _ALL_MOD_SUBDIRS:
@@ -205,10 +263,21 @@ def main():
         metavar="DIR",
         help="path to the KSP install (defaults to $KSP_DIR)",
     )
+    parser.add_argument(
+        "--skip-gamedata-check",
+        action="store_true",
+        default=False,
+        help="skip the check that GameData holds only the known-valid set, to allow "
+        "an unmanaged mod to remain installed",
+    )
     args = parser.parse_args()
     mods = [m for m in args.mods.split(",") if m]
     try:
-        install(mods=mods, ksp_dir=args.ksp_dir)
+        install(
+            mods=mods,
+            ksp_dir=args.ksp_dir,
+            validate_gamedata=not args.skip_gamedata_check,
+        )
     except (ValueError, RuntimeError) as ex:
         sys.stderr.write("Error: %s\n" % ex)
         return 1
