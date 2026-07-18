@@ -22,7 +22,8 @@ function krpc.connect(name, address, rpc_port)
   request.client_name = name
   rpc_connection:send_message(request)
   local response = rpc_connection:receive_message(schema.ConnectionResponse)
-  -- FIXME: status field reported as not set when set to OK, as that's the default value
+  -- A successful (OK) status is the protobuf default, so it is omitted from the message and
+  -- response.status reads as nil; the guard ensures only a present, non-OK status is an error.
   if response.status and response.status ~= schema.CONNECTIONRESPONSE_STATUS_OK_ENUM.number then
     error('Failed to connect: ' .. response.message)
   end
