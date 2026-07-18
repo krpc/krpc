@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.CodedOutputStream;
 import com.google.protobuf.Message;
+import com.google.protobuf.UnsafeByteOperations;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
@@ -27,8 +28,6 @@ import org.javatuples.Sextet;
 import org.javatuples.Triplet;
 import org.javatuples.Tuple;
 import org.javatuples.Unit;
-
-// TODO: remove all the ByteString.copyFrom calls
 
 /** Encodes and decodes values for kRPC procedure calls. */
 public class Encoder {
@@ -165,7 +164,7 @@ public class Encoder {
     stream.writeDoubleNoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeFloat(float value) throws IOException {
@@ -174,7 +173,7 @@ public class Encoder {
     stream.writeFloatNoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeSint32(int value) throws IOException {
@@ -183,7 +182,7 @@ public class Encoder {
     stream.writeSInt32NoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeSint64(long value) throws IOException {
@@ -192,7 +191,7 @@ public class Encoder {
     stream.writeSInt64NoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeUint32(int value) throws IOException {
@@ -201,7 +200,7 @@ public class Encoder {
     stream.writeUInt32NoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeUint64(long value) throws IOException {
@@ -210,7 +209,7 @@ public class Encoder {
     stream.writeUInt64NoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeBoolean(boolean value) throws IOException {
@@ -219,7 +218,7 @@ public class Encoder {
     stream.writeBoolNoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeString(String value) throws IOException {
@@ -228,7 +227,7 @@ public class Encoder {
     stream.writeStringNoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeBytes(byte[] value) throws IOException {
@@ -237,7 +236,7 @@ public class Encoder {
     stream.writeByteArrayNoTag(value);
     stream.flush();
     stream.checkNoSpaceLeft();
-    return ByteString.copyFrom(data);
+    return UnsafeByteOperations.unsafeWrap(data);
   }
 
   static ByteString encodeObject(RemoteObject value) throws IOException {
@@ -256,7 +255,7 @@ public class Encoder {
     for (int i = 0; i < value.getSize(); i++) {
       tuple.addItems(encode(value.getValue(i), valueTypes.get(i)));
     }
-    return ByteString.copyFrom(tuple.build().toByteArray());
+    return UnsafeByteOperations.unsafeWrap(tuple.build().toByteArray());
   }
 
   static ByteString encodeList(List<?> value, KRPC.Type valueType) throws IOException {
@@ -264,7 +263,7 @@ public class Encoder {
     for (Object item : value) {
       list.addItems(encode(item, valueType));
     }
-    return ByteString.copyFrom(list.build().toByteArray());
+    return UnsafeByteOperations.unsafeWrap(list.build().toByteArray());
   }
 
   static ByteString encodeSet(Set<?> value, KRPC.Type valueType) throws IOException {
@@ -272,7 +271,7 @@ public class Encoder {
     for (Object item : value) {
       set.addItems(encode(item, valueType));
     }
-    return ByteString.copyFrom(set.build().toByteArray());
+    return UnsafeByteOperations.unsafeWrap(set.build().toByteArray());
   }
 
   static ByteString encodeDictionary(Map<?, ?> value, KRPC.Type keyType, KRPC.Type valueType)
@@ -284,11 +283,11 @@ public class Encoder {
       dictionaryEntry.setValue(encode(entry.getValue(), valueType));
       dictionary.addEntries(dictionaryEntry.build());
     }
-    return ByteString.copyFrom(dictionary.build().toByteArray());
+    return UnsafeByteOperations.unsafeWrap(dictionary.build().toByteArray());
   }
 
   static ByteString encodeMessage(Message value) throws IOException {
-    return ByteString.copyFrom(value.toByteArray());
+    return UnsafeByteOperations.unsafeWrap(value.toByteArray());
   }
 
   static double decodeDouble(ByteString data) throws IOException {
