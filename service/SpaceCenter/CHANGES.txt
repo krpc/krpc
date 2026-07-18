@@ -127,6 +127,8 @@ v0.6.0
  * **Deprecated:** Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and
    Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and
    Orbit.ClosestApproaches (#334)
+ * Fix Part.Lift, Flight.Lift and Flight.AerodynamicForce including stale body lift for
+   parts whose body lift the game suppresses . e.g. a pod with a heatshield attached (#971)
 
 v0.5.4
  * Fix vessel recovery (#782)
