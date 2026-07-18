@@ -394,7 +394,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float Mass {
-            get { return InternalVessel.parts.Sum(part => part.WetMass()); }
+            get { return InternalVessel.WetMass (); }
         }
 
         /// <summary>
