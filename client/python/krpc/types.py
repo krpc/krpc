@@ -620,9 +620,10 @@ class WrappedClass:
         return self._class_type(*args, **kwargs)
 
     def __getattr__(self, name: str) -> object:
-        # FIXME: is this the best place to set it?
-        # Might be better to dynamically create a type that derives from _class_type
-        # and adds the _client field
+        # Inject the client onto the class so its static methods can reach it. With pre-generated
+        # stubs the class object is shared across clients, so this is rewritten on each access and,
+        # for multiple simultaneous clients, the last one to touch a given class wins. A proper fix
+        # would give each client its own subclass of _class_type carrying its own _client.
         self._class_type._client = self._client  # type: ignore[attr-defined]
         return getattr(self._class_type, name)
 
