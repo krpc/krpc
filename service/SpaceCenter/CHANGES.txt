@@ -1,6 +1,10 @@
 v0.6.0
  * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
    aerodynamic control surfaces, including deployed airbrakes (#622)
+ * Fix Parachute.Deploy being a silent no-op for RealChute parachutes (#382)
+ * Fix Experiment.Reset not clearing the science data stored by DMagic experiments,
+   which caused the next call to Run to fail with "Experiment already contains data" (#550)
+ * Fix Camera Distance, Pitch, Heading and FoV setters being lost when set during a camera mode switch (#318)
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
  * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
  * Fix ControlSurface.AvailableTorque returning inconsistent signs (ModuleControlSurface negates the roll axis); now normalised to positive/negative torque like other parts
@@ -17,7 +21,11 @@ v0.6.0
  * Fix waypoint mean altitude not including bedrock height (#801)
  * Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (#582)
  * Add Flight.SimulateAerodynamicTorqueAt (#825)
+ * Add Part.Drag and Part.Lift returning the aerodynamic drag and lift forces acting on an
+   individual part (#459)
  * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
+ * Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
+ * Add Engine.Flameout (#311)
  * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
  * Add Module.AllFieldsById to expose all part module field values, including those not
    visible in the UI (#858)
@@ -41,6 +49,9 @@ v0.6.0
  * Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (#823)
  * Fix Vessel.AvailableTorque due to sign inconsistency in KSP's ITorqueProvider implementations (#525)
  * Fix AutoPilot.Error to return the absolute value of the normalized angle (#893)
+ * Fix the auto-pilot no longer controlling the vessel after a Revert to Launch when a
+   client keeps its auto-pilot object across the reload (it appeared engaged but stopped
+   driving the vessel until the game was restarted)
  * Fix CelestialBody.Rotation returning incorrect values before a flight scene loads (#890)
  * Fix ResourceConverter.State and ResourceHarvester.ThermalEfficiency misreading the KSP status string (#892)
  * Fix Waypoint.MeanAltitude, SurfaceAltitude, BedrockAltitude (#891)
@@ -109,6 +120,15 @@ v0.6.0
    * Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics
    * On client disconnect the AutoPilot is now disengaged but its settings and target are kept
  * Add Orbit.OrbitalEnergy (#303)
+ * Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach
+   class exposing the time, distance, positions, velocities, relative position/velocity
+   and relative speed at a close approach with a target orbit, plus the vessels or bodies
+   involved (#334)
+ * **Deprecated:** Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and
+   Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and
+   Orbit.ClosestApproaches (#334)
+ * Fix Part.Lift, Flight.Lift and Flight.AerodynamicForce including stale body lift for
+   parts whose body lift the game suppresses . e.g. a pod with a heatshield attached (#971)
 
 v0.5.4
  * Fix vessel recovery (#782)

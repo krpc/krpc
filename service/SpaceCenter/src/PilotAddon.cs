@@ -286,6 +286,7 @@ namespace KRPC.SpaceCenter
         public void Awake ()
         {
             Clear ();
+            GameEvents.onVesselDestroy.Add (OnVesselDestroy);
         }
 
         /// <summary>
@@ -293,6 +294,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         public void OnDestroy ()
         {
+            GameEvents.onVesselDestroy.Remove (OnVesselDestroy);
             Clear ();
         }
 
@@ -305,6 +307,32 @@ namespace KRPC.SpaceCenter
             controlDelegates.Clear ();
             remoteTechSanctionedDelegates.Clear ();
             attitudeControllers.Clear ();
+        }
+
+        /// <summary>
+        /// Tear down all control state for a vessel as soon as it is destroyed rather than only
+        /// at scene teardown via <see cref="Clear"/>.
+        /// </summary>
+        void OnVesselDestroy (Vessel vessel)
+        {
+            Remove (vessel);
+        }
+
+        static void Remove (Vessel vessel)
+        {
+            Action<FlightCtrlState> action;
+            if (controlDelegates.TryGetValue (vessel, out action)) {
+                vessel.OnFlyByWire -= new FlightInputCallback (action);
+                if (RemoteTech.IsAvailable && remoteTechSanctionedDelegates.Contains (vessel) &&
+                    RemoteTech.RemoveSanctionedPilot != null)
+                    RemoteTech.RemoveSanctionedPilot (vessel.id, action);
+                controlDelegates.Remove (vessel);
+            }
+            remoteTechSanctionedDelegates.Remove (vessel);
+            currentInputs.Remove (vessel);
+            manualInputs.Remove (vessel);
+            autoPilotInputs.Remove (vessel);
+            attitudeControllers.Remove (vessel.id);
         }
 
         /// <summary>

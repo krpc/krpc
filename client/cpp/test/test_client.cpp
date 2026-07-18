@@ -385,7 +385,7 @@ TEST_F(test_client, test_thread_safe) {
   std::vector<std::thread> threads;
   for (int i = 0; i < thread_count; i++)
     threads.push_back(std::thread(
-        [this, repeats](std::atomic_int* count) {
+        [this](std::atomic_int* count) {
           for (int j = 0; j < repeats; j++) {
             ASSERT_EQ("False", test_service.bool_to_string(false));
             ASSERT_EQ(12345, test_service.string_to_int32("12345"));

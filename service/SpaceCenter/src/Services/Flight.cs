@@ -117,25 +117,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckNoFAR ();
                 Vector3d lift = Vector3d.zero;
-                foreach (var part in InternalVessel.Parts) {
-                    // Same bodyLiftOnlyUnattachedLift gate as the FlightIntegrator:
-                    // when it skips a pod's cube body lift, the bodyLift fields are
-                    // not updated and must not be read.
-                    var gated = part.bodyLiftOnlyUnattachedLiftActual
-                                && part.bodyLiftOnlyProvider != null
-                                && part.bodyLiftOnlyProvider.IsLifting;
-                    if (!part.hasLiftModule && !gated) {
-                        Vector3 bodyLift = part.transform.rotation * (part.bodyLiftScalar * part.DragCubes.LiftForce);
-                        bodyLift = Vector3.ProjectOnPlane (bodyLift, -part.dragVectorDir);
-                        lift += bodyLift;
-                    }
-                    foreach (var module in part.Modules) {
-                        var wing = module as ModuleLiftingSurface;
-                        if (wing != null)
-                            lift += wing.liftForce;
-                    }
-                }
-                return lift * 1000f;
+                foreach (var part in InternalVessel.Parts)
+                    lift += StockAeroReadout.Lift (part);
+                return lift * 1000d;
             }
         }
 
@@ -147,17 +131,9 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckNoFAR ();
                 Vector3d drag = Vector3d.zero;
-                foreach (var part in InternalVessel.Parts) {
-                    // Part drag
-                    drag += -part.dragVectorDir * part.dragScalar;
-                    // Lifting surface drag
-                    foreach (var module in part.Modules) {
-                        var wing = module as ModuleLiftingSurface;
-                        if (wing != null)
-                            drag += wing.dragForce;
-                    }
-                }
-                return drag * 1000f;
+                foreach (var part in InternalVessel.Parts)
+                    drag += StockAeroReadout.Drag (part);
+                return drag * 1000d;
             }
         }
 

@@ -97,8 +97,8 @@ automatically.
 
 To run the **integration tests** (see "Running the Tests" below) you do need a real copy of the
 game, since those launch KSP. Point the test tooling at it by setting the `KSP_DIR` environment
-variable to the KSP install directory — the `krpc-install`, `krpc-run-ksp` and `pytest` commands all
-pick it up (and also accept an equivalent `--ksp-dir` option). For example:
+variable to the KSP install directory — every command below picks it up (and they also accept an
+equivalent `--ksp-dir` option). For example:
 ```
 export KSP_DIR="$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program"
 ```
@@ -202,26 +202,42 @@ Note: these tests do not require the game to be running. They test the various c
 using the game. For communication tests, a tool called "TestServer" is used. This runs a version of
 the server plugin without needing to launch the game.
 
-kRPC also includes a suite of tests that test interaction with the KSP. This requires the game to be
-running. To run these tests:
- * First install the python client package and the `krpctest` package. This can be done using:
-   ```
-   bazel build //client/python //tools/krpctest
-   pip install --upgrade bazel-bin/client/python/krpc-<version>.tar.gz
-   pip install --upgrade bazel-bin/tools/krpctest/krpctest-<version>.tar.gz
-   ```
-   These python packages are also available from the GitHub releases page. Installing `krpctest`
-   provides the `krpc-install` and `krpc-run-ksp` console scripts, and registers a pytest
-   plugin so the tests run with `pytest`.
- * Then run the tests using `pytest`. With no arguments it runs every
-   `service/*/test` directory. Pass test directories or files, or `-k`, to run a subset. The KSP
-   install is taken from the `KSP_DIR` environment variable (or the `--ksp-dir` option); one of them
-   must be set. KSP is automatically launched (if its not already running) and the required mods are
-   managed automatically.
+kRPC also includes a suite of tests that test interaction with KSP. These need the game, so they
+are not part of `//:test`. Run them with:
+```
+bazel run //:test-ingame
+```
+With no arguments this runs every `service/*/test` directory. Anything after `--` is passed
+through to pytest, so pass test directories or files, or `-k`, to run a subset:
+```
+bazel run //:test-ingame -- service/SpaceCenter/test/test_camera.py -v
+bazel run //:test-ingame -- -k test_camera_mode
+```
+The KSP install is taken from the `KSP_DIR` environment variable (or the `--ksp-dir` option); one
+of them must be set. The mod is built and installed, KSP is launched (if it is not already
+running) and the required mods are managed, all automatically. The test framework and the python
+client are built from the repository too, so your changes to either are picked up by the next run
+with nothing to reinstall.
 
-If the game is already running (via `krpc-run-ksp` - see below) then running `pytest` does not launch
-the game, it just makes use of the existing running game. If the game is not in the expected state (e.g.
-the wrong mods are installed) then the tests will fail.
+To keep the game up across an extended run of test iterations, start it separately in another
+terminal and leave it running:
+```
+bazel run //:run-ksp -- --load-game=krpctest
+```
+Then run the tests against it, telling them not to launch a game of their own:
+```
+bazel run //:test-ingame -- --no-launch service/SpaceCenter/test/test_camera.py -v
+```
+The tests reuse the running game rather than restarting it, and leave it running afterwards. Two
+things to know: a game the tests did not start is never modified, so it must already have the mods
+the tests ask for (which is why the whole suite cannot run this way — it needs a relaunch per mod
+set, and `--no-launch` will fail instead); and if a test run is killed rather than interrupted it
+cannot stop a game it did start, so clean up with `pkill -f KSP.x86_64`.
+
+The `krpctest` and python client packages are also on the GitHub releases page, for testing
+against KSP from outside a checkout of this repository. Installing them with `pip` provides the
+`krpc-install` and `krpc-run-ksp` console scripts, and registers a pytest plugin so the tests run
+with `pytest` directly — the equivalents of the two Bazel targets above.
 
 ## Tools
 
@@ -231,14 +247,20 @@ Included in the project are various tools to aid development.
    - Builds the documentation website and starts a local webserver, rebuilding automatically as you
    edit the sources. A web browser is opened at `http://localhost:8080` once the site is ready; pass
    `-- --no-browser` to skip that, or `-- --port <PORT>` to serve on a different port.
- * `krpc-install`
-   - Console script from the `krpctest` package. It builds the `//:krpc` release archive and the
-   `TestingTools` DLL, and installs them into the GameData directory of the KSP install given by
-   `KSP_DIR` (or `--ksp-dir`). Run it from the repository root.
- * `krpc-run-ksp`
-   - Console script from the `krpctest` package. It uses `krpc-install` to install the mod (as
-   above) and then launches the game. It also pipes the game's log output to the terminal for ease
-   of debugging.
+ * `bazel run //:test-ingame`
+   - Runs the tests that need the game, as described under "Running the Tests" above. Arguments
+   after `--` are passed to pytest.
+ * `bazel run //:run-ksp`
+   - Installs the mod and launches the game, piping its log output to the terminal for ease of
+   debugging. `--mods` chooses which third-party mods to install, and the `--load-*` options
+   auto-load a save, switch vessel or launch a craft on startup; pass `-- --help` for the full
+   list.
+ * `krpc-install` and `krpc-run-ksp`
+   - Console scripts from the `krpctest` package, for use outside a checkout of this repository.
+   `krpc-install` builds the `//:krpc` release archive and the `TestingTools` DLL and installs
+   them into the GameData directory of the KSP install given by `KSP_DIR` (or `--ksp-dir`).
+   `krpc-run-ksp` installs the mod that way and then launches the game, and is what
+   `bazel run //:run-ksp` runs.
 
 ## Bazel cheat sheet
 

@@ -4,6 +4,7 @@ using System.Linq;
 using CompoundParts;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.SpaceCenter.ExternalAPI;
 using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
@@ -837,6 +838,70 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (InternalPart.transform.rotation).ToTuple ();
+        }
+
+        /// <summary>
+        /// The aerodynamic <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">lift</a>
+        /// currently acting on the part.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// vector is in.</param>
+        /// <remarks>
+        /// Not available when the Ferram Aerospace Research mod is installed.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 Lift (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            CheckNoFAR ();
+            return referenceFrame.DirectionFromWorldSpace (WorldLift).ToTuple ();
+        }
+
+        /// <summary>
+        /// The aerodynamic <a href="https://en.wikipedia.org/wiki/Aerodynamic_force">drag</a>
+        /// currently acting on the part.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// vector is in.</param>
+        /// <remarks>
+        /// Not available when the Ferram Aerospace Research mod is installed.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 Drag (ReferenceFrame referenceFrame)
+        {
+            if (ReferenceEquals (referenceFrame, null))
+                throw new ArgumentNullException (nameof (referenceFrame));
+            CheckNoFAR ();
+            return referenceFrame.DirectionFromWorldSpace (WorldDrag).ToTuple ();
+        }
+
+        /// <summary>
+        /// The lift force acting on the part, in world space, in Newtons.
+        /// </summary>
+        Vector3d WorldLift {
+            get { return StockAeroReadout.Lift (InternalPart) * 1000d; }
+        }
+
+        /// <summary>
+        /// The drag force acting on the part, in world space, in Newtons.
+        /// </summary>
+        Vector3d WorldDrag {
+            get { return StockAeroReadout.Drag (InternalPart) * 1000d; }
+        }
+
+        /// <summary>
+        /// Throws if the Ferram Aerospace Research mod is installed, as it replaces
+        /// the stock aerodynamic model these forces are read from.
+        /// </summary>
+        static void CheckNoFAR ()
+        {
+            if (FAR.IsAvailable)
+                throw new InvalidOperationException ("Not available; FAR is installed");
         }
 
         /// <summary>

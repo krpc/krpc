@@ -442,10 +442,11 @@ http_file(
 )
 
 # ----------------------- Third-party mods (integration testing) -------------------------
-# The RemoteTech, InfernalRobotics and KerbalAlarmClock services wrap these mods. They are
-# installed into GameData by `krpc-install --mods=...` for the integration tests, and are
-# not part of the release. Each filegroup exports only the mod's own GameData subtree (the
-# RemoteTech archive also bundles an older ModuleManager, which is deliberately excluded).
+# The RemoteTech, InfernalRobotics and KerbalAlarmClock services wrap these mods, and the
+# SpaceCenter Parachute class wraps RealChute. They are installed into GameData by
+# `krpc-install --mods=...` for the integration tests, and are not part of the release. Each
+# filegroup exports only the mod's own GameData subtree (the RemoteTech archive also bundles
+# an older ModuleManager, which is deliberately excluded).
 
 http_archive(
     name = "remotetech",
@@ -466,4 +467,67 @@ http_archive(
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/TriggerTech/**']), visibility = ['//visibility:public'])",
     sha256 = "5fbaf7a1c69dec68557f4ce956e0f85956e66ffd828545914f23b79024fc3d67",
     url = "https://github.com/TriggerAu/KerbalAlarmClock/releases/download/v3.14.0.0/KerbalAlarmClock_3.14.0.0.zip",
+)
+
+http_archive(
+    name = "realchute",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/RealChute/**']), visibility = ['//visibility:public'])",
+    sha256 = "3b135ae03d2214d4721a655e2d63e7c93c9a69558d8eae2473fced2bbf92bdf0",
+    url = "https://github.com/ChrisViral/RealChute/releases/download/v1.4.9.5/RealChute_v1.4.9.5.zip",
+)
+
+# RealChute's plugin assembly hard-depends on ClickThroughBlocker and ToolbarControl, so its
+# part modules do not register unless both are installed alongside it; ClickThroughBlocker in
+# turn references Harmony, whose absence otherwise crashes kRPC's assembly scanner at startup.
+# All three are installed only as RealChute's dependencies, not requested on their own.
+http_archive(
+    name = "harmony",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_Harmony/**']), visibility = ['//visibility:public'])",
+    sha256 = "51d63f6739eaf22f12ce9456adace54385520c67cc13735d5300d5aa15c79476",
+    url = "https://github.com/KSPModdingLibs/HarmonyKSP/releases/download/2.2.1.0/HarmonyKSP_2.2.1.0_for_KSP1.8%2B.zip",
+)
+
+http_archive(
+    name = "clickthroughblocker",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_ClickThroughBlocker/**']), visibility = ['//visibility:public'])",
+    sha256 = "83bf6c3556a7d2c46634260100a535f1ccda99f83fc999c846b45a93c6369e3e",
+    url = "https://github.com/linuxgurugamer/ClickThroughBlocker/releases/download/2.1.10.23/ClickThroughBlocker-1.12.5-2.1.10.23.zip",
+)
+
+http_archive(
+    name = "toolbarcontrol",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/001_ToolbarControl/**']), visibility = ['//visibility:public'])",
+    sha256 = "0f44f5500f8e914346cb2e6dd5c5e5f26df9f26caa6ce8179738a3842aac2a5b",
+    url = "https://github.com/linuxgurugamer/ToolbarControl/releases/download/0.1.9.14/ToolbarControl-1.12.0-0.1.9.14.zip",
+)
+
+# DMagic's science part module, wrapped by the SpaceCenter Experiment class. This standalone
+# release is just the part-module assembly with no parts and no dependencies; a test-only part
+# config in tools/mods/config/DMagicScienceAnimate adds a part that uses it, so the DMagic code
+# path is exercised by the integration tests.
+http_archive(
+    name = "dmagic_science_animate",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/DMagicScienceAnimate/**']), visibility = ['//visibility:public'])",
+    sha256 = "a4821a1d76ddf0757b57a383bd4c76c153851159d533f7bcf31f1b74401d9b60",
+    url = "https://github.com/DMagic1/DMModuleScienceAnimateGeneric/releases/download/v0.23/DMModuleScienceAnimateGeneric_v0.23.zip",
+)
+
+# Action Groups Extended, whose action-group compatibility is wrapped by the SpaceCenter Control
+# class. Its part.cfg is a ModuleManager patch adding a ModuleAGX module to every part (no new
+# part of its own); it shares RealChute's ClickThroughBlocker + ToolbarControl + Harmony
+# dependencies and additionally references KSP_Log from SpaceTuxLibrary, whose absence throws a
+# BadImageFormatException when its toolbar registration loads.
+http_archive(
+    name = "agext",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/Diazo/**']), visibility = ['//visibility:public'])",
+    sha256 = "fa5f56288165321775c96674a1b64e49c353ccfec57fd4d7979afb1c1005f7aa",
+    url = "https://github.com/linuxgurugamer/AGExt/releases/download/2.4.1.4/AGExt-1.12.0-2.4.1.4.zip",
+)
+
+# SpaceTuxLibrary — LinuxGuruGamer's shared library bundle (KSP_Log, etc.), an AGExt dependency.
+http_archive(
+    name = "spacetuxlibrary",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/SpaceTuxLibrary/**']), visibility = ['//visibility:public'])",
+    sha256 = "e916b6907e8310e08baa49532d04f92068864cb38b93afd664bf712b190197f1",
+    url = "https://github.com/linuxgurugamer/SpaceTuxLibrary/releases/download/0.0.9/SpaceTuxLibrary-1.12.0-0.0.9.zip",
 )

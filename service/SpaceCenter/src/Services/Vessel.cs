@@ -95,6 +95,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+        /// because it is within loading range of the active vessel. A vessel that is not
+        /// loaded exists only as orbital data and is always on-rails (see <see cref="Packed" />).
+        /// </summary>
+        [KRPCProperty]
+        public bool Loaded {
+            get { return InternalVessel.loaded; }
+        }
+
+        /// <summary>
+        /// Whether the vessel is packed (on-rails). A packed vessel has its physics
+        /// simulation suspended and follows its orbit analytically. A vessel that is not
+        /// loaded (see <see cref="Loaded" />) is always packed.
+        /// </summary>
+        [KRPCProperty]
+        public bool Packed {
+            get { return InternalVessel.packed; }
+        }
+
+        /// <summary>
         /// Whether the vessel is recoverable.
         /// </summary>
         [KRPCProperty]
@@ -164,7 +184,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public Orbit Orbit {
-            get { return new Orbit (InternalVessel); }
+            get { return new Orbit (this); }
         }
 
         /// <summary>

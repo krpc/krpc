@@ -71,7 +71,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (parachute)
                 parachute.Deploy ();
-            else if (realChute.HasVisibleEvent ("Deploy chute"))
+            else if (realChute.HasVisibleEvent ("Deploy Chute"))
                 realChute.TriggerVisibleEvent ("Deploy Chute");
         }
 

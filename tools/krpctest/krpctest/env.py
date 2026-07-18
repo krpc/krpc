@@ -25,9 +25,19 @@ def get_ksp_dir(ksp_dir=None):
 
 
 def get_repo_root():
-    """The repository root, found by walking up from the working directory looking for
-    MODULE.bazel. Tests run from a service's test directory, which is inside the repo,
-    even though KSP_DIR points at a separate KSP install."""
+    """The repository root.
+
+    Under `bazel run`, bazel names the root in BUILD_WORKSPACE_DIRECTORY. Take it from there
+    rather than searching: the process starts in the runfiles tree, which sits under bazel's
+    execroot, and the execroot has a MODULE.bazel of its own that the search below would
+    find first.
+
+    Otherwise, walk up from the working directory looking for MODULE.bazel. Tests run from a
+    service's test directory, which is inside the repo, even though KSP_DIR points at a
+    separate KSP install."""
+    workspace = os.environ.get("BUILD_WORKSPACE_DIRECTORY")
+    if workspace:
+        return workspace
     path = os.getcwd()
     while True:
         if os.path.exists(os.path.join(path, "MODULE.bazel")):

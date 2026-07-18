@@ -268,6 +268,22 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertFalse(engine.has_fuel)
         engine.active = False
 
+    def test_flameout(self):
+        engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
+        self.assertFalse(engine.flameout)
+
+    def test_flameout_no_fuel(self):
+        engine = self.get_engine("liquidEngine3.v2")  # LV-909 "Terrier"
+        self.assertFalse(engine.flameout)
+        # Flameout is only flagged once an ignited engine is commanded to
+        # produce thrust and finds no propellant, so open the throttle.
+        engine.active = True
+        self.vessel.control.throttle = 1
+        self.wait(0.5)
+        self.assertTrue(engine.flameout)
+        self.vessel.control.throttle = 0
+        engine.active = False
+
     def test_thrust_limit(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
         thrust = 205600

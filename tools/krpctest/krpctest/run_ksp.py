@@ -13,8 +13,10 @@ import os
 import subprocess
 import sys
 import time
+from importlib.resources import files
 
 from krpctest.env import get_ksp_dir
+from krpctest.game import copy_blank_save
 from krpctest.install import MODS, install
 from krpctest.version import __version__
 
@@ -23,6 +25,19 @@ from krpctest.version import __version__
 # cross-platform (Windows/macOS) support.
 _KSP_BINARY = "KSP.x86_64"
 _KSP_LOG = "KSP.log"
+
+
+def _stage_blank_save(name, ksp_dir):
+    """Create the save --load-game asked for, when it is one of the saves bundled with the
+    package (krpctest, krpctest_career) and the KSP install does not have it yet. The test
+    framework stages these when it launches the game itself, so without this a manual run
+    against an install that has never run the tests reaches the main menu with nothing to
+    load. An existing save is left alone: it is the state being iterated on."""
+    if not files("krpctest").joinpath(name + ".sfs").is_file():
+        return
+    if os.path.exists(os.path.join(ksp_dir, "saves", name)):
+        return
+    copy_blank_save(name, ksp_dir)
 
 
 def _terminate(proc):
@@ -111,6 +126,13 @@ def main():
         metavar="DIR",
         help="path to the KSP install (defaults to $KSP_DIR)",
     )
+    parser.add_argument(
+        "--skip-gamedata-check",
+        action="store_true",
+        default=False,
+        help="skip the check that GameData holds only the known-valid set, to launch "
+        "with an unmanaged mod installed",
+    )
 
     autoload = parser.add_argument_group(
         "auto-load options",
@@ -169,7 +191,9 @@ def main():
             ksp_args.append("%s=%s" % (flag, value))
 
     ksp_dir = get_ksp_dir(args.ksp_dir)
-    install(mods=mods, ksp_dir=ksp_dir)
+    install(mods=mods, ksp_dir=ksp_dir, validate_gamedata=not args.skip_gamedata_check)
+    if args.load_game is not None:
+        _stage_blank_save(args.load_game, ksp_dir)
 
     proc = subprocess.Popen(  # pylint: disable=consider-using-with
         [os.path.join(ksp_dir, _KSP_BINARY), *ksp_args], cwd=ksp_dir

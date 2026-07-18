@@ -259,5 +259,94 @@ class TestOrbit(krpctest.TestCase):
         self.assertAlmostEqual((1, 0, 0), direction)
 
 
+class TestClosestApproach(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        # Two coplanar circular orbits. The target is inner (and so faster) and
+        # trails the active vessel, so it catches up to a close approach in the
+        # future rather than at the current instant.
+        cls.launch_vessel_from_vab("Basic")
+        cls.remove_other_vessels()
+        cls.set_orbit("Kerbin", 1600000, 0, 0, 0, 0, 0, 0)
+        cls.launch_vessel_from_vab("Basic")
+        cls.set_orbit("Kerbin", 1650000, 0, 0, 0, 0, 0.15, 0)
+        cls.sc = cls.connect().space_center
+        cls.vessel = cls.sc.active_vessel
+        cls.other = next(v for v in cls.sc.vessels if v != cls.vessel)
+        cls.orbit = cls.vessel.orbit
+        cls.target = cls.other.orbit
+
+    def test_next_closest_approach(self):
+        approach = self.orbit.next_closest_approach(self.target)
+        # Time is in the future and consistent with time_to
+        self.assertGreater(approach.ut, self.sc.ut)
+        self.assertGreater(approach.time_to, 0)
+        self.assertAlmostEqual(approach.time_to, approach.ut - self.sc.ut, delta=1)
+        # The objects genuinely approach: the closest distance is much smaller
+        # than their initial separation
+        self.assertGreater(approach.distance, 0)
+        self.assertLess(approach.distance, 100000)
+        # Agrees with the deprecated scalar helpers
+        self.assertAlmostEqual(
+            approach.ut, self.orbit.time_of_closest_approach(self.target), delta=1
+        )
+        self.assertAlmostEqual(
+            approach.distance,
+            self.orbit.distance_at_closest_approach(self.target),
+            delta=1,
+        )
+        # Both endpoints are vessels, not celestial bodies
+        self.assertEqual(approach.vessel, self.vessel)
+        self.assertIsNone(approach.body)
+        self.assertEqual(approach.target_vessel, self.other)
+        self.assertIsNone(approach.target_body)
+
+    def test_target_body(self):
+        # Approaching a celestial body: target_body is set, target_vessel is not,
+        # while the approaching side is still this vessel
+        approach = self.orbit.next_closest_approach(self.sc.bodies["Mun"].orbit)
+        self.assertEqual(approach.vessel, self.vessel)
+        self.assertIsNone(approach.body)
+        self.assertIsNone(approach.target_vessel)
+        self.assertEqual(approach.target_body, self.sc.bodies["Mun"])
+
+    def test_relative_quantities(self):
+        approach = self.orbit.next_closest_approach(self.target)
+        frame = self.orbit.body.non_rotating_reference_frame
+        pos = approach.position(frame)
+        target_pos = approach.target_position(frame)
+        rel_pos = approach.relative_position(frame)
+        vel = approach.velocity(frame)
+        target_vel = approach.target_velocity(frame)
+        rel_vel = approach.relative_velocity(frame)
+        # Relative quantities are the target relative to the orbiting object.
+        # In a non-rotating frame they are the plain difference of the absolutes.
+        for i in range(3):
+            self.assertAlmostEqual(rel_pos[i], target_pos[i] - pos[i], delta=1)
+            self.assertAlmostEqual(rel_vel[i], target_vel[i] - vel[i], delta=0.1)
+        # Distance and relative speed are the magnitudes, and frame independent
+        self.assertAlmostEqual(approach.distance, norm(rel_pos), delta=1)
+        self.assertAlmostEqual(approach.relative_speed, norm(rel_vel), delta=0.1)
+        self.assertAlmostEqual(
+            norm(rel_pos),
+            norm(approach.relative_position()),  # default frame
+            delta=1,
+        )
+
+    def test_closest_approaches(self):
+        approaches = self.orbit.closest_approaches(self.target, 3)
+        self.assertEqual(3, len(approaches))
+        times = [approach.ut for approach in approaches]
+        # Strictly increasing in time, all in the future
+        self.assertGreater(times[0], self.sc.ut)
+        for earlier, later in zip(times, times[1:]):
+            self.assertGreater(later, earlier)
+        # The first matches next_closest_approach
+        first = self.orbit.next_closest_approach(self.target)
+        self.assertAlmostEqual(approaches[0].ut, first.ut, delta=1)
+        self.assertAlmostEqual(approaches[0].distance, first.distance, delta=1)
+
+
 if __name__ == "__main__":
     unittest.main()
