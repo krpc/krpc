@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -135,21 +133,11 @@ namespace KRPC.SpaceCenter.Services.Parts
             // Try calling "Decouple Node" or "Undock" on this part and on the port we are docked to, if any
             if (InvokeEvent (port, "Decouple Node") || InvokeEvent (port, "Undock") ||
                 (dockedPort != null && (InvokeEvent (dockedPort, "Decouple Node") || InvokeEvent (dockedPort, "Undock")))) {
-                return PostUndock (preVesselIds);
+                return PartSeparation.NewVessel (preVesselIds, () => State != DockingPortState.Docked);
             }
 
             // Failed to undock
             throw new InvalidOperationException ("Failed to undock, a suitable event to trigger was not found");
-        }
-
-        Vessel PostUndock (IList<Guid> preVesselIds, int wait = 0)
-        {
-            // FIXME: sometimes after undocking, KSP changes it's mind as to what the active vessel is, so we wait for 10 frames before getting the active vessel
-            // Wait while the port is docked
-            if (wait < 10 || State == DockingPortState.Docked)
-                throw new YieldException<Func<Vessel>> (() => PostUndock(preVesselIds, wait + 1));
-            // Return the newly created vessel
-            return new Vessel (FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
         }
 
         /// <summary>
