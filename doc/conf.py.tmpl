@@ -92,7 +92,10 @@ toc_object_entries = False
 todo_include_todos = True
 
 spelling_word_list_filename = 'dictionary.txt'
-spelling_ignore_contributor_names = True
+# Not enabled: it scans git history for contributor names, but the docs are built from a source tree
+# with no git repository, so it only ever warns and adds nothing. Names that need allowing go in
+# dictionary.txt. Keeping it off lets the spelling build run with warnings treated as errors.
+spelling_ignore_contributor_names = False
 
 # The changelog page is generated verbatim from the CHANGES.txt files and is
 # dense with API identifiers; exclude it from the spell checker (only -- it is
