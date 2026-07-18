@@ -352,25 +352,22 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-        // FIXME: isn't working
-        // /// <summary>
-        // /// Whether the wheel steering is limited in relationship to speed.
-        // /// </summary>
-        // [KRPCProperty]
-        // public bool SteeringAngleAuto
-        // {
-        //     get
-        //     {
-        //         CheckSteering();
-        //         return steering.autoSteeringAdjust;
-        //     }
-        //     set
-        //     {
-        //         CheckSteering();
-        //         steering.autoSteeringAdjust = value;
-        //         steering.steer
-        //     }
-        // }
+        /// <summary>
+        /// Whether the steering angle is automatically limited based on the vessel's speed,
+        /// reducing the maximum angle as the vessel moves faster. See also
+        /// <see cref="SteeringAngleLimit" />.
+        /// </summary>
+        [KRPCProperty]
+        public bool SteeringAngleAuto {
+            get {
+                CheckSteering();
+                return steering.autoSteeringAdjust;
+            }
+            set {
+                CheckSteering();
+                steering.autoSteeringAdjust = value;
+            }
+        }
 
         /// <summary>
         /// The steering angle limit.
