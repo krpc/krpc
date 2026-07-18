@@ -511,3 +511,23 @@ http_archive(
     sha256 = "a4821a1d76ddf0757b57a383bd4c76c153851159d533f7bcf31f1b74401d9b60",
     url = "https://github.com/DMagic1/DMModuleScienceAnimateGeneric/releases/download/v0.23/DMModuleScienceAnimateGeneric_v0.23.zip",
 )
+
+# Action Groups Extended, whose action-group compatibility is wrapped by the SpaceCenter Control
+# class. Its part.cfg is a ModuleManager patch adding a ModuleAGX module to every part (no new
+# part of its own); it shares RealChute's ClickThroughBlocker + ToolbarControl + Harmony
+# dependencies and additionally references KSP_Log from SpaceTuxLibrary, whose absence throws a
+# BadImageFormatException when its toolbar registration loads.
+http_archive(
+    name = "agext",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/Diazo/**']), visibility = ['//visibility:public'])",
+    sha256 = "fa5f56288165321775c96674a1b64e49c353ccfec57fd4d7979afb1c1005f7aa",
+    url = "https://github.com/linuxgurugamer/AGExt/releases/download/2.4.1.4/AGExt-1.12.0-2.4.1.4.zip",
+)
+
+# SpaceTuxLibrary — LinuxGuruGamer's shared library bundle (KSP_Log, etc.), an AGExt dependency.
+http_archive(
+    name = "spacetuxlibrary",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/SpaceTuxLibrary/**']), visibility = ['//visibility:public'])",
+    sha256 = "e916b6907e8310e08baa49532d04f92068864cb38b93afd664bf712b190197f1",
+    url = "https://github.com/linuxgurugamer/SpaceTuxLibrary/releases/download/0.0.9/SpaceTuxLibrary-1.12.0-0.0.9.zip",
+)

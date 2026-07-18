@@ -14,6 +14,10 @@
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
 #                          GameData/001_ToolbarControl (deps)
 #   DMagic            -> GameData/DMagicScienceAnimate
+#   AGExt             -> GameData/Diazo
+#                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
+#                          GameData/001_ToolbarControl (deps, shared with RealChute),
+#                          GameData/SpaceTuxLibrary (dep)
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -40,9 +44,9 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
-# RealChute's runtime dependencies. Installed only alongside RealChute (its plugin will not
-# load without ClickThroughBlocker + ToolbarControl, and ClickThroughBlocker references
-# Harmony), never requested on their own.
+# Runtime dependencies shared by RealChute and AGExt. Installed only alongside a mod that needs
+# them (their plugins will not load without ClickThroughBlocker + ToolbarControl, and
+# ClickThroughBlocker references Harmony), never requested on their own.
 filegroup(
     name = "harmony",
     srcs = ["@harmony//:gamedata"],
@@ -66,5 +70,21 @@ filegroup(
 filegroup(
     name = "dmagic_science_animate",
     srcs = ["@dmagic_science_animate//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# Action Groups Extended. Adds no parts; a ModuleManager patch adds a ModuleAGX module to every
+# part instead. Shares RealChute's ClickThroughBlocker/ToolbarControl/Harmony dependencies, plus
+# SpaceTuxLibrary (KSP_Log).
+filegroup(
+    name = "agext",
+    srcs = ["@agext//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# AGExt's SpaceTuxLibrary dependency (KSP_Log and other shared LGG libraries).
+filegroup(
+    name = "spacetuxlibrary",
+    srcs = ["@spacetuxlibrary//:gamedata"],
     visibility = ["//visibility:public"],
 )

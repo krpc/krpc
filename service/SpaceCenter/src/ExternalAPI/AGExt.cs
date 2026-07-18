@@ -6,7 +6,7 @@ using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExternalAPI
 {
-    static class AGX
+    static class AGExt
     {
         static MethodInfo groupActionsMethod;
         static FieldInfo partField;
@@ -14,7 +14,7 @@ namespace KRPC.SpaceCenter.ExternalAPI
 
         public static void Load ()
         {
-            var type = APILoader.Load (typeof(AGX), "AGExt", "ActionGroupsExtended.AGExtExternal");
+            var type = APILoader.Load (typeof(AGExt), "AGExt", "ActionGroupsExtended.AGExtExternal");
             IsAvailable = (type != null);
             if (IsAvailable) {
                 groupActionsMethod = type.GetMethod (
