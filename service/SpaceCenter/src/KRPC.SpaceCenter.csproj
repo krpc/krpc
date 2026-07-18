@@ -155,6 +155,7 @@
     <Compile Include="Services\Parts\PartEvent.cs" />
     <Compile Include="Services\Parts\PartField.cs" />
     <Compile Include="Services\Parts\Parts.cs" />
+    <Compile Include="Services\Parts\PartSeparation.cs" />
     <Compile Include="Services\Parts\Propellant.cs" />
     <Compile Include="Services\Parts\RCS.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />
