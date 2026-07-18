@@ -139,6 +139,8 @@ class TestContracts(krpctest.TestCase):
         self.assertFalse(contract.can_be_canceled)
         self.assertFalse(contract.can_be_declined)
         self.assertFalse(contract.can_be_failed)
+        self.assertGreater(contract.date_accepted, 0)
+        self.assertEqual(0, contract.date_finished)
 
     def test_offered_contracts(self):
         contracts = self.cm.offered_contracts
@@ -166,6 +168,9 @@ class TestContracts(krpctest.TestCase):
         self.assertTrue(contract.can_be_canceled)
         self.assertTrue(contract.can_be_declined)
         self.assertTrue(contract.can_be_failed)
+        self.assertEqual(0, contract.date_accepted)
+        self.assertGreater(contract.date_expire, 0)
+        self.assertEqual(0, contract.date_finished)
 
     def test_completed_contracts(self):
         contracts = self.cm.completed_contracts
@@ -183,6 +188,10 @@ class TestContracts(krpctest.TestCase):
         self.assertFalse(contract.can_be_canceled)
         self.assertFalse(contract.can_be_declined)
         self.assertFalse(contract.can_be_failed)
+        self.assertGreater(contract.date_accepted, 0)
+        # This save's auto-completed progression contract has no recorded
+        # finish time, so only check the value is readable
+        self.assertGreaterEqual(contract.date_finished, 0)
 
     def test_failed_contracts(self):
         # TODO: fail a contract to test this

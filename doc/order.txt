@@ -1426,6 +1426,10 @@ SpaceCenter.Contract.ReputationCompletion
 SpaceCenter.Contract.ReputationFailure
 SpaceCenter.Contract.ScienceCompletion
 SpaceCenter.Contract.Parameters
+SpaceCenter.Contract.DateAccepted
+SpaceCenter.Contract.DateDeadline
+SpaceCenter.Contract.DateExpire
+SpaceCenter.Contract.DateFinished
 SpaceCenter.ContractState
 SpaceCenter.ContractState.Active
 SpaceCenter.ContractState.Canceled
