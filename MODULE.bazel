@@ -478,14 +478,12 @@ http_archive(
 
 # KSPCommunityPartModules provides the shared ModuleNameTag part module that SpaceCenter's Part.Tag
 # and kOS both use. It is a hard dependency (see AssemblyDependencies.cs) installed on every run,
-# not a per-test managed mod. This needs the 0.5.0 release, the first to contain ModuleNameTag; the
-# sha256 below is a placeholder and must be set to that release's archive checksum once it is
-# published (until then the integration tests cannot fetch it).
+# not a per-test managed mod. The v0.5.0 release is the first to contain ModuleNameTag.
 http_archive(
     name = "kspcommunitypartmodules",
     build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/KSPCommunityPartModules/**']), visibility = ['//visibility:public'])",
-    sha256 = "0000000000000000000000000000000000000000000000000000000000000000",
-    url = "https://github.com/KSPModdingLibs/KSPCommunityPartModules/releases/download/0.5.0/KSPCommunityPartModules_0.5.0.zip",
+    sha256 = "59204d046b20c84f0a86740f3f6a1f45c06140bdb6a238e6987bf773e8d75b86",
+    url = "https://github.com/KSPModdingLibs/KSPCommunityPartModules/releases/download/v0.5.0/KSPCommunityPartModules-v0.5.0.zip",
 )
 
 # RealChute's plugin assembly hard-depends on ClickThroughBlocker and ToolbarControl, so its
