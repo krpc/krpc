@@ -40,6 +40,15 @@ filegroup(
     visibility = ["//visibility:public"],
 )
 
+# KSPCommunityPartModules provides the shared ModuleNameTag part module that SpaceCenter
+# (and kOS) depend on. It is a base dependency installed on every run (see install.py BASE_MODS),
+# not a per-test managed mod.
+filegroup(
+    name = "kspcommunitypartmodules",
+    srcs = ["@kspcommunitypartmodules//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
 # RealChute's runtime dependencies. Installed only alongside RealChute (its plugin will not
 # load without ClickThroughBlocker + ToolbarControl, and ClickThroughBlocker references
 # Harmony), never requested on their own.

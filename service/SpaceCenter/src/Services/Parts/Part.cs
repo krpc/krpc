@@ -96,18 +96,19 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// in-game user interface.
         /// </summary>
         /// <remarks>
-        /// This string is shared with
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>
-        /// if it is installed.
+        /// This string is provided by the name tag part module from
+        /// <a href="https://github.com/KSPModdingLibs/KSPCommunityPartModules">KSPCommunityPartModules</a>,
+        /// a required dependency, and is shared with
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/">kOS</a>.
         /// </remarks>
         [KRPCProperty]
         public string Tag {
             get {
-                var module = InternalPart.Module ("KOSNameTag");
+                var module = InternalPart.Module ("ModuleNameTag");
                 return (string)module.GetType ().GetField ("nameTag").GetValue (module);
             }
             set {
-                var module = InternalPart.Module ("KOSNameTag");
+                var module = InternalPart.Module ("ModuleNameTag");
                 module.GetType ().GetField ("nameTag").SetValue (module, value);
             }
         }

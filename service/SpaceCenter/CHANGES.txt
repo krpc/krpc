@@ -1,4 +1,9 @@
 v0.6.0
+ * **Breaking:** The part name tag (Part.Tag) is now provided by the
+   KSPCommunityPartModules mod, a new required dependency, instead of a name-tag
+   module bundled with kRPC. Name tags on existing craft and saves are migrated
+   automatically, and the editor name-tag window no longer drags parts behind its
+   Accept/Cancel buttons (#829)
  * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
    aerodynamic control surfaces, including deployed airbrakes (#622)
  * Fix Parachute.Deploy being a silent no-op for RealChute parachutes (#382)

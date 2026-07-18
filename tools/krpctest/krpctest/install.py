@@ -40,8 +40,26 @@ MODS = {
     "DMagic": [("dmagic_science_animate", "DMagicScienceAnimate")],
 }
 
-# All managed GameData subdirs, every one a candidate for removal during reconcile.
-_ALL_MOD_SUBDIRS = [subdir for comps in MODS.values() for _, subdir in comps]
+# Mods installed unconditionally on every run, each a (Bazel target under //tools/mods, GameData
+# subdir) pair. KSPCommunityPartModules provides the ModuleNameTag part module that SpaceCenter
+# hard-depends on (a KSPAssemblyDependency), so KSP will not load SpaceCenter without it; its plugin
+# in turn references Harmony, so 000_Harmony must be present alongside it. Unlike MODS these are
+# never reconciled away, so they are available even for a test that requests no managed mods.
+BASE_MODS = [
+    ("kspcommunitypartmodules", "KSPCommunityPartModules"),
+    ("harmony", "000_Harmony"),
+]
+
+_BASE_SUBDIRS = {subdir for _, subdir in BASE_MODS}
+
+# All managed GameData subdirs, every one a candidate for removal during reconcile, except the
+# always-installed base mods (which reconcile must never remove even when no test requests them).
+_ALL_MOD_SUBDIRS = [
+    subdir
+    for comps in MODS.values()
+    for _, subdir in comps
+    if subdir not in _BASE_SUBDIRS
+]
 
 
 def _mod_archive_src(target, subdir):
@@ -144,31 +162,44 @@ def install(mods=(), ksp_dir=None):
     for module_manager in glob.glob(os.path.join(gamedata_root, "ModuleManager*.dll")):
         os.chmod(module_manager, 0o644)
 
+    # Always install the base dependencies (KSPCommunityPartModules + Harmony) first, then reconcile
+    # the optional managed mods to exactly the requested set.
+    for target, subdir in BASE_MODS:
+        _install_component(target, subdir, root, gamedata_root)
     _reconcile_mods(mods, root, gamedata_root)
 
 
+def _install_component(target, subdir, root, gamedata_root):
+    """Install (or refresh) one mod component from its Bazel-fetched archive into gamedata_root,
+    then lay any bundled config overlay on top (see _mod_config_overlay)."""
+    subprocess.check_call(["bazel", "build", "//tools/mods:" + target], cwd=root)
+    dst = os.path.join(gamedata_root, subdir)
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    shutil.copytree(os.path.join(root, _mod_archive_src(target, subdir)), dst)
+    overlay = _mod_config_overlay(root, subdir)
+    if os.path.isdir(overlay):
+        shutil.copytree(overlay, dst, dirs_exist_ok=True)
+    _normalize_permissions(dst)
+
+
 def _reconcile_mods(mods, root, gamedata_root):
-    """Make the managed mods in gamedata_root exactly the requested set."""
+    """Make the optional managed mods in gamedata_root exactly the requested set."""
     requested = [comp for mod in mods for comp in MODS[mod]]
     requested_subdirs = {subdir for _, subdir in requested}
 
-    # Remove any managed mod that is not requested.
+    # Remove any managed mod that is not requested. The always-installed base mods are excluded
+    # from _ALL_MOD_SUBDIRS, so they are never removed here.
     for subdir in _ALL_MOD_SUBDIRS:
         if subdir not in requested_subdirs:
             shutil.rmtree(os.path.join(gamedata_root, subdir), ignore_errors=True)
 
-    # Install (or refresh) each requested mod (and its dependencies) from its Bazel-fetched
-    # archive, then lay any bundled config overlay on top (see _mod_config_overlay).
+    # Install (or refresh) each requested mod (and its dependencies). Skip base subdirs, which are
+    # already installed unconditionally (a mod may list Harmony as a dependency component).
     for target, subdir in requested:
-        subprocess.check_call(["bazel", "build", "//tools/mods:" + target], cwd=root)
-        dst = os.path.join(gamedata_root, subdir)
-        if os.path.exists(dst):
-            shutil.rmtree(dst)
-        shutil.copytree(os.path.join(root, _mod_archive_src(target, subdir)), dst)
-        overlay = _mod_config_overlay(root, subdir)
-        if os.path.isdir(overlay):
-            shutil.copytree(overlay, dst, dirs_exist_ok=True)
-        _normalize_permissions(dst)
+        if subdir in _BASE_SUBDIRS:
+            continue
+        _install_component(target, subdir, root, gamedata_root)
 
 
 def main():
