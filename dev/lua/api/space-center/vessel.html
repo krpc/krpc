@@ -728,6 +728,38 @@ Created using <a class="reference internal" href="space-center.html#SpaceCenter.
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Vessel.loaded">
+<span class="sig-name descname"><span class="pre">loaded</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Vessel.loaded" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+because it is within loading range of the active vessel. A vessel that is not
+loaded exists only as orbital data and is always on-rails (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Vessel.packed" title="SpaceCenter.SpaceCenter.Vessel.packed"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.packed</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Vessel.packed">
+<span class="sig-name descname"><span class="pre">packed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Vessel.packed" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel is packed (on-rails). A packed vessel has its physics
+simulation suspended and follows its orbit analytically. A vessel that is not
+loaded (see <a class="reference internal" href="#SpaceCenter.SpaceCenter.Vessel.loaded" title="SpaceCenter.SpaceCenter.Vessel.loaded"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.loaded</span></code></a>) is always packed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Vessel.recoverable">
 <span class="sig-name descname"><span class="pre">recoverable</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Vessel.recoverable" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel is recoverable.</p>
@@ -2486,7 +2518,7 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.CrewMember.suit
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b3711c7">b3711c7</a>
+  <a href="https://github.com/krpc/krpc/commit/5087827">5087827</a>
 </p></div>
       
     </div>

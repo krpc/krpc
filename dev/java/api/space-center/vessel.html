@@ -714,6 +714,22 @@ Created using <a class="reference internal" href="space-center.html#krpc.client.
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getLoaded()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLoaded</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getLoaded()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+because it is within loading range of the active vessel. A vessel that is not
+loaded exists only as orbital data and is always on-rails (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getPacked()" title="krpc.client.services.SpaceCenter.Vessel.getPacked()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getPacked()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getPacked()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPacked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getPacked()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel is packed (on-rails). A packed vessel has its physics
+simulation suspended and follows its orbit analytically. A vessel that is not
+loaded (see <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getLoaded()" title="krpc.client.services.SpaceCenter.Vessel.getLoaded()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getLoaded()</span></code></a>) is always packed.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getRecoverable()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRecoverable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getRecoverable()" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel is recoverable.</p>
@@ -2222,7 +2238,7 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.CrewMe
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b3711c7">b3711c7</a>
+  <a href="https://github.com/krpc/krpc/commit/5087827">5087827</a>
 </p></div>
       
     </div>

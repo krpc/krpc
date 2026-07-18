@@ -32,6 +32,22 @@ Vessel
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Loaded(krpc_connection_t connection, bool * result)
+
+      Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+      because it is within loading range of the active vessel. A vessel that is not
+      loaded exists only as orbital data and is always on-rails (see :func:`krpc_SpaceCenter_Vessel_Packed`).
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Packed(krpc_connection_t connection, bool * result)
+
+      Whether the vessel is packed (on-rails). A packed vessel has its physics
+      simulation suspended and follows its orbit analytically. A vessel that is not
+      loaded (see :func:`krpc_SpaceCenter_Vessel_Loaded`) is always packed.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Recoverable(krpc_connection_t connection, bool * result)
 
       Whether the vessel is recoverable.

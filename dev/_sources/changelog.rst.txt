@@ -64,6 +64,7 @@ SpaceCenter service
 * Add Flight.SimulateAerodynamicTorqueAt (:issue:`825`)
 * Add Part.Drag and Part.Lift returning the aerodynamic drag and lift forces acting on an individual part (:issue:`459`)
 * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (:issue:`827`)
+* Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
 * Add Engine.Flameout (:issue:`311`)
 * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (:issue:`827`)
 * Add Module.AllFieldsById to expose all part module field values, including those not visible in the UI (:issue:`858`)

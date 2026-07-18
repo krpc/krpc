@@ -719,6 +719,32 @@ Created using <a class="reference internal" href="space-center.html#property-KRP
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.Loaded">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Loaded</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Loaded" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel is loaded, i.e. its parts are instantiated in the scene
+because it is within loading range of the active vessel. A vessel that is not
+loaded exists only as orbital data and is always on-rails (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Packed" title="KRPC.Client.Services.SpaceCenter.Vessel.Packed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.Packed</span></code></a>).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.Packed">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Packed</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Packed" title="Link to this definition">#</a></dt>
+<dd><p>Whether the vessel is packed (on-rails). A packed vessel has its physics
+simulation suspended and follows its orbit analytically. A vessel that is not
+loaded (see <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Loaded" title="KRPC.Client.Services.SpaceCenter.Vessel.Loaded property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.Loaded</span></code></a>) is always packed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.Recoverable">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Recoverable</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Recoverable" title="Link to this definition">#</a></dt>
 <dd><p>Whether the vessel is recoverable.</p>
@@ -2312,7 +2338,7 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b3711c7">b3711c7</a>
+  <a href="https://github.com/krpc/krpc/commit/5087827">5087827</a>
 </p></div>
       
     </div>
