@@ -136,6 +136,7 @@ SpaceCenter service
 * Add Orbit.OrbitalEnergy (:issue:`303`)
 * Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach class exposing the time, distance, positions, velocities, relative position/velocity and relative speed at a close approach with a target orbit, plus the vessels or bodies involved (:issue:`334`)
 * Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (:issue:`334`)
+* Fix Part.Lift, Flight.Lift and Flight.AerodynamicForce including stale body lift for parts whose body lift the game suppresses . e.g. a pod with a heatshield attached (:issue:`971`)
 
 
 KerbalAlarmClock service
