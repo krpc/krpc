@@ -203,8 +203,8 @@ def update_thread(
             except IndexError:
                 pass
             except:  # noqa pylint: disable=bare-except
-                # TODO: is there a better way to catch exceptions when the
-                #      thread is forcibly stopped (e.g. by CTRL+c)?
+                # Any failure here (the socket closing as the client shuts down,
+                # or the thread being interrupted) should just end the update thread.
                 return
             if stop.is_set():
                 connection.close()
