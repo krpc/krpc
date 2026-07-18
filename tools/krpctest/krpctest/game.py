@@ -49,6 +49,14 @@ _MOD_PARTS = {
     "DMagic": "dmagicSensorTest",
 }
 
+# Some mods add no part and no service, but patch a part module onto existing parts (Action
+# Groups Extended adds a ModuleAGX module to every part via ModuleManager; it is wrapped by the
+# SpaceCenter Control class). Detect these by probing the loaded part prefabs for that module,
+# via the test-only TestingTools helper.
+_MOD_MODULES = {
+    "AGExt": "ModuleAGX",
+}
+
 # The KSP process this test run launched, or None if KSP was started externally (a
 # manually-started game is never killed or reinstalled).
 _owned_ksp = None  # pylint: disable=invalid-name
@@ -113,11 +121,16 @@ def _installed_mods(conn):
         for name, part in _MOD_PARTS.items()
         if conn.testing_tools.part_available(part)
     }
+    installed |= {
+        name
+        for name, module in _MOD_MODULES.items()
+        if conn.testing_tools.part_module_available(module)
+    }
     return installed
 
 
 def _validate_mods(required):
-    known = set(_MOD_SERVICES) | set(_MOD_PARTS)
+    known = set(_MOD_SERVICES) | set(_MOD_PARTS) | set(_MOD_MODULES)
     unknown = set(required) - known
     if unknown:
         raise ValueError(

@@ -39,6 +39,27 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// Whether any loaded part prefab has a part module with the given name. Used by the test
+        /// framework to detect mods that add no part and no dedicated kRPC service, but patch a
+        /// module onto existing parts (e.g. Action Groups Extended, whose ModuleManager patch adds
+        /// a ModuleAGX module to every part; wrapped by the SpaceCenter Control class).
+        /// </summary>
+        /// <param name="name">The part module class name, e.g. "ModuleAGX".</param>
+        [KRPCProcedure]
+        public static bool PartModuleAvailable (string name)
+        {
+            foreach (var part in PartLoader.LoadedPartsList) {
+                var prefab = part.partPrefab;
+                if (prefab == null)
+                    continue;
+                foreach (PartModule module in prefab.Modules)
+                    if (module.moduleName == name)
+                        return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Quit the game, closing Kerbal Space Program and returning to the desktop.
         /// Works from any scene, including in-flight, and skips the confirmation dialog
         /// that the main-menu quit button normally shows.

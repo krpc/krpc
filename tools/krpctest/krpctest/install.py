@@ -25,8 +25,8 @@ from krpctest.version import __version__
 
 # Managed third-party mods: name accepted by --mods -> list of components it installs, each a
 # (Bazel target under //tools/mods, GameData subdir it installs as) pair. Most mods are a
-# single component; RealChute also pulls in its two runtime dependencies, whose assemblies
-# RealChute hard-depends on (its part modules do not register without them).
+# single component; RealChute and AGExt also pull in the shared ClickThroughBlocker /
+# ToolbarControl / Harmony dependencies, whose assemblies their plugins hard-depend on.
 MODS = {
     "RemoteTech": [("remotetech", "RemoteTech")],
     "InfernalRobotics": [("infernal_robotics", "MagicSmokeIndustries")],
@@ -38,6 +38,13 @@ MODS = {
         ("toolbarcontrol", "001_ToolbarControl"),
     ],
     "DMagic": [("dmagic_science_animate", "DMagicScienceAnimate")],
+    "AGExt": [
+        ("agext", "Diazo"),
+        ("harmony", "000_Harmony"),
+        ("clickthroughblocker", "000_ClickThroughBlocker"),
+        ("toolbarcontrol", "001_ToolbarControl"),
+        ("spacetuxlibrary", "SpaceTuxLibrary"),
+    ],
 }
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.
