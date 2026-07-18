@@ -14,7 +14,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         protected override void Load ()
         {
-            ExternalAPI.AGX.Load ();
+            ExternalAPI.AGExt.Load ();
             ExternalAPI.FAR.Load ();
             ExternalAPI.RemoteTech.Load ();
         }
