@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -11,19 +13,62 @@ namespace KRPC.Server.WebSockets
     {
         const string WEB_SOCKETS_KEY = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
         const int BUFFER_SIZE = 4096;
+        // Seconds to wait for the rest of a request that arrived split across reads before rejecting it.
+        const double TIMEOUT = 3;
         static readonly SHA1 sha1 = SHA1.Create ();
 
+        static readonly IDictionary<IClient<byte,byte>, DynamicBuffer> readBuffers =
+            new Dictionary<IClient<byte,byte>, DynamicBuffer> ();
+        static readonly IDictionary<IClient<byte,byte>, Stopwatch> readTimers =
+            new Dictionary<IClient<byte,byte>, Stopwatch> ();
+
         /// <summary>
-        /// Read a websockets connection request. If the request is invalid,
-        /// writes the approprate HTTP response and denies the connection attempt.
+        /// Read a websockets connection request. If the request is invalid, writes the appropriate
+        /// HTTP response and denies the connection attempt. Returns null without denying the request
+        /// if it has not been fully received yet, in which case the connection attempt should be
+        /// retried later.
         /// </summary>
         public static Request ReadRequest (ClientRequestingConnectionEventArgs<byte,byte> args)
         {
-            var stream = args.Client.Stream;
+            var client = args.Client;
+            var stream = client.Stream;
+
+            // The request may arrive split across several reads. Accumulate it until the blank line
+            // terminating the HTTP headers has been received.
+            DynamicBuffer buffer;
+            if (!readBuffers.TryGetValue (client, out buffer)) {
+                buffer = new DynamicBuffer ();
+                readBuffers [client] = buffer;
+            }
+            if (stream.DataAvailable) {
+                var chunk = new byte [BUFFER_SIZE];
+                var count = stream.Read (chunk, 0);
+                buffer.Append (chunk, 0, count);
+            }
+
+            if (!EndOfHeaders (buffer)) {
+                // Not all of the request has arrived. Wait for more data, up to the timeout.
+                Stopwatch timer;
+                if (!readTimers.TryGetValue (client, out timer)) {
+                    timer = Stopwatch.StartNew ();
+                    readTimers [client] = timer;
+                }
+                if (timer.ElapsedSeconds () > TIMEOUT) {
+                    Reset (client);
+                    Logger.WriteLine (
+                        "WebSockets connection request not received after waiting " + TIMEOUT + " seconds",
+                        Logger.Severity.Error);
+                    args.Request.Deny ();
+                    stream.Write (Response.CreateBadRequest ().ToBytes ());
+                    return null;
+                }
+                // Leave the connection attempt pending; it will be retried.
+                return null;
+            }
+
+            Reset (client);
             try {
-                var buffer = new byte [BUFFER_SIZE];
-                var count = stream.Read (buffer, 0);
-                var request = Request.FromBytes (buffer, 0, count);
+                var request = Request.FromBytes (buffer.GetBuffer (), 0, buffer.Length);
                 CheckValid (request);
                 Logger.WriteLine ("WebSockets: received valid connection request", Logger.Severity.Debug);
                 return request;
@@ -33,12 +78,33 @@ namespace KRPC.Server.WebSockets
                 stream.Write (e.Response.ToBytes ());
                 return null;
             } catch (MalformedRequestException e) {
-                // TODO: wait for timeout seconds to see if the request was truncated
                 Logger.WriteLine ("Malformed WebSockets connection request: " + e.Message, Logger.Severity.Error);
                 args.Request.Deny ();
                 stream.Write (Response.CreateBadRequest ().ToBytes ());
                 return null;
             }
+        }
+
+        static void Reset (IClient<byte,byte> client)
+        {
+            readBuffers.Remove (client);
+            readTimers.Remove (client);
+        }
+
+        /// <summary>
+        /// Returns true once the buffer contains the blank line (\r\n\r\n) that terminates the
+        /// HTTP request headers.
+        /// </summary>
+        static bool EndOfHeaders (DynamicBuffer buffer)
+        {
+            var data = buffer.GetBuffer ();
+            var length = buffer.Length;
+            for (var i = 0; i + 3 < length; i++) {
+                if (data [i] == (byte)'\r' && data [i + 1] == (byte)'\n' &&
+                    data [i + 2] == (byte)'\r' && data [i + 3] == (byte)'\n')
+                    return true;
+            }
+            return false;
         }
 
         public static byte[] WriteResponse (string key)

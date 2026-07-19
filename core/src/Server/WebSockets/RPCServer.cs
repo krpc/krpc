@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Messages;
@@ -45,6 +44,9 @@ namespace KRPC.Server.WebSockets
                 Logger.WriteLine ("WebSockets: client connection denied (" + address + ")", Logger.Severity.Error);
                 return null;
             }
+            if (request == null)
+                // The request has not been fully received yet; retry on a later update.
+                return null;
             var clientName = GetClientName (request);
             clientKeys [args.Client] = request.Headers ["sec-websocket-key"].Single ();
             return new RPCClient (clientName, args.Client, shouldEcho);
@@ -69,14 +71,10 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         public static string GetClientName (HTTP.Request request)
         {
-            string name = string.Empty;
-            var query = request.URI.Query;
-            // TODO: make this name extraction more robust
-            if (query.StartsWith ("?name=", StringComparison.CurrentCulture))
-                name = query.Substring ("?name=".Length);
-            else if (request.Headers.ContainsKey ("origin"))
+            var name = request.QueryParameter ("name");
+            if (name == null && request.Headers.ContainsKey ("origin"))
                 name = request.Headers ["origin"].First ();
-            return Uri.UnescapeDataString (name);
+            return name ?? string.Empty;
         }
     }
 }

@@ -137,10 +137,74 @@ namespace KRPC.Test.Server.WebSockets
         }
 
         [Test]
+        public void GetClientNameFromReorderedQuery ()
+        {
+            var request = KRPC.Server.HTTP.Request.FromString (
+                "GET /?foo=bar&name=Jeb%20Kerman HTTP/1.1\r\nHost: localhost\r\n\r\n");
+            Assert.AreEqual (
+                "Jeb Kerman", KRPC.Server.WebSockets.RPCServer.GetClientName (request));
+        }
+
+        [Test]
         public void InvalidConnectionRequestGarbage ()
         {
-            var response = CheckInvalidConnectionRequest ("deadbeef".ToBytes ());
+            var response = CheckInvalidConnectionRequest ("deadbeef\r\n\r\n");
             Assert.AreEqual ("HTTP/1.1 400 Bad Request\r\n\r\n", response);
+        }
+
+        [Test]
+        public void ValidConnectionRequestSplitAcrossReads ()
+        {
+            var ascii = Encoding.ASCII;
+            var requestBytes = ascii.GetBytes (
+                "GET / HTTP/1.1\r\n" +
+                "Host: localhost\r\n" +
+                "Upgrade: websocket\r\n" +
+                "Connection: Upgrade\r\n" +
+                "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n" +
+                "Sec-WebSocket-Version: 13\r\n\r\n");
+            var split = requestBytes.Length / 2;
+
+            // Start with only the first half of the request available to be read.
+            var inputStream = new MemoryStream ();
+            inputStream.Write (requestBytes, 0, split);
+            inputStream.Seek (0, SeekOrigin.Begin);
+            var responseStream = new MemoryStream ();
+            var stream = new TestStream (inputStream, responseStream);
+
+            var mockByteServer = new Mock<IServer<byte, byte>> ();
+            var byteServer = mockByteServer.Object;
+            var byteClient = new TestClient (stream);
+
+            var server = new KRPC.Server.WebSockets.RPCServer (byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
+            server.Start ();
+
+            // The partial request leaves the connection attempt pending, neither allowed nor denied.
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte, byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+            Assert.IsTrue (eventArgs.Request.StillPending);
+
+            // Deliver the rest of the request, then retry the connection attempt.
+            inputStream.Seek (0, SeekOrigin.End);
+            inputStream.Write (requestBytes, split, requestBytes.Length - split);
+            inputStream.Seek (split, SeekOrigin.Begin);
+
+            var eventArgs2 = new ClientRequestingConnectionEventArgs<byte, byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs2);
+            Assert.IsTrue (eventArgs2.Request.ShouldAllow);
+
+            server.Update ();
+            Assert.AreEqual (1, server.Clients.Count ());
+
+            var response = ascii.GetString (responseStream.ToArray ());
+            Assert.AreEqual (
+                "HTTP/1.1 101 Switching Protocols\r\n" +
+                "Upgrade: websocket\r\n" +
+                "Connection: Upgrade\r\n" +
+                "Sec-WebSocket-Accept: s3pPLMBiTxaQ9kYGzzhZRbK+xOo=\r\n\r\n",
+                response
+            );
         }
 
         [Test]

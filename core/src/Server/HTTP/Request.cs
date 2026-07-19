@@ -26,6 +26,26 @@ namespace KRPC.Server.HTTP
             return FromString (Encoding.ASCII.GetString (data, index, count));
         }
 
+        /// <summary>
+        /// Get the value of a query string parameter, or null if it is not present. Handles the
+        /// parameter appearing in any position, and percent-decodes the value.
+        /// </summary>
+        public string QueryParameter (string key)
+        {
+            var query = URI.Query;
+            if (query.StartsWith ("?", StringComparison.Ordinal))
+                query = query.Substring (1);
+            foreach (var pair in query.Split ('&')) {
+                if (pair.Length == 0)
+                    continue;
+                var i = pair.IndexOf ('=');
+                var name = i == -1 ? pair : pair.Substring (0, i);
+                if (Uri.UnescapeDataString (name) == key)
+                    return i == -1 ? string.Empty : Uri.UnescapeDataString (pair.Substring (i + 1));
+            }
+            return null;
+        }
+
         public static Request FromString (string content)
         {
             var request = new Request ();

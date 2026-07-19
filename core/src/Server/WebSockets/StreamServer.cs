@@ -35,6 +35,9 @@ namespace KRPC.Server.WebSockets
             var request = ConnectionRequest.ReadRequest (args);
             if (args.Request.ShouldDeny)
                 return null;
+            if (request == null)
+                // The request has not been fully received yet; retry on a later update.
+                return null;
             var guid = GetGuid (request);
             if (guid == Guid.Empty) {
                 args.Client.Stream.Write (HTTP.Response.CreateBadRequest ().ToBytes ());
@@ -63,13 +66,11 @@ namespace KRPC.Server.WebSockets
         /// </summary>
         public static Guid GetGuid (HTTP.Request request)
         {
-            // TODO: make this id extraction more robust
-            var query = request.URI.Query;
-            if (!query.StartsWith ("?id=", StringComparison.CurrentCulture)) {
+            var id = request.QueryParameter ("id");
+            if (id == null) {
                 Logger.WriteLine ("Invalid WebSockets URI: id is not set in query string", Logger.Severity.Error);
                 return Guid.Empty;
             }
-            var id = query.Substring ("?id=".Length);
             try {
                 var bytes = Convert.FromBase64String (id);
                 var length = bytes.Length;
