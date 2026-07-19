@@ -65,6 +65,7 @@
     <Compile Include="ExtensionMethods\ParachuteSafeStateExtensions.cs" />
     <Compile Include="ExtensionMethods\ParachuteStateExtensions.cs" />
     <Compile Include="ExtensionMethods\PartExtensions.cs" />
+    <Compile Include="ExtensionMethods\PartModuleExtensions.cs" />
     <Compile Include="ExtensionMethods\RadiatorStateExtensions.cs" />
     <Compile Include="ExtensionMethods\ResourceFlowModeExtensions.cs" />
     <Compile Include="ExtensionMethods\SolarPanelStateExtensions.cs" />

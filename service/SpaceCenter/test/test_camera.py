@@ -45,6 +45,29 @@ class TestCamera(krpctest.TestCase):
 
 
 class CameraTestBase:
+    def reset_distance(self):
+        self.camera.distance = self.camera.default_distance
+
+    def test_heading(self):
+        self.camera.pitch = 0
+        self.reset_distance()
+        for heading in self.headings:
+            self.camera.heading = heading
+            self.wait(0.01)
+            self.assertAlmostEqual(heading, self.camera.heading, places=3)
+
+    def test_pitch(self):
+        self.camera.heading = 0
+        self.reset_distance()
+        for pitch in self.pitches:
+            self.assertGreater(pitch, self.camera.min_pitch)
+            self.assertLess(pitch, self.camera.max_pitch)
+            self.camera.pitch = pitch
+            self.wait(0.01)
+            self.assertAlmostEqual(pitch, self.camera.pitch, places=1)
+
+
+class CameraDistanceTestBase:
     def test_distance(self):
         self.assertGreater(self.camera.default_distance, self.camera.min_distance)
         self.assertLess(self.camera.default_distance, self.camera.max_distance)
@@ -55,26 +78,8 @@ class CameraTestBase:
             self.wait(0.5)
             self.assertAlmostEqual(distance, self.camera.distance, places=3)
 
-    def test_heading(self):
-        self.camera.pitch = 0
-        self.camera.distance = self.camera.default_distance
-        for heading in self.headings:
-            self.camera.heading = heading
-            self.wait(0.01)
-            self.assertAlmostEqual(heading, self.camera.heading, places=3)
 
-    def test_pitch(self):
-        self.camera.heading = 0
-        self.camera.distance = self.camera.default_distance
-        for pitch in self.pitches:
-            self.assertGreater(pitch, self.camera.min_pitch)
-            self.assertLess(pitch, self.camera.max_pitch)
-            self.camera.pitch = pitch
-            self.wait(0.01)
-            self.assertAlmostEqual(pitch, self.camera.pitch, places=1)
-
-
-class TestCameraFlight(krpctest.TestCase, CameraTestBase):
+class TestCameraFlight(krpctest.TestCase, CameraTestBase, CameraDistanceTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
@@ -90,25 +95,32 @@ class TestCameraFlight(krpctest.TestCase, CameraTestBase):
         cls.distances = (1, 5, 10, 20)
 
 
-# TODO: test camera in IVA mode
-# class TestCameraIVA(krpctest.TestCase, CameraTestBase):
-#     @classmethod
-#     def setUpClass(cls):
-#         super().setUpClass()
-#         cls.camera = cls.space_center.camera
-#         cls.mode = cls.space_center.CameraMode
-#         cls.camera.mode = cls.mode.iva
-#         cls.wait(1)
-#         cls.pitches = range(-30, 30, 5)
-#         cls.headings = range(-60, 60, 5)
-#
-#     @classmethod
-#     def tearDownClass(cls):
-#         cls.camera.mode = cls.mode.automatic
-#         cls.wait(1)
+class TestCameraIVA(krpctest.TestCase, CameraTestBase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.set_circular_orbit("Kerbin", 1000000)
+        space_center = cls.connect().space_center
+        cls.camera = space_center.camera
+        cls.mode = space_center.CameraMode
+        cls.camera.mode = cls.mode.iva
+        cls.wait(2)
+        # Ranges chosen to lie strictly within the IVA camera's pitch and
+        # rotation limits
+        cls.pitches = range(-25, 30, 5)
+        cls.headings = range(-55, 60, 5)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.camera.mode = cls.mode.automatic
+        cls.wait(2)
+
+    def reset_distance(self):
+        # The IVA camera has no distance
+        pass
 
 
-class TestCameraMap(krpctest.TestCase, CameraTestBase):
+class TestCameraMap(krpctest.TestCase, CameraTestBase, CameraDistanceTestBase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()

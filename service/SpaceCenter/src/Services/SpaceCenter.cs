@@ -657,7 +657,11 @@ namespace KRPC.SpaceCenter.Services
             get { return 6.67408e-11; }
         }
 
-        // TODO: warp functionality should be available in other game scenes? not just flight?
+        // The warp RPCs are gated to the flight scene because they are defined in terms
+        // of the active vessel: the rails-warp altitude limits, the physics-warp fallback
+        // and CanRailsWarpAt all read its state. KSP can also warp on rails in the space
+        // center and tracking station scenes; exposing that would need a vessel-independent
+        // API surface.
 
         /// <summary>
         /// The current time warp mode. Returns <see cref="WarpMode.None"/> if time

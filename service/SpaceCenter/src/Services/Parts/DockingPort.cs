@@ -131,8 +131,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
 
             // Try calling "Decouple Node" or "Undock" on this part and on the port we are docked to, if any
-            if (InvokeEvent (port, "Decouple Node") || InvokeEvent (port, "Undock") ||
-                (dockedPort != null && (InvokeEvent (dockedPort, "Decouple Node") || InvokeEvent (dockedPort, "Undock")))) {
+            if (port.InvokeEvent ("Decouple Node") || port.InvokeEvent ("Undock") ||
+                (dockedPort != null && (dockedPort.InvokeEvent ("Decouple Node") || dockedPort.InvokeEvent ("Undock")))) {
                 return PartSeparation.NewVessel (preVesselIds, () => State != DockingPortState.Docked);
             }
 
@@ -354,21 +354,5 @@ namespace KRPC.SpaceCenter.Services.Parts
             throw new ArgumentException ("Unknown docking port state '" + node.state + "'");
         }
 
-        /// <summary>
-        /// Try invoking a named event for a docking port. Returns true if an event is found
-        /// and invoked.
-        /// </summary>
-        // TODO: move to PartModule extension methods
-        static bool InvokeEvent (PartModule module, string eventName)
-        {
-            var e = module.Events
-                .Where (x => x != null && (HighLogic.LoadedSceneIsEditor ? x.guiActiveEditor : x.guiActive) && x.active)
-                .FirstOrDefault (x => x.guiName == eventName);
-            if (e != null) {
-                e.Invoke ();
-                return true;
-            }
-            return false;
-        }
     }
 }

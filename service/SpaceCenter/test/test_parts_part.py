@@ -253,7 +253,8 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual([], part.children)
         self.assertFalse(part.axially_attached)
         self.assertTrue(part.radially_attached)
-        # TODO: why is this not -1? Docking ports aren't activated in stages?
+        # Docking ports are stageable (they have a staging icon, and
+        # activating their stage decouples the port), so they have a stage
         self.assertEqual(3, part.stage)
         self.assertEqual(3, part.decouple_stage)
         self.assertFalse(part.massless)
@@ -389,9 +390,10 @@ class TestPartsPart(krpctest.TestCase):
         self.assertEqual(1, part.decouple_stage)
         self.assertFalse(part.massless)
         self.assertAlmostEqual(30, part.mass, places=4)
-        # TODO: why is the dry mass != total mass,
-        # part doens't have any resources!?
+        # The 10 kg above the dry mass is the intake's IntakeAir resource
+        # (2 units at 5 kg each)
         self.assertAlmostEqual(20, part.dry_mass, places=4)
+        self.assertEqual(["IntakeAir"], part.resources.names)
         self.assertEqual(10, part.impact_tolerance)
         self.assertTrue(part.crossfeed)
         self.assertFalse(part.is_fuel_line)
