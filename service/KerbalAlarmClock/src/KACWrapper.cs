@@ -400,6 +400,12 @@ namespace KRPC.KerbalAlarmClock
 
                     RepeatAlarmField = KACAlarmType.GetField("RepeatAlarm");
                     RepeatAlarmPeriodProperty = KACAlarmType.GetProperty("RepeatAlarmPeriodUT");
+                    SupportsRepeatProperty = KACAlarmType.GetProperty("SupportsRepeat");
+                    SupportsRepeatPeriodProperty = KACAlarmType.GetProperty("SupportsRepeatPeriod");
+
+                    EnabledField = KACAlarmType.GetField("Enabled");
+                    PlaySoundField = KACAlarmType.GetField("PlaySound");
+                    TriggeredField = KACAlarmType.GetField("Triggered", BindingFlags.NonPublic | BindingFlags.Instance);
 
                     //PropertyInfo[] pis = KACAlarmType.GetProperties();
                     //foreach (PropertyInfo pi in pis)
@@ -548,6 +554,48 @@ namespace KRPC.KerbalAlarmClock
                         catch (Exception) { return 0; }
                     }
                     set { RepeatAlarmPeriodProperty.SetValue(actualAlarm, value, null); }
+                }
+                private PropertyInfo SupportsRepeatProperty;
+                /// <summary>
+                /// Whether this alarm's type supports repeating
+                /// </summary>
+                public Boolean SupportsRepeat
+                {
+                    get { return (Boolean)SupportsRepeatProperty.GetValue(actualAlarm, null); }
+                }
+                private PropertyInfo SupportsRepeatPeriodProperty;
+                /// <summary>
+                /// Whether this alarm's type supports a repeat period
+                /// </summary>
+                public Boolean SupportsRepeatPeriod
+                {
+                    get { return (Boolean)SupportsRepeatPeriodProperty.GetValue(actualAlarm, null); }
+                }
+                private FieldInfo EnabledField;
+                /// <summary>
+                /// Whether the alarm is enabled
+                /// </summary>
+                public Boolean Enabled
+                {
+                    get { return (Boolean)EnabledField.GetValue(actualAlarm); }
+                    set { EnabledField.SetValue(actualAlarm, value); }
+                }
+                private FieldInfo PlaySoundField;
+                /// <summary>
+                /// Whether the alarm plays a sound when it fires
+                /// </summary>
+                public Boolean PlaySound
+                {
+                    get { return (Boolean)PlaySoundField.GetValue(actualAlarm); }
+                    set { PlaySoundField.SetValue(actualAlarm, value); }
+                }
+                private FieldInfo TriggeredField;
+                /// <summary>
+                /// Whether the alarm has been triggered (the field is internal to the mod)
+                /// </summary>
+                public Boolean Triggered
+                {
+                    get { return (Boolean)TriggeredField.GetValue(actualAlarm); }
                 }
 
                 public enum AlarmStateEventsEnum

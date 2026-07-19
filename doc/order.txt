@@ -1598,8 +1598,13 @@ KerbalAlarmClock.Alarm.ID
 KerbalAlarmClock.Alarm.Name
 KerbalAlarmClock.Alarm.Notes
 KerbalAlarmClock.Alarm.Remaining
+KerbalAlarmClock.Alarm.Enabled
+KerbalAlarmClock.Alarm.PlaySound
+KerbalAlarmClock.Alarm.Triggered
 KerbalAlarmClock.Alarm.Repeat
+KerbalAlarmClock.Alarm.SupportsRepeat
 KerbalAlarmClock.Alarm.RepeatPeriod
+KerbalAlarmClock.Alarm.SupportsRepeatPeriod
 KerbalAlarmClock.Alarm.Vessel
 KerbalAlarmClock.Alarm.XferOriginBody
 KerbalAlarmClock.Alarm.XferTargetBody
