@@ -107,23 +107,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the wheel.
         /// </summary>
         [KRPCProperty]
-        public WheelState State {
-            get {
-                if (damage != null && damage.isDamaged)
-                    return WheelState.Broken;
-                if (deployment != null) {
-                    if (Math.Abs(deployment.position - deployment.deployedPosition) < 0.0001)
-                        return WheelState.Deployed;
-                    else if (Math.Abs(deployment.position - deployment.retractedPosition) < 0.0001)
-                        return WheelState.Retracted;
-                    else if (deployment.stateString.Equals(deployment.st_deploying.name))
-                        return WheelState.Deploying;
-                    else if (deployment.stateString.Equals(deployment.st_retracting.name))
-                        return WheelState.Retracting;
-                    throw new InvalidOperationException();
-                }
-                return WheelState.Deployed;
-            }
+        public DeployableState State {
+            get { return deployment.ToDeployableState (damage); }
         }
 
         /// <summary>
@@ -197,7 +182,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployed {
-            get { return State == WheelState.Deployed; }
+            get { return State == DeployableState.Deployed; }
             set {
                 CheckDeployment();
                 deployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));

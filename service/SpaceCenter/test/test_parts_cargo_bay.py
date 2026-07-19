@@ -13,32 +13,32 @@ class TestPartsCargoBay(krpctest.TestCase):
         vessel = sc.active_vessel
         cls.control = vessel.control
         cls.parts = vessel.parts
-        cls.state = sc.CargoBayState
+        cls.state = sc.DeployableState
 
     def check_open_close(self, bay):
-        self.assertEqual(bay.state, self.state.closed)
+        self.assertEqual(bay.state, self.state.retracted)
         self.assertFalse(bay.open)
         self.assertFalse(self.control.cargo_bays)
 
         bay.open = True
         self.wait()
 
-        self.assertEqual(bay.state, self.state.opening)
+        self.assertEqual(bay.state, self.state.deploying)
         self.assertTrue(bay.open)
         self.assertTrue(self.control.cargo_bays)
 
         self.wait_while(
-            lambda: bay.state == self.state.opening,
+            lambda: bay.state == self.state.deploying,
             message="cargo bay to finish opening",
         )
 
-        self.assertEqual(bay.state, self.state.open)
+        self.assertEqual(bay.state, self.state.deployed)
         self.assertTrue(bay.open)
 
         bay.open = False
         self.wait()
 
-        self.assertEqual(bay.state, self.state.closing)
+        self.assertEqual(bay.state, self.state.retracting)
         self.assertFalse(bay.open)
 
         # After the close animation stops, ModuleCargoBay can take an extra
@@ -47,11 +47,11 @@ class TestPartsCargoBay(krpctest.TestCase):
         # terminal closed state rather than just "no longer closing", so the
         # assertion doesn't race that lock-lag (seen on mk3CargoBayS).
         self.wait_while(
-            lambda: bay.state in (self.state.closing, self.state.open),
+            lambda: bay.state in (self.state.retracting, self.state.deployed),
             message="cargo bay to close and lock",
         )
 
-        self.assertEqual(bay.state, self.state.closed)
+        self.assertEqual(bay.state, self.state.retracted)
         self.assertFalse(bay.open)
         self.assertFalse(self.control.cargo_bays)
 
@@ -77,7 +77,7 @@ class TestPartsCargoBay(krpctest.TestCase):
         self.assertTrue(self.control.cargo_bays)
         for bay in self.parts.cargo_bays:
             self.wait_while(
-                lambda bay=bay: bay.state != self.state.open,
+                lambda bay=bay: bay.state != self.state.deployed,
                 message="cargo bay to open",
             )
             self.assertTrue(bay.open)
@@ -89,7 +89,7 @@ class TestPartsCargoBay(krpctest.TestCase):
         self.assertFalse(self.control.cargo_bays)
         for bay in self.parts.cargo_bays:
             self.wait_while(
-                lambda bay=bay: bay.state != self.state.closed,
+                lambda bay=bay: bay.state != self.state.retracted,
                 message="cargo bay to close",
             )
             self.assertFalse(bay.open)

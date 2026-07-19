@@ -55,25 +55,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the antenna.
         /// </summary>
         [KRPCProperty]
-        public AntennaState State {
+        public DeployableState State {
             get {
-                if (deployment != null) {
-                    switch (deployment.deployState) {
-                    case ModuleDeployablePart.DeployState.EXTENDED:
-                        return AntennaState.Deployed;
-                    case ModuleDeployablePart.DeployState.EXTENDING:
-                        return AntennaState.Deploying;
-                    case ModuleDeployablePart.DeployState.RETRACTED:
-                        return AntennaState.Retracted;
-                    case ModuleDeployablePart.DeployState.RETRACTING:
-                        return AntennaState.Retracting;
-                    case ModuleDeployablePart.DeployState.BROKEN:
-                        return AntennaState.Broken;
-                    default:
-                        throw new InvalidOperationException ();
-                    }
-                }
-                return AntennaState.Deployed;
+                if (deployment == null)
+                    return DeployableState.Deployed;
+                return deployment.deployState.ToDeployableState ();
             }
         }
 
@@ -94,7 +80,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public bool Deployed {
-            get { return State == AntennaState.Deployed; }
+            get { return State == DeployableState.Deployed; }
             set {
                 if (deployment == null)
                     throw new InvalidOperationException ("Antenna is not deployable");

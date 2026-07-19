@@ -59,22 +59,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part Part { get; private set; }
 
         /// <summary>
-        /// The state of the harvester.
+        /// The deployment state of the harvester. Whether it is drilling is
+        /// reported separately by <see cref="Active" />.
         /// </summary>
+        /// <remarks>
+        /// A harvester is never <see cref="DeployableState.Broken" />, as the game
+        /// does not track damage for them.
+        /// </remarks>
         [KRPCProperty]
-        public ResourceHarvesterState State {
+        public DeployableState State {
             get {
+                // An activated harvester is necessarily fully deployed. This has to be
+                // checked first, as the drill keeps animating while it is running and
+                // so the animation alone cannot tell operation from deployment.
                 if (harvester.IsActivated)
-                    return ResourceHarvesterState.Active;
+                    return DeployableState.Deployed;
                 // ActiveAnimation can be null/destroyed (e.g. while the vessel is
                 // packed); guard it so the state can still be reported.
                 var animation = animator.ActiveAnimation;
                 if (animation != null && animation.isPlaying)
-                    return animator.isDeployed ? ResourceHarvesterState.Deploying : ResourceHarvesterState.Retracting;
-                else if (animator.isDeployed)
-                    return ResourceHarvesterState.Deployed;
-                else
-                    return ResourceHarvesterState.Retracted;
+                    return animator.isDeployed ? DeployableState.Deploying : DeployableState.Retracting;
+                return animator.isDeployed ? DeployableState.Deployed : DeployableState.Retracted;
             }
         }
 
@@ -83,10 +88,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployed {
-            get {
-                var state = State;
-                return state == ResourceHarvesterState.Deployed || state == ResourceHarvesterState.Active;
-            }
+            get { return State == DeployableState.Deployed; }
             set {
                 if (value && !animator.isDeployed)
                     animator.DeployModule ();
@@ -107,13 +109,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public bool Active {
-            get { return State == ResourceHarvesterState.Active; }
+            get { return harvester.IsActivated; }
             set {
                 if (!Deployed) {
                     // The converter cannot start until the deploy animation has
                     // finished; defer the requested state until then rather than
                     // silently dropping it.
-                    if (State == ResourceHarvesterState.Deploying)
+                    if (State == DeployableState.Deploying)
                         ResourceHarvesterAddon.Request (harvester, animator, value);
                     return;
                 }

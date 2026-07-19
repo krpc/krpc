@@ -59,17 +59,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The state of the cargo bay.
         /// </summary>
+        /// <remarks>
+        /// A cargo bay is never <see cref="DeployableState.Broken" />, as the game
+        /// does not track damage for them.
+        /// </remarks>
         [KRPCProperty]
-        public CargoBayState State {
+        public DeployableState State {
             get {
                 if (bay.ClosedAndLocked ())
-                    return CargoBayState.Closed;
+                    return DeployableState.Retracted;
                 else if (!animation.IsMoving ())
-                    return CargoBayState.Open;
+                    return DeployableState.Deployed;
                 else if (!animation.animSwitch)
-                    return animation.startEventGUIName == "Open" ? CargoBayState.Opening : CargoBayState.Closing;
+                    return animation.startEventGUIName == "Open" ? DeployableState.Deploying : DeployableState.Retracting;
                 else
-                    return animation.startEventGUIName == "Close" ? CargoBayState.Opening : CargoBayState.Closing;
+                    return animation.startEventGUIName == "Close" ? DeployableState.Deploying : DeployableState.Retracting;
             }
         }
 
@@ -80,7 +84,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Open {
             get {
                 var state = State;
-                return state == CargoBayState.Open || state == CargoBayState.Opening;
+                return state == DeployableState.Deployed || state == DeployableState.Deploying;
             }
             set {
                 var openEvent = OpenEvent;

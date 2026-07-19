@@ -12,7 +12,7 @@ class TestPartsSolarPanel(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
-        cls.state = cls.connect().space_center.SolarPanelState
+        cls.state = cls.connect().space_center.DeployableState
         cls.panels = parts.solar_panels
         cls.deployable_panel = parts.with_name("largeSolarPanel")[0].solar_panel
         cls.fixed_panel = parts.with_name("solarPanels5")[0].solar_panel
@@ -20,7 +20,7 @@ class TestPartsSolarPanel(krpctest.TestCase):
     def test_fixed_panel(self):
         self.assertFalse(self.fixed_panel.deployable)
         self.assertTrue(self.fixed_panel.deployed)
-        self.assertEqual(self.state.extended, self.fixed_panel.state)
+        self.assertEqual(self.state.deployed, self.fixed_panel.state)
         self.assertGreater(self.fixed_panel.energy_flow, 0)
         self.assertGreater(self.fixed_panel.sun_exposure, 0)
 
@@ -37,16 +37,16 @@ class TestPartsSolarPanel(krpctest.TestCase):
         self.wait()
 
         self.assertTrue(panel.deployed)
-        self.assertEqual(self.state.extending, panel.state)
+        self.assertEqual(self.state.deploying, panel.state)
         self.assertEqual(0, panel.energy_flow)
         self.assertEqual(0, panel.sun_exposure)
         self.assertFalse(self.control.solar_panels)
 
-        while panel.state == self.state.extending:
+        while panel.state == self.state.deploying:
             self.wait()
 
         self.assertTrue(panel.deployed)
-        self.assertEqual(self.state.extended, panel.state)
+        self.assertEqual(self.state.deployed, panel.state)
         self.wait()
         self.assertGreater(panel.energy_flow, 0)
         self.assertGreater(panel.sun_exposure, 0)
@@ -73,7 +73,7 @@ class TestPartsSolarPanel(krpctest.TestCase):
         self.control.solar_panels = True
         for panel in self.panels:
             if panel.deployable:
-                while panel.state == self.state.extending:
+                while panel.state == self.state.deploying:
                     self.wait()
             self.assertTrue(panel.deployed)
         self.assertTrue(self.control.solar_panels)
@@ -96,13 +96,13 @@ class TestPartsSolarPanelBreak(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
-        cls.state = cls.connect().space_center.SolarPanelState
+        cls.state = cls.connect().space_center.DeployableState
         cls.panel = parts.with_name("solarPanels2")[0].solar_panel
 
     def test_break_panel(self):
         self.assertEqual(self.state.retracted, self.panel.state)
         self.panel.deployed = True
-        while self.panel.state == self.state.extending:
+        while self.panel.state == self.state.deploying:
             self.wait()
         self.control.activate_next_stage()
         self.wait(1)

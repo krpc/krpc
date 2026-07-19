@@ -12,7 +12,7 @@ class TestPartsRadiator(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
-        cls.state = cls.connect().space_center.RadiatorState
+        cls.state = cls.connect().space_center.DeployableState
         cls.radiators = parts.radiators
         cls.radiator = parts.with_name("foldingRadMed")[0].radiator
         cls.radiator_break = parts.with_name("foldingRadSmall")[0].radiator
@@ -21,7 +21,7 @@ class TestPartsRadiator(krpctest.TestCase):
     def test_fixed_radiator(self):
         self.assertFalse(self.fixed_radiator.deployable)
         self.assertTrue(self.fixed_radiator.deployed)
-        self.assertEqual(self.state.extended, self.fixed_radiator.state)
+        self.assertEqual(self.state.deployed, self.fixed_radiator.state)
 
     def test_extendable_radiator(self):
         self.assertTrue(self.radiator.deployable)
@@ -31,11 +31,11 @@ class TestPartsRadiator(krpctest.TestCase):
         while not self.radiator.deployed:
             self.wait()
         self.assertTrue(self.radiator.deployed)
-        self.assertEqual(self.state.extending, self.radiator.state)
-        while self.radiator.state == self.state.extending:
+        self.assertEqual(self.state.deploying, self.radiator.state)
+        while self.radiator.state == self.state.deploying:
             self.wait()
         self.assertTrue(self.radiator.deployed)
-        self.assertEqual(self.state.extended, self.radiator.state)
+        self.assertEqual(self.state.deployed, self.radiator.state)
         self.radiator.deployed = False
         while self.radiator.deployed:
             self.wait()
@@ -51,7 +51,7 @@ class TestPartsRadiator(krpctest.TestCase):
         self.control.radiators = True
         for radiator in self.radiators:
             if radiator.deployable:
-                while radiator.state == self.state.extending:
+                while radiator.state == self.state.deploying:
                     self.wait()
             self.assertTrue(radiator.deployed)
         self.assertTrue(self.control.radiators)
@@ -74,13 +74,13 @@ class TestPartsRadiatorBreak(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
-        cls.state = cls.connect().space_center.RadiatorState
+        cls.state = cls.connect().space_center.DeployableState
         cls.radiator = parts.with_name("foldingRadSmall")[0].radiator
 
     def test_break_radiator(self):
         self.assertEqual(self.state.retracted, self.radiator.state)
         self.radiator.deployed = True
-        while self.radiator.state == self.state.extending:
+        while self.radiator.state == self.state.deploying:
             self.wait()
         self.control.activate_next_stage()
         while self.radiator.state != self.state.broken:

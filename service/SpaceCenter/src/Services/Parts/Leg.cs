@@ -60,23 +60,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the landing leg.
         /// </summary>
         [KRPCProperty]
-        public LegState State {
-            get {
-                if (damage != null && damage.isDamaged)
-                    return LegState.Broken;
-                if (deployment != null) {
-                    if (Math.Abs (deployment.position - deployment.deployedPosition) < 0.0001)
-                        return LegState.Deployed;
-                    else if (Math.Abs (deployment.position - deployment.retractedPosition) < 0.0001)
-                        return LegState.Retracted;
-                    else if (deployment.stateString.Equals (deployment.st_deploying.name))
-                        return LegState.Deploying;
-                    else if (deployment.stateString.Equals (deployment.st_retracting.name))
-                        return LegState.Retracting;
-                    throw new InvalidOperationException ();
-                }
-                return LegState.Deployed;
-            }
+        public DeployableState State {
+            get { return deployment.ToDeployableState (damage); }
         }
 
         /// <summary>
@@ -96,7 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public bool Deployed {
-            get { return State == LegState.Deployed; }
+            get { return State == DeployableState.Deployed; }
             set {
                 if (deployment == null)
                     throw new InvalidOperationException ("Landing leg is not deployable");

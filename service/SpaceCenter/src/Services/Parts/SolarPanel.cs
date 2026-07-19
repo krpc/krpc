@@ -85,8 +85,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the solar panel.
         /// </summary>
         [KRPCProperty]
-        public SolarPanelState State {
-            get { return panel.deployState.ToSolarPanelState (); }
+        public DeployableState State {
+            get { return panel.deployState.ToDeployableState (); }
         }
 
         /// <summary>
