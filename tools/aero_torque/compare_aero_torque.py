@@ -416,7 +416,7 @@ def probe(conn, speed, aoa_max, aoa_step, spin, name):
             print(
                 f"VERDICT: off-axis (roll+yaw) torque reaches {100 * worst:.0f}% of the "
                 "total at real AoA -> symmetry-forbidden component confirmed. The bug is "
-                "in the static force x lever geometry (shared by SimAeroTorque and "
+                "in the static force x lever geometry (shared by simulated torque and "
                 "AerodynamicTorque), not the angular-velocity term."
             )
         else:

@@ -228,21 +228,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Compatibility wrapper for the torque endpoint. Returns the torque component
-        /// of the full rate-aware aerodynamic wrench.
-        /// </summary>
-        public static Vector3 SimAeroTorque(
-            CelestialBody body, Vessel vessel, Vector3d worldVelocity,
-            Vector3d worldAngularVelocity, Vector3d worldCoM,
-            QuaternionD attitudeDelta)
-        {
-            var wrench = SimAeroWrench(
-                body, vessel, worldVelocity, worldAngularVelocity, worldCoM,
-                attitudeDelta, Planetarium.GetUniversalTime(), true, false);
-            return (Vector3)wrench.Torque;
-        }
-
-        /// <summary>
         /// Simulate the instantaneous rigid-body aerodynamic wrench. The input state is
         /// the hypothetical vessel center-of-mass state in world space. Current part
         /// geometry is rotated by attitudeDelta into that hypothetical state. Each part
