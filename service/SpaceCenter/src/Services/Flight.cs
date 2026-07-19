@@ -8,6 +8,7 @@ using KRPC.Utils;
 using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
+using TupleT3 = System.Tuple<System.Tuple<double, double, double>, System.Tuple<double, double, double>>;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -143,6 +144,77 @@ namespace KRPC.SpaceCenter.Services
             get {
                 CheckNoFAR ();
                 return WorldPartsLift + WorldPartsDrag;
+            }
+        }
+
+        /// <summary>
+        /// Net aerodynamic torque about the vessel's center of mass, in world space, in
+        /// newton-meters. This is a live readout that reconstructs the exact per-part
+        /// force and application-point pairs KSP applied on the current physics frame:
+        /// cube drag (-dragVectorDir * dragScalar) at the part's center-of-pressure point,
+        /// body lift from the bodyLiftLocalVector/bodyLiftLocalPosition values the
+        /// FlightIntegrator writes back each frame, and lifting-surface lift and drag
+        /// (the modules' live liftForce/dragForce) at the center-of-lift and
+        /// center-of-pressure points they are applied at. Also includes the first-order
+        /// equivalent of the per-part rigidbody angular drag the engine applies
+        /// (-rb.angularDrag * I_part * omega), which damps rotation without ever
+        /// appearing as a force.
+        /// </summary>
+        Vector3d WorldAerodynamicTorque {
+            get {
+                CheckNoFAR ();
+                var com = WorldCoM;
+                Vector3d torque = Vector3d.zero;
+                foreach (var part in InternalVessel.Parts) {
+                    if (part.Rigidbody == null)
+                        continue;
+                    Vector3d liftPoint = part.partTransform.TransformPoint (part.CoLOffset);
+                    Vector3d dragPoint = part.partTransform.TransformPoint (part.CoPOffset);
+                    // Part (cube) drag, applied by FlightIntegrator.ApplyAeroDrag at the
+                    // center-of-pressure point
+                    Vector3d cubeDrag = -part.dragVectorDir * part.dragScalar;
+                    torque += Vector3d.Cross (dragPoint - com, cubeDrag);
+                    // Body lift: FlightIntegrator.ApplyAeroLift writes the exact applied
+                    // vector and point back to these part-local fields each frame. It skips
+                    // parts with a lifting-surface module AND parts whose
+                    // bodyLiftOnlyUnattachedLift gate is closed (pod with a heatshield on
+                    // the designated node), so mirror both here (the fields would be stale
+                    // for those parts).
+                    var bodyLiftGated = part.bodyLiftOnlyUnattachedLiftActual
+                                        && part.bodyLiftOnlyProvider != null
+                                        && part.bodyLiftOnlyProvider.IsLifting;
+                    if (!part.hasLiftModule && !bodyLiftGated) {
+                        Vector3d bodyLift = part.partTransform.TransformDirection (part.bodyLiftLocalVector);
+                        Vector3d bodyLiftPoint = part.partTransform.TransformPoint (part.bodyLiftLocalPosition);
+                        torque += Vector3d.Cross (bodyLiftPoint - com, bodyLift);
+                    }
+                    // Lifting-surface (wing / control-surface) lift and drag, applied by
+                    // the modules at the center-of-lift and center-of-pressure points
+                    foreach (var module in part.Modules) {
+                        var wing = module as ModuleLiftingSurface;
+                        if (wing == null)
+                            continue;
+                        torque += Vector3d.Cross (liftPoint - com, (Vector3d)wing.liftForce);
+                        torque += Vector3d.Cross (dragPoint - com, (Vector3d)wing.dragForce);
+                    }
+                    // Unity rigidbody angular drag: the FlightIntegrator re-applies
+                    // rb.angularDrag = part.angularDrag * dynamicPressure(atm) *
+                    // PhysicsGlobals.AngularDragMultiplier every frame, and the engine
+                    // damps the rigidbody's rotation by it. It is a real attitude torque
+                    // the game applies that never appears as a per-part force, so add its
+                    // first-order equivalent (-angularDrag * I_part * omega) to keep this
+                    // live sum consistent with the vessel's measured net torque and with
+                    // SimulateAerodynamicTorqueAt. Gate on the part's OWN rigidbody
+                    // (physicsless parts share the parent's and get no angular drag).
+                    // KSP runs Unity physics in tonne/kilonewton units, so rb.inertiaTensor
+                    // is in tonne*m^2 and angularDrag * I * omega is already in
+                    // kilonewton-meters -- the same scale as this accumulator.
+                    var rb = part.rb;
+                    if (rb != null && rb.angularDrag > 0f)
+                        torque -= (Vector3d)(rb.angularDrag *
+                            StockAerodynamics.PartAngularMomentum (rb, rb.angularVelocity));
+                }
+                return torque * 1000d;
             }
         }
 
@@ -558,6 +630,31 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The net aerodynamic torque currently acting on the vessel about its center of
+        /// mass, in reference frame <see cref="ReferenceFrame"/>. The magnitude is in
+        /// newton-meters.
+        /// </summary>
+        /// <returns>A vector pointing along the axis of the torque, with its magnitude
+        /// equal to the strength of the torque in newton-meters.</returns>
+        /// <remarks>
+        /// This is the live counterpart to <see cref="AerodynamicForce"/>: it reconstructs
+        /// the per-part aerodynamic forces and application points that the game applied on
+        /// the current physics frame and levers them about the center of mass, rather than
+        /// re-simulating them for hypothetical conditions the way
+        /// <see cref="SimulateAerodynamicTorqueAt"/> does. It is intended for validating the
+        /// simulator against the live game state. Not available when
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+        /// is installed, as FAR does not expose a live per-frame torque.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 AerodynamicTorque {
+            get {
+                CheckNoFAR ();
+                return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicTorque).ToTuple ();
+            }
+        }
+
+        /// <summary>
         /// Simulate and return the total aerodynamic forces acting on the vessel,
         /// if it were traveling with the given velocity, at the given position and
         /// orientation, in the atmosphere of the given celestial body.
@@ -581,6 +678,7 @@ namespace KRPC.SpaceCenter.Services
         /// force the vessel would experience if it were placed at that position and
         /// orientation with the air flowing past it at that velocity; it is the force at
         /// the requested orientation, not the force in the vessel's current orientation.
+        /// Atmospheric temperature and density are evaluated at the current universal time.
         /// </remarks>
         [KRPCMethod]
         public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation)
@@ -593,46 +691,142 @@ namespace KRPC.SpaceCenter.Services
             QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
             QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
             var delta = desiredWorld * currentWorld.Inverse ();
-            var adjustedVelocity = delta.Inverse () * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
             Vector3 force;
             if (!FAR.IsAvailable) {
-                force = StockAerodynamics.SimAeroForce(body.InternalBody, vessel, adjustedVelocity, worldPosition);
+                force = StockAerodynamics.SimAeroForce(
+                    body.InternalBody, vessel, worldVelocity, worldPosition, delta);
             } else {
                 Vector3 torque;
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
+                var adjustedVelocity = delta.Inverse ()
+                    * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
                 FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
                 // CalculateVesselAeroForces returns kilonewtons; convert to newtons to
                 // match the stock path and this method's documented units.
                 force = force * 1000f;
+                force = (Vector3)(delta * (Vector3d)force);
             }
-            var worldForce = (Vector3)(delta * (Vector3d)force);
-            return referenceFrame.DirectionFromWorldSpace(worldForce).ToTuple();
+            return referenceFrame.DirectionFromWorldSpace(force).ToTuple();
         }
 
         /// <summary>
-        /// Simulate and return the total aerodynamic torques acting on the vessel,
-        /// if it where to be traveling with the given velocity at the given position in the
-        /// atmosphere of the given celestial body.
+        /// Simulate and return the total aerodynamic force and torque acting on the vessel,
+        /// if its center of mass were traveling with the given velocity, at the given position,
+        /// orientation and angular velocity, in the atmosphere of the given celestial body.
         /// </summary>
-        /// <returns>A vector pointing in the direction that the torque acts,
-        /// with its magnitude equal to the strength of the force in kilonewton-meters.</returns>
+        /// <param name="body">The celestial body whose atmosphere the wrench is simulated in.</param>
+        /// <param name="position">The position of the vessel's center of mass, in reference
+        /// frame <see cref="ReferenceFrame"/>.</param>
+        /// <param name="velocity">The velocity of the vessel's center of mass, in reference
+        /// frame <see cref="ReferenceFrame"/>.</param>
+        /// <param name="rotation">The orientation of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>, in the same form as <see cref="Vessel.Rotation"/>.
+        /// Pass the vessel's current rotation to evaluate the wrench at its current
+        /// orientation.</param>
+        /// <param name="angularVelocity">The angular velocity of the vessel, in reference
+        /// frame <see cref="ReferenceFrame"/>. This adds the solid-body rotation term to each
+        /// part's local airflow and the per-part rigid-body angular drag the game applies,
+        /// together giving the aerodynamic damping force and torque. Pass a zero vector to
+        /// evaluate the static wrench relative to the reference frame.</param>
+        /// <param name="ut">The universal time used for the atmospheric ephemeris. It
+        /// selects the body/Sun geometry used for temperature and density, but does not
+        /// change or propagate <see cref="ReferenceFrame"/> or any of the state arguments.</param>
+        /// <returns>A pair containing the aerodynamic force in newtons followed by the
+        /// aerodynamic torque in newton-meters about the vessel's center of mass. Both are
+        /// vectors in reference frame <see cref="ReferenceFrame"/>.</returns>
         /// <remarks>
-        /// Requires <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.
+        /// The position and velocity describe the hypothetical center-of-mass state. The
+        /// position, velocity, rotation and angular velocity arguments, and both returned
+        /// vectors, are expressed in reference frame <see cref="ReferenceFrame"/>.
+        /// For future-state prediction, <see cref="CelestialBody.NonRotatingReferenceFrame"/>
+        /// is recommended so that the spatial state has unambiguous inertial semantics.
+        ///
+        /// This is an instantaneous rigid-body result based on the vessel's current parts,
+        /// drag cubes and control-surface state. When
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+        /// is installed the angular velocity and <paramref name="ut"/> arguments are ignored.
         /// </remarks>
         [KRPCMethod]
-        public Tuple3 SimulateAerodynamicTorqueAt(CelestialBody body, Tuple3 position, Tuple3 velocity)
+        public TupleT3 SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity, double ut)
         {
-          if (ReferenceEquals(body, null))
-              throw new ArgumentNullException(nameof(body));
-          CheckFAR();
-          var vessel = InternalVessel;
-          var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
-          var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
-          Vector3 worldForce;
-          Vector3 torque;
-          var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
-          FAR.CalculateVesselAeroForces(vessel, out worldForce, out torque, worldVelocity - body.InternalBody.getRFrmVel(worldPosition), altitude);
-          return referenceFrame.DirectionFromWorldSpace(torque).ToTuple();
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            var vessel = InternalVessel;
+            var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
+            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
+            var worldAngularVelocity = referenceFrame.AngularVelocityToWorldSpace(angularVelocity.ToVector());
+            QuaternionD desiredWorld = referenceFrame.RotationToWorldSpace (rotation.ToQuaternion ());
+            QuaternionD currentWorld = vessel.ReferenceTransform.rotation;
+            var delta = desiredWorld * currentWorld.Inverse ();
+            Vector3d force;
+            Vector3d torque;
+            if (!FAR.IsAvailable) {
+                var wrench = StockAerodynamics.SimAeroWrench(
+                    body.InternalBody, vessel, worldVelocity, worldAngularVelocity,
+                    worldPosition, delta, ut, true, false);
+                force = wrench.Force;
+                torque = wrench.Torque;
+            } else {
+                Vector3 farForce;
+                Vector3 farTorque;
+                var adjustedVelocity = delta.Inverse ()
+                    * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
+                var altitude = (worldPosition - body.InternalBody.position).magnitude
+                               - body.InternalBody.Radius;
+                FAR.CalculateVesselAeroForces(
+                    vessel, out farForce, out farTorque, adjustedVelocity, altitude);
+                // FAR returns kilonewtons and kilonewton-meters. Rotate the one
+                // evaluation into the hypothetical attitude and convert both to SI.
+                force = delta * (Vector3d)farForce * 1000d;
+                torque = delta * (Vector3d)farTorque * 1000d;
+            }
+            return new TupleT3(
+                referenceFrame.DirectionFromWorldSpace(force).ToTuple(),
+                referenceFrame.DirectionFromWorldSpace(torque).ToTuple());
+        }
+
+        /// <summary>
+        /// Simulate and return the total aerodynamic torque acting on the vessel about its
+        /// center of mass, if it were traveling with the given velocity, at the given
+        /// position, orientation and angular velocity, in the atmosphere of the given
+        /// celestial body.
+        /// </summary>
+        /// <param name="body">The celestial body whose atmosphere the torque is simulated in.</param>
+        /// <param name="position">The position of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>.</param>
+        /// <param name="velocity">The velocity of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>.</param>
+        /// <param name="rotation">The orientation of the vessel, in reference frame
+        /// <see cref="ReferenceFrame"/>, in the same form as <see cref="Vessel.Rotation"/>.
+        /// Pass the vessel's current rotation to evaluate the torque at its current
+        /// orientation.</param>
+        /// <param name="angularVelocity">The angular velocity of the vessel, in reference
+        /// frame <see cref="ReferenceFrame"/>. This adds the solid-body rotation term to each
+        /// part's local airflow and the per-part rigid-body angular drag the game applies,
+        /// together giving the aerodynamic damping torque. Pass a zero vector to
+        /// evaluate the static torque.</param>
+        /// <returns>A vector pointing along the axis of the torque, with its magnitude equal
+        /// to the strength of the torque in newton-meters, in reference frame
+        /// <see cref="ReferenceFrame"/>.</returns>
+        /// <remarks>
+        /// The position, velocity, rotation and angular velocity arguments, and the returned
+        /// torque, are all expressed in reference frame <see cref="ReferenceFrame"/>. When
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+        /// is installed the angular velocity argument is ignored.
+        /// Atmospheric temperature and density are evaluated at the current universal time.
+        ///
+        /// This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
+        /// about the center of mass. A vessel may not visibly rotate by the full amount when
+        /// a large aerodynamic force acts on a small part far from the center of mass, because
+        /// the game applies each part's force to that part and propagates it through the joints
+        /// rather than to the vessel as a rigid body.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 SimulateAerodynamicTorqueAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity)
+        {
+            return SimulateAerodynamicWrenchAt(
+                body, position, velocity, rotation, angularVelocity,
+                Planetarium.GetUniversalTime()).Item2;
         }
 
         /// <summary>

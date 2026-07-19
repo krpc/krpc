@@ -351,18 +351,9 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals(referenceFrame, null))
                 throw new ArgumentNullException(nameof(referenceFrame));
-            var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
-            var body = InternalBody;
-            var altitude = (float) body.GetAltitude(worldPosition);
-            var latitude = (float) body.GetLatitude(worldPosition);
-            var pressure = FlightGlobals.getStaticPressure(worldPosition);
-            var temperature =
-                FlightGlobals.getExternalTemperature(altitude, body)
-                + body.atmosphereTemperatureSunMultCurve.Evaluate(altitude)
-                * (body.latitudeTemperatureBiasCurve.Evaluate(latitude)
-                   + body.latitudeTemperatureSunMultCurve.Evaluate(latitude) // fix that 0 into latitude
-                   + body.axialTemperatureSunMultCurve.Evaluate(1));
-            return FlightGlobals.getAtmDensity(pressure, temperature);
+            return StockAerodynamics.GetAtmosphericState(
+                referenceFrame.PositionToWorldSpace(position.ToVector()),
+                InternalBody, Planetarium.GetUniversalTime()).Density;
         }
 
         /// <summary>
@@ -379,10 +370,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <param name="position">Position as a vector.</param>
         /// <param name="referenceFrame">The reference frame that the position is in.</param>
-        /// <remarks>
-        /// This calculation is performed using the bodies current position, which means that
-        /// the value could be wrong if you want to know the temperature in the far future.
-        /// </remarks>
+        /// <remarks>The atmospheric ephemeris is evaluated at the current universal time.</remarks>
         [KRPCMethod]
         public double TemperatureAt (Tuple3 position, ReferenceFrame referenceFrame)
         {

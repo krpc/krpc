@@ -349,8 +349,10 @@ SpaceCenter.Flight.DynamicPressure
 SpaceCenter.Flight.StaticPressure
 SpaceCenter.Flight.StaticPressureAtMSL
 SpaceCenter.Flight.AerodynamicForce
+SpaceCenter.Flight.AerodynamicTorque
 SpaceCenter.Flight.SimulateAerodynamicForceAt
 SpaceCenter.Flight.SimulateAerodynamicTorqueAt
+SpaceCenter.Flight.SimulateAerodynamicWrenchAt
 SpaceCenter.Flight.Lift
 SpaceCenter.Flight.Drag
 SpaceCenter.Flight.AerodynamicAcceleration
