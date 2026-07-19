@@ -49,6 +49,34 @@ class TestAntenna(krpctest.TestCase):
         self.wait()
         self.antenna.target = self.rt.Target.none
 
+    def test_target_invalid_setter_raises(self):
+        # Only none and active_vessel can be assigned directly; other targets
+        # are set via the typed target_body/target_ground_station/target_vessel
+        # setters
+        self.assertEqual(self.rt.Target.none, self.antenna.target)
+        with self.assertRaises(ValueError):
+            self.antenna.target = self.rt.Target.celestial_body
+
+    def test_target_body_getter_wrong_type_raises(self):
+        self.assertEqual(self.rt.Target.none, self.antenna.target)
+        with self.assertRaises(RuntimeError):
+            _ = self.antenna.target_body
+
+    def test_target_ground_station_getter_wrong_type_raises(self):
+        self.assertEqual(self.rt.Target.none, self.antenna.target)
+        with self.assertRaises(RuntimeError):
+            _ = self.antenna.target_ground_station
+
+    def test_target_vessel_getter_wrong_type_raises(self):
+        self.assertEqual(self.rt.Target.none, self.antenna.target)
+        with self.assertRaises(RuntimeError):
+            _ = self.antenna.target_vessel
+
+    def test_target_unknown_ground_station_raises(self):
+        self.assertEqual(self.rt.Target.none, self.antenna.target)
+        with self.assertRaises(ValueError):
+            self.antenna.target_ground_station = "Nowhere"
+
     def test_target_vessel(self):
         self.assertEqual("RemoteTech Ship", self.other_vessel.name)
         self.assertEqual(self.rt.Target.none, self.antenna.target)
