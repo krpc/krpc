@@ -91,7 +91,7 @@ def main():
                 )
             defs = servicedefs(args.ksp, args.service, inputs)
             if args.output_defs:
-                with open(args.output_defs, "w") as fp:
+                with open(args.output_defs, "w", encoding="utf-8") as fp:
                     fp.write(defs)
             defs = json.loads(defs)
 
@@ -146,7 +146,7 @@ def load_generator(path):
     sys.path.append(dirpath)
     module = importlib.import_module(modulepath)
     generator = module.generator
-    with open(module.tmpl, "r") as fp:
+    with open(module.tmpl, "r", encoding="utf-8") as fp:
         macro_template = "".join(fp.readlines()).decode("utf-8")
     return generator, macro_template
 

@@ -15,11 +15,21 @@ local regex_multi_uppercase = '([A-Z]+)([A-Z][a-z0-9])'
 local regex_single_uppercase = '([a-z0-9])([A-Z])'
 local regex_underscores = '(.)_'
 
+-- Lower case the ASCII letters in a string. string.lower goes through the C
+-- library and so follows LC_CTYPE, which in Turkish locales maps I onto a
+-- dotless i. These names have to match the identifiers the server sends
+-- exactly, so the fold must not depend on the locale.
+local function ascii_lower(str)
+  return (str:gsub('[A-Z]', function(char)
+    return string.char(string.byte(char) + 32)
+  end))
+end
+
 --- Convert camel case to snake case, e.g. GetServices -> get_services
 function service.to_snake_case(camel_case)
   local result = camel_case:gsub(regex_underscores, '%1__')
   result = result:gsub(regex_single_uppercase, '%1_%2')
-  return result:gsub(regex_multi_uppercase, '%1_%2'):lower()
+  return ascii_lower(result:gsub(regex_multi_uppercase, '%1_%2'))
 end
 
 local KEYWORDS = Set{
