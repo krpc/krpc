@@ -1878,7 +1878,7 @@ Antenna
 
    
 
-   .. function:: AntennaState state()
+   .. function:: DeployableState state()
 
       The current state of the antenna.
 
@@ -1968,38 +1968,6 @@ Antenna
 
 
 
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: AntennaState
-
-   The state of an antenna. See :func:`Antenna::state`.
-
-
-   .. enumerator:: deployed
-
-      Antenna is fully deployed.
-
-
-   .. enumerator:: retracted
-
-      Antenna is fully retracted.
-
-
-   .. enumerator:: deploying
-
-      Antenna is being deployed.
-
-
-   .. enumerator:: retracting
-
-      Antenna is being retracted.
-
-
-   .. enumerator:: broken
-
-      Antenna is broken.
-
-
-
 Cargo Bay
 ^^^^^^^^^
 
@@ -2014,11 +1982,16 @@ Cargo Bay
 
    
 
-   .. function:: CargoBayState state()
+   .. function:: DeployableState state()
 
       The state of the cargo bay.
 
    
+
+      .. note::
+
+         A cargo bay is never :enumerator:`DeployableState::broken`, as the game
+         does not track damage for them.
 
    .. function:: bool open()
    .. function:: void set_open(bool value)
@@ -2026,33 +1999,6 @@ Cargo Bay
       Whether the cargo bay is open.
 
    
-
-
-
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: CargoBayState
-
-   The state of a cargo bay. See :func:`CargoBay::state`.
-
-
-   .. enumerator:: open
-
-      Cargo bay is fully open.
-
-
-   .. enumerator:: closed
-
-      Cargo bay closed and locked.
-
-
-   .. enumerator:: opening
-
-      Cargo bay is opening.
-
-
-   .. enumerator:: closing
-
-      Cargo bay is closing.
 
 
 
@@ -2205,6 +2151,52 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
    
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: DeployableState
+
+   The state of a deployable part.
+   :func:`Antenna::state`, :func:`CargoBay::state`,
+   :func:`Leg::state`, :func:`Radiator::state`,
+   :func:`ResourceHarvester::state`, :func:`SolarPanel::state`,
+   :func:`Wheel::state`
+
+
+   .. enumerator:: deployed
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. enumerator:: retracted
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. enumerator:: deploying
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. enumerator:: retracting
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. enumerator:: broken
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
 
 
 
@@ -3096,7 +3088,7 @@ Leg
 
    
 
-   .. function:: LegState state()
+   .. function:: DeployableState state()
 
       The current state of the landing leg.
 
@@ -3125,38 +3117,6 @@ Leg
       Returns whether the leg is touching the ground.
 
    
-
-
-
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: LegState
-
-   The state of a landing leg. See :func:`Leg::state`.
-
-
-   .. enumerator:: deployed
-
-      Landing leg is fully deployed.
-
-
-   .. enumerator:: retracted
-
-      Landing leg is fully retracted.
-
-
-   .. enumerator:: deploying
-
-      Landing leg is being deployed.
-
-
-   .. enumerator:: retracting
-
-      Landing leg is being retracted.
-
-
-   .. enumerator:: broken
-
-      Landing leg is broken.
 
 
 
@@ -3405,7 +3365,7 @@ Radiator
 
    
 
-   .. function:: RadiatorState state()
+   .. function:: DeployableState state()
 
       The current state of the radiator.
 
@@ -3413,39 +3373,7 @@ Radiator
 
       .. note::
 
-         A fixed radiator is always :enumerator:`RadiatorState::extended`.
-
-
-
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: RadiatorState
-
-   The state of a radiator. :func:`Radiator::state`
-
-
-   .. enumerator:: extended
-
-      Radiator is fully extended.
-
-
-   .. enumerator:: retracted
-
-      Radiator is fully retracted.
-
-
-   .. enumerator:: extending
-
-      Radiator is being extended.
-
-
-   .. enumerator:: retracting
-
-      Radiator is being retracted.
-
-
-   .. enumerator:: broken
-
-      Radiator is broken.
+         A fixed radiator is always :enumerator:`DeployableState::deployed`.
 
 
 
@@ -3622,11 +3550,17 @@ Resource Harvester
 
    
 
-   .. function:: ResourceHarvesterState state()
+   .. function:: DeployableState state()
 
-      The state of the harvester.
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :func:`ResourceHarvester::active`.
 
    
+
+      .. note::
+
+         A harvester is never :enumerator:`DeployableState::broken`, as the game
+         does not track damage for them.
 
    .. function:: bool deployed()
    .. function:: void set_deployed(bool value)
@@ -3673,38 +3607,6 @@ Resource Harvester
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
    
-
-
-
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: ResourceHarvesterState
-
-   The state of a resource harvester. See :func:`ResourceHarvester::state`.
-
-
-   .. enumerator:: deploying
-
-      The drill is deploying.
-
-
-   .. enumerator:: deployed
-
-      The drill is deployed and ready.
-
-
-   .. enumerator:: retracting
-
-      The drill is retracting.
-
-
-   .. enumerator:: retracted
-
-      The drill is retracted.
-
-
-   .. enumerator:: active
-
-      The drill is running.
 
 
 
@@ -4577,7 +4479,7 @@ Solar Panel
 
    
 
-   .. function:: SolarPanelState state()
+   .. function:: DeployableState state()
 
       The current state of the solar panel.
 
@@ -4596,38 +4498,6 @@ Solar Panel
       as a percentage. A value between 0 and 1.
 
    
-
-
-
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: SolarPanelState
-
-   The state of a solar panel. See :func:`SolarPanel::state`.
-
-
-   .. enumerator:: extended
-
-      Solar panel is fully extended.
-
-
-   .. enumerator:: retracted
-
-      Solar panel is fully retracted.
-
-
-   .. enumerator:: extending
-
-      Solar panel is being extended.
-
-
-   .. enumerator:: retracting
-
-      Solar panel is being retracted.
-
-
-   .. enumerator:: broken
-
-      Solar panel is broken.
 
 
 
@@ -4763,7 +4633,7 @@ Wheel
 
    
 
-   .. function:: WheelState state()
+   .. function:: DeployableState state()
 
       The current state of the wheel.
 
@@ -4982,38 +4852,6 @@ Wheel
       Current slip of the wheel.
 
    
-
-
-
-.. namespace:: krpc::services::SpaceCenter
-.. enum-struct:: WheelState
-
-   The state of a wheel. See :func:`Wheel::state`.
-
-
-   .. enumerator:: deployed
-
-      Wheel is fully deployed.
-
-
-   .. enumerator:: retracted
-
-      Wheel is fully retracted.
-
-
-   .. enumerator:: deploying
-
-      Wheel is being deployed.
-
-
-   .. enumerator:: retracting
-
-      Wheel is being retracted.
-
-
-   .. enumerator:: broken
-
-      Wheel is broken.
 
 
 

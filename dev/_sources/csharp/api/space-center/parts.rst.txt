@@ -1899,7 +1899,7 @@ Antenna
 
       :Game Scenes: All
 
-   .. property:: AntennaState State { get; }
+   .. property:: DeployableState State { get; }
 
       The current state of the antenna.
 
@@ -1988,37 +1988,6 @@ Antenna
 
 
 
-.. enum:: AntennaState
-
-   The state of an antenna. See :prop:`Antenna.State`.
-
-
-   .. value:: Deployed
-
-      Antenna is fully deployed.
-
-
-   .. value:: Retracted
-
-      Antenna is fully retracted.
-
-
-   .. value:: Deploying
-
-      Antenna is being deployed.
-
-
-   .. value:: Retracting
-
-      Antenna is being retracted.
-
-
-   .. value:: Broken
-
-      Antenna is broken.
-
-
-
 Cargo Bay
 ^^^^^^^^^
 
@@ -2033,43 +2002,23 @@ Cargo Bay
 
       :Game Scenes: All
 
-   .. property:: CargoBayState State { get; }
+   .. property:: DeployableState State { get; }
 
       The state of the cargo bay.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         A cargo bay is never :enum:`DeployableState.Broken`, as the game
+         does not track damage for them.
 
    .. property:: bool Open { get; set; }
 
       Whether the cargo bay is open.
 
       :Game Scenes: All
-
-
-
-.. enum:: CargoBayState
-
-   The state of a cargo bay. See :prop:`CargoBay.State`.
-
-
-   .. value:: Open
-
-      Cargo bay is fully open.
-
-
-   .. value:: Closed
-
-      Cargo bay closed and locked.
-
-
-   .. value:: Opening
-
-      Cargo bay is opening.
-
-
-   .. value:: Closing
-
-      Cargo bay is closing.
 
 
 
@@ -2215,6 +2164,51 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
       :Game Scenes: All
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. enum:: DeployableState
+
+   The state of a deployable part.
+   :prop:`Antenna.State`, :prop:`CargoBay.State`,
+   :prop:`Leg.State`, :prop:`Radiator.State`,
+   :prop:`ResourceHarvester.State`, :prop:`SolarPanel.State`,
+   :prop:`Wheel.State`
+
+
+   .. value:: Deployed
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. value:: Retracted
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. value:: Deploying
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. value:: Retracting
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. value:: Broken
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
 
 
 
@@ -3094,7 +3088,7 @@ Leg
 
       :Game Scenes: All
 
-   .. property:: LegState State { get; }
+   .. property:: DeployableState State { get; }
 
       The current state of the landing leg.
 
@@ -3123,37 +3117,6 @@ Leg
       Returns whether the leg is touching the ground.
 
       :Game Scenes: All
-
-
-
-.. enum:: LegState
-
-   The state of a landing leg. See :prop:`Leg.State`.
-
-
-   .. value:: Deployed
-
-      Landing leg is fully deployed.
-
-
-   .. value:: Retracted
-
-      Landing leg is fully retracted.
-
-
-   .. value:: Deploying
-
-      Landing leg is being deployed.
-
-
-   .. value:: Retracting
-
-      Landing leg is being retracted.
-
-
-   .. value:: Broken
-
-      Landing leg is broken.
 
 
 
@@ -3393,7 +3356,7 @@ Radiator
 
       :Game Scenes: All
 
-   .. property:: RadiatorState State { get; }
+   .. property:: DeployableState State { get; }
 
       The current state of the radiator.
 
@@ -3402,38 +3365,7 @@ Radiator
 
       .. note::
 
-         A fixed radiator is always :enum:`RadiatorState.Extended`.
-
-
-
-.. enum:: RadiatorState
-
-   The state of a radiator. :prop:`Radiator.State`
-
-
-   .. value:: Extended
-
-      Radiator is fully extended.
-
-
-   .. value:: Retracted
-
-      Radiator is fully retracted.
-
-
-   .. value:: Extending
-
-      Radiator is being extended.
-
-
-   .. value:: Retracting
-
-      Radiator is being retracted.
-
-
-   .. value:: Broken
-
-      Radiator is broken.
+         A fixed radiator is always :enum:`DeployableState.Deployed`.
 
 
 
@@ -3609,11 +3541,18 @@ Resource Harvester
 
       :Game Scenes: All
 
-   .. property:: ResourceHarvesterState State { get; }
+   .. property:: DeployableState State { get; }
 
-      The state of the harvester.
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :prop:`ResourceHarvester.Active`.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         A harvester is never :enum:`DeployableState.Broken`, as the game
+         does not track damage for them.
 
    .. property:: bool Deployed { get; set; }
 
@@ -3659,37 +3598,6 @@ Resource Harvester
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
       :Game Scenes: All
-
-
-
-.. enum:: ResourceHarvesterState
-
-   The state of a resource harvester. See :prop:`ResourceHarvester.State`.
-
-
-   .. value:: Deploying
-
-      The drill is deploying.
-
-
-   .. value:: Deployed
-
-      The drill is deployed and ready.
-
-
-   .. value:: Retracting
-
-      The drill is retracting.
-
-
-   .. value:: Retracted
-
-      The drill is retracted.
-
-
-   .. value:: Active
-
-      The drill is running.
 
 
 
@@ -4514,7 +4422,7 @@ Solar Panel
 
       :Game Scenes: All
 
-   .. property:: SolarPanelState State { get; }
+   .. property:: DeployableState State { get; }
 
       The current state of the solar panel.
 
@@ -4533,37 +4441,6 @@ Solar Panel
       as a percentage. A value between 0 and 1.
 
       :Game Scenes: All
-
-
-
-.. enum:: SolarPanelState
-
-   The state of a solar panel. See :prop:`SolarPanel.State`.
-
-
-   .. value:: Extended
-
-      Solar panel is fully extended.
-
-
-   .. value:: Retracted
-
-      Solar panel is fully retracted.
-
-
-   .. value:: Extending
-
-      Solar panel is being extended.
-
-
-   .. value:: Retracting
-
-      Solar panel is being retracted.
-
-
-   .. value:: Broken
-
-      Solar panel is broken.
 
 
 
@@ -4700,7 +4577,7 @@ Wheel
 
       :Game Scenes: All
 
-   .. property:: WheelState State { get; }
+   .. property:: DeployableState State { get; }
 
       The current state of the wheel.
 
@@ -4905,37 +4782,6 @@ Wheel
       Current slip of the wheel.
 
       :Game Scenes: All
-
-
-
-.. enum:: WheelState
-
-   The state of a wheel. See :prop:`Wheel.State`.
-
-
-   .. value:: Deployed
-
-      Wheel is fully deployed.
-
-
-   .. value:: Retracted
-
-      Wheel is fully retracted.
-
-
-   .. value:: Deploying
-
-      Wheel is being deployed.
-
-
-   .. value:: Retracting
-
-      Wheel is being retracted.
-
-
-   .. value:: Broken
-
-      Wheel is broken.
 
 
 

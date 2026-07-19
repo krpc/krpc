@@ -2048,7 +2048,7 @@ Antenna
       The current state of the antenna.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`AntennaState`
+      :rtype: :class:`DeployableState`
    
 
    .. attribute:: deployable
@@ -2151,37 +2151,6 @@ Antenna
 
 
 
-.. class:: AntennaState
-
-   The state of an antenna. See :attr:`Antenna.state`.
-
-
-   .. data:: deployed
-
-      Antenna is fully deployed.
-
-
-   .. data:: retracted
-
-      Antenna is fully retracted.
-
-
-   .. data:: deploying
-
-      Antenna is being deployed.
-
-
-   .. data:: retracting
-
-      Antenna is being retracted.
-
-
-   .. data:: broken
-
-      Antenna is broken.
-
-
-
 Cargo Bay
 ^^^^^^^^^
 
@@ -2203,8 +2172,13 @@ Cargo Bay
       The state of the cargo bay.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`CargoBayState`
+      :rtype: :class:`DeployableState`
    
+
+      .. note::
+
+         A cargo bay is never :attr:`DeployableState.broken`, as the game
+         does not track damage for them.
 
    .. attribute:: open
 
@@ -2213,32 +2187,6 @@ Cargo Bay
       :Attribute: Can be read or written
       :rtype: bool
    
-
-
-
-.. class:: CargoBayState
-
-   The state of a cargo bay. See :attr:`CargoBay.state`.
-
-
-   .. data:: open
-
-      Cargo bay is fully open.
-
-
-   .. data:: closed
-
-      Cargo bay closed and locked.
-
-
-   .. data:: opening
-
-      Cargo bay is opening.
-
-
-   .. data:: closing
-
-      Cargo bay is closing.
 
 
 
@@ -2417,6 +2365,51 @@ Decoupler
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
    
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. class:: DeployableState
+
+   The state of a deployable part.
+   :attr:`Antenna.state`, :attr:`CargoBay.state`,
+   :attr:`Leg.state`, :attr:`Radiator.state`,
+   :attr:`ResourceHarvester.state`, :attr:`SolarPanel.state`,
+   :attr:`Wheel.state`
+
+
+   .. data:: deployed
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. data:: retracted
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. data:: deploying
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. data:: retracting
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. data:: broken
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
 
 
 
@@ -3448,7 +3441,7 @@ Leg
       The current state of the landing leg.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`LegState`
+      :rtype: :class:`DeployableState`
    
 
    .. attribute:: deployable
@@ -3479,37 +3472,6 @@ Leg
       :Attribute: Read-only, cannot be set
       :rtype: bool
    
-
-
-
-.. class:: LegState
-
-   The state of a landing leg. See :attr:`Leg.state`.
-
-
-   .. data:: deployed
-
-      Landing leg is fully deployed.
-
-
-   .. data:: retracted
-
-      Landing leg is fully retracted.
-
-
-   .. data:: deploying
-
-      Landing leg is being deployed.
-
-
-   .. data:: retracting
-
-      Landing leg is being retracted.
-
-
-   .. data:: broken
-
-      Landing leg is broken.
 
 
 
@@ -3784,43 +3746,12 @@ Radiator
       The current state of the radiator.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`RadiatorState`
+      :rtype: :class:`DeployableState`
    
 
       .. note::
 
-         A fixed radiator is always :attr:`RadiatorState.extended`.
-
-
-
-.. class:: RadiatorState
-
-   The state of a radiator. :attr:`Radiator.state`
-
-
-   .. data:: extended
-
-      Radiator is fully extended.
-
-
-   .. data:: retracted
-
-      Radiator is fully retracted.
-
-
-   .. data:: extending
-
-      Radiator is being extended.
-
-
-   .. data:: retracting
-
-      Radiator is being retracted.
-
-
-   .. data:: broken
-
-      Radiator is broken.
+         A fixed radiator is always :attr:`DeployableState.deployed`.
 
 
 
@@ -3992,11 +3923,17 @@ Resource Harvester
 
    .. attribute:: state
 
-      The state of the harvester.
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :attr:`ResourceHarvester.active`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`ResourceHarvesterState`
+      :rtype: :class:`DeployableState`
    
+
+      .. note::
+
+         A harvester is never :attr:`DeployableState.broken`, as the game
+         does not track damage for them.
 
    .. attribute:: deployed
 
@@ -4053,37 +3990,6 @@ Resource Harvester
       :Attribute: Read-only, cannot be set
       :rtype: float
    
-
-
-
-.. class:: ResourceHarvesterState
-
-   The state of a resource harvester. See :attr:`ResourceHarvester.state`.
-
-
-   .. data:: deploying
-
-      The drill is deploying.
-
-
-   .. data:: deployed
-
-      The drill is deployed and ready.
-
-
-   .. data:: retracting
-
-      The drill is retracting.
-
-
-   .. data:: retracted
-
-      The drill is retracted.
-
-
-   .. data:: active
-
-      The drill is running.
 
 
 
@@ -5072,7 +4978,7 @@ Solar Panel
       The current state of the solar panel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SolarPanelState`
+      :rtype: :class:`DeployableState`
    
 
    .. attribute:: energy_flow
@@ -5092,37 +4998,6 @@ Solar Panel
       :Attribute: Read-only, cannot be set
       :rtype: float
    
-
-
-
-.. class:: SolarPanelState
-
-   The state of a solar panel. See :attr:`SolarPanel.state`.
-
-
-   .. data:: extended
-
-      Solar panel is fully extended.
-
-
-   .. data:: retracted
-
-      Solar panel is fully retracted.
-
-
-   .. data:: extending
-
-      Solar panel is being extended.
-
-
-   .. data:: retracting
-
-      Solar panel is being retracted.
-
-
-   .. data:: broken
-
-      Solar panel is broken.
 
 
 
@@ -5263,7 +5138,7 @@ Wheel
       The current state of the wheel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`WheelState`
+      :rtype: :class:`DeployableState`
    
 
    .. attribute:: radius
@@ -5529,37 +5404,6 @@ Wheel
       :Attribute: Read-only, cannot be set
       :rtype: float
    
-
-
-
-.. class:: WheelState
-
-   The state of a wheel. See :attr:`Wheel.state`.
-
-
-   .. data:: deployed
-
-      Wheel is fully deployed.
-
-
-   .. data:: retracted
-
-      Wheel is fully retracted.
-
-
-   .. data:: deploying
-
-      Wheel is being deployed.
-
-
-   .. data:: retracting
-
-      Wheel is being retracted.
-
-
-   .. data:: broken
-
-      Wheel is broken.
 
 
 

@@ -1880,7 +1880,7 @@ Antenna
 
    
 
-   .. method:: AntennaState getState()
+   .. method:: DeployableState getState()
 
 
       The current state of the antenna.
@@ -1979,37 +1979,6 @@ Antenna
 
 
 
-.. type:: public enum AntennaState
-
-   The state of an antenna. See :meth:`Antenna.getState()`.
-
-
-   .. field:: public AntennaState DEPLOYED
-
-      Antenna is fully deployed.
-
-
-   .. field:: public AntennaState RETRACTED
-
-      Antenna is fully retracted.
-
-
-   .. field:: public AntennaState DEPLOYING
-
-      Antenna is being deployed.
-
-
-   .. field:: public AntennaState RETRACTING
-
-      Antenna is being retracted.
-
-
-   .. field:: public AntennaState BROKEN
-
-      Antenna is broken.
-
-
-
 Cargo Bay
 ^^^^^^^^^
 
@@ -2025,12 +1994,17 @@ Cargo Bay
 
    
 
-   .. method:: CargoBayState getState()
+   .. method:: DeployableState getState()
 
 
       The state of the cargo bay.
 
    
+
+      .. note::
+
+         A cargo bay is never :meth:`DeployableState.BROKEN`, as the game
+         does not track damage for them.
 
    .. method:: boolean getOpen()
 
@@ -2039,32 +2013,6 @@ Cargo Bay
       Whether the cargo bay is open.
 
    
-
-
-
-.. type:: public enum CargoBayState
-
-   The state of a cargo bay. See :meth:`CargoBay.getState()`.
-
-
-   .. field:: public CargoBayState OPEN
-
-      Cargo bay is fully open.
-
-
-   .. field:: public CargoBayState CLOSED
-
-      Cargo bay closed and locked.
-
-
-   .. field:: public CargoBayState OPENING
-
-      Cargo bay is opening.
-
-
-   .. field:: public CargoBayState CLOSING
-
-      Cargo bay is closing.
 
 
 
@@ -2233,6 +2181,51 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
    
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. type:: public enum DeployableState
+
+   The state of a deployable part.
+   :meth:`Antenna.getState()`, :meth:`CargoBay.getState()`,
+   :meth:`Leg.getState()`, :meth:`Radiator.getState()`,
+   :meth:`ResourceHarvester.getState()`, :meth:`SolarPanel.getState()`,
+   :meth:`Wheel.getState()`
+
+
+   .. field:: public DeployableState DEPLOYED
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. field:: public DeployableState RETRACTED
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. field:: public DeployableState DEPLOYING
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. field:: public DeployableState RETRACTING
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. field:: public DeployableState BROKEN
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
 
 
 
@@ -3182,7 +3175,7 @@ Leg
 
    
 
-   .. method:: LegState getState()
+   .. method:: DeployableState getState()
 
 
       The current state of the landing leg.
@@ -3215,37 +3208,6 @@ Leg
       Returns whether the leg is touching the ground.
 
    
-
-
-
-.. type:: public enum LegState
-
-   The state of a landing leg. See :meth:`Leg.getState()`.
-
-
-   .. field:: public LegState DEPLOYED
-
-      Landing leg is fully deployed.
-
-
-   .. field:: public LegState RETRACTED
-
-      Landing leg is fully retracted.
-
-
-   .. field:: public LegState DEPLOYING
-
-      Landing leg is being deployed.
-
-
-   .. field:: public LegState RETRACTING
-
-      Landing leg is being retracted.
-
-
-   .. field:: public LegState BROKEN
-
-      Landing leg is broken.
 
 
 
@@ -3505,7 +3467,7 @@ Radiator
 
    
 
-   .. method:: RadiatorState getState()
+   .. method:: DeployableState getState()
 
 
       The current state of the radiator.
@@ -3514,38 +3476,7 @@ Radiator
 
       .. note::
 
-         A fixed radiator is always :meth:`RadiatorState.EXTENDED`.
-
-
-
-.. type:: public enum RadiatorState
-
-   The state of a radiator. :meth:`Radiator.getState()`
-
-
-   .. field:: public RadiatorState EXTENDED
-
-      Radiator is fully extended.
-
-
-   .. field:: public RadiatorState RETRACTED
-
-      Radiator is fully retracted.
-
-
-   .. field:: public RadiatorState EXTENDING
-
-      Radiator is being extended.
-
-
-   .. field:: public RadiatorState RETRACTING
-
-      Radiator is being retracted.
-
-
-   .. field:: public RadiatorState BROKEN
-
-      Radiator is broken.
+         A fixed radiator is always :meth:`DeployableState.DEPLOYED`.
 
 
 
@@ -3703,12 +3634,18 @@ Resource Harvester
 
    
 
-   .. method:: ResourceHarvesterState getState()
+   .. method:: DeployableState getState()
 
 
-      The state of the harvester.
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :meth:`ResourceHarvester.getActive()`.
 
    
+
+      .. note::
+
+         A harvester is never :meth:`DeployableState.BROKEN`, as the game
+         does not track damage for them.
 
    .. method:: boolean getDeployed()
 
@@ -3761,37 +3698,6 @@ Resource Harvester
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
    
-
-
-
-.. type:: public enum ResourceHarvesterState
-
-   The state of a resource harvester. See :meth:`ResourceHarvester.getState()`.
-
-
-   .. field:: public ResourceHarvesterState DEPLOYING
-
-      The drill is deploying.
-
-
-   .. field:: public ResourceHarvesterState DEPLOYED
-
-      The drill is deployed and ready.
-
-
-   .. field:: public ResourceHarvesterState RETRACTING
-
-      The drill is retracting.
-
-
-   .. field:: public ResourceHarvesterState RETRACTED
-
-      The drill is retracted.
-
-
-   .. field:: public ResourceHarvesterState ACTIVE
-
-      The drill is running.
 
 
 
@@ -4727,7 +4633,7 @@ Solar Panel
 
    
 
-   .. method:: SolarPanelState getState()
+   .. method:: DeployableState getState()
 
 
       The current state of the solar panel.
@@ -4749,37 +4655,6 @@ Solar Panel
       as a percentage. A value between 0 and 1.
 
    
-
-
-
-.. type:: public enum SolarPanelState
-
-   The state of a solar panel. See :meth:`SolarPanel.getState()`.
-
-
-   .. field:: public SolarPanelState EXTENDED
-
-      Solar panel is fully extended.
-
-
-   .. field:: public SolarPanelState RETRACTED
-
-      Solar panel is fully retracted.
-
-
-   .. field:: public SolarPanelState EXTENDING
-
-      Solar panel is being extended.
-
-
-   .. field:: public SolarPanelState RETRACTING
-
-      Solar panel is being retracted.
-
-
-   .. field:: public SolarPanelState BROKEN
-
-      Solar panel is broken.
 
 
 
@@ -4905,7 +4780,7 @@ Wheel
 
    
 
-   .. method:: WheelState getState()
+   .. method:: DeployableState getState()
 
 
       The current state of the wheel.
@@ -5157,37 +5032,6 @@ Wheel
       Current slip of the wheel.
 
    
-
-
-
-.. type:: public enum WheelState
-
-   The state of a wheel. See :meth:`Wheel.getState()`.
-
-
-   .. field:: public WheelState DEPLOYED
-
-      Wheel is fully deployed.
-
-
-   .. field:: public WheelState RETRACTED
-
-      Wheel is fully retracted.
-
-
-   .. field:: public WheelState DEPLOYING
-
-      Wheel is being deployed.
-
-
-   .. field:: public WheelState RETRACTING
-
-      Wheel is being retracted.
-
-
-   .. field:: public WheelState BROKEN
-
-      Wheel is broken.
 
 
 

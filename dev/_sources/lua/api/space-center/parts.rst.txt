@@ -1849,12 +1849,12 @@ Antenna
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
 
-   .. attribute:: state: SpaceCenter.AntennaState
+   .. attribute:: state: SpaceCenter.DeployableState
 
       The current state of the antenna.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.AntennaState`
+      :rtype: :class:`SpaceCenter.DeployableState`
 
    .. attribute:: deployable: boolean
 
@@ -1942,37 +1942,6 @@ Antenna
 
 
 
-.. class:: AntennaState
-
-   The state of an antenna. See :attr:`SpaceCenter.Antenna.state`.
-
-
-   .. data:: deployed
-
-      Antenna is fully deployed.
-
-
-   .. data:: retracted
-
-      Antenna is fully retracted.
-
-
-   .. data:: deploying
-
-      Antenna is being deployed.
-
-
-   .. data:: retracting
-
-      Antenna is being retracted.
-
-
-   .. data:: broken
-
-      Antenna is broken.
-
-
-
 Cargo Bay
 ^^^^^^^^^
 
@@ -1988,12 +1957,17 @@ Cargo Bay
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
 
-   .. attribute:: state: SpaceCenter.CargoBayState
+   .. attribute:: state: SpaceCenter.DeployableState
 
       The state of the cargo bay.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.CargoBayState`
+      :rtype: :class:`SpaceCenter.DeployableState`
+
+      .. note::
+
+         A cargo bay is never :attr:`SpaceCenter.DeployableState.broken`, as the game
+         does not track damage for them.
 
    .. attribute:: open: boolean
 
@@ -2001,32 +1975,6 @@ Cargo Bay
 
       :Attribute: Can be read or written
       :rtype: boolean
-
-
-
-.. class:: CargoBayState
-
-   The state of a cargo bay. See :attr:`SpaceCenter.CargoBay.state`.
-
-
-   .. data:: open
-
-      Cargo bay is fully open.
-
-
-   .. data:: closed
-
-      Cargo bay closed and locked.
-
-
-   .. data:: opening
-
-      Cargo bay is opening.
-
-
-   .. data:: closing
-
-      Cargo bay is closing.
 
 
 
@@ -2187,6 +2135,51 @@ Decoupler
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. class:: DeployableState
+
+   The state of a deployable part.
+   :attr:`SpaceCenter.Antenna.state`, :attr:`SpaceCenter.CargoBay.state`,
+   :attr:`SpaceCenter.Leg.state`, :attr:`SpaceCenter.Radiator.state`,
+   :attr:`SpaceCenter.ResourceHarvester.state`, :attr:`SpaceCenter.SolarPanel.state`,
+   :attr:`SpaceCenter.Wheel.state`
+
+
+   .. data:: deployed
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. data:: retracted
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. data:: deploying
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. data:: retracting
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. data:: broken
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
 
 
 
@@ -3107,12 +3100,12 @@ Leg
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
 
-   .. attribute:: state: SpaceCenter.LegState
+   .. attribute:: state: SpaceCenter.DeployableState
 
       The current state of the landing leg.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.LegState`
+      :rtype: :class:`SpaceCenter.DeployableState`
 
    .. attribute:: deployable: boolean
 
@@ -3139,37 +3132,6 @@ Leg
 
       :Attribute: Read-only, cannot be set
       :rtype: boolean
-
-
-
-.. class:: LegState
-
-   The state of a landing leg. See :attr:`SpaceCenter.Leg.state`.
-
-
-   .. data:: deployed
-
-      Landing leg is fully deployed.
-
-
-   .. data:: retracted
-
-      Landing leg is fully retracted.
-
-
-   .. data:: deploying
-
-      Landing leg is being deployed.
-
-
-   .. data:: retracting
-
-      Landing leg is being retracted.
-
-
-   .. data:: broken
-
-      Landing leg is broken.
 
 
 
@@ -3414,47 +3376,16 @@ Radiator
       :Attribute: Can be read or written
       :rtype: boolean
 
-   .. attribute:: state: SpaceCenter.RadiatorState
+   .. attribute:: state: SpaceCenter.DeployableState
 
       The current state of the radiator.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.RadiatorState`
+      :rtype: :class:`SpaceCenter.DeployableState`
 
       .. note::
 
-         A fixed radiator is always :attr:`SpaceCenter.RadiatorState.extended`.
-
-
-
-.. class:: RadiatorState
-
-   The state of a radiator. :attr:`SpaceCenter.Radiator.state`
-
-
-   .. data:: extended
-
-      Radiator is fully extended.
-
-
-   .. data:: retracted
-
-      Radiator is fully retracted.
-
-
-   .. data:: extending
-
-      Radiator is being extended.
-
-
-   .. data:: retracting
-
-      Radiator is being retracted.
-
-
-   .. data:: broken
-
-      Radiator is broken.
+         A fixed radiator is always :attr:`SpaceCenter.DeployableState.deployed`.
 
 
 
@@ -3610,12 +3541,18 @@ Resource Harvester
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
 
-   .. attribute:: state: SpaceCenter.ResourceHarvesterState
+   .. attribute:: state: SpaceCenter.DeployableState
 
-      The state of the harvester.
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :attr:`SpaceCenter.ResourceHarvester.active`.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.ResourceHarvesterState`
+      :rtype: :class:`SpaceCenter.DeployableState`
+
+      .. note::
+
+         A harvester is never :attr:`SpaceCenter.DeployableState.broken`, as the game
+         does not track damage for them.
 
    .. attribute:: deployed: boolean
 
@@ -3666,37 +3603,6 @@ Resource Harvester
 
       :Attribute: Read-only, cannot be set
       :rtype: number
-
-
-
-.. class:: ResourceHarvesterState
-
-   The state of a resource harvester. See :attr:`SpaceCenter.ResourceHarvester.state`.
-
-
-   .. data:: deploying
-
-      The drill is deploying.
-
-
-   .. data:: deployed
-
-      The drill is deployed and ready.
-
-
-   .. data:: retracting
-
-      The drill is retracting.
-
-
-   .. data:: retracted
-
-      The drill is retracted.
-
-
-   .. data:: active
-
-      The drill is running.
 
 
 
@@ -4569,12 +4475,12 @@ Solar Panel
       :Attribute: Can be read or written
       :rtype: boolean
 
-   .. attribute:: state: SpaceCenter.SolarPanelState
+   .. attribute:: state: SpaceCenter.DeployableState
 
       The current state of the solar panel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.SolarPanelState`
+      :rtype: :class:`SpaceCenter.DeployableState`
 
    .. attribute:: energy_flow: number
 
@@ -4591,37 +4497,6 @@ Solar Panel
 
       :Attribute: Read-only, cannot be set
       :rtype: number
-
-
-
-.. class:: SolarPanelState
-
-   The state of a solar panel. See :attr:`SpaceCenter.SolarPanel.state`.
-
-
-   .. data:: extended
-
-      Solar panel is fully extended.
-
-
-   .. data:: retracted
-
-      Solar panel is fully retracted.
-
-
-   .. data:: extending
-
-      Solar panel is being extended.
-
-
-   .. data:: retracting
-
-      Solar panel is being retracted.
-
-
-   .. data:: broken
-
-      Solar panel is broken.
 
 
 
@@ -4747,12 +4622,12 @@ Wheel
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
 
-   .. attribute:: state: SpaceCenter.WheelState
+   .. attribute:: state: SpaceCenter.DeployableState
 
       The current state of the wheel.
 
       :Attribute: Read-only, cannot be set
-      :rtype: :class:`SpaceCenter.WheelState`
+      :rtype: :class:`SpaceCenter.DeployableState`
 
    .. attribute:: radius: number
 
@@ -4985,37 +4860,6 @@ Wheel
 
       :Attribute: Read-only, cannot be set
       :rtype: number
-
-
-
-.. class:: WheelState
-
-   The state of a wheel. See :attr:`SpaceCenter.Wheel.state`.
-
-
-   .. data:: deployed
-
-      Wheel is fully deployed.
-
-
-   .. data:: retracted
-
-      Wheel is fully retracted.
-
-
-   .. data:: deploying
-
-      Wheel is being deployed.
-
-
-   .. data:: retracting
-
-      Wheel is being retracted.
-
-
-   .. data:: broken
-
-      Wheel is broken.
 
 
 

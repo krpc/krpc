@@ -6,6 +6,13 @@ Changelog
 -----
 
 
+.. warning:: **Breaking changes**
+
+   * *(SpaceCenter service)* Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating
+   * *(SpaceCenter service)* ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated
+
+
+
 .. note:: **Deprecated**
 
    * *(Core)* KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (:issue:`897`)
@@ -45,6 +52,8 @@ Core
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
+* Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating
+* ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated
 * Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in flight (the KSP fields they read are only refreshed while the part action window is open)
 * Add SpaceCenter.Expansions to report the installed KSP expansions
 * Add Parts.RoboticControllers

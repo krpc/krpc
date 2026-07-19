@@ -1876,7 +1876,7 @@ Antenna
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_State(krpc_connection_t connection, krpc_SpaceCenter_AntennaState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the antenna.
 
@@ -1966,37 +1966,6 @@ Antenna
 
 
 
-.. type:: krpc_SpaceCenter_AntennaState_t
-
-   The state of an antenna. See :func:`krpc_SpaceCenter_Antenna_State`.
-
-
-   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_DEPLOYED
-
-      Antenna is fully deployed.
-
-
-   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_RETRACTED
-
-      Antenna is fully retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_DEPLOYING
-
-      Antenna is being deployed.
-
-
-   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_RETRACTING
-
-      Antenna is being retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_BROKEN
-
-      Antenna is broken.
-
-
-
 Cargo Bay
 ^^^^^^^^^
 
@@ -2011,11 +1980,16 @@ Cargo Bay
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_State(krpc_connection_t connection, krpc_SpaceCenter_CargoBayState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The state of the cargo bay.
 
    
+
+      .. note::
+
+         A cargo bay is never :macro:`KRPC_SPACECENTER_DEPLOYABLESTATE_BROKEN`, as the game
+         does not track damage for them.
 
    .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_Open(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_CargoBay_set_Open(bool value)
@@ -2023,32 +1997,6 @@ Cargo Bay
       Whether the cargo bay is open.
 
    
-
-
-
-.. type:: krpc_SpaceCenter_CargoBayState_t
-
-   The state of a cargo bay. See :func:`krpc_SpaceCenter_CargoBay_State`.
-
-
-   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_OPEN
-
-      Cargo bay is fully open.
-
-
-   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_CLOSED
-
-      Cargo bay closed and locked.
-
-
-   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_OPENING
-
-      Cargo bay is opening.
-
-
-   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_CLOSING
-
-      Cargo bay is closing.
 
 
 
@@ -2201,6 +2149,51 @@ Decoupler
       The part attached to this decoupler's explosive node.
 
    
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. type:: krpc_SpaceCenter_DeployableState_t
+
+   The state of a deployable part.
+   :func:`krpc_SpaceCenter_Antenna_State`, :func:`krpc_SpaceCenter_CargoBay_State`,
+   :func:`krpc_SpaceCenter_Leg_State`, :func:`krpc_SpaceCenter_Radiator_State`,
+   :func:`krpc_SpaceCenter_ResourceHarvester_State`, :func:`krpc_SpaceCenter_SolarPanel_State`,
+   :func:`krpc_SpaceCenter_Wheel_State`
+
+
+   .. macro:: KRPC_SPACECENTER_DEPLOYABLESTATE_DEPLOYED
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. macro:: KRPC_SPACECENTER_DEPLOYABLESTATE_RETRACTED
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. macro:: KRPC_SPACECENTER_DEPLOYABLESTATE_DEPLOYING
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. macro:: KRPC_SPACECENTER_DEPLOYABLESTATE_RETRACTING
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. macro:: KRPC_SPACECENTER_DEPLOYABLESTATE_BROKEN
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
 
 
 
@@ -3091,7 +3084,7 @@ Leg
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Leg_State(krpc_connection_t connection, krpc_SpaceCenter_LegState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the landing leg.
 
@@ -3120,37 +3113,6 @@ Leg
       Returns whether the leg is touching the ground.
 
    
-
-
-
-.. type:: krpc_SpaceCenter_LegState_t
-
-   The state of a landing leg. See :func:`krpc_SpaceCenter_Leg_State`.
-
-
-   .. macro:: KRPC_SPACECENTER_LEGSTATE_DEPLOYED
-
-      Landing leg is fully deployed.
-
-
-   .. macro:: KRPC_SPACECENTER_LEGSTATE_RETRACTED
-
-      Landing leg is fully retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_LEGSTATE_DEPLOYING
-
-      Landing leg is being deployed.
-
-
-   .. macro:: KRPC_SPACECENTER_LEGSTATE_RETRACTING
-
-      Landing leg is being retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_LEGSTATE_BROKEN
-
-      Landing leg is broken.
 
 
 
@@ -3397,7 +3359,7 @@ Radiator
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Radiator_State(krpc_connection_t connection, krpc_SpaceCenter_RadiatorState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Radiator_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the radiator.
 
@@ -3405,38 +3367,7 @@ Radiator
 
       .. note::
 
-         A fixed radiator is always :macro:`KRPC_SPACECENTER_RADIATORSTATE_EXTENDED`.
-
-
-
-.. type:: krpc_SpaceCenter_RadiatorState_t
-
-   The state of a radiator. :func:`krpc_SpaceCenter_Radiator_State`
-
-
-   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_EXTENDED
-
-      Radiator is fully extended.
-
-
-   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_RETRACTED
-
-      Radiator is fully retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_EXTENDING
-
-      Radiator is being extended.
-
-
-   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_RETRACTING
-
-      Radiator is being retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_BROKEN
-
-      Radiator is broken.
+         A fixed radiator is always :macro:`KRPC_SPACECENTER_DEPLOYABLESTATE_DEPLOYED`.
 
 
 
@@ -3612,11 +3543,17 @@ Resource Harvester
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_State(krpc_connection_t connection, krpc_SpaceCenter_ResourceHarvesterState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
-      The state of the harvester.
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :func:`krpc_SpaceCenter_ResourceHarvester_Active`.
 
    
+
+      .. note::
+
+         A harvester is never :macro:`KRPC_SPACECENTER_DEPLOYABLESTATE_BROKEN`, as the game
+         does not track damage for them.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ResourceHarvester_set_Deployed(bool value)
@@ -3663,37 +3600,6 @@ Resource Harvester
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
    
-
-
-
-.. type:: krpc_SpaceCenter_ResourceHarvesterState_t
-
-   The state of a resource harvester. See :func:`krpc_SpaceCenter_ResourceHarvester_State`.
-
-
-   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_DEPLOYING
-
-      The drill is deploying.
-
-
-   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_DEPLOYED
-
-      The drill is deployed and ready.
-
-
-   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_RETRACTING
-
-      The drill is retracting.
-
-
-   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_RETRACTED
-
-      The drill is retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_ACTIVE
-
-      The drill is running.
 
 
 
@@ -4565,7 +4471,7 @@ Solar Panel
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_State(krpc_connection_t connection, krpc_SpaceCenter_SolarPanelState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the solar panel.
 
@@ -4584,37 +4490,6 @@ Solar Panel
       as a percentage. A value between 0 and 1.
 
    
-
-
-
-.. type:: krpc_SpaceCenter_SolarPanelState_t
-
-   The state of a solar panel. See :func:`krpc_SpaceCenter_SolarPanel_State`.
-
-
-   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_EXTENDED
-
-      Solar panel is fully extended.
-
-
-   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_RETRACTED
-
-      Solar panel is fully retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_EXTENDING
-
-      Solar panel is being extended.
-
-
-   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_RETRACTING
-
-      Solar panel is being retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_BROKEN
-
-      Solar panel is broken.
 
 
 
@@ -4750,7 +4625,7 @@ Wheel
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_State(krpc_connection_t connection, krpc_SpaceCenter_WheelState_t * result)
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the wheel.
 
@@ -4969,37 +4844,6 @@ Wheel
       Current slip of the wheel.
 
    
-
-
-
-.. type:: krpc_SpaceCenter_WheelState_t
-
-   The state of a wheel. See :func:`krpc_SpaceCenter_Wheel_State`.
-
-
-   .. macro:: KRPC_SPACECENTER_WHEELSTATE_DEPLOYED
-
-      Wheel is fully deployed.
-
-
-   .. macro:: KRPC_SPACECENTER_WHEELSTATE_RETRACTED
-
-      Wheel is fully retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_WHEELSTATE_DEPLOYING
-
-      Wheel is being deployed.
-
-
-   .. macro:: KRPC_SPACECENTER_WHEELSTATE_RETRACTING
-
-      Wheel is being retracted.
-
-
-   .. macro:: KRPC_SPACECENTER_WHEELSTATE_BROKEN
-
-      Wheel is broken.
 
 
 
