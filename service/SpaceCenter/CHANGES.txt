@@ -5,6 +5,7 @@ v0.6.0
  * Fix Experiment.Reset not clearing the science data stored by DMagic experiments,
    which caused the next call to Run to fail with "Experiment already contains data" (#550)
  * Fix Camera Distance, Pitch, Heading and FoV setters being lost when set during a camera mode switch (#318)
+ * Fix ResourceHarvester.Active being silently ignored when set while the harvester is deploying; the requested state is now applied when the deploy completes
  * Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
  * Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
  * Fix ControlSurface.AvailableTorque returning inconsistent signs (ModuleControlSurface negates the roll axis); now normalised to positive/negative torque like other parts
