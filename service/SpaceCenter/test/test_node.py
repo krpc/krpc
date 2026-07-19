@@ -1,6 +1,5 @@
 import unittest
 
-import krpc
 import krpctest
 from krpctest.geometry import norm, normalize, vector
 
@@ -55,17 +54,17 @@ class TestNode(krpctest.TestCase):
     def test_remove_node(self):
         node = self.control.add_node(self.space_center.ut, 0, 0, 0)
         node.remove()
-        with self.assertRaises(krpc.client.RPCError):
+        with self.assertRaises(RuntimeError):
             node.prograde = 0
 
     def test_remove_nodes(self):
-        self.control.add_node(self.space_center.ut + 15, 4, -2, 1)
-        self.control.add_node(self.space_center.ut + 40, 1, 3, 2)
-        self.control.add_node(self.space_center.ut + 60, 0, 4, 0)
+        node0 = self.control.add_node(self.space_center.ut + 15, 4, -2, 1)
+        node1 = self.control.add_node(self.space_center.ut + 40, 1, 3, 2)
+        node2 = self.control.add_node(self.space_center.ut + 60, 0, 4, 0)
         self.control.remove_nodes()
-        # TODO: don't skip the following
-        # with self.assertRaises (krpc.client.RPCError):
-        #     node.prograde = 0
+        for node in (node0, node1, node2):
+            with self.assertRaises(RuntimeError):
+                node.prograde = 0
 
     def test_get_nodes(self):
         self.assertEqual([], self.control.nodes)

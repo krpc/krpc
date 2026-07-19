@@ -1402,7 +1402,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         /// </summary>
         Vector3 ComputeCurrentAngularVelocity ()
         {
-            var worldAngularVelocity = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
+            var worldAngularVelocity = vessel.InternalVessel.WorldAngularVelocity ();
             var localAngularVelocity = ReferenceFrame.AngularVelocityFromWorldSpace (worldAngularVelocity);
             // Express the measured angular velocity in the controller's sign convention.
             //
@@ -1529,7 +1529,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             // from-rest flip has no committed plane, so latch the arbitrary-but-consistent geodesic
             // axis instead — either way the flip then rides a fixed plane, not the precessing live axis.
             if (!antipodeLatched) {
-                var worldOmega = vessel.InternalVessel.GetComponent<Rigidbody> ().angularVelocity;
+                var worldOmega = vessel.InternalVessel.WorldAngularVelocity ();
                 Vector3d omegaAp = ReferenceFrame.AngularVelocityFromWorldSpace (worldOmega);
                 var omegaPerp = omegaAp - Vector3d.Dot (omegaAp, currentDirection) * currentDirection;
                 antipodeLatchedNormal = omegaPerp.magnitude >= AntipodeLeadRate

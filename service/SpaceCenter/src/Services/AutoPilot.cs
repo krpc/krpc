@@ -442,7 +442,7 @@ namespace KRPC.SpaceCenter.Services
         void WaitWithDeadline (DateTime deadline)
         {
             if (Error > Controller.StoppingAngleThreshold ||
-                InternalVessel.GetComponent<Rigidbody> ().angularVelocity.magnitude > Controller.StoppingVelocityThreshold) {
+                InternalVessel.WorldAngularVelocity ().magnitude > Controller.StoppingVelocityThreshold) {
                 if (DateTime.UtcNow > deadline)
                     throw new TimeoutException ("AutoPilot timed out waiting to reach target direction");
                 throw new YieldException<Action> (() => WaitWithDeadline (deadline));

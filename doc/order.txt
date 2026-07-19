@@ -1192,6 +1192,7 @@ SpaceCenter.Wheel.DriveLimiter
 SpaceCenter.Wheel.Steerable
 SpaceCenter.Wheel.SteeringEnabled
 SpaceCenter.Wheel.SteeringInverted
+SpaceCenter.Wheel.SteeringAngleAuto
 SpaceCenter.Wheel.SteeringAngleLimit
 SpaceCenter.Wheel.SteeringResponseTime
 SpaceCenter.Wheel.HasSuspension

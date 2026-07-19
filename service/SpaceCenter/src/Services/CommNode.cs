@@ -66,20 +66,31 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The KSP vessel this node belongs to, or null if it is not a vessel's node.
+        /// A vessel's node is constructed with the vessel's transform, so the vessel
+        /// component can be read straight off it without scanning every vessel in the
+        /// game. The vessel's connection is checked to confirm the node is its current
+        /// one, so a stale node from a rebuilt network is not treated as the vessel's.
+        /// </summary>
+        global::Vessel InternalVessel {
+            get {
+                var transform = InternalNode.transform;
+                if (transform == null)
+                    return null;
+                var vessel = transform.GetComponent<global::Vessel> ();
+                if (vessel == null)
+                    return null;
+                var connection = vessel.Connection;
+                return connection != null && connection.Comm == InternalNode ? vessel : null;
+            }
+        }
+
+        /// <summary>
         /// Whether the communication node is a vessel.
         /// </summary>
         [KRPCProperty]
         public bool IsVessel {
-            get {
-                // FIXME: this is inefficient
-                var node = InternalNode;
-                foreach (var x in FlightGlobals.Vessels) {
-                    var connection = x.Connection;
-                    if (connection != null && connection.Comm == InternalNode)
-                        return true;
-                }
-                return false;
-            }
+            get { return InternalVessel != null; }
         }
 
         /// <summary>
@@ -88,14 +99,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Vessel Vessel {
             get {
-                // FIXME: this is inefficient
-                var node = InternalNode;
-                foreach (var x in FlightGlobals.Vessels) {
-                    var connection = x.Connection;
-                    if (connection != null && connection.Comm == InternalNode)
-                        return new Vessel (x);
-                }
-                throw new InvalidOperationException ("Communication node is not part of a vessel");
+                var vessel = InternalVessel;
+                if (vessel == null)
+                    throw new InvalidOperationException ("Communication node is not part of a vessel");
+                return new Vessel (vessel);
             }
         }
     }

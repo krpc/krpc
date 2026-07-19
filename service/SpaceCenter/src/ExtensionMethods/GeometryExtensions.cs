@@ -242,7 +242,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             switch (order) {
             case AxisOrder.YZX:
                 {
-                    // FIXME: use double precision arithmetic
+                    // The double-precision QuaternionD.eulerAngles cannot be used: its native
+                    // Internal_ToEulerRad binding is stripped from KSP's runtime and throws a
+                    // missing-method error. Round-trip through the single-precision Quaternion.
                     var angles = new Quaternion ((float)q.z, (float)q.x, (float)q.y, (float)q.w).eulerAngles;
                     result = new Vector3d (angles.z, angles.x, angles.y);
                     break;
@@ -278,7 +280,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             QuaternionD result;
             switch (order) {
             case AxisOrder.YZX:
-                // FIXME: use double precision arithmetic
+                // The double-precision QuaternionD.Euler cannot be used: its native
+                // Internal_FromEulerRad binding is stripped from KSP's runtime and throws a
+                // missing-method error. Round-trip through the single-precision Quaternion.
                 var angles = new Vector3 ((float)eulerAngles.y, (float)eulerAngles.z, (float)eulerAngles.x);
                 var tmp = Quaternion.Euler (angles);
                 result = new QuaternionD (tmp.y, tmp.z, tmp.x, tmp.w);

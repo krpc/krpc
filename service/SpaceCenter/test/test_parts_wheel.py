@@ -159,11 +159,23 @@ class TestPartsWheel(krpctest.TestCase):
         self.assertTrue(wheel.steering_enabled)
         self.assertFalse(wheel.steering_inverted)
 
+    def test_steering_angle_auto(self):
+        wheel = self.powered_wheel
+        # The setting round-trips through the live KSP field
+        default = wheel.steering_angle_auto
+        wheel.steering_angle_auto = not default
+        self.wait()
+        self.assertEqual(not default, wheel.steering_angle_auto)
+        wheel.steering_angle_auto = default
+        self.wait()
+        self.assertEqual(default, wheel.steering_angle_auto)
+
     def test_unsteerable(self):
         wheel = self.fixed_wheel
         self.assertFalse(wheel.steerable)
         self.assertRaises(RuntimeError, getattr, wheel, "steering_enabled")
         self.assertRaises(RuntimeError, getattr, wheel, "steering_inverted")
+        self.assertRaises(RuntimeError, getattr, wheel, "steering_angle_auto")
 
     def test_suspension(self):
         wheel = self.suspension_wheel

@@ -394,7 +394,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight)]
         public float Mass {
-            get { return InternalVessel.parts.Sum(part => part.WetMass()); }
+            get { return InternalVessel.WetMass (); }
         }
 
         /// <summary>
@@ -1081,10 +1081,9 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            // FIXME: finding the rigidbody is expensive - cache it
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
-            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.GetComponent<Rigidbody> ().angularVelocity).ToTuple ();
+            return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.WorldAngularVelocity ()).ToTuple ();
         }
     }
 }

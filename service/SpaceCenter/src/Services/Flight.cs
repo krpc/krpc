@@ -222,8 +222,7 @@ namespace KRPC.SpaceCenter.Services
         /// Reference area used for lift and drag calculations
         /// </summary>
         double ReferenceArea {
-            // TODO: avoid creating vessel object
-            get { return new Vessel (InternalVessel).Mass / (BallisticCoefficient * DragCoefficient); }
+            get { return InternalVessel.WetMass () / (BallisticCoefficient * DragCoefficient); }
         }
 
         /// <summary>
