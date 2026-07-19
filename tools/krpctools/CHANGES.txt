@@ -2,6 +2,8 @@ v0.6.0
  * Surface deprecated members in generated documentation and client stubs (#904)
  * Fix docgen dropping remarks in service-level documentation
  * Fix cross-service member references not resolving in generated C# and Lua documentation (#897)
+ * Fix member references in generated Python documentation using lowerCamelCase
+   instead of snake_case
 
 v0.5.4
  * Fix incorrect protobuf DLL (#755)

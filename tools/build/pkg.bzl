@@ -16,16 +16,24 @@ def _apply_path_map(path_map, path):
                 matchlen = len(x)
     return match
 
+# buildifier: disable=function-docstring-header
 def _apply_exclude(exclude, path):
-    """ Apply wildcard exclusion patterns to the path. """
-
-    # TODO: improve this
+    """ Whether the path matches any of the exclusion patterns. A pattern may be an exact path, a
+        leading '*' (suffix match), a trailing '*' (prefix match), or both (substring match); these
+        are the forms the callers use. Patterns with a '*' elsewhere are not supported. """
     for pattern in exclude:
-        if "*" in pattern:
-            if pattern[0] == "*" and path.endswith(pattern[1:]):
+        if "*" not in pattern:
+            if path == pattern:
                 return True
-        else:
-            return path == pattern
+        elif pattern.startswith("*") and pattern.endswith("*"):
+            if pattern[1:-1] in path:
+                return True
+        elif pattern.startswith("*"):
+            if path.endswith(pattern[1:]):
+                return True
+        elif pattern.endswith("*"):
+            if path.startswith(pattern[:-1]):
+                return True
     return False
 
 def _is_executable(mode_map, path):
