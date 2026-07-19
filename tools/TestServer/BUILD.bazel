@@ -43,15 +43,19 @@ pkg_zip(
     exclude = ["*.pdb"],
     files = [
         ":README.md",
+        ":TestServer-xmldoc",
         ":publish",
         "//:version",
+        "//core:KRPC.Core.net8-xmldoc",
         "//tools/build/protobuf:LICENSE",
     ],
     mode_map = {
         "TestServer": "755",
     },
     path_map = {
+        "core/xmldoc-net8/": "",
         "tools/TestServer/publish/publish/linux-x64/": "",
+        "tools/TestServer/xmldoc/": "",
         "tools/TestServer/": "",
         "tools/build/protobuf/LICENSE": "LICENSE.protobuf",
     },
@@ -70,6 +74,15 @@ csharp_binary(
     visibility = ["//visibility:public"],
     warning_level = 4,
     deps = exe_deps,
+)
+
+# The server reads API documentation from the XML doc file next to each
+# assembly at runtime, so the release archive ships it beside the binaries.
+genrule(
+    name = "TestServer-xmldoc",
+    srcs = [":TestServer"],
+    outs = ["xmldoc/TestServer.xml"],
+    cmd = 'for f in $(SRCS); do case "$$f" in *.xml) cp "$$f" "$@";; esac; done',
 )
 
 # Published (framework-dependent) layout of TestServer for the release
