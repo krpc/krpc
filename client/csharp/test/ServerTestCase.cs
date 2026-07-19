@@ -16,8 +16,6 @@ namespace KRPC.Client.Test
         [TearDown]
         public virtual void TearDown ()
         {
-            // TODO: This shouldn't be necessary, but avoids an assertion in Mono 4.4.0.182
-            // when the stream update thread is still running when the process exits.
             Connection.Dispose ();
         }
 

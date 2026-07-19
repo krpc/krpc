@@ -7,7 +7,9 @@ using NUnit.Framework;
 
 namespace KRPC.Test.Utils
 {
-    // TODO: relies on test fixtures from KRPC.Test.Service, so these tests are not self contained
+    // These tests count types and members declared across the test assembly, so
+    // they depend on the fixtures in KRPC.Test.Service and need updating when
+    // fixtures are added there.
     [TestFixture]
     public class ReflectionTest
     {

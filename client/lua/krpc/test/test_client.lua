@@ -138,10 +138,9 @@ function TestClient:test_blocking_procedure()
 end
 
 function TestClient:test_too_many_arguments()
-  -- FIXME: passing too many arguments isn't a bug in Lua!
-  --luaunit.assertError(self.conn.test_service.optional_arguments, '1', '2', '3', '4', '5')
-  --obj = self.conn.test_service.create_test_object('jeb')
-  --luaunit.assertError(obj.optional_arguments, '1', '2', '3', '4', '5')
+  -- Calling a procedure with more arguments than it has parameters is not an
+  -- error in Lua: excess arguments are discarded by the language before the
+  -- client sees them, so there is no failure mode to test.
 end
 
 local function filter_private(xs)
