@@ -5424,7 +5424,8 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dd><p>Whether the RCS thrusters are active.
 An RCS thruster is inactive if the RCS action group is disabled
 (<a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7Control3rcsEv" title="krpc::services::SpaceCenter::Control::rcs"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::rcs()</span></code></a>), the RCS thruster itself is not enabled
-(<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS7enabledEv" title="krpc::services::SpaceCenter::RCS::enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::enabled()</span></code></a>) or it is covered by a fairing (<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part8shieldedEv" title="krpc::services::SpaceCenter::Part::shielded"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::shielded()</span></code></a>).</p>
+(<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter3RCS7enabledEv" title="krpc::services::SpaceCenter::RCS::enabled"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RCS::enabled()</span></code></a>), or it is covered by a fairing
+(<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part8shieldedEv" title="krpc::services::SpaceCenter::Part::shielded"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::shielded()</span></code></a>) and cannot thrust while shielded.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -6109,6 +6110,19 @@ A value between 0 and 100 inclusive.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel19steering_angle_autoEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel19steering_angle_autoEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel19steering_angle_autoEv"></span><span id="krpc::services::SpaceCenter::Wheel::steering_angle_auto"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">steering_angle_auto</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel19steering_angle_autoEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel23set_steering_angle_autoEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Wheel23set_steering_angle_autoEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel23set_steering_angle_autoEb"></span><span id="krpc::services::SpaceCenter::Wheel::set_steering_angle_auto__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_steering_angle_auto</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel23set_steering_angle_autoEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the steering angle is automatically limited based on the vessel’s speed,
+reducing the maximum angle as the vessel moves faster. See also
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel20steering_angle_limitEv" title="krpc::services::SpaceCenter::Wheel::steering_angle_limit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::steering_angle_limit()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Wheel20steering_angle_limitEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Wheel20steering_angle_limitEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Wheel20steering_angle_limitEv"></span><span id="krpc::services::SpaceCenter::Wheel::steering_angle_limit"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">steering_angle_limit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Wheel20steering_angle_limitEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -6653,7 +6667,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b94072b">b94072b</a>
+  <a href="https://github.com/krpc/krpc/commit/babcaa0">babcaa0</a>
 </p></div>
       
     </div>

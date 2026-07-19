@@ -4147,7 +4147,8 @@ RCS
       Whether the RCS thrusters are active.
       An RCS thruster is inactive if the RCS action group is disabled
       (:func:`Control::rcs`), the RCS thruster itself is not enabled
-      (:func:`RCS::enabled`) or it is covered by a fairing (:func:`Part::shielded`).
+      (:func:`RCS::enabled`), or it is covered by a fairing
+      (:func:`Part::shielded`) and cannot thrust while shielded.
 
    
 
@@ -4707,6 +4708,15 @@ Wheel
    .. function:: void set_steering_inverted(bool value)
 
       Whether the wheel steering is inverted.
+
+   
+
+   .. function:: bool steering_angle_auto()
+   .. function:: void set_steering_angle_auto(bool value)
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :func:`Wheel::steering_angle_limit`.
 
    
 

@@ -7045,7 +7045,8 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dd><p>Whether the RCS thrusters are active.
 An RCS thruster is inactive if the RCS action group is disabled
 (<a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.RCS" title="KRPC.Client.Services.SpaceCenter.Control.RCS property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Control.RCS</span></code></a>), the RCS thruster itself is not enabled
-(<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Enabled" title="KRPC.Client.Services.SpaceCenter.RCS.Enabled property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.Enabled</span></code></a>) or it is covered by a fairing (<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Shielded" title="KRPC.Client.Services.SpaceCenter.Part.Shielded property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.Shielded</span></code></a>).</p>
+(<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.RCS.Enabled" title="KRPC.Client.Services.SpaceCenter.RCS.Enabled property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">RCS.Enabled</span></code></a>), or it is covered by a fairing
+(<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Shielded" title="KRPC.Client.Services.SpaceCenter.Part.Shielded property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.Shielded</span></code></a>) and cannot thrust while shielded.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -7915,6 +7916,19 @@ A value between 0 and 100 inclusive.</p>
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Wheel.SteeringAngleAuto">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">SteeringAngleAuto</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Wheel.SteeringAngleAuto" title="Link to this definition">#</a></dt>
+<dd><p>Whether the steering angle is automatically limited based on the vessel’s speed,
+reducing the maximum angle as the vessel moves faster. See also
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Wheel.SteeringAngleLimit" title="KRPC.Client.Services.SpaceCenter.Wheel.SteeringAngleLimit property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Wheel.SteeringAngleLimit</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Wheel.SteeringAngleLimit">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">SteeringAngleLimit</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Wheel.SteeringAngleLimit" title="Link to this definition">#</a></dt>
 <dd><p>The steering angle limit.</p>
@@ -8507,7 +8521,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b94072b">b94072b</a>
+  <a href="https://github.com/krpc/krpc/commit/babcaa0">babcaa0</a>
 </p></div>
       
     </div>

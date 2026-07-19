@@ -4120,7 +4120,8 @@ RCS
       Whether the RCS thrusters are active.
       An RCS thruster is inactive if the RCS action group is disabled
       (:attr:`SpaceCenter.Control.rcs`), the RCS thruster itself is not enabled
-      (:attr:`SpaceCenter.RCS.enabled`) or it is covered by a fairing (:attr:`SpaceCenter.Part.shielded`).
+      (:attr:`SpaceCenter.RCS.enabled`), or it is covered by a fairing
+      (:attr:`SpaceCenter.Part.shielded`) and cannot thrust while shielded.
 
       :Attribute: Read-only, cannot be set
       :rtype: boolean
@@ -4697,6 +4698,15 @@ Wheel
    .. attribute:: steering_inverted: boolean
 
       Whether the wheel steering is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: steering_angle_auto: boolean
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :attr:`SpaceCenter.Wheel.steering_angle_limit`.
 
       :Attribute: Can be read or written
       :rtype: boolean

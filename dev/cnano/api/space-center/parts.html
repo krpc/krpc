@@ -5424,7 +5424,8 @@ See <code class="xref c c-func docutils literal notranslate"><span class="pre">k
 <dd><p>Whether the RCS thrusters are active.
 An RCS thruster is inactive if the RCS action group is disabled
 (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_RCS()</span></code>), the RCS thruster itself is not enabled
-(<a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Enabled" title="krpc_SpaceCenter_RCS_Enabled"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Enabled()</span></code></a>) or it is covered by a fairing (<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Shielded()</span></code>).</p>
+(<a class="reference internal" href="#c.krpc_SpaceCenter_RCS_t.krpc_SpaceCenter_RCS_Enabled" title="krpc_SpaceCenter_RCS_Enabled"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_RCS_Enabled()</span></code></a>), or it is covered by a fairing
+(<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Shielded()</span></code>) and cannot thrust while shielded.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -6109,6 +6110,19 @@ A value between 0 and 100 inclusive.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SteeringAngleAuto">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_SteeringAngleAuto</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SteeringAngleAuto" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_set_SteeringAngleAuto">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_set_SteeringAngleAuto</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_set_SteeringAngleAuto" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the steering angle is automatically limited based on the vessel’s speed,
+reducing the maximum angle as the vessel moves faster. See also
+<a class="reference internal" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SteeringAngleLimit" title="krpc_SpaceCenter_Wheel_SteeringAngleLimit"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Wheel_SteeringAngleLimit()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SteeringAngleLimit">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Wheel_SteeringAngleLimit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Wheel_t.krpc_SpaceCenter_Wheel_SteeringAngleLimit" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -6690,7 +6704,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b94072b">b94072b</a>
+  <a href="https://github.com/krpc/krpc/commit/babcaa0">babcaa0</a>
 </p></div>
       
     </div>

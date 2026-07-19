@@ -4564,7 +4564,8 @@ RCS
       Whether the RCS thrusters are active.
       An RCS thruster is inactive if the RCS action group is disabled
       (:attr:`Control.rcs`), the RCS thruster itself is not enabled
-      (:attr:`RCS.enabled`) or it is covered by a fairing (:attr:`Part.shielded`).
+      (:attr:`RCS.enabled`), or it is covered by a fairing
+      (:attr:`Part.shielded`) and cannot thrust while shielded.
 
       :Attribute: Read-only, cannot be set
       :rtype: bool
@@ -5203,6 +5204,16 @@ Wheel
    .. attribute:: steering_inverted
 
       Whether the wheel steering is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: steering_angle_auto
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :attr:`Wheel.steering_angle_limit`.
 
       :Attribute: Can be read or written
       :rtype: bool

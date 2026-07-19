@@ -4107,7 +4107,8 @@ RCS
       Whether the RCS thrusters are active.
       An RCS thruster is inactive if the RCS action group is disabled
       (:prop:`Control.RCS`), the RCS thruster itself is not enabled
-      (:prop:`RCS.Enabled`) or it is covered by a fairing (:prop:`Part.Shielded`).
+      (:prop:`RCS.Enabled`), or it is covered by a fairing
+      (:prop:`Part.Shielded`) and cannot thrust while shielded.
 
       :Game Scenes: All
 
@@ -4644,6 +4645,14 @@ Wheel
    .. property:: bool SteeringInverted { get; set; }
 
       Whether the wheel steering is inverted.
+
+      :Game Scenes: All
+
+   .. property:: bool SteeringAngleAuto { get; set; }
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :prop:`Wheel.SteeringAngleLimit`.
 
       :Game Scenes: All
 

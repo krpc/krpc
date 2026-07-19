@@ -5495,7 +5495,8 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dd><p>Whether the RCS thrusters are active.
 An RCS thruster is inactive if the RCS action group is disabled
 (<a class="reference internal" href="control.html#krpc.client.services.SpaceCenter.Control.getRCS()" title="krpc.client.services.SpaceCenter.Control.getRCS()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getRCS()</span></code></a>), the RCS thruster itself is not enabled
-(<a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getEnabled()" title="krpc.client.services.SpaceCenter.RCS.getEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getEnabled()</span></code></a>) or it is covered by a fairing (<a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getShielded()" title="krpc.client.services.SpaceCenter.Part.getShielded()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getShielded()</span></code></a>).</p>
+(<a class="reference internal" href="#krpc.client.services.SpaceCenter.RCS.getEnabled()" title="krpc.client.services.SpaceCenter.RCS.getEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RCS.getEnabled()</span></code></a>), or it is covered by a fairing
+(<a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getShielded()" title="krpc.client.services.SpaceCenter.Part.getShielded()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getShielded()</span></code></a>) and cannot thrust while shielded.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -6180,6 +6181,19 @@ A value between 0 and 100 inclusive.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getSteeringAngleAuto()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSteeringAngleAuto</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getSteeringAngleAuto()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.setSteeringAngleAuto(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSteeringAngleAuto</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.setSteeringAngleAuto(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the steering angle is automatically limited based on the vessel’s speed,
+reducing the maximum angle as the vessel moves faster. See also
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Wheel.getSteeringAngleLimit()" title="krpc.client.services.SpaceCenter.Wheel.getSteeringAngleLimit()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getSteeringAngleLimit()</span></code></a>.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Wheel.getSteeringAngleLimit()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getSteeringAngleLimit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Wheel.getSteeringAngleLimit()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -6740,7 +6754,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b94072b">b94072b</a>
+  <a href="https://github.com/krpc/krpc/commit/babcaa0">babcaa0</a>
 </p></div>
       
     </div>

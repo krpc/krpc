@@ -4251,7 +4251,8 @@ RCS
       Whether the RCS thrusters are active.
       An RCS thruster is inactive if the RCS action group is disabled
       (:meth:`Control.getRCS()`), the RCS thruster itself is not enabled
-      (:meth:`RCS.getEnabled()`) or it is covered by a fairing (:meth:`Part.getShielded()`).
+      (:meth:`RCS.getEnabled()`), or it is covered by a fairing
+      (:meth:`Part.getShielded()`) and cannot thrust while shielded.
 
    
 
@@ -4852,6 +4853,16 @@ Wheel
    .. method:: void setSteeringInverted(boolean value)
 
       Whether the wheel steering is inverted.
+
+   
+
+   .. method:: boolean getSteeringAngleAuto()
+
+   .. method:: void setSteeringAngleAuto(boolean value)
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :meth:`Wheel.getSteeringAngleLimit()`.
 
    
 

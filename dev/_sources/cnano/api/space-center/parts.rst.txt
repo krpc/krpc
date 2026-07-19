@@ -4136,7 +4136,8 @@ RCS
       Whether the RCS thrusters are active.
       An RCS thruster is inactive if the RCS action group is disabled
       (:func:`krpc_SpaceCenter_Control_RCS`), the RCS thruster itself is not enabled
-      (:func:`krpc_SpaceCenter_RCS_Enabled`) or it is covered by a fairing (:func:`krpc_SpaceCenter_Part_Shielded`).
+      (:func:`krpc_SpaceCenter_RCS_Enabled`), or it is covered by a fairing
+      (:func:`krpc_SpaceCenter_Part_Shielded`) and cannot thrust while shielded.
 
    
 
@@ -4695,6 +4696,15 @@ Wheel
    .. function:: void krpc_SpaceCenter_Wheel_set_SteeringInverted(bool value)
 
       Whether the wheel steering is inverted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SteeringAngleAuto(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_SteeringAngleAuto(bool value)
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :func:`krpc_SpaceCenter_Wheel_SteeringAngleLimit`.
 
    
 

@@ -735,6 +735,11 @@
 <li><p>Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach class exposing the time, distance, positions, velocities, relative position/velocity and relative speed at a close approach with a target orbit, plus the vessels or bodies involved (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/334">#334</a>)</p></li>
 <li><p>Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/334">#334</a>)</p></li>
 <li><p>Fix Part.Lift, Flight.Lift and Flight.AerodynamicForce including stale body lift for parts whose body lift the game suppresses . e.g. a pod with a heatshield attached (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/971">#971</a>)</p></li>
+<li><p>Fix RCS.Active reporting a shielded thruster as inactive when it is able to thrust while shielded</p></li>
+<li><p>Add Wheel.SteeringAngleAuto to get/set automatic speed-based steering angle limiting</p></li>
+<li><p>Fix maneuver node reference frame positions being computed relative to the active vessel, giving wrong positions for maneuver nodes on other vessels</p></li>
+<li><p>Fix Node objects whose maneuver node was removed by Control.RemoveNodes, another Node object or the in-game UI: all members now raise an error, instead of silently reading and writing the detached node</p></li>
+<li><p>Improve performance of CommNode.IsVessel, CommNode.Vessel, Vessel.AngularVelocity and reference frame angular velocities</p></li>
 </ul>
 </section>
 <section id="kerbalalarmclock-service">
@@ -3150,7 +3155,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/b94072b">b94072b</a>
+  <a href="https://github.com/krpc/krpc/commit/babcaa0">babcaa0</a>
 </p></div>
       
     </div>
