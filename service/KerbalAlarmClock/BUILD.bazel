@@ -2,6 +2,7 @@ load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("//:config.bzl", "assembly_version", "author")
 load("//service:build.bzl", "service_deps")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
 exports_files(["CHANGES.txt"])
@@ -52,4 +53,27 @@ service_definitions(
     ],
     service = "KerbalAlarmClock",
     visibility = ["//visibility:public"],
+)
+
+test_suite(
+    name = "test",
+    tests = [":lint"],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pylint",
+    ],
+)
+
+py_lint_test(
+    name = "pylint",
+    size = "small",
+    srcs = glob(["test/*.py"]),
+    pylint_config = "test/pylint.rc",
+    deps = [
+        "//client/python:krpc_lib",
+        "//tools/krpctest:krpctest_lib",
+    ],
 )
