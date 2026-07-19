@@ -177,6 +177,8 @@ C++ client
 * CMake dependency options (KRPC\_FETCH\_PROTOBUF, KRPC\_FETCH\_ASIO, KRPC\_FETCH\_ABSL): when OFF (default) the system install is required; when ON FetchContent is used.
 * Add KRPC\_FETCH\_DEPS option to enable FetchContent for all dependencies at once
 * Mark deprecated members with the [[deprecated]] attribute (:issue:`904`)
+* Fix stream update notifications being lost, which could leave Client::wait\_for\_stream\_update sleeping through the update it was waiting for
+* Fix Client::freeze\_streams blocking forever when no stream is producing updates
 
 
 C-nano client

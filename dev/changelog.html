@@ -769,6 +769,8 @@
 <li><p>CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_ASIO, KRPC_FETCH_ABSL): when OFF (default) the system install is required; when ON FetchContent is used.</p></li>
 <li><p>Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once</p></li>
 <li><p>Mark deprecated members with the [[deprecated]] attribute (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
+<li><p>Fix stream update notifications being lost, which could leave Client::wait_for_stream_update sleeping through the update it was waiting for</p></li>
+<li><p>Fix Client::freeze_streams blocking forever when no stream is producing updates</p></li>
 </ul>
 </section>
 <section id="c-nano-client">
@@ -3148,7 +3150,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/8a6f8b1">8a6f8b1</a>
+  <a href="https://github.com/krpc/krpc/commit/b94072b">b94072b</a>
 </p></div>
       
     </div>
