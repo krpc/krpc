@@ -92,6 +92,7 @@
     <Compile Include="AutoPilotInfoAddon.cs" />
     <Compile Include="AutoPilotInfoWindow.cs" />
     <Compile Include="PilotAddon.cs" />
+    <Compile Include="ResourceHarvesterAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
     <Compile Include="Services\Alarm.cs" />
     <Compile Include="Services\AlarmManager.cs" />

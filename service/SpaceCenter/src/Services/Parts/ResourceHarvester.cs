@@ -98,12 +98,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the harvester is actively drilling.
         /// </summary>
+        /// <remarks>
+        /// A value set while the harvester is deploying is applied when the
+        /// deploy completes, so it can be set immediately after setting
+        /// <see cref="Deployed"/> without waiting for the deploy animation.
+        /// Setting it has no effect while the harvester is retracted or
+        /// retracting.
+        /// </remarks>
         [KRPCProperty]
         public bool Active {
             get { return State == ResourceHarvesterState.Active; }
             set {
-                if (!Deployed)
+                if (!Deployed) {
+                    // The converter cannot start until the deploy animation has
+                    // finished; defer the requested state until then rather than
+                    // silently dropping it.
+                    if (State == ResourceHarvesterState.Deploying)
+                        ResourceHarvesterAddon.Request (harvester, animator, value);
                     return;
+                }
+                ResourceHarvesterAddon.Cancel (harvester);
                 if (value && !harvester.IsActivated)
                     harvester.StartResourceConverter ();
                 if (!value && harvester.IsActivated)
