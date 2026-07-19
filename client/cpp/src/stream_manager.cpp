@@ -124,7 +124,13 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     decoder::decode(update, data, client);
     for (const auto& result : update.results())
       stream_manager->update(result.id(), result.result());
-    stream_manager->condition.notify_all();
+    {
+      // Notify while holding the condition mutex, so that a notification cannot
+      // fire between a waiter checking the stream value and entering its wait --
+      // it would be lost and the waiter would sleep through the update.
+      std::lock_guard<std::mutex> guard(stream_manager->condition_mutex);
+      stream_manager->condition.notify_all();
+    }
     for (const auto& callback : stream_manager->callbacks) callback.second();
   };
 
