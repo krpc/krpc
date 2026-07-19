@@ -5,6 +5,9 @@ v0.6.0
  * Rename KRPC.CurrentGameScene to KRPC.GameScene and make it settable to switch the current game scene (#897)
  * Add AstronautComplex, MissionControl, ResearchAndDevelopment, Administration and MissionBuilder game scenes (#897)
  * **Deprecated:** KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (#897)
+ * Reduce copying and allocation when receiving messages: protobuf messages are
+   now parsed directly from the receive buffer, without allocating intermediate
+   buffers or streams
 
 v0.5.4
  * Initial version, split off from KRPC.dll
