@@ -182,6 +182,19 @@ namespace KRPC.SpaceCenter.Services.Parts
             }
         }
 
-        // TODO: add safe deployment information?
+        /// <summary>
+        /// Whether it is currently safe to deploy the parachute, given the vessel's
+        /// flight conditions. Computed by KSP from the current airspeed, pressure and
+        /// temperature. Only applicable to stock parachutes.
+        /// Note that KSP reports <see cref="ParachuteSafeState.Unsafe"/> for the first
+        /// second after the vessel unpacks, before its thermal data is valid.
+        /// </summary>
+        [KRPCProperty]
+        public ParachuteSafeState SafeState {
+            get {
+                CheckStock ();
+                return parachute.deploymentSafeState.ToParachuteSafeState ();
+            }
+        }
     }
 }

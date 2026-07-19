@@ -257,7 +257,40 @@ namespace KRPC.SpaceCenter.Services
             }
         }
 
-        //TODO: times and dates
-        //TODO: contract parameters
+        /// <summary>
+        /// Universal time at which the contract was accepted, in seconds.
+        /// Zero if the contract has not been accepted.
+        /// </summary>
+        [KRPCProperty]
+        public double DateAccepted {
+            get { return InternalContract.DateAccepted; }
+        }
+
+        /// <summary>
+        /// Universal time by which the contract must be completed, in seconds.
+        /// Zero if the contract has no deadline.
+        /// </summary>
+        [KRPCProperty]
+        public double DateDeadline {
+            get { return InternalContract.DateDeadline; }
+        }
+
+        /// <summary>
+        /// Universal time at which the contract offer expires, in seconds.
+        /// Zero if the contract has no expiry date.
+        /// </summary>
+        [KRPCProperty]
+        public double DateExpire {
+            get { return InternalContract.DateExpire; }
+        }
+
+        /// <summary>
+        /// Universal time at which the contract was completed or failed, in seconds.
+        /// Zero if the contract has not finished or KSP did not record a finish time.
+        /// </summary>
+        [KRPCProperty]
+        public double DateFinished {
+            get { return InternalContract.DateFinished; }
+        }
     }
 }

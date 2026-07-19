@@ -11,12 +11,18 @@ class TestPartsParachute(krpctest.TestCase):
         self.vessel = self.connect().space_center.active_vessel
         self.control = self.vessel.control
         self.state = self.connect().space_center.ParachuteState
+        self.safe_state = self.connect().space_center.ParachuteSafeState
         self.parachutes = self.vessel.parts.parachutes
 
     def test_parachute_on_ground(self):
+        # KSP reports Unsafe for the first second after the vessel unpacks,
+        # before the parachute's thermal data is valid, so wait that out
+        self.wait(2)
         for parachute in self.parachutes:
             self.assertFalse(parachute.deployed)
             self.assertEqual(parachute.state, self.state.stowed)
+            # Stationary in an atmosphere, so safe to deploy
+            self.assertEqual(parachute.safe_state, self.safe_state.safe)
             self.assertAlmostEqual(parachute.deploy_altitude, 500)
             self.assertAlmostEqual(parachute.deploy_min_pressure, 0.01)
 
@@ -60,6 +66,8 @@ class TestPartsParachute(krpctest.TestCase):
         for parachute in self.parachutes:
             self.assertTrue(parachute.deployed)
             self.assertEqual(self.state.semi_deployed, parachute.state)
+            # No safety state once the parachute has deployed
+            self.assertEqual(self.safe_state.none, parachute.safe_state)
 
         while flight.surface_altitude > 0.9 * deploy_altitude:
             pass

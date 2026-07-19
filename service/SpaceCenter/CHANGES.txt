@@ -156,6 +156,9 @@ v0.6.0
    instead of silently reading and writing the detached node
  * Improve performance of CommNode.IsVessel, CommNode.Vessel,
    Vessel.AngularVelocity and reference frame angular velocities
+ * Add Parachute.SafeState reporting whether it is currently safe to deploy the
+   parachute (safe, risky, unsafe, or not applicable)
+ * Add Contract.DateAccepted, DateDeadline, DateExpire and DateFinished
 
 v0.5.4
  * Fix vessel recovery (#782)
