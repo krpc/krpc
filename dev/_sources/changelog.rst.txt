@@ -226,6 +226,7 @@ krpctools
 * Surface deprecated members in generated documentation and client stubs (:issue:`904`)
 * Fix docgen dropping remarks in service-level documentation
 * Fix cross-service member references not resolving in generated C# and Lua documentation (:issue:`897`)
+* Fix member references in generated Python documentation using lowerCamelCase instead of snake\_case
 
 
 0.5.4
