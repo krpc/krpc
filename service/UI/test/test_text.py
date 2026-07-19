@@ -24,7 +24,6 @@ class TestText(krpctest.TestCase):
         self.assertAlmostEqual((0.196, 0.196, 0.196), text.color, places=3)
         self.assertEqual(self.anchor.upper_left, text.alignment)
         self.assertEqual(1, text.line_spacing)
-        self.wait()
         text.remove()
         self.assertRaises(ValueError, text.remove)
 
@@ -43,7 +42,6 @@ class TestText(krpctest.TestCase):
         self.assertEqual((1, 0, 0), text.color)
         self.assertEqual(self.anchor.upper_right, text.alignment)
         self.assertEqual(2, text.line_spacing)
-        self.wait()
         text.remove()
         self.assertRaises(ValueError, text.remove)
 

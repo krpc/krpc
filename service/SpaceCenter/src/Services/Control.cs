@@ -386,6 +386,12 @@ namespace KRPC.SpaceCenter.Services
         /// Unlike the other control inputs, the throttle is not zeroed when the
         /// clients that set it disconnect.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Throttle {
             get { return PilotAddon.Get (InternalVessel).Throttle; }
@@ -411,6 +417,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// Equivalent to the w and s keys.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Pitch {
             get { return PilotAddon.Get (InternalVessel).Pitch; }
@@ -422,6 +434,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// Equivalent to the a and d keys.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Yaw {
             get { return PilotAddon.Get (InternalVessel).Yaw; }
@@ -433,6 +451,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// Equivalent to the q and e keys.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Roll {
             get { return PilotAddon.Get (InternalVessel).Roll; }
@@ -489,6 +513,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// Equivalent to the h and n keys.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Forward {
             get { return PilotAddon.Get (InternalVessel).Forward; }
@@ -500,6 +530,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// Equivalent to the i and k keys.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Up {
             get { return PilotAddon.Get (InternalVessel).Up; }
@@ -511,6 +547,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// Equivalent to the j and l keys.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float Right {
             get { return PilotAddon.Get (InternalVessel).Right; }
@@ -523,6 +565,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value of 1 rotates the wheels forwards, a value of -1 rotates
         /// the wheels backwards.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float WheelThrottle {
             get { return PilotAddon.Get (InternalVessel).WheelThrottle; }
@@ -534,6 +582,12 @@ namespace KRPC.SpaceCenter.Services
         /// A value between -1 and 1.
         /// A value of 1 steers to the left, and a value of -1 steers to the right.
         /// </summary>
+        /// <remarks>
+        /// The getter returns the input currently applied to the vessel, which
+        /// combines the input set by kRPC with any keyboard, SAS and trim input.
+        /// It refreshes one physics tick after a set, so a read immediately after
+        /// a set returns the previously applied value rather than the value just set.
+        /// </remarks>
         [KRPCProperty]
         public float WheelSteering {
             get { return PilotAddon.Get (InternalVessel).WheelSteer; }

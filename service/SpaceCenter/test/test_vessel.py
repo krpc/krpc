@@ -309,12 +309,6 @@ class TestVesselEngines(krpctest.TestCase):
         engine.active = True
         self.wait(0.5)
 
-        # FIXME: need to run the engines to update their has fuel status
-        self.control.throttle = 0.1
-        self.wait(0.5)
-        self.control.throttle = 0.0
-        self.wait(0.5)
-
         info = self.engine_info[name]
         self.assertAlmostEqual(0, self.vessel.thrust, places=3)
         self.assertAlmostEqual(

@@ -261,12 +261,10 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertTrue(engine.has_fuel)
 
     def test_has_no_fuel(self):
+        # has_fuel reads live propellant totals, so it reports correctly
+        # without the engine ever having been activated.
         engine = self.get_engine("liquidEngine3.v2")  # LV-909 "Terrier"
-        # FIXME: have to activate engine for this to work
-        engine.active = True
-        self.wait()
         self.assertFalse(engine.has_fuel)
-        engine.active = False
 
     def test_flameout(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
@@ -553,12 +551,16 @@ class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
         self.assertTrue(engine.can_reverse_thrust)
         self.assertFalse(engine.thrust_reversed)
 
-        # Engage the reverser
+        # Engage the reverser. The read-back reflects the commanded state while
+        # the animation is still running, so re-issuing the set mid-animation is
+        # a no-op rather than a second toggle that would cancel the first.
+        engine.thrust_reversed = True
+        self.assertTrue(engine.thrust_reversed)
         engine.thrust_reversed = True
         self.wait(2)  # the reverser animation takes time
         self.assertTrue(engine.thrust_reversed)
 
-        # Setting to the same state is a no-op
+        # Setting to the same state once settled is also a no-op
         engine.thrust_reversed = True
         self.assertTrue(engine.thrust_reversed)
 

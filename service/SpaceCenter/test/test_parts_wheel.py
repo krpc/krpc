@@ -40,11 +40,9 @@ class TestPartsWheel(krpctest.TestCase):
         wheel = self.fixed_wheel
         self.assertTrue(wheel.auto_friction_control)
         wheel.auto_friction_control = False
-        self.wait()
         self.assertFalse(wheel.auto_friction_control)
         self.assertAlmostEqual(2.0005, wheel.manual_friction_control, places=3)
         wheel.manual_friction_control = 1.2
-        self.wait()
         self.assertAlmostEqual(1.2, wheel.manual_friction_control, places=3)
         wheel.manual_friction_control = 1.0
         wheel.auto_friction_control = True

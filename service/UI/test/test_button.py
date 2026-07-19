@@ -16,7 +16,6 @@ class TestButton(krpctest.TestCase):
         self.assertIsNotNone(button.text)
         self.assertEqual("Foo", button.text.content)
         self.assertFalse(button.clicked)
-        self.wait()
         button.remove()
         self.assertRaises(ValueError, button.remove)
 

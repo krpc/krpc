@@ -99,10 +99,8 @@ class TestPartsAntenna(krpctest.TestCase):
     def test_allow_partial(self):
         self.assertFalse(self.fixed_antenna.allow_partial)
         self.fixed_antenna.allow_partial = True
-        self.wait()
         self.assertTrue(self.fixed_antenna.allow_partial)
         self.fixed_antenna.allow_partial = False
-        self.wait()
         self.assertFalse(self.fixed_antenna.allow_partial)
 
 

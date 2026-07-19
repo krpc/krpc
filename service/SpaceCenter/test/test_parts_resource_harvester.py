@@ -96,6 +96,31 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertFalse(self.drill.deployed)
         self.assertFalse(self.drill.active)
 
+    def test_activate_while_deploying(self):
+        # An activation requested during the deploy animation is deferred and
+        # applied when the deploy completes, rather than silently dropped.
+        self.assertEqual(self.state.retracted, self.drill.state)
+        self.drill.deployed = True
+        self.drill.active = True
+        self.wait()
+        self.assertEqual(self.state.deploying, self.drill.state)
+        self.assertFalse(self.drill.active)
+        self.wait_until(
+            lambda: self.drill.state == self.state.active,
+            message="drill to activate after its deploy completes",
+        )
+        self.assertTrue(self.drill.active)
+        # Return the drill to its retracted state for the other tests
+        self.drill.active = False
+        self.wait_until(
+            lambda: self.drill.state == self.state.deployed,
+            message="drill to deactivate",
+        )
+        self.drill.deployed = False
+        self.wait_until(
+            lambda: self.drill.state == self.state.retracted, message="drill to retract"
+        )
+
     def test_control(self):
         for drill in self.drills:
             self.assertEqual(self.state.retracted, drill.state)

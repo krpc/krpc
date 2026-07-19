@@ -16,7 +16,6 @@ class TestInputField(krpctest.TestCase):
         self.assertEqual("", input_field.value)
         self.assertIsNotNone(input_field.text)
         self.assertFalse(input_field.changed)
-        self.wait()
         input_field.remove()
         self.assertRaises(ValueError, input_field.remove)
 

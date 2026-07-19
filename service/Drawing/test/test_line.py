@@ -23,7 +23,6 @@ class TestLine(krpctest.TestCase):
         self.assertEqual((1, 1, 1), line.color)
         self.assertEqual("Legacy Shaders/Particles/Additive", line.material)
         self.assertAlmostEqual(0.1, line.thickness)
-        self.wait()
         line.remove()
         self.assertRaises(ValueError, line.remove)
 
@@ -34,7 +33,6 @@ class TestLine(krpctest.TestCase):
         line.visible = True
         self.assertTrue(line.visible)
         self.assertEqual((1, 0, 0), line.color)
-        self.wait()
         line.remove()
 
     def test_thickness(self):
@@ -44,7 +42,6 @@ class TestLine(krpctest.TestCase):
         line.visible = True
         self.assertTrue(line.visible)
         self.assertAlmostEqual(1.234, line.thickness)
-        self.wait()
         line.remove()
 
 
