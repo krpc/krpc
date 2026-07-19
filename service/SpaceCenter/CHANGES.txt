@@ -20,7 +20,11 @@ v0.6.0
  * Guard ContractManager against null ContractSystem in non-career game modes (#819)
  * Fix waypoint mean altitude not including bedrock height (#801)
  * Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (#582)
- * Add Flight.SimulateAerodynamicTorqueAt (#825)
+ * Add Flight.SimulateAerodynamicTorqueAt to simulate the aerodynamic torque about the
+   vessel's center of mass, for a hypothetical attitude and angular velocity, with both
+   stock aerodynamics and FAR, in newton-meters. The torque includes both damping
+   mechanisms the game applies: the change in each part's local airflow due to rotation,
+   and the per-part rigidbody angular drag (#825, #914, #429)
  * Add Part.Drag and Part.Lift returning the aerodynamic drag and lift forces acting on an
    individual part (#459)
  * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
@@ -66,6 +70,19 @@ v0.6.0
    rotation for the previous behavior (#915)
  * Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of
    newtons when FAR is installed (#915)
+ * Fix Flight.SimulateAerodynamicForceAt computing incorrect lift for command pods and
+   other parts with a perpendicular-only lifting-surface module: cube body lift was
+   applied even where the game disables it (a pod with a heatshield occupying its bottom
+   node has none), and lifting-surface modules were evaluated against stale internal
+   airflow state, so results depended on the game context the call was made from (landed,
+   in vacuum, or in atmospheric flight). The live AerodynamicForce and AerodynamicTorque
+   properties honor the same body-lift gating (#914)
+ * Add Flight.SimulateAerodynamicWrenchAt to evaluate stock aerodynamic force and torque
+   together at a hypothetical center-of-mass state, attitude, body rate and atmospheric
+   ephemeris time (#914)
+ * Add Flight.AerodynamicTorque, the live counterpart to Flight.AerodynamicForce, giving
+   the net aerodynamic torque acting on the vessel about its center of mass on the current
+   physics frame; not available with FAR (#914)
  * Add direct control of engine gimbals, RCS and control surfaces (#917)
  * Fix reference frame velocity being incorrect at non-equatorial latitudes (#454)
  * Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (#889)
