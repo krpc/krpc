@@ -203,10 +203,24 @@ class TestSpaceCenter(krpctest.TestCase):
         p2 = self.sc.transform_position((0, 0, 0), self.ref_kerbin, self.ref_sun)
 
         p3 = tuple(x - y for (x, y) in zip(p1, p2))
-        # TODO: sometimes there is a large difference?!?! but only sometimes...
+        # Each transform is evaluated on its own physics tick, and Kerbin moves
+        # at ~9.3 km/s in the Sun's frame, so p1 and p2 embed slightly
+        # different times; the tolerance covers several ticks of that motion
         self.assertAlmostEqual(norm(p0), norm(p3), delta=5000)
 
-    # TODO: improve transform direction tests
+    def test_transform_direction_round_trip(self):
+        direction = normalize((1, 2, 3))
+        rotated = self.sc.transform_direction(
+            direction, self.ref_vessel, self.ref_kerbin
+        )
+        # Rotations preserve length
+        self.assertAlmostEqual(1, norm(rotated), places=5)
+        # Kerbin's frame rotates a little between the two calls, so the round
+        # trip is only approximate
+        round_trip = self.sc.transform_direction(
+            rotated, self.ref_kerbin, self.ref_vessel
+        )
+        self.assertAlmostEqual(direction, round_trip, places=3)
 
     def test_transform_direction_same_reference_frame(self):
         direction = normalize((1, 2, 3))
@@ -237,16 +251,32 @@ class TestSpaceCenter(krpctest.TestCase):
             up, self.sc.transform_direction(up, self.ref_vessel, self.ref_kerbin)
         )
 
-    # TODO: improve transform rotation tests
-
     def test_transform_rotation_same_reference_frame(self):
         r = (1, 0, 0, 0)
         self.assertAlmostEqual(
             r, self.sc.transform_rotation(r, self.ref_vessel, self.ref_vessel)
         )
 
-    # TODO: improve transform velocity tests
-    #       - check it includes rotational velocities
+    def test_transform_rotation_round_trip(self):
+        r = (0.5, 0.5, 0.5, 0.5)
+        r1 = self.sc.transform_rotation(r, self.ref_vessel, self.ref_kerbin)
+        # Quaternions stay unit length under frame conversion
+        self.assertAlmostEqual(1, norm(r1), places=5)
+        r2 = self.sc.transform_rotation(r1, self.ref_kerbin, self.ref_vessel)
+        # q and -q are the same rotation
+        if r2[3] * r[3] < 0:
+            r2 = tuple(-x for x in r2)
+        self.assertAlmostEqual(r, r2, places=3)
+
+    def test_transform_velocity_includes_rotational_velocity(self):
+        # A point at rest on Kerbin's equator moves at the surface rotational
+        # speed in the non-rotating frame
+        radius = self.kerbin.equatorial_radius
+        v = self.sc.transform_velocity(
+            (radius, 0, 0), (0, 0, 0), self.ref_kerbin, self.ref_nr_kerbin
+        )
+        expected = radius * self.kerbin.rotational_speed
+        self.assertAlmostEqual(expected, norm(v), places=2)
 
     def test_transform_velocity_same_reference_frame(self):
         vel = (1, 2, 3)

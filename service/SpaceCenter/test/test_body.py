@@ -225,7 +225,10 @@ class TestBody(krpctest.TestCase):
                     self.assertAlmostEqual(0, pos[1])
                 else:
                     self.assertNotAlmostEqual(0, pos[1])
-                # TODO: large error
+                # The tolerance is limited by precision: the transform chain
+                # subtracts near-equal double-precision world positions, and at
+                # the largest orbital radii (~9e10 m) a 100 m delta is a
+                # relative tolerance of ~1e-9
                 self.assertAlmostEqual(body.orbit.radius, norm(pos), delta=100)
 
     def test_velocity(self):
@@ -257,7 +260,9 @@ class TestBody(krpctest.TestCase):
             position[1] = 0
             radius = norm(position)
             rotational_speed *= radius
-            # TODO: large error
+            # The comparison models the body's motion as circular and
+            # equatorial, which eccentric or inclined moons only approximate,
+            # so the tolerance covers the model error of this test
             self.assertAlmostEqual(
                 abs(rotational_speed + body.orbit.speed), norm(v), delta=500
             )
@@ -266,10 +271,17 @@ class TestBody(krpctest.TestCase):
         for body in self.space_center.bodies.values():
             # Check body's rotation relative to itself is zero
             r = body.rotation(body.reference_frame)
-            # TODO: better test for identity quaternion
+            # Compare against the identity allowing for quaternion sign
+            # ambiguity: q and -q are the same rotation
             self.assertAlmostEqual((0, 0, 0), (r[0], r[1], r[2]), places=3)
+            self.assertAlmostEqual(1, abs(r[3]), places=3)
 
-            # TODO: more thorough testing
+            # A body's rotation relative to its non-rotating frame is a pure
+            # rotation about the y-axis, as stock bodies have no axial tilt
+            r = body.rotation(body.non_rotating_reference_frame)
+            self.assertAlmostEqual(0, r[0], places=3)
+            self.assertAlmostEqual(0, r[2], places=3)
+            self.assertAlmostEqual(1, r[1] * r[1] + r[3] * r[3], places=3)
 
     def test_angular_velocity(self):
         for body in self.space_center.bodies.values():
