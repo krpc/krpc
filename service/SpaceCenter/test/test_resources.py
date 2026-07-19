@@ -2,18 +2,7 @@ import unittest
 
 import krpctest
 
-
-# FIXME: duplicated in test_stage.py
-def assert_resources_equivalent(testcase, expected, actual, delta=1):
-    """Compare two SpaceCenter Resources objects by resource name, amount, and max."""
-    expected_names = set(expected.names)
-    actual_names = set(actual.names)
-    testcase.assertEqual(expected_names, actual_names)
-    for name in sorted(expected_names):
-        testcase.assertAlmostEqual(
-            expected.amount(name), actual.amount(name), delta=delta
-        )
-        testcase.assertAlmostEqual(expected.max(name), actual.max(name), delta=delta)
+from service.SpaceCenter.test.resources_equivalence import assert_resources_equivalent
 
 
 class FakeResources:
