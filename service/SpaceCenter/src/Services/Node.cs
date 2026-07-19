@@ -78,10 +78,28 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public ManeuverNode InternalNode { get; private set; }
 
+        /// <summary>
+        /// The KSP maneuver node, checked to still be part of the vessel's flight plan.
+        /// A node can be removed through this object, through another object wrapping
+        /// the same node (including Control.RemoveNodes), or manually in the in-game
+        /// UI; in all cases accessing it through this object is an error.
+        /// </summary>
+        ManeuverNode SafeNode {
+            get {
+                var node = InternalNode;
+                if (node != null) {
+                    var solver = InternalVessel.patchedConicSolver;
+                    if (solver != null && solver.maneuverNodes.Contains (node))
+                        return node;
+                }
+                throw new InvalidOperationException ("Maneuver node has been removed");
+            }
+        }
+
         internal Vector3d WorldBurnVector {
             get {
-                var prograde = InternalNode.patch.getOrbitalVelocityAtUT (InternalNode.UT).SwapYZ ().normalized;
-                var normal = InternalNode.patch.GetOrbitNormal ().SwapYZ ().normalized;
+                var prograde = SafeNode.patch.getOrbitalVelocityAtUT (SafeNode.UT).SwapYZ ().normalized;
+                var normal = SafeNode.patch.GetOrbitNormal ().SwapYZ ().normalized;
                 var radial = Vector3d.Cross (normal, prograde);
                 return Prograde * prograde + Normal * normal + Radial * radial;
             }
@@ -93,9 +111,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Prograde {
-            get { return InternalNode.DeltaV.z; }
+            get { return SafeNode.DeltaV.z; }
             set {
-                InternalNode.DeltaV.z = value;
+                SafeNode.DeltaV.z = value;
                 Update ();
             }
         }
@@ -106,9 +124,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Normal {
-            get { return InternalNode.DeltaV.y; }
+            get { return SafeNode.DeltaV.y; }
             set {
-                InternalNode.DeltaV.y = value;
+                SafeNode.DeltaV.y = value;
                 Update ();
             }
         }
@@ -119,9 +137,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Radial {
-            get { return InternalNode.DeltaV.x; }
+            get { return SafeNode.DeltaV.x; }
             set {
-                InternalNode.DeltaV.x = value;
+                SafeNode.DeltaV.x = value;
                 Update ();
             }
         }
@@ -134,10 +152,10 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public double DeltaV {
-            get { return InternalNode.DeltaV.magnitude; }
+            get { return SafeNode.DeltaV.magnitude; }
             set {
-                var direction = InternalNode.DeltaV.normalized;
-                InternalNode.DeltaV = new Vector3d (direction.x * value, direction.y * value, direction.z * value);
+                var direction = SafeNode.DeltaV.normalized;
+                SafeNode.DeltaV = new Vector3d (direction.x * value, direction.y * value, direction.z * value);
                 Update ();
             }
         }
@@ -148,7 +166,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RemainingDeltaV {
-            get { return InternalNode.GetBurnVector (InternalNode.patch).magnitude; }
+            get { return SafeNode.GetBurnVector (SafeNode.patch).magnitude; }
         }
 
         /// <summary>
@@ -186,7 +204,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
-            return referenceFrame.DirectionFromWorldSpace (InternalNode.GetBurnVector (InternalNode.patch)).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (SafeNode.GetBurnVector (SafeNode.patch)).ToTuple ();
         }
 
         /// <summary>
@@ -194,9 +212,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double UT {
-            get { return InternalNode.UT; }
+            get { return SafeNode.UT; }
             set {
-                InternalNode.UT = value;
+                SafeNode.UT = value;
                 Update ();
             }
         }
@@ -230,13 +248,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Remove ()
         {
-            if (InternalNode == null)
-                throw new InvalidOperationException ("Node does not exist");
-            if (InternalVessel.patchedConicSolver == null)
-                throw new InvalidOperationException ("Cannot remove maneuver node");
-            InternalNode.RemoveSelf ();
+            // Note: the Node object itself is not removed from the object store; that
+            // is the object-lifetime gap tracked by issue #771
+            SafeNode.RemoveSelf ();
             InternalNode = null;
-            // TODO: delete this Node object
         }
 
         /// <summary>
@@ -249,7 +264,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Object (InternalVessel, InternalNode); }
+            get { return ReferenceFrame.Object (InternalVessel, SafeNode); }
         }
 
         /// <summary>
@@ -268,7 +283,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
-            get { return ReferenceFrame.Orbital (InternalVessel, InternalNode); }
+            get { return ReferenceFrame.Orbital (InternalVessel, SafeNode); }
         }
 
         /// <summary>
@@ -282,7 +297,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals (referenceFrame, null))
                 throw new ArgumentNullException (nameof (referenceFrame));
-            return referenceFrame.PositionFromWorldSpace (InternalNode.patch.getPositionAtUT (InternalNode.UT)).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (SafeNode.patch.getPositionAtUT (SafeNode.UT)).ToTuple ();
         }
 
         /// <summary>
