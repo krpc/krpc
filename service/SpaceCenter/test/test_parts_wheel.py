@@ -17,7 +17,7 @@ class TestPartsWheel(krpctest.TestCase):
         cls.free_wheel = cls.parts.with_name("GearFree")[0].wheel
         cls.powered_wheel = cls.parts.with_name("roverWheel1")[0].wheel
         cls.suspension_wheel = cls.parts.with_name("wheelMed")[0].wheel
-        cls.state = cls.connect().space_center.WheelState
+        cls.state = cls.connect().space_center.DeployableState
         cls.motor_state = cls.connect().space_center.MotorState
         cls.control = vessel.control
 

@@ -97,14 +97,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The current state of the radiator.
         /// </summary>
         /// <remarks>
-        /// A fixed radiator is always <see cref="RadiatorState.Extended" />.
+        /// A fixed radiator is always <see cref="DeployableState.Deployed" />.
         /// </remarks>
         [KRPCProperty]
-        public RadiatorState State {
+        public DeployableState State {
             get {
                 if (!Deployable)
-                    return RadiatorState.Extended;
-                return deployableRadiator.deployState.ToRadiatorState ();
+                    return DeployableState.Deployed;
+                return deployableRadiator.deployState.ToDeployableState ();
             }
         }
     }

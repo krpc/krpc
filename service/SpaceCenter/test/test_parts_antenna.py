@@ -15,7 +15,7 @@ class TestPartsAntenna(krpctest.TestCase):
         cls.antennas = parts.antennas
         cls.fixed_antenna = parts.with_name("RelayAntenna5")[0].antenna
         cls.deployable_antenna = parts.with_name("HighGainAntenna5")[0].antenna
-        cls.state = cls.connect().space_center.AntennaState
+        cls.state = cls.connect().space_center.DeployableState
 
     def test_fixed_antenna(self):
         antenna = self.fixed_antenna
@@ -114,7 +114,7 @@ class TestPartsAntennaBreak(krpctest.TestCase):
         vessel = cls.connect().space_center.active_vessel
         parts = vessel.parts
         cls.control = vessel.control
-        cls.state = cls.connect().space_center.AntennaState
+        cls.state = cls.connect().space_center.DeployableState
         cls.antenna = parts.with_name("longAntenna")[0].antenna
 
     def test_break(self):
