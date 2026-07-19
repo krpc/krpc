@@ -84,6 +84,7 @@ KRPC.ArgumentNullException
 KRPC.ArgumentOutOfRangeException
 SpaceCenter
 SpaceCenter.GameMode
+SpaceCenter.Expansions
 SpaceCenter.Science
 SpaceCenter.Funds
 SpaceCenter.Reputation

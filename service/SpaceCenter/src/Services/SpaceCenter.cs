@@ -32,6 +32,26 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The names of the installed expansions, for example <c>"Serenity"</c> (Breaking Ground)
+        /// or <c>"MakingHistory"</c> (Making History).
+        /// </summary>
+        [KRPCProperty]
+        public static IList<string> Expansions {
+            get {
+                // KSP ships exactly two expansions, tracked by these fixed names in
+                // ExpansionsLoader's installed set. The public supportedExpansions array is only
+                // populated from expansion master-config files and is empty at runtime, so query
+                // each known name directly — this is how KSP's own code checks for them.
+                var result = new List<string>();
+                foreach (var name in new[] { "MakingHistory", "Serenity" }) {
+                    if (global::Expansions.ExpansionsLoader.IsExpansionInstalled(name))
+                        result.Add(name);
+                }
+                return result;
+            }
+        }
+
+        /// <summary>
         /// The current amount of science.
         /// </summary>
         [KRPCProperty]

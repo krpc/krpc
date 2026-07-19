@@ -10,6 +10,7 @@ import os
 import shutil
 import sys
 import time
+import unittest
 
 from krpctest import game
 from krpctest.assertions import AssertionsMixin
@@ -24,6 +25,11 @@ class TestCase(AssertionsMixin):
     # Third-party mods this test class requires (e.g. ["RemoteTech"]). The framework
     # guarantees the running game has exactly this managed mod set before the class runs.
     mods = []
+
+    # KSP expansions this test class requires (e.g. ["Serenity"] for Breaking Ground).
+    # Unlike mods, expansions cannot be installed by the harness, so a class requiring one
+    # that is not present is skipped rather than relaunched.
+    expansions = []
 
     # Whether the class needs a running game. The library's own unit tests (which only
     # exercise TestCase's geometry/assertion helpers) set this False so they run headless
@@ -43,7 +49,7 @@ class TestCase(AssertionsMixin):
 
         @classmethod
         def setUpClass(cls, _raw=raw):  # pylint: disable=invalid-name
-            cls.ensure_game(cls.mods)
+            cls.ensure_game(cls.mods, cls.expansions)
             _raw(cls)
 
         setUpClass.__func__._krpctest_wrapped = True
@@ -54,14 +60,24 @@ class TestCase(AssertionsMixin):
         return game.connect(use_cached)
 
     @classmethod
-    def ensure_game(cls, mods=None):
-        """Ensure a KSP server is running with exactly the required managed mods."""
+    def ensure_game(cls, mods=None, expansions=None):
+        """Ensure a KSP server is running with exactly the required managed mods, then
+        skip the test class if any required KSP expansion is missing. Expansions can't be
+        installed by the harness, so they gate via unittest.SkipTest rather than relaunch.
+        """
         game.ensure_game(mods)
+        if expansions:
+            installed = set(cls.connect().space_center.expansions)
+            missing = [e for e in expansions if e not in installed]
+            if missing:
+                raise unittest.SkipTest(
+                    "Required KSP expansion(s) not installed: " + ", ".join(missing)
+                )
 
     @classmethod
     def setUpClass(cls):
         if cls.game_required:
-            cls.ensure_game(cls.mods)
+            cls.ensure_game(cls.mods, cls.expansions)
 
     @classmethod
     def new_save(cls, name="krpctest", always_load=False):
