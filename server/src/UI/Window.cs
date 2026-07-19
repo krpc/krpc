@@ -111,7 +111,9 @@ namespace KRPC.UI
                     Visible = false;
                 }
             }
-            // FIXME: dirty hack to make the title bar slightly bigger when the UI is scaled up
+            // The title font is scaled with UI_SCALE (see OnGUI) but the skin's window
+            // style reserves a fixed-height title area, so reserve the extra height the
+            // scaled title needs to stop the content overlapping it.
             GUILayout.Space ((int)(20 * (GameSettings.UI_SCALE - 1)));
             Draw (rescale);
             rescale = false;
