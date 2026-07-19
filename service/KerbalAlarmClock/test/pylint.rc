@@ -1,0 +1,5 @@
+[MESSAGES CONTROL]
+disable=no-member,missing-docstring,similarities
+
+[REPORTS]
+reports=no

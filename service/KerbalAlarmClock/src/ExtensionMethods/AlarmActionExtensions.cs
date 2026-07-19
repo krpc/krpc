@@ -19,6 +19,10 @@ namespace KRPC.KerbalAlarmClock.ExtensionMethods
                 return AlarmAction.MessageOnly;
             case KACWrapper.KACAPI.AlarmActionEnum.PauseGame:
                 return AlarmAction.PauseGame;
+            case KACWrapper.KACAPI.AlarmActionEnum.Custom:
+                return AlarmAction.Custom;
+            case KACWrapper.KACAPI.AlarmActionEnum.Converted:
+                return AlarmAction.Converted;
             default:
                 throw new ArgumentException ("Unsupported alarm action");
             }
@@ -39,6 +43,10 @@ namespace KRPC.KerbalAlarmClock.ExtensionMethods
                 return KACWrapper.KACAPI.AlarmActionEnum.MessageOnly;
             case AlarmAction.PauseGame:
                 return KACWrapper.KACAPI.AlarmActionEnum.PauseGame;
+            case AlarmAction.Custom:
+                return KACWrapper.KACAPI.AlarmActionEnum.Custom;
+            case AlarmAction.Converted:
+                return KACWrapper.KACAPI.AlarmActionEnum.Converted;
             default:
                 throw new ArgumentException ("Unsupported alarm action");
             }
