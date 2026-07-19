@@ -87,6 +87,10 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// See <see cref="Transfer"/>.
         /// </summary>
-        TransferModelled
+        TransferModelled,
+        /// <summary>
+        /// An alarm for when a science lab has finished processing data.
+        /// </summary>
+        ScienceLab
     }
 }

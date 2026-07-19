@@ -1623,6 +1623,7 @@ KerbalAlarmClock.AlarmType.SOIChange
 KerbalAlarmClock.AlarmType.SOIChangeAuto
 KerbalAlarmClock.AlarmType.Transfer
 KerbalAlarmClock.AlarmType.TransferModelled
+KerbalAlarmClock.AlarmType.ScienceLab
 KerbalAlarmClock.AlarmAction
 KerbalAlarmClock.AlarmAction.DoNothing
 KerbalAlarmClock.AlarmAction.DoNothingDeleteWhenPassed
@@ -1630,6 +1631,8 @@ KerbalAlarmClock.AlarmAction.KillWarp
 KerbalAlarmClock.AlarmAction.KillWarpOnly
 KerbalAlarmClock.AlarmAction.MessageOnly
 KerbalAlarmClock.AlarmAction.PauseGame
+KerbalAlarmClock.AlarmAction.Custom
+KerbalAlarmClock.AlarmAction.Converted
 RemoteTech
 RemoteTech.Available
 RemoteTech.GroundStations

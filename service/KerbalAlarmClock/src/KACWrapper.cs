@@ -589,7 +589,9 @@ namespace KRPC.KerbalAlarmClock
                 [Description("Message Only-No Affect on warp")]     MessageOnly,
                 [Description("Kill Warp Only-No Message")]          KillWarpOnly,
                 [Description("Kill Warp and Message")]              KillWarp,
-                [Description("Pause Game and Message")]             PauseGame
+                [Description("Pause Game and Message")]             PauseGame,
+                [Description("Custom Config")]                      Custom,
+                [Description("Converted to Components")]            Converted
             }
 
             public enum TimeEntryPrecisionEnum

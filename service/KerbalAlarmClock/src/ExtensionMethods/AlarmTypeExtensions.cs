@@ -43,6 +43,8 @@ namespace KRPC.KerbalAlarmClock.ExtensionMethods
                 return AlarmType.Transfer;
             case KACWrapper.KACAPI.AlarmTypeEnum.TransferModelled:
                 return AlarmType.TransferModelled;
+            case KACWrapper.KACAPI.AlarmTypeEnum.ScienceLab:
+                return AlarmType.ScienceLab;
             default:
                 throw new ArgumentException ("Unsupported alarm type");
             }
@@ -87,6 +89,8 @@ namespace KRPC.KerbalAlarmClock.ExtensionMethods
                 return KACWrapper.KACAPI.AlarmTypeEnum.Transfer;
             case AlarmType.TransferModelled:
                 return KACWrapper.KACAPI.AlarmTypeEnum.TransferModelled;
+            case AlarmType.ScienceLab:
+                return KACWrapper.KACAPI.AlarmTypeEnum.ScienceLab;
             default:
                 throw new ArgumentException ("Unsupported alarm type");
             }

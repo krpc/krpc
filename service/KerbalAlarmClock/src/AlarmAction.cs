@@ -34,6 +34,18 @@ namespace KRPC.KerbalAlarmClock
         /// <summary>
         /// Pause the game.
         /// </summary>
-        PauseGame
+        PauseGame,
+        /// <summary>
+        /// A combination of actions configured in the Kerbal Alarm Clock user
+        /// interface that does not correspond to any of the other values.
+        /// Setting an alarm's action to this value has no effect.
+        /// </summary>
+        Custom,
+        /// <summary>
+        /// The alarm was converted from an older version of Kerbal Alarm Clock
+        /// and its action has not been set since.
+        /// Setting an alarm's action to this value has no effect.
+        /// </summary>
+        Converted
     }
 }
