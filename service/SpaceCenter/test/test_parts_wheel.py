@@ -184,7 +184,9 @@ class TestPartsWheel(krpctest.TestCase):
         self.assertAlmostEqual(0.85, wheel.suspension_damper_strength, places=2)
 
     def test_no_suspension(self):
-        # TODO: there are no wheel with no suspension to test!
+        # Every stock wheel part includes a suspension module, so the negative
+        # paths of has_suspension and the suspension properties cannot be
+        # exercised with stock parts.
         # wheel = self.fixed_wheel
         # self.assertFalse(wheel.has_suspension)
         # self.assertRaises(RuntimeError,
