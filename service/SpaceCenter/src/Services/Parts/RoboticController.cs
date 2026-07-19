@@ -144,6 +144,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Add an axis to the controller.
         /// </summary>
+        /// <param name="module">The part module that the axis belongs to.</param>
+        /// <param name="fieldName">The name of the axis field, as returned by
+        /// <see cref="Axes"/>.</param>
         /// <returns>Returns <c>true</c> if the axis is added successfully.</returns>
         [KRPCMethod]
         public bool AddAxis(Module module, string fieldName)
@@ -152,25 +155,21 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
-            foreach (var field in internalModule.Fields)
-            {
-                if (field.guiName == fieldName)
-                {
-                    var axisField = (BaseAxisField)internalModule.Fields[field.name];
-                    if (axisField != null)
-                    {
-                        controller.AddPartAxis(internalPart, internalModule, axisField);
-                        return true;
-                    }
-                    return false;
-                }
-            }
-            return false;
+            var axisField = internalModule.Fields[fieldName] as BaseAxisField;
+            if (axisField == null)
+                return false;
+            controller.AddPartAxis(internalPart, internalModule, axisField);
+            return true;
         }
 
         /// <summary>
         /// Add key frame value for controller axis.
         /// </summary>
+        /// <param name="module">The part module that the axis belongs to.</param>
+        /// <param name="fieldName">The name of the axis field, as returned by
+        /// <see cref="Axes"/>.</param>
+        /// <param name="time">The time of the key frame.</param>
+        /// <param name="value">The value of the key frame.</param>
         /// <returns>Returns <c>true</c> if the key frame is added successfully.</returns>
         [KRPCMethod]
         public bool AddKeyFrame(Module module, string fieldName, float time, float value)
@@ -182,7 +181,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
             foreach (var axis in controller.ControlledAxes)
             {
-                if (internalModule == axis.Module && fieldName == axis.AxisField.guiName)
+                if (internalModule == axis.Module && fieldName == axis.AxisField.name)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
                     controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
@@ -200,6 +199,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Clear axis.
         /// </summary>
+        /// <param name="module">The part module that the axis belongs to.</param>
+        /// <param name="fieldName">The name of the axis field, as returned by
+        /// <see cref="Axes"/>.</param>
         /// <returns>Returns <c>true</c> if the axis is cleared successfully.</returns>
         [KRPCMethod]
         public bool ClearAxis(Module module, string fieldName)
@@ -211,7 +213,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
             foreach (var axis in controller.ControlledAxes)
             {
-                if (internalModule == axis.Module && fieldName == axis.AxisField.guiName)
+                if (internalModule == axis.Module && fieldName == axis.AxisField.name)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
                     controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);

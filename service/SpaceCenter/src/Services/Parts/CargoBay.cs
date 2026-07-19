@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -68,12 +67,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (bay.ClosedAndLocked ())
                     return DeployableState.Retracted;
-                else if (!animation.IsMoving ())
+                if (!animation.IsMoving ())
                     return DeployableState.Deployed;
-                else if (!animation.animSwitch)
-                    return animation.startEventGUIName == "Open" ? DeployableState.Deploying : DeployableState.Retracting;
-                else
-                    return animation.startEventGUIName == "Close" ? DeployableState.Deploying : DeployableState.Retracting;
+                // The animation plays forwards, towards a scalar of 1, while animSwitch is false,
+                // and backwards towards 0 while it is true. closedPosition is the scalar at which
+                // the bay is closed, so which direction opens the bay depends on which end of the
+                // animation that is.
+                var playingForwards = !animation.animSwitch;
+                var opensForwards = bay.closedPosition < 0.5f;
+                return playingForwards == opensForwards
+                    ? DeployableState.Deploying
+                    : DeployableState.Retracting;
             }
         }
 
@@ -87,28 +91,27 @@ namespace KRPC.SpaceCenter.Services.Parts
                 return state == DeployableState.Deployed || state == DeployableState.Deploying;
             }
             set {
-                var openEvent = OpenEvent;
-                var closeEvent = CloseEvent;
-                if (value && openEvent != null)
-                    openEvent.Invoke ();
-                else if (!value && closeEvent != null)
-                    closeEvent.Invoke ();
+                if (value == Open)
+                    return;
+                var toggle = ToggleEvent;
+                if (toggle != null)
+                    toggle.Invoke ();
             }
         }
 
-        BaseEvent OpenEvent {
+        /// <summary>
+        /// The event that opens or closes the bay, whichever it currently offers. It is looked up
+        /// by id -- the name of the method implementing it -- which the game does not translate,
+        /// unlike the display name on the button. Null when the bay cannot currently be toggled,
+        /// for example while it is shielded from the airstream.
+        /// </summary>
+        BaseEvent ToggleEvent {
             get {
-                return animation.Events
-                    .Where (x => x != null && (HighLogic.LoadedSceneIsEditor ? x.guiActiveEditor : x.guiActive))
-                    .FirstOrDefault (x => x.guiName == "Open");
-            }
-        }
-
-        BaseEvent CloseEvent {
-            get {
-                return animation.Events
-                    .Where (x => x != null && (HighLogic.LoadedSceneIsEditor ? x.guiActiveEditor : x.guiActive))
-                    .FirstOrDefault (x => x.guiName == "Close");
+                var toggle = animation.Events ["Toggle"];
+                if (toggle == null)
+                    return null;
+                var available = HighLogic.LoadedSceneIsEditor ? toggle.guiActiveEditor : toggle.guiActive;
+                return available ? toggle : null;
             }
         }
     }
