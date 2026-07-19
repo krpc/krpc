@@ -64,6 +64,7 @@ differencing
 dll
 doesn
 enum
+ephemeris
 erm
 feedforward
 focussed
