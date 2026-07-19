@@ -16,7 +16,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         cls.launch_vessel_from_vab("PartsHarvester")
         cls.set_landed("Minmus", -4.794139, -11.575088)
         cls.remove_other_vessels()
-        cls.state = space_center.ResourceHarvesterState
+        cls.state = space_center.DeployableState
         cls.vessel = space_center.active_vessel
         parts = cls.vessel.parts
         cls.control = cls.vessel.control
@@ -55,7 +55,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.drill.active = True
         self.wait(3)
 
-        self.assertEqual(self.state.active, self.drill.state)
+        self.assertEqual(self.state.deployed, self.drill.state)
         self.assertTrue(self.drill.deployed)
         self.assertTrue(self.drill.active)
         self.assertGreater(self.vessel.resources.amount("Ore"), ore_before)
@@ -153,7 +153,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertTrue(self.control.resource_harvesters_active)
         self.assertGreater(self.vessel.resources.amount("Ore"), ore_before)
         for drill in self.drills:
-            self.assertEqual(self.state.active, drill.state)
+            self.assertEqual(self.state.deployed, drill.state)
             self.assertTrue(drill.deployed)
             self.assertTrue(drill.active)
             self.assertGreater(drill.extraction_rate, 0)

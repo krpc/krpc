@@ -167,7 +167,6 @@
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
     <Compile Include="Services\Parts\ResourceDrain.cs" />
     <Compile Include="Services\Parts\ResourceHarvester.cs" />
-    <Compile Include="Services\Parts\ResourceHarvesterState.cs" />
     <Compile Include="Services\Parts\RoboticHinge.cs" />
     <Compile Include="Services\Parts\RoboticPiston.cs" />
     <Compile Include="Services\Parts\RoboticRotation.cs" />

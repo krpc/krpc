@@ -1086,12 +1086,6 @@ SpaceCenter.ResourceHarvester.ExtractionRate
 SpaceCenter.ResourceHarvester.ThermalEfficiency
 SpaceCenter.ResourceHarvester.CoreTemperature
 SpaceCenter.ResourceHarvester.OptimumCoreTemperature
-SpaceCenter.ResourceHarvesterState
-SpaceCenter.ResourceHarvesterState.Deploying
-SpaceCenter.ResourceHarvesterState.Deployed
-SpaceCenter.ResourceHarvesterState.Retracting
-SpaceCenter.ResourceHarvesterState.Retracted
-SpaceCenter.ResourceHarvesterState.Active
 SpaceCenter.RoboticController
 SpaceCenter.RoboticController.Part
 SpaceCenter.RoboticController.Enabled
