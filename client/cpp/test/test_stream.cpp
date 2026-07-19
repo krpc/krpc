@@ -272,41 +272,52 @@ TEST_F(test_stream, test_wait_timeout_long) {
   x.release();
 }
 
-// TODO: fix these tests on Travis CI and re-enable
-// TEST_F(test_stream, test_wait_update) {
-//   auto x = test_service.counter_stream("test_stream.test_wait_update", 10);
-//   conn.acquire_stream_update();
-//   auto count = x();
-//   ASSERT_LT(count, 10);
-//   while (count < 10) {
-//     conn.wait_for_stream_update();
-//     count += 1;
-//     ASSERT_EQ(count, x());
-//   }
-//   conn.release_stream_update();
-// }
-//
-// TEST_F(test_stream, test_wait_update_timeout_short) {
-//   auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_short", 10);
-//   conn.acquire_stream_update();
-//   auto count = x();
-//   conn.wait_for_stream_update(0);
-//   ASSERT_EQ(count, x());
-//   conn.release_stream_update();
-// }
-//
-// TEST_F(test_stream, test_wait_update_timeout_long) {
-//   auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_long", 10);
-//   conn.acquire_stream_update();
-//   auto count = x();
-//   ASSERT_LT(count, 10);
-//   while (count < 10) {
-//     conn.wait_for_stream_update(10);
-//     count += 1;
-//     ASSERT_EQ(count, x());
-//   }
-//   conn.release_stream_update();
-// }
+// These tests wait for an update first, to synchronize on an update message
+// boundary before reading their baseline count; each subsequent wait then
+// corresponds to exactly one update message, which advances the counter value
+// by exactly one (the counter's divisor slows value changes to one per ten
+// server ticks, so each change is sent in its own update message).
+
+TEST_F(test_stream, test_wait_update) {
+  auto x = test_service.counter_stream("test_stream.test_wait_update", 10);
+  conn.acquire_stream_update();
+  x.start(false);
+  conn.wait_for_stream_update();
+  auto count = x();
+  ASSERT_LT(count, 10);
+  while (count < 10) {
+    conn.wait_for_stream_update();
+    count += 1;
+    ASSERT_EQ(count, x());
+  }
+  conn.release_stream_update();
+}
+
+TEST_F(test_stream, test_wait_update_timeout_short) {
+  auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_short", 10);
+  conn.acquire_stream_update();
+  x.start(false);
+  conn.wait_for_stream_update();
+  auto count = x();
+  conn.wait_for_stream_update(0);
+  ASSERT_EQ(count, x());
+  conn.release_stream_update();
+}
+
+TEST_F(test_stream, test_wait_update_timeout_long) {
+  auto x = test_service.counter_stream("test_stream.test_wait_update_timeout_long", 10);
+  conn.acquire_stream_update();
+  x.start(false);
+  conn.wait_for_stream_update();
+  auto count = x();
+  ASSERT_LT(count, 10);
+  while (count < 10) {
+    conn.wait_for_stream_update(10);
+    count += 1;
+    ASSERT_EQ(count, x());
+  }
+  conn.release_stream_update();
+}
 
 TEST_F(test_stream, test_callback) {
   std::atomic<int> test_callback_value(-1);
@@ -467,11 +478,12 @@ TEST_F(test_stream, test_stream_freeze_many) {
   for (size_t i = 0; i < streams.size(); i++) ASSERT_NE(values[i], streams[i]());
 }
 
-// FIXME: reenable test
-// TEST_F(test_stream, test_stream_stop_while_frozen) {
-//   auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
-//   conn.freeze_streams();
-// }
+// Freezes with a stream that is not producing updates (it is never started), then
+// tears the connection down while still frozen.
+TEST_F(test_stream, test_stream_stop_while_frozen) {
+  auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
+  conn.freeze_streams();
+}
 
 TEST_F(test_stream, test_default_constructable) {
   krpc::Stream<int> s;

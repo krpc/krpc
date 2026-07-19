@@ -124,7 +124,13 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
     decoder::decode(update, data, client);
     for (const auto& result : update.results())
       stream_manager->update(result.id(), result.result());
-    stream_manager->condition.notify_all();
+    {
+      // Notify while holding the condition mutex, so that a notification cannot
+      // fire between a waiter checking the stream value and entering its wait --
+      // it would be lost and the waiter would sleep through the update.
+      std::lock_guard<std::mutex> guard(stream_manager->condition_mutex);
+      stream_manager->condition.notify_all();
+    }
     for (const auto& callback : stream_manager->callbacks) callback.second();
   };
 
@@ -139,11 +145,16 @@ void StreamManager::update_thread_main(StreamManager* stream_manager,
         break;
       } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
       }
+      // Handle a freeze request even when no update message is arriving, so that
+      // freezing does not block until the next message when no stream is producing
+      // updates. Only applies between messages: partial data means a message is
+      // mid-transfer, and it is read to completion first.
+      if (data.empty() && should_freeze->load()) break;
     }
     if (stop->load()) break;
 
     // Decode and apply the update
-    apply_update(connection->receive(size));
+    if (size > 0) apply_update(connection->receive(size));
 
     // Check if updates should freeze
     if (should_freeze->load()) {

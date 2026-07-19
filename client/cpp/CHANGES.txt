@@ -9,6 +9,9 @@ v0.6.0
    (default) the system install is required; when ON FetchContent is used.
  * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
  * Mark deprecated members with the [[deprecated]] attribute (#904)
+ * Fix stream update notifications being lost, which could leave
+   Client::wait_for_stream_update sleeping through the update it was waiting for
+ * Fix Client::freeze_streams blocking forever when no stream is producing updates
 
 v0.5.2
  * Use protobuf-lite

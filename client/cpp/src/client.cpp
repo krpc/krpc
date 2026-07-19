@@ -68,16 +68,10 @@ std::string Client::invoke(const schema::Request& request) {
 }
 
 std::string Client::invoke(const schema::ProcedureCall& call) {
-  // TODO: is there a way to avoid copying the ProcedureCall in order to create a Request?
   schema::Request request;
-  schema::ProcedureCall* call2 = request.add_calls();
-  call2->set_service(call.service());
-  call2->set_procedure(call.procedure());
-  for (const auto& arg : call.arguments()) {
-    schema::Argument* arg2 = call2->add_arguments();
-    arg2->set_position(arg.position());
-    arg2->set_value(arg.value());
-  }
+  // Copied because the call is received by const reference and a Request owns its calls, so it
+  // cannot be moved in. CopyFrom also stays correct if ProcedureCall gains fields.
+  request.add_calls()->CopyFrom(call);
   return this->invoke(request);
 }
 
