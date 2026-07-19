@@ -66,10 +66,41 @@ Alarm
 
    
 
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Enabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Enabled(bool value)
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_PlaySound(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_PlaySound(bool value)
+
+      Whether the alarm plays a sound when it fires.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Triggered(krpc_connection_t connection, bool * result)
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+   
+
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Repeat(krpc_connection_t connection, bool * result)
    .. function:: void krpc_KerbalAlarmClock_Alarm_set_Repeat(bool value)
 
       Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :func:`krpc_KerbalAlarmClock_Alarm_SupportsRepeat`).
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_SupportsRepeat(krpc_connection_t connection, bool * result)
+
+      Whether this alarm's type supports repeating
+      (see :func:`krpc_KerbalAlarmClock_Alarm_Repeat`).
 
    
 
@@ -77,6 +108,15 @@ Alarm
    .. function:: void krpc_KerbalAlarmClock_Alarm_set_RepeatPeriod(double value)
 
       The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :func:`krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod`).
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod(krpc_connection_t connection, bool * result)
+
+      Whether this alarm's type supports a repeat period
+      (see :func:`krpc_KerbalAlarmClock_Alarm_RepeatPeriod`).
 
    
 
@@ -103,4 +143,4 @@ Alarm
 
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Remove(krpc_connection_t connection)
 
-      Removes the alarm.
+      Removes the alarm. Any further use of this object throws an exception.

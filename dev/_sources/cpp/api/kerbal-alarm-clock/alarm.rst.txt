@@ -66,10 +66,41 @@ Alarm
 
    
 
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+   
+
+   .. function:: bool play_sound()
+   .. function:: void set_play_sound(bool value)
+
+      Whether the alarm plays a sound when it fires.
+
+   
+
+   .. function:: bool triggered()
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+   
+
    .. function:: bool repeat()
    .. function:: void set_repeat(bool value)
 
       Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :func:`Alarm::supports_repeat`).
+
+   
+
+   .. function:: bool supports_repeat()
+
+      Whether this alarm's type supports repeating
+      (see :func:`Alarm::repeat`).
 
    
 
@@ -77,6 +108,15 @@ Alarm
    .. function:: void set_repeat_period(double value)
 
       The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :func:`Alarm::supports_repeat_period`).
+
+   
+
+   .. function:: bool supports_repeat_period()
+
+      Whether this alarm's type supports a repeat period
+      (see :func:`Alarm::repeat_period`).
 
    
 
@@ -103,4 +143,4 @@ Alarm
 
    .. function:: void remove()
 
-      Removes the alarm.
+      Removes the alarm. Any further use of this object throws an exception.

@@ -156,6 +156,12 @@ KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Make available in all game scenes
+* Add AlarmType.ScienceLab; Alarm.Type no longer fails for science lab alarms
+* Add AlarmAction.Custom and AlarmAction.Converted; Alarm.Action no longer fails for alarms whose action does not match one of the presets
+* Add Alarm.Enabled, Alarm.PlaySound, Alarm.Triggered, Alarm.SupportsRepeat and Alarm.SupportsRepeatPeriod
+* Fix Alarm.Remaining always failing with an invalid cast error
+* Fix alarm equality, so the same alarm obtained twice compares equal
+* Fix accessing an alarm after it has been removed, which read stale data; it now fails with an "Alarm does not exist" error
 
 
 Python client

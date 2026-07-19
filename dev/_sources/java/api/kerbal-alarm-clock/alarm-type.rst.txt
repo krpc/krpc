@@ -105,3 +105,8 @@ AlarmType
    .. field:: public AlarmType TRANSFER_MODELLED
 
       See :meth:`AlarmType.TRANSFER`.
+
+
+   .. field:: public AlarmType SCIENCE_LAB
+
+      An alarm for when a science lab has finished processing data.

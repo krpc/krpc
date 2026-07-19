@@ -105,3 +105,8 @@ AlarmType
    .. data:: transfer_modelled
 
       See :attr:`AlarmType.transfer`.
+
+
+   .. data:: science_lab
+
+      An alarm for when a science lab has finished processing data.

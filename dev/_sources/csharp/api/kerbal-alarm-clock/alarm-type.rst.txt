@@ -105,3 +105,8 @@ AlarmType
    .. value:: TransferModelled
 
       See :enum:`AlarmType.Transfer`.
+
+
+   .. value:: ScienceLab
+
+      An alarm for when a science lab has finished processing data.

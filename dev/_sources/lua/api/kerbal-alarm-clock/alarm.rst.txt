@@ -69,19 +69,62 @@ Alarm
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: enabled: boolean
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: play_sound: boolean
+
+      Whether the alarm plays a sound when it fires.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: triggered: boolean
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
    .. attribute:: repeat: boolean
 
       Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :attr:`KerbalAlarmClock.Alarm.supports_repeat`).
 
       :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: supports_repeat: boolean
+
+      Whether this alarm's type supports repeating
+      (see :attr:`KerbalAlarmClock.Alarm.repeat`).
+
+      :Attribute: Read-only, cannot be set
       :rtype: boolean
 
    .. attribute:: repeat_period: number
 
       The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :attr:`KerbalAlarmClock.Alarm.supports_repeat_period`).
 
       :Attribute: Can be read or written
       :rtype: number
+
+   .. attribute:: supports_repeat_period: boolean
+
+      Whether this alarm's type supports a repeat period
+      (see :attr:`KerbalAlarmClock.Alarm.repeat_period`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
 
    .. attribute:: vessel: SpaceCenter.Vessel
 
@@ -106,4 +149,4 @@ Alarm
 
    .. method:: remove()
 
-      Removes the alarm.
+      Removes the alarm. Any further use of this object throws an exception.

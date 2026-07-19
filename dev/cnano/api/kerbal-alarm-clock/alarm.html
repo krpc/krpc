@@ -759,6 +759,36 @@
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Enabled">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_Enabled</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Enabled" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_Enabled">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_set_Enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_Enabled" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the alarm is enabled. A disabled alarm does not fire.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_PlaySound">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_PlaySound</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_PlaySound" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_PlaySound">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_set_PlaySound</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_PlaySound" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the alarm plays a sound when it fires.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Triggered">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_Triggered</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Triggered" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the alarm has fired. Remains true once the alarm has fired;
+stream this or use it in an event expression to react to the alarm
+firing.</p>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Repeat">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_Repeat</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Repeat" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -766,7 +796,16 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_Repeat">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_set_Repeat</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_Repeat" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the alarm will be repeated after it has fired.</p>
+<dd><p>Whether the alarm will be repeated after it has fired.
+Only has an effect for alarm types that support repeating
+(see <a class="reference internal" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_SupportsRepeat" title="krpc_KerbalAlarmClock_Alarm_SupportsRepeat"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KerbalAlarmClock_Alarm_SupportsRepeat()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_SupportsRepeat">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_SupportsRepeat</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_SupportsRepeat" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether this alarm’s type supports repeating
+(see <a class="reference internal" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Repeat" title="krpc_KerbalAlarmClock_Alarm_Repeat"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KerbalAlarmClock_Alarm_Repeat()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="c function">
@@ -777,7 +816,16 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_RepeatPeriod">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_set_RepeatPeriod</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_set_RepeatPeriod" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time delay to automatically create an alarm after it has fired.</p>
+<dd><p>The time delay to automatically create an alarm after it has fired.
+Only has an effect for alarm types that support a repeat period
+(see <a class="reference internal" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod" title="krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod()</span></code></a>).</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_SupportsRepeatPeriod" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether this alarm’s type supports a repeat period
+(see <a class="reference internal" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_RepeatPeriod" title="krpc_KerbalAlarmClock_Alarm_RepeatPeriod"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_KerbalAlarmClock_Alarm_RepeatPeriod()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="c function">
@@ -816,7 +864,7 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Remove">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_KerbalAlarmClock_Alarm_Remove</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_KerbalAlarmClock_Alarm_t.krpc_KerbalAlarmClock_Alarm_Remove" title="Link to this definition">#</a><br /></dt>
-<dd><p>Removes the alarm.</p>
+<dd><p>Removes the alarm. Any further use of this object throws an exception.</p>
 </dd></dl>
 
 </dd></dl>
@@ -918,7 +966,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/611362d">611362d</a>
+  <a href="https://github.com/krpc/krpc/commit/24687f1">24687f1</a>
 </p></div>
       
     </div>

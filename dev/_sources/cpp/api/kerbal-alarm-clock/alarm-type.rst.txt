@@ -106,3 +106,8 @@ AlarmType
    .. enumerator:: transfer_modelled
 
       See :enumerator:`AlarmType::transfer`.
+
+
+   .. enumerator:: science_lab
+
+      An alarm for when a science lab has finished processing data.

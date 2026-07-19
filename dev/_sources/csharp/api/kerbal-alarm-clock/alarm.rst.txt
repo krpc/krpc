@@ -61,15 +61,53 @@ Alarm
 
       :Game Scenes: All
 
+   .. property:: bool Enabled { get; set; }
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+      :Game Scenes: All
+
+   .. property:: bool PlaySound { get; set; }
+
+      Whether the alarm plays a sound when it fires.
+
+      :Game Scenes: All
+
+   .. property:: bool Triggered { get; }
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+      :Game Scenes: All
+
    .. property:: bool Repeat { get; set; }
 
       Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :prop:`Alarm.SupportsRepeat`).
+
+      :Game Scenes: All
+
+   .. property:: bool SupportsRepeat { get; }
+
+      Whether this alarm's type supports repeating
+      (see :prop:`Alarm.Repeat`).
 
       :Game Scenes: All
 
    .. property:: double RepeatPeriod { get; set; }
 
       The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :prop:`Alarm.SupportsRepeatPeriod`).
+
+      :Game Scenes: All
+
+   .. property:: bool SupportsRepeatPeriod { get; }
+
+      Whether this alarm's type supports a repeat period
+      (see :prop:`Alarm.RepeatPeriod`).
 
       :Game Scenes: All
 
@@ -93,7 +131,7 @@ Alarm
 
    .. method:: void Remove()
 
-      Removes the alarm.
+      Removes the alarm. Any further use of this object throws an exception.
 
 
       :Game Scenes: All

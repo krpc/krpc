@@ -39,3 +39,17 @@ AlarmAction
    .. value:: PauseGame
 
       Pause the game.
+
+
+   .. value:: Custom
+
+      A combination of actions configured in the Kerbal Alarm Clock user
+      interface that does not correspond to any of the other values.
+      Setting an alarm's action to this value has no effect.
+
+
+   .. value:: Converted
+
+      The alarm was converted from an older version of Kerbal Alarm Clock
+      and its action has not been set since.
+      Setting an alarm's action to this value has no effect.

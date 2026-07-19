@@ -105,3 +105,8 @@ AlarmType
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_TRANSFERMODELLED
 
       See :macro:`KRPC_KERBALALARMCLOCK_ALARMTYPE_TRANSFER`.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_SCIENCELAB
+
+      An alarm for when a science lab has finished processing data.
