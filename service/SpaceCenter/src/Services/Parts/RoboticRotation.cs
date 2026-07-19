@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -74,7 +75,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float CurrentAngle {
-            get { return servo.currentAngle; }
+            // servo.currentAngle is only refreshed while the part action window is open, so read
+            // the live transform angle directly (this is the value KSP copies into currentAngle).
+            get
+            {
+                return (float)typeof(ModuleRoboticRotationServo)
+                    .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+            }
         }
 
         /// <summary>

@@ -71,7 +71,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float CurrentRPM
         {
-            get { return servo.currentRPM; }
+            // servo.currentRPM is only refreshed while the part action window is open, so read the
+            // live rate of motion directly (this is the value KSP copies into currentRPM).
+            get
+            {
+                return (float)typeof(BaseServo)
+                    .GetField("transformRateOfMotion", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .GetValue(servo);
+            }
         }
 
         /// <summary>
