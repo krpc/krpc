@@ -803,6 +803,8 @@
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.aerodynamic_force">aerodynamic_force (Flight attribute)</a>
 </li>
+      <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.aerodynamic_torque">aerodynamic_torque (Flight attribute)</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.aggregate">aggregate() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.aggregate">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.aggregate(Connection, Expression, Expression)">aggregate(Connection, Expression, Expression) (Java method)</a>
@@ -941,10 +943,10 @@
 </li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.transfer">AlarmType.transfer (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.transfer">[1]</a>
 </li>
-      <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.transfer_modelled">AlarmType.transfer_modelled (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.transfer_modelled">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.transfer_modelled">AlarmType.transfer_modelled (in module KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm-type.html#KerbalAlarmClock.AlarmType.transfer_modelled">[1]</a>
+</li>
       <li><a href="lua/api/space-center/alarms.html#SpaceCenter.AlarmType.transfer_window">AlarmType.transfer_window (in module SpaceCenter)</a>, <a href="python/api/space-center/alarms.html#SpaceCenter.AlarmType.transfer_window">[1]</a>
 </li>
       <li><a href="lua/api/space-center/alarms.html#SpaceCenter.AlarmType.unknown">AlarmType.unknown (in module SpaceCenter)</a>, <a href="python/api/space-center/alarms.html#SpaceCenter.AlarmType.unknown">[1]</a>
@@ -2819,6 +2821,8 @@
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getAerodynamicAcceleration()">getAerodynamicAcceleration() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getAerodynamicForce()">getAerodynamicForce() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getAerodynamicTorque()">getAerodynamicTorque() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getAeroSurfaces()">getAeroSurfaces() (Java method)</a>
 </li>
@@ -6762,6 +6766,8 @@
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight17aerodynamic_forceEv">krpc::services::SpaceCenter::Flight::aerodynamic_force (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight18aerodynamic_torqueEv">krpc::services::SpaceCenter::Flight::aerodynamic_torque (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight15angle_of_attackEv">krpc::services::SpaceCenter::Flight::angle_of_attack (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight11anti_normalEv">krpc::services::SpaceCenter::Flight::anti_normal (C++ function)</a>
@@ -6830,7 +6836,9 @@
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight29simulate_aerodynamic_force_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEE">krpc::services::SpaceCenter::Flight::simulate_aerodynamic_force_at (C++ function)</a>
 </li>
-      <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_torque_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEE">krpc::services::SpaceCenter::Flight::simulate_aerodynamic_torque_at (C++ function)</a>
+      <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_torque_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEE">krpc::services::SpaceCenter::Flight::simulate_aerodynamic_torque_at (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight30simulate_aerodynamic_wrench_atE13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEEd">krpc::services::SpaceCenter::Flight::simulate_aerodynamic_wrench_at (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv">krpc::services::SpaceCenter::Flight::speed (C++ function)</a>
 </li>
@@ -10904,6 +10912,8 @@
 </li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicForce">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicForce (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicTorque">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicTorque (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AngleOfAttack">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AngleOfAttack (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AntiNormal">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AntiNormal (C function)</a>
@@ -10973,6 +10983,8 @@
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicWrenchAt">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicWrenchAt (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_Speed">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_Speed (C function)</a>
 </li>
@@ -15613,9 +15625,13 @@
 </li>
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.Flight.simulate_aerodynamic_torque_at">simulate_aerodynamic_torque_at() (Flight method)</a>, <a href="python/api/space-center/flight.html#SpaceCenter.Flight.simulate_aerodynamic_torque_at">[1]</a>
 </li>
+      <li><a href="lua/api/space-center/flight.html#SpaceCenter.Flight.simulate_aerodynamic_wrench_at">simulate_aerodynamic_wrench_at() (Flight method)</a>, <a href="python/api/space-center/flight.html#SpaceCenter.Flight.simulate_aerodynamic_wrench_at">[1]</a>
+</li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.simulateAerodynamicForceAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, org.javatuples.Quartet)">simulateAerodynamicForceAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, org.javatuples.Quartet) (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.simulateAerodynamicTorqueAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet)">simulateAerodynamicTorqueAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet) (Java method)</a>
+      <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.simulateAerodynamicTorqueAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet)">simulateAerodynamicTorqueAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet) (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.simulateAerodynamicWrenchAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, double)">simulateAerodynamicWrenchAt(CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, double) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.SITE">SITE (Java field)</a>
 </li>
@@ -16383,6 +16399,8 @@
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.aerodynamic_acceleration">SpaceCenter.SpaceCenter.Flight.aerodynamic_acceleration (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.aerodynamic_force">SpaceCenter.SpaceCenter.Flight.aerodynamic_force (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.aerodynamic_torque">SpaceCenter.SpaceCenter.Flight.aerodynamic_torque (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.angle_of_attack">SpaceCenter.SpaceCenter.Flight.angle_of_attack (attribute)</a>
 </li>
@@ -18617,7 +18635,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c5bd78">3c5bd78</a>
+  <a href="https://github.com/krpc/krpc/commit/9d53e49">9d53e49</a>
 </p></div>
       
     </div>

@@ -1128,6 +1128,33 @@ in reference frame <a class="reference internal" href="reference-frame.html#c.kr
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicTorque">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Flight_AerodynamicTorque</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicTorque" title="Link to this definition">#</a><br /></dt>
+<dd><p>The net aerodynamic torque currently acting on the vessel about its center of
+mass, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. The magnitude is in
+newton-meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the live counterpart to <a class="reference internal" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_AerodynamicForce" title="krpc_SpaceCenter_Flight_AerodynamicForce"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_AerodynamicForce()</span></code></a>: it reconstructs
+the per-part aerodynamic forces and application points that the game applied on
+the current physics frame and levers them about the center of mass, rather than
+re-simulating them for hypothetical conditions the way
+<a class="reference internal" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt" title="krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt()</span></code></a> does. It is intended for validating the
+simulator against the live game state. Not available when
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+is installed, as FAR does not expose a live per-frame torque.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">velocity</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt" title="Link to this definition">#</a><br /></dt>
 <dd><p>Simulate and return the total aerodynamic forces acting on the vessel,
@@ -1155,21 +1182,30 @@ orientation, in the atmosphere of the given celestial body.</p>
 expressed in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. The result is the
 force the vessel would experience if it were placed at that position and
 orientation with the air flowing past it at that velocity; it is the force at
-the requested orientation, not the force in the vessel’s current orientation.</p>
+the requested orientation, not the force in the vessel’s current orientation.
+Atmospheric temperature and density are evaluated at the current universal time.</p>
 </div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">velocity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt" title="Link to this definition">#</a><br /></dt>
-<dd><p>Simulate and return the total aerodynamic torques acting on the vessel,
-if it where to be traveling with the given velocity at the given position in the
-atmosphere of the given celestial body.</p>
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">velocity</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">angularVelocity</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt" title="Link to this definition">#</a><br /></dt>
+<dd><p>Simulate and return the total aerodynamic torque acting on the vessel about its
+center of mass, if it were traveling with the given velocity, at the given
+position, orientation and angular velocity, in the atmosphere of the given
+celestial body.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body whose atmosphere the torque is simulated in.</p></li>
+<li><p><strong>position</strong> – The position of the vessel, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p></li>
+<li><p><strong>velocity</strong> – The velocity of the vessel, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p></li>
+<li><p><strong>rotation</strong> – The orientation of the vessel, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>, in the same form as <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_Rotation()</span></code>. Pass the vessel’s current rotation to evaluate the torque at its current orientation.</p></li>
+<li><p><strong>angularVelocity</strong> – The angular velocity of the vessel, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. This adds the solid-body rotation term to each part’s local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping torque. Pass a zero vector to evaluate the static torque.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>A vector pointing in the direction that the torque acts, with its magnitude equal to the strength of the force in kilonewton-meters.</p>
+<dd class="field-even"><p>A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1177,7 +1213,54 @@ atmosphere of the given celestial body.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Requires <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>.</p>
+<p>The position, velocity, rotation and angular velocity arguments, and the returned
+torque, are all expressed in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. When
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+is installed the angular velocity argument is ignored.
+Atmospheric temperature and density are evaluated at the current universal time.</p>
+<p>This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
+about the center of mass. A vessel may not visibly rotate by the full amount when
+a large aerodynamic force acts on a small part far from the center of mass, because
+the game applies each part’s force to that part and propagates it through the joints
+rather than to the vessel as a rigid body.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicWrenchAt">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Flight_SimulateAerodynamicWrenchAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_tuple_double_double_double_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t" title="krpc_SpaceCenter_CelestialBody_t"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">body</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">velocity</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">rotation</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">angularVelocity</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">ut</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SimulateAerodynamicWrenchAt" title="Link to this definition">#</a><br /></dt>
+<dd><p>Simulate and return the total aerodynamic force and torque acting on the vessel,
+if its center of mass were traveling with the given velocity, at the given position,
+orientation and angular velocity, in the atmosphere of the given celestial body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body whose atmosphere the wrench is simulated in.</p></li>
+<li><p><strong>position</strong> – The position of the vessel’s center of mass, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p></li>
+<li><p><strong>velocity</strong> – The velocity of the vessel’s center of mass, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p></li>
+<li><p><strong>rotation</strong> – The orientation of the vessel, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>, in the same form as <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_Rotation()</span></code>. Pass the vessel’s current rotation to evaluate the wrench at its current orientation.</p></li>
+<li><p><strong>angularVelocity</strong> – The angular velocity of the vessel, in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>. This adds the solid-body rotation term to each part’s local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.</p></li>
+<li><p><strong>ut</strong> – The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a> or any of the state arguments.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel’s center of mass. Both are vectors in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The position and velocity describe the hypothetical center-of-mass state. The
+position, velocity, rotation and angular velocity arguments, and both returned
+vectors, are expressed in reference frame <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></code></a>.
+For future-state prediction, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame()</span></code>
+is recommended so that the spatial state has unambiguous inertial semantics.</p>
+<p>This is an instantaneous rigid-body result based on the vessel’s current parts,
+drag cubes and control-surface state. When
+<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
+is installed the angular velocity and <em>ut</em> arguments are ignored.</p>
 </div>
 </dd></dl>
 
@@ -1558,7 +1641,7 @@ per hour, to produce one newton of thrust.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c5bd78">3c5bd78</a>
+  <a href="https://github.com/krpc/krpc/commit/9d53e49">9d53e49</a>
 </p></div>
       
     </div>

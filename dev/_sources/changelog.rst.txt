@@ -61,7 +61,7 @@ SpaceCenter service
 * Guard ContractManager against null ContractSystem in non-career game modes (:issue:`819`)
 * Fix waypoint mean altitude not including bedrock height (:issue:`801`)
 * Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (:issue:`582`)
-* Add Flight.SimulateAerodynamicTorqueAt (:issue:`825`)
+* Add Flight.SimulateAerodynamicTorqueAt to simulate the aerodynamic torque about the vessel's center of mass, for a hypothetical attitude and angular velocity, with both stock aerodynamics and FAR, in newton-meters. The torque includes both damping mechanisms the game applies: the change in each part's local airflow due to rotation, and the per-part rigidbody angular drag (:issue:`825`, :issue:`914`, :issue:`429`)
 * Add Part.Drag and Part.Lift returning the aerodynamic drag and lift forces acting on an individual part (:issue:`459`)
 * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (:issue:`827`)
 * Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
@@ -94,6 +94,9 @@ SpaceCenter service
 * Fix Flight.SimulateAerodynamicForceAt overestimating drag at low altitude and subsonic speed by applying KSP's pseudo-Reynolds drag multiplier to cube drag (:issue:`912`)
 * Add a rotation parameter to Flight.SimulateAerodynamicForceAt to set the vessel attitude (angle of attack and sideslip) independently of velocity. Pass the current rotation for the previous behavior (:issue:`915`)
 * Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of newtons when FAR is installed (:issue:`915`)
+* Fix Flight.SimulateAerodynamicForceAt computing incorrect lift for command pods and other parts with a perpendicular-only lifting-surface module: cube body lift was applied even where the game disables it (a pod with a heatshield occupying its bottom node has none), and lifting-surface modules were evaluated against stale internal airflow state, so results depended on the game context the call was made from (landed, in vacuum, or in atmospheric flight). The live AerodynamicForce and AerodynamicTorque properties honor the same body-lift gating (:issue:`914`)
+* Add Flight.SimulateAerodynamicWrenchAt to evaluate stock aerodynamic force and torque together at a hypothetical center-of-mass state, attitude, body rate and atmospheric ephemeris time (:issue:`914`)
+* Add Flight.AerodynamicTorque, the live counterpart to Flight.AerodynamicForce, giving the net aerodynamic torque acting on the vessel about its center of mass on the current physics frame; not available with FAR (:issue:`914`)
 * Add direct control of engine gimbals, RCS and control surfaces (:issue:`917`)
 * Fix reference frame velocity being incorrect at non-equatorial latitudes (:issue:`454`)
 * Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (:issue:`889`)

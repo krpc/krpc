@@ -239,8 +239,7 @@ CelestialBody
 
       .. note::
 
-         This calculation is performed using the bodies current position, which means that
-         the value could be wrong if you want to know the temperature in the far future.
+         The atmospheric ephemeris is evaluated at the current universal time.
 
    .. method:: double densityAt(double altitude)
 

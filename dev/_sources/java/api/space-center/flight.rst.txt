@@ -307,6 +307,28 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getAerodynamicTorque()
+
+
+      The net aerodynamic torque currently acting on the vessel about its center of
+      mass, in reference frame :type:`ReferenceFrame`. The magnitude is in
+      newton-meters.
+
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the live counterpart to :meth:`Flight.getAerodynamicForce()`: it reconstructs
+         the per-part aerodynamic forces and application points that the game applied on
+         the current physics frame and levers them about the center of mass, rather than
+         re-simulating them for hypothetical conditions the way
+         :meth:`Flight.simulateAerodynamicTorqueAt(CelestialBody, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)` does. It is intended for validating the
+         simulator against the live game state. Not available when
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         is installed, as FAR does not expose a live per-frame torque.
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> simulateAerodynamicForceAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Quartet<Double,Double,Double,Double> rotation)
 
       Simulate and return the total aerodynamic forces acting on the vessel,
@@ -328,23 +350,66 @@ Flight
          force the vessel would experience if it were placed at that position and
          orientation with the air flowing past it at that velocity; it is the force at
          the requested orientation, not the force in the vessel's current orientation.
+         Atmospheric temperature and density are evaluated at the current universal time.
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> simulateAerodynamicTorqueAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity)
+   .. method:: org.javatuples.Triplet<Double,Double,Double> simulateAerodynamicTorqueAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Quartet<Double,Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> angularVelocity)
 
-      Simulate and return the total aerodynamic torques acting on the vessel,
-      if it where to be traveling with the given velocity at the given position in the
-      atmosphere of the given celestial body.
+      Simulate and return the total aerodynamic torque acting on the vessel about its
+      center of mass, if it were traveling with the given velocity, at the given
+      position, orientation and angular velocity, in the atmosphere of the given
+      celestial body.
 
-      :param CelestialBody body:
-      :param org.javatuples.Triplet<Double,Double,Double> position:
-      :param org.javatuples.Triplet<Double,Double,Double> velocity:
-      :returns: A vector pointing in the direction that the torque acts, with its magnitude equal to the strength of the force in kilonewton-meters.
+      :param CelestialBody body: The celestial body whose atmosphere the torque is simulated in.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position of the vessel, in reference frame :type:`ReferenceFrame`.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity of the vessel, in reference frame :type:`ReferenceFrame`.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The orientation of the vessel, in reference frame :type:`ReferenceFrame`, in the same form as :meth:`Vessel.rotation(ReferenceFrame)`. Pass the vessel's current rotation to evaluate the torque at its current orientation.
+      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity of the vessel, in reference frame :type:`ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping torque. Pass a zero vector to evaluate the static torque.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters, in reference frame :type:`ReferenceFrame`.
       :Game Scenes: Flight
 
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         The position, velocity, rotation and angular velocity arguments, and the returned
+         torque, are all expressed in reference frame :type:`ReferenceFrame`. When
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         is installed the angular velocity argument is ignored.
+         Atmospheric temperature and density are evaluated at the current universal time.
+
+         This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
+         about the center of mass. A vessel may not visibly rotate by the full amount when
+         a large aerodynamic force acts on a small part far from the center of mass, because
+         the game applies each part's force to that part and propagates it through the joints
+         rather than to the vessel as a rigid body.
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> simulateAerodynamicWrenchAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Quartet<Double,Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> angularVelocity, double ut)
+
+      Simulate and return the total aerodynamic force and torque acting on the vessel,
+      if its center of mass were traveling with the given velocity, at the given position,
+      orientation and angular velocity, in the atmosphere of the given celestial body.
+
+      :param CelestialBody body: The celestial body whose atmosphere the wrench is simulated in.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position of the vessel's center of mass, in reference frame :type:`ReferenceFrame`.
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The velocity of the vessel's center of mass, in reference frame :type:`ReferenceFrame`.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The orientation of the vessel, in reference frame :type:`ReferenceFrame`, in the same form as :meth:`Vessel.rotation(ReferenceFrame)`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
+      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity of the vessel, in reference frame :type:`ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
+      :param double ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :type:`ReferenceFrame` or any of the state arguments.
+      :returns: A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel's center of mass. Both are vectors in reference frame :type:`ReferenceFrame`.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The position and velocity describe the hypothetical center-of-mass state. The
+         position, velocity, rotation and angular velocity arguments, and both returned
+         vectors, are expressed in reference frame :type:`ReferenceFrame`.
+         For future-state prediction, :meth:`CelestialBody.getNonRotatingReferenceFrame()`
+         is recommended so that the spatial state has unambiguous inertial semantics.
+
+         This is an instantaneous rigid-body result based on the vessel's current parts,
+         drag cubes and control-surface state. When
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         is installed the angular velocity and *ut* arguments are ignored.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getLift()
 

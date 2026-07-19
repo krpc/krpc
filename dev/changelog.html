@@ -653,7 +653,7 @@
 <li><p>Guard ContractManager against null ContractSystem in non-career game modes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/819">#819</a>)</p></li>
 <li><p>Fix waypoint mean altitude not including bedrock height (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/801">#801</a>)</p></li>
 <li><p>Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/582">#582</a>)</p></li>
-<li><p>Add Flight.SimulateAerodynamicTorqueAt (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/825">#825</a>)</p></li>
+<li><p>Add Flight.SimulateAerodynamicTorqueAt to simulate the aerodynamic torque about the vessel’s center of mass, for a hypothetical attitude and angular velocity, with both stock aerodynamics and FAR, in newton-meters. The torque includes both damping mechanisms the game applies: the change in each part’s local airflow due to rotation, and the per-part rigidbody angular drag (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/825">#825</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/914">#914</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/429">#429</a>)</p></li>
 <li><p>Add Part.Drag and Part.Lift returning the aerodynamic drag and lift forces acting on an individual part (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/459">#459</a>)</p></li>
 <li><p>Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/827">#827</a>)</p></li>
 <li><p>Add Vessel.Loaded and Vessel.Packed to report a vessel’s loading and on-rails state</p></li>
@@ -686,6 +686,9 @@
 <li><p>Fix Flight.SimulateAerodynamicForceAt overestimating drag at low altitude and subsonic speed by applying KSP’s pseudo-Reynolds drag multiplier to cube drag (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/912">#912</a>)</p></li>
 <li><p>Add a rotation parameter to Flight.SimulateAerodynamicForceAt to set the vessel attitude (angle of attack and sideslip) independently of velocity. Pass the current rotation for the previous behavior (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/915">#915</a>)</p></li>
 <li><p>Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of newtons when FAR is installed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/915">#915</a>)</p></li>
+<li><p>Fix Flight.SimulateAerodynamicForceAt computing incorrect lift for command pods and other parts with a perpendicular-only lifting-surface module: cube body lift was applied even where the game disables it (a pod with a heatshield occupying its bottom node has none), and lifting-surface modules were evaluated against stale internal airflow state, so results depended on the game context the call was made from (landed, in vacuum, or in atmospheric flight). The live AerodynamicForce and AerodynamicTorque properties honor the same body-lift gating (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/914">#914</a>)</p></li>
+<li><p>Add Flight.SimulateAerodynamicWrenchAt to evaluate stock aerodynamic force and torque together at a hypothetical center-of-mass state, attitude, body rate and atmospheric ephemeris time (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/914">#914</a>)</p></li>
+<li><p>Add Flight.AerodynamicTorque, the live counterpart to Flight.AerodynamicForce, giving the net aerodynamic torque acting on the vessel about its center of mass on the current physics frame; not available with FAR (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/914">#914</a>)</p></li>
 <li><p>Add direct control of engine gimbals, RCS and control surfaces (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/917">#917</a>)</p></li>
 <li><p>Fix reference frame velocity being incorrect at non-equatorial latitudes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/454">#454</a>)</p></li>
 <li><p>Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/889">#889</a>)</p></li>
@@ -3142,7 +3145,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c5bd78">3c5bd78</a>
+  <a href="https://github.com/krpc/krpc/commit/9d53e49">9d53e49</a>
 </p></div>
       
     </div>

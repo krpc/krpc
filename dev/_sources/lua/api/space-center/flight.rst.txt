@@ -302,6 +302,27 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :rtype: Tuple
 
+   .. attribute:: aerodynamic_torque: Tuple
+
+      The net aerodynamic torque currently acting on the vessel about its center of
+      mass, in reference frame :class:`SpaceCenter.ReferenceFrame`. The magnitude is in
+      newton-meters.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters.
+      :rtype: Tuple
+
+      .. note::
+
+         This is the live counterpart to :attr:`SpaceCenter.Flight.aerodynamic_force`: it reconstructs
+         the per-part aerodynamic forces and application points that the game applied on
+         the current physics frame and levers them about the center of mass, rather than
+         re-simulating them for hypothetical conditions the way
+         :meth:`SpaceCenter.Flight.simulate_aerodynamic_torque_at` does. It is intended for validating the
+         simulator against the live game state. Not available when
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         is installed, as FAR does not expose a live per-frame torque.
+
    .. method:: simulate_aerodynamic_force_at(body, position, velocity, rotation)
 
       Simulate and return the total aerodynamic forces acting on the vessel,
@@ -322,22 +343,64 @@ Flight
          force the vessel would experience if it were placed at that position and
          orientation with the air flowing past it at that velocity; it is the force at
          the requested orientation, not the force in the vessel's current orientation.
+         Atmospheric temperature and density are evaluated at the current universal time.
 
-   .. method:: simulate_aerodynamic_torque_at(body, position, velocity)
+   .. method:: simulate_aerodynamic_torque_at(body, position, velocity, rotation, angular_velocity)
 
-      Simulate and return the total aerodynamic torques acting on the vessel,
-      if it where to be traveling with the given velocity at the given position in the
-      atmosphere of the given celestial body.
+      Simulate and return the total aerodynamic torque acting on the vessel about its
+      center of mass, if it were traveling with the given velocity, at the given
+      position, orientation and angular velocity, in the atmosphere of the given
+      celestial body.
 
-      :param SpaceCenter.CelestialBody body:
-      :param Tuple position:
-      :param Tuple velocity:
-      :returns: A vector pointing in the direction that the torque acts, with its magnitude equal to the strength of the force in kilonewton-meters.
+      :param SpaceCenter.CelestialBody body: The celestial body whose atmosphere the torque is simulated in.
+      :param Tuple position: The position of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param Tuple velocity: The velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param Tuple rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the torque at its current orientation.
+      :param Tuple angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping torque. Pass a zero vector to evaluate the static torque.
+      :returns: A vector pointing along the axis of the torque, with its magnitude equal to the strength of the torque in newton-meters, in reference frame :class:`SpaceCenter.ReferenceFrame`.
       :rtype: Tuple
 
       .. note::
 
-         Requires `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_.
+         The position, velocity, rotation and angular velocity arguments, and the returned
+         torque, are all expressed in reference frame :class:`SpaceCenter.ReferenceFrame`. When
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         is installed the angular velocity argument is ignored.
+         Atmospheric temperature and density are evaluated at the current universal time.
+
+         This is the ideal rigid-body aerodynamic torque, summed from the per-part forces
+         about the center of mass. A vessel may not visibly rotate by the full amount when
+         a large aerodynamic force acts on a small part far from the center of mass, because
+         the game applies each part's force to that part and propagates it through the joints
+         rather than to the vessel as a rigid body.
+
+   .. method:: simulate_aerodynamic_wrench_at(body, position, velocity, rotation, angular_velocity, ut)
+
+      Simulate and return the total aerodynamic force and torque acting on the vessel,
+      if its center of mass were traveling with the given velocity, at the given position,
+      orientation and angular velocity, in the atmosphere of the given celestial body.
+
+      :param SpaceCenter.CelestialBody body: The celestial body whose atmosphere the wrench is simulated in.
+      :param Tuple position: The position of the vessel's center of mass, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param Tuple velocity: The velocity of the vessel's center of mass, in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :param Tuple rotation: The orientation of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`, in the same form as :meth:`SpaceCenter.Vessel.rotation`. Pass the vessel's current rotation to evaluate the wrench at its current orientation.
+      :param Tuple angular_velocity: The angular velocity of the vessel, in reference frame :class:`SpaceCenter.ReferenceFrame`. This adds the solid-body rotation term to each part's local airflow and the per-part rigid-body angular drag the game applies, together giving the aerodynamic damping force and torque. Pass a zero vector to evaluate the static wrench relative to the reference frame.
+      :param number ut: The universal time used for the atmospheric ephemeris. It selects the body/Sun geometry used for temperature and density, but does not change or propagate :class:`SpaceCenter.ReferenceFrame` or any of the state arguments.
+      :returns: A pair containing the aerodynamic force in newtons followed by the aerodynamic torque in newton-meters about the vessel's center of mass. Both are vectors in reference frame :class:`SpaceCenter.ReferenceFrame`.
+      :rtype: Tuple
+
+      .. note::
+
+         The position and velocity describe the hypothetical center-of-mass state. The
+         position, velocity, rotation and angular velocity arguments, and both returned
+         vectors, are expressed in reference frame :class:`SpaceCenter.ReferenceFrame`.
+         For future-state prediction, :attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame`
+         is recommended so that the spatial state has unambiguous inertial semantics.
+
+         This is an instantaneous rigid-body result based on the vessel's current parts,
+         drag cubes and control-surface state. When
+         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
+         is installed the angular velocity and *ut* arguments are ignored.
 
    .. attribute:: lift: Tuple
 
