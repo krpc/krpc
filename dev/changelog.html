@@ -629,6 +629,7 @@
 <li><p>Rename KRPC.CurrentGameScene to KRPC.GameScene and make it settable to switch the current game scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
 <li><p>Add AstronautComplex, MissionControl, ResearchAndDevelopment, Administration and MissionBuilder game scenes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
 <li><p>KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
+<li><p>Reduce copying and allocation when receiving messages: protobuf messages are now parsed directly from the receive buffer, without allocating intermediate buffers or streams</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -3145,7 +3146,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/9d53e49">9d53e49</a>
+  <a href="https://github.com/krpc/krpc/commit/166cb79">166cb79</a>
 </p></div>
       
     </div>

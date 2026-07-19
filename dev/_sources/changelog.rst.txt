@@ -37,6 +37,7 @@ Core
 * Rename KRPC.CurrentGameScene to KRPC.GameScene and make it settable to switch the current game scene (:issue:`897`)
 * Add AstronautComplex, MissionControl, ResearchAndDevelopment, Administration and MissionBuilder game scenes (:issue:`897`)
 * KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (:issue:`897`)
+* Reduce copying and allocation when receiving messages: protobuf messages are now parsed directly from the receive buffer, without allocating intermediate buffers or streams
 
 
 SpaceCenter service
