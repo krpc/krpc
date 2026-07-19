@@ -205,6 +205,12 @@ namespace KRPC.InfernalRobotics
 			private PropertyInfo forwardKeyProperty;
 			private PropertyInfo reverseKeyProperty;
 
+			private PropertyInfo movingDirectionProperty;
+			private PropertyInfo advancedModeProperty;
+			private PropertyInfo totalElectricChargeRequirementProperty;
+			private PropertyInfo buildAidProperty;
+			private PropertyInfo ikActiveProperty;
+
 			private MethodInfo moveRightMethod;
 			private MethodInfo moveLeftMethod;
 			private MethodInfo moveCenterMethod;
@@ -227,6 +233,11 @@ namespace KRPC.InfernalRobotics
 				reverseKeyProperty = IRServoGroupType.GetProperty("ReverseKey");
 				groupSpeedFactorProperty = IRServoGroupType.GetProperty("GroupSpeedFactor");
 				expandedProperty = IRServoGroupType.GetProperty("Expanded");
+				movingDirectionProperty = IRServoGroupType.GetProperty("MovingDirection");
+				advancedModeProperty = IRServoGroupType.GetProperty("AdvancedMode");
+				totalElectricChargeRequirementProperty = IRServoGroupType.GetProperty("TotalElectricChargeRequirement");
+				buildAidProperty = IRServoGroupType.GetProperty("BuildAid");
+				ikActiveProperty = IRServoGroupType.GetProperty("IKActive");
 
 				var servosProperty = IRServoGroupType.GetProperty("Servos");
 				ActualServos = servosProperty.GetValue(actualControlGroup, null);
@@ -275,6 +286,34 @@ namespace KRPC.InfernalRobotics
 			{
 				get { return (bool)expandedProperty.GetValue(actualControlGroup, null); }
 				set { expandedProperty.SetValue (actualControlGroup, value, null); }
+			}
+
+			public int MovingDirection
+			{
+				get { return (int)movingDirectionProperty.GetValue(actualControlGroup, null); }
+			}
+
+			public bool AdvancedMode
+			{
+				get { return (bool)advancedModeProperty.GetValue(actualControlGroup, null); }
+				set { advancedModeProperty.SetValue (actualControlGroup, value, null); }
+			}
+
+			public float TotalElectricChargeRequirement
+			{
+				get { return (float)totalElectricChargeRequirementProperty.GetValue(actualControlGroup, null); }
+			}
+
+			public bool BuildAid
+			{
+				get { return (bool)buildAidProperty.GetValue(actualControlGroup, null); }
+				set { buildAidProperty.SetValue (actualControlGroup, value, null); }
+			}
+
+			public bool IKActive
+			{
+				get { return (bool)ikActiveProperty.GetValue(actualControlGroup, null); }
+				set { ikActiveProperty.SetValue (actualControlGroup, value, null); }
 			}
 
 			private object ActualServos { get; set; }
@@ -369,6 +408,29 @@ namespace KRPC.InfernalRobotics
 			private PropertyInfo forwardKeyProperty;
 			private PropertyInfo reverseKeyProperty;
 
+			private PropertyInfo targetPositionProperty;
+			private PropertyInfo targetSpeedProperty;
+			private PropertyInfo defaultPositionProperty;
+			private PropertyInfo maxForceProperty;
+			private PropertyInfo maxAccelerationProperty;
+			private PropertyInfo maxSpeedProperty;
+			private PropertyInfo electricChargeRequiredProperty;
+			private PropertyInfo springPowerProperty;
+			private PropertyInfo dampingPowerProperty;
+			private PropertyInfo rotorAccelerationProperty;
+			private PropertyInfo isLimitedProperty;
+			private PropertyInfo isRotationalProperty;
+			private PropertyInfo isServoProperty;
+			private PropertyInfo canHaveLimitsProperty;
+			private PropertyInfo hasSpringProperty;
+			private PropertyInfo isRunningProperty;
+			private PropertyInfo modeProperty;
+			private PropertyInfo presetPositionsProperty;
+			private PropertyInfo presetsProperty;
+			private MethodInfo presetAddMethod;
+			private MethodInfo presetRemoveAtMethod;
+			private MethodInfo presetSortMethod;
+
 			private MethodInfo moveLeftMethod;
 			private MethodInfo moveCenterMethod;
 			private MethodInfo moveRightMethod;
@@ -413,6 +475,32 @@ namespace KRPC.InfernalRobotics
 
 				forwardKeyProperty = IRServoType.GetProperty("ForwardKey");
 				reverseKeyProperty = IRServoType.GetProperty("ReverseKey");
+
+				targetPositionProperty = IRServoType.GetProperty("TargetPosition");
+				targetSpeedProperty = IRServoType.GetProperty("TargetSpeed");
+				defaultPositionProperty = IRServoType.GetProperty("DefaultPosition");
+				maxForceProperty = IRServoType.GetProperty("MaxForce");
+				maxAccelerationProperty = IRServoType.GetProperty("MaxAcceleration");
+				maxSpeedProperty = IRServoType.GetProperty("MaxSpeed");
+				electricChargeRequiredProperty = IRServoType.GetProperty("ElectricChargeRequired");
+				springPowerProperty = IRServoType.GetProperty("SpringPower");
+				dampingPowerProperty = IRServoType.GetProperty("DampingPower");
+				rotorAccelerationProperty = IRServoType.GetProperty("RotorAcceleration");
+				isLimitedProperty = IRServoType.GetProperty("IsLimited");
+				isRotationalProperty = IRServoType.GetProperty("IsRotational");
+				isServoProperty = IRServoType.GetProperty("IsServo");
+				canHaveLimitsProperty = IRServoType.GetProperty("CanHaveLimits");
+				hasSpringProperty = IRServoType.GetProperty("HasSpring");
+				isRunningProperty = IRServoType.GetProperty("IsRunning");
+				modeProperty = IRServoType.GetProperty("Mode");
+				presetPositionsProperty = IRServoType.GetProperty("PresetPositions");
+				presetsProperty = IRServoType.GetProperty("Presets");
+				if (presetsProperty != null) {
+					var presetableType = presetsProperty.PropertyType;
+					presetAddMethod = presetableType.GetMethod("Add");
+					presetRemoveAtMethod = presetableType.GetMethod("RemoveAt");
+					presetSortMethod = presetableType.GetMethod("Sort");
+				}
 			}
 
 			private void FindMethods()
@@ -532,6 +620,117 @@ namespace KRPC.InfernalRobotics
 			public float Position
 			{
 				get { return (float)positionProperty.GetValue(actualServo, null); }
+			}
+
+			public float TargetPosition
+			{
+				get { return (float)targetPositionProperty.GetValue(actualServo, null); }
+			}
+
+			public float TargetSpeed
+			{
+				get { return (float)targetSpeedProperty.GetValue(actualServo, null); }
+			}
+
+			public float DefaultPosition
+			{
+				get { return (float)defaultPositionProperty.GetValue(actualServo, null); }
+			}
+
+			public float MaxForce
+			{
+				get { return (float)maxForceProperty.GetValue(actualServo, null); }
+			}
+
+			public float MaxAcceleration
+			{
+				get { return (float)maxAccelerationProperty.GetValue(actualServo, null); }
+			}
+
+			public float MaxSpeed
+			{
+				get { return (float)maxSpeedProperty.GetValue(actualServo, null); }
+			}
+
+			public float ElectricChargeRequired
+			{
+				get { return (float)electricChargeRequiredProperty.GetValue(actualServo, null); }
+			}
+
+			public float SpringPower
+			{
+				get { return (float)springPowerProperty.GetValue(actualServo, null); }
+				set { springPowerProperty.SetValue(actualServo, value, null); }
+			}
+
+			public float DampingPower
+			{
+				get { return (float)dampingPowerProperty.GetValue(actualServo, null); }
+				set { dampingPowerProperty.SetValue(actualServo, value, null); }
+			}
+
+			public float RotorAcceleration
+			{
+				get { return (float)rotorAccelerationProperty.GetValue(actualServo, null); }
+				set { rotorAccelerationProperty.SetValue(actualServo, value, null); }
+			}
+
+			public bool IsLimited
+			{
+				get { return (bool)isLimitedProperty.GetValue(actualServo, null); }
+				set { isLimitedProperty.SetValue(actualServo, value, null); }
+			}
+
+			public bool IsRotational
+			{
+				get { return (bool)isRotationalProperty.GetValue(actualServo, null); }
+			}
+
+			public bool IsServo
+			{
+				get { return (bool)isServoProperty.GetValue(actualServo, null); }
+			}
+
+			public bool CanHaveLimits
+			{
+				get { return (bool)canHaveLimitsProperty.GetValue(actualServo, null); }
+			}
+
+			public bool HasSpring
+			{
+				get { return (bool)hasSpringProperty.GetValue(actualServo, null); }
+			}
+
+			public bool IsRunning
+			{
+				get { return (bool)isRunningProperty.GetValue(actualServo, null); }
+			}
+
+			// IR-Next's ModeType enum: servo = 1, rotor = 2. Returned as its integer value; the
+			// service maps it to the ServoMode enum.
+			public int Mode
+			{
+				get { return Convert.ToInt32(modeProperty.GetValue(actualServo, null)); }
+			}
+
+			public IList<float> PresetPositions
+			{
+				get { return (IList<float>)presetPositionsProperty.GetValue(actualServo, null); }
+			}
+
+			public void AddPreset(float position)
+			{
+				presetAddMethod.Invoke(presetsProperty.GetValue(actualServo, null), new object [] { position });
+			}
+
+			public void RemovePresetAt(int index)
+			{
+				presetRemoveAtMethod.Invoke(presetsProperty.GetValue(actualServo, null), new object [] { index });
+			}
+
+			public void SortPresets()
+			{
+				presetSortMethod.Invoke(presetsProperty.GetValue(actualServo, null), new object [] { null });
 			}
 
 			// kRPC-local patch (diverges from the upstream vendored IRWrapper): IR-Next's
@@ -807,8 +1006,9 @@ namespace KRPC.InfernalRobotics
 				return new InvalidOperationException (
 					"This member is not available for a servo group on a non-active vessel. " +
 					"Such groups support Name, Vessel and Servos, movement (MoveLeft, MoveRight, " +
-					"MoveCenter, Stop) and full per-servo control; preset, key, speed-factor and " +
-					"expanded state are only available for the active vessel.");
+					"MoveCenter, Stop) and full per-servo control; preset, key, speed-factor, " +
+					"expanded, moving-direction, advanced-mode, electric-charge, build-aid and " +
+					"IK state are only available for the active vessel.");
 			}
 
 			public float GroupSpeedFactor
@@ -818,6 +1018,34 @@ namespace KRPC.InfernalRobotics
 			}
 
 			public bool Expanded
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public int MovingDirection
+			{
+				get { throw NotAvailable (); }
+			}
+
+			public bool AdvancedMode
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public float TotalElectricChargeRequirement
+			{
+				get { throw NotAvailable (); }
+			}
+
+			public bool BuildAid
+			{
+				get { throw NotAvailable (); }
+				set { throw NotAvailable (); }
+			}
+
+			public bool IKActive
 			{
 				get { throw NotAvailable (); }
 				set { throw NotAvailable (); }
@@ -874,6 +1102,12 @@ namespace KRPC.InfernalRobotics
 
 			bool Expanded { get; set; }
 
+			int MovingDirection { get; }
+			bool AdvancedMode { get; set; }
+			float TotalElectricChargeRequirement { get; }
+			bool BuildAid { get; set; }
+			bool IKActive { get; set; }
+
 			IList<IServo> Servos { get; }
 
 			void MoveLeft();
@@ -925,6 +1159,29 @@ namespace KRPC.InfernalRobotics
 			float CommandedSpeed { get; }
 
 			float Position { get; }
+
+			float TargetPosition { get; }
+			float TargetSpeed { get; }
+			float DefaultPosition { get; }
+			float MaxForce { get; }
+			float MaxAcceleration { get; }
+			float MaxSpeed { get; }
+			float ElectricChargeRequired { get; }
+			float SpringPower { get; set; }
+			float DampingPower { get; set; }
+			float RotorAcceleration { get; set; }
+			bool IsLimited { get; set; }
+			bool IsRotational { get; }
+			bool IsServo { get; }
+			bool CanHaveLimits { get; }
+			bool HasSpring { get; }
+			bool IsRunning { get; }
+			int Mode { get; }
+			IList<float> PresetPositions { get; }
+
+			void AddPreset (float position);
+			void RemovePresetAt (int index);
+			void SortPresets ();
 
 			void MoveLeft();
 			void MoveCenter();

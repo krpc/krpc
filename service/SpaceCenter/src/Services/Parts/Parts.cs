@@ -335,6 +335,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// A list of all robotic controllers in the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public IList<RoboticController> RoboticControllers
+        {
+            get { return All.Where(RoboticController.Is).Select(part => new RoboticController(part)).ToList(); }
+        }
+
+        /// <summary>
         /// A list of all robotic hinges in the vessel.
         /// </summary>
         [KRPCProperty]

@@ -34,7 +34,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticController other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && controller == other.controller;
+            return !ReferenceEquals(other, null) && Part == other.Part && controller.Equals(other.controller);
         }
 
         /// <summary>
@@ -50,6 +50,71 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Part { get; private set; }
+
+        /// <summary>
+        /// Whether the controller is enabled.
+        /// </summary>
+        [KRPCProperty]
+        public bool Enabled
+        {
+            get { return controller.controllerEnabled; }
+            set { controller.controllerEnabled = value; }
+        }
+
+        /// <summary>
+        /// Whether the controller's sequence is currently playing.
+        /// </summary>
+        [KRPCProperty]
+        public bool Playing
+        {
+            get { return controller.SequenceIsPlaying; }
+        }
+
+        /// <summary>
+        /// The current position along the sequence, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float Position
+        {
+            get { return controller.SequencePosition; }
+            set { controller.SetSequencePosition(value); }
+        }
+
+        /// <summary>
+        /// The length of the sequence, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float Length
+        {
+            get { return controller.SequenceLength; }
+        }
+
+        /// <summary>
+        /// The speed at which the sequence is played back, as a multiple of normal speed.
+        /// </summary>
+        [KRPCProperty]
+        public float PlaySpeed
+        {
+            get { return controller.SequencePlaySpeed; }
+        }
+
+        /// <summary>
+        /// Start playing the controller's sequence.
+        /// </summary>
+        [KRPCMethod]
+        public void Play()
+        {
+            controller.SequencePlay();
+        }
+
+        /// <summary>
+        /// Stop playing the controller's sequence.
+        /// </summary>
+        [KRPCMethod]
+        public void Stop()
+        {
+            controller.SequenceStop();
+        }
 
         /// <summary>
         /// Whether the controller has a part.

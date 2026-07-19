@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Expansions.Serenity;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
@@ -46,14 +47,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The KSP object.
-        /// </summary>
-        public ModuleRoboticRotationServo InternalRotation
-        {
-            get { return servo; }
-        }
-
-        /// <summary>
         /// The part object for this robotic rotation servo.
         /// </summary>
         [KRPCProperty]
@@ -74,7 +67,45 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float CurrentAngle {
-            get { return servo.currentAngle; }
+            // servo.currentAngle is only refreshed while the part action window is open, so read
+            // the live transform angle directly (this is the value KSP copies into currentAngle).
+            get
+            {
+                return (float)typeof(ModuleRoboticRotationServo)
+                    .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+            }
+        }
+
+        /// <summary>
+        /// The minimum angle the servo can rotate to, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float MinAngle
+        {
+            get { return servo.softMinMaxAngles.x; }
+            set { servo.SetSoftLimits("targetAngle", new Vector2(value, servo.softMinMaxAngles.y)); }
+        }
+
+        /// <summary>
+        /// The maximum angle the servo can rotate to, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxAngle
+        {
+            get { return servo.softMinMaxAngles.y; }
+            set { servo.SetSoftLimits("targetAngle", new Vector2(servo.softMinMaxAngles.x, value)); }
+        }
+
+        /// <summary>
+        /// Whether the servo is allowed to rotate freely through a full revolution,
+        /// ignoring the angle limits.
+        /// </summary>
+        [KRPCProperty]
+        public bool AllowFullRotation
+        {
+            get { return servo.allowFullRotation; }
+            set { servo.allowFullRotation = value; }
         }
 
         /// <summary>
@@ -130,7 +161,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Move rotation servo to it's built position.
+        /// Whether the servo is currently moving.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsMoving
+        {
+            get
+            {
+                return (bool)typeof(BaseServo)
+                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+            }
+        }
+
+        /// <summary>
+        /// Move rotation servo to its built position.
         /// </summary>
         [KRPCMethod]
         public void MoveHome()

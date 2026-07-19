@@ -76,6 +76,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The minimum angle the hinge can move to, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float MinAngle
+        {
+            get { return servo.softMinMaxAngles.x; }
+            set { servo.SetSoftLimits("targetAngle", new Vector2(value, servo.softMinMaxAngles.y)); }
+        }
+
+        /// <summary>
+        /// The maximum angle the hinge can move to, in degrees.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxAngle
+        {
+            get { return servo.softMinMaxAngles.y; }
+            set { servo.SetSoftLimits("targetAngle", new Vector2(servo.softMinMaxAngles.x, value)); }
+        }
+
+        /// <summary>
         /// Target movement rate in degrees per second.
         /// </summary>
         [KRPCProperty]
@@ -127,7 +147,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Move hinge to it's built position.
+        /// Whether the servo is currently moving.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsMoving
+        {
+            get
+            {
+                return (bool)typeof(BaseServo)
+                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+            }
+        }
+
+        /// <summary>
+        /// Move hinge to its built position.
         /// </summary>
         [KRPCMethod]
         public void MoveHome()

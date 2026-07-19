@@ -82,6 +82,62 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
+        /// The vessel the group belongs to, or <c>null</c> if it is not available.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public SpaceCenter.Services.Vessel Vessel {
+            get {
+                var vessel = servoGroup.Vessel;
+                return vessel != null ? new SpaceCenter.Services.Vessel (vessel) : null;
+            }
+        }
+
+        /// <summary>
+        /// The direction the group is currently moving in: -1 for reverse, 0 for stopped
+        /// and 1 for forward.
+        /// </summary>
+        [KRPCProperty]
+        public int MovingDirection {
+            get { return servoGroup.MovingDirection; }
+        }
+
+        /// <summary>
+        /// Whether the group is in advanced mode.
+        /// </summary>
+        [KRPCProperty]
+        public bool AdvancedMode {
+            get { return servoGroup.AdvancedMode; }
+            set { servoGroup.AdvancedMode = value; }
+        }
+
+        /// <summary>
+        /// The total rate at which the servos in the group consume electric charge, in units
+        /// per second, when moving.
+        /// </summary>
+        [KRPCProperty]
+        public float ElectricChargeRequired {
+            get { return servoGroup.TotalElectricChargeRequirement; }
+        }
+
+        /// <summary>
+        /// Whether the build aid is enabled for the group.
+        /// </summary>
+        [KRPCProperty]
+        public bool BuildAid {
+            get { return servoGroup.BuildAid; }
+            set { servoGroup.BuildAid = value; }
+        }
+
+        /// <summary>
+        /// Whether inverse kinematics is active for the group.
+        /// </summary>
+        [KRPCProperty]
+        public bool IKActive {
+            get { return servoGroup.IKActive; }
+            set { servoGroup.IKActive = value; }
+        }
+
+        /// <summary>
         /// The servos that are in the group.
         /// </summary>
         [KRPCProperty]

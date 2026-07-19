@@ -164,6 +164,16 @@ class TestNonActiveVessel(krpctest.TestCase):
         with self.assertRaises(RuntimeError):
             _ = group.expanded
         with self.assertRaises(RuntimeError):
+            _ = group.moving_direction
+        with self.assertRaises(RuntimeError):
+            _ = group.advanced_mode
+        with self.assertRaises(RuntimeError):
+            _ = group.electric_charge_required
+        with self.assertRaises(RuntimeError):
+            _ = group.build_aid
+        with self.assertRaises(RuntimeError):
+            _ = group.ik_active
+        with self.assertRaises(RuntimeError):
             group.move_next_preset()
         with self.assertRaises(RuntimeError):
             group.move_prev_preset()

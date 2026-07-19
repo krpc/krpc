@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -45,11 +46,27 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
+        /// The unique identifier of the servo.
+        /// </summary>
+        [KRPCProperty]
+        public uint UID {
+            get { return servo.UID; }
+        }
+
+        /// <summary>
         /// The part containing the servo.
         /// </summary>
         [KRPCProperty]
         public SpaceCenter.Services.Parts.Part Part {
             get { return new SpaceCenter.Services.Parts.Part (servo.HostPart); }
+        }
+
+        /// <summary>
+        /// Whether the part acts as a servo or a rotor.
+        /// </summary>
+        [KRPCProperty]
+        public ServoMode Mode {
+            get { return (ServoMode)servo.Mode; }
         }
 
         /// <summary>
@@ -89,8 +106,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MinPosition {
-            get { return servo.MinPosition; }
-            set { servo.MinPosition = value; }
+            get { return servo.MinPositionLimit; }
+            set { servo.MinPositionLimit = value; }
         }
 
         /// <summary>
@@ -98,8 +115,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxPosition {
-            get { return servo.MaxPosition; }
-            set { servo.MaxPosition = value; }
+            get { return servo.MaxPositionLimit; }
+            set { servo.MaxPositionLimit = value; }
         }
 
         /// <summary>
@@ -171,6 +188,164 @@ namespace KRPC.InfernalRobotics
         }
 
         /// <summary>
+        /// The target position the servo is moving towards.
+        /// </summary>
+        [KRPCProperty]
+        public float TargetPosition {
+            get { return servo.TargetPosition; }
+        }
+
+        /// <summary>
+        /// The target speed the servo is moving at.
+        /// </summary>
+        [KRPCProperty]
+        public float TargetSpeed {
+            get { return servo.TargetSpeed; }
+        }
+
+        /// <summary>
+        /// The position the servo is currently being commanded to move to.
+        /// </summary>
+        [KRPCProperty]
+        public float CommandedPosition {
+            get { return servo.CommandedPosition; }
+        }
+
+        /// <summary>
+        /// The default (built) position of the servo.
+        /// </summary>
+        [KRPCProperty]
+        public float DefaultPosition {
+            get { return servo.DefaultPosition; }
+        }
+
+        /// <summary>
+        /// The force limit of the servo, as a percentage of the maximum force.
+        /// </summary>
+        [KRPCProperty]
+        public float ForceLimit {
+            get { return servo.ForceLimit; }
+            set { servo.ForceLimit = value; }
+        }
+
+        /// <summary>
+        /// The maximum force the servo can generate.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxForce {
+            get { return servo.MaxForce; }
+        }
+
+        /// <summary>
+        /// The maximum acceleration the servo can achieve.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxAcceleration {
+            get { return servo.MaxAcceleration; }
+        }
+
+        /// <summary>
+        /// The maximum speed the servo can achieve.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxSpeed {
+            get { return servo.MaxSpeed; }
+        }
+
+        /// <summary>
+        /// The rate at which the servo consumes electric charge, in units per second, when moving.
+        /// </summary>
+        [KRPCProperty]
+        public float ElectricChargeRequired {
+            get { return servo.ElectricChargeRequired; }
+        }
+
+        /// <summary>
+        /// The strength of the servo's spring, when it has one.
+        /// </summary>
+        [KRPCProperty]
+        public float SpringPower {
+            get { return servo.SpringPower; }
+            set { servo.SpringPower = value; }
+        }
+
+        /// <summary>
+        /// The strength of the servo's damping.
+        /// </summary>
+        [KRPCProperty]
+        public float DampingPower {
+            get { return servo.DampingPower; }
+            set { servo.DampingPower = value; }
+        }
+
+        /// <summary>
+        /// The acceleration of the servo when operating as a rotor.
+        /// </summary>
+        [KRPCProperty]
+        public float RotorAcceleration {
+            get { return servo.RotorAcceleration; }
+            set { servo.RotorAcceleration = value; }
+        }
+
+        /// <summary>
+        /// Whether the servo's range of movement is limited to the configured minimum and
+        /// maximum positions.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsLimited {
+            get { return servo.IsLimited; }
+            set { servo.IsLimited = value; }
+        }
+
+        /// <summary>
+        /// Whether the servo moves rotationally (as opposed to linearly).
+        /// </summary>
+        [KRPCProperty]
+        public bool IsRotational {
+            get { return servo.IsRotational; }
+        }
+
+        /// <summary>
+        /// Whether the part is operating as a servo (rather than a rotor).
+        /// </summary>
+        [KRPCProperty]
+        public bool IsServo {
+            get { return servo.IsServo; }
+        }
+
+        /// <summary>
+        /// Whether the servo can have its range of movement limited.
+        /// </summary>
+        [KRPCProperty]
+        public bool CanHaveLimits {
+            get { return servo.CanHaveLimits; }
+        }
+
+        /// <summary>
+        /// Whether the servo has a spring.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasSpring {
+            get { return servo.HasSpring; }
+        }
+
+        /// <summary>
+        /// Whether the servo is running, when operating as a rotor.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsRunning {
+            get { return servo.IsRunning; }
+        }
+
+        /// <summary>
+        /// The list of preset positions configured for the servo.
+        /// </summary>
+        [KRPCProperty]
+        public IList<float> PresetPositions {
+            get { return servo.PresetPositions; }
+        }
+
+        /// <summary>
         /// Moves the servo to the right.
         /// </summary>
         [KRPCMethod]
@@ -216,6 +391,35 @@ namespace KRPC.InfernalRobotics
         public void Stop ()
         {
             servo.Stop ();
+        }
+
+        /// <summary>
+        /// Adds a preset position to the servo.
+        /// </summary>
+        /// <param name="position">The position of the preset.</param>
+        [KRPCMethod]
+        public void AddPreset (float position)
+        {
+            servo.AddPreset (position);
+        }
+
+        /// <summary>
+        /// Removes the preset position at the given index.
+        /// </summary>
+        /// <param name="index">The index of the preset to remove.</param>
+        [KRPCMethod]
+        public void RemovePresetAt (int index)
+        {
+            servo.RemovePresetAt (index);
+        }
+
+        /// <summary>
+        /// Sorts the preset positions of the servo into ascending order.
+        /// </summary>
+        [KRPCMethod]
+        public void SortPresets ()
+        {
+            servo.SortPresets ();
         }
     }
 }
