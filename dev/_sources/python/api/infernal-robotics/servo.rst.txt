@@ -21,12 +21,28 @@ Servo
       :rtype: str
       :Game Scenes: Flight
 
+   .. attribute:: uid
+
+      The unique identifier of the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
    .. attribute:: part
 
       The part containing the servo.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
+      :Game Scenes: Flight
+
+   .. attribute:: mode
+
+      Whether the part acts as a servo or a rotor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ServoMode`
       :Game Scenes: Flight
 
    .. attribute:: highlight
@@ -141,6 +157,159 @@ Servo
       :rtype: bool
       :Game Scenes: Flight
 
+   .. attribute:: target_position
+
+      The target position the servo is moving towards.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_speed
+
+      The target speed the servo is moving at.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: commanded_position
+
+      The position the servo is currently being commanded to move to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: default_position
+
+      The default (built) position of the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: force_limit
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_force
+
+      The maximum force the servo can generate.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_acceleration
+
+      The maximum acceleration the servo can achieve.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_speed
+
+      The maximum speed the servo can achieve.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: electric_charge_required
+
+      The rate at which the servo consumes electric charge, in units per second, when moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: spring_power
+
+      The strength of the servo's spring, when it has one.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: damping_power
+
+      The strength of the servo's damping.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: rotor_acceleration
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: is_limited
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: is_rotational
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: is_servo
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: can_have_limits
+
+      Whether the servo can have its range of movement limited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: has_spring
+
+      Whether the servo has a spring.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: is_running
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: preset_positions
+
+      The list of preset positions configured for the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(float)
+      :Game Scenes: Flight
+
    .. method:: move_right()
 
       Moves the servo to the right.
@@ -173,3 +342,39 @@ Servo
       Stops the servo.
 
       :Game Scenes: Flight
+
+   .. method:: add_preset(position)
+
+      Adds a preset position to the servo.
+
+      :param float position: The position of the preset.
+      :Game Scenes: Flight
+
+   .. method:: remove_preset_at(index)
+
+      Removes the preset position at the given index.
+
+      :param int index: The index of the preset to remove.
+      :Game Scenes: Flight
+
+   .. method:: sort_presets()
+
+      Sorts the preset positions of the servo into ascending order.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: ServoMode
+
+   The mode a servo is operating in. See :attr:`Servo.mode`.
+
+
+   .. data:: servo
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. data:: rotor
+
+      The part acts as a rotor, spinning continuously.

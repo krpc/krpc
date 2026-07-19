@@ -16,6 +16,13 @@ SpaceCenter
 
       Construct an instance of this service.
 
+   .. function:: std::vector<std::string> expansions()
+
+      The names of the installed expansions, for example ``"Serenity"`` (Breaking Ground)
+      or ``"MakingHistory"`` (Making History).
+
+   
+
    .. function:: float science()
 
       The current amount of science.

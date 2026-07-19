@@ -765,6 +765,89 @@ in the InfernalRobotics UI.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_Vessel">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_Vessel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_Vessel" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vessel the group belongs to, or <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if it is not available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_MovingDirection">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_MovingDirection</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_MovingDirection" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction the group is currently moving in: -1 for reverse, 0 for stopped
+and 1 for forward.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_AdvancedMode">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_AdvancedMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_AdvancedMode" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_set_AdvancedMode">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_set_AdvancedMode</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_set_AdvancedMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the group is in advanced mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_ElectricChargeRequired">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_ElectricChargeRequired</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_ElectricChargeRequired" title="Link to this definition">#</a><br /></dt>
+<dd><p>The total rate at which the servos in the group consume electric charge, in units
+per second, when moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_BuildAid">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_BuildAid</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_BuildAid" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_set_BuildAid">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_set_BuildAid</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_set_BuildAid" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the build aid is enabled for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_IKActive">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_IKActive</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_IKActive" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_set_IKActive">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_set_IKActive</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_set_IKActive" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether inverse kinematics is active for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_Servos">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoGroup_Servos</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoGroup_t.krpc_InfernalRobotics_ServoGroup_Servos" title="Link to this definition">#</a><br /></dt>
 <dd><p>The servos that are in the group.</p>
@@ -968,7 +1051,7 @@ or <code class="docutils literal notranslate"><span class="pre">nullptr</span></
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

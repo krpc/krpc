@@ -1179,6 +1179,20 @@ RCS thrusters.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Parts.robotic_controllers">
+<span class="sig-name descname"><span class="pre">robotic_controllers</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Parts.robotic_controllers" title="Link to this definition">#</a></dt>
+<dd><p>A list of all robotic controllers in the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">List</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Parts.robotic_hinges">
 <span class="sig-name descname"><span class="pre">robotic_hinges</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">List</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Parts.robotic_hinges" title="Link to this definition">#</a></dt>
 <dd><p>A list of all robotic hinges in the vessel.</p>
@@ -7362,6 +7376,88 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dl>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticController.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticController.enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the controller is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticController.playing">
+<span class="sig-name descname"><span class="pre">playing</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticController.playing" title="Link to this definition">#</a></dt>
+<dd><p>Whether the controller’s sequence is currently playing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticController.position">
+<span class="sig-name descname"><span class="pre">position</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticController.position" title="Link to this definition">#</a></dt>
+<dd><p>The current position along the sequence, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticController.length">
+<span class="sig-name descname"><span class="pre">length</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticController.length" title="Link to this definition">#</a></dt>
+<dd><p>The length of the sequence, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticController.play_speed">
+<span class="sig-name descname"><span class="pre">play_speed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticController.play_speed" title="Link to this definition">#</a></dt>
+<dd><p>The speed at which the sequence is played back, as a multiple of normal speed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.RoboticController.play">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticController.play" title="Link to this definition">#</a></dt>
+<dd><p>Start playing the controller’s sequence.</p>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.RoboticController.stop">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticController.stop" title="Link to this definition">#</a></dt>
+<dd><p>Stop playing the controller’s sequence.</p>
+</dd></dl>
+
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.RoboticController.has_part">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">has_part</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticController.has_part" title="Link to this definition">#</a></dt>
@@ -7501,6 +7597,34 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticHinge.min_angle">
+<span class="sig-name descname"><span class="pre">min_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticHinge.min_angle" title="Link to this definition">#</a></dt>
+<dd><p>The minimum angle the hinge can move to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticHinge.max_angle">
+<span class="sig-name descname"><span class="pre">max_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticHinge.max_angle" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angle the hinge can move to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticHinge.rate">
 <span class="sig-name descname"><span class="pre">rate</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticHinge.rate" title="Link to this definition">#</a></dt>
 <dd><p>Target movement rate in degrees per second.</p>
@@ -7556,10 +7680,24 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dl>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticHinge.is_moving">
+<span class="sig-name descname"><span class="pre">is_moving</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticHinge.is_moving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.RoboticHinge.move_home">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">move_home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticHinge.move_home" title="Link to this definition">#</a></dt>
-<dd><p>Move hinge to it’s built position.</p>
+<dd><p>Move hinge to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -7614,9 +7752,37 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticPiston.min_extension">
+<span class="sig-name descname"><span class="pre">min_extension</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticPiston.min_extension" title="Link to this definition">#</a></dt>
+<dd><p>The minimum extension of the piston, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticPiston.max_extension">
+<span class="sig-name descname"><span class="pre">max_extension</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticPiston.max_extension" title="Link to this definition">#</a></dt>
+<dd><p>The maximum extension of the piston, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticPiston.rate">
 <span class="sig-name descname"><span class="pre">rate</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticPiston.rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -7669,10 +7835,24 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dl>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticPiston.is_moving">
+<span class="sig-name descname"><span class="pre">is_moving</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticPiston.is_moving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.RoboticPiston.move_home">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">move_home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticPiston.move_home" title="Link to this definition">#</a></dt>
-<dd><p>Move piston to it’s built position.</p>
+<dd><p>Move piston to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -7722,6 +7902,49 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotation.min_angle">
+<span class="sig-name descname"><span class="pre">min_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotation.min_angle" title="Link to this definition">#</a></dt>
+<dd><p>The minimum angle the servo can rotate to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotation.max_angle">
+<span class="sig-name descname"><span class="pre">max_angle</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotation.max_angle" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angle the servo can rotate to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotation.allow_full_rotation">
+<span class="sig-name descname"><span class="pre">allow_full_rotation</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotation.allow_full_rotation" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is allowed to rotate freely through a full revolution,
+ignoring the angle limits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
 </dd></dl>
@@ -7782,10 +8005,24 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dl>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotation.is_moving">
+<span class="sig-name descname"><span class="pre">is_moving</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotation.is_moving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.RoboticRotation.move_home">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">move_home</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.RoboticRotation.move_home" title="Link to this definition">#</a></dt>
-<dd><p>Move rotation servo to it’s built position.</p>
+<dd><p>Move rotation servo to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -7868,6 +8105,34 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotor.max_torque">
+<span class="sig-name descname"><span class="pre">max_torque</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotor.max_torque" title="Link to this definition">#</a></dt>
+<dd><p>The maximum torque the rotor can generate, in kilonewtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotor.brake_percentage">
+<span class="sig-name descname"><span class="pre">brake_percentage</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotor.brake_percentage" title="Link to this definition">#</a></dt>
+<dd><p>The percentage of braking force applied to the rotor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotor.locked">
 <span class="sig-name descname"><span class="pre">locked</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotor.locked" title="Link to this definition">#</a></dt>
 <dd><p>Lock movement.</p>
@@ -7888,6 +8153,20 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.RoboticRotor.is_moving">
+<span class="sig-name descname"><span class="pre">is_moving</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.RoboticRotor.is_moving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the rotor is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
@@ -9582,7 +9861,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

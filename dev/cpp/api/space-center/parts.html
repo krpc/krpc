@@ -980,6 +980,12 @@ RCS thrusters.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Parts19robotic_controllersEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Parts19robotic_controllersEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Parts19robotic_controllersEv"></span><span id="krpc::services::SpaceCenter::Parts::robotic_controllers"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticControllerE" title="krpc::services::SpaceCenter::RoboticController"><span class="n"><span class="pre">RoboticController</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">robotic_controllers</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Parts19robotic_controllersEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>A list of all robotic controllers in the vessel.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Parts14robotic_hingesEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Parts14robotic_hingesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Parts14robotic_hingesEv"></span><span id="krpc::services::SpaceCenter::Parts::robotic_hinges"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHingeE" title="krpc::services::SpaceCenter::RoboticHinge"><span class="n"><span class="pre">RoboticHinge</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">robotic_hinges</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Parts14robotic_hingesEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>A list of all robotic hinges in the vessel.</p>
@@ -5079,6 +5085,58 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController7enabledEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController7enabledEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController7enabledEv"></span><span id="krpc::services::SpaceCenter::RoboticController::enabled"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">enabled</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController7enabledEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController11set_enabledEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController11set_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController11set_enabledEb"></span><span id="krpc::services::SpaceCenter::RoboticController::set_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController11set_enabledEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the controller is enabled.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController7playingEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController7playingEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController7playingEv"></span><span id="krpc::services::SpaceCenter::RoboticController::playing"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">playing</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController7playingEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the controller’s sequence is currently playing.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController8positionEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController8positionEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController8positionEv"></span><span id="krpc::services::SpaceCenter::RoboticController::position"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController8positionEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController12set_positionEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController12set_positionEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController12set_positionEf"></span><span id="krpc::services::SpaceCenter::RoboticController::set_position__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_position</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController12set_positionEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current position along the sequence, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController6lengthEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController6lengthEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController6lengthEv"></span><span id="krpc::services::SpaceCenter::RoboticController::length"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">length</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController6lengthEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The length of the sequence, in seconds.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController10play_speedEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController10play_speedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController10play_speedEv"></span><span id="krpc::services::SpaceCenter::RoboticController::play_speed"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">play_speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController10play_speedEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The speed at which the sequence is played back, as a multiple of normal speed.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController4playEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController4playEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController4playEv"></span><span id="krpc::services::SpaceCenter::RoboticController::play"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">play</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController4playEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Start playing the controller’s sequence.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController4stopEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController4stopEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController4stopEv"></span><span id="krpc::services::SpaceCenter::RoboticController::stop"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stop</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController4stopEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Stop playing the controller’s sequence.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter17RoboticController8has_partE4Part">
 <span id="_CPPv3N4krpc8services11SpaceCenter17RoboticController8has_partE4Part"></span><span id="_CPPv2N4krpc8services11SpaceCenter17RoboticController8has_partE4Part"></span><span id="krpc::services::SpaceCenter::RoboticController::has_part__Part"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">has_part</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">part</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController8has_partE4Part" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the controller has a part.</p>
@@ -5166,6 +5224,28 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9min_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge9min_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge9min_angleEv"></span><span id="krpc::services::SpaceCenter::RoboticHinge::min_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9min_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge13set_min_angleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge13set_min_angleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge13set_min_angleEf"></span><span id="krpc::services::SpaceCenter::RoboticHinge::set_min_angle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_min_angle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge13set_min_angleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum angle the hinge can move to, in degrees.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9max_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge9max_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge9max_angleEv"></span><span id="krpc::services::SpaceCenter::RoboticHinge::max_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9max_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge13set_max_angleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge13set_max_angleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge13set_max_angleEf"></span><span id="krpc::services::SpaceCenter::RoboticHinge::set_max_angle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_angle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge13set_max_angleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum angle the hinge can move to, in degrees.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge4rateEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge4rateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge4rateEv"></span><span id="krpc::services::SpaceCenter::RoboticHinge::rate"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge4rateEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -5210,9 +5290,15 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9is_movingEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge9is_movingEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge9is_movingEv"></span><span id="krpc::services::SpaceCenter::RoboticHinge::is_moving"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_moving</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9is_movingEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo is currently moving.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9move_homeEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12RoboticHinge9move_homeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticHinge9move_homeEv"></span><span id="krpc::services::SpaceCenter::RoboticHinge::move_home"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">move_home</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticHinge9move_homeEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Move hinge to it’s built position.</p>
+<dd><p>Move hinge to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -5248,6 +5334,28 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston13min_extensionEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston13min_extensionEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston13min_extensionEv"></span><span id="krpc::services::SpaceCenter::RoboticPiston::min_extension"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_extension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston13min_extensionEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston17set_min_extensionEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston17set_min_extensionEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston17set_min_extensionEf"></span><span id="krpc::services::SpaceCenter::RoboticPiston::set_min_extension__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_min_extension</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston17set_min_extensionEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum extension of the piston, in meters.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston13max_extensionEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston13max_extensionEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston13max_extensionEv"></span><span id="krpc::services::SpaceCenter::RoboticPiston::max_extension"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_extension</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston13max_extensionEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston17set_max_extensionEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston17set_max_extensionEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston17set_max_extensionEf"></span><span id="krpc::services::SpaceCenter::RoboticPiston::set_max_extension__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_extension</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston17set_max_extensionEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum extension of the piston, in meters.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston4rateEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston4rateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston4rateEv"></span><span id="krpc::services::SpaceCenter::RoboticPiston::rate"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rate</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston4rateEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -5255,7 +5363,7 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston8set_rateEf">
 <span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston8set_rateEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston8set_rateEf"></span><span id="krpc::services::SpaceCenter::RoboticPiston::set_rate__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_rate</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston8set_rateEf" title="Link to this definition">#</a><br /></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in meters per second.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -5292,9 +5400,15 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston9is_movingEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston9is_movingEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston9is_movingEv"></span><span id="krpc::services::SpaceCenter::RoboticPiston::is_moving"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_moving</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston9is_movingEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo is currently moving.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13RoboticPiston9move_homeEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter13RoboticPiston9move_homeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter13RoboticPiston9move_homeEv"></span><span id="krpc::services::SpaceCenter::RoboticPiston::move_home"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">move_home</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13RoboticPiston9move_homeEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Move piston to it’s built position.</p>
+<dd><p>Move piston to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -5327,6 +5441,40 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation13current_angleEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation13current_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation13current_angleEv"></span><span id="krpc::services::SpaceCenter::RoboticRotation::current_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">current_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation13current_angleEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Current angle.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9min_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation9min_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation9min_angleEv"></span><span id="krpc::services::SpaceCenter::RoboticRotation::min_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9min_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation13set_min_angleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation13set_min_angleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation13set_min_angleEf"></span><span id="krpc::services::SpaceCenter::RoboticRotation::set_min_angle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_min_angle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation13set_min_angleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The minimum angle the servo can rotate to, in degrees.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9max_angleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation9max_angleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation9max_angleEv"></span><span id="krpc::services::SpaceCenter::RoboticRotation::max_angle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_angle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9max_angleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation13set_max_angleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation13set_max_angleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation13set_max_angleEf"></span><span id="krpc::services::SpaceCenter::RoboticRotation::set_max_angle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_angle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation13set_max_angleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum angle the servo can rotate to, in degrees.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation19allow_full_rotationEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation19allow_full_rotationEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation19allow_full_rotationEv"></span><span id="krpc::services::SpaceCenter::RoboticRotation::allow_full_rotation"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">allow_full_rotation</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation19allow_full_rotationEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation23set_allow_full_rotationEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation23set_allow_full_rotationEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation23set_allow_full_rotationEb"></span><span id="krpc::services::SpaceCenter::RoboticRotation::set_allow_full_rotation__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_allow_full_rotation</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation23set_allow_full_rotationEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo is allowed to rotate freely through a full revolution,
+ignoring the angle limits.</p>
 </dd></dl>
 
 <dl class="cpp function">
@@ -5374,9 +5522,15 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9is_movingEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation9is_movingEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation9is_movingEv"></span><span id="krpc::services::SpaceCenter::RoboticRotation::is_moving"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_moving</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9is_movingEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo is currently moving.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9move_homeEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter15RoboticRotation9move_homeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter15RoboticRotation9move_homeEv"></span><span id="krpc::services::SpaceCenter::RoboticRotation::move_home"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">move_home</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter15RoboticRotation9move_homeEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>Move rotation servo to it’s built position.</p>
+<dd><p>Move rotation servo to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -5434,6 +5588,28 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor10max_torqueEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor10max_torqueEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor10max_torqueEv"></span><span id="krpc::services::SpaceCenter::RoboticRotor::max_torque"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max_torque</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor10max_torqueEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor14set_max_torqueEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor14set_max_torqueEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor14set_max_torqueEf"></span><span id="krpc::services::SpaceCenter::RoboticRotor::set_max_torque__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_max_torque</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor14set_max_torqueEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum torque the rotor can generate, in kilonewtons.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor16brake_percentageEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor16brake_percentageEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor16brake_percentageEv"></span><span id="krpc::services::SpaceCenter::RoboticRotor::brake_percentage"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">brake_percentage</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor16brake_percentageEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor20set_brake_percentageEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor20set_brake_percentageEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor20set_brake_percentageEf"></span><span id="krpc::services::SpaceCenter::RoboticRotor::set_brake_percentage__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_brake_percentage</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor20set_brake_percentageEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The percentage of braking force applied to the rotor.</p>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor6lockedEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor6lockedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor6lockedEv"></span><span id="krpc::services::SpaceCenter::RoboticRotor::locked"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">locked</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor6lockedEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -5453,6 +5629,12 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor17set_motor_engagedEb">
 <span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor17set_motor_engagedEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor17set_motor_engagedEb"></span><span id="krpc::services::SpaceCenter::RoboticRotor::set_motor_engaged__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_motor_engaged</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor17set_motor_engagedEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the motor is engaged.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12RoboticRotor9is_movingEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter12RoboticRotor9is_movingEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter12RoboticRotor9is_movingEv"></span><span id="krpc::services::SpaceCenter::RoboticRotor::is_moving"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">is_moving</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12RoboticRotor9is_movingEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the rotor is currently moving.</p>
 </dd></dl>
 
 </dd></dl>
@@ -6719,7 +6901,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

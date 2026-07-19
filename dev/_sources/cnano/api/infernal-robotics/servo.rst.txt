@@ -20,9 +20,21 @@ Servo
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_UID(krpc_connection_t connection, uint32_t * result)
+
+      The unique identifier of the servo.
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
 
       The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_Mode(krpc_connection_t connection, krpc_InfernalRobotics_ServoMode_t * result)
+
+      Whether the part acts as a servo or a rotor.
 
       :Game Scenes: Flight
 
@@ -116,6 +128,126 @@ Servo
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_TargetPosition(krpc_connection_t connection, float * result)
+
+      The target position the servo is moving towards.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_TargetSpeed(krpc_connection_t connection, float * result)
+
+      The target speed the servo is moving at.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_CommandedPosition(krpc_connection_t connection, float * result)
+
+      The position the servo is currently being commanded to move to.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_DefaultPosition(krpc_connection_t connection, float * result)
+
+      The default (built) position of the servo.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_ForceLimit(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_ForceLimit(float value)
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MaxForce(krpc_connection_t connection, float * result)
+
+      The maximum force the servo can generate.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MaxAcceleration(krpc_connection_t connection, float * result)
+
+      The maximum acceleration the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MaxSpeed(krpc_connection_t connection, float * result)
+
+      The maximum speed the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_ElectricChargeRequired(krpc_connection_t connection, float * result)
+
+      The rate at which the servo consumes electric charge, in units per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_SpringPower(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_SpringPower(float value)
+
+      The strength of the servo's spring, when it has one.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_DampingPower(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_DampingPower(float value)
+
+      The strength of the servo's damping.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_RotorAcceleration(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_RotorAcceleration(float value)
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsLimited(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_Servo_set_IsLimited(bool value)
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsRotational(krpc_connection_t connection, bool * result)
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsServo(krpc_connection_t connection, bool * result)
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_CanHaveLimits(krpc_connection_t connection, bool * result)
+
+      Whether the servo can have its range of movement limited.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_HasSpring(krpc_connection_t connection, bool * result)
+
+      Whether the servo has a spring.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_IsRunning(krpc_connection_t connection, bool * result)
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_PresetPositions(krpc_connection_t connection, krpc_list_float_t * result)
+
+      The list of preset positions configured for the servo.
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_InfernalRobotics_Servo_MoveRight(krpc_connection_t connection)
 
       Moves the servo to the right.
@@ -155,3 +287,46 @@ Servo
 
 
       :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_AddPreset(krpc_connection_t connection, float position)
+
+      Adds a preset position to the servo.
+
+      :Parameters:
+
+       * **position** -- The position of the preset.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_RemovePresetAt(krpc_connection_t connection, int32_t index)
+
+      Removes the preset position at the given index.
+
+      :Parameters:
+
+       * **index** -- The index of the preset to remove.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_Servo_SortPresets(krpc_connection_t connection)
+
+      Sorts the preset positions of the servo into ascending order.
+
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_InfernalRobotics_ServoMode_t
+
+   The mode a servo is operating in. See :func:`krpc_InfernalRobotics_Servo_Mode`.
+
+
+   .. macro:: KRPC_INFERNALROBOTICS_SERVOMODE_SERVO
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. macro:: KRPC_INFERNALROBOTICS_SERVOMODE_ROTOR
+
+      The part acts as a rotor, spinning continuously.

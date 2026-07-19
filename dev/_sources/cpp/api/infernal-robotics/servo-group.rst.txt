@@ -47,6 +47,47 @@ ServoGroup
 
       :Game Scenes: Flight
 
+   .. function:: SpaceCenter::Vessel vessel()
+
+      The vessel the group belongs to, or ``NULL`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t moving_direction()
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. function:: bool advanced_mode()
+   .. function:: void set_advanced_mode(bool value)
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. function:: float electric_charge_required()
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. function:: bool build_aid()
+   .. function:: void set_build_aid(bool value)
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: bool ik_active()
+   .. function:: void set_ik_active(bool value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
    .. function:: std::vector<Servo> servos()
 
       The servos that are in the group.

@@ -21,10 +21,24 @@ Servo
 
       :Game Scenes: Flight
 
+   .. method:: int getUID()
+
+
+      The unique identifier of the servo.
+
+      :Game Scenes: Flight
+
    .. method:: SpaceCenter.Part getPart()
 
 
       The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: ServoMode getMode()
+
+
+      Whether the part acts as a servo or a rotor.
 
       :Game Scenes: Flight
 
@@ -131,6 +145,145 @@ Servo
 
       :Game Scenes: Flight
 
+   .. method:: float getTargetPosition()
+
+
+      The target position the servo is moving towards.
+
+      :Game Scenes: Flight
+
+   .. method:: float getTargetSpeed()
+
+
+      The target speed the servo is moving at.
+
+      :Game Scenes: Flight
+
+   .. method:: float getCommandedPosition()
+
+
+      The position the servo is currently being commanded to move to.
+
+      :Game Scenes: Flight
+
+   .. method:: float getDefaultPosition()
+
+
+      The default (built) position of the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: float getForceLimit()
+
+   .. method:: void setForceLimit(float value)
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxForce()
+
+
+      The maximum force the servo can generate.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxAcceleration()
+
+
+      The maximum acceleration the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxSpeed()
+
+
+      The maximum speed the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. method:: float getElectricChargeRequired()
+
+
+      The rate at which the servo consumes electric charge, in units per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. method:: float getSpringPower()
+
+   .. method:: void setSpringPower(float value)
+
+      The strength of the servo's spring, when it has one.
+
+      :Game Scenes: Flight
+
+   .. method:: float getDampingPower()
+
+   .. method:: void setDampingPower(float value)
+
+      The strength of the servo's damping.
+
+      :Game Scenes: Flight
+
+   .. method:: float getRotorAcceleration()
+
+   .. method:: void setRotorAcceleration(float value)
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsLimited()
+
+   .. method:: void setIsLimited(boolean value)
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsRotational()
+
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsServo()
+
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getCanHaveLimits()
+
+
+      Whether the servo can have its range of movement limited.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getHasSpring()
+
+
+      Whether the servo has a spring.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIsRunning()
+
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Float> getPresetPositions()
+
+
+      The list of preset positions configured for the servo.
+
+      :Game Scenes: Flight
+
    .. method:: void moveRight()
 
       Moves the servo to the right.
@@ -163,3 +316,39 @@ Servo
       Stops the servo.
 
       :Game Scenes: Flight
+
+   .. method:: void addPreset(float position)
+
+      Adds a preset position to the servo.
+
+      :param float position: The position of the preset.
+      :Game Scenes: Flight
+
+   .. method:: void removePresetAt(int index)
+
+      Removes the preset position at the given index.
+
+      :param int index: The index of the preset to remove.
+      :Game Scenes: Flight
+
+   .. method:: void sortPresets()
+
+      Sorts the preset positions of the servo into ascending order.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum ServoMode
+
+   The mode a servo is operating in. See :meth:`Servo.getMode()`.
+
+
+   .. field:: public ServoMode SERVO
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. field:: public ServoMode ROTOR
+
+      The part acts as a rotor, spinning continuously.

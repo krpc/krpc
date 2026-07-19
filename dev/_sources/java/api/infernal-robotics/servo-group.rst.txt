@@ -52,6 +52,53 @@ ServoGroup
 
       :Game Scenes: Flight
 
+   .. method:: SpaceCenter.Vessel getVessel()
+
+
+      The vessel the group belongs to, or ``null`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. method:: int getMovingDirection()
+
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAdvancedMode()
+
+   .. method:: void setAdvancedMode(boolean value)
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. method:: float getElectricChargeRequired()
+
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getBuildAid()
+
+   .. method:: void setBuildAid(boolean value)
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIKActive()
+
+   .. method:: void setIKActive(boolean value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
    .. method:: java.util.List<Servo> getServos()
 
 

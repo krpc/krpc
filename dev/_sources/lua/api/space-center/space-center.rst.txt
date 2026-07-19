@@ -12,6 +12,17 @@ Provides functionality to interact with Kerbal Space Program. This includes cont
 the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
 
 
+.. attribute:: expansions: List
+
+   The names of the installed expansions, for example ``"Serenity"`` (Breaking Ground)
+   or ``"MakingHistory"`` (Making History).
+
+   :Attribute: Read-only, cannot be set
+   :rtype: List
+
+
+
+
 .. attribute:: science: number
 
    The current amount of science.

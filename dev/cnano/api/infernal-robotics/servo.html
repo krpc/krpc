@@ -702,9 +702,31 @@ or <a class="reference internal" href="infernal-robotics.html#c.krpc_InfernalRob
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_UID">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_UID</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_UID" title="Link to this definition">#</a><br /></dt>
+<dd><p>The unique identifier of the servo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_Part">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_Part</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="../space-center/parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_Part" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part containing the servo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_Mode">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_Mode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_InfernalRobotics_ServoMode_t" title="krpc_InfernalRobotics_ServoMode_t"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoMode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_Mode" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the part acts as a servo or a rotor.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -897,6 +919,241 @@ or <a class="reference internal" href="infernal-robotics.html#c.krpc_InfernalRob
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_TargetPosition">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_TargetPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_TargetPosition" title="Link to this definition">#</a><br /></dt>
+<dd><p>The target position the servo is moving towards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_TargetSpeed">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_TargetSpeed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_TargetSpeed" title="Link to this definition">#</a><br /></dt>
+<dd><p>The target speed the servo is moving at.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_CommandedPosition">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_CommandedPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_CommandedPosition" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position the servo is currently being commanded to move to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_DefaultPosition">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_DefaultPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_DefaultPosition" title="Link to this definition">#</a><br /></dt>
+<dd><p>The default (built) position of the servo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_ForceLimit">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_ForceLimit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_ForceLimit" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_ForceLimit">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_set_ForceLimit</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_ForceLimit" title="Link to this definition">#</a><br /></dt>
+<dd><p>The force limit of the servo, as a percentage of the maximum force.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MaxForce">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_MaxForce</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MaxForce" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum force the servo can generate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MaxAcceleration">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_MaxAcceleration</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MaxAcceleration" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum acceleration the servo can achieve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MaxSpeed">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_MaxSpeed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MaxSpeed" title="Link to this definition">#</a><br /></dt>
+<dd><p>The maximum speed the servo can achieve.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_ElectricChargeRequired">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_ElectricChargeRequired</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_ElectricChargeRequired" title="Link to this definition">#</a><br /></dt>
+<dd><p>The rate at which the servo consumes electric charge, in units per second, when moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_SpringPower">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_SpringPower</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_SpringPower" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_SpringPower">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_set_SpringPower</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_SpringPower" title="Link to this definition">#</a><br /></dt>
+<dd><p>The strength of the servo’s spring, when it has one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_DampingPower">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_DampingPower</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_DampingPower" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_DampingPower">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_set_DampingPower</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_DampingPower" title="Link to this definition">#</a><br /></dt>
+<dd><p>The strength of the servo’s damping.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_RotorAcceleration">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_RotorAcceleration</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_RotorAcceleration" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_RotorAcceleration">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_set_RotorAcceleration</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_RotorAcceleration" title="Link to this definition">#</a><br /></dt>
+<dd><p>The acceleration of the servo when operating as a rotor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsLimited">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_IsLimited</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsLimited" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_IsLimited">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_set_IsLimited</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_set_IsLimited" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo’s range of movement is limited to the configured minimum and
+maximum positions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsRotational">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_IsRotational</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsRotational" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo moves rotationally (as opposed to linearly).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsServo">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_IsServo</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsServo" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the part is operating as a servo (rather than a rotor).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_CanHaveLimits">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_CanHaveLimits</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_CanHaveLimits" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo can have its range of movement limited.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_HasSpring">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_HasSpring</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_HasSpring" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo has a spring.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsRunning">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_IsRunning</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_IsRunning" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the servo is running, when operating as a rotor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_PresetPositions">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_PresetPositions</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_float_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_PresetPositions" title="Link to this definition">#</a><br /></dt>
+<dd><p>The list of preset positions configured for the servo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MoveRight">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_MoveRight</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_MoveRight" title="Link to this definition">#</a><br /></dt>
 <dd><p>Moves the servo to the right.</p>
@@ -956,6 +1213,67 @@ speed multiplier to <em>speed</em>.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_AddPreset">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_AddPreset</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n"><span class="pre">position</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_AddPreset" title="Link to this definition">#</a><br /></dt>
+<dd><p>Adds a preset position to the servo.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> – The position of the preset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_RemovePresetAt">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_RemovePresetAt</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n"><span class="pre">index</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_RemovePresetAt" title="Link to this definition">#</a><br /></dt>
+<dd><p>Removes the preset position at the given index.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>index</strong> – The index of the preset to remove.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_SortPresets">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_Servo_SortPresets</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_InfernalRobotics_Servo_t.krpc_InfernalRobotics_Servo_SortPresets" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sorts the preset positions of the servo into ascending order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoMode_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_InfernalRobotics_ServoMode_t</span></span></span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoMode_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mode a servo is operating in. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_InfernalRobotics_Servo_Mode()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoMode_t.KRPC_INFERNALROBOTICS_SERVOMODE_SERVO">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_INFERNALROBOTICS_SERVOMODE_SERVO</span></span></span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoMode_t.KRPC_INFERNALROBOTICS_SERVOMODE_SERVO" title="Link to this definition">#</a><br /></dt>
+<dd><p>The part acts as a servo, driving towards a target position.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_InfernalRobotics_ServoMode_t.KRPC_INFERNALROBOTICS_SERVOMODE_ROTOR">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_INFERNALROBOTICS_SERVOMODE_ROTOR</span></span></span><a class="headerlink" href="#c.krpc_InfernalRobotics_ServoMode_t.KRPC_INFERNALROBOTICS_SERVOMODE_ROTOR" title="Link to this definition">#</a><br /></dt>
+<dd><p>The part acts as a rotor, spinning continuously.</p>
 </dd></dl>
 
 </dd></dl>
@@ -1057,7 +1375,7 @@ speed multiplier to <em>speed</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

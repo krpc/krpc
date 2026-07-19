@@ -19,9 +19,21 @@ Servo
 
       :Game Scenes: Flight
 
+   .. property:: uint UID { get; }
+
+      The unique identifier of the servo.
+
+      :Game Scenes: Flight
+
    .. property:: SpaceCenter.Part Part { get; }
 
       The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: ServoMode Mode { get; }
+
+      Whether the part acts as a servo or a rotor.
 
       :Game Scenes: Flight
 
@@ -109,6 +121,121 @@ Servo
 
       :Game Scenes: Flight
 
+   .. property:: float TargetPosition { get; }
+
+      The target position the servo is moving towards.
+
+      :Game Scenes: Flight
+
+   .. property:: float TargetSpeed { get; }
+
+      The target speed the servo is moving at.
+
+      :Game Scenes: Flight
+
+   .. property:: float CommandedPosition { get; }
+
+      The position the servo is currently being commanded to move to.
+
+      :Game Scenes: Flight
+
+   .. property:: float DefaultPosition { get; }
+
+      The default (built) position of the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: float ForceLimit { get; set; }
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxForce { get; }
+
+      The maximum force the servo can generate.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxAcceleration { get; }
+
+      The maximum acceleration the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxSpeed { get; }
+
+      The maximum speed the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. property:: float ElectricChargeRequired { get; }
+
+      The rate at which the servo consumes electric charge, in units per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. property:: float SpringPower { get; set; }
+
+      The strength of the servo's spring, when it has one.
+
+      :Game Scenes: Flight
+
+   .. property:: float DampingPower { get; set; }
+
+      The strength of the servo's damping.
+
+      :Game Scenes: Flight
+
+   .. property:: float RotorAcceleration { get; set; }
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsLimited { get; set; }
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsRotational { get; }
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsServo { get; }
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Game Scenes: Flight
+
+   .. property:: bool CanHaveLimits { get; }
+
+      Whether the servo can have its range of movement limited.
+
+      :Game Scenes: Flight
+
+   .. property:: bool HasSpring { get; }
+
+      Whether the servo has a spring.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsRunning { get; }
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<float> PresetPositions { get; }
+
+      The list of preset positions configured for the servo.
+
+      :Game Scenes: Flight
+
    .. method:: void MoveRight()
 
       Moves the servo to the right.
@@ -148,3 +275,46 @@ Servo
 
 
       :Game Scenes: Flight
+
+   .. method:: void AddPreset(float position)
+
+      Adds a preset position to the servo.
+
+      :parameters:
+
+       * **position** -- The position of the preset.
+
+      :Game Scenes: Flight
+
+   .. method:: void RemovePresetAt(int index)
+
+      Removes the preset position at the given index.
+
+      :parameters:
+
+       * **index** -- The index of the preset to remove.
+
+      :Game Scenes: Flight
+
+   .. method:: void SortPresets()
+
+      Sorts the preset positions of the servo into ascending order.
+
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: ServoMode
+
+   The mode a servo is operating in. See :prop:`Servo.Mode`.
+
+
+   .. value:: Servo
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. value:: Rotor
+
+      The part acts as a rotor, spinning continuously.

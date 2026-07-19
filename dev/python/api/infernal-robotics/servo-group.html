@@ -770,6 +770,110 @@ in the InfernalRobotics UI.</p>
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.vessel" title="Link to this definition">#</a></dt>
+<dd><p>The vessel the group belongs to, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it is not available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../space-center/vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.moving_direction">
+<span class="sig-name descname"><span class="pre">moving_direction</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.moving_direction" title="Link to this definition">#</a></dt>
+<dd><p>The direction the group is currently moving in: -1 for reverse, 0 for stopped
+and 1 for forward.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.advanced_mode">
+<span class="sig-name descname"><span class="pre">advanced_mode</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.advanced_mode" title="Link to this definition">#</a></dt>
+<dd><p>Whether the group is in advanced mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.electric_charge_required">
+<span class="sig-name descname"><span class="pre">electric_charge_required</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.electric_charge_required" title="Link to this definition">#</a></dt>
+<dd><p>The total rate at which the servos in the group consume electric charge, in units
+per second, when moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../space-center/parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.build_aid">
+<span class="sig-name descname"><span class="pre">build_aid</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.build_aid" title="Link to this definition">#</a></dt>
+<dd><p>Whether the build aid is enabled for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.ik_active">
+<span class="sig-name descname"><span class="pre">ik_active</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.ik_active" title="Link to this definition">#</a></dt>
+<dd><p>Whether inverse kinematics is active for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="InfernalRobotics.ServoGroup.servos">
 <span class="sig-name descname"><span class="pre">servos</span></span><a class="headerlink" href="#InfernalRobotics.ServoGroup.servos" title="Link to this definition">#</a></dt>
 <dd><p>The servos that are in the group.</p>
@@ -986,7 +1090,7 @@ or <code class="docutils literal notranslate"><span class="pre">None</span></cod
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

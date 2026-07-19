@@ -42,6 +42,44 @@ ServoGroup
 
       :Game Scenes: Flight
 
+   .. property:: SpaceCenter.Vessel Vessel { get; }
+
+      The vessel the group belongs to, or ``null`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. property:: int MovingDirection { get; }
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AdvancedMode { get; set; }
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. property:: float ElectricChargeRequired { get; }
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. property:: bool BuildAid { get; set; }
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IKActive { get; set; }
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
    .. property:: System.Collections.Generic.IList<Servo> Servos { get; }
 
       The servos that are in the group.

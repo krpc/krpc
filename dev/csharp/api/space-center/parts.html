@@ -1106,6 +1106,17 @@ RCS thrusters.</p>
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Parts.RoboticControllers">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.RoboticController" title="KRPC.Client.Services.SpaceCenter.RoboticController class"><span class="pre">RoboticController</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">RoboticControllers</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Parts.RoboticControllers" title="Link to this definition">#</a></dt>
+<dd><p>A list of all robotic controllers in the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Parts.RoboticHinges">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.RoboticHinge" title="KRPC.Client.Services.SpaceCenter.RoboticHinge class"><span class="pre">RoboticHinge</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">RoboticHinges</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Parts.RoboticHinges" title="Link to this definition">#</a></dt>
 <dd><p>A list of all robotic hinges in the vessel.</p>
@@ -6627,6 +6638,83 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dl>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticController.Enabled">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Enabled</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticController.Enabled" title="Link to this definition">#</a></dt>
+<dd><p>Whether the controller is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticController.Playing">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Playing</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticController.Playing" title="Link to this definition">#</a></dt>
+<dd><p>Whether the controller’s sequence is currently playing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticController.Position">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Position</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticController.Position" title="Link to this definition">#</a></dt>
+<dd><p>The current position along the sequence, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticController.Length">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Length</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticController.Length" title="Link to this definition">#</a></dt>
+<dd><p>The length of the sequence, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticController.PlaySpeed">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">PlaySpeed</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticController.PlaySpeed" title="Link to this definition">#</a></dt>
+<dd><p>The speed at which the sequence is played back, as a multiple of normal speed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RoboticController.Play">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Play</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RoboticController.Play" title="Link to this definition">#</a></dt>
+<dd><p>Start playing the controller’s sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RoboticController.Stop">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Stop</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RoboticController.Stop" title="Link to this definition">#</a></dt>
+<dd><p>Stop playing the controller’s sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RoboticController.HasPart">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">HasPart</span></span> <span class="sig-paren">(</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Part" title="KRPC.Client.Services.SpaceCenter.Part class"><span class="pre">Part</span></a> <em><span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RoboticController.HasPart" title="Link to this definition">#</a></dt>
@@ -6742,6 +6830,28 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticHinge.MinAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MinAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticHinge.MinAngle" title="Link to this definition">#</a></dt>
+<dd><p>The minimum angle the hinge can move to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticHinge.MaxAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MaxAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticHinge.MaxAngle" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angle the hinge can move to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticHinge.Rate">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Rate</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticHinge.Rate" title="Link to this definition">#</a></dt>
 <dd><p>Target movement rate in degrees per second.</p>
@@ -6785,10 +6895,21 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dl>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticHinge.IsMoving">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">IsMoving</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticHinge.IsMoving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RoboticHinge.MoveHome">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">MoveHome</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RoboticHinge.MoveHome" title="Link to this definition">#</a></dt>
-<dd><p>Move hinge to it’s built position.</p>
+<dd><p>Move hinge to its built position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -6839,9 +6960,31 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticPiston.MinExtension">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MinExtension</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticPiston.MinExtension" title="Link to this definition">#</a></dt>
+<dd><p>The minimum extension of the piston, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticPiston.MaxExtension">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MaxExtension</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticPiston.MaxExtension" title="Link to this definition">#</a></dt>
+<dd><p>The maximum extension of the piston, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticPiston.Rate">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">Rate</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticPiston.Rate" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in meters per second.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -6882,10 +7025,21 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dl>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticPiston.IsMoving">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">IsMoving</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticPiston.IsMoving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RoboticPiston.MoveHome">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">MoveHome</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RoboticPiston.MoveHome" title="Link to this definition">#</a></dt>
-<dd><p>Move piston to it’s built position.</p>
+<dd><p>Move piston to its built position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -6928,6 +7082,40 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotation.CurrentAngle">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">CurrentAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotation.CurrentAngle" title="Link to this definition">#</a></dt>
 <dd><p>Current angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotation.MinAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MinAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotation.MinAngle" title="Link to this definition">#</a></dt>
+<dd><p>The minimum angle the servo can rotate to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotation.MaxAngle">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MaxAngle</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotation.MaxAngle" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angle the servo can rotate to, in degrees.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotation.AllowFullRotation">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">AllowFullRotation</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotation.AllowFullRotation" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is allowed to rotate freely through a full revolution,
+ignoring the angle limits.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -6979,10 +7167,21 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dl>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotation.IsMoving">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">IsMoving</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotation.IsMoving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.RoboticRotation.MoveHome">
 <span class="pre">void</span> <span class="sig-name descname"><span class="pre">MoveHome</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.RoboticRotation.MoveHome" title="Link to this definition">#</a></dt>
-<dd><p>Move rotation servo to it’s built position.</p>
+<dd><p>Move rotation servo to its built position.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -7055,6 +7254,28 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotor.MaxTorque">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">MaxTorque</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotor.MaxTorque" title="Link to this definition">#</a></dt>
+<dd><p>The maximum torque the rotor can generate, in kilonewtons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotor.BrakePercentage">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">BrakePercentage</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotor.BrakePercentage" title="Link to this definition">#</a></dt>
+<dd><p>The percentage of braking force applied to the rotor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotor.Locked">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Locked</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotor.Locked" title="Link to this definition">#</a></dt>
 <dd><p>Lock movement.</p>
@@ -7069,6 +7290,17 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotor.MotorEngaged">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">MotorEngaged</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotor.MotorEngaged" title="Link to this definition">#</a></dt>
 <dd><p>Whether the motor is engaged.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.RoboticRotor.IsMoving">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">IsMoving</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.RoboticRotor.IsMoving" title="Link to this definition">#</a></dt>
+<dd><p>Whether the rotor is currently moving.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
@@ -8578,7 +8810,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

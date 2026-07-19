@@ -47,6 +47,47 @@ ServoGroup
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      The vessel the group belongs to, or ``nullptr`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MovingDirection(krpc_connection_t connection, int32_t * result)
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_AdvancedMode(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_AdvancedMode(bool value)
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_ElectricChargeRequired(krpc_connection_t connection, float * result)
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_BuildAid(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_BuildAid(bool value)
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_IKActive(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_IKActive(bool value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Servos(krpc_connection_t connection, krpc_list_object_t * result)
 
       The servos that are in the group.

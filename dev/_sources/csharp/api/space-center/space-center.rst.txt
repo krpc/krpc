@@ -11,6 +11,13 @@ SpaceCenter
    Provides functionality to interact with Kerbal Space Program. This includes controlling
    the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
 
+   .. property:: System.Collections.Generic.IList<string> Expansions { get; }
+
+      The names of the installed expansions, for example ``"Serenity"`` (Breaking Ground)
+      or ``"MakingHistory"`` (Making History).
+
+      :Game Scenes: All
+
    .. property:: float Science { get; }
 
       The current amount of science.

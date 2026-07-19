@@ -282,6 +282,14 @@ Parts
       :rtype: list(:class:`ResourceHarvester`)
    
 
+   .. attribute:: robotic_controllers
+
+      A list of all robotic controllers in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RoboticController`)
+   
+
    .. attribute:: robotic_hinges
 
       A list of all robotic hinges in the vessel.
@@ -4262,6 +4270,58 @@ Robotic Controller
       :rtype: :class:`Part`
    
 
+   .. attribute:: enabled
+
+      Whether the controller is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: playing
+
+      Whether the controller's sequence is currently playing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: position
+
+      The current position along the sequence, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: length
+
+      The length of the sequence, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: play_speed
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: play()
+
+      Start playing the controller's sequence.
+
+   
+
+   .. method:: stop()
+
+      Stop playing the controller's sequence.
+
+   
+
    .. method:: has_part(part)
 
       Whether the controller has a part.
@@ -4343,6 +4403,22 @@ Robotic Hinge
       :rtype: float
    
 
+   .. attribute:: min_angle
+
+      The minimum angle the hinge can move to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: max_angle
+
+      The maximum angle the hinge can move to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
    .. attribute:: rate
 
       Target movement rate in degrees per second.
@@ -4375,9 +4451,17 @@ Robotic Hinge
       :rtype: bool
    
 
+   .. attribute:: is_moving
+
+      Whether the servo is currently moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
    .. method:: move_home()
 
-      Move hinge to it's built position.
+      Move hinge to its built position.
 
    
 
@@ -4415,9 +4499,25 @@ Robotic Piston
       :rtype: float
    
 
+   .. attribute:: min_extension
+
+      The minimum extension of the piston, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: max_extension
+
+      The maximum extension of the piston, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
    .. attribute:: rate
 
-      Target movement rate in degrees per second.
+      Target movement rate in meters per second.
 
       :Attribute: Can be read or written
       :rtype: float
@@ -4447,9 +4547,17 @@ Robotic Piston
       :rtype: bool
    
 
+   .. attribute:: is_moving
+
+      Whether the servo is currently moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
    .. method:: move_home()
 
-      Move piston to it's built position.
+      Move piston to its built position.
 
    
 
@@ -4487,6 +4595,31 @@ Robotic Rotation
       :rtype: float
    
 
+   .. attribute:: min_angle
+
+      The minimum angle the servo can rotate to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: max_angle
+
+      The maximum angle the servo can rotate to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: allow_full_rotation
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
    .. attribute:: rate
 
       Target movement rate in degrees per second.
@@ -4519,9 +4652,17 @@ Robotic Rotation
       :rtype: bool
    
 
+   .. attribute:: is_moving
+
+      Whether the servo is currently moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
    .. method:: move_home()
 
-      Move rotation servo to it's built position.
+      Move rotation servo to its built position.
 
    
 
@@ -4575,6 +4716,22 @@ Robotic Rotor
       :rtype: float
    
 
+   .. attribute:: max_torque
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: brake_percentage
+
+      The percentage of braking force applied to the rotor.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
    .. attribute:: locked
 
       Lock movement.
@@ -4588,6 +4745,14 @@ Robotic Rotor
       Whether the motor is engaged.
 
       :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: is_moving
+
+      Whether the rotor is currently moving.
+
+      :Attribute: Read-only, cannot be set
       :rtype: bool
    
 

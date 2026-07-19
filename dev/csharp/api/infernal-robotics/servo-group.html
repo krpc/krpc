@@ -740,6 +740,74 @@ in the InfernalRobotics UI.</p>
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.Vessel">
+<a class="reference internal" href="../space-center/vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="KRPC.Client.Services.SpaceCenter.Vessel class"><span class="pre">SpaceCenter.Vessel</span></a> <span class="sig-name descname"><span class="pre">Vessel</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.Vessel" title="Link to this definition">#</a></dt>
+<dd><p>The vessel the group belongs to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.MovingDirection">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">MovingDirection</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.MovingDirection" title="Link to this definition">#</a></dt>
+<dd><p>The direction the group is currently moving in: -1 for reverse, 0 for stopped
+and 1 for forward.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.AdvancedMode">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">AdvancedMode</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.AdvancedMode" title="Link to this definition">#</a></dt>
+<dd><p>Whether the group is in advanced mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.ElectricChargeRequired">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <span class="sig-name descname"><span class="pre">ElectricChargeRequired</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.ElectricChargeRequired" title="Link to this definition">#</a></dt>
+<dd><p>The total rate at which the servos in the group consume electric charge, in units
+per second, when moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.BuildAid">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">BuildAid</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.BuildAid" title="Link to this definition">#</a></dt>
+<dd><p>Whether the build aid is enabled for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.IKActive">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">IKActive</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.IKActive" title="Link to this definition">#</a></dt>
+<dd><p>Whether inverse kinematics is active for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.Servos">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="servo.html#class-KRPC.Client.Services.InfernalRobotics.Servo" title="KRPC.Client.Services.InfernalRobotics.Servo class"><span class="pre">Servo</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Servos</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.Servos" title="Link to this definition">#</a></dt>
 <dd><p>The servos that are in the group.</p>
@@ -943,7 +1011,7 @@ or <code class="docutils literal notranslate"><span class="pre">null</span></cod
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

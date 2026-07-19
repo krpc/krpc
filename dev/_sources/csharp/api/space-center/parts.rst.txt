@@ -257,6 +257,12 @@ Parts
 
       :Game Scenes: All
 
+   .. property:: System.Collections.Generic.IList<RoboticController> RoboticControllers { get; }
+
+      A list of all robotic controllers in the vessel.
+
+      :Game Scenes: All
+
    .. property:: System.Collections.Generic.IList<RoboticHinge> RoboticHinges { get; }
 
       A list of all robotic hinges in the vessel.
@@ -3851,6 +3857,50 @@ Robotic Controller
 
       :Game Scenes: All
 
+   .. property:: bool Enabled { get; set; }
+
+      Whether the controller is enabled.
+
+      :Game Scenes: All
+
+   .. property:: bool Playing { get; }
+
+      Whether the controller's sequence is currently playing.
+
+      :Game Scenes: All
+
+   .. property:: float Position { get; set; }
+
+      The current position along the sequence, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float Length { get; }
+
+      The length of the sequence, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float PlaySpeed { get; }
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+      :Game Scenes: All
+
+   .. method:: void Play()
+
+      Start playing the controller's sequence.
+
+
+      :Game Scenes: All
+
+   .. method:: void Stop()
+
+      Stop playing the controller's sequence.
+
+
+      :Game Scenes: All
+
    .. method:: bool HasPart(Part part)
 
       Whether the controller has a part.
@@ -3934,6 +3984,18 @@ Robotic Hinge
 
       :Game Scenes: All
 
+   .. property:: float MinAngle { get; set; }
+
+      The minimum angle the hinge can move to, in degrees.
+
+      :Game Scenes: All
+
+   .. property:: float MaxAngle { get; set; }
+
+      The maximum angle the hinge can move to, in degrees.
+
+      :Game Scenes: All
+
    .. property:: float Rate { get; set; }
 
       Target movement rate in degrees per second.
@@ -3958,9 +4020,15 @@ Robotic Hinge
 
       :Game Scenes: All
 
+   .. property:: bool IsMoving { get; }
+
+      Whether the servo is currently moving.
+
+      :Game Scenes: All
+
    .. method:: void MoveHome()
 
-      Move hinge to it's built position.
+      Move hinge to its built position.
 
 
       :Game Scenes: All
@@ -3993,9 +4061,21 @@ Robotic Piston
 
       :Game Scenes: All
 
+   .. property:: float MinExtension { get; set; }
+
+      The minimum extension of the piston, in meters.
+
+      :Game Scenes: All
+
+   .. property:: float MaxExtension { get; set; }
+
+      The maximum extension of the piston, in meters.
+
+      :Game Scenes: All
+
    .. property:: float Rate { get; set; }
 
-      Target movement rate in degrees per second.
+      Target movement rate in meters per second.
 
       :Game Scenes: All
 
@@ -4017,9 +4097,15 @@ Robotic Piston
 
       :Game Scenes: All
 
+   .. property:: bool IsMoving { get; }
+
+      Whether the servo is currently moving.
+
+      :Game Scenes: All
+
    .. method:: void MoveHome()
 
-      Move piston to it's built position.
+      Move piston to its built position.
 
 
       :Game Scenes: All
@@ -4052,6 +4138,25 @@ Robotic Rotation
 
       :Game Scenes: All
 
+   .. property:: float MinAngle { get; set; }
+
+      The minimum angle the servo can rotate to, in degrees.
+
+      :Game Scenes: All
+
+   .. property:: float MaxAngle { get; set; }
+
+      The maximum angle the servo can rotate to, in degrees.
+
+      :Game Scenes: All
+
+   .. property:: bool AllowFullRotation { get; set; }
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+      :Game Scenes: All
+
    .. property:: float Rate { get; set; }
 
       Target movement rate in degrees per second.
@@ -4076,9 +4181,15 @@ Robotic Rotation
 
       :Game Scenes: All
 
+   .. property:: bool IsMoving { get; }
+
+      Whether the servo is currently moving.
+
+      :Game Scenes: All
+
    .. method:: void MoveHome()
 
-      Move rotation servo to it's built position.
+      Move rotation servo to its built position.
 
 
       :Game Scenes: All
@@ -4123,6 +4234,18 @@ Robotic Rotor
 
       :Game Scenes: All
 
+   .. property:: float MaxTorque { get; set; }
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+      :Game Scenes: All
+
+   .. property:: float BrakePercentage { get; set; }
+
+      The percentage of braking force applied to the rotor.
+
+      :Game Scenes: All
+
    .. property:: bool Locked { get; set; }
 
       Lock movement.
@@ -4132,6 +4255,12 @@ Robotic Rotor
    .. property:: bool MotorEngaged { get; set; }
 
       Whether the motor is engaged.
+
+      :Game Scenes: All
+
+   .. property:: bool IsMoving { get; }
+
+      Whether the rotor is currently moving.
 
       :Game Scenes: All
 

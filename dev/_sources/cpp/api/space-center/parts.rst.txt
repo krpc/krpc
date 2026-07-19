@@ -253,6 +253,12 @@ Parts
 
    
 
+   .. function:: std::vector<RoboticController> robotic_controllers()
+
+      A list of all robotic controllers in the vessel.
+
+   
+
    .. function:: std::vector<RoboticHinge> robotic_hinges()
 
       A list of all robotic hinges in the vessel.
@@ -3871,6 +3877,52 @@ Robotic Controller
 
    
 
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the controller is enabled.
+
+   
+
+   .. function:: bool playing()
+
+      Whether the controller's sequence is currently playing.
+
+   
+
+   .. function:: float position()
+   .. function:: void set_position(float value)
+
+      The current position along the sequence, in seconds.
+
+   
+
+   .. function:: float length()
+
+      The length of the sequence, in seconds.
+
+   
+
+   .. function:: float play_speed()
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+   
+
+   .. function:: void play()
+
+      Start playing the controller's sequence.
+
+
+   
+
+   .. function:: void stop()
+
+      Stop playing the controller's sequence.
+
+
+   
+
    .. function:: bool has_part(Part part)
 
       Whether the controller has a part.
@@ -3955,6 +4007,20 @@ Robotic Hinge
 
    
 
+   .. function:: float min_angle()
+   .. function:: void set_min_angle(float value)
+
+      The minimum angle the hinge can move to, in degrees.
+
+   
+
+   .. function:: float max_angle()
+   .. function:: void set_max_angle(float value)
+
+      The maximum angle the hinge can move to, in degrees.
+
+   
+
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
@@ -3983,9 +4049,15 @@ Robotic Hinge
 
    
 
+   .. function:: bool is_moving()
+
+      Whether the servo is currently moving.
+
+   
+
    .. function:: void move_home()
 
-      Move hinge to it's built position.
+      Move hinge to its built position.
 
 
    
@@ -4019,10 +4091,24 @@ Robotic Piston
 
    
 
+   .. function:: float min_extension()
+   .. function:: void set_min_extension(float value)
+
+      The minimum extension of the piston, in meters.
+
+   
+
+   .. function:: float max_extension()
+   .. function:: void set_max_extension(float value)
+
+      The maximum extension of the piston, in meters.
+
+   
+
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in meters per second.
 
    
 
@@ -4047,9 +4133,15 @@ Robotic Piston
 
    
 
+   .. function:: bool is_moving()
+
+      Whether the servo is currently moving.
+
+   
+
    .. function:: void move_home()
 
-      Move piston to it's built position.
+      Move piston to its built position.
 
 
    
@@ -4083,6 +4175,28 @@ Robotic Rotation
 
    
 
+   .. function:: float min_angle()
+   .. function:: void set_min_angle(float value)
+
+      The minimum angle the servo can rotate to, in degrees.
+
+   
+
+   .. function:: float max_angle()
+   .. function:: void set_max_angle(float value)
+
+      The maximum angle the servo can rotate to, in degrees.
+
+   
+
+   .. function:: bool allow_full_rotation()
+   .. function:: void set_allow_full_rotation(bool value)
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+   
+
    .. function:: float rate()
    .. function:: void set_rate(float value)
 
@@ -4111,9 +4225,15 @@ Robotic Rotation
 
    
 
+   .. function:: bool is_moving()
+
+      Whether the servo is currently moving.
+
+   
+
    .. function:: void move_home()
 
-      Move rotation servo to it's built position.
+      Move rotation servo to its built position.
 
 
    
@@ -4161,6 +4281,20 @@ Robotic Rotor
 
    
 
+   .. function:: float max_torque()
+   .. function:: void set_max_torque(float value)
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+   
+
+   .. function:: float brake_percentage()
+   .. function:: void set_brake_percentage(float value)
+
+      The percentage of braking force applied to the rotor.
+
+   
+
    .. function:: bool locked()
    .. function:: void set_locked(bool value)
 
@@ -4172,6 +4306,12 @@ Robotic Rotor
    .. function:: void set_motor_engaged(bool value)
 
       Whether the motor is engaged.
+
+   
+
+   .. function:: bool is_moving()
+
+      Whether the rotor is currently moving.
 
    
 

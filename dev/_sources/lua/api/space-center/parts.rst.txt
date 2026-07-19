@@ -253,6 +253,13 @@ Parts
       :Attribute: Read-only, cannot be set
       :rtype: List
 
+   .. attribute:: robotic_controllers: List
+
+      A list of all robotic controllers in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
    .. attribute:: robotic_hinges: List
 
       A list of all robotic hinges in the vessel.
@@ -3857,6 +3864,49 @@ Robotic Controller
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Part`
 
+   .. attribute:: enabled: boolean
+
+      Whether the controller is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: playing: boolean
+
+      Whether the controller's sequence is currently playing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: position: number
+
+      The current position along the sequence, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: length: number
+
+      The length of the sequence, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: play_speed: number
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: play()
+
+      Start playing the controller's sequence.
+
+   .. method:: stop()
+
+      Stop playing the controller's sequence.
+
    .. method:: has_part(part)
 
       Whether the controller has a part.
@@ -3930,6 +3980,20 @@ Robotic Hinge
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: min_angle: number
+
+      The minimum angle the hinge can move to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: max_angle: number
+
+      The maximum angle the hinge can move to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
    .. attribute:: rate: number
 
       Target movement rate in degrees per second.
@@ -3958,9 +4022,16 @@ Robotic Hinge
       :Attribute: Can be read or written
       :rtype: boolean
 
+   .. attribute:: is_moving: boolean
+
+      Whether the servo is currently moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
    .. method:: move_home()
 
-      Move hinge to it's built position.
+      Move hinge to its built position.
 
 
 
@@ -3993,9 +4064,23 @@ Robotic Piston
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: min_extension: number
+
+      The minimum extension of the piston, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: max_extension: number
+
+      The maximum extension of the piston, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
    .. attribute:: rate: number
 
-      Target movement rate in degrees per second.
+      Target movement rate in meters per second.
 
       :Attribute: Can be read or written
       :rtype: number
@@ -4021,9 +4106,16 @@ Robotic Piston
       :Attribute: Can be read or written
       :rtype: boolean
 
+   .. attribute:: is_moving: boolean
+
+      Whether the servo is currently moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
    .. method:: move_home()
 
-      Move piston to it's built position.
+      Move piston to its built position.
 
 
 
@@ -4056,6 +4148,28 @@ Robotic Rotation
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: min_angle: number
+
+      The minimum angle the servo can rotate to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: max_angle: number
+
+      The maximum angle the servo can rotate to, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: allow_full_rotation: boolean
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
    .. attribute:: rate: number
 
       Target movement rate in degrees per second.
@@ -4084,9 +4198,16 @@ Robotic Rotation
       :Attribute: Can be read or written
       :rtype: boolean
 
+   .. attribute:: is_moving: boolean
+
+      Whether the servo is currently moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
    .. method:: move_home()
 
-      Move rotation servo to it's built position.
+      Move rotation servo to its built position.
 
 
 
@@ -4133,6 +4254,20 @@ Robotic Rotor
       :Attribute: Can be read or written
       :rtype: number
 
+   .. attribute:: max_torque: number
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: brake_percentage: number
+
+      The percentage of braking force applied to the rotor.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
    .. attribute:: locked: boolean
 
       Lock movement.
@@ -4145,6 +4280,13 @@ Robotic Rotor
       Whether the motor is engaged.
 
       :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: is_moving: boolean
+
+      Whether the rotor is currently moving.
+
+      :Attribute: Read-only, cannot be set
       :rtype: boolean
 
 

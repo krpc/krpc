@@ -52,6 +52,56 @@ ServoGroup
       :rtype: bool
       :Game Scenes: Flight
 
+   .. attribute:: vessel
+
+      The vessel the group belongs to, or ``None`` if it is not available.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`
+      :Game Scenes: Flight
+
+   .. attribute:: moving_direction
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: advanced_mode
+
+      Whether the group is in advanced mode.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: electric_charge_required
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: build_aid
+
+      Whether the build aid is enabled for the group.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: ik_active
+
+      Whether inverse kinematics is active for the group.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
    .. attribute:: servos
 
       The servos that are in the group.

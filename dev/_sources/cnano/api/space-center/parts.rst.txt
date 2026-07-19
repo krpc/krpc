@@ -253,6 +253,12 @@ Parts
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_RoboticControllers(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all robotic controllers in the vessel.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_Parts_RoboticHinges(krpc_connection_t connection, krpc_list_object_t * result)
 
       A list of all robotic hinges in the vessel.
@@ -3859,6 +3865,52 @@ Robotic Controller
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Enabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticController_set_Enabled(bool value)
+
+      Whether the controller is enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Playing(krpc_connection_t connection, bool * result)
+
+      Whether the controller's sequence is currently playing.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Position(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticController_set_Position(float value)
+
+      The current position along the sequence, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Length(krpc_connection_t connection, float * result)
+
+      The length of the sequence, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_PlaySpeed(krpc_connection_t connection, float * result)
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Play(krpc_connection_t connection)
+
+      Start playing the controller's sequence.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Stop(krpc_connection_t connection)
+
+      Stop playing the controller's sequence.
+
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_HasPart(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Part_t part)
 
       Whether the controller has a part.
@@ -3943,6 +3995,20 @@ Robotic Hinge
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MinAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_MinAngle(float value)
+
+      The minimum angle the hinge can move to, in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MaxAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_MaxAngle(float value)
+
+      The maximum angle the hinge can move to, in degrees.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_Rate(float value)
 
@@ -3971,9 +4037,15 @@ Robotic Hinge
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_IsMoving(krpc_connection_t connection, bool * result)
+
+      Whether the servo is currently moving.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MoveHome(krpc_connection_t connection)
 
-      Move hinge to it's built position.
+      Move hinge to its built position.
 
 
    
@@ -4007,10 +4079,24 @@ Robotic Piston
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MinExtension(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_MinExtension(float value)
+
+      The minimum extension of the piston, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MaxExtension(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_MaxExtension(float value)
+
+      The maximum extension of the piston, in meters.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_Rate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in meters per second.
 
    
 
@@ -4035,9 +4121,15 @@ Robotic Piston
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_IsMoving(krpc_connection_t connection, bool * result)
+
+      Whether the servo is currently moving.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MoveHome(krpc_connection_t connection)
 
-      Move piston to it's built position.
+      Move piston to its built position.
 
 
    
@@ -4071,6 +4163,28 @@ Robotic Rotation
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MinAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_MinAngle(float value)
+
+      The minimum angle the servo can rotate to, in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MaxAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_MaxAngle(float value)
+
+      The maximum angle the servo can rotate to, in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_AllowFullRotation(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_AllowFullRotation(bool value)
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_Rate(float value)
 
@@ -4099,9 +4213,15 @@ Robotic Rotation
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_IsMoving(krpc_connection_t connection, bool * result)
+
+      Whether the servo is currently moving.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MoveHome(krpc_connection_t connection)
 
-      Move rotation servo to it's built position.
+      Move rotation servo to its built position.
 
 
    
@@ -4149,6 +4269,20 @@ Robotic Rotor
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_MaxTorque(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_MaxTorque(float value)
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_BrakePercentage(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_BrakePercentage(float value)
+
+      The percentage of braking force applied to the rotor.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Locked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_Locked(bool value)
 
@@ -4160,6 +4294,12 @@ Robotic Rotor
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_MotorEngaged(bool value)
 
       Whether the motor is engaged.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_IsMoving(krpc_connection_t connection, bool * result)
+
+      Whether the rotor is currently moving.
 
    
 

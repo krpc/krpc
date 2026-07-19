@@ -10,6 +10,16 @@ Provides functionality to interact with Kerbal Space Program. This includes cont
 the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_Expansions(krpc_connection_t connection, krpc_list_string_t * result)
+
+   The names of the installed expansions, for example ``"Serenity"`` (Breaking Ground)
+   or ``"MakingHistory"`` (Making History).
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_Science(krpc_connection_t connection, float * result)
 
    The current amount of science.

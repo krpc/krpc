@@ -254,6 +254,13 @@ Parts
 
    
 
+   .. method:: java.util.List<RoboticController> getRoboticControllers()
+
+
+      A list of all robotic controllers in the vessel.
+
+   
+
    .. method:: java.util.List<RoboticHinge> getRoboticHinges()
 
 
@@ -3961,6 +3968,55 @@ Robotic Controller
 
    
 
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the controller is enabled.
+
+   
+
+   .. method:: boolean getPlaying()
+
+
+      Whether the controller's sequence is currently playing.
+
+   
+
+   .. method:: float getPosition()
+
+   .. method:: void setPosition(float value)
+
+      The current position along the sequence, in seconds.
+
+   
+
+   .. method:: float getLength()
+
+
+      The length of the sequence, in seconds.
+
+   
+
+   .. method:: float getPlaySpeed()
+
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+   
+
+   .. method:: void play()
+
+      Start playing the controller's sequence.
+
+   
+
+   .. method:: void stop()
+
+      Stop playing the controller's sequence.
+
+   
+
    .. method:: boolean hasPart(Part part)
 
       Whether the controller has a part.
@@ -4035,6 +4091,22 @@ Robotic Hinge
 
    
 
+   .. method:: float getMinAngle()
+
+   .. method:: void setMinAngle(float value)
+
+      The minimum angle the hinge can move to, in degrees.
+
+   
+
+   .. method:: float getMaxAngle()
+
+   .. method:: void setMaxAngle(float value)
+
+      The maximum angle the hinge can move to, in degrees.
+
+   
+
    .. method:: float getRate()
 
    .. method:: void setRate(float value)
@@ -4067,9 +4139,16 @@ Robotic Hinge
 
    
 
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is currently moving.
+
+   
+
    .. method:: void moveHome()
 
-      Move hinge to it's built position.
+      Move hinge to its built position.
 
    
 
@@ -4105,11 +4184,27 @@ Robotic Piston
 
    
 
+   .. method:: float getMinExtension()
+
+   .. method:: void setMinExtension(float value)
+
+      The minimum extension of the piston, in meters.
+
+   
+
+   .. method:: float getMaxExtension()
+
+   .. method:: void setMaxExtension(float value)
+
+      The maximum extension of the piston, in meters.
+
+   
+
    .. method:: float getRate()
 
    .. method:: void setRate(float value)
 
-      Target movement rate in degrees per second.
+      Target movement rate in meters per second.
 
    
 
@@ -4137,9 +4232,16 @@ Robotic Piston
 
    
 
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is currently moving.
+
+   
+
    .. method:: void moveHome()
 
-      Move piston to it's built position.
+      Move piston to its built position.
 
    
 
@@ -4175,6 +4277,31 @@ Robotic Rotation
 
    
 
+   .. method:: float getMinAngle()
+
+   .. method:: void setMinAngle(float value)
+
+      The minimum angle the servo can rotate to, in degrees.
+
+   
+
+   .. method:: float getMaxAngle()
+
+   .. method:: void setMaxAngle(float value)
+
+      The maximum angle the servo can rotate to, in degrees.
+
+   
+
+   .. method:: boolean getAllowFullRotation()
+
+   .. method:: void setAllowFullRotation(boolean value)
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+   
+
    .. method:: float getRate()
 
    .. method:: void setRate(float value)
@@ -4207,9 +4334,16 @@ Robotic Rotation
 
    
 
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is currently moving.
+
+   
+
    .. method:: void moveHome()
 
-      Move rotation servo to it's built position.
+      Move rotation servo to its built position.
 
    
 
@@ -4261,6 +4395,22 @@ Robotic Rotor
 
    
 
+   .. method:: float getMaxTorque()
+
+   .. method:: void setMaxTorque(float value)
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+   
+
+   .. method:: float getBrakePercentage()
+
+   .. method:: void setBrakePercentage(float value)
+
+      The percentage of braking force applied to the rotor.
+
+   
+
    .. method:: boolean getLocked()
 
    .. method:: void setLocked(boolean value)
@@ -4274,6 +4424,13 @@ Robotic Rotor
    .. method:: void setMotorEngaged(boolean value)
 
       Whether the motor is engaged.
+
+   
+
+   .. method:: boolean getIsMoving()
+
+
+      Whether the rotor is currently moving.
 
    
 

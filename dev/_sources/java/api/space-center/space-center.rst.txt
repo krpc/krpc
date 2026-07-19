@@ -11,6 +11,14 @@ SpaceCenter
    Provides functionality to interact with Kerbal Space Program. This includes controlling
    the active vessel, managing its resources, planning maneuver nodes and auto-piloting.
 
+   .. method:: java.util.List<String> getExpansions()
+
+
+      The names of the installed expansions, for example ``"Serenity"`` (Breaking Ground)
+      or ``"MakingHistory"`` (Making History).
+
+   
+
    .. method:: float getScience()
 
 

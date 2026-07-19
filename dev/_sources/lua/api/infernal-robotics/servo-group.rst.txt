@@ -47,6 +47,50 @@ ServoGroup
       :Attribute: Can be read or written
       :rtype: boolean
 
+   .. attribute:: vessel: SpaceCenter.Vessel
+
+      The vessel the group belongs to, or ``nil`` if it is not available.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`
+
+   .. attribute:: moving_direction: number
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: advanced_mode: boolean
+
+      Whether the group is in advanced mode.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: electric_charge_required: number
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: build_aid: boolean
+
+      Whether the build aid is enabled for the group.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: ik_active: boolean
+
+      Whether inverse kinematics is active for the group.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
    .. attribute:: servos: List
 
       The servos that are in the group.

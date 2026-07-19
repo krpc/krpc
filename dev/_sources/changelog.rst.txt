@@ -45,6 +45,14 @@ Core
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
+* Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in flight (the KSP fields they read are only refreshed while the part action window is open)
+* Add SpaceCenter.Expansions to report the installed KSP expansions
+* Add Parts.RoboticControllers
+* Add to RoboticController: Enabled, Playing, Position, Length, PlaySpeed, Play and Stop
+* Add to RoboticHinge: MinAngle, MaxAngle and IsMoving
+* Add to RoboticPiston: MinExtension, MaxExtension and IsMoving
+* Add to RoboticRotation: MinAngle, MaxAngle, AllowFullRotation and IsMoving
+* Add to RoboticRotor: MaxTorque, BrakePercentage and IsMoving
 * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of aerodynamic control surfaces, including deployed airbrakes (:issue:`622`)
 * Fix Parachute.Deploy being a silent no-op for RealChute parachutes (:issue:`382`)
 * Fix Experiment.Reset not clearing the science data stored by DMagic experiments, which caused the next call to Run to fail with "Experiment already contains data" (:issue:`550`)
@@ -151,6 +159,14 @@ SpaceCenter service
 * Improve performance of CommNode.IsVessel, CommNode.Vessel, Vessel.AngularVelocity and reference frame angular velocities
 * Add Parachute.SafeState reporting whether it is currently safe to deploy the parachute (safe, risky, unsafe, or not applicable)
 * Add Contract.DateAccepted, DateDeadline, DateExpire and DateFinished
+
+
+InfernalRobotics service
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Add to Servo: UID, Mode (with a new ServoMode enum), TargetPosition, TargetSpeed, CommandedPosition, DefaultPosition, ForceLimit, MaxForce, MaxAcceleration, MaxSpeed, ElectricChargeRequired, SpringPower, DampingPower, RotorAcceleration, IsLimited, IsRotational, IsServo, CanHaveLimits, HasSpring, IsRunning, PresetPositions, AddPreset, RemovePresetAt and SortPresets
+* Add to ServoGroup: Vessel, MovingDirection, AdvancedMode, ElectricChargeRequired, BuildAid and IKActive
+* Fix Servo.MinPosition and MaxPosition to return the position limits set in the tweak menu, rather than the fixed range from the part configuration
 
 
 KerbalAlarmClock service

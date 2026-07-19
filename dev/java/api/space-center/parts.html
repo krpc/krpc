@@ -1001,6 +1001,12 @@ RCS thrusters.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Parts.getRoboticControllers()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.RoboticController" title="krpc.client.services.SpaceCenter.RoboticController"><span class="pre">RoboticController</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getRoboticControllers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Parts.getRoboticControllers()" title="Link to this definition">#</a></dt>
+<dd><p>A list of all robotic controllers in the vessel.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Parts.getRoboticHinges()">
  <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.RoboticHinge" title="krpc.client.services.SpaceCenter.RoboticHinge"><span class="pre">RoboticHinge</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getRoboticHinges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Parts.getRoboticHinges()" title="Link to this definition">#</a></dt>
 <dd><p>A list of all robotic hinges in the vessel.</p>
@@ -5133,6 +5139,58 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.getEnabled()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEnabled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.getEnabled()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.setEnabled(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.setEnabled(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the controller is enabled.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.getPlaying()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getPlaying</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.getPlaying()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the controller’s sequence is currently playing.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.getPosition()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPosition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.getPosition()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.setPosition(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPosition</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.setPosition(float)" title="Link to this definition">#</a></dt>
+<dd><p>The current position along the sequence, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.getLength()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getLength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.getLength()" title="Link to this definition">#</a></dt>
+<dd><p>The length of the sequence, in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.getPlaySpeed()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPlaySpeed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.getPlaySpeed()" title="Link to this definition">#</a></dt>
+<dd><p>The speed at which the sequence is played back, as a multiple of normal speed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.play()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">play</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.play()" title="Link to this definition">#</a></dt>
+<dd><p>Start playing the controller’s sequence.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.stop()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.stop()" title="Link to this definition">#</a></dt>
+<dd><p>Stop playing the controller’s sequence.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticController.hasPart(Part)">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">hasPart</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><em> <span class="pre">part</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticController.hasPart(Part)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the controller has a part.</p>
@@ -5237,6 +5295,28 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.getMinAngle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.getMinAngle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.setMinAngle(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMinAngle</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.setMinAngle(float)" title="Link to this definition">#</a></dt>
+<dd><p>The minimum angle the hinge can move to, in degrees.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.getMaxAngle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.getMaxAngle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.setMaxAngle(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxAngle</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.setMaxAngle(float)" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angle the hinge can move to, in degrees.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.getRate()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.getRate()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -5281,9 +5361,15 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.getIsMoving()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.getIsMoving()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticHinge.moveHome()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveHome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticHinge.moveHome()" title="Link to this definition">#</a></dt>
-<dd><p>Move hinge to it’s built position.</p>
+<dd><p>Move hinge to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -5319,6 +5405,28 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.getMinExtension()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinExtension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.getMinExtension()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.setMinExtension(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMinExtension</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.setMinExtension(float)" title="Link to this definition">#</a></dt>
+<dd><p>The minimum extension of the piston, in meters.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.getMaxExtension()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxExtension</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.getMaxExtension()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.setMaxExtension(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxExtension</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.setMaxExtension(float)" title="Link to this definition">#</a></dt>
+<dd><p>The maximum extension of the piston, in meters.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.getRate()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.getRate()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -5326,7 +5434,7 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.setRate(float)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRate</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.setRate(float)" title="Link to this definition">#</a></dt>
-<dd><p>Target movement rate in degrees per second.</p>
+<dd><p>Target movement rate in meters per second.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -5363,9 +5471,15 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.getIsMoving()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.getIsMoving()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticPiston.moveHome()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveHome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticPiston.moveHome()" title="Link to this definition">#</a></dt>
-<dd><p>Move piston to it’s built position.</p>
+<dd><p>Move piston to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -5398,6 +5512,40 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.getCurrentAngle()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCurrentAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.getCurrentAngle()" title="Link to this definition">#</a></dt>
 <dd><p>Current angle.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.getMinAngle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMinAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.getMinAngle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.setMinAngle(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMinAngle</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.setMinAngle(float)" title="Link to this definition">#</a></dt>
+<dd><p>The minimum angle the servo can rotate to, in degrees.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.getMaxAngle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxAngle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.getMaxAngle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.setMaxAngle(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxAngle</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.setMaxAngle(float)" title="Link to this definition">#</a></dt>
+<dd><p>The maximum angle the servo can rotate to, in degrees.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.getAllowFullRotation()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAllowFullRotation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.getAllowFullRotation()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.setAllowFullRotation(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAllowFullRotation</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.setAllowFullRotation(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is allowed to rotate freely through a full revolution,
+ignoring the angle limits.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -5445,9 +5593,15 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.getIsMoving()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.getIsMoving()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the servo is currently moving.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotation.moveHome()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">moveHome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotation.moveHome()" title="Link to this definition">#</a></dt>
-<dd><p>Move rotation servo to it’s built position.</p>
+<dd><p>Move rotation servo to its built position.</p>
 </dd></dl>
 
 </dd></dl>
@@ -5505,6 +5659,28 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.getMaxTorque()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMaxTorque</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.getMaxTorque()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.setMaxTorque(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMaxTorque</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.setMaxTorque(float)" title="Link to this definition">#</a></dt>
+<dd><p>The maximum torque the rotor can generate, in kilonewtons.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.getBrakePercentage()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getBrakePercentage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.getBrakePercentage()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.setBrakePercentage(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBrakePercentage</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.setBrakePercentage(float)" title="Link to this definition">#</a></dt>
+<dd><p>The percentage of braking force applied to the rotor.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLocked</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -5524,6 +5700,12 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.setMotorEngaged(boolean)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMotorEngaged</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.setMotorEngaged(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the motor is engaged.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.RoboticRotor.getIsMoving()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIsMoving</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.RoboticRotor.getIsMoving()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the rotor is currently moving.</p>
 </dd></dl>
 
 </dd></dl>
@@ -6806,7 +6988,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>

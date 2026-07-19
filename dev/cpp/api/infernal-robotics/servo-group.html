@@ -765,6 +765,89 @@ in the InfernalRobotics UI.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup6vesselEv">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup6vesselEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup6vesselEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::vessel"></span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vessel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup6vesselEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The vessel the group belongs to, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it is not available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup16moving_directionEv">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup16moving_directionEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup16moving_directionEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::moving_direction"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">moving_direction</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup16moving_directionEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The direction the group is currently moving in: -1 for reverse, 0 for stopped
+and 1 for forward.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup13advanced_modeEv">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup13advanced_modeEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup13advanced_modeEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::advanced_mode"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">advanced_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup13advanced_modeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup17set_advanced_modeEb">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup17set_advanced_modeEb"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup17set_advanced_modeEb"></span><span id="krpc::services::InfernalRobotics::ServoGroup::set_advanced_mode__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_advanced_mode</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup17set_advanced_modeEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the group is in advanced mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup24electric_charge_requiredEv">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup24electric_charge_requiredEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup24electric_charge_requiredEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::electric_charge_required"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">electric_charge_required</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup24electric_charge_requiredEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The total rate at which the servos in the group consume electric charge, in units
+per second, when moving.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup9build_aidEv">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup9build_aidEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup9build_aidEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::build_aid"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">build_aid</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup9build_aidEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup13set_build_aidEb">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup13set_build_aidEb"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup13set_build_aidEb"></span><span id="krpc::services::InfernalRobotics::ServoGroup::set_build_aid__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_build_aid</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup13set_build_aidEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the build aid is enabled for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup9ik_activeEv">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup9ik_activeEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup9ik_activeEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::ik_active"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ik_active</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup9ik_activeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup13set_ik_activeEb">
+<span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup13set_ik_activeEb"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup13set_ik_activeEb"></span><span id="krpc::services::InfernalRobotics::ServoGroup::set_ik_active__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_ik_active</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup13set_ik_activeEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether inverse kinematics is active for the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup6servosEv">
 <span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup6servosEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup6servosEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::servos"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="servo.html#_CPPv4N4krpc8services16InfernalRobotics5ServoE" title="krpc::services::InfernalRobotics::Servo"><span class="n"><span class="pre">Servo</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">servos</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup6servosEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The servos that are in the group.</p>
@@ -968,7 +1051,7 @@ or <code class="docutils literal notranslate"><span class="pre">NULL</span></cod
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
+  <a href="https://github.com/krpc/krpc/commit/2c6cf09">2c6cf09</a>
 </p></div>
       
     </div>
