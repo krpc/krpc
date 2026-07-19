@@ -27,6 +27,26 @@ namespace KRPC.Utils
             Length += length - offset;
         }
 
+        /// <summary>
+        /// Ensure the buffer has room for at least 'count' more bytes past its current length, and
+        /// return the backing array. Data may be written into it starting at Length, after which
+        /// Length must be advanced by the number of bytes written. Lets data be read straight into
+        /// the buffer with no intermediate array.
+        /// </summary>
+        public byte[] Reserve (int count)
+        {
+            // If the buffer is too small, grow it by a multiple of CHUNK_SIZE
+            if (buffer.Length < Length + count) {
+                var newLength = Length + count;
+                if (newLength % CHUNK_SIZE > 0)
+                    newLength += CHUNK_SIZE - (newLength % CHUNK_SIZE);
+                var newBuffer = new byte [newLength];
+                Array.Copy (buffer, newBuffer, Length);
+                buffer = newBuffer;
+            }
+            return buffer;
+        }
+
         public int Length { get; set; }
 
         public byte[] GetBuffer ()

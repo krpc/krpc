@@ -43,6 +43,48 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
+        public void ValidConnectionMessageInParts ()
+        {
+            var connectionMessage = TestingTools.CreateConnectionRequest (Type.Rpc);
+            var split = connectionMessage.Length / 2;
+
+            // Start with only the first half of the request available to be read.
+            var inputStream = new MemoryStream ();
+            inputStream.Write (connectionMessage, 0, split);
+            inputStream.Seek (0, SeekOrigin.Begin);
+            var responseStream = new MemoryStream ();
+            var stream = new TestStream (inputStream, responseStream);
+
+            var mockByteServer = new Mock<IServer<byte,byte>> ();
+            var byteServer = mockByteServer.Object;
+            var byteClient = new TestClient (stream);
+
+            var server = new RPCServer (byteServer);
+            server.OnClientRequestingConnection += (sender, e) => e.Request.Allow ();
+            server.Start ();
+
+            // The partial request leaves the connection attempt pending, neither allowed nor denied.
+            var eventArgs = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs);
+            Assert.IsTrue (eventArgs.Request.StillPending);
+            Assert.AreEqual (0, responseStream.ToArray ().Length);
+
+            // Deliver the rest of the request, then retry the connection attempt.
+            inputStream.Seek (0, SeekOrigin.End);
+            inputStream.Write (connectionMessage, split, connectionMessage.Length - split);
+            inputStream.Seek (split, SeekOrigin.Begin);
+
+            var eventArgs2 = new ClientRequestingConnectionEventArgs<byte,byte> (byteClient);
+            mockByteServer.Raise (m => m.OnClientRequestingConnection += null, eventArgs2);
+            Assert.IsTrue (eventArgs2.Request.ShouldAllow);
+
+            server.Update ();
+            Assert.AreEqual (1, server.Clients.Count ());
+            Assert.AreEqual ("Jebediah Kerman!!!", server.Clients.First ().Name);
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 19, Status.Ok, string.Empty, 16);
+        }
+
+        [Test]
         public void WrongConnectionType ()
         {
             var connectionMessage = TestingTools.CreateConnectionRequest (Type.Stream);

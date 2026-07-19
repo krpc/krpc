@@ -10,6 +10,9 @@ namespace KRPC.Server.ProtocolBuffers
 {
     static class Utils
     {
+        // Size of the chunk read from the stream on each call. Messages larger than this are
+        // accumulated across successive reads via the DynamicBuffer.
+        const int ReadChunkSize = 4096;
 
         static IDictionary<IClient<byte, byte>, Stopwatch> readMessageTimers = new Dictionary<IClient<byte, byte>, Stopwatch> ();
         static IDictionary<IClient<byte, byte>, DynamicBuffer> readMessageBuffers = new Dictionary<IClient<byte, byte>, DynamicBuffer> ();
@@ -54,28 +57,31 @@ namespace KRPC.Server.ProtocolBuffers
 
             if (data == null)
                 data = new DynamicBuffer ();
-            byte[] buffer = new byte[4096]; //TODO: sensible default???
 
-            int read = stream.Read (buffer, 0, buffer.Length);
+            // Read straight into the accumulation buffer, without an intermediate array or copy.
+            var backing = data.Reserve (ReadChunkSize);
+            int read = stream.Read (backing, data.Length, ReadChunkSize);
             if (read == 0)
                 return null;
-            data.Append (buffer, 0, read);
+            data.Length += read;
 
-            var codedStream = new CodedInputStream (data.GetBuffer (), 0, data.Length);
-            // Get the protobuf message size
+            // Messages are length-delimited: a varint byte-length prefix followed by the message body.
+            int prefixLength;
             int size;
             try {
-                size = (int)codedStream.ReadUInt32 ();
-            } catch (InvalidProtocolBufferException) {
+                size = DecodeMessageLength (data.GetBuffer (), 0, data.Length, out prefixLength);
+            } catch (InvalidOperationException) {
+                // Malformed length prefix; wait for the receive to time out.
                 return null;
             }
-            int totalSize = (int)codedStream.Position + size;
-            // Check if enough data is available, if not then delay the decoding
-            if (data.Length < totalSize)
-                return null;
-            // Decode the request
+            if (prefixLength == 0)
+                return null; // The length prefix has not been fully received yet.
+            if (data.Length < prefixLength + size)
+                return null; // The message body has not been fully received yet.
+            // Parse the message body straight out of the buffer, with no copy or intermediate stream,
+            // reading exactly the message's own bytes.
             var message = new T ();
-            message.MergeFrom (codedStream);
+            message.MergeFrom (data.GetBuffer (), prefixLength, size);
             return message;
         }
 
@@ -86,19 +92,45 @@ namespace KRPC.Server.ProtocolBuffers
         public static int ReadMessage <T> (ref T message, MessageParser<T> parser, byte[] data,
                                            int offset, int length) where T : IMessage<T>, new()
         {
-            var codedStream = new CodedInputStream (data, offset, length);
-            // Get the protobuf message size
-            var size = (int)codedStream.ReadUInt32 ();
-            var totalSize = (int)codedStream.Position + size;
-            // Check if enough data is available
+            // Messages are length-delimited: a varint byte-length prefix followed by the message body.
+            int prefixLength;
+            var size = DecodeMessageLength (data, offset, length, out prefixLength);
+            if (prefixLength == 0)
+                return 0; // The length prefix has not been fully received yet.
+            var totalSize = prefixLength + size;
             if (length < totalSize)
-                return 0;
-            // Decode the message
-            // FIXME: If multiple requests are received, decoding a single request fails unless
-            // the coded stream is recreated to be precisely the message size. Why is this?
-            codedStream = new CodedInputStream (data, offset + (int)codedStream.Position, size);
-            message = parser.ParseFrom (codedStream);
+                return 0; // The message body has not been fully received yet.
+            // Parse the message body straight out of the buffer. This copies no payload bytes and
+            // allocates no intermediate stream, and reads exactly the message's own bytes, so a
+            // following message in the same buffer is left untouched.
+            message = parser.ParseFrom (data, offset + prefixLength, size);
             return totalSize;
+        }
+
+        /// <summary>
+        /// Decode the base-128 varint that prefixes a length-delimited message. Returns the message
+        /// length in bytes and sets prefixLength to the number of bytes the varint occupies, or sets
+        /// prefixLength to zero if the buffer does not yet contain the complete varint.
+        /// </summary>
+        static int DecodeMessageLength (byte[] data, int offset, int length, out int prefixLength)
+        {
+            var result = 0;
+            // A varint encoding a 32-bit value is at most five bytes long.
+            for (var i = 0; i < 5; i++) {
+                if (i >= length) {
+                    prefixLength = 0;
+                    return 0;
+                }
+                int b = data [offset + i];
+                result |= (b & 0x7f) << (7 * i);
+                if ((b & 0x80) == 0) {
+                    if (result < 0)
+                        throw new InvalidOperationException ("Message length prefix is out of range");
+                    prefixLength = i + 1;
+                    return result;
+                }
+            }
+            throw new InvalidOperationException ("Message length prefix is not a valid varint");
         }
 
         /// <summary>
