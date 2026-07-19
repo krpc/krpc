@@ -53,11 +53,10 @@ namespace KRPC.UI
         public void Close ()
         {
             if (Visible) {
-                try {
+                // The popup may have already been destroyed by other UI logic (e.g. a
+                // scene switch); Unity's lifetime check reports it as null in that case.
+                if (popup != null)
                     Destroy (popup.gameObject);
-                } catch (NullReferenceException) {
-                    // FIXME: Nasty hack catching this. Dialog may have already been removed by other UI logic.
-                }
                 Visible = false;
                 dialog = null;
                 popup = null;

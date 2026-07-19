@@ -12,7 +12,9 @@ namespace KRPC
     [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     public sealed class Addon : MonoBehaviour
     {
-        // TODO: clean this up
+        // A new addon instance is created on every scene change (KSPAddon.AllGameScenes
+        // with once: false), so state that must survive scene switches — the loaded
+        // configuration, the running server core and cached button textures — is static.
         internal static ConfigurationFile config;
         static Core core;
         static Texture textureOnline;

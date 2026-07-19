@@ -177,13 +177,10 @@ namespace KRPC.UI
             // be used to set the position of the combo window later
             if (Event.current.type == EventType.Repaint) {
                 var position = GUILayoutUtility.GetLastRect ();
-                // Convert from relative to absolute coordinates
-                // TODO: ugly hack...
-                Vector2 mousePosition = Input.mousePosition;
-                mousePosition.y = Screen.height - mousePosition.y;
-                Vector2 clippedMousePos = Event.current.mousePosition;
-                position.x = position.x + mousePosition.x - clippedMousePos.x;
-                position.y = position.y + mousePosition.y - clippedMousePos.y;
+                // Convert from GUI-space (window-relative) to screen coordinates
+                var screenPosition = GUIUtility.GUIToScreenPoint (new Vector2 (position.x, position.y));
+                position.x = screenPosition.x;
+                position.y = screenPosition.y;
                 comboButtonPositions [caller] = position;
             }
 
