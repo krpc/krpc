@@ -553,12 +553,16 @@ class TestPartsEngineReverser(krpctest.TestCase, EngineTestBase):
         self.assertTrue(engine.can_reverse_thrust)
         self.assertFalse(engine.thrust_reversed)
 
-        # Engage the reverser
+        # Engage the reverser. The read-back reflects the commanded state while
+        # the animation is still running, so re-issuing the set mid-animation is
+        # a no-op rather than a second toggle that would cancel the first.
+        engine.thrust_reversed = True
+        self.assertTrue(engine.thrust_reversed)
         engine.thrust_reversed = True
         self.wait(2)  # the reverser animation takes time
         self.assertTrue(engine.thrust_reversed)
 
-        # Setting to the same state is a no-op
+        # Setting to the same state once settled is also a no-op
         engine.thrust_reversed = True
         self.assertTrue(engine.thrust_reversed)
 

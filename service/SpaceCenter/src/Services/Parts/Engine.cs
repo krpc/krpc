@@ -665,8 +665,11 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// Whether the engine's thrust reverser is engaged, reversing the
-        /// direction of thrust. Raises an exception if the engine does not have a
-        /// thrust reverser (see <see cref="CanReverseThrust"/>).
+        /// direction of thrust. While the reverser is still moving, this reports
+        /// the state it is moving to, so a read immediately after a set returns
+        /// the value that was set and setting the same value again has no effect.
+        /// Raises an exception if the engine does not have a thrust reverser
+        /// (see <see cref="CanReverseThrust"/>).
         /// </summary>
         [KRPCProperty]
         public bool ThrustReversed {
