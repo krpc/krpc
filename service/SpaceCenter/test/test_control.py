@@ -183,10 +183,8 @@ class ControlMixin:
         speed_mode = self.space_center.SpeedMode
         self.control.speed_mode = speed_mode.orbit
         self.assertEqual(self.control.speed_mode, speed_mode.orbit)
-        self.wait()
         self.control.speed_mode = speed_mode.surface
         self.assertEqual(self.control.speed_mode, speed_mode.surface)
-        self.wait()
         # No target set, so the target mode would be ignored here. It is
         # covered by test_speed_mode_with_target on the active vessel.
 

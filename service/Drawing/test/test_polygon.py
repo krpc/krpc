@@ -25,7 +25,6 @@ class TestPolygon(krpctest.TestCase):
         self.assertEqual((1, 1, 1), polygon.color)
         self.assertEqual("Legacy Shaders/Particles/Additive", polygon.material)
         self.assertAlmostEqual(0.1, polygon.thickness)
-        self.wait()
         polygon.remove()
         self.assertRaises(ValueError, polygon.remove)
 
@@ -36,7 +35,6 @@ class TestPolygon(krpctest.TestCase):
         polygon.visible = True
         self.assertTrue(polygon.visible)
         self.assertEqual((1, 0, 0), polygon.color)
-        self.wait()
         polygon.remove()
 
     def test_thickness(self):
@@ -46,7 +44,6 @@ class TestPolygon(krpctest.TestCase):
         polygon.visible = True
         self.assertTrue(polygon.visible)
         self.assertAlmostEqual(1.234, polygon.thickness)
-        self.wait()
         polygon.remove()
 
 

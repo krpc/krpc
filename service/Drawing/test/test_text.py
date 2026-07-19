@@ -36,7 +36,6 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.alignment.left, text.alignment)
         self.assertEqual(1, text.line_spacing)
         self.assertEqual(self.anchor.upper_left, text.anchor)
-        self.wait()
         text.remove()
         self.assertRaises(ValueError, text.remove)
 
@@ -59,7 +58,6 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.alignment.right, text.alignment)
         self.assertEqual(2, text.line_spacing)
         self.assertEqual(self.anchor.upper_right, text.anchor)
-        self.wait()
         text.remove()
         self.assertRaises(ValueError, text.remove)
 

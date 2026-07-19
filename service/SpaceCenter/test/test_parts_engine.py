@@ -261,12 +261,10 @@ class TestPartsEngine(krpctest.TestCase, EngineTestBase):
         self.assertTrue(engine.has_fuel)
 
     def test_has_no_fuel(self):
+        # has_fuel reads live propellant totals, so it reports correctly
+        # without the engine ever having been activated.
         engine = self.get_engine("liquidEngine3.v2")  # LV-909 "Terrier"
-        # FIXME: have to activate engine for this to work
-        engine.active = True
-        self.wait()
         self.assertFalse(engine.has_fuel)
-        engine.active = False
 
     def test_flameout(self):
         engine = self.get_engine("liquidEngine")  # LV-T30 "Reliant"
