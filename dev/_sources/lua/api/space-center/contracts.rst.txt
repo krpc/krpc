@@ -218,6 +218,38 @@ Contracts
       :Attribute: Read-only, cannot be set
       :rtype: List
 
+   .. attribute:: date_accepted: number
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: date_deadline: number
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: date_expire: number
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: date_finished: number
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
 
 
 .. class:: ContractState

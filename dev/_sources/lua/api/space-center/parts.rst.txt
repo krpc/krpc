@@ -3302,6 +3302,17 @@ Parachute
       :Attribute: Can be read or written
       :rtype: number
 
+   .. attribute:: safe_state: SpaceCenter.ParachuteSafeState
+
+      Whether it is currently safe to deploy the parachute, given the vessel's
+      flight conditions. Computed by KSP from the current airspeed, pressure and
+      temperature. Only applicable to stock parachutes.
+      Note that KSP reports :attr:`SpaceCenter.ParachuteSafeState.unsafe` for the first
+      second after the vessel unpacks, before its thermal data is valid.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ParachuteSafeState`
+
 
 
 .. class:: ParachuteState
@@ -3333,6 +3344,33 @@ Parachute
    .. data:: cut
 
       The parachute has been cut.
+
+
+
+.. class:: ParachuteSafeState
+
+   The safety state of deploying a parachute. See :attr:`SpaceCenter.Parachute.safe_state`.
+
+
+   .. data:: safe
+
+      The parachute is safe to deploy.
+
+
+   .. data:: risky
+
+      Deploying the parachute is risky, and it may break off.
+
+
+   .. data:: unsafe
+
+      The parachute is unsafe to deploy, and will break off.
+
+
+   .. data:: none
+
+      The safety state is not available, because the vessel is not in an
+      atmosphere or the parachute has already been deployed or cut.
 
 
 

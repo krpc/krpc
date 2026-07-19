@@ -3289,6 +3289,16 @@ Parachute
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_SafeState(krpc_connection_t connection, krpc_SpaceCenter_ParachuteSafeState_t * result)
+
+      Whether it is currently safe to deploy the parachute, given the vessel's
+      flight conditions. Computed by KSP from the current airspeed, pressure and
+      temperature. Only applicable to stock parachutes.
+      Note that KSP reports :macro:`KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE` for the first
+      second after the vessel unpacks, before its thermal data is valid.
+
+   
+
 
 
 .. type:: krpc_SpaceCenter_ParachuteState_t
@@ -3320,6 +3330,33 @@ Parachute
    .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_CUT
 
       The parachute has been cut.
+
+
+
+.. type:: krpc_SpaceCenter_ParachuteSafeState_t
+
+   The safety state of deploying a parachute. See :func:`krpc_SpaceCenter_Parachute_SafeState`.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE
+
+      The parachute is safe to deploy.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESAFESTATE_RISKY
+
+      Deploying the parachute is risky, and it may break off.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE
+
+      The parachute is unsafe to deploy, and will break off.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESAFESTATE_NONE
+
+      The safety state is not available, because the vessel is not in an
+      atmosphere or the parachute has already been deployed or cut.
 
 
 

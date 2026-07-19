@@ -200,6 +200,34 @@ Contracts
 
    
 
+   .. function:: double date_accepted()
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+   
+
+   .. function:: double date_deadline()
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+   
+
+   .. function:: double date_expire()
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+   
+
+   .. function:: double date_finished()
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+   
+
 
 
 .. namespace:: krpc::services::SpaceCenter

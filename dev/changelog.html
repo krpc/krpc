@@ -740,6 +740,8 @@
 <li><p>Fix maneuver node reference frame positions being computed relative to the active vessel, giving wrong positions for maneuver nodes on other vessels</p></li>
 <li><p>Fix Node objects whose maneuver node was removed by Control.RemoveNodes, another Node object or the in-game UI: all members now raise an error, instead of silently reading and writing the detached node</p></li>
 <li><p>Improve performance of CommNode.IsVessel, CommNode.Vessel, Vessel.AngularVelocity and reference frame angular velocities</p></li>
+<li><p>Add Parachute.SafeState reporting whether it is currently safe to deploy the parachute (safe, risky, unsafe, or not applicable)</p></li>
+<li><p>Add Contract.DateAccepted, DateDeadline, DateExpire and DateFinished</p></li>
 </ul>
 </section>
 <section id="kerbalalarmclock-service">
@@ -3155,7 +3157,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

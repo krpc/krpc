@@ -6499,6 +6499,24 @@ Only applicable to stock parachutes.</p>
 </dl>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Parachute.safe_state">
+<span class="sig-name descname"><span class="pre">safe_state</span></span><a class="headerlink" href="#SpaceCenter.Parachute.safe_state" title="Link to this definition">#</a></dt>
+<dd><p>Whether it is currently safe to deploy the parachute, given the vessel’s
+flight conditions. Computed by KSP from the current airspeed, pressure and
+temperature. Only applicable to stock parachutes.
+Note that KSP reports <a class="reference internal" href="#SpaceCenter.ParachuteSafeState.unsafe" title="SpaceCenter.ParachuteSafeState.unsafe"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ParachuteSafeState.unsafe</span></code></a> for the first
+second after the vessel unpacks, before its thermal data is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.ParachuteSafeState" title="SpaceCenter.ParachuteSafeState"><code class="xref py py-class docutils literal notranslate"><span class="pre">ParachuteSafeState</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -6534,6 +6552,37 @@ but is not fully deployed yet. (Stock parachutes only)</p>
 <dt class="sig sig-object py" id="SpaceCenter.ParachuteState.cut">
 <span class="sig-name descname"><span class="pre">cut</span></span><a class="headerlink" href="#SpaceCenter.ParachuteState.cut" title="Link to this definition">#</a></dt>
 <dd><p>The parachute has been cut.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.ParachuteSafeState">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">ParachuteSafeState</span></span><a class="headerlink" href="#SpaceCenter.ParachuteSafeState" title="Link to this definition">#</a></dt>
+<dd><p>The safety state of deploying a parachute. See <a class="reference internal" href="#SpaceCenter.Parachute.safe_state" title="SpaceCenter.Parachute.safe_state"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Parachute.safe_state</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.ParachuteSafeState.safe">
+<span class="sig-name descname"><span class="pre">safe</span></span><a class="headerlink" href="#SpaceCenter.ParachuteSafeState.safe" title="Link to this definition">#</a></dt>
+<dd><p>The parachute is safe to deploy.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.ParachuteSafeState.risky">
+<span class="sig-name descname"><span class="pre">risky</span></span><a class="headerlink" href="#SpaceCenter.ParachuteSafeState.risky" title="Link to this definition">#</a></dt>
+<dd><p>Deploying the parachute is risky, and it may break off.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.ParachuteSafeState.unsafe">
+<span class="sig-name descname"><span class="pre">unsafe</span></span><a class="headerlink" href="#SpaceCenter.ParachuteSafeState.unsafe" title="Link to this definition">#</a></dt>
+<dd><p>The parachute is unsafe to deploy, and will break off.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.ParachuteSafeState.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.ParachuteSafeState.none" title="Link to this definition">#</a></dt>
+<dd><p>The safety state is not available, because the vessel is not in an
+atmosphere or the parachute has already been deployed or cut.</p>
 </dd></dl>
 
 </dd></dl>
@@ -9518,7 +9567,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

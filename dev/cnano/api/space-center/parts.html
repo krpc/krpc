@@ -4438,6 +4438,16 @@ Only applicable to stock parachutes.</p>
 Only applicable to stock parachutes.</p>
 </dd></dl>
 
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_SafeState">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Parachute_SafeState</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ParachuteSafeState_t" title="krpc_SpaceCenter_ParachuteSafeState_t"><span class="n"><span class="pre">krpc_SpaceCenter_ParachuteSafeState_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_SafeState" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether it is currently safe to deploy the parachute, given the vessel’s
+flight conditions. Computed by KSP from the current airspeed, pressure and
+temperature. Only applicable to stock parachutes.
+Note that KSP reports <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE</span></code> for the first
+second after the vessel unpacks, before its thermal data is valid.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="c type">
@@ -4473,6 +4483,37 @@ but is not fully deployed yet. (Stock parachutes only)</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ParachuteState_t.KRPC_SPACECENTER_PARACHUTESTATE_CUT">
 <span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_PARACHUTESTATE_CUT</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ParachuteState_t.KRPC_SPACECENTER_PARACHUTESTATE_CUT" title="Link to this definition">#</a><br /></dt>
 <dd><p>The parachute has been cut.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ParachuteSafeState_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ParachuteSafeState_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ParachuteSafeState_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The safety state of deploying a parachute. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Parachute_SafeState()</span></code>.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The parachute is safe to deploy.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_RISKY">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_PARACHUTESAFESTATE_RISKY</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_RISKY" title="Link to this definition">#</a><br /></dt>
+<dd><p>Deploying the parachute is risky, and it may break off.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The parachute is unsafe to deploy, and will break off.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_NONE">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_SPACECENTER_PARACHUTESAFESTATE_NONE</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_NONE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The safety state is not available, because the vessel is not in an
+atmosphere or the parachute has already been deployed or cut.</p>
 </dd></dl>
 
 </dd></dl>
@@ -6704,7 +6745,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

@@ -224,6 +224,38 @@ Contracts
 
    
 
+   .. method:: double getDateAccepted()
+
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+   
+
+   .. method:: double getDateDeadline()
+
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+   
+
+   .. method:: double getDateExpire()
+
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+   
+
+   .. method:: double getDateFinished()
+
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+   
+
 
 
 .. type:: public enum ContractState

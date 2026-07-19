@@ -3286,6 +3286,16 @@ Parachute
 
       :Game Scenes: All
 
+   .. property:: ParachuteSafeState SafeState { get; }
+
+      Whether it is currently safe to deploy the parachute, given the vessel's
+      flight conditions. Computed by KSP from the current airspeed, pressure and
+      temperature. Only applicable to stock parachutes.
+      Note that KSP reports :enum:`ParachuteSafeState.Unsafe` for the first
+      second after the vessel unpacks, before its thermal data is valid.
+
+      :Game Scenes: All
+
 
 
 .. enum:: ParachuteState
@@ -3317,6 +3327,33 @@ Parachute
    .. value:: Cut
 
       The parachute has been cut.
+
+
+
+.. enum:: ParachuteSafeState
+
+   The safety state of deploying a parachute. See :prop:`Parachute.SafeState`.
+
+
+   .. value:: Safe
+
+      The parachute is safe to deploy.
+
+
+   .. value:: Risky
+
+      Deploying the parachute is risky, and it may break off.
+
+
+   .. value:: Unsafe
+
+      The parachute is unsafe to deploy, and will break off.
+
+
+   .. value:: None
+
+      The safety state is not available, because the vessel is not in an
+      atmosphere or the parachute has already been deployed or cut.
 
 
 

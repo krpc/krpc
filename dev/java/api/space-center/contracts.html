@@ -869,6 +869,34 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
 <dd><p>Parameters for the contract.</p>
 </dd></dl>
 
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateAccepted()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateAccepted</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateAccepted()" title="Link to this definition">#</a></dt>
+<dd><p>Universal time at which the contract was accepted, in seconds.
+Zero if the contract has not been accepted.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateDeadline()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateDeadline</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateDeadline()" title="Link to this definition">#</a></dt>
+<dd><p>Universal time by which the contract must be completed, in seconds.
+Zero if the contract has no deadline.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateExpire()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateExpire</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateExpire()" title="Link to this definition">#</a></dt>
+<dd><p>Universal time at which the contract offer expires, in seconds.
+Zero if the contract has no expiry date.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Contract.getDateFinished()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getDateFinished</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Contract.getDateFinished()" title="Link to this definition">#</a></dt>
+<dd><p>Universal time at which the contract was completed or failed, in seconds.
+Zero if the contract has not finished or KSP did not record a finish time.</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="java type">
@@ -1106,7 +1134,7 @@ Obtained by calling <a class="reference internal" href="space-center.html#krpc.c
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

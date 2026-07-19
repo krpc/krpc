@@ -2020,6 +2020,14 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ScienceSubject.data_scale">data_scale (ScienceSubject attribute)</a>
 </li>
+      <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.date_accepted">date_accepted (Contract attribute)</a>
+</li>
+      <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.date_deadline">date_deadline (Contract attribute)</a>
+</li>
+      <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.date_expire">date_expire (Contract attribute)</a>
+</li>
+      <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.date_finished">date_finished (Contract attribute)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.RosterStatus.DEAD">DEAD (Java field)</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractState.DEADLINE_EXPIRED">DEADLINE_EXPIRED (Java field)</a>
@@ -2188,12 +2196,12 @@
       </ul></li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType.DISTANCE">DISTANCE (Java field)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.distance_at_closest_approach">distance_at_closest_approach() (Orbit method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.distance_at_closest_approach">[1]</a>
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.distanceAtClosestApproach(Orbit)">distanceAtClosestApproach(Orbit) (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.divide">divide() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.divide">[1]</a>
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.divide(Connection, Expression, Expression)">divide(Connection, Expression, Expression) (Java method)</a>
@@ -3124,6 +3132,14 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ScienceSubject.getDataScale()">getDataScale() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getDateAccepted()">getDateAccepted() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getDateDeadline()">getDateDeadline() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getDateExpire()">getDateExpire() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getDateFinished()">getDateFinished() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Decoupler.getDecoupled()">getDecoupled() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getDecoupler()">getDecoupler() (Java method)</a>
@@ -3478,10 +3494,10 @@
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getLights()">getLights() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts.getLights()">[1]</a>
 </li>
-      <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
@@ -3859,6 +3875,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getRotationOverride()">getRotationOverride() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getRotationTarget()">getRotationTarget() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getSafeState()">getSafeState() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSAS()">getSAS() (Java method)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getSAS()">[1]</a>
 </li>
@@ -6110,6 +6128,14 @@
 </li>
       <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract6cancelEv">krpc::services::SpaceCenter::Contract::cancel (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract13date_acceptedEv">krpc::services::SpaceCenter::Contract::date_accepted (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract13date_deadlineEv">krpc::services::SpaceCenter::Contract::date_deadline (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract11date_expireEv">krpc::services::SpaceCenter::Contract::date_expire (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract13date_finishedEv">krpc::services::SpaceCenter::Contract::date_finished (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract7declineEv">krpc::services::SpaceCenter::Contract::decline (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/contracts.html#_CPPv4N4krpc8services11SpaceCenter8Contract11descriptionEv">krpc::services::SpaceCenter::Contract::description (C++ function)</a>
@@ -7292,11 +7318,23 @@
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter9Parachute4partEv">krpc::services::SpaceCenter::Parachute::part (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter9Parachute10safe_stateEv">krpc::services::SpaceCenter::Parachute::safe_state (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter9Parachute19set_deploy_altitudeEf">krpc::services::SpaceCenter::Parachute::set_deploy_altitude (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter9Parachute23set_deploy_min_pressureEf">krpc::services::SpaceCenter::Parachute::set_deploy_min_pressure (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter9Parachute5stateEv">krpc::services::SpaceCenter::Parachute::state (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter18ParachuteSafeStateE">krpc::services::SpaceCenter::ParachuteSafeState (C++ enum)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter18ParachuteSafeState4noneE">krpc::services::SpaceCenter::ParachuteSafeState::none (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter18ParachuteSafeState5riskyE">krpc::services::SpaceCenter::ParachuteSafeState::risky (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter18ParachuteSafeState4safeE">krpc::services::SpaceCenter::ParachuteSafeState::safe (C++ enumerator)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter18ParachuteSafeState6unsafeE">krpc::services::SpaceCenter::ParachuteSafeState::unsafe (C++ enumerator)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter14ParachuteStateE">krpc::services::SpaceCenter::ParachuteState (C++ enum)</a>
 </li>
@@ -10260,6 +10298,14 @@
 </li>
       <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Cancel">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Cancel (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateAccepted">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateAccepted (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateDeadline">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateDeadline (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateExpire">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateExpire (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateFinished">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_DateFinished (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Decline">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Decline (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/contracts.html#c.krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Description">krpc_SpaceCenter_Contract_t.krpc_SpaceCenter_Contract_Description (C function)</a>
@@ -11442,11 +11488,23 @@
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_Part">krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_Part (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_SafeState">krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_SafeState (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_set_DeployAltitude">krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_set_DeployAltitude (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_set_DeployMinPressure">krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_set_DeployMinPressure (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_State">krpc_SpaceCenter_Parachute_t.krpc_SpaceCenter_Parachute_State (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ParachuteSafeState_t">krpc_SpaceCenter_ParachuteSafeState_t (C type)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_NONE">krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_NONE (C macro)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_RISKY">krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_RISKY (C macro)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE">krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_SAFE (C macro)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE">krpc_SpaceCenter_ParachuteSafeState_t.KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE (C macro)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_ParachuteState_t">krpc_SpaceCenter_ParachuteState_t (C type)</a>
 </li>
@@ -13762,7 +13820,7 @@
       </ul></li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.non_rotating_reference_frame">non_rotating_reference_frame (CelestialBody attribute)</a>
 </li>
-      <li><a href="java/api/remote-tech/antenna.html#krpc.client.services.RemoteTech.Target.NONE">NONE (Java field)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlSource.NONE">[1]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlState.NONE">[2]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.ResourceFlowMode.NONE">[3]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.EditorFacility.NONE">[4]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.NONE">[5]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.WarpMode.NONE">[6]</a>
+      <li><a href="java/api/remote-tech/antenna.html#krpc.client.services.RemoteTech.Target.NONE">NONE (Java field)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlSource.NONE">[1]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlState.NONE">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.NONE">[3]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.ResourceFlowMode.NONE">[4]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.EditorFacility.NONE">[5]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.NONE">[6]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.WarpMode.NONE">[7]</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.normal">normal (Flight attribute)</a>
 </li>
@@ -13932,6 +13990,20 @@
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Parts.parachutes">(Parts attribute)</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.ParachuteSafeState">ParachuteSafeState (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ParachuteSafeState">[1]</a>
+
+      <ul>
+        <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState">(Java enum)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.none">ParachuteSafeState.none (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.none">[1]</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.risky">ParachuteSafeState.risky (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.risky">[1]</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.safe">ParachuteSafeState.safe (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.safe">[1]</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.unsafe">ParachuteSafeState.unsafe (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ParachuteSafeState.unsafe">[1]</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.ParachuteState">ParachuteState (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ParachuteState">[1]</a>
 
       <ul>
@@ -14056,6 +14128,8 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField">(Java class)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlState.PARTIAL">PARTIAL (Java field)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Parts">Parts (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Parts">[1]</a>
@@ -14064,8 +14138,6 @@
         <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parts">(Java class)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.parts">parts (ServoGroup attribute)</a>
 
       <ul>
@@ -14563,10 +14635,10 @@
 </li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat">repeat (Alarm attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat_period">repeat_period (Alarm attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/space-center.html#SpaceCenter.reputation">reputation (in module SpaceCenter)</a>
 </li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.reputation_completion">reputation_completion (Contract attribute)</a>
@@ -14745,6 +14817,8 @@
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.rightShift(Connection, Expression, Expression)">rightShift(Connection, Expression, Expression) (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.RISKY">RISKY (Java field)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.robotic_controller">robotic_controller (Part attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.robotic_hinge">robotic_hinge (Part attribute)</a>
@@ -14899,6 +14973,10 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.SAFE">SAFE (Java field)</a>
+</li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.Parachute.safe_state">safe_state (Parachute attribute)</a>
+</li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.GameMode.SANDBOX">SANDBOX (Java field)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.sas">sas (AutoPilot attribute)</a>
@@ -16062,6 +16140,14 @@
 </li>
       <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.can_be_failed">SpaceCenter.SpaceCenter.Contract.can_be_failed (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.date_accepted">SpaceCenter.SpaceCenter.Contract.date_accepted (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.date_deadline">SpaceCenter.SpaceCenter.Contract.date_deadline (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.date_expire">SpaceCenter.SpaceCenter.Contract.date_expire (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.date_finished">SpaceCenter.SpaceCenter.Contract.date_finished (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.description">SpaceCenter.SpaceCenter.Contract.description (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/contracts.html#SpaceCenter.SpaceCenter.Contract.failed">SpaceCenter.SpaceCenter.Contract.failed (attribute)</a>
@@ -16318,12 +16404,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.can_restart">SpaceCenter.SpaceCenter.Engine.can_restart (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.can_reverse_thrust">SpaceCenter.SpaceCenter.Engine.can_reverse_thrust (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.can_shutdown">SpaceCenter.SpaceCenter.Engine.can_shutdown (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.flameout">SpaceCenter.SpaceCenter.Engine.flameout (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_actuation">SpaceCenter.SpaceCenter.Engine.gimbal_actuation (attribute)</a>
@@ -16677,6 +16763,8 @@
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Parachute.deployed">SpaceCenter.SpaceCenter.Parachute.deployed (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Parachute.part">SpaceCenter.SpaceCenter.Parachute.part (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Parachute.safe_state">SpaceCenter.SpaceCenter.Parachute.safe_state (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Parachute.state">SpaceCenter.SpaceCenter.Parachute.state (attribute)</a>
 </li>
@@ -18197,10 +18285,10 @@
 </li>
       <li><a href="lua/api/ui/rect-transform.html#UI.UI.RectTransform.upper_right">UI.UI.RectTransform.upper_right (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/ui/ui.html#UI.UI.stock_canvas">UI.UI.stock_canvas (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.alignment">UI.UI.Text.alignment (attribute)</a>
 </li>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.available_fonts">UI.UI.Text.available_fonts (attribute)</a>
@@ -18234,6 +18322,8 @@
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmType.UNKNOWN">UNKNOWN (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.UNKNOWN">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverterState.UNKNOWN">[2]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.UNKNOWN">[3]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.UNKNOWN">[4]</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMemberType.UNOWNED">UNOWNED (Java field)</a>
+</li>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.UNSAFE">UNSAFE (Java field)</a>
 </li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.up">up (Control attribute)</a>
 </li>
@@ -18651,7 +18741,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

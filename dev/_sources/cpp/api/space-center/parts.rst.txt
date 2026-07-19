@@ -3295,6 +3295,16 @@ Parachute
 
    
 
+   .. function:: ParachuteSafeState safe_state()
+
+      Whether it is currently safe to deploy the parachute, given the vessel's
+      flight conditions. Computed by KSP from the current airspeed, pressure and
+      temperature. Only applicable to stock parachutes.
+      Note that KSP reports :enumerator:`ParachuteSafeState::unsafe` for the first
+      second after the vessel unpacks, before its thermal data is valid.
+
+   
+
 
 
 .. namespace:: krpc::services::SpaceCenter
@@ -3327,6 +3337,34 @@ Parachute
    .. enumerator:: cut
 
       The parachute has been cut.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: ParachuteSafeState
+
+   The safety state of deploying a parachute. See :func:`Parachute::safe_state`.
+
+
+   .. enumerator:: safe
+
+      The parachute is safe to deploy.
+
+
+   .. enumerator:: risky
+
+      Deploying the parachute is risky, and it may break off.
+
+
+   .. enumerator:: unsafe
+
+      The parachute is unsafe to deploy, and will break off.
+
+
+   .. enumerator:: none
+
+      The safety state is not available, because the vessel is not in an
+      atmosphere or the parachute has already been deployed or cut.
 
 
 

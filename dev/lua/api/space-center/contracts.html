@@ -1085,6 +1085,66 @@ Obtained by calling <a class="reference internal" href="space-center.html#SpaceC
 </dl>
 </dd></dl>
 
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Contract.date_accepted">
+<span class="sig-name descname"><span class="pre">date_accepted</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Contract.date_accepted" title="Link to this definition">#</a></dt>
+<dd><p>Universal time at which the contract was accepted, in seconds.
+Zero if the contract has not been accepted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Contract.date_deadline">
+<span class="sig-name descname"><span class="pre">date_deadline</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Contract.date_deadline" title="Link to this definition">#</a></dt>
+<dd><p>Universal time by which the contract must be completed, in seconds.
+Zero if the contract has no deadline.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Contract.date_expire">
+<span class="sig-name descname"><span class="pre">date_expire</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Contract.date_expire" title="Link to this definition">#</a></dt>
+<dd><p>Universal time at which the contract offer expires, in seconds.
+Zero if the contract has no expiry date.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Contract.date_finished">
+<span class="sig-name descname"><span class="pre">date_finished</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Contract.date_finished" title="Link to this definition">#</a></dt>
+<dd><p>Universal time at which the contract was completed or failed, in seconds.
+Zero if the contract has not finished or KSP did not record a finish time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="lua class">
@@ -1410,7 +1470,7 @@ Obtained by calling <a class="reference internal" href="space-center.html#SpaceC
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

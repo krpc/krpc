@@ -200,6 +200,34 @@ Contracts
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateAccepted(krpc_connection_t connection, double * result)
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateDeadline(krpc_connection_t connection, double * result)
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateExpire(krpc_connection_t connection, double * result)
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateFinished(krpc_connection_t connection, double * result)
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+   
+
 
 
 .. type:: krpc_SpaceCenter_ContractState_t

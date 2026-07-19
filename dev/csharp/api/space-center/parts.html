@@ -5827,6 +5827,21 @@ Only applicable to stock parachutes.</p>
 </dl>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Parachute.SafeState">
+<a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.ParachuteSafeState" title="KRPC.Client.Services.SpaceCenter.ParachuteSafeState enum"><span class="pre">ParachuteSafeState</span></a> <span class="sig-name descname"><span class="pre">SafeState</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Parachute.SafeState" title="Link to this definition">#</a></dt>
+<dd><p>Whether it is currently safe to deploy the parachute, given the vessel’s
+flight conditions. Computed by KSP from the current airspeed, pressure and
+temperature. Only applicable to stock parachutes.
+Note that KSP reports <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Unsafe" title="KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Unsafe value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">ParachuteSafeState.Unsafe</span></code></a> for the first
+second after the vessel unpacks, before its thermal data is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="csharp enum">
@@ -5862,6 +5877,37 @@ but is not fully deployed yet. (Stock parachutes only)</p>
 <dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.ParachuteState.Cut">
 <span class="sig-name descname"><span class="pre">Cut</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.ParachuteState.Cut" title="Link to this definition">#</a></dt>
 <dd><p>The parachute has been cut.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp enum">
+<dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.SpaceCenter.ParachuteSafeState">
+<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">ParachuteSafeState</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.SpaceCenter.ParachuteSafeState" title="Link to this definition">#</a></dt>
+<dd><p>The safety state of deploying a parachute. See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Parachute.SafeState" title="KRPC.Client.Services.SpaceCenter.Parachute.SafeState property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Parachute.SafeState</span></code></a>.</p>
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Safe">
+<span class="sig-name descname"><span class="pre">Safe</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Safe" title="Link to this definition">#</a></dt>
+<dd><p>The parachute is safe to deploy.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Risky">
+<span class="sig-name descname"><span class="pre">Risky</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Risky" title="Link to this definition">#</a></dt>
+<dd><p>Deploying the parachute is risky, and it may break off.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Unsafe">
+<span class="sig-name descname"><span class="pre">Unsafe</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.Unsafe" title="Link to this definition">#</a></dt>
+<dd><p>The parachute is unsafe to deploy, and will break off.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.None">
+<span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#value-KRPC.Client.Services.SpaceCenter.ParachuteSafeState.None" title="Link to this definition">#</a></dt>
+<dd><p>The safety state is not available, because the vessel is not in an
+atmosphere or the parachute has already been deployed or cut.</p>
 </dd></dl>
 
 </dd></dl>
@@ -8521,7 +8567,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/7824505">7824505</a>
+  <a href="https://github.com/krpc/krpc/commit/1134a58">1134a58</a>
 </p></div>
       
     </div>

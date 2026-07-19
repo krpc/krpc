@@ -200,6 +200,34 @@ Contracts
 
       :Game Scenes: All
 
+   .. property:: double DateAccepted { get; }
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+      :Game Scenes: All
+
+   .. property:: double DateDeadline { get; }
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+      :Game Scenes: All
+
+   .. property:: double DateExpire { get; }
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+      :Game Scenes: All
+
+   .. property:: double DateFinished { get; }
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+      :Game Scenes: All
+
 
 
 .. enum:: ContractState
