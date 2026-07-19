@@ -39,10 +39,13 @@ class TestSpaceCenter(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, self.sc, "reputation")
 
     def test_launchable_vessels(self):
-        # TODO: implement test
-        # print self.sc.launchable_vessels("SPH")
-        # print self.sc.launchable_vessels("VAB")
-        pass
+        # The test harness stages the craft launched by setUpClass into the
+        # save's Ships/VAB directory
+        self.assertIn("Basic", self.sc.launchable_vessels("VAB"))
+        # The save includes KSP's stock craft, for example in the SPH
+        self.assertIn("Aeris 4A", self.sc.launchable_vessels("SPH"))
+        # An unknown directory yields an empty list rather than an error
+        self.assertEqual([], self.sc.launchable_vessels("NoSuchDirectory"))
 
     def test_active_vessel(self):
         active = self.sc.active_vessel

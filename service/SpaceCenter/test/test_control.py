@@ -171,10 +171,10 @@ class ControlMixin:
         self.assertEqual(self.control.sas_mode, sas_mode.radial)
         self.control.sas_mode = sas_mode.anti_radial
         self.assertEqual(self.control.sas_mode, sas_mode.anti_radial)
-        # No target set, so these would be ignored
-        # TODO: test with a target set
-        # self.control.sas_mode = sas_mode.target
-        # self.control.sas_mode = sas_mode.anti_target
+        # No target set, so the target modes would be ignored here. They are
+        # covered by test_sas_mode_with_target on the active vessel; a
+        # non-active vessel cannot have a target, as targets are per-vessel
+        # and only the active vessel's target can be set.
         self.control.sas_mode = sas_mode.stability_assist
         self.assertEqual(self.control.sas_mode, sas_mode.stability_assist)
         self.control.sas = False
@@ -187,13 +187,8 @@ class ControlMixin:
         self.control.speed_mode = speed_mode.surface
         self.assertEqual(self.control.speed_mode, speed_mode.surface)
         self.wait()
-        # No target set, should not change
-        # TODO: test with a target set
-        # self.control.speed_mode = speed_mode.target
-        # self.assertEqual(self.control.speed_mode, speed_mode.surface)
-        # self.wait()
-        # self.control.speed_mode = speed_mode.orbit
-        # self.assertEqual(self.control.speed_mode, speed_mode.orbit)
+        # No target set, so the target mode would be ignored here. It is
+        # covered by test_speed_mode_with_target on the active vessel.
 
 
 class TestControlActiveVessel(krpctest.TestCase, ControlMixin):
@@ -211,6 +206,30 @@ class TestControlActiveVessel(krpctest.TestCase, ControlMixin):
 
     def test_equality(self):
         self.assertEqual(self.space_center.active_vessel.control, self.control)
+
+    def test_sas_mode_with_target(self):
+        sas_mode = self.space_center.SASMode
+        self.space_center.target_body = self.space_center.bodies["Mun"]
+        self.wait()
+        self.control.sas = True
+        self.wait()
+        self.control.sas_mode = sas_mode.target
+        self.assertEqual(self.control.sas_mode, sas_mode.target)
+        self.control.sas_mode = sas_mode.anti_target
+        self.assertEqual(self.control.sas_mode, sas_mode.anti_target)
+        self.control.sas_mode = sas_mode.stability_assist
+        self.control.sas = False
+        self.space_center.clear_target()
+
+    def test_speed_mode_with_target(self):
+        speed_mode = self.space_center.SpeedMode
+        self.space_center.target_body = self.space_center.bodies["Mun"]
+        self.wait()
+        self.control.speed_mode = speed_mode.target
+        self.assertEqual(self.control.speed_mode, speed_mode.target)
+        self.control.speed_mode = speed_mode.orbit
+        self.assertEqual(self.control.speed_mode, speed_mode.orbit)
+        self.space_center.clear_target()
 
     def test_maneuver_node_editing(self):
         node = self.control.add_node(self.space_center.ut + 60, 100, 0, 0)
