@@ -164,6 +164,7 @@ Python client
 * Allow calling static class methods from a class instance (:issue:`832`)
 * Update to protobuf v7.35.1
 * Emit a DeprecationWarning when calling a deprecated member, and note deprecation in docstrings (:issue:`904`)
+* Fix static class method calls being sent to the wrong connection when multiple clients are connected
 
 
 C# client
@@ -212,6 +213,7 @@ Java client
 * Update checkstyle to 10.26.1, using bundled google\_checks.xml
 * Fix all checkstyle violations: import ordering, typecast spacing, Javadoc, method naming (Sint32/Sint64/Uint32/Uint64)
 * Mark deprecated members with the @Deprecated annotation and an @deprecated javadoc tag (:issue:`904`)
+* Reduce copying when encoding values
 
 
 Lua client

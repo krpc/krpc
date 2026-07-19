@@ -756,6 +756,7 @@
 <li><p>Allow calling static class methods from a class instance (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/832">#832</a>)</p></li>
 <li><p>Update to protobuf v7.35.1</p></li>
 <li><p>Emit a DeprecationWarning when calling a deprecated member, and note deprecation in docstrings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
+<li><p>Fix static class method calls being sent to the wrong connection when multiple clients are connected</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -804,6 +805,7 @@
 <li><p>Update checkstyle to 10.26.1, using bundled google_checks.xml</p></li>
 <li><p>Fix all checkstyle violations: import ordering, typecast spacing, Javadoc, method naming (Sint32/Sint64/Uint32/Uint64)</p></li>
 <li><p>Mark deprecated members with the &#64;Deprecated annotation and an &#64;deprecated javadoc tag (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
+<li><p>Reduce copying when encoding values</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -3158,7 +3160,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/29e697f">29e697f</a>
+  <a href="https://github.com/krpc/krpc/commit/3535949">3535949</a>
 </p></div>
       
     </div>
