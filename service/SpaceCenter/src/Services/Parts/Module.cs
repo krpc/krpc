@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -200,7 +201,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var result = new Dictionary<string,string> ();
                 foreach (var f in VisibleFields)
-                    result.Add (f.guiName, f.GetValue (module).ToString ());
+                    result.Add (f.guiName, f.GetValueString (module));
                 return result;
             }
         }
@@ -215,7 +216,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var result = new Dictionary<string,string> ();
                 foreach (var f in VisibleFields)
-                    result.Add (f.name, f.GetValue (module).ToString ());
+                    result.Add (f.name, f.GetValueString (module));
                 return result;
             }
         }
@@ -260,7 +261,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public string GetField (string name)
         {
-            return GetBaseFieldByName (name).GetValue (module).ToString ();
+            return GetBaseFieldByName (name).GetValueString (module);
         }
 
         /// <summary>
@@ -271,7 +272,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public string GetFieldById (string id)
         {
-            return GetBaseFieldById (id).GetValue (module).ToString ();
+            return GetBaseFieldById (id).GetValueString (module);
         }
 
         /// <summary>

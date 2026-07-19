@@ -519,7 +519,7 @@ namespace KRPC.Service.KRPC
             if (ReferenceEquals (arg, null))
                 throw new ArgumentNullException (nameof (arg));
             var argType = arg.Type;
-            if (argType.Name.StartsWith("Tuple`", StringComparison.CurrentCulture)) {
+            if (argType.Name.StartsWith("Tuple`", StringComparison.Ordinal)) {
                 var tupleIndex = LinqExpression.Lambda<Func<int>> (index).Compile () ();
                 var property = argType.GetProperty ("Item" + (tupleIndex + 1));
                 if (property == null)

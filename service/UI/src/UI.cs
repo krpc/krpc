@@ -1,3 +1,4 @@
+using System.Globalization;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;

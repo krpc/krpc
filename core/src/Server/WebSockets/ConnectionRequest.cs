@@ -132,7 +132,7 @@ namespace KRPC.Server.WebSockets
                 throw new HandshakeException (Response.CreateBadRequest ("Host field not set."));
 
             // Check upgrade field
-            if (!request.Headers.ContainsKey ("upgrade") || request.Headers ["upgrade"].SingleOrDefault ().ToLower () != "websocket")
+            if (!request.Headers.ContainsKey ("upgrade") || request.Headers ["upgrade"].SingleOrDefault ().ToLowerInvariant () != "websocket")
                 throw new HandshakeException (Response.CreateBadRequest ("Upgrade field not set to websocket."));
 
             // Check connection field

@@ -38,7 +38,7 @@ namespace KRPC.Server.ProtocolBuffers
                 if (request == null)
                     return null;
                 if (request.Type != Type.Stream) {
-                    var name = request.Type.ToString ().ToLower ();
+                    var name = request.Type.ToString ().ToLowerInvariant ();
                     WriteErrorConnectionResponse (Status.WrongType,
                         "Connection request was for the " + name + " server, but this is the stream server. " +
                         "Did you connect to the wrong port number?", stream);

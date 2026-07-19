@@ -50,6 +50,7 @@
     <Compile Include="ExtensionMethods\AlarmTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\AlarmWarpActionExtensions.cs" />
     <Compile Include="ExtensionMethods\AutoPilotModeExtensions.cs" />
+    <Compile Include="ExtensionMethods\BaseFieldExtensions.cs" />
     <Compile Include="ExtensionMethods\CelestialBodyExtensions.cs" />
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\ContractStateExtensions.cs" />

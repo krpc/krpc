@@ -93,7 +93,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (icons == null) {
                     icons = GameDatabase.Instance.databaseTexture
-                        .Where (t => t.name.StartsWith ("Squad/Contracts/Icons/", StringComparison.CurrentCulture))
+                        .Where (t => t.name.StartsWith ("Squad/Contracts/Icons/", StringComparison.Ordinal))
                         .Select (texInfo => texInfo.name.Replace ("Squad/Contracts/Icons/", string.Empty))
                         .ToList ();
                 }

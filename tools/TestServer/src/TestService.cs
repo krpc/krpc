@@ -56,7 +56,7 @@ namespace TestServer
         [KRPCProcedure]
         public static string BytesToHexString (byte[] value)
         {
-            return BitConverter.ToString (value).Replace ("-", string.Empty).ToLower ();
+            return BitConverter.ToString (value).Replace ("-", string.Empty).ToLowerInvariant ();
         }
 
         [KRPCProcedure]
