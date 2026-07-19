@@ -641,6 +641,7 @@
 <li><p>Fix Parachute.Deploy being a silent no-op for RealChute parachutes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/382">#382</a>)</p></li>
 <li><p>Fix Experiment.Reset not clearing the science data stored by DMagic experiments, which caused the next call to Run to fail with “Experiment already contains data” (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/550">#550</a>)</p></li>
 <li><p>Fix Camera Distance, Pitch, Heading and FoV setters being lost when set during a camera mode switch (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/318">#318</a>)</p></li>
+<li><p>Fix ResourceHarvester.Active being silently ignored when set while the harvester is deploying; the requested state is now applied when the deploy completes</p></li>
 <li><p>Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)</p></li>
 <li><p>Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)</p></li>
 <li><p>Fix ControlSurface.AvailableTorque returning inconsistent signs (ModuleControlSurface negates the roll axis); now normalised to positive/negative torque like other parts</p></li>
@@ -3166,7 +3167,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/47c2b77">47c2b77</a>
+  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
 </p></div>
       
     </div>

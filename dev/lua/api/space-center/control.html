@@ -1087,6 +1087,13 @@ clients that set it disconnect.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1122,6 +1129,13 @@ Equivalent to the w and s keys.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1138,6 +1152,13 @@ Equivalent to the a and d keys.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1154,6 +1175,13 @@ Equivalent to the q and e keys.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1230,6 +1258,13 @@ Equivalent to the h and n keys.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1246,6 +1281,13 @@ Equivalent to the i and k keys.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1262,6 +1304,13 @@ Equivalent to the j and l keys.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1279,6 +1328,13 @@ the wheels backwards.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1295,6 +1351,13 @@ A value of 1 steers to the left, and a value of -1 steers to the right.</p>
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -1841,7 +1904,7 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.speed_m
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/47c2b77">47c2b77</a>
+  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
 </p></div>
       
     </div>

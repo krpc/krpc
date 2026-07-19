@@ -242,6 +242,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_InputMode(krpc_connection_t connection, krpc_SpaceCenter_ControlInputMode_t * result)
    .. function:: void krpc_SpaceCenter_Control_set_InputMode(krpc_SpaceCenter_ControlInputMode_t value)
 
@@ -263,6 +271,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Yaw(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_Yaw(float value)
 
@@ -272,6 +288,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Roll(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_Roll(float value)
 
@@ -280,6 +304,14 @@ Control
       Equivalent to the q and e keys.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Control_PitchTrim(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_PitchTrim(float value)
@@ -329,6 +361,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Up(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_Up(float value)
 
@@ -338,6 +378,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Right(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_Right(float value)
 
@@ -346,6 +394,14 @@ Control
       Equivalent to the j and l keys.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelThrottle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_WheelThrottle(float value)
@@ -357,6 +413,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelSteering(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_WheelSteering(float value)
 
@@ -365,6 +429,14 @@ Control
       A value of 1 steers to the left, and a value of -1 steers to the right.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis01(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Control_set_CustomAxis01(float value)

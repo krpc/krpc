@@ -242,6 +242,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: ControlInputMode input_mode()
    .. function:: void set_input_mode(ControlInputMode value)
 
@@ -263,6 +271,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: float yaw()
    .. function:: void set_yaw(float value)
 
@@ -272,6 +288,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: float roll()
    .. function:: void set_roll(float value)
 
@@ -280,6 +304,14 @@ Control
       Equivalent to the q and e keys.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. function:: float pitch_trim()
    .. function:: void set_pitch_trim(float value)
@@ -329,6 +361,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: float up()
    .. function:: void set_up(float value)
 
@@ -338,6 +378,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: float right()
    .. function:: void set_right(float value)
 
@@ -346,6 +394,14 @@ Control
       Equivalent to the j and l keys.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. function:: float wheel_throttle()
    .. function:: void set_wheel_throttle(float value)
@@ -357,6 +413,14 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. function:: float wheel_steering()
    .. function:: void set_wheel_steering(float value)
 
@@ -365,6 +429,14 @@ Control
       A value of 1 steers to the left, and a value of -1 steers to the right.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. function:: float custom_axis01()
    .. function:: void set_custom_axis01(float value)

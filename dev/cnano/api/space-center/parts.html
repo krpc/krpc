@@ -3858,8 +3858,11 @@ standard way to detect one.</p>
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_set_ThrustReversed">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Engine_set_ThrustReversed</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_set_ThrustReversed" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the engine’s thrust reverser is engaged, reversing the
-direction of thrust. Raises an exception if the engine does not have a
-thrust reverser (see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_CanReverseThrust" title="krpc_SpaceCenter_Engine_CanReverseThrust"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_CanReverseThrust()</span></code></a>).</p>
+direction of thrust. While the reverser is still moving, this reports
+the state it is moving to, so a read immediately after a set returns
+the value that was set and setting the same value again has no effect.
+Raises an exception if the engine does not have a thrust reverser
+(see <a class="reference internal" href="#c.krpc_SpaceCenter_Engine_t.krpc_SpaceCenter_Engine_CanReverseThrust" title="krpc_SpaceCenter_Engine_CanReverseThrust"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Engine_CanReverseThrust()</span></code></a>).</p>
 </dd></dl>
 
 <dl class="c function">
@@ -4823,6 +4826,14 @@ In this case, check <code class="xref c c-func docutils literal notranslate"><sp
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ResourceHarvester_t.krpc_SpaceCenter_ResourceHarvester_set_Active">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ResourceHarvester_set_Active</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ResourceHarvester_t.krpc_SpaceCenter_ResourceHarvester_set_Active" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the harvester is actively drilling.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A value set while the harvester is deploying is applied when the
+deploy completes, so it can be set immediately after setting
+<a class="reference internal" href="#c.krpc_SpaceCenter_ResourceHarvester_t.krpc_SpaceCenter_ResourceHarvester_Deployed" title="krpc_SpaceCenter_ResourceHarvester_Deployed"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ResourceHarvester_Deployed()</span></code></a> without waiting for the deploy animation.
+Setting it has no effect while the harvester is retracted or
+retracting.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -6745,7 +6756,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/47c2b77">47c2b77</a>
+  <a href="https://github.com/krpc/krpc/commit/2234868">2234868</a>
 </p></div>
       
     </div>

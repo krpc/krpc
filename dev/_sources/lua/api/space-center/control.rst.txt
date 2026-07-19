@@ -242,6 +242,13 @@ Control
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. attribute:: input_mode: SpaceCenter.ControlInputMode
 
       Sets the behavior of the pitch, yaw, roll and translation control inputs.
@@ -263,6 +270,13 @@ Control
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. attribute:: yaw: number
 
       The state of the yaw control.
@@ -272,6 +286,13 @@ Control
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. attribute:: roll: number
 
       The state of the roll control.
@@ -280,6 +301,13 @@ Control
 
       :Attribute: Can be read or written
       :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. attribute:: pitch_trim: number
 
@@ -329,6 +357,13 @@ Control
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. attribute:: up: number
 
       The state of the up translational control.
@@ -338,6 +373,13 @@ Control
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. attribute:: right: number
 
       The state of the right translational control.
@@ -346,6 +388,13 @@ Control
 
       :Attribute: Can be read or written
       :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. attribute:: wheel_throttle: number
 
@@ -357,6 +406,13 @@ Control
       :Attribute: Can be read or written
       :rtype: number
 
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
    .. attribute:: wheel_steering: number
 
       The state of the wheel steering.
@@ -365,6 +421,13 @@ Control
 
       :Attribute: Can be read or written
       :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
 
    .. attribute:: custom_axis01: number
 

@@ -2732,8 +2732,11 @@ Engine
    .. property:: bool ThrustReversed { get; set; }
 
       Whether the engine's thrust reverser is engaged, reversing the
-      direction of thrust. Raises an exception if the engine does not have a
-      thrust reverser (see :prop:`Engine.CanReverseThrust`).
+      direction of thrust. While the reverser is still moving, this reports
+      the state it is moving to, so a read immediately after a set returns
+      the value that was set and setting the same value again has no effect.
+      Raises an exception if the engine does not have a thrust reverser
+      (see :prop:`Engine.CanReverseThrust`).
 
       :Game Scenes: All
 
@@ -3617,6 +3620,15 @@ Resource Harvester
       Whether the harvester is actively drilling.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         A value set while the harvester is deploying is applied when the
+         deploy completes, so it can be set immediately after setting
+         :prop:`ResourceHarvester.Deployed` without waiting for the deploy animation.
+         Setting it has no effect while the harvester is retracted or
+         retracting.
 
    .. property:: float ExtractionRate { get; }
 
