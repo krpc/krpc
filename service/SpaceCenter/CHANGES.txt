@@ -1,4 +1,13 @@
 v0.6.0
+ * Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in
+   flight (the KSP fields they read are only refreshed while the part action window is open)
+ * Add SpaceCenter.Expansions to report the installed KSP expansions
+ * Add Parts.RoboticControllers
+ * Add to RoboticController: Enabled, Playing, Position, Length, PlaySpeed, Play and Stop
+ * Add to RoboticHinge: MinAngle, MaxAngle and IsMoving
+ * Add to RoboticPiston: MinExtension, MaxExtension and IsMoving
+ * Add to RoboticRotation: MinAngle, MaxAngle, AllowFullRotation and IsMoving
+ * Add to RoboticRotor: MaxTorque, BrakePercentage and IsMoving
  * Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of
    aerodynamic control surfaces, including deployed airbrakes (#622)
  * Fix Parachute.Deploy being a silent no-op for RealChute parachutes (#382)

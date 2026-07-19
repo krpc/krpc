@@ -1,3 +1,14 @@
+v0.6.0
+ * Add to Servo: UID, Mode (with a new ServoMode enum), TargetPosition, TargetSpeed,
+   CommandedPosition, DefaultPosition, ForceLimit, MaxForce, MaxAcceleration, MaxSpeed,
+   ElectricChargeRequired, SpringPower, DampingPower, RotorAcceleration, IsLimited,
+   IsRotational, IsServo, CanHaveLimits, HasSpring, IsRunning, PresetPositions,
+   AddPreset, RemovePresetAt and SortPresets
+ * Add to ServoGroup: Vessel, MovingDirection, AdvancedMode, ElectricChargeRequired,
+   BuildAid and IKActive
+ * Fix Servo.MinPosition and MaxPosition to return the position limits set in the
+   tweak menu, rather than the fixed range from the part configuration
+
 v0.5.0
  * Update to work with Infernal Robotics Next v3.1.9
  * Drop support for original Infernal Robotics mod
