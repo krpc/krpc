@@ -478,11 +478,12 @@ TEST_F(test_stream, test_stream_freeze_many) {
   for (size_t i = 0; i < streams.size(); i++) ASSERT_NE(values[i], streams[i]());
 }
 
-// FIXME: reenable test
-// TEST_F(test_stream, test_stream_stop_while_frozen) {
-//   auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
-//   conn.freeze_streams();
-// }
+// Freezes with a stream that is not producing updates (it is never started), then
+// tears the connection down while still frozen.
+TEST_F(test_stream, test_stream_stop_while_frozen) {
+  auto s = test_service.counter_stream("test_stream.test_stream_stop_while_frozen");
+  conn.freeze_streams();
+}
 
 TEST_F(test_stream, test_default_constructable) {
   krpc::Stream<int> s;
