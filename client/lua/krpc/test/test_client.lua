@@ -138,10 +138,9 @@ function TestClient:test_blocking_procedure()
 end
 
 function TestClient:test_too_many_arguments()
-  -- FIXME: passing too many arguments isn't a bug in Lua!
-  --luaunit.assertError(self.conn.test_service.optional_arguments, '1', '2', '3', '4', '5')
-  --obj = self.conn.test_service.create_test_object('jeb')
-  --luaunit.assertError(obj.optional_arguments, '1', '2', '3', '4', '5')
+  -- Calling a procedure with more arguments than it has parameters is not an
+  -- error in Lua: excess arguments are discarded by the language before the
+  -- client sees them, so there is no failure mode to test.
 end
 
 local function filter_private(xs)
@@ -244,88 +243,151 @@ function TestClient:test_custom_exception()
     self.conn.test_service.throw_custom_exception)
 end
 
--- FIXME: enable tests
---def test_client_members(self):
---    self.assertSetEqual(
---        set(['krpc', 'test_service', 'add_stream', 'stream', 'close']),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn))))
---
---def test_krpc_service_members(self):
---    self.assertSetEqual(
---        set(['get_services', 'get_status', 'add_stream', 'remove_stream']),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn.krpc))))
---
---def test_test_service_service_members(self):
---    self.assertSetEqual(
---        set([
---            'float_to_string',
---            'double_to_string',
---            'int32_to_string',
---            'int64_to_string',
---            'bool_to_string',
---            'string_to_int32',
---            'bytes_to_hex_string',
---            'add_multiple_values',
---
---            'string_property',
---
---            'string_property_private_get',
---
---            'string_property_private_set',
---
---            'create_test_object',
---            'echo_test_object',
---
---            'object_property',
---
---            'TestClass',
---
---            'optional_arguments',
---
---            'TestEnum',
---            'enum_return',
---            'enum_echo',
---            'enum_default_arg',
---
---            'blocking_procedure',
---
---            'increment_list',
---            'increment_dictionary',
---            'increment_set',
---            'increment_tuple',
---            'increment_nested_collection',
---            'add_to_object_list',
---
---            'counter',
---
---            'throw_argument_exception',
---            'throw_invalid_operation_exception'
---        ]),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service))))
---
---def test_test_service_test_class_members(self):
---    self.assertSetEqual(
---        set([
---            'get_value',
---            'float_to_string',
---            'object_to_string',
---
---            'int_property',
---
---            'object_property',
---
---            'optional_arguments',
---            'static_method'
---        ]),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestClass))))
+-- Collect the public member names of an object: its own string keys, plus those
+-- of class tables reachable through the metatable (penlight class instances have
+-- their class table as metatable, with parent classes linked through _base).
+-- Service members live on per-service class tables, so the instance's own keys
+-- are not enough. Penlight's class machinery is excluded, along with
+-- underscore-prefixed private members.
+local CLASS_LIB_MEMBERS = Set{'is_a', 'class_of', 'cast', 'catch', 'lineinfo'}
+local function public_members(obj)
+  local members = Set{}
+  local function add(t)
+    for k,_ in pairs(t) do
+      if type(k) == 'string' and k:sub(1,1) ~= '_' and not CLASS_LIB_MEMBERS[k] then
+        members = members + Set{k}
+      end
+    end
+  end
+  add(obj)
+  local cls = getmetatable(obj)
+  if rawget(obj, '_init') ~= nil then
+    cls = obj  -- obj is itself a class table; walk its parents
+  end
+  while type(cls) == 'table' do
+    add(cls)
+    cls = rawget(cls, '_base')
+  end
+  return members
+end
 
---def test_test_service_enum_members(self):
---    self.assertSetEqual(
---        set(['value_a','value_b','value_c']),
---        set(filter(lambda x: not x.startswith('_'), dir(self.conn.test_service.TestEnum))))
---    self.assertEqual (0, self.conn.test_service.TestEnum.value_a.value)
---    self.assertEqual (1, self.conn.test_service.TestEnum.value_b.value)
---    self.assertEqual (2, self.conn.test_service.TestEnum.value_c.value)
+function TestClient:test_krpc_service_members()
+  local members = Set.values(public_members(self.conn.krpc))
+  table.sort(members)
+  luaunit.assertEquals(
+    members,
+    {'Expression',
+     'GameScene',
+     'Type',
+     'add_event',
+     'add_stream',
+     'get_client_id',
+     'get_client_name',
+     'get_clients',
+     'get_current_game_scene',
+     'get_game_scene',
+     'get_paused',
+     'get_services',
+     'get_status',
+     'remove_stream',
+     'set_game_scene',
+     'set_paused',
+     'set_stream_rate',
+     'start_stream'})
+end
+
+function TestClient:test_test_service_service_members()
+  local members = Set.values(public_members(self.conn.test_service))
+  table.sort(members)
+  luaunit.assertEquals(
+    members,
+    {'DeprecatedClass',
+     'DeprecatedEnum',
+     'TestClass',
+     'TestEnum',
+     'add_multiple_values',
+     'add_to_object_list',
+     'blocking_procedure',
+     'bool_to_string',
+     'bytes_to_hex_string',
+     'counter',
+     'create_test_object',
+     'deprecated_procedure',
+     'deprecated_procedure_no_message',
+     'dictionary_default',
+     'double_to_string',
+     'echo_test_object',
+     'enum_default_arg',
+     'enum_echo',
+     'enum_return',
+     'float_to_string',
+     'get_deprecated_property',
+     'get_object_property',
+     'get_string_property',
+     'get_string_property_private_set',
+     'increment_dictionary',
+     'increment_list',
+     'increment_nested_collection',
+     'increment_set',
+     'increment_tuple',
+     'int32_to_string',
+     'int64_to_string',
+     'list_default',
+     'on_timer',
+     'on_timer_using_lambda',
+     'optional_arguments',
+     'reset_custom_exception_later',
+     'reset_invalid_operation_exception_later',
+     'return_null_when_not_allowed',
+     'set_default',
+     'set_deprecated_property',
+     'set_object_property',
+     'set_string_property',
+     'set_string_property_private_get',
+     'string_to_int32',
+     'throw_argument_exception',
+     'throw_argument_null_exception',
+     'throw_argument_out_of_range_exception',
+     'throw_custom_exception',
+     'throw_custom_exception_later',
+     'throw_invalid_operation_exception',
+     'throw_invalid_operation_exception_later',
+     'tuple_default'})
+end
+
+function TestClient:test_test_service_test_class_members()
+  local members = Set.values(public_members(self.conn.test_service.TestClass))
+  table.sort(members)
+  luaunit.assertEquals(
+    members,
+    {'float_to_string',
+     'get_int_property',
+     'get_object_property',
+     'get_string_property_private_set',
+     'get_value',
+     'object_to_string',
+     'optional_arguments',
+     'set_int_property',
+     'set_object_property',
+     'set_string_property_private_get',
+     'static_method'})
+end
+
+function TestClient:test_test_service_enum_members()
+  local members = Set.values(public_members(self.conn.test_service.TestEnum))
+  table.sort(members)
+  luaunit.assertEquals(
+    members,
+    {'value_a',
+     'value_b',
+     'value_c'})
+end
+
+function TestClient:test_test_service_enum_values()
+  luaunit.assertEquals(0, self.conn.test_service.TestEnum.value_a.value)
+  luaunit.assertEquals(1, self.conn.test_service.TestEnum.value_b.value)
+  luaunit.assertEquals(2, self.conn.test_service.TestEnum.value_c.value)
+end
 
 function TestClient:test_line_endings()
   local strings = {

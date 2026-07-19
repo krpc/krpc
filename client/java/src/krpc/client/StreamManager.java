@@ -108,7 +108,7 @@ class StreamManager {
             manager.update(result.getId(), result.getResult());
           }
         }
-        // TODO: handle these exceptions properly
+        // A closed connection (e.g. on disconnect) surfaces as one of these; end the update thread.
       } catch (StreamException exn) {
         return;
       } catch (IOException exn) {

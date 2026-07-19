@@ -2,6 +2,8 @@ v0.6.0
  * Allow calling static class methods from a class instance (#832)
  * Update to protobuf v7.35.1
  * Emit a DeprecationWarning when calling a deprecated member, and note deprecation in docstrings (#904)
+ * Fix static class method calls being sent to the wrong connection when
+   multiple clients are connected
 
 v0.5.4
  * Fix streams for services without pre-generated stubs (#774)

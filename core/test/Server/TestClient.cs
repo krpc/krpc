@@ -3,7 +3,9 @@ using KRPC.Server;
 
 namespace KRPC.Test.Server
 {
-    // TODO: This is only required due to mocking not performing equality testing. Is there a better way to do this?
+    // A concrete client stand-in: framework-generated mocks do not implement the
+    // equality comparisons the server code under test relies on, so tests that
+    // compare clients use this class instead.
     sealed class TestClient : IClient<byte,byte>
     {
         readonly Guid guid;

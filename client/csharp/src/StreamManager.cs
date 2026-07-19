@@ -145,11 +145,9 @@ namespace KRPC.Client
                         }
                     }
                 } catch (ObjectDisposedException) {
-                    // Connection closed, so exit
-                    // FIXME: is there a better way to handle this?
+                    // The connection was closed (e.g. on disconnect); end the update thread.
                 } catch (IOException) {
-                    // Connection closed, so exit
-                    // FIXME: is there a better way to handle this?
+                    // The connection was closed (e.g. on disconnect); end the update thread.
                 }
             }
         }

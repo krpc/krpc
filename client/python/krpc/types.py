@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import collections
 import functools
+import weakref
 from enum import Enum
 from typing import (
     TYPE_CHECKING,
     Any,
     Callable,
+    Dict,
     Iterable,
     List,
     Mapping,
@@ -607,23 +609,39 @@ class DefaultArgument:
         return self._value
 
 
+# Per-client subclasses of wrapped classes, keyed weakly by client then by the shared class. With
+# pre-generated stubs the class object is shared across every client, so binding a client to it must
+# not be done by writing _client onto the shared class (which multiple clients would overwrite for
+# each other). Each client gets its own subclass carrying its own _client instead.
+_wrapped_subclasses: "weakref.WeakKeyDictionary[object, Dict[type, type]]" = (
+    weakref.WeakKeyDictionary()
+)
+
+
+def _wrapped_subclass(client: object, class_type: type) -> type:
+    """Return the given client's subclass of class_type, carrying that client as _client, creating
+    and caching it on first use."""
+    cache = _wrapped_subclasses.setdefault(client, {})
+    subclass = cache.get(class_type)
+    if subclass is None:
+        subclass = type(class_type.__name__, (class_type,), {"_client": client})
+        cache[class_type] = subclass
+    return subclass
+
+
 class WrappedClass:
-    """Wraps a class type, to allow injection of a client object
-    for static method calls"""
+    """Wraps a class type accessed through a service, binding it to the client it was accessed
+    through so that its static methods use that client."""
 
     def __init__(self, client: Client, class_type: type) -> None:
         self._client = client
-        self._class_type = class_type
+        self._class_type = _wrapped_subclass(client, class_type)
         self.__doc__ = class_type.__doc__
 
     def __call__(self, *args: object, **kwargs: object) -> object:
         return self._class_type(*args, **kwargs)
 
     def __getattr__(self, name: str) -> object:
-        # FIXME: is this the best place to set it?
-        # Might be better to dynamically create a type that derives from _class_type
-        # and adds the _client field
-        self._class_type._client = self._client  # type: ignore[attr-defined]
         return getattr(self._class_type, name)
 
     def __dir__(self) -> List[str]:
@@ -633,10 +651,10 @@ class WrappedClass:
 class StaticMethod:
     """Descriptor for static methods.
 
-    Like @classmethod, but also works when called on an instance: if the class
-    does not yet have _client set (i.e. it was not accessed through WrappedClass),
-    the instance's _client is injected onto the class first — matching what
-    WrappedClass.__getattr__ does when the class is accessed via the service."""
+    Like @classmethod, but also works when called on an instance: if the class does not already
+    have _client set, the instance's _client is injected onto it first. A class accessed through a
+    service is a per-client subclass (see WrappedClass) that already carries its own _client, so
+    this only applies to static methods called through an instance."""
 
     def __init__(self, func: Callable) -> None:  # type: ignore[type-arg]
         self._func = func

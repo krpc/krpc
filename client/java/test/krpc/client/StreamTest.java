@@ -68,7 +68,7 @@ public class StreamTest {
   @Test
   public void testClassStaticMethod()
       throws RPCException, StreamException, NoSuchMethodException {
-    // FIXME: Java does not support default parameter values, so have to pass ""
+    // Java has no default parameter values, so the optional parameter is passed explicitly
     Stream<String> stream = connection.addStream(
         TestClass.class, "staticMethod", connection, "foo", "");
     for (int i = 0; i < 5; i++) {

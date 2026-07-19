@@ -4,6 +4,7 @@ v0.6.0
  * Update checkstyle to 10.26.1, using bundled google_checks.xml
  * Fix all checkstyle violations: import ordering, typecast spacing, Javadoc, method naming (Sint32/Sint64/Uint32/Uint64)
  * Mark deprecated members with the @Deprecated annotation and an @deprecated javadoc tag (#904)
+ * Reduce copying when encoding values
 
 v0.5.0
  * Update to protobuf v3.22.0
