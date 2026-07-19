@@ -133,5 +133,39 @@ namespace KRPC.SpaceCenter.Services.Parts
             set { servo.Fields["servoMotorLimit"].SetValue((float)value, servo); }
         }
 
+        /// <summary>
+        /// The maximum torque the rotor can generate, in kilonewtons.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxTorque
+        {
+            get { return servo.maxTorque; }
+            set { servo.maxTorque = value; }
+        }
+
+        /// <summary>
+        /// The percentage of braking force applied to the rotor.
+        /// </summary>
+        [KRPCProperty]
+        public float BrakePercentage
+        {
+            get { return servo.brakePercentage; }
+            set { servo.brakePercentage = value; }
+        }
+
+        /// <summary>
+        /// Whether the rotor is currently moving.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsMoving
+        {
+            get
+            {
+                return (bool)typeof(BaseServo)
+                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+            }
+        }
+
     }
 }

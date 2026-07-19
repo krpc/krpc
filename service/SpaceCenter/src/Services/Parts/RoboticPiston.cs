@@ -72,7 +72,27 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Target movement rate in degrees per second.
+        /// The minimum extension of the piston, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public float MinExtension
+        {
+            get { return servo.softMinMaxExtension.x; }
+            set { servo.SetSoftLimits("targetExtension", new Vector2(value, servo.softMinMaxExtension.y)); }
+        }
+
+        /// <summary>
+        /// The maximum extension of the piston, in meters.
+        /// </summary>
+        [KRPCProperty]
+        public float MaxExtension
+        {
+            get { return servo.softMinMaxExtension.y; }
+            set { servo.SetSoftLimits("targetExtension", new Vector2(servo.softMinMaxExtension.x, value)); }
+        }
+
+        /// <summary>
+        /// Target movement rate in meters per second.
         /// </summary>
         [KRPCProperty]
         public float Rate {
@@ -122,7 +142,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// Move piston to it's built position.
+        /// Whether the servo is currently moving.
+        /// </summary>
+        [KRPCProperty]
+        public bool IsMoving
+        {
+            get
+            {
+                return (bool)typeof(BaseServo)
+                    .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(servo, null);
+            }
+        }
+
+        /// <summary>
+        /// Move piston to its built position.
         /// </summary>
         [KRPCMethod]
         public void MoveHome()
