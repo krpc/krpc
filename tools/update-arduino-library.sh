@@ -4,9 +4,11 @@ set -e
 VERSION=`tools/krpc-version.sh`
 COMMIT=`git rev-parse HEAD`
 
-# Build cnano library
+# Build cnano library, and fetch the nanopb runtime that the Arduino library
+# vendors (the cnano archive itself takes nanopb as an external dependency)
 echo 'Building library...'
-bazel build //client/cnano
+bazel build //client/cnano @c_nanopb//:srcs
+nanopb=`pwd`/bazel-krpc/external/+http_archive+c_nanopb
 
 # Clone arduino library repository
 arduino=`pwd`/bazel-bin/client/cnano/arduino
@@ -25,8 +27,11 @@ unzip -q krpc-cnano-$VERSION.zip
 # Restructure files
 mv krpc-cnano-$VERSION/include/* ./
 mv krpc-cnano-$VERSION/src/*.c ./
-rm Makefile.*
 rm -rf krpc-cnano-$VERSION krpc-cnano-$VERSION.zip
+# Vendor the nanopb runtime: headers beside the other krpc_cnano headers
+# (they are included as <krpc_cnano/pb.h>), sources at the top level
+cp $nanopb/pb.h $nanopb/pb_common.h $nanopb/pb_encode.h $nanopb/pb_decode.h krpc_cnano/
+cp $nanopb/pb_common.c $nanopb/pb_encode.c $nanopb/pb_decode.c ./
 # Rename .c to .cpp for arduino builder
 for file in *.c; do
   mv "$file" "$(basename "$file" .c).cpp"
