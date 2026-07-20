@@ -41,7 +41,9 @@ Control
 
       .. note::
 
-         Equivalent to :prop:`AutoPilot.SAS`
+         Equivalent to :prop:`AutoPilot.SAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
 
    .. property:: SASMode SASMode { get; set; }
 

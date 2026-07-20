@@ -734,7 +734,9 @@ its value when clients disconnect.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="auto-pilot.html#SpaceCenter.SpaceCenter.AutoPilot.sas" title="SpaceCenter.SpaceCenter.AutoPilot.sas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#SpaceCenter.SpaceCenter.AutoPilot.sas" title="SpaceCenter.SpaceCenter.AutoPilot.sas"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.AutoPilot.sas</span></code></a>.
+Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">True</span></code> while the auto-pilot is engaged, as the
+auto-pilot holds SAS off for as long as it is flying the vessel.</p>
 </div>
 </dd></dl>
 
@@ -1904,7 +1906,7 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Control.speed_m
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
+  <a href="https://github.com/krpc/krpc/commit/897ebc0">897ebc0</a>
 </p></div>
       
     </div>

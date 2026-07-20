@@ -45,7 +45,9 @@ Control
 
       .. note::
 
-         Equivalent to :meth:`AutoPilot.getSAS()`
+         Equivalent to :meth:`AutoPilot.getSAS()`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
 
    .. method:: SASMode getSASMode()
 

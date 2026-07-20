@@ -25,7 +25,9 @@ AutoPilot
 
       .. note::
 
-         Equivalent to :attr:`SpaceCenter.Control.sas`
+         Equivalent to :attr:`SpaceCenter.Control.sas`.
+         Throws an exception if set to ``True`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
 
    .. attribute:: sas_mode: SpaceCenter.SASMode
 

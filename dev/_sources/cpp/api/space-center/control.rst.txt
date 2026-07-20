@@ -42,7 +42,9 @@ Control
 
       .. note::
 
-         Equivalent to :func:`AutoPilot::sas`
+         Equivalent to :func:`AutoPilot::sas`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
 
    .. function:: SASMode sas_mode()
    .. function:: void set_sas_mode(SASMode value)

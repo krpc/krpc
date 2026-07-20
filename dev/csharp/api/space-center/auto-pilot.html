@@ -699,7 +699,9 @@ the auto-pilot will be disengaged. Its configuration and target are left unchang
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.SAS" title="KRPC.Client.Services.SpaceCenter.Control.SAS property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Control.SAS</span></code></a></p>
+<p>Equivalent to <a class="reference internal" href="control.html#property-KRPC.Client.Services.SpaceCenter.Control.SAS" title="KRPC.Client.Services.SpaceCenter.Control.SAS property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Control.SAS</span></code></a>.
+Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">true</span></code> while the auto-pilot is engaged, as the
+auto-pilot holds SAS off for as long as it is flying the vessel.</p>
 </div>
 </dd></dl>
 
@@ -1839,7 +1841,7 @@ detector reports.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
+  <a href="https://github.com/krpc/krpc/commit/897ebc0">897ebc0</a>
 </p></div>
       
     </div>

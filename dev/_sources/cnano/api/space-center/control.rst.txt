@@ -42,7 +42,9 @@ Control
 
       .. note::
 
-         Equivalent to :func:`krpc_SpaceCenter_AutoPilot_SAS`
+         Equivalent to :func:`krpc_SpaceCenter_AutoPilot_SAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Control_SASMode(krpc_connection_t connection, krpc_SpaceCenter_SASMode_t * result)
    .. function:: void krpc_SpaceCenter_Control_set_SASMode(krpc_SpaceCenter_SASMode_t value)
