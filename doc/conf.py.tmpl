@@ -245,3 +245,30 @@ nitpick_ignore = [
     ('py:class', 'krpc.schema.KRPC.Status'),
     ('py:class', 'krpc.schema.KRPC.Stream')
 ]
+
+# The builtin type names above are meant to render as plain text, since there
+# is nothing in these docs to link them to. The python domain resolves the type
+# of a :param:/:rtype: field in "refspecific" mode, which falls back to a fuzzy
+# suffix search over every documented attribute when the exact name is unknown,
+# so an unqualified builtin can match an unrelated member that happens to share
+# its name: "float" matched the SpaceCenter.FieldType.float enumeration value
+# and every float parameter and return type in the Python API linked to it.
+# Refusing to resolve these names keeps them plain text.
+PY_BUILTIN_TYPES = frozenset(
+    target for domain, target in nitpick_ignore
+    if domain == 'py:class' and '.' not in target
+)
+
+
+def setup(app):
+    from sphinx.domains.python import PythonDomain
+
+    class KRPCPythonDomain(PythonDomain):
+        def resolve_xref(self, env, fromdocname, builder, typ, target, node,
+                         contnode):
+            if typ == 'class' and target in PY_BUILTIN_TYPES:
+                return None
+            return super().resolve_xref(env, fromdocname, builder, typ, target,
+                                        node, contnode)
+
+    app.add_domain(KRPCPythonDomain, override=True)
