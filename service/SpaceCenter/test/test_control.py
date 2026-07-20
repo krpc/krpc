@@ -179,6 +179,26 @@ class ControlMixin:
         self.assertEqual(self.control.sas_mode, sas_mode.stability_assist)
         self.control.sas = False
 
+    def test_sas_cannot_be_enabled_while_autopilot_engaged(self):
+        # Control.sas and AutoPilot.sas are documented as equivalent, so both must
+        # refuse to enable SAS while the auto-pilot is engaged. Control.sas used to
+        # accept the write and let the pilot loop silently clear SAS a tick later.
+        self.control.sas = False
+        self.auto_pilot.reference_frame = self.vessel.surface_reference_frame
+        self.auto_pilot.target_pitch_and_heading(0, 90)
+        self.auto_pilot.engaged = True
+        try:
+            self.assertRaises(RuntimeError, setattr, self.control, "sas", True)
+            self.assertRaises(RuntimeError, setattr, self.auto_pilot, "sas", True)
+            # The refused writes left SAS off rather than enabling it for a tick.
+            self.wait()
+            self.assertFalse(self.control.sas)
+            # Disabling SAS is always allowed, engaged or not.
+            self.control.sas = False
+            self.auto_pilot.sas = False
+        finally:
+            self.auto_pilot.engaged = False
+
     def test_speed_mode(self):
         speed_mode = self.space_center.SpeedMode
         self.control.speed_mode = speed_mode.orbit

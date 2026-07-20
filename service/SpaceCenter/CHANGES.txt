@@ -10,6 +10,9 @@ v0.6.0
    Active; use ResourceHarvester.Active to check whether the harvester is drilling. The
    ResourceHarvesterState enumeration is removed and its values renumbered, so clients
    using it must be regenerated
+ * **Breaking:** Control.SAS now throws an exception when set to true while the autopilot is
+   engaged, matching AutoPilot.SAS. Previously the write was accepted and the autopilot
+   silently switched SAS back off on the next physics tick (#492)
  * Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in
    flight (the KSP fields they read are only refreshed while the part action window is open)
  * Add SpaceCenter.Expansions to report the installed KSP expansions

@@ -63,15 +63,15 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The state of SAS.
         /// </summary>
-        /// <remarks>Equivalent to <see cref="Control.SAS"/></remarks>
+        /// <remarks>
+        /// Equivalent to <see cref="Control.SAS"/>.
+        /// Throws an exception if set to <c>true</c> while the auto-pilot is engaged, as the
+        /// auto-pilot holds SAS off for as long as it is flying the vessel.
+        /// </remarks>
         [KRPCProperty]
         public bool SAS {
             get { return GetSAS (InternalVessel); }
-            set {
-                if (value && Engaged)
-                    throw new InvalidOperationException ("SAS cannot be enabled when the auto-pilot is engaged");
-                SetSAS (InternalVessel, value);
-            }
+            set { SetSAS (InternalVessel, value); }
         }
 
         internal static bool GetSAS (global::Vessel vessel)
@@ -79,9 +79,26 @@ namespace KRPC.SpaceCenter.Services
             return vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.SAS)];
         }
 
+        /// <summary>
+        /// Sets the SAS action group, refusing to enable it while the auto-pilot is engaged.
+        /// The guard lives here rather than in the properties so that every route to SAS
+        /// enforces it and reports the same error.
+        /// </summary>
         internal static void SetSAS (global::Vessel vessel, bool value)
         {
+            if (value && IsAutoPilotEngaged (vessel))
+                throw new InvalidOperationException ("SAS cannot be enabled when the auto-pilot is engaged");
             vessel.ActionGroups.SetGroup (KSPActionGroup.SAS, value);
+        }
+
+        /// <summary>
+        /// Whether the vessel's auto-pilot is currently engaged. Uses the non-creating lookup,
+        /// so merely querying SAS does not allocate a controller for a vessel that has none.
+        /// </summary>
+        static bool IsAutoPilotEngaged (global::Vessel vessel)
+        {
+            var controller = PilotAddon.FindAttitudeController (vessel.id);
+            return controller != null && controller.Engaged;
         }
 
         /// <summary>
