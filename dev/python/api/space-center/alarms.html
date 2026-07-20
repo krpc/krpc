@@ -734,7 +734,7 @@ one alarm shares the given title, the first one found is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Number of seconds from now that the alarm should trigger.</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Number of seconds from now that the alarm should trigger.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the alarm.</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description for the alarm.</p></li>
 </ul>
@@ -752,7 +752,7 @@ one alarm shares the given title, the first one found is returned.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Number of seconds from now that the alarm should trigger.</p></li>
+<li><p><strong>time</strong> (<em>float</em>) – Number of seconds from now that the alarm should trigger.</p></li>
 <li><p><strong>vessel</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>Vessel</em></a>) – Vessel to link the alarm to.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the alarm.</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description for the alarm.</p></li>
@@ -772,7 +772,7 @@ one alarm shares the given title, the first one found is returned.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vessel</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>Vessel</em></a>) – The vessel.</p></li>
-<li><p><strong>offset</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Time in seconds to offset the alarm by.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – Time in seconds to offset the alarm by.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the alarm.</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description for the alarm.</p></li>
 </ul>
@@ -791,7 +791,7 @@ one alarm shares the given title, the first one found is returned.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vessel</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>Vessel</em></a>) – The vessel.</p></li>
-<li><p><strong>offset</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Time in seconds to offset the alarm by.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – Time in seconds to offset the alarm by.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the alarm.</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description for the alarm.</p></li>
 </ul>
@@ -811,7 +811,7 @@ one alarm shares the given title, the first one found is returned.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vessel</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>Vessel</em></a>) – The vessel.</p></li>
 <li><p><strong>node</strong> (<a class="reference internal" href="node.html#SpaceCenter.Node" title="SpaceCenter.Node"><em>Node</em></a>) – The maneuver node.</p></li>
-<li><p><strong>offset</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Time in seconds to offset the alarm by.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – Time in seconds to offset the alarm by.</p></li>
 <li><p><strong>add_burn_time</strong> (<em>bool</em>) – Whether the node’s burn time should be included in the alarm.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the alarm.</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description for the alarm.</p></li>
@@ -831,7 +831,7 @@ one alarm shares the given title, the first one found is returned.</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>vessel</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><em>Vessel</em></a>) – The vessel.</p></li>
-<li><p><strong>offset</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Time in seconds to offset the alarm by.</p></li>
+<li><p><strong>offset</strong> (<em>float</em>) – Time in seconds to offset the alarm by.</p></li>
 <li><p><strong>title</strong> (<em>str</em>) – Title for the alarm.</p></li>
 <li><p><strong>description</strong> (<em>str</em>) – Description for the alarm.</p></li>
 </ul>
@@ -942,7 +942,7 @@ This id will remain constant between the old and new alarms.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -956,7 +956,7 @@ This id will remain constant between the old and new alarms.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -970,7 +970,7 @@ This id will remain constant between the old and new alarms.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1339,7 +1339,7 @@ See <a class="reference internal" href="#SpaceCenter.Alarm.message_action" title
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/83ee6f4">83ee6f4</a>
+  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
 </p></div>
       
     </div>

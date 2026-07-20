@@ -818,7 +818,7 @@ reference frame.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -842,7 +842,7 @@ current roll relative to <a class="reference internal" href="#SpaceCenter.AutoPi
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -867,7 +867,7 @@ positive roll banks right). <code class="docutils literal notranslate"><span cla
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -898,7 +898,7 @@ frame’s up (the zenith / radial-out direction).</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -922,8 +922,8 @@ keeps roll well-defined through the vertical.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>pitch</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Target pitch angle, in degrees between -90° and +90°.</p></li>
-<li><p><strong>heading</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Target heading angle, in degrees between 0° and 360°.</p></li>
+<li><p><strong>pitch</strong> (<em>float</em>) – Target pitch angle, in degrees between -90° and +90°.</p></li>
+<li><p><strong>heading</strong> (<em>float</em>) – Target heading angle, in degrees between 0° and 360°.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -949,7 +949,7 @@ This is in the reference frame specified by <a class="reference internal" href="
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -967,7 +967,7 @@ This is in the reference frame specified by <a class="reference internal" href="
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -988,7 +988,7 @@ specified by <a class="reference internal" href="#SpaceCenter.AutoPilot.referenc
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>direction</strong> (<em>tuple</em>) – The direction to point the nose in.</p></li>
 <li><p><strong>up</strong> (<em>tuple</em>) – The reference direction the roof is rolled towards. Need not be normalized or perpendicular to <em>direction</em> — its component perpendicular to the nose is used. Stored as the <a class="reference internal" href="#SpaceCenter.AutoPilot.up_reference" title="SpaceCenter.AutoPilot.up_reference"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AutoPilot.up_reference</span></code></a>.</p></li>
-<li><p><strong>roll</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
+<li><p><strong>roll</strong> (<em>float</em>) – An additional roll about the nose, in degrees (positive banks right). Defaults to 0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
@@ -1020,7 +1020,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1040,7 +1040,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1060,7 +1060,7 @@ A convenience scalar, ill-defined near the vertical — see <a class="reference 
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1080,7 +1080,7 @@ slewed in when <a class="reference internal" href="#SpaceCenter.AutoPilot.target
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1099,7 +1099,7 @@ change is slewed in when <a class="reference internal" href="#SpaceCenter.AutoPi
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1114,7 +1114,7 @@ change is slewed in when <a class="reference internal" href="#SpaceCenter.AutoPi
 the target roll (if set). Throws an exception if the auto-pilot has not been engaged.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>timeout</strong> (<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – Maximum time to wait in seconds. If not specified, waits indefinitely.</p>
+<dd class="field-odd"><p><strong>timeout</strong> (<em>float</em>) – Maximum time to wait in seconds. If not specified, waits indefinitely.</p>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-even"><p>Flight</p>
@@ -1132,7 +1132,7 @@ the target roll (if set). Throws an exception if the auto-pilot has not been eng
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1151,7 +1151,7 @@ Defaults to 0.05 rad/s.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1170,7 +1170,7 @@ has not been engaged and SAS is not enabled or is in stability assist mode.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1199,7 +1199,7 @@ engaged.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1217,7 +1217,7 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1240,7 +1240,7 @@ Throws an exception if the auto-pilot has not been engaged.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1264,7 +1264,7 @@ Throws an exception if the auto-pilot has not been engaged or no target roll is 
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1292,7 +1292,7 @@ auto-pilot has not been engaged.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1314,7 +1314,7 @@ smoothing is off. Throws an exception if the auto-pilot has not been engaged.</p
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1333,7 +1333,7 @@ auto-pilot has not been engaged.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1356,7 +1356,7 @@ auto-pilot has not been engaged.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1379,7 +1379,7 @@ auto-pilot has not been engaged or no target roll is set.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1402,7 +1402,7 @@ Defaults to 20 degrees.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1421,7 +1421,7 @@ Defaults to 15 degrees.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1441,7 +1441,7 @@ Defaults to 1 rad/s for each axis.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1462,7 +1462,7 @@ are controlled jointly, so a single angle applies to both. Defaults to 1°.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1482,7 +1482,7 @@ linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1520,7 +1520,7 @@ Defaults to 1 second for each axis.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1541,7 +1541,7 @@ Set to 0 to disable the fade-in.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1564,7 +1564,7 @@ turn) without inducing oscillation from stepwise target changes. Defaults to 0
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1583,7 +1583,7 @@ Defaults to 0.01 for each axis.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1600,7 +1600,7 @@ Defaults to 0.01 for each axis.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1622,7 +1622,7 @@ which will overwrite any manual changes.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1644,7 +1644,7 @@ which will overwrite any manual changes.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1715,7 +1715,7 @@ to 1.5 Hz.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1733,7 +1733,7 @@ to 1.5 Hz.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1753,7 +1753,7 @@ advanced tuning parameter.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1795,7 +1795,7 @@ Defaults to 1 rad/s. This is an advanced tuning parameter.</p>
 <dd class="field-odd"><p>Can be read or written</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1857,7 +1857,7 @@ near zero; a sustained limit cycle drives it toward 1. Read-only.</p>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1876,7 +1876,7 @@ deviation of the delivered control about its slowly-varying trim. Read-only. See
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1895,7 +1895,7 @@ detected; values approaching 1 mean a sustained structural oscillation. Read-onl
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>tuple(<a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>, <a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a>)</p>
+<dd class="field-even"><p>tuple(float, float, float)</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1951,7 +1951,7 @@ all modes, so this is observable even when suppression is off or forced. Read-on
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -1970,7 +1970,7 @@ roll axis, or <code class="docutils literal notranslate"><span class="pre">NaN</
 <dd class="field-odd"><p>Read-only, cannot be set</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float">float</a></p>
+<dd class="field-even"><p>float</p>
 </dd>
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
@@ -2193,7 +2193,7 @@ detector reports.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/83ee6f4">83ee6f4</a>
+  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
 </p></div>
       
     </div>
