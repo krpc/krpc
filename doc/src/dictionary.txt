@@ -62,6 +62,7 @@ deployable
 dict
 differencing
 dll
+docstring
 doesn
 enum
 ephemeris

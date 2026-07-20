@@ -53,12 +53,16 @@ Attributes
 The following `C# attributes <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be used
 to add functionality to the kRPC server.
 
-.. csharp:attribute:: KRPCService (string Name, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.All)
+.. csharp:attribute:: KRPCService (string Name, uint Id = 0, KRPC.Service.GameScene GameScene = KRPC.Service.GameScene.All)
 
    :parameters:
 
     * **Name** -- Optional name for the service. If omitted, the service name is set to the name of
       the class this attribute is applied to.
+
+    * **Id** -- Optional integer identifier for the service, used by clients that call procedures
+      by id rather than by name. If omitted or set to 0, an identifier is generated from a hash of
+      the service name.
 
     * **GameScene** -- The game scenes in which the services procedures are available. Defaults to
       all game scenes. If this is set to :csharp:enum:`KRPC.Service.GameScene.Inherit` the service
@@ -270,7 +274,7 @@ to add functionality to the kRPC server.
       [KRPCClass (Service = "EVA")]
       public class Flag {
           [KRPCMethod]
-          void Remove()
+          public void Remove()
           {
               ...
           }
@@ -319,7 +323,7 @@ to add functionality to the kRPC server.
         [KRPCService]
         public static class EVA {
             [KRPCProperty]
-            public Flag LastFlag
+            public static Flag LastFlag
             {
                 get { ... }
             }
@@ -340,10 +344,10 @@ to add functionality to the kRPC server.
         [KRPCClass (Service = "EVA")]
         public class Flag {
             [KRPCProperty]
-            public void Name { get; set; }
+            public string Name { get; set; }
 
             [KRPCProperty]
-            public void Description { get; set; }
+            public string Description { get; set; }
         }
 
 .. csharp:attribute:: KRPCEnum (string Service)
@@ -524,7 +528,9 @@ following types are serializable:
   * ``System.Collections.Generic.IDictionary<K,V>`` where ``K`` is one of ``int``, ``long``,
     ``uint``, ``ulong``, ``bool`` or ``string`` and ``V`` is a serializable type
 
-  * ``System.Collections.HashSet<V>`` where ``V`` is a serializable type
+  * ``System.Collections.Generic.HashSet<V>`` where ``V`` is a serializable type
+
+  * ``System.Tuple<...>`` where all of the tuple's value types are serializable types
 
 * Return types can be ``void``
 
@@ -534,14 +540,14 @@ Events
 ^^^^^^
 
 kRPC procedures, methods and properties can return event objects to clients. This is done using the
-class ``KRPC.Services.Event``. This class supports two different types of
+class ``KRPC.Service.Event``. This class supports two different types of
 event.
 
 Manually Triggered Events
 """""""""""""""""""""""""
 
 This type of event must be triggered by some other piece of code running somewhere in the game. It
-is created by calling the default constructor for type ``KRPC.Services.Event``.
+is created by calling the default constructor for type ``KRPC.Service.Event``.
 
 For example, the following example is a procedure that returns an event that triggers after a given
 number of milliseconds. When the event triggers it is removed.
@@ -708,6 +714,22 @@ controlled by the following enumeration:
 
       The mission builder.
 
+   .. csharp:value:: AstronautComplex
+
+      The astronaut complex facility, open within the space center scene.
+
+   .. csharp:value:: MissionControl
+
+      The mission control facility, open within the space center scene.
+
+   .. csharp:value:: ResearchAndDevelopment
+
+      The research and development facility, open within the space center scene.
+
+   .. csharp:value:: Administration
+
+      The administration facility, open within the space center scene.
+
 The special enumeration value :csharp:enum:`KRPC.Service.GameScene.Inherit` can be used to inherit
 the game scene setting from the containing service or class. Game scene inheritance works as
 follows:
@@ -766,6 +788,29 @@ follows:
 
         ...
      }
+
+Deprecating Service Members
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To deprecate part of a service's API, annotate it with the standard C# ``System.Obsolete``
+attribute. This can be applied to services, procedures, properties, classes, methods and
+enumerations. For example:
+
+.. code-block:: csharp
+
+   [KRPCProcedure]
+   [Obsolete ("Use <see cref='Flag.Remove'/> instead.")]
+   public static void RemoveFlag(Flag flag) {
+       ...
+   }
+
+The deprecation, along with the message from the attribute, is included in the service definition
+and sent to clients over the wire, as the ``deprecated`` and ``deprecated_reason`` fields returned
+by ``KRPC.GetServices``. Any ``<see cref='...'/>`` references in the message are resolved to the
+name of the referenced member; unqualified names are resolved against the declaring type. Clients then expose the deprecation using each language's own
+mechanism: for example, the Python client emits a ``DeprecationWarning`` when a deprecated member
+is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
+``[Obsolete]``, ``[[deprecated]]``, ``@Deprecated`` and ``KRPC_DEPRECATED`` respectively.
 
 Documentation
 -------------

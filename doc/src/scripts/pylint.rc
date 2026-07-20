@@ -1,5 +1,8 @@
 [BASIC]
 good-names=i,j,k,ex,Run,_,u,v,q,r,g,x,y,z,w,n,F,Isp,d,communication-protocol-rpc,communication-protocol-stream,communication-protocol-serialio,ServiceAPIExample
+# The example scripts are named to match their C#/C++/Java siblings, so
+# PascalCase module names are permitted alongside snake_case
+module-rgx=([a-z_][a-z0-9_]*|[A-Z][a-zA-Z0-9]*)$
 variable-rgx=[a-z_][a-z0-9_]{1,30}$
 method-rgx=[a-z_][a-z0-9_]{2,60}$
 const-rgx=[a-z_][a-z0-9_]{1,30}$

@@ -8,7 +8,7 @@ v0.6.0
  * CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_NANOPB): when OFF
    (default) the system install is required; when ON FetchContent is used.
  * Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once
- * Add support for socket communication on Windows
+ * Add support for serial port communication on Windows
  * Mark deprecated functions with the KRPC_DEPRECATED attribute macro (#904)
  * Generated functions are now defined as static inline, so the generated
    service headers can be safely included from multiple translation units

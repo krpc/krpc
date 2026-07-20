@@ -23,8 +23,8 @@ class AngleOfAttack
 
             // Compute the angle between the vectors
             double angle = 0;
-            if (dotProd > 0)
-                angle = Math.Abs (Math.Acos (dotProd / vMag) * (180.0 / Math.PI));
+            if (vMag > 0)
+                angle = Math.Acos (dotProd / vMag) * (180.0 / Math.PI);
 
             Console.WriteLine (
                 "Angle of attack = " + Math.Round (angle, 2) + " degrees");

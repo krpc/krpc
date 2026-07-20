@@ -46,8 +46,8 @@ format:
    message ProcedureCall {
      string service = 1;
      string procedure = 2;
-     uint32 serviceId = 4;
-     uint32 procedureId = 5;
+     uint32 service_id = 4;
+     uint32 procedure_id = 5;
      repeated Argument arguments = 3;
    }
 
@@ -230,7 +230,7 @@ Events
 ------
 
 Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
-stream returns to true. Remote procedures that return an event return an ``Event`` message that
+stream returns true. Remote procedures that return an event return an ``Event`` message that
 contains a ``Stream`` message describing the underlying stream for the event.
 
 The format for an ``Event`` message is simply the following:
@@ -238,7 +238,7 @@ The format for an ``Event`` message is simply the following:
 .. code-block:: protobuf
 
    message Event {
-     repeated Stream stream = 1;
+     Stream stream = 1;
    }
 
 .. _communication-protocol-krpc-service:
@@ -594,10 +594,11 @@ The ``GetServices`` procedure returns type information about parameters, return 
        ENUMERATION = 101;
 
        // Messages
-       PROCEDURE_CALL = 200;
-       STREAM = 201;
-       STATUS = 202;
-       SERVICES = 203;
+       EVENT = 200;
+       PROCEDURE_CALL = 201;
+       STREAM = 202;
+       STATUS = 203;
+       SERVICES = 204;
 
        // Collections
        TUPLE = 300;
@@ -636,12 +637,12 @@ follows:
 .. code-block:: protobuf
 
    enum GameScene {
-     SPACE_CENTER = 1;
-     FLIGHT = 2;
-     TRACKING_STATION = 3;
-     EDITOR_VAB = 4;
-     EDITOR_SPH = 5;
-     MISSION_BUILDER = 6;
+     SPACE_CENTER = 0;
+     FLIGHT = 1;
+     TRACKING_STATION = 2;
+     EDITOR_VAB = 3;
+     EDITOR_SPH = 4;
+     MISSION_BUILDER = 5;
    };
 
 .. _communication-protocol-proxy-objects:

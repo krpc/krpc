@@ -2,7 +2,7 @@ local krpc = require 'krpc'
 local platform = require 'krpc.platform'
 local conn = krpc.connect('Orbital speed')
 local vessel = conn.space_center.active_vessel
-local ref_frame = conn.SpaceCenter.ReferenceFrame.CreateHybrid(
+local ref_frame = conn.space_center.ReferenceFrame.create_hybrid(
   vessel.orbit.body.reference_frame,
   vessel.surface_reference_frame)
 

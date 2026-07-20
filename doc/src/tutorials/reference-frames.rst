@@ -290,7 +290,7 @@ and angular velocity) from the components of other reference frames. Note that
 these components need not be fixed. For example, you could construct a reference
 frame whose position is the center of mass of the vessel (inherited from
 :attr:`Vessel.reference_frame`) and whose rotation is that of the planet being
-orbited (inherited from :attr:`CelestialBody.reference_frame`). Relative
+orbited (inherited from :attr:`CelestialBody.reference_frame`). Hybrid
 reference frames can be constructed by calling
 :meth:`ReferenceFrame.create_hybrid`.
 
@@ -396,6 +396,10 @@ is orbiting:
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VisualDebugging.py
          :language: python
+
+.. note:: This example uses :attr:`Vessel.surface_velocity_reference_frame`, which is
+   singular when the vessel's surface speed is zero (hovering, landed). Run it while the
+   vessel is moving; on the launchpad the drawing calls will raise an error.
 
 .. note:: The client must remain connected for the line to continue to be drawn,
           hence the infinite loop at the end of this example.
@@ -554,6 +558,11 @@ below:
 .. image:: /images/reference-frames/vessel-surface-velocity.png
    :align: center
 
+.. seealso:: If you only need the surface prograde or retrograde direction as a
+   vector, rather than a reference frame to point the auto-pilot at,
+   :attr:`Flight.surface_prograde` and :attr:`Flight.surface_retrograde` return
+   it directly, matching the navball's surface mode.
+
 .. _tutorial-reference-frames-vessel-speed:
 
 Vessel Speed
@@ -697,6 +706,12 @@ regardless of the orientation of the axes. However, if we were to use a
 reference frame that moves with the vessel, the velocity would return
 ``(0,0,0)``. We therefore need a reference frame that is not fixed relative to
 the vessel. :attr:`CelestialBody.reference_frame` fits these requirements.
+
+The angle computed here is the total angle between the two vectors, in the range
+0° to 180°. This is not the same quantity as :attr:`Flight.angle_of_attack`,
+which is the signed angle of attack in the vessel's pitch plane, in the range
+-90° to +90° (with the sideways component reported separately by
+:attr:`Flight.sideslip_angle`).
 
 Landing Site
 ^^^^^^^^^^^^

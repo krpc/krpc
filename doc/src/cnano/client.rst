@@ -93,13 +93,16 @@ argument to the compiler.
    * ``KRPC_PRINT_ERRORS_TO_STDERR`` -- enables printing of a descriptive error message to stderr
      when an error occurs
    * ``PB_NO_ERRMSG`` -- disables error messages in the nanopb library, which kRPC uses to
-     communicate with the server. Enabled by default on in the Arduino version of the library.
+     communicate with the server. Enabled by default in the Arduino version of the library.
 
  * Communication
 
    * ``KRPC_COMMUNICATION_POSIX`` -- Specifies that the library should be built to communicate over
-     a serial port using POSIX read/write functions communication mechanisms. This is the default,
-     unless the a different platform is detected.
+     a serial port using POSIX read/write functions communication mechanisms. This is the default
+     when no other platform is detected.
+   * ``KRPC_COMMUNICATION_WINDOWS`` -- Specifies that the library should be built to communicate
+     over a serial port using the Windows API. The Windows platform will be auto-detected so you do
+     not need to specify this manually.
    * ``KRPC_COMMUNICATION_ARDUINO`` -- Specifies that the library should be built using Arduino
      serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
      to specify this manually.
@@ -120,8 +123,8 @@ argument to the compiler.
 
 .. note::
 
-   On embedded systems you probably want to define ``KRPC_NO_PRINT_ERROR`` and ``PB_NO_ERRMSG`` to
-   minimize the memory footprint of kRPC.
+   On embedded systems you probably want to leave ``KRPC_PRINT_ERRORS_TO_STDERR`` undefined and
+   define ``PB_NO_ERRMSG`` to minimize the memory footprint of kRPC.
 
 Getting Started
 ---------------
@@ -203,14 +206,19 @@ Client API Reference
 
    Create a communication handle over which the client can talk to a server.
 
-   When the library is built using ``KRPC_COMMUNICATION_POSIX`` (which is defined by default)
-   calling this function opens a serial port using the port name passed as *arg*, using a call to
-   ``open(arg, ...)``. In this case the type of the *arg* parameter is ``const char *``. For example:
+   When the library is built using ``KRPC_COMMUNICATION_POSIX`` (the default when no other
+   platform is detected) calling this function opens a serial port using the port name passed as
+   *arg*, using a call to ``open(arg, ...)``. In this case the type of the *arg* parameter is
+   ``const char *``. For example:
 
    .. code-block:: c
 
      krpc_connection_t conn;
-     krpc_open(&conn, "COM0");
+     krpc_open(&conn, "/dev/ttyS0");
+
+   When the library is built using ``KRPC_COMMUNICATION_WINDOWS`` (auto-detected on Windows)
+   calling this function opens the serial port named by *arg* using the Windows API, for example
+   ``krpc_open(&conn, "COM1")``.
 
    When the library is built using ``KRPC_COMMUNICATION_ARDUINO``, *connection* must be a pointer to
    a ``HardwareSerial`` object. *arg* is optionally used to pass additional configuration options

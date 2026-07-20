@@ -51,6 +51,14 @@ API documentation:
       * :ref:`python-api-parts-fuel-lines`
       * :ref:`python-api-parts-staging`
 
+.. note:: To interact with the fields, events and actions of a part module, use
+   :attr:`Module.field_list`, :attr:`Module.event_list` and
+   :attr:`Module.action_list`. These return :class:`PartField`,
+   :class:`PartEvent` and :class:`PartAction` objects that can be read, set and
+   triggered. They replace the module's string-dictionary members (such as
+   ``Module.fields``, ``Module.get_field`` and ``Module.set_action``) that older
+   scripts and forum posts use, which are deprecated.
+
 Deploying all Parachutes
 ------------------------
 
@@ -165,3 +173,7 @@ https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines
 
       .. literalinclude:: /scripts/tutorials/parts/CombinedIsp.py
          :language: python
+
+.. seealso:: The combined specific impulse of each stage is also available
+   directly from the staging API, as :attr:`Stage.specific_impulse` on the
+   object returned by :meth:`Vessel.stage_at`.

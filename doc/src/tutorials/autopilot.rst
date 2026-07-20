@@ -39,7 +39,8 @@ both can be adjusted. ``wait()`` also takes an optional ``timeout`` (in seconds)
 which it raises rather than blocking indefinitely.
 
 While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
-each other for control of the vessel.
+each other for control of the vessel. Attempting to enable SAS while the autopilot is
+engaged raises an ``InvalidOperationException``.
 
 The autopilot handles structurally flexible craft automatically, detecting and
 suppressing any structural oscillation (wobble) with no tuning required (see
@@ -64,7 +65,7 @@ The three primary ways
   and roll together. Always well-defined, and the canonical form; best when you already
   have a rotation to hand — copied from another vessel, or a saved orientation.
 
-* **target direction** — a vector for the nose to point along. **Roll is held**: the
+* **target direction** — a vector for the nose to point along. **Roll is not held**: the
   autopilot drives the roll rate to zero but does not hold any particular roll angle. This
   is the "point here, don't care which way is up" knob.
 

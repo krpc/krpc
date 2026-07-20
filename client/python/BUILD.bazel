@@ -35,6 +35,9 @@ py_library(
         ":krpc-version-py",
         ":schema-py",
     ],
+    # The type stub for the generated protobuf module, so type checkers see
+    # the message classes (the module itself builds them dynamically)
+    data = [":schema-pyi"],
     imports = ["."],
     visibility = ["//visibility:public"],
     deps = ["@pypi//protobuf"],
@@ -45,6 +48,13 @@ genrule(
     srcs = ["//protobuf:python"],
     outs = ["krpc/schema/KRPC_pb2.py"],
     cmd = "for f in $(locations //protobuf:python); do case $$f in *KRPC_pb2.py) cp $$f $@;; esac; done",
+)
+
+genrule(
+    name = "schema-pyi",
+    srcs = ["//protobuf:python"],
+    outs = ["krpc/schema/KRPC_pb2.pyi"],
+    cmd = "for f in $(locations //protobuf:python); do case $$f in *KRPC_pb2.pyi) cp $$f $@;; esac; done",
 )
 
 genrule(
