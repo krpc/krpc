@@ -76,7 +76,11 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The state of SAS.
         /// </summary>
-        /// <remarks>Equivalent to <see cref="AutoPilot.SAS"/></remarks>
+        /// <remarks>
+        /// Equivalent to <see cref="AutoPilot.SAS"/>.
+        /// Throws an exception if set to <c>true</c> while the auto-pilot is engaged, as the
+        /// auto-pilot holds SAS off for as long as it is flying the vessel.
+        /// </remarks>
         [KRPCProperty]
         public bool SAS {
             get { return AutoPilot.GetSAS (InternalVessel); }

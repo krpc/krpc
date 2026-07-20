@@ -2237,6 +2237,10 @@ class TestAutoPilotRevertToLaunch(krpctest.TestCase):
         # is a ground-independent signal that the engaged handle is wired to the vessel's
         # live controller — a revert leaves the craft on the launch pad, where it cannot be
         # slewed to a target, so this checks the drive path rather than actual rotation.
+        #
+        # SAS can only be enabled while the auto-pilot is disengaged, so the sequence is
+        # disengage, arm SAS, then engage and watch the pilot loop clear it.
+        auto_pilot.engaged = False
         auto_pilot.reference_frame = vessel.surface_reference_frame
         auto_pilot.target_pitch_and_heading(0, 90)
         vessel.control.sas = True
