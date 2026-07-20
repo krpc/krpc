@@ -15,6 +15,9 @@ v0.6.0
    across multiple reads; requests are now buffered until complete
  * Fix websocket connection URL query parameter parsing: parameters are now
    found in any position and are percent-decoded
+ * Fix type codes in the service description, and HTTP and websocket protocol tokens, being
+   case converted using the machine's locale; under Turkish locales this produced values that
+   clients could not match
 
 v0.5.4
  * Initial version, split off from KRPC.dll

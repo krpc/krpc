@@ -4,6 +4,8 @@ v0.6.0
  * Fix cross-service member references not resolving in generated C# and Lua documentation (#897)
  * Fix member references in generated Python documentation using lowerCamelCase
    instead of snake_case
+ * Fix generating client stubs and documentation from a KSP install failing when the machine's
+   locale is not UTF-8 and a service's documentation contains non-ASCII characters
 
 v0.5.4
  * Fix incorrect protobuf DLL (#755)

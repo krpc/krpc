@@ -1,5 +1,7 @@
 v0.6.0
  * Fix attributes module to always return boolean for is_a_class_member and is_a_class_property_accessor
+ * Fix service, method and property names being converted to snake case using the machine's
+   locale, which renamed every member the client exposes under Turkish locales
 
 v0.5.0
  * Update to protobuf v3.22.0
