@@ -18,21 +18,20 @@ namespace KRPC.KerbalAlarmClock
         /// Don't do anything, and delete the alarm.
         /// </summary>
         DoNothingDeleteWhenPassed,
-        // TODO: what's the difference between KillWarp and KillWarpOnly?
         /// <summary>
-        /// Drop out of time warp.
+        /// Drop out of time warp and display a message.
         /// </summary>
         KillWarp,
         /// <summary>
-        /// Drop out of time warp.
+        /// Drop out of time warp, without displaying a message.
         /// </summary>
         KillWarpOnly,
         /// <summary>
-        /// Display a message.
+        /// Display a message, without affecting time warp.
         /// </summary>
         MessageOnly,
         /// <summary>
-        /// Pause the game.
+        /// Pause the game and display a message.
         /// </summary>
         PauseGame,
         /// <summary>
