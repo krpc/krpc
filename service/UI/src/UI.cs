@@ -83,7 +83,7 @@ namespace KRPC.UI
             float size = 20)
         {
             var htmlColor = "#" + ColorUtility.ToHtmlStringRGB(color.ToColor());
-            var message = "<color=" + htmlColor + "><size=" + size.ToString() + ">" + content + "</size></color>";
+            var message = "<color=" + htmlColor + "><size=" + size.ToString(CultureInfo.InvariantCulture) + ">" + content + "</size></color>";
             ScreenMessages.PostScreenMessage(message, duration, position.ToScreenMessageStyle());
         }
 
