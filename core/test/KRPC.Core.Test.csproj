@@ -81,6 +81,7 @@
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\TestService2.cs" />
     <Compile Include="Service\TestService3.cs" />
+    <Compile Include="Service\TestServiceDeprecated.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
     <Compile Include="Service\ValueUtilsTest.cs" />
