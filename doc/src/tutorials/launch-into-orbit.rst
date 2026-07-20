@@ -25,28 +25,28 @@ bunch of streams to get flight telemetry then prepares the rocket for launch.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 1-44
+         :lines: 1-42
          :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 1-39
+         :lines: 1-40
          :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 1-35
+         :lines: 1-36
          :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 1-50
+         :lines: 1-51
          :linenos:
 
    .. group-tab:: Lua
@@ -75,32 +75,32 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 46-77
-         :lineno-start: 46
+         :lines: 44-79
+         :lineno-start: 44
          :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 41-78
-         :lineno-start: 41
+         :lines: 42-79
+         :lineno-start: 42
          :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 37-71
-         :lineno-start: 37
+         :lines: 38-72
+         :lineno-start: 38
          :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 52-89
-         :lineno-start: 52
+         :lines: 53-90
+         :lineno-start: 53
          :linenos:
 
    .. group-tab:: Lua
@@ -115,7 +115,7 @@ close to the target apoapsis.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 33-62
+         :lines: 33-63
          :lineno-start: 33
          :linenos:
 
@@ -128,32 +128,32 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 79-95
-         :lineno-start: 79
+         :lines: 81-97
+         :lineno-start: 81
          :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 80-90
-         :lineno-start: 80
+         :lines: 81-91
+         :lineno-start: 81
          :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 73-83
-         :lineno-start: 73
+         :lines: 74-84
+         :lineno-start: 74
          :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 91-101
-         :lineno-start: 91
+         :lines: 92-102
+         :lineno-start: 92
          :linenos:
 
    .. group-tab:: Lua
@@ -168,8 +168,8 @@ the rocket has left Kerbin's atmosphere.
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 64-74
-         :lineno-start: 64
+         :lines: 65-75
+         :lineno-start: 65
          :linenos:
 
 It is now time to plan the circularization burn. First, we calculate the delta-v
@@ -191,32 +191,32 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 97-126
-         :lineno-start: 97
+         :lines: 99-128
+         :lineno-start: 99
          :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 92-110
-         :lineno-start: 92
+         :lines: 93-111
+         :lineno-start: 93
          :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 85-103
-         :lineno-start: 85
+         :lines: 86-104
+         :lineno-start: 86
          :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 103-121
-         :lineno-start: 103
+         :lines: 104-122
+         :lineno-start: 104
          :linenos:
 
    .. group-tab:: Lua
@@ -231,8 +231,8 @@ time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.py
          :language: python
-         :lines: 76-94
-         :lineno-start: 76
+         :lines: 77-94
+         :lineno-start: 77
          :linenos:
 
 Next, we need to rotate the craft and wait until the circularization burn. We
@@ -245,32 +245,32 @@ orientate the ship along the y-axis of the maneuver node's reference frame
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 128-141
-         :lineno-start: 128
+         :lines: 130-143
+         :lineno-start: 130
          :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 112-122
-         :lineno-start: 112
+         :lines: 113-123
+         :lineno-start: 113
          :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 105-115
-         :lineno-start: 105
+         :lines: 106-116
+         :lineno-start: 106
          :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 123-135
-         :lineno-start: 123
+         :lines: 124-136
+         :lineno-start: 124
          :linenos:
 
    .. group-tab:: Lua
@@ -300,32 +300,32 @@ which point the node has been executed).
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.c
          :language: c
-         :lines: 143-
-         :lineno-start: 143
+         :lines: 145-
+         :lineno-start: 145
          :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cs
          :language: csharp
-         :lines: 124-
-         :lineno-start: 124
+         :lines: 125-
+         :lineno-start: 125
          :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.cpp
          :language: cpp
-         :lines: 117-
-         :lineno-start: 115
+         :lines: 118-
+         :lineno-start: 118
          :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/launch-into-orbit/LaunchIntoOrbit.java
          :language: java
-         :lines: 137-
-         :lineno-start: 137
+         :lines: 138-
+         :lineno-start: 138
          :linenos:
 
    .. group-tab:: Lua

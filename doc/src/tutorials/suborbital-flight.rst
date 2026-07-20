@@ -82,8 +82,8 @@ name for our script that will appear in the server window in game:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 3
-         :lineno-start: 3
+         :lines: 4
+         :lineno-start: 4
          :linenos:
 
 Next we need to get an object representing the active vessel. It's via this object that we will send
@@ -135,8 +135,8 @@ instructions to the rocket:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 5
-         :lineno-start: 5
+         :lines: 6
+         :lineno-start: 6
          :linenos:
 
 We then need to prepare the rocket for launch. The following code sets the throttle to maximum and
@@ -189,8 +189,8 @@ instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 7-10
-         :lineno-start: 7
+         :lines: 8-11
+         :lineno-start: 8
          :linenos:
 
 Part Two: Lift-off!
@@ -244,8 +244,8 @@ We're now ready to launch by activating the first stage (equivalent to pressing 
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 12-13
-         :lineno-start: 12
+         :lines: 13-14
+         :lineno-start: 13
          :linenos:
 
 The rocket has a solid fuel stage that will quickly run out, and will need to be jettisoned. We can
@@ -299,8 +299,8 @@ jettison the boosters:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 15-23
-         :lineno-start: 15
+         :lines: 16-24
+         :lineno-start: 16
          :linenos:
 
 In this bit of code, ``vessel.resources`` returns a :class:`Resources` object that is used to get
@@ -360,8 +360,8 @@ following uses an event to wait until the altitude of the rocket reaches 10km:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 25-31
-         :lineno-start: 25
+         :lines: 26-33
+         :lineno-start: 26
          :linenos:
 
 In this bit of code, calling ``vessel.flight()`` returns a :class:`Flight` object that is used to
@@ -417,8 +417,8 @@ this, we simply reconfigure the auto-pilot:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 33-34
-         :lineno-start: 33
+         :lines: 35-36
+         :lineno-start: 35
          :linenos:
 
 Now we wait until the apoapsis reaches 100km (again, using an event), then reduce the throttle to
@@ -439,7 +439,7 @@ zero, jettison the launch stage and turn off the auto-pilot:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 48-62
-         :lineno-start: 32
+         :lineno-start: 48
          :linenos:
 
    .. group-tab:: C++
@@ -470,8 +470,8 @@ zero, jettison the launch stage and turn off the auto-pilot:
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 36-48
-         :lineno-start: 36
+         :lines: 38-51
+         :lineno-start: 38
          :linenos:
 
 In this bit of code, ``vessel.orbit`` returns an :class:`Orbit` object that contains all the
@@ -531,8 +531,8 @@ happens - the script will continue to work.
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 50-58
-         :lineno-start: 50
+         :lines: 53-61
+         :lineno-start: 53
          :linenos:
 
 The parachutes should have now been deployed. The next bit of code will repeatedly print out the
@@ -584,8 +584,8 @@ altitude of the capsule until its speed reaches zero -- which will happen when i
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
-         :lines: 60-63
-         :lineno-start: 60
+         :lines: 63-66
+         :lineno-start: 63
          :linenos:
 
 This bit of code uses the ``vessel.flight()`` function, as before, but this time it is passed a
