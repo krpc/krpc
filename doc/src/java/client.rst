@@ -6,7 +6,7 @@ Java Client
 
 This client provides a Java API for interacting with a kRPC server. A jar containing the
 ``krpc.client`` package can be `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
-It requires Java version 1.8.
+It requires Java 9 or later.
 
 Getting Started
 ---------------
@@ -25,7 +25,7 @@ the following (replace ``<VERSION>`` with the kRPC version you are using):
 
 .. code-block:: bash
 
-   javac -cp krpc-java-<VERSION>.jar:protobuf-java-3.4.0.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java-<VERSION>.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java
 
 Note that you may need to change the paths to the JAR files.
 
@@ -321,7 +321,7 @@ Client API Reference
       If the event has not been started this method calls ``start()`` to start the underlying
       stream.
 
-   .. method:: int addCallback(java.lang.Callable callback)
+   .. method:: int addCallback(java.lang.Runnable callback)
 
       Adds a callback function that is invoked whenever the event occurs. The callback function
       should be a function that takes zero arguments. Returns an integer tag identifying the

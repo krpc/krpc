@@ -300,7 +300,7 @@ Client API Reference
       If *timeout* is specified and is greater than or equal to 0, it is the timeout in seconds for
       the operation.
 
-   .. function:: int add_callback(const std::function<void()>& callback)
+   .. function:: int add_stream_update_callback(const std::function<void()>& callback)
 
       Adds a callback function that is invoked whenever a stream update message finishes
       processing. Returns a unique identifier for the callback which can be used to remove it.
@@ -311,7 +311,7 @@ Client API Reference
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
-   .. function:: void remove_callback(int tag)
+   .. function:: void remove_stream_update_callback(int tag)
 
       Removes a stream update callback function. The tag is the identifier returned when the
       callback was added.
@@ -337,7 +337,7 @@ Client API Reference
       ``operator()`` may throw a ``krpc::StreamError`` exception.
 
    .. function:: float rate() const
-   .. function:: void setRate(float rate)
+   .. function:: void set_rate(float rate)
 
       The update rate of the stream in Hertz. When set to zero, the rate is unlimited.
 

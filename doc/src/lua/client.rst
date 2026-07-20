@@ -66,7 +66,7 @@ Reference
 
 .. module:: krpc
 
-.. function:: connect([name=nil], [address='127.0.0.1'], [rpc_port=50000], [stream_port=50001])
+.. function:: connect([name=''], [address='127.0.0.1'], [rpc_port=50000])
 
    This function creates a connection to a kRPC server. It returns a
    :class:`krpc.Client` object, through which the server can be communicated
@@ -79,8 +79,6 @@ Reference
                           a hostname or an IP address in dotted decimal
                           notation. Defaults to '127.0.0.1'.
    :param number rpc_port: The port number of the RPC Server. Defaults to 50000.
-   :param number stream_port: The port number of the Stream Server. Defaults
-                              to 50001.
 
 .. class:: Client
 

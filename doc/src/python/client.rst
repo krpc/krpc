@@ -55,6 +55,14 @@ will list all of the classes, enumerations, procedures and properties provides b
 ``SpaceCenter`` service. This works similarly for class types, for example:
 ``help(conn.space_center.Vessel)``.
 
+Deprecated Members
+------------------
+
+Some members of the server's API are deprecated, and may be removed in a future release. Calling
+one emits a ``DeprecationWarning`` naming the replacement to use instead. The deprecation is also
+noted in the member's docstring. Python hides ``DeprecationWarning`` by default; run Python with
+``-W default`` or use the ``warnings`` module to see them.
+
 .. _python-client-streams:
 
 Streaming Data
@@ -184,7 +192,7 @@ expression returns true:
 Client API Reference
 --------------------
 
-.. function:: krpc.connect([name=None], [address='127.0.0.1'], [rpc_port=50000], [stream_port=50001])
+.. function:: krpc.connect([name=None], [address='127.0.0.1'], [rpc_port=50000], [stream_port=50001], [use_pregenerated_stubs=True])
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc.client.Client`
    object, through which the server can be communicated with.
@@ -197,6 +205,10 @@ Client API Reference
                            RPC port number of the server you want to connect to.
    :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
                            match the stream port number of the server you want to connect to.
+   :param bool use_pregenerated_stubs: Whether to use the pre-generated service stubs bundled with
+                           the client, which include type hints. If set to ``False``, or if the
+                           server provides a service with no bundled stub, the service is generated
+                           dynamically at runtime. Defaults to ``True``.
 
 .. class:: krpc.client.Client
 
@@ -239,7 +251,7 @@ Client API Reference
          stream. Any changes to shared state must therefore be protected with appropriate
          synchronization.
 
-   .. method:: remove_callback(callback)
+   .. method:: remove_stream_update_callback(callback)
 
       Removes a stream update callback function.
 
