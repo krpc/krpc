@@ -26,6 +26,8 @@ def main():
 
     lib.banner(f'Remaining manual steps for {lib.TAG}')
     print(STEPS.format(version=lib.VERSION))
+    print()
+    print('Next, once the release is announced: tools/release/80-bump-version.py')
 
 
 if __name__ == '__main__':

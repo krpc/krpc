@@ -5,13 +5,38 @@ inputs:
 runs:
   using: composite
   steps:
-    # Suffix the version in config.bzl with a build number derived from the
-    # commit sha, followed by the truncated sha. The build number is kept in
-    # 0-65535 to satisfy the .NET assembly version format.
+    # Suffix the version in config.bzl with the number of commits since the
+    # last release, followed by the truncated sha. The count orders one dev
+    # build against another; the sha says which commit it came from.
     - if: ${{ inputs.long-version == 'true' }}
       shell: python
       run: |
         import os
+        import subprocess
+        import sys
+
+        def git(*arguments):
+            return subprocess.run(("git",) + arguments, check=True,
+                                  capture_output=True, text=True).stdout.strip()
+
+        # actions/checkout clones to a depth of one and fetches no tags,
+        # leaving neither history to count nor a release to count it from.
+        # Deepen the clone and fetch the tags, taking no trees or blobs: the
+        # commits are all rev-list needs, and they cost a couple of megabytes
+        # against the ~150MB the full history would pull down.
+        if git("rev-parse", "--is-shallow-repository") == "true":
+            git("fetch", "-q", "--unshallow", "--tags", "--filter=tree:0")
+        # Rather than stamp a wrong build number: a repository still shallow
+        # here counts one commit, so every build would call itself build 1.
+        if git("rev-parse", "--is-shallow-repository") == "true":
+            sys.exit("could not deepen the repository to count its commits")
+
+        # Counting from the last release rather than the root keeps the number
+        # small and restarts it each cycle, well inside the 16-bit build field
+        # the .NET assembly version allows. Releases are tagged vx.y.z; the
+        # pattern excludes the lua client's tags, which are versioned apart.
+        release = git("describe", "--tags", "--abbrev=0", "--match", "v[0-9]*")
+        build = git("rev-list", "--count", release + "..HEAD")
 
         with open("config.bzl", "r") as f:
             lines = f.readlines()
@@ -19,8 +44,7 @@ runs:
             if line.startswith("version = "):
                 version = line.partition("=")[2].strip()[1:-1]
                 sha = os.environ["GITHUB_SHA"][:7]
-                sha_int = int(sha, 16) % 65536
-                version += "-" + str(sha_int) + "-" + sha
+                version += "-" + build + "-" + sha
                 lines[i] = 'version = "%s"\n' % version
                 break
         with open("config.bzl", "w") as f:
