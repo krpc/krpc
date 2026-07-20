@@ -730,6 +730,48 @@ loaded (see <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCen
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel13physics_rangeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel13physics_rangeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel13physics_rangeEv"></span><span id="krpc::services::SpaceCenter::Vessel::physics_range"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">physics_range</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel13physics_rangeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf"></span><span id="krpc::services::SpaceCenter::Vessel::set_physics_range__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_physics_range</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel17set_physics_rangeEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The distance from the active vessel, in meters, out to which this vessel keeps running
+its physics simulation — and so stays controllable, able to burn its engines and
+respond to its autopilot. Setting this raises the vessel out of the stock physics
+bubble, so that it keeps flying while the active vessel is far away. Set to zero to
+restore the game’s default range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This always reports the vessel’s live range, so reading it when no range has been set
+gives the game’s default for the vessel’s current <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel9situationEv" title="krpc::services::SpaceCenter::Vessel::situation"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::situation()</span></code></a> — which is
+much shorter than the distance at which the vessel unloads. In orbit a vessel is put
+on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
+produces no thrust and ignores control input even though it is still loaded.</p>
+<p>There is a 10% margin below the range, so that a vessel hovering at the threshold does
+not repeatedly drop out of the simulation and rejoin it. The vessel leaves the
+simulation at the distance set here, and rejoins it at 90% of that distance; in
+between it keeps whichever state it is already in.</p>
+<p>The requested range applies in every situation. The game’s own defaults are not
+uniform — a vessel flying in atmosphere stays loaded out to 22.5km — so setting a
+small range can shorten the range such a vessel would otherwise have had.</p>
+<p>A range lasts until it is set back to zero or the game is exited. Unlike most state a
+client sets, it is not released when that client disconnects, because dropping a
+distant vessel back to the default range would put it on-rails part way through a
+maneuver.</p>
+<p>Holding a vessel off-rails a long way from the active vessel costs performance, and
+accumulates positional error that can destroy it. Raise the range on the vessels that
+need it, by as little as they need.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel11recoverableEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Vessel11recoverableEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel11recoverableEv"></span><span id="krpc::services::SpaceCenter::Vessel::recoverable"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">recoverable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel11recoverableEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the vessel is recoverable.</p>
@@ -2238,7 +2280,7 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter10Cre
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
+  <a href="https://github.com/krpc/krpc/commit/83ee6f4">83ee6f4</a>
 </p></div>
       
     </div>

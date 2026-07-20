@@ -48,6 +48,44 @@ Vessel
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_PhysicsRange(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Vessel_set_PhysicsRange(float value)
+
+      The distance from the active vessel, in meters, out to which this vessel keeps running
+      its physics simulation — and so stays controllable, able to burn its engines and
+      respond to its autopilot. Setting this raises the vessel out of the stock physics
+      bubble, so that it keeps flying while the active vessel is far away. Set to zero to
+      restore the game's default range.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This always reports the vessel's live range, so reading it when no range has been set
+         gives the game's default for the vessel's current :func:`krpc_SpaceCenter_Vessel_Situation` — which is
+         much shorter than the distance at which the vessel unloads. In orbit a vessel is put
+         on rails just 350m away, long before it unloads at 2.5km, and a vessel on rails
+         produces no thrust and ignores control input even though it is still loaded.
+
+         There is a 10% margin below the range, so that a vessel hovering at the threshold does
+         not repeatedly drop out of the simulation and rejoin it. The vessel leaves the
+         simulation at the distance set here, and rejoins it at 90% of that distance; in
+         between it keeps whichever state it is already in.
+
+         The requested range applies in every situation. The game's own defaults are not
+         uniform — a vessel flying in atmosphere stays loaded out to 22.5km — so setting a
+         small range can shorten the range such a vessel would otherwise have had.
+
+         A range lasts until it is set back to zero or the game is exited. Unlike most state a
+         client sets, it is not released when that client disconnects, because dropping a
+         distant vessel back to the default range would put it on-rails part way through a
+         maneuver.
+
+         Holding a vessel off-rails a long way from the active vessel costs performance, and
+         accumulates positional error that can destroy it. Raise the range on the vessels that
+         need it, by as little as they need.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Recoverable(krpc_connection_t connection, bool * result)
 
       Whether the vessel is recoverable.
