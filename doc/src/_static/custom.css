@@ -22,6 +22,44 @@
     font-weight: 600;
 }
 
+/* Changelog entries that are breaking changes or deprecations lead with a small
+   label, sized to sit inside the bullet's line without breaking its rhythm.
+   Red for breaking and amber for deprecated puts the more severe of the two
+   first while both stay quieter than an admonition. Each pairs the theme's
+   severity color with the matching -text foreground the theme defines for it,
+   so both the fill and the text on it follow the light/dark mode toggle and
+   stay legible in either. */
+.changelog-marker {
+    margin-right: 0.4em;
+    padding: 0.05em 0.45em;
+    border-radius: 0.25rem;
+    font-size: 0.8em;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.changelog-marker.breaking {
+    color: var(--pst-color-danger-text);
+    background-color: var(--pst-color-danger);
+}
+
+.changelog-marker.deprecated {
+    color: var(--pst-color-warning-text);
+    background-color: var(--pst-color-warning);
+}
+
+/* In light mode the theme's warning color is a mid orange that is too dark for
+   its near-black text and too light for white, so neither pairing is legible.
+   Deepen the fill to an amber that carries white text at the same strength as
+   the breaking label, while staying far enough from its red to read as a
+   distinct severity. Dark mode keeps the theme's pale amber and dark text. */
+html[data-theme="light"] .changelog-marker.deprecated {
+    color: #fff;
+    background-color: #b45309;
+}
+
 /* Key sphinx-tabs' colors to the theme's light/dark mode. Its stock tabs.css
    only reacts to body[data-theme], but pydata-sphinx-theme sets data-theme on
    the html element, so its dark styling never applies; restyle the tabs with

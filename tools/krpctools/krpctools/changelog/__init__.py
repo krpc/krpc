@@ -7,9 +7,8 @@ followed by ``  * `` bullet items; wrapped continuation lines are indented and
 carry no bullet. Issue/PR references appear inline as ``(#NNN)``.
 
 Items may start with an inline ``**Breaking:**`` or ``**Deprecated:**`` marker
-(used from v0.5.4 onward). Such items are hoisted into a highlighted callout at
-the top of their version's section, tagged with their component, and also kept
-in place in the per-component list.
+(used from v0.5.4 onward). Such items stay in their component's list, where the
+marker is rendered as a small highlighted label in front of the entry text.
 """
 
 import argparse
@@ -29,6 +28,16 @@ class Item:
 _MARKERS = (
     ("**Breaking:**", "breaking"),
     ("**Deprecated:**", "deprecated"),
+)
+
+# Label text shown in the rendered marker for each kind.
+_LABELS = {"breaking": "Breaking", "deprecated": "Deprecated"}
+
+# Custom inline roles carrying the marker labels. Both share a class that styles
+# them as a label, plus a per-kind class that colors them by severity; the rules
+# live in the docs theme's custom.css.
+_ROLES = "\n".join(
+    ".. role:: %s\n   :class: changelog-marker %s\n" % (kind, kind) for kind in _LABELS
 )
 
 _VERSION_RE = re.compile(r"^v(\d[^\s]*)\s*$")
@@ -111,14 +120,11 @@ def heading(text, char):
     return "%s\n%s\n" % (text, char * len(text))
 
 
-def render_callout(directive, title, tagged_items):
-    """Render a Sphinx admonition holding hoisted items, each tagged with the
-    component it came from. ``tagged_items`` is a list of ``(component, Item)``."""
-    lines = [".. %s:: **%s**" % (directive, title), ""]
-    for component, item in tagged_items:
-        lines.append("   * *(%s)* %s" % (component, item.text))
-    lines.append("")
-    return "\n".join(lines) + "\n"
+def render_item(item):
+    """Render one bullet, prefixing marked items with their label role."""
+    if item.kind:
+        return "* :%s:`%s` %s" % (item.kind, _LABELS[item.kind], item.text)
+    return "* %s" % item.text
 
 
 def render(components):
@@ -129,23 +135,10 @@ def render(components):
         all_versions.update(versions)
     ordered = sorted(all_versions, key=version_key, reverse=True)
 
-    out = [heading("Changelog", "=")]
+    out = [_ROLES, heading("Changelog", "=")]
 
     for version in ordered:
         out.append("\n" + heading(version, "-"))
-
-        breaking = []
-        deprecated = []
-        for name, versions in components:
-            for item in versions.get(version, []):
-                if item.kind == "breaking":
-                    breaking.append((name, item))
-                elif item.kind == "deprecated":
-                    deprecated.append((name, item))
-        if breaking:
-            out.append("\n" + render_callout("warning", "Breaking changes", breaking))
-        if deprecated:
-            out.append("\n" + render_callout("note", "Deprecated", deprecated))
 
         for name, versions in components:
             items = versions.get(version, [])
@@ -153,7 +146,7 @@ def render(components):
                 continue
             out.append("\n" + heading(name, "^"))
             for item in items:
-                out.append("* %s" % item.text)
+                out.append(render_item(item))
             out.append("")
 
     return "\n".join(out).rstrip() + "\n"
