@@ -97,16 +97,14 @@ Run KSP and start the server with the default settings. Then run the following p
 
 
 .. code-block:: python
-   :linenos:
 
    import krpc
    conn = krpc.connect(name='Hello World')
    vessel = conn.space_center.active_vessel
    print(vessel.name)
 
-This does the following: line 1 loads the kRPC python module, line 2 opens a new connection to the
-server, line 3 gets the active vessel and line 4 prints out the name of the vessel. You should see
-something like the following:
+This loads the kRPC python module, opens a new connection to the server, gets the active vessel and
+prints out the name of the vessel. You should see something like the following:
 
 .. image:: /images/getting-started/hello-world.png
 

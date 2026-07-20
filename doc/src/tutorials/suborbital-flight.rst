@@ -44,47 +44,36 @@ name for our script that will appear in the server window in game:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 7-9
-         :lineno-start: 7
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 10
-         :lineno-start: 10
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 9-11
-         :lineno-start: 9
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 20-22
-         :lineno-start: 20
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 1-3
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 4
-         :lineno-start: 4
-         :linenos:
 
 Next we need to get an object representing the active vessel. It's via this object that we will send
 instructions to the rocket:
@@ -96,48 +85,36 @@ instructions to the rocket:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 11-18
-         :lineno-start: 11
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 12
-         :lineno-start: 12
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 13
-         :lineno-start: 13
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 24
-         :lineno-start: 24
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 5
-         :lineno-start: 5
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 6
-         :lineno-start: 6
-         :linenos:
 
 We then need to prepare the rocket for launch. The following code sets the throttle to maximum and
 instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards). It then waits for
@@ -150,48 +127,36 @@ instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 20-23
-         :lineno-start: 20
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 14-17
-         :lineno-start: 14
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 15-18
-         :lineno-start: 15
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 26-29
-         :lineno-start: 26
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 7-10
-         :lineno-start: 7
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 8-11
-         :lineno-start: 8
-         :linenos:
 
 Part Two: Lift-off!
 -------------------
@@ -205,48 +170,36 @@ We're now ready to launch by activating the first stage (equivalent to pressing 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 25-26
-         :lineno-start: 25
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 19-20
-         :lineno-start: 19
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 20-21
-         :lineno-start: 20
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 31-32
-         :lineno-start: 31
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 12-13
-         :lineno-start: 12
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 13-14
-         :lineno-start: 13
-         :linenos:
 
 The rocket has a solid fuel stage that will quickly run out, and will need to be jettisoned. We can
 monitor the amount of solid fuel in the rocket using an event that is triggered when there is very
@@ -260,48 +213,36 @@ jettison the boosters:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 28-38
-         :lineno-start: 28
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 23-29
-         :lineno-start: 23
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 26-32
-         :lineno-start: 26
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 34-47
-         :lineno-start: 34
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 15-19
-         :lineno-start: 15
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 16-24
-         :lineno-start: 16
-         :linenos:
 
 In this bit of code, ``vessel.resources`` returns a :class:`Resources` object that is used to get
 information about the resources in the rocket. The code creates the expression
@@ -321,48 +262,36 @@ following uses an event to wait until the altitude of the rocket reaches 10km:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 40-47
-         :lineno-start: 40
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 36-42
-         :lineno-start: 36
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 39-45
-         :lineno-start: 39
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 50-58
-         :lineno-start: 50
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 21-23
-         :lineno-start: 21
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 26-33
-         :lineno-start: 26
-         :linenos:
 
 In this bit of code, calling ``vessel.flight()`` returns a :class:`Flight` object that is used to
 get all sorts of information about the rocket, such as the direction it is pointing in and its
@@ -378,48 +307,36 @@ this, we simply reconfigure the auto-pilot:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 49-50
-         :lineno-start: 49
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 45-46
-         :lineno-start: 45
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 48-49
-         :lineno-start: 48
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 61-62
-         :lineno-start: 61
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 25-26
-         :lineno-start: 25
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 35-36
-         :lineno-start: 35
-         :linenos:
 
 Now we wait until the apoapsis reaches 100km (again, using an event), then reduce the throttle to
 zero, jettison the launch stage and turn off the auto-pilot:
@@ -431,48 +348,36 @@ zero, jettison the launch stage and turn off the auto-pilot:
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 52-65
-         :lineno-start: 52
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 48-62
-         :lineno-start: 48
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 51-65
-         :lineno-start: 51
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 64-81
-         :lineno-start: 64
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 28-35
-         :lineno-start: 28
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 38-51
-         :lineno-start: 38
-         :linenos:
 
 In this bit of code, ``vessel.orbit`` returns an :class:`Orbit` object that contains all the
 information about the orbit of the rocket.
@@ -492,48 +397,36 @@ happens - the script will continue to work.
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 67-74
-         :lineno-start: 67
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 64-74
-         :lineno-start: 64
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 67-77
-         :lineno-start: 67
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 83-96
-         :lineno-start: 83
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 37-40
-         :lineno-start: 37
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 53-61
-         :lineno-start: 53
-         :linenos:
 
 The parachutes should have now been deployed. The next bit of code will repeatedly print out the
 altitude of the capsule until its speed reaches zero -- which will happen when it lands:
@@ -545,48 +438,36 @@ altitude of the capsule until its speed reaches zero -- which will happen when i
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.c
          :language: c
          :lines: 76-93
-         :lineno-start: 76
-         :linenos:
 
    .. group-tab:: C#
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cs
          :language: csharp
          :lines: 76-81
-         :lineno-start: 76
-         :linenos:
 
    .. group-tab:: C++
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.cpp
          :language: cpp
          :lines: 79-83
-         :lineno-start: 79
-         :linenos:
 
    .. group-tab:: Java
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.java
          :language: java
          :lines: 98-103
-         :lineno-start: 98
-         :linenos:
 
    .. group-tab:: Lua
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.lua
          :language: lua
          :lines: 42-
-         :lineno-start: 42
-         :linenos:
 
    .. group-tab:: Python
 
       .. literalinclude:: /scripts/tutorials/sub-orbital-flight/SubOrbitalFlight.py
          :language: python
          :lines: 63-66
-         :lineno-start: 63
-         :linenos:
 
 This bit of code uses the ``vessel.flight()`` function, as before, but this time it is passed a
 :class:`ReferenceFrame` parameter. We want to get the vertical speed of the capsule relative to the
