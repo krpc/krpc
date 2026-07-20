@@ -1,3 +1,4 @@
+load("@rules_python//python:defs.bzl", "py_test")
 load("//:config.bzl", "avc_version", "ksp_avc_version_max", "ksp_avc_version_min", "python_version", "version")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
@@ -173,9 +174,36 @@ pkg_zip(
     },
 )
 
+# The Bazel build globs its C# sources, so it cannot see a source file that is
+# missing from a .csproj -- only a `dotnet build` of KRPC.sln can. This checks the
+# .csproj file lists directly, so the divergence is caught without a .NET SDK.
+py_test(
+    name = "csproj-test",
+    srcs = ["//tools/build:csproj_test.py"],
+    data = [
+        "KRPC.sln",
+        "//client/csharp:csproj-srcs",
+        "//core:csproj-srcs",
+        "//server:csproj-srcs",
+        "//service/DockingCamera:csproj-srcs",
+        "//service/Drawing:csproj-srcs",
+        "//service/InfernalRobotics:csproj-srcs",
+        "//service/KerbalAlarmClock:csproj-srcs",
+        "//service/LiDAR:csproj-srcs",
+        "//service/RemoteTech:csproj-srcs",
+        "//service/SpaceCenter:csproj-srcs",
+        "//service/UI:csproj-srcs",
+        "//tools/ServiceDefinitions:csproj-srcs",
+        "//tools/TestServer:csproj-srcs",
+        "//tools/TestingTools:csproj-srcs",
+    ],
+    main = "csproj_test.py",
+)
+
 test_suite(
     name = "test",
     tests = [
+        "//:csproj-test",
         "//client/cnano:test",
         "//client/cpp:test",
         "//client/csharp:test",

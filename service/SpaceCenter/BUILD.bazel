@@ -82,3 +82,13 @@ py_lint_test(
         "//tools/krpctest:krpctest_lib",
     ],
 )
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)

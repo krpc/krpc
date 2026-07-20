@@ -2,6 +2,8 @@ load("@rules_python//python:defs.bzl", "py_binary")
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(["csproj_test.py"])
+
 py_binary(
     name = "run_and_stamp",
     srcs = ["run_and_stamp.py"],
