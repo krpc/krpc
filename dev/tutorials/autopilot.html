@@ -639,7 +639,8 @@ threshold</strong> (default 1°) and the <strong>stopping velocity threshold</st
 both can be adjusted. <code class="docutils literal notranslate"><span class="pre">wait()</span></code> also takes an optional <code class="docutils literal notranslate"><span class="pre">timeout</span></code> (in seconds), after
 which it raises rather than blocking indefinitely.</p>
 <p>While the autopilot is engaged it keeps SAS switched off, so that the two do not fight
-each other for control of the vessel.</p>
+each other for control of the vessel. Attempting to enable SAS while the autopilot is
+engaged raises an <code class="docutils literal notranslate"><span class="pre">InvalidOperationException</span></code>.</p>
 <p>The autopilot handles structurally flexible craft automatically, detecting and
 suppressing any structural oscillation (wobble) with no tuning required (see
 <a class="reference internal" href="#flexible-craft"><span class="std std-ref">Flexible craft</span></a>), and can ease target changes in over time for
@@ -657,7 +658,7 @@ want to pin.</p>
 <li><p><strong>target rotation</strong> — a full rotation (quaternion). Pins the complete attitude, nose
 and roll together. Always well-defined, and the canonical form; best when you already
 have a rotation to hand — copied from another vessel, or a saved orientation.</p></li>
-<li><p><strong>target direction</strong> — a vector for the nose to point along. <strong>Roll is held</strong>: the
+<li><p><strong>target direction</strong> — a vector for the nose to point along. <strong>Roll is not held</strong>: the
 autopilot drives the roll rate to zero but does not hold any particular roll angle. This
 is the “point here, don’t care which way is up” knob.</p></li>
 <li><p><strong>set_direction_and_up(direction, up, roll=0)</strong> — point the nose along <code class="docutils literal notranslate"><span class="pre">direction</span></code> and
@@ -2046,7 +2047,7 @@ is safe to leave always on.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

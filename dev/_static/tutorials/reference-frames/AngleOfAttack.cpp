@@ -32,8 +32,8 @@ int main() {
 
     // Compute the angle between the vectors
     double angle = 0;
-    if (dotProd > 0)
-      angle = fabs(acos(dotProd / vMag) * (180.0 / pi));
+    if (vMag > 0)
+      angle = acos(dotProd / vMag) * (180.0 / pi);
 
     std::cout << "Angle of attack = "
               << std::fixed << std::setprecision(1)

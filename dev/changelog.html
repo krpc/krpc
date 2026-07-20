@@ -825,7 +825,7 @@
 <li><p>Add CMake package config so consumers can use find_package(krpc_cnano CONFIG REQUIRED)</p></li>
 <li><p>CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_NANOPB): when OFF (default) the system install is required; when ON FetchContent is used.</p></li>
 <li><p>Add KRPC_FETCH_DEPS option to enable FetchContent for all dependencies at once</p></li>
-<li><p>Add support for socket communication on Windows</p></li>
+<li><p>Add support for serial port communication on Windows</p></li>
 <li><p>Mark deprecated functions with the KRPC_DEPRECATED attribute macro (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
 <li><p>Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units</p></li>
 </ul>
@@ -3194,7 +3194,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

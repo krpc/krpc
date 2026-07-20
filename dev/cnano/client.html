@@ -748,14 +748,17 @@ takes a single parameter of type <code class="docutils literal notranslate"><spa
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> – enables printing of a descriptive error message to stderr
 when an error occurs</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> – disables error messages in the nanopb library, which kRPC uses to
-communicate with the server. Enabled by default on in the Arduino version of the library.</p></li>
+communicate with the server. Enabled by default in the Arduino version of the library.</p></li>
 </ul>
 </li>
 <li><p>Communication</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> – Specifies that the library should be built to communicate over
-a serial port using POSIX read/write functions communication mechanisms. This is the default,
-unless the a different platform is detected.</p></li>
+a serial port using POSIX read/write functions communication mechanisms. This is the default
+when no other platform is detected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code> – Specifies that the library should be built to communicate
+over a serial port using the Windows API. The Windows platform will be auto-detected so you do
+not need to specify this manually.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code> – Specifies that the library should be built using Arduino
 serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
 to specify this manually.</p></li>
@@ -780,8 +783,8 @@ provide your own implementation.</p></li>
 </div></blockquote>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>On embedded systems you probably want to define <code class="docutils literal notranslate"><span class="pre">KRPC_NO_PRINT_ERROR</span></code> and <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> to
-minimize the memory footprint of kRPC.</p>
+<p>On embedded systems you probably want to leave <code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> undefined and
+define <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> to minimize the memory footprint of kRPC.</p>
 </div>
 </section>
 </section>
@@ -847,7 +850,7 @@ port interface:</p>
 <span class="w">  </span><span class="c1">// Set up communication with the server</span>
 <span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Arduino Example&quot;</span><span class="p">);</span>
 
-<span class="w">  </span><span class="c1">// Indicate succesful connection by lighting the on-board LED</span>
+<span class="w">  </span><span class="c1">// Indicate successful connection by lighting the on-board LED</span>
 <span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
 <span class="p">}</span>
 
@@ -900,13 +903,17 @@ SpaceCenter service is contained in the header file <code class="docutils litera
 <dt class="sig sig-object c" id="c.krpc_open">
 <a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_connection_config_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open" title="Link to this definition">#</a><br /></dt>
 <dd><p>Create a communication handle over which the client can talk to a server.</p>
-<p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> (which is defined by default)
-calling this function opens a serial port using the port name passed as <em>arg</em>, using a call to
-<code class="docutils literal notranslate"><span class="pre">open(arg,</span> <span class="pre">...)</span></code>. In this case the type of the <em>arg</em> parameter is <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. For example:</p>
+<p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> (the default when no other
+platform is detected) calling this function opens a serial port using the port name passed as
+<em>arg</em>, using a call to <code class="docutils literal notranslate"><span class="pre">open(arg,</span> <span class="pre">...)</span></code>. In this case the type of the <em>arg</em> parameter is
+<code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. For example:</p>
 <div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
-<span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+<span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;/dev/ttyS0&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
+<p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code> (auto-detected on Windows)
+calling this function opens the serial port named by <em>arg</em> using the Windows API, for example
+<code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;COM1&quot;)</span></code>.</p>
 <p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>, <em>connection</em> must be a pointer to
 a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> object. <em>arg</em> is optionally used to pass additional configuration options
 used to initialize the connection, including baud rate for the serial port.</p>
@@ -1136,7 +1143,7 @@ server and appears in the in-game server window.</p></li>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

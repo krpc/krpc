@@ -747,7 +747,7 @@
 </li>
       <li><a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.addButton(String, boolean)">addButton(String, boolean) (Java method)</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.addButton(String, boolean)">[1]</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Event.addCallback(java.lang.Callable)">addCallback(java.lang.Callable) (Java method)</a>
+      <li><a href="java/client.html#krpc.client.Event.addCallback(java.lang.Runnable)">addCallback(java.lang.Runnable) (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Stream.addCallback(java.util.function.Consumer)">addCallback(java.util.function.Consumer) (Java method)</a>
 </li>
@@ -4934,7 +4934,7 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Client21acquire_stream_updateEv">krpc::Client::acquire_stream_update (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc6Client12add_callbackERKNSt8functionIFvvEEE">krpc::Client::add_callback (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc6Client26add_stream_update_callbackERKNSt8functionIFvvEEE">krpc::Client::add_stream_update_callback (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Client14freeze_streamsEv">krpc::Client::freeze_streams (C++ function)</a>
 </li>
@@ -4944,7 +4944,7 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Client21release_stream_updateEv">krpc::Client::release_stream_update (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc6Client15remove_callbackEi">krpc::Client::remove_callback (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc6Client29remove_stream_update_callbackEi">krpc::Client::remove_stream_update_callback (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Client12thaw_streamsEv">krpc::Client::thaw_streams (C++ function)</a>
 </li>
@@ -9256,7 +9256,7 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Stream15remove_callbackEi">krpc::Stream::remove_callback (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream7setRateEf">krpc::Stream::setRate (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc6Stream8set_rateEf">krpc::Stream::set_rate (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6Stream5startEb">krpc::Stream::start (C++ function)</a>
 </li>
@@ -15005,17 +15005,17 @@
         <li><a href="lua/api/space-center/waypoints.html#SpaceCenter.Waypoint.remove">(Waypoint method)</a>, <a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.remove">[1]</a>
 </li>
       </ul></li>
-      <li><a href="python/client.html#krpc.client.Client.remove_callback">remove_callback() (krpc.client.Client method)</a>
+      <li><a href="python/client.html#krpc.event.Event.remove_callback">remove_callback() (krpc.event.Event method)</a>
 
       <ul>
-        <li><a href="python/client.html#krpc.event.Event.remove_callback">(krpc.event.Event method)</a>
-</li>
         <li><a href="python/client.html#krpc.stream.Stream.remove_callback">(krpc.stream.Stream method)</a>
 </li>
       </ul></li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.remove_nodes">remove_nodes() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.remove_nodes">[1]</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">remove_preset_at() (Servo method)</a>, <a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.remove_preset_at">[1]</a>
+</li>
+      <li><a href="python/client.html#krpc.client.Client.remove_stream_update_callback">remove_stream_update_callback() (krpc.client.Client method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Event.removeCallback(int)">removeCallback(int) (Java method)</a>, <a href="java/client.html#krpc.client.Stream.removeCallback(int)">[1]</a>
 </li>
@@ -19199,7 +19199,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

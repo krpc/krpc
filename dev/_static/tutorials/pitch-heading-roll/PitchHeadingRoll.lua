@@ -6,9 +6,9 @@ local conn = krpc.connect('Pitch/Heading/Roll')
 local vessel = conn.space_center.active_vessel
 
 function cross_product(u, v)
-    return List{u[3]*v[3] - u[3]*v[2],
-                u[1]*v[1] - u[1]*v[3],
-                u[2]*v[2] - u[2]*v[1]}
+    return List{u[2]*v[3] - u[3]*v[2],
+                u[3]*v[1] - u[1]*v[3],
+                u[1]*v[2] - u[2]*v[1]}
 end
 
 function dot_product(u, v)
@@ -73,7 +73,7 @@ while true do
         roll = roll - 180
     end
 
-    print(string.format('pitch = %1.f, heading = %.1f, roll = %.1f',
+    print(string.format('pitch = %.1f, heading = %.1f, roll = %.1f',
                         pitch, heading, roll))
 
     platform.sleep(1)

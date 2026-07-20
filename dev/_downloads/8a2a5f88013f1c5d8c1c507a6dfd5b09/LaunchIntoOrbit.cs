@@ -134,7 +134,7 @@ class LaunchIntoOrbit
         vessel.Control.Throttle = 0.05f;
         var remainingBurn = conn.AddStream (
             () => node.RemainingBurnVector (node.ReferenceFrame));
-        while (remainingBurn.Get ().Item1 > 0) {
+        while (remainingBurn.Get ().Item2 > 0) {
         }
         vessel.Control.Throttle = 0;
         node.Remove ();

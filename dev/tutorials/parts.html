@@ -652,6 +652,16 @@ API documentation:</p>
 <li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
 </ul>
 </div></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To interact with the fields, events and actions of a part module, use
+<a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Module.field_list" title="SpaceCenter.Module.field_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Module.field_list</span></code></a>, <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Module.event_list" title="SpaceCenter.Module.event_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Module.event_list</span></code></a> and
+<a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.Module.action_list" title="SpaceCenter.Module.action_list"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Module.action_list</span></code></a>. These return <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.PartField" title="SpaceCenter.PartField"><code class="xref py py-class docutils literal notranslate"><span class="pre">PartField</span></code></a>,
+<a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.PartEvent" title="SpaceCenter.PartEvent"><code class="xref py py-class docutils literal notranslate"><span class="pre">PartEvent</span></code></a> and <a class="reference internal" href="../python/api/space-center/parts.html#SpaceCenter.PartAction" title="SpaceCenter.PartAction"><code class="xref py py-class docutils literal notranslate"><span class="pre">PartAction</span></code></a> objects that can be read, set and
+triggered. They replace the module’s string-dictionary members (such as
+<code class="docutils literal notranslate"><span class="pre">Module.fields</span></code>, <code class="docutils literal notranslate"><span class="pre">Module.get_field</span></code> and <code class="docutils literal notranslate"><span class="pre">Module.set_action</span></code>) that older
+scripts and forum posts use, which are deprecated.</p>
+</div>
 <section id="deploying-all-parachutes">
 <h2>Deploying all Parachutes<a class="headerlink" href="#deploying-all-parachutes" title="Link to this heading">#</a></h2>
 <p>Sometimes things go horribly wrong. The following script does its best to save
@@ -1068,6 +1078,12 @@ active and fueled engines on a rocket. See here for a description of the maths:
 </pre></div>
 </div>
 </div></div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>The combined specific impulse of each stage is also available
+directly from the staging API, as <a class="reference internal" href="../python/api/space-center/stage.html#SpaceCenter.Stage.specific_impulse" title="SpaceCenter.Stage.specific_impulse"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Stage.specific_impulse</span></code></a> on the
+object returned by <a class="reference internal" href="../python/api/space-center/vessel.html#SpaceCenter.Vessel.stage_at" title="SpaceCenter.Vessel.stage_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vessel.stage_at()</span></code></a>.</p>
+</div>
 </section>
 </section>
 
@@ -1180,7 +1196,7 @@ active and fueled engines on a rocket. See here for a description of the maths:
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

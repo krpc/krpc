@@ -18,9 +18,9 @@ while True:
     # Note: don't need to magnitude of d as it is a unit vector
 
     # Compute the angle between the vectors
-    angle = 0
-    if dotprod > 0:
-        angle = abs(math.acos(dotprod / vmag) * (180.0 / math.pi))
+    angle = 0.0
+    if vmag > 0:
+        angle = math.acos(dotprod / vmag) * (180.0 / math.pi)
 
     print("Angle of attack = %.1f degrees" % angle)
 

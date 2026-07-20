@@ -1014,9 +1014,9 @@ once per second.</p>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
 
 <span class="kr">function</span><span class="w"> </span><span class="nf">cross_product</span><span class="p">(</span><span class="nv">u</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="p">)</span>
-<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="nv">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
-<span class="w">                </span><span class="nv">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
-<span class="w">                </span><span class="nv">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="nv">List</span><span class="p">{</span><span class="nv">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+<span class="w">                </span><span class="nv">u</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+<span class="w">                </span><span class="nv">u</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="nv">v</span><span class="p">[</span><span class="mi">1</span><span class="p">]}</span>
 <span class="kr">end</span>
 
 <span class="kr">function</span><span class="w"> </span><span class="nf">dot_product</span><span class="p">(</span><span class="nv">u</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="p">)</span>
@@ -1081,7 +1081,7 @@ once per second.</p>
 <span class="w">        </span><span class="nv">roll</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">roll</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">180</span>
 <span class="w">    </span><span class="kr">end</span>
 
-<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;pitch = %1.f, heading = %.1f, roll = %.1f&#39;</span><span class="p">,</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;pitch = %.1f, heading = %.1f, roll = %.1f&#39;</span><span class="p">,</span>
 <span class="w">                        </span><span class="nv">pitch</span><span class="p">,</span><span class="w"> </span><span class="nv">heading</span><span class="p">,</span><span class="w"> </span><span class="nv">roll</span><span class="p">))</span>
 
 <span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -1170,6 +1170,17 @@ once per second.</p>
 </pre></div>
 </div>
 </div></div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Pitch, heading and roll are Euler angles, and are ill-defined when the vessel
+points near vertical (pitch approaching ±90°), where heading and roll become
+ambiguous. This applies both to the computation in this example (which prints
+0, 0, 0 for a vessel pointing straight up, for example on the launchpad) and to the
+<a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.pitch" title="SpaceCenter.Flight.pitch"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.pitch</span></code></a>, <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.heading" title="SpaceCenter.Flight.heading"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.heading</span></code></a> and <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.roll" title="SpaceCenter.Flight.roll"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.roll</span></code></a> telemetry. For a
+representation of the vessel’s attitude that is always well-defined, use
+<a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.rotation" title="SpaceCenter.Flight.rotation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.rotation</span></code></a> or <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight.direction" title="SpaceCenter.Flight.direction"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.direction</span></code></a>, or the auto-pilot’s error
+readouts described in the <a class="reference internal" href="autopilot.html"><span class="doc">autopilot tutorial</span></a>.</p>
+</div>
 </section>
 
 
@@ -1267,7 +1278,7 @@ once per second.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

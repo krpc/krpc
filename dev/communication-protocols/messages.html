@@ -635,8 +635,8 @@ format:</p>
 <span class="kd">message</span><span class="w"> </span><span class="nc">ProcedureCall</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">procedure</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">serviceId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">procedureId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">service_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">uint32</span><span class="w"> </span><span class="na">procedure_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Argument</span><span class="w"> </span><span class="na">arguments</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 <span class="p">}</span>
 
@@ -814,11 +814,11 @@ message.</p></li>
 <section id="events">
 <h2>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h2>
 <p>Events are a wrapper over a stream that returns a boolean value. The event is triggered when the
-stream returns to true. Remote procedures that return an event return an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message that
+stream returns true. Remote procedures that return an event return an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message that
 contains a <code class="docutils literal notranslate"><span class="pre">Stream</span></code> message describing the underlying stream for the event.</p>
 <p>The format for an <code class="docutils literal notranslate"><span class="pre">Event</span></code> message is simply the following:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Event</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Stream</span><span class="w"> </span><span class="na">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Stream</span><span class="w"> </span><span class="na">stream</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1113,10 +1113,11 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">    </span><span class="na">ENUMERATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Messages</span>
-<span class="w">    </span><span class="na">PROCEDURE_CALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
-<span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">201</span><span class="p">;</span>
-<span class="w">    </span><span class="na">STATUS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">202</span><span class="p">;</span>
-<span class="w">    </span><span class="na">SERVICES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">203</span><span class="p">;</span>
+<span class="w">    </span><span class="na">EVENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+<span class="w">    </span><span class="na">PROCEDURE_CALL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">201</span><span class="p">;</span>
+<span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">202</span><span class="p">;</span>
+<span class="w">    </span><span class="na">STATUS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">203</span><span class="p">;</span>
+<span class="w">    </span><span class="na">SERVICES</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">204</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Collections</span>
 <span class="w">    </span><span class="na">TUPLE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">300</span><span class="p">;</span>
@@ -1150,12 +1151,12 @@ from. These are returned as a repeated field containing <code class="docutils li
 procedure is available in all game scenes, this field is empty. The enumeration is defined as
 follows:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">enum</span><span class="w"> </span><span class="n">GameScene</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="na">SPACE_CENTER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="na">FLIGHT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">  </span><span class="na">TRACKING_STATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="w">  </span><span class="na">EDITOR_VAB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
-<span class="w">  </span><span class="na">EDITOR_SPH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
-<span class="w">  </span><span class="na">MISSION_BUILDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
+<span class="w">  </span><span class="na">SPACE_CENTER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="na">FLIGHT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="na">TRACKING_STATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="na">EDITOR_VAB</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="na">EDITOR_SPH</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="na">MISSION_BUILDER</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
 <span class="p">};</span>
 </pre></div>
 </div>
@@ -1307,7 +1308,7 @@ properties make remote procedure calls to the server. Object identifiers have ty
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

@@ -736,6 +736,13 @@ will list all of the classes, enumerations, procedures and properties provides b
 <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service. This works similarly for class types, for example:
 <code class="docutils literal notranslate"><span class="pre">help(conn.space_center.Vessel)</span></code>.</p>
 </section>
+<section id="deprecated-members">
+<h2>Deprecated Members<a class="headerlink" href="#deprecated-members" title="Link to this heading">#</a></h2>
+<p>Some members of the server’s API are deprecated, and may be removed in a future release. Calling
+one emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> naming the replacement to use instead. The deprecation is also
+noted in the member’s docstring. Python hides <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> by default; run Python with
+<code class="docutils literal notranslate"><span class="pre">-W</span> <span class="pre">default</span></code> or use the <code class="docutils literal notranslate"><span class="pre">warnings</span></code> module to see them.</p>
+</section>
 <section id="streaming-data">
 <span id="python-client-streams"></span><h2>Streaming Data<a class="headerlink" href="#streaming-data" title="Link to this heading">#</a></h2>
 <p>A common use case for kRPC is to continuously extract data from the game. The naive approach to do
@@ -936,7 +943,7 @@ expression returns true:</p>
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
-<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50001</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50001</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
 <dd><p>This function creates a connection to a kRPC server. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>
 object, through which the server can be communicated with.</p>
 <dl class="field-list simple">
@@ -950,6 +957,10 @@ address in dotted decimal notation. Defaults to ‘127.0.0.1’.</p></li>
 RPC port number of the server you want to connect to.</p></li>
 <li><p><strong>stream_port</strong> (<em>int</em>) – The port number of the Stream Server. Defaults to 50001. This should
 match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – Whether to use the pre-generated service stubs bundled with
+the client, which include type hints. If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, or if the
+server provides a service with no bundled stub, the service is generated
+dynamically at runtime. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
@@ -1005,8 +1016,8 @@ synchronization.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="krpc.client.Client.remove_callback">
-<span class="sig-name descname"><span class="pre">remove_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.remove_callback" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="krpc.client.Client.remove_stream_update_callback">
+<span class="sig-name descname"><span class="pre">remove_stream_update_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Client.remove_stream_update_callback" title="Link to this definition">#</a></dt>
 <dd><p>Removes a stream update callback function.</p>
 </dd></dl>
 
@@ -1234,6 +1245,7 @@ should be a function that takes zero arguments.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecated-members">Deprecated Members</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streaming-data">Streaming Data</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#synchronizing-with-stream-updates">Synchronizing with Stream Updates</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#condition-variables">Condition Variables</a></li>
@@ -1301,7 +1313,7 @@ should be a function that takes zero arguments.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

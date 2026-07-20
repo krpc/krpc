@@ -232,7 +232,7 @@ C-nano client
 * Add CMake package config so consumers can use find\_package(krpc\_cnano CONFIG REQUIRED)
 * CMake dependency options (KRPC\_FETCH\_PROTOBUF, KRPC\_FETCH\_NANOPB): when OFF (default) the system install is required; when ON FetchContent is used.
 * Add KRPC\_FETCH\_DEPS option to enable FetchContent for all dependencies at once
-* Add support for socket communication on Windows
+* Add support for serial port communication on Windows
 * Mark deprecated functions with the KRPC\_DEPRECATED attribute macro (:issue:`904`)
 * Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units
 

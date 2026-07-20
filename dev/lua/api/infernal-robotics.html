@@ -689,12 +689,14 @@
 names and positions of all of the servos in the group, then moves all of the
 servos to the right for 1 second.</p>
 <div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc.platform&#39;</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">Types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc.types&#39;</span>
 
 <span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">&#39;InfernalRobotics Example&#39;</span><span class="p">)</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
 
 <span class="kd">local</span><span class="w"> </span><span class="nv">group</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">infernal_robotics</span><span class="p">.</span><span class="nf">servo_group_with_name</span><span class="p">(</span><span class="nv">vessel</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;MyGroup&#39;</span><span class="p">)</span>
-<span class="kr">if</span><span class="w"> </span><span class="nv">group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="py">types</span><span class="p">.</span><span class="py">none</span><span class="w"> </span><span class="kr">then</span>
+<span class="kr">if</span><span class="w"> </span><span class="nv">group</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">Types</span><span class="p">.</span><span class="py">none</span><span class="w"> </span><span class="kr">then</span>
 <span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Group not found&#39;</span><span class="p">)</span>
 <span class="w">  </span><span class="nb">os.exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="kr">end</span>
@@ -704,7 +706,7 @@ servos to the right for 1 second.</p>
 <span class="kr">end</span>
 
 <span class="nv">group</span><span class="p">:</span><span class="nf">move_right</span><span class="p">()</span>
-<span class="nv">krpc</span><span class="p">.</span><span class="py">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="nv">group</span><span class="p">:</span><span class="nf">stop</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -818,7 +820,7 @@ servos to the right for 1 second.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

@@ -605,7 +605,7 @@
                   
   <section id="protocol-buffers-over-tcp-ip">
 <h1>Protocol Buffers over TCP/IP<a class="headerlink" href="#protocol-buffers-over-tcp-ip" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows languages that can communication over a TCP/IP connection to
+<p>This communication protocol allows languages that can communicate over a TCP/IP connection to
 interact with a kRPC server.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
@@ -708,9 +708,6 @@ there is no need to connect.</p>
 name “Jeb”. Next, it connects to the stream server on port 50001. It then invokes the
 <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC, receives and decodes the result and prints out the server version number
 from the response.</p>
-<p>The following python code connects to the RPC server at address 127.0.0.1 and port 50000, using the
-name “Jeb”. Next, it connects to the stream server on port 50001. Finally it invokes the
-<code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> procedure, and receives, decodes and prints the result.</p>
 <p>To send and receive messages to the server, they need to be encoded and decoded from their binary
 format:</p>
 <blockquote>
@@ -1059,7 +1056,7 @@ decodes it.</p></li>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

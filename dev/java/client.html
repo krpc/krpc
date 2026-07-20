@@ -677,7 +677,7 @@
 <h1>Java Client<a class="headerlink" href="#java-client" title="Link to this heading">#</a></h1>
 <p>This client provides a Java API for interacting with a kRPC server. A jar containing the
 <code class="docutils literal notranslate"><span class="pre">krpc.client</span></code> package can be <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.
-It requires Java version 1.8.</p>
+It requires Java 9 or later.</p>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <p>The kRPC client library depends on the <a class="reference external" href="https://github.com/google/protobuf/tree/master/java">protobuf</a> and <a class="reference external" href="http://www.javatuples.org">javatuples</a> libraries. A prebuilt jar for protobuf is available via <a class="reference external" href="http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22">Maven</a>.</p>
@@ -700,7 +700,7 @@ It requires Java version 1.8.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following (replace <code class="docutils literal notranslate"><span class="pre">&lt;VERSION&gt;</span></code> with the kRPC version you are using):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>javac<span class="w"> </span>-cp<span class="w"> </span>krpc-java-&lt;VERSION&gt;.jar:protobuf-java-3.4.0.jar:javatuples-1.2.jar<span class="w"> </span>Example.java
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>javac<span class="w"> </span>-cp<span class="w"> </span>krpc-java-&lt;VERSION&gt;.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar<span class="w"> </span>Example.java
 </pre></div>
 </div>
 <p>Note that you may need to change the paths to the JAR files.</p>
@@ -1212,8 +1212,8 @@ stream.</p>
 </dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.Event.addCallback(java.lang.Callable)">
- <span class="pre">int</span> <span class="sig-name descname"><span class="pre">addCallback</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/package-summary.html" title="java.lang.package-summary"><span class="pre">lang</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Callable.html" title="java.lang.Callable"><span class="pre">Callable</span></a><em> <span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.addCallback(java.lang.Callable)" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object java" id="krpc.client.Event.addCallback(java.lang.Runnable)">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">addCallback</span></span><span class="sig-paren">(</span><span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/package-summary.html" title="java.lang.package-summary"><span class="pre">lang</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Runnable.html" title="java.lang.Runnable"><span class="pre">Runnable</span></a><em> <span class="pre">callback</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Event.addCallback(java.lang.Runnable)" title="Link to this definition">#</a></dt>
 <dd><p>Adds a callback function that is invoked whenever the event occurs. The callback function
 should be a function that takes zero arguments. Returns an integer tag identifying the
 callback which can be used to remove it later.</p>
@@ -1367,7 +1367,7 @@ callback which can be used to remove it later.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

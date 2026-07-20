@@ -117,6 +117,9 @@ Going further...
 
  * For some more interesting examples of what you can do with kRPC, check out the
    :doc:`tutorials <tutorials>`.
+ * A script is not limited to the game scene it connected in: setting ``KRPC.GameScene``
+   switches the current game scene, for example from the space center to the tracking
+   station, and can open and close space center facilities such as mission control.
  * Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
    :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
    :doc:`Lua <lua/client>`.

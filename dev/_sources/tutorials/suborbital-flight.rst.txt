@@ -368,7 +368,7 @@ In this bit of code, calling ``vessel.flight()`` returns a :class:`Flight` objec
 get all sorts of information about the rocket, such as the direction it is pointing in and its
 velocity.
 
-Now we need to angle the rocket over to a pitch of 60° and maintain a heading of 90° (west). To do
+Now we need to angle the rocket over to a pitch of 60° and maintain a heading of 90° (east). To do
 this, we simply reconfigure the auto-pilot:
 
 .. tabs::

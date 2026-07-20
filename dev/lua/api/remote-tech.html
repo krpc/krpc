@@ -694,11 +694,11 @@ out the signal delay to the active vessel.</p>
 
 <span class="c1">-- Set a dish target</span>
 <span class="kd">local</span><span class="w"> </span><span class="nv">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">:</span><span class="nf">with_title</span><span class="p">(</span><span class="s1">&#39;Reflectron KR-7&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">antenna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">remote_tech</span><span class="p">:</span><span class="nf">antenna</span><span class="p">(</span><span class="nv">part</span><span class="p">)</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">antenna</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">remote_tech</span><span class="p">.</span><span class="nf">antenna</span><span class="p">(</span><span class="nv">part</span><span class="p">)</span>
 <span class="nv">antenna</span><span class="p">.</span><span class="py">target_body</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">bodies</span><span class="p">[</span><span class="s1">&#39;Jool&#39;</span><span class="p">]</span>
 
 <span class="c1">-- Get info about the vessels communications</span>
-<span class="kd">local</span><span class="w"> </span><span class="nv">comms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">remote_tech</span><span class="p">:</span><span class="nf">comms</span><span class="p">(</span><span class="nv">vessel</span><span class="p">)</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">comms</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">remote_tech</span><span class="p">.</span><span class="nf">comms</span><span class="p">(</span><span class="nv">vessel</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Signal delay = &#39;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">comms</span><span class="p">.</span><span class="py">signal_delay</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -812,7 +812,7 @@ out the signal delay to the active vessel.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

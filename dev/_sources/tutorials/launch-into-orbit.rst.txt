@@ -119,7 +119,7 @@ close to the target apoapsis.
          :lineno-start: 33
          :linenos:
 
-Next, the program fine tunes the apoapsis, using 10% thrust, then waits until
+Next, the program fine tunes the apoapsis, using 25% thrust, then waits until
 the rocket has left Kerbin's atmosphere.
 
 .. tabs::
@@ -177,6 +177,13 @@ required to circularize the orbit using the `vis-viva equation
 <https://en.wikipedia.org/wiki/Vis-viva_equation>`_. We then calculate the burn
 time needed to achieve this delta-v, using the `Tsiolkovsky rocket equation
 <https://en.wikipedia.org/wiki/Tsiolkovsky_rocket_equation>`_.
+
+.. note:: The per-stage values that feed this calculation are also available
+   directly from the staging API: :meth:`Vessel.stage_at` returns a
+   :class:`Stage` object with properties such as :attr:`Stage.delta_v`,
+   :attr:`Stage.specific_impulse` and :attr:`Stage.burn_time`. The derivation is
+   shown here because we need the burn time for a specific delta-v, rather than
+   for burning the whole stage.
 
 .. tabs::
 

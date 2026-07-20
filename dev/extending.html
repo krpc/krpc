@@ -670,12 +670,15 @@ from the service assembly so that they can interact with new or changed function
 to add functionality to the kRPC server.</p>
 <dl class="csharp attribute">
 <dt class="sig sig-object csharp" id="attribute-KRPCService">
-<span class="sig-name descname"><span class="pre">KRPCService</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Name</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.All</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCService" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">KRPCService</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Name</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.uint32" title="System.UInt32"><span class="pre">UInt32</span></a> <em><span class="pre">Id</span></em><em> <span class="pre">=</span> <span class="pre">0</span></em>, <a class="reference internal" href="#enum-KRPC.Service.GameScene" title="KRPC.Service.GameScene enum"><span class="pre">KRPC.Service.GameScene</span></a> <em><span class="pre">GameScene</span></em><em> <span class="pre">=</span> <span class="pre">KRPC.Service.GameScene.All</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCService" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>Name</strong> – Optional name for the service. If omitted, the service name is set to the name of
 the class this attribute is applied to.</p></li>
+<li><p><strong>Id</strong> – Optional integer identifier for the service, used by clients that call procedures
+by id rather than by name. If omitted or set to 0, an identifier is generated from a hash of
+the service name.</p></li>
 <li><p><strong>GameScene</strong> – The game scenes in which the services procedures are available. Defaults to
 all game scenes. If this is set to <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> the service
 will be available in all game scenes.</p></li>
@@ -865,7 +868,7 @@ to true.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = &quot;EVA&quot;)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Flag</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCMethod]</span>
-<span class="w">    </span><span class="k">void</span><span class="w"> </span><span class="nf">Remove</span><span class="p">()</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Remove</span><span class="p">()</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="p">...</span>
 <span class="w">    </span><span class="p">}</span>
@@ -915,7 +918,7 @@ must be set to true.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCService]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">EVA</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCProperty]</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">Flag</span><span class="w"> </span><span class="n">LastFlag</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="n">Flag</span><span class="w"> </span><span class="n">LastFlag</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">        </span><span class="k">get</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
 <span class="w">    </span><span class="p">}</span>
@@ -933,10 +936,10 @@ must be set to true.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCClass (Service = &quot;EVA&quot;)]</span>
 <span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Flag</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="na">[KRPCProperty]</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 
 <span class="w">    </span><span class="na">[KRPCProperty]</span>
-<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="n">Description</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Description</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -1113,7 +1116,8 @@ and <code class="docutils literal notranslate"><span class="pre">byte[]</span></
 <li><p><code class="docutils literal notranslate"><span class="pre">System.Collections.Generic.IList&lt;T&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a serializable type</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">System.Collections.Generic.IDictionary&lt;K,V&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">K</span></code> is one of <code class="docutils literal notranslate"><span class="pre">int</span></code>, <code class="docutils literal notranslate"><span class="pre">long</span></code>,
 <code class="docutils literal notranslate"><span class="pre">uint</span></code>, <code class="docutils literal notranslate"><span class="pre">ulong</span></code>, <code class="docutils literal notranslate"><span class="pre">bool</span></code> or <code class="docutils literal notranslate"><span class="pre">string</span></code> and <code class="docutils literal notranslate"><span class="pre">V</span></code> is a serializable type</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">System.Collections.HashSet&lt;V&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">V</span></code> is a serializable type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">System.Collections.Generic.HashSet&lt;V&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">V</span></code> is a serializable type</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">System.Tuple&lt;...&gt;</span></code> where all of the tuple’s value types are serializable types</p></li>
 </ul>
 </li>
 <li><p>Return types can be <code class="docutils literal notranslate"><span class="pre">void</span></code></p></li>
@@ -1123,12 +1127,12 @@ and <code class="docutils literal notranslate"><span class="pre">byte[]</span></
 <section id="events">
 <h3>Events<a class="headerlink" href="#events" title="Link to this heading">#</a></h3>
 <p>kRPC procedures, methods and properties can return event objects to clients. This is done using the
-class <code class="docutils literal notranslate"><span class="pre">KRPC.Services.Event</span></code>. This class supports two different types of
+class <code class="docutils literal notranslate"><span class="pre">KRPC.Service.Event</span></code>. This class supports two different types of
 event.</p>
 <section id="manually-triggered-events">
 <h4>Manually Triggered Events<a class="headerlink" href="#manually-triggered-events" title="Link to this heading">#</a></h4>
 <p>This type of event must be triggered by some other piece of code running somewhere in the game. It
-is created by calling the default constructor for type <code class="docutils literal notranslate"><span class="pre">KRPC.Services.Event</span></code>.</p>
+is created by calling the default constructor for type <code class="docutils literal notranslate"><span class="pre">KRPC.Service.Event</span></code>.</p>
 <p>For example, the following example is a procedure that returns an event that triggers after a given
 number of milliseconds. When the event triggers it is removed.</p>
 <div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProcedure]</span>
@@ -1299,6 +1303,30 @@ controlled by the following enumeration:</p>
 <dd><p>The mission builder.</p>
 </dd></dl>
 
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.AstronautComplex">
+<span class="sig-name descname"><span class="pre">AstronautComplex</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.AstronautComplex" title="Link to this definition">#</a></dt>
+<dd><p>The astronaut complex facility, open within the space center scene.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.MissionControl">
+<span class="sig-name descname"><span class="pre">MissionControl</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.MissionControl" title="Link to this definition">#</a></dt>
+<dd><p>The mission control facility, open within the space center scene.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.ResearchAndDevelopment">
+<span class="sig-name descname"><span class="pre">ResearchAndDevelopment</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.ResearchAndDevelopment" title="Link to this definition">#</a></dt>
+<dd><p>The research and development facility, open within the space center scene.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Service.GameScene.Administration">
+<span class="sig-name descname"><span class="pre">Administration</span></span><a class="headerlink" href="#value-KRPC.Service.GameScene.Administration" title="Link to this definition">#</a></dt>
+<dd><p>The administration facility, open within the space center scene.</p>
+</dd></dl>
+
 </dd></dl>
 
 <p>The special enumeration value <a class="reference internal" href="#value-KRPC.Service.GameScene.Inherit" title="KRPC.Service.GameScene.Inherit value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">KRPC.Service.GameScene.Inherit</span></code></a> can be used to inherit
@@ -1355,6 +1383,26 @@ overrides this and is available in all game scenes:</p>
 </div>
 </li>
 </ul>
+</section>
+<section id="deprecating-service-members">
+<h3>Deprecating Service Members<a class="headerlink" href="#deprecating-service-members" title="Link to this heading">#</a></h3>
+<p>To deprecate part of a service’s API, annotate it with the standard C# <code class="docutils literal notranslate"><span class="pre">System.Obsolete</span></code>
+attribute. This can be applied to services, procedures, properties, classes, methods and
+enumerations. For example:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCProcedure]</span>
+<span class="na">[Obsolete (&quot;Use &lt;see cref=&#39;Flag.Remove&#39;/&gt; instead.&quot;)]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">RemoveFlag</span><span class="p">(</span><span class="n">Flag</span><span class="w"> </span><span class="n">flag</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The deprecation, along with the message from the attribute, is included in the service definition
+and sent to clients over the wire, as the <code class="docutils literal notranslate"><span class="pre">deprecated</span></code> and <code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> fields returned
+by <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code>. Any <code class="docutils literal notranslate"><span class="pre">&lt;see</span> <span class="pre">cref='...'/&gt;</span></code> references in the message are resolved to the
+name of the referenced member; unqualified names are resolved against the declaring type. Clients then expose the deprecation using each language’s own
+mechanism: for example, the Python client emits a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> when a deprecated member
+is called, and the generated C#, C++, Java and C-nano client code marks deprecated members with
+<code class="docutils literal notranslate"><span class="pre">[Obsolete]</span></code>, <code class="docutils literal notranslate"><span class="pre">[[deprecated]]</span></code>, <code class="docutils literal notranslate"><span class="pre">&#64;Deprecated</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> respectively.</p>
 </section>
 </section>
 <section id="documentation">
@@ -1494,6 +1542,7 @@ and include <cite>LaunchControl.cs</cite> in your project.</p>
 </ul>
 </li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#game-scenes">Game Scenes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deprecating-service-members">Deprecating Service Members</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a></li>
@@ -1561,7 +1610,7 @@ and include <cite>LaunchControl.cs</cite> in your project.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

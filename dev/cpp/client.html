@@ -1079,8 +1079,8 @@ the operation.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client12add_callbackERKNSt8functionIFvvEEE">
-<span id="_CPPv3N4krpc6Client12add_callbackERKNSt8functionIFvvEEE"></span><span id="_CPPv2N4krpc6Client12add_callbackERKNSt8functionIFvvEEE"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_callback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client12add_callbackERKNSt8functionIFvvEEE" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client26add_stream_update_callbackERKNSt8functionIFvvEEE">
+<span id="_CPPv3N4krpc6Client26add_stream_update_callbackERKNSt8functionIFvvEEE"></span><span id="_CPPv2N4krpc6Client26add_stream_update_callbackERKNSt8functionIFvvEEE"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_stream_update_callback</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">void</span></span><span class="p"><span class="pre">(</span></span><span class="p"><span class="pre">)</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">callback</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client26add_stream_update_callbackERKNSt8functionIFvvEEE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Adds a callback function that is invoked whenever a stream update message finishes
 processing. Returns a unique identifier for the callback which can be used to remove it.</p>
 <div class="admonition note">
@@ -1092,8 +1092,8 @@ synchronization.</p>
 </dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client15remove_callbackEi">
-<span id="_CPPv3N4krpc6Client15remove_callbackEi"></span><span id="_CPPv2N4krpc6Client15remove_callbackEi"></span><span id="krpc::Client::remove_callback__i"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_callback</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client15remove_callbackEi" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Client29remove_stream_update_callbackEi">
+<span id="_CPPv3N4krpc6Client29remove_stream_update_callbackEi"></span><span id="_CPPv2N4krpc6Client29remove_stream_update_callbackEi"></span><span id="krpc::Client::remove_stream_update_callback__i"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_stream_update_callback</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">tag</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Client29remove_stream_update_callbackEi" title="Link to this definition">#</a><br /></dt>
 <dd><p>Removes a stream update callback function. The tag is the identifier returned when the
 callback was added.</p>
 </dd></dl>
@@ -1124,8 +1124,8 @@ server.</p>
 <dd></dd></dl>
 
 <dl class="cpp function">
-<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream7setRateEf">
-<span id="_CPPv3N4krpc6Stream7setRateEf"></span><span id="_CPPv2N4krpc6Stream7setRateEf"></span><span id="krpc::Stream::setRate__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">setRate</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rate</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream7setRateEf" title="Link to this definition">#</a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc6Stream8set_rateEf">
+<span id="_CPPv3N4krpc6Stream8set_rateEf"></span><span id="_CPPv2N4krpc6Stream8set_rateEf"></span><span id="krpc::Stream::set_rate__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_rate</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">rate</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc6Stream8set_rateEf" title="Link to this definition">#</a><br /></dt>
 <dd><p>The update rate of the stream in Hertz. When set to zero, the rate is unlimited.</p>
 </dd></dl>
 
@@ -1441,7 +1441,7 @@ added.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/5192b40">5192b40</a>
+  <a href="https://github.com/krpc/krpc/commit/3a6953b">3a6953b</a>
 </p></div>
       
     </div>

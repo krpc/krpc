@@ -127,7 +127,7 @@ int main() {
   std::cout << "Fine tuning" << std::endl;
   vessel.control().set_throttle(0.05);
   auto remaining_burn = node.remaining_burn_vector_stream(node.reference_frame());
-  while (std::get<0>(remaining_burn()) > 0) {
+  while (std::get<1>(remaining_burn()) > 0) {
   }
   vessel.control().set_throttle(0);
   node.remove();
