@@ -63,7 +63,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         /// <remarks>
         /// This is the same readout string shown in the part's right-click menu
-        /// in-game. For programmatic access to the underlying quantities, consider
+        /// in-game, and is intended for display rather than for parsing. Both its
+        /// units and the way it formats numbers follow the language the game is
+        /// running in, so it is not stable across locales. For programmatic access
+        /// to the underlying quantities, use
         /// <see cref="Part.Temperature"/> (temperature sensors),
         /// <see cref="Flight.GForce"/> (accelerometers) or
         /// <see cref="Flight.StaticPressure"/> (barometers).

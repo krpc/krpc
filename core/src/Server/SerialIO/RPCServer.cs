@@ -45,7 +45,7 @@ namespace KRPC.Server.SerialIO
                         client, Status.MalformedMessage, "Expected a ConnectionRequest message");
                 }
                 if (connectionRequest.Type != Type.Rpc) {
-                    var name = connectionRequest.Type.ToString().ToLower ();
+                    var name = connectionRequest.Type.ToString().ToLowerInvariant ();
                     WriteErrorConnectionResponse(
                         client, Status.WrongType,
                         "Connection request was for a " + name + " server, " +

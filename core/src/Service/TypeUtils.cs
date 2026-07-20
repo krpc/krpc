@@ -102,7 +102,7 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsATupleCollectionType (Type type)
         {
-            return type.Name.StartsWith("Tuple`", StringComparison.CurrentCulture) &&
+            return type.Name.StartsWith("Tuple`", StringComparison.Ordinal) &&
             type.GetGenericArguments().All(IsAValidType);
         }
 
@@ -626,7 +626,7 @@ namespace KRPC.Service
                         snakeCase += camelCase[i];
                 }
                 snakeCase += camelCase[camelCase.Length-1];
-                result["code"] = snakeCase.ToUpper();
+                result["code"] = snakeCase.ToUpperInvariant();
             }
             if (!result.ContainsKey("code"))
                 throw new ArgumentException ("Type " + type + " is not a valid kRPC type");

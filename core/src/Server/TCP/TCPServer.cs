@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -237,7 +238,7 @@ namespace KRPC.Server.TCP
                     return anyClientText;
                 try {
                     var subnet = NetworkInformation.GetSubnetMask (ListenAddress);
-                    return string.Format (subnetAllowedText, subnet);
+                    return string.Format (CultureInfo.InvariantCulture, subnetAllowedText, subnet);
                 } catch (NotImplementedException) {
                 } catch (ArgumentException) {
                 } catch (DllNotFoundException) {

@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -126,7 +127,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public string Value {
-            get { return baseField.GetValue (Module.InternalModule).ToString (); }
+            get { return baseField.GetValueString (Module.InternalModule); }
             set { Assign (value); }
         }
 

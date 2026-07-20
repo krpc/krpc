@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -60,20 +59,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The state of the cargo bay.
         /// </summary>
         /// <remarks>
+        /// This describes where the bay's doors are, which is not the same as whether the parts
+        /// inside are sheltered: a bay whose open end has nothing attached to it never shelters
+        /// anything, however tightly shut it is. Use <see cref="Part.Shielded"/> for that.
+        ///
         /// A cargo bay is never <see cref="DeployableState.Broken" />, as the game
         /// does not track damage for them.
         /// </remarks>
         [KRPCProperty]
         public DeployableState State {
             get {
-                if (bay.ClosedAndLocked ())
-                    return DeployableState.Retracted;
-                else if (!animation.IsMoving ())
-                    return DeployableState.Deployed;
-                else if (!animation.animSwitch)
-                    return animation.startEventGUIName == "Open" ? DeployableState.Deploying : DeployableState.Retracting;
-                else
-                    return animation.startEventGUIName == "Close" ? DeployableState.Deploying : DeployableState.Retracting;
+                if (animation.IsMoving ())
+                    return OpeningOrOpen
+                        ? DeployableState.Deploying
+                        : DeployableState.Retracting;
+                return OpeningOrOpen
+                    ? DeployableState.Deployed
+                    : DeployableState.Retracted;
             }
         }
 
@@ -82,33 +84,47 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Open {
-            get {
-                var state = State;
-                return state == DeployableState.Deployed || state == DeployableState.Deploying;
-            }
+            get { return OpeningOrOpen; }
             set {
-                var openEvent = OpenEvent;
-                var closeEvent = CloseEvent;
-                if (value && openEvent != null)
-                    openEvent.Invoke ();
-                else if (!value && closeEvent != null)
-                    closeEvent.Invoke ();
+                if (value == OpeningOrOpen)
+                    return;
+                var toggle = ToggleEvent;
+                if (toggle != null)
+                    toggle.Invoke ();
             }
         }
 
-        BaseEvent OpenEvent {
-            get {
-                return animation.Events
-                    .Where (x => x != null && (HighLogic.LoadedSceneIsEditor ? x.guiActiveEditor : x.guiActive))
-                    .FirstOrDefault (x => x.guiName == "Open");
-            }
+        /// <summary>
+        /// Whether the bay is open, or travelling that way.
+        /// </summary>
+        /// <remarks>
+        /// The animation runs forwards, towards a scalar of 1, while animSwitch is false, and
+        /// backwards towards 0 while it is true. closedPosition is the scalar at which the bay is
+        /// shut, so which of those opens it depends on which end of the animation that is.
+        ///
+        /// A bay that is not moving is sitting at whichever end it last travelled to, so the same
+        /// answer covers a moving and a stationary bay alike. Reading the direction rather than
+        /// the position matters: the animation stops fractionally short of its end, so comparing
+        /// the scalar against closedPosition reports a shut bay as open for as long as it takes
+        /// the last frame to land.
+        /// </remarks>
+        bool OpeningOrOpen {
+            get { return !animation.animSwitch == (bay.closedPosition < 0.5f); }
         }
 
-        BaseEvent CloseEvent {
+        /// <summary>
+        /// The event that opens or closes the bay, whichever it currently offers. It is looked up
+        /// by id -- the name of the method implementing it -- which the game does not translate,
+        /// unlike the display name on the button. Null when the bay cannot currently be toggled,
+        /// for example while it is shielded from the airstream.
+        /// </summary>
+        BaseEvent ToggleEvent {
             get {
-                return animation.Events
-                    .Where (x => x != null && (HighLogic.LoadedSceneIsEditor ? x.guiActiveEditor : x.guiActive))
-                    .FirstOrDefault (x => x.guiName == "Close");
+                var toggle = animation.Events ["Toggle"];
+                if (toggle == null)
+                    return null;
+                var available = HighLogic.LoadedSceneIsEditor ? toggle.guiActiveEditor : toggle.guiActive;
+                return available ? toggle : null;
             }
         }
     }

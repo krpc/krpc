@@ -43,7 +43,7 @@ def main():
         return 1
 
     if args.output:
-        with open(args.output, "w") as fp:
+        with open(args.output, "w", encoding="utf-8") as fp:
             fp.write(defs)
     else:
         print(defs)
@@ -102,7 +102,7 @@ def servicedefs(ksp, service, assemblies):
         shutil.rmtree(bindir)
         raise RuntimeError(ex.output) from ex
 
-    with open(tmpout, "r") as fp:
+    with open(tmpout, "r", encoding="utf-8") as fp:
         return fp.read()
 
     shutil.rmtree(bindir)

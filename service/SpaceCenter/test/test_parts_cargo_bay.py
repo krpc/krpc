@@ -41,14 +41,9 @@ class TestPartsCargoBay(krpctest.TestCase):
         self.assertEqual(bay.state, self.state.retracting)
         self.assertFalse(bay.open)
 
-        # After the close animation stops, ModuleCargoBay can take an extra
-        # frame or two to register as closed-and-locked; until it does, the
-        # state reads back as open (not moving, not yet locked). Wait for the
-        # terminal closed state rather than just "no longer closing", so the
-        # assertion doesn't race that lock-lag (seen on mk3CargoBayS).
         self.wait_while(
-            lambda: bay.state in (self.state.retracting, self.state.deployed),
-            message="cargo bay to close and lock",
+            lambda: bay.state == self.state.retracting,
+            message="cargo bay to finish closing",
         )
 
         self.assertEqual(bay.state, self.state.retracted)

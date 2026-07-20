@@ -58,7 +58,7 @@ namespace KRPC.Server.HTTP
                     throw new MalformedRequestException ("Request line malformed");
                 if (requestLineParts [0].Length == 0)
                     throw new MalformedRequestException ("Invalid or unsupported method");
-                request.Method = requestLineParts [0].ToLower ();
+                request.Method = requestLineParts [0].ToLowerInvariant ();
                 try {
                     var baseUri = new Uri ("http://localhost/");
                     request.URI = new Uri (baseUri, requestLineParts [1]);
@@ -67,7 +67,7 @@ namespace KRPC.Server.HTTP
                 }
                 if (requestLineParts [2].Length == 0)
                     throw new MalformedRequestException ("Invalid or unsupported protocol");
-                request.Protocol = requestLineParts [2].ToLower ();
+                request.Protocol = requestLineParts [2].ToLowerInvariant ();
 
                 // Parse header fields
                 if (!line.MoveNext ())
@@ -77,7 +77,7 @@ namespace KRPC.Server.HTTP
                     var i = line.Current.IndexOf (':');
                     if (i == -1)
                         throw new MalformedRequestException ("Header field malformed");
-                    var key = line.Current.Substring (0, i).Trim ().ToLower ();
+                    var key = line.Current.Substring (0, i).Trim ().ToLowerInvariant ();
                     var value = line.Current.Substring (i + 1).Trim ();
                     if (key.Length == 0)
                         throw new MalformedRequestException ("Header field key empty");

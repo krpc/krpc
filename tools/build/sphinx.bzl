@@ -67,7 +67,12 @@ def _build_impl(ctx):
         outputs = [out],
         progress_message = "Generating %s documentation" % builder,
         command = " && \\\n".join(sub_commands),
+        # The default shell environment supplies PATH, needed to find make and the
+        # LaTeX toolchain. LC_ALL is set on top of it so that hyphenation, sorting
+        # and date formatting do not vary with whoever runs the build; unlike the
+        # inherited variables it also forms part of the action key.
         use_default_shell_env = True,
+        env = {"LC_ALL": "C.UTF-8"},
     )
 
 sphinx_build = rule(

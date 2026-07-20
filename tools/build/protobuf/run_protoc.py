@@ -66,10 +66,10 @@ def main():
 
     for spec in opts.rewrite:
         dst, pattern, repl = spec.split("=", 2)
-        with open(dst) as handle:
+        with open(dst, encoding="utf-8") as handle:
             text = handle.read()
         text = re.sub(pattern, repl, text)
-        with open(dst, "w") as handle:
+        with open(dst, "w", encoding="utf-8") as handle:
             handle.write(text)
 
     return 0

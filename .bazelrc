@@ -19,6 +19,16 @@ build:macos --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused
 
 build --java_runtime_version=remotejdk_11
 
+# Pin the locale for build actions and tests. Several tools change behaviour with
+# it: the code generators read and write UTF-8 sources, C and Lua case folding and
+# number formatting go through the C library, and .NET formats numbers using the
+# ambient culture. Without this the output depends on whoever runs the build, and
+# CI (which has no LANG set, so runs under POSIX) disagrees with a developer
+# machine that does.
+build --action_env=LC_ALL=C.UTF-8
+build --host_action_env=LC_ALL=C.UTF-8
+test --test_env=LC_ALL=C.UTF-8
+
 # Windows: rules_dotnet (and the symlink-based staging rules) need real symlinks
 # and runfiles trees. The startup flag is a no-op off Windows; the windows config
 # group is auto-selected on Windows hosts (and CI also passes --config=windows).

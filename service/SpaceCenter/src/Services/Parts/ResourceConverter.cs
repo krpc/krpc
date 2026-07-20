@@ -4,6 +4,7 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using KSP.Localization;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -130,14 +131,43 @@ namespace KRPC.SpaceCenter.Services.Parts
             var status = converter.status;
             if (status == null)
                 return ResourceConverterState.Unknown;
-            else if (status.Contains ("missing") || status.IndexOf("insufficient", StringComparison.OrdinalIgnoreCase) >= 0)
+            if (StatusMatches (status, MissingResourceMessages))
                 return ResourceConverterState.MissingResource;
-            else if (status.Contains ("full"))
+            if (StatusMatches (status, StorageFullMessages))
                 return ResourceConverterState.StorageFull;
-            else if (status.Contains ("cap"))
+            if (StatusMatches (status, CapacityMessages))
                 return ResourceConverterState.Capacity;
-            else
-                return ResourceConverterState.Running;
+            return ResourceConverterState.Running;
+        }
+
+        // The messages the game builds a converter's status out of. It reports the status
+        // already translated, so these are the tags for the same messages rather than the
+        // English text, which only matches when the game is running in English.
+        static readonly string[] MissingResourceMessages = {
+            "#autoLOC_261263", "#autoLOC_261304", // missing <resource>
+            "#autoLOC_258451", "#autoLOC_259933"  // insufficient power
+        };
+        static readonly string[] StorageFullMessages = { "#autoLOC_261334" };
+        static readonly string[] CapacityMessages = { "#autoLOC_261332" };
+
+        /// <summary>
+        /// Whether a converter's status is one of the given messages.
+        /// </summary>
+        /// <remarks>
+        /// The messages carry a resource name or amount in a placeholder, so only their
+        /// fixed part can be matched. Comparison follows the language the game is running
+        /// in, which is the one case where that is what is wanted: both sides are text the
+        /// game has translated.
+        /// </remarks>
+        static bool StatusMatches (string status, string[] tags)
+        {
+            foreach (var tag in tags) {
+                var message = Localizer.Format (tag, new [] { string.Empty }).Trim ();
+                if (message.Length > 0 &&
+                    status.IndexOf (message, StringComparison.CurrentCultureIgnoreCase) >= 0)
+                    return true;
+            }
+            return false;
         }
 
         /// <summary>

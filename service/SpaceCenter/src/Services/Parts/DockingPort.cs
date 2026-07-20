@@ -130,9 +130,11 @@ namespace KRPC.SpaceCenter.Services.Parts
             var dockedPort = dockedPart != null ? dockedPart.Module<ModuleDockingNode> () : null;
             var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
 
-            // Try calling "Decouple Node" or "Undock" on this part and on the port we are docked to, if any
-            if (port.InvokeEvent ("Decouple Node") || port.InvokeEvent ("Undock") ||
-                (dockedPort != null && (dockedPort.InvokeEvent ("Decouple Node") || dockedPort.InvokeEvent ("Undock")))) {
+            // Try decoupling or undocking this part, and then the port we are docked to, if any.
+            // Decouple detaches a port that was attached in the editor, Undock separates two ports
+            // that docked in flight; a given port only ever offers one of them.
+            if (port.InvokeEvent ("Decouple") || port.InvokeEvent ("Undock") ||
+                (dockedPort != null && (dockedPort.InvokeEvent ("Decouple") || dockedPort.InvokeEvent ("Undock")))) {
                 return PartSeparation.NewVessel (preVesselIds, () => State != DockingPortState.Docked);
             }
 
@@ -176,13 +178,11 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // Don't do anything if we are aren't in a state where the shield can be opened or closed
                 if (state != DockingPortState.Shielded && state != DockingPortState.Ready)
                     return;
-                // Open the shield if we are shielded, and value is false
-                var shielded = Shielded;
-                if (!value && shielded)
-                    shield.Events.First (e => e.guiName == shield.startEventGUIName).Invoke ();
-                // Close the shield if we are not shielded, and value is true
-                else if (value && !shielded)
-                    shield.Events.First (e => e.guiName == shield.endEventGUIName).Invoke ();
+                // A single event toggles the shield open or closed. It is looked up by id -- the
+                // name of the method implementing it -- which the game does not translate, unlike
+                // the display name shown on the button.
+                if (value != Shielded)
+                    shield.Events ["Toggle"].Invoke ();
             }
         }
 
@@ -336,10 +336,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         static DockingPortState IndividualState (ModuleDockingNode node)
         {
+            // These are the names of the port's finite state machine states, which the game
+            // does not translate, unlike the status text shown in the right-click menu.
             var state = node.state;
             if (state == "Ready")
                 return DockingPortState.Ready;
-            if (state.StartsWith ("Docked", StringComparison.CurrentCulture) || state == "PreAttached")
+            if (state.StartsWith ("Docked", StringComparison.Ordinal) || state == "PreAttached")
                 return DockingPortState.Docked;
             if (state.Contains ("Acquire"))
                 return DockingPortState.Docking;
@@ -349,7 +351,8 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var shieldModule = node.part.Module<ModuleAnimateGeneric> ();
                 if (shieldModule == null)
                     throw new InvalidOperationException ("Docking port state is '" + node.state + "', but it does not have a shield!");
-                return shieldModule.status.StartsWith ("Moving", StringComparison.CurrentCulture) ? DockingPortState.Moving : DockingPortState.Shielded;
+                return shieldModule.aniState == ModuleAnimateGeneric.animationStates.MOVING
+                    ? DockingPortState.Moving : DockingPortState.Shielded;
             }
             throw new ArgumentException ("Unknown docking port state '" + node.state + "'");
         }

@@ -7,7 +7,12 @@ def _impl(ctx):
         inputs = [input],
         outputs = [output],
         progress_message = "Generating PNG image %s" % output.short_path,
+        # The default shell environment supplies PATH, needed to find rsvg-convert.
+        # LC_ALL is set on top of it so that text shaping in the rendered image does
+        # not vary with whoever runs the build; unlike the inherited variables it
+        # also forms part of the action key.
         use_default_shell_env = True,
+        env = {"LC_ALL": "C.UTF-8"},
         command = "rsvg-convert --format=png -o %s %s" % (output.path, input.path),
     )
 
