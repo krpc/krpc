@@ -23,22 +23,22 @@ AlarmAction
 
    .. value:: KillWarp
 
-      Drop out of time warp.
+      Drop out of time warp and display a message.
 
 
    .. value:: KillWarpOnly
 
-      Drop out of time warp.
+      Drop out of time warp, without displaying a message.
 
 
    .. value:: MessageOnly
 
-      Display a message.
+      Display a message, without affecting time warp.
 
 
    .. value:: PauseGame
 
-      Pause the game.
+      Pause the game and display a message.
 
 
    .. value:: Custom

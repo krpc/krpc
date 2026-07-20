@@ -23,22 +23,22 @@ AlarmAction
 
    .. field:: public AlarmAction KILL_WARP
 
-      Drop out of time warp.
+      Drop out of time warp and display a message.
 
 
    .. field:: public AlarmAction KILL_WARP_ONLY
 
-      Drop out of time warp.
+      Drop out of time warp, without displaying a message.
 
 
    .. field:: public AlarmAction MESSAGE_ONLY
 
-      Display a message.
+      Display a message, without affecting time warp.
 
 
    .. field:: public AlarmAction PAUSE_GAME
 
-      Pause the game.
+      Pause the game and display a message.
 
 
    .. field:: public AlarmAction CUSTOM

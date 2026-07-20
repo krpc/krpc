@@ -24,22 +24,22 @@ AlarmAction
 
    .. enumerator:: kill_warp
 
-      Drop out of time warp.
+      Drop out of time warp and display a message.
 
 
    .. enumerator:: kill_warp_only
 
-      Drop out of time warp.
+      Drop out of time warp, without displaying a message.
 
 
    .. enumerator:: message_only
 
-      Display a message.
+      Display a message, without affecting time warp.
 
 
    .. enumerator:: pause_game
 
-      Pause the game.
+      Pause the game and display a message.
 
 
    .. enumerator:: custom

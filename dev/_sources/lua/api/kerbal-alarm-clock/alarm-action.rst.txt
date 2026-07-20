@@ -23,22 +23,22 @@ AlarmAction
 
    .. data:: kill_warp
 
-      Drop out of time warp.
+      Drop out of time warp and display a message.
 
 
    .. data:: kill_warp_only
 
-      Drop out of time warp.
+      Drop out of time warp, without displaying a message.
 
 
    .. data:: message_only
 
-      Display a message.
+      Display a message, without affecting time warp.
 
 
    .. data:: pause_game
 
-      Pause the game.
+      Pause the game and display a message.
 
 
    .. data:: custom

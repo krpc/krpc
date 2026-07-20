@@ -23,22 +23,22 @@ AlarmAction
 
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_KILLWARP
 
-      Drop out of time warp.
+      Drop out of time warp and display a message.
 
 
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_KILLWARPONLY
 
-      Drop out of time warp.
+      Drop out of time warp, without displaying a message.
 
 
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_MESSAGEONLY
 
-      Display a message.
+      Display a message, without affecting time warp.
 
 
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_PAUSEGAME
 
-      Pause the game.
+      Pause the game and display a message.
 
 
    .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_CUSTOM
