@@ -625,23 +625,19 @@ baud rate (which defaults to 9600) to be set.</p>
 protobuf binary format. When sending messages to and from the server, they are prefixed with their
 size, in bytes, encoded as a Protocol Buffers varint.</p>
 <p>To send a message to the server:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Encode the message using the Protocol Buffers format.</p></li>
 <li><p>Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
 varint.</p></li>
 <li><p>Write the encoded length followed by the encoded message data to the serial port.</p></li>
 </ol>
-</div></blockquote>
 <p>To receive a message from the server, do the reverse:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Read the size of the message as a Protocol Buffers encoded varint from the serial port.</p></li>
 <li><p>Decode the message size.</p></li>
 <li><p>Read message size bytes of message data from the serial port.</p></li>
 <li><p>Decode the message data.</p></li>
 </ol>
-</div></blockquote>
 <p>Unlike the TCP/IP and WebSockets protocols, all messages sent to the server after the initial
 connection handshake are wrapped in a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> message, and all messages received
 from the server after the handshake are wrapped in a <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> message:</p>
@@ -661,8 +657,7 @@ from the server after the handshake are wrapped in a <code class="docutils liter
 <h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
 <p>There is a single serial port connection for both RPC calls and stream updates. To establish a
 connection, a client must do the following:</p>
-<blockquote>
-<div><ol class="arabic">
+<ol class="arabic">
 <li><p>Open a connection to the serial port.</p></li>
 <li><p>Send a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> message to the server with its <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> field
 populated. The <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message is defined as:</p>
@@ -699,7 +694,6 @@ be left blank.</p>
 If not, the <code class="docutils literal notranslate"><span class="pre">message</span></code> field contains a description of what went wrong.</p>
 </li>
 </ol>
-</div></blockquote>
 </section>
 <section id="receiving-stream-updates">
 <h2>Receiving Stream Updates<a class="headerlink" href="#receiving-stream-updates" title="Link to this heading">#</a></h2>
@@ -926,7 +920,7 @@ the server version number from the response.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
+  <a href="https://github.com/krpc/krpc/commit/94b223c">94b223c</a>
 </p></div>
       
     </div>

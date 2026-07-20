@@ -705,8 +705,7 @@ contain a description of the error. If an individual procedure call encounters a
 <code class="docutils literal notranslate"><span class="pre">error</span></code> field in the corresponding procedure result message will contain a description of the
 error.</p>
 <p>The fields of an error message are:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">service</span></code> - If the error was caused by an exception, this is the name of the service in which the
 exception type is defined.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - If the error was caused by an exception, this is the name of the exception type.</p></li>
@@ -714,7 +713,6 @@ exception type is defined.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">stack_trace</span></code> - If the error was caused by an exception, this is a server-side stack trace for
 the exception.</p></li>
 </ul>
-</div></blockquote>
 </section>
 <section id="example-rpc-invocation">
 <h3>Example RPC invocation<a class="headerlink" href="#example-rpc-invocation" title="Link to this heading">#</a></h3>
@@ -953,20 +951,18 @@ this field is informational.</p></li>
 </pre></div>
 </div>
 <p>The fields are:</p>
-<ul>
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the procedure. See <a class="reference internal" href="#communication-protocol-procedure-names"><span class="std std-ref">Procedure Names</span></a> for more
 information.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Parameter</span></code> messages containing details of the
 procedure’s parameters, with the following fields:</p>
-<blockquote>
-<div><ul class="simple">
+<ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the parameter, to allow parameter passing by name.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">type</span></a> of the parameter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">default_value</span></code> - The value of the default value of the parameter, if any, <a class="reference internal" href="#communication-protocol-protobuf-encoding"><span class="std std-ref">encoded
 using Protocol Buffer format</span></a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">nullable</span></code> - If the parameter has a class type, indicates whether null can be passed.</p></li>
 </ul>
-</div></blockquote>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">return_type</span></code> - The <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">return type</span></a> of the procedure. If the
 procedure does not return anything its type is set to <code class="docutils literal notranslate"><span class="pre">NONE</span></code>.</p></li>
@@ -1070,8 +1066,7 @@ empty.</p></li>
 <span id="communication-protocol-procedure-names"></span><h2>Procedure Names<a class="headerlink" href="#procedure-names" title="Link to this heading">#</a></h2>
 <p>Procedures names are CamelCase. Whether a procedure is a service procedure, class method, class
 property, and what class (if any) it belongs to is determined by its name:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">ProcedureName</span></code> - a standard procedure that is just part of a service.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">get_PropertyName</span></code> - a procedure that returns the value of a property in a service.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">set_PropertyName</span></code> - a procedure that sets the value of a property in a service.</p></li>
@@ -1080,7 +1075,6 @@ property, and what class (if any) it belongs to is determined by its name:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">ClassName_get_PropertyName</span></code> - a class property getter.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">ClassName_set_PropertyName</span></code> - a class property setter.</p></li>
 </ul>
-</div></blockquote>
 <p>Only letters and numbers are permitted in class, method and property names. Underscores can
 therefore be used to split the name into its constituent parts.</p>
 </section>
@@ -1134,14 +1128,12 @@ not return a value.</p>
 defines the class/enumeration and the name of the class/enumeration. For all other types these
 fields are empty.</p>
 <p>For collection types the <code class="docutils literal notranslate"><span class="pre">types</span></code> repeated field will contain the sub-types:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> types contain 1 or more types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">LIST</span></code> and <code class="docutils literal notranslate"><span class="pre">SET</span></code> types contain a single type in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">DICTIONARY</span></code> types contain a 2 types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field - the key and value types, in that
 order.</p></li>
 </ul>
-</div></blockquote>
 <p>For all other types the <code class="docutils literal notranslate"><span class="pre">types</span></code> field is empty.</p>
 </section>
 <section id="gamescene">
@@ -1314,7 +1306,7 @@ properties make remote procedure calls to the server. Object identifiers have ty
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
+  <a href="https://github.com/krpc/krpc/commit/94b223c">94b223c</a>
 </p></div>
       
     </div>

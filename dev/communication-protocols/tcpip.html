@@ -618,30 +618,25 @@ protocol.</p>
 protobuf binary format. When sending messages to and from the server, they are prefixed with their
 size, in bytes, encoded as a Protocol Buffers varint.</p>
 <p>To send a message to the server:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Encode the message using the Protocol Buffers format.</p></li>
 <li><p>Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
 varint.</p></li>
 <li><p>Send the encoded length followed by the encoded message data.</p></li>
 </ol>
-</div></blockquote>
 <p>To receive a message from the server, do the reverse:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Receive the size of the message as a Protocol Buffers encoded varint.</p></li>
 <li><p>Decode the message size.</p></li>
 <li><p>Receive message size bytes of message data.</p></li>
 <li><p>Decode the message data.</p></li>
 </ol>
-</div></blockquote>
 </section>
 <section id="connecting-to-the-rpc-server">
 <h2>Connecting to the RPC Server<a class="headerlink" href="#connecting-to-the-rpc-server" title="Link to this heading">#</a></h2>
 <p>A client invokes remote procedures by communicating with the <em>RPC server</em>. To establish a
 connection, a client must do the following:</p>
-<blockquote>
-<div><ol class="arabic">
+<ol class="arabic">
 <li><p>Open a TCP socket to the server on its RPC port (which defaults to 50000).</p></li>
 <li><p>Send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message to the server. This message is defined as:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionRequest</span><span class="w"> </span><span class="p">{</span>
@@ -680,7 +675,6 @@ identifier for the client. This is required when connecting to the stream server
 below).</p>
 </li>
 </ol>
-</div></blockquote>
 </section>
 <section id="connecting-to-the-stream-server">
 <h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
@@ -710,8 +704,7 @@ name “Jeb”. Next, it connects to the stream server on port 50001. It then in
 from the response.</p>
 <p>To send and receive messages to the server, they need to be encoded and decoded from their binary
 format:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">encode_varint</span></code> and <code class="docutils literal notranslate"><span class="pre">decode_varint</span></code> functions convert between Python integers and
 Protocol Buffer varint encoded integers.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">send_message</span></code> encodes a message, sends the length of the message to the server as a Protocol
@@ -719,7 +712,6 @@ Buffer varint encoded integer, and then sends the message data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">recv_message</span></code> receives the size of the message, decodes it, receives the message data, and
 decodes it.</p></li>
 </ul>
-</div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
@@ -1056,7 +1048,7 @@ decodes it.</p></li>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
+  <a href="https://github.com/krpc/krpc/commit/94b223c">94b223c</a>
 </p></div>
       
     </div>

@@ -602,18 +602,15 @@ basic Python script to interact with the game.</p>
 <h2>The Server Plugin<a class="headerlink" href="#the-server-plugin" title="Link to this heading">#</a></h2>
 <section id="installation">
 <h3>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>Download and install the kRPC server plugin from one of these locations:</p></li>
-</ol>
-<blockquote>
-<div><ul class="simple">
+<ol class="arabic">
+<li><p>Download and install the kRPC server plugin from one of these locations:</p>
+<ul class="simple">
 <li><p><a class="reference external" href="https://github.com/krpc/krpc/releases">Github</a></p></li>
 <li><p><a class="reference external" href="https://spacedock.info/mod/69/kRPC">SpaceDock</a></p></li>
 <li><p><a class="reference external" href="https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python">Curse</a></p></li>
 <li><p>Or the install it using <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/">CKAN</a></p></li>
 </ul>
-</div></blockquote>
-<ol class="arabic" start="2">
+</li>
 <li><p>Start up KSP and load a save game.</p></li>
 <li><p>You should be greeted by the server window:</p>
 <img alt="_images/server-window.png" src="_images/server-window.png" />
@@ -681,34 +678,28 @@ your favorite package manager, or get it from here: <a class="reference external
 <section id="hello-world-script">
 <h2>‘Hello World’ Script<a class="headerlink" href="#hello-world-script" title="Link to this heading">#</a></h2>
 <p>Run KSP and start the server with the default settings. Then run the following python script.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
-<span class="linenos">2</span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Hello World&#39;</span><span class="p">)</span>
-<span class="linenos">3</span><span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
-<span class="linenos">4</span><span class="nb">print</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Hello World&#39;</span><span class="p">)</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>This does the following: line 1 loads the kRPC python module, line 2 opens a new connection to the
-server, line 3 gets the active vessel and line 4 prints out the name of the vessel. You should see
-something like the following:</p>
+<p>This loads the kRPC python module, opens a new connection to the server, gets the active vessel and
+prints out the name of the vessel. You should see something like the following:</p>
 <img alt="_images/hello-world.png" src="_images/hello-world.png" />
 <p>Congratulations! You’ve written your first script that communicates with KSP.</p>
 </section>
 <section id="going-further">
 <h2>Going further…<a class="headerlink" href="#going-further" title="Link to this heading">#</a></h2>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>For some more interesting examples of what you can do with kRPC, check out the
 <a class="reference internal" href="tutorials.html"><span class="doc">tutorials</span></a>.</p></li>
-<li><p>A script is not limited to the game scene it connected in: setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code>
-switches the current game scene, for example from the space center to the tracking
-station, and can open and close space center facilities such as mission control.</p></li>
 <li><p>Client libraries are available for other languages too, including <a class="reference internal" href="csharp/client.html"><span class="doc">C#</span></a>,
 <a class="reference internal" href="cpp/client.html"><span class="doc">C++</span></a>, <a class="reference internal" href="cnano/client.html"><span class="doc">C</span></a>, <a class="reference internal" href="java/client.html"><span class="doc">Java</span></a> and
 <a class="reference internal" href="lua/client.html"><span class="doc">Lua</span></a>.</p></li>
 <li><p>It is also possible to <a class="reference internal" href="communication-protocols.html"><span class="doc">communicate with the server manually</span></a> from
 any language you like.</p></li>
 </ul>
-</div></blockquote>
 </section>
 </section>
 
@@ -830,7 +821,7 @@ any language you like.</p></li>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
+  <a href="https://github.com/krpc/krpc/commit/94b223c">94b223c</a>
 </p></div>
       
     </div>

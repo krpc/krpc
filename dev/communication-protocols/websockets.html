@@ -637,20 +637,16 @@ there is no need to connect.</p>
 <p>Communication with the server is performed via Protocol Buffer messages, encoded according to the
 protobuf binary format.</p>
 <p>To send a message to the server:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Encode the message using the Protocol Buffers format.</p></li>
 <li><p>Send a binary websockets message to the server, with payload containing the encoded message
 data.</p></li>
 </ol>
-</div></blockquote>
 <p>To receive a message from the server, do the reverse:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Receive a binary websockets message from the server.</p></li>
 <li><p>Decode the messages payload using the Protocol Buffers format.</p></li>
 </ol>
-</div></blockquote>
 </section>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
@@ -851,7 +847,7 @@ from the response.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/3c474d9">3c474d9</a>
+  <a href="https://github.com/krpc/krpc/commit/94b223c">94b223c</a>
 </p></div>
       
     </div>
