@@ -36,8 +36,8 @@ public class AngleOfAttack {
 
             // Compute the angle between the vectors
             double angle = 0;
-            if (dotProd > 0) {
-                angle = Math.abs(Math.acos(dotProd / vMag) * (180.0 / Math.PI));
+            if (vMag > 0) {
+                angle = Math.acos(dotProd / vMag) * (180.0 / Math.PI);
             }
 
             System.out.printf("Angle of attack = %.1f degrees\n", angle);

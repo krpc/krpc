@@ -18,8 +18,8 @@ while true do
 
     -- Compute the angle between the vectors
     angle = 0
-    if dotprod > 0 then
-        angle = math.abs(math.acos (dotprod / vmag) * (180. / math.pi))
+    if vmag > 0 then
+        angle = math.acos(dotprod / vmag) * (180. / math.pi)
     end
 
     print(string.format('Angle of attack = %.1f', angle))
