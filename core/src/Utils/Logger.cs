@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 
 namespace KRPC.Utils
 {
@@ -73,7 +74,7 @@ namespace KRPC.Utils
         public static void WriteLine (string message, Severity severity = Severity.Info)
         {
             if (ShouldLog (severity))
-                Writer (string.Format (format, DateTime.Now, severity, message), severity);
+                Writer (string.Format (CultureInfo.InvariantCulture, format, DateTime.Now, severity, message), severity);
         }
 
         internal static bool ShouldLog (Severity severity)

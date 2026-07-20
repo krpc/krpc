@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Google.Protobuf;
 
@@ -8,7 +9,7 @@ namespace KRPC.Client.Test
     {
         public static string ToHexString (this byte[] data)
         {
-            return BitConverter.ToString (data).Replace ("-", string.Empty).ToLower ();
+            return BitConverter.ToString (data).Replace ("-", string.Empty).ToLowerInvariant ();
         }
 
         public static string ToHexString (this ByteString data)

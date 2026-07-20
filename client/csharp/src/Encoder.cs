@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -98,12 +99,12 @@ namespace KRPC.Client
         {
             var encodedTuple = new Schema.KRPC.Tuple ();
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString (CultureInfo.InvariantCulture));
             var tupleType = genericType.MakeGenericType (valueTypes);
             using (var internalBuffer = new MemoryStream ()) {
                 var internalStream = new CodedOutputStream (internalBuffer);
                 for (int i = 0; i < valueTypes.Length; i++) {
-                    var property = tupleType.GetProperty ("Item" + (i + 1).ToString ());
+                    var property = tupleType.GetProperty ("Item" + (i + 1).ToString (CultureInfo.InvariantCulture));
                     var item = property.GetGetMethod ().Invoke (value, null);
                     encodedTuple.Items.Add (EncodeObject (item, valueTypes [i], internalBuffer, internalStream));
                 }
@@ -217,7 +218,7 @@ namespace KRPC.Client
         {
             var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
             var valueTypes = type.GetGenericArguments ().ToArray ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString ());
+            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString (CultureInfo.InvariantCulture));
             var values = new object[valueTypes.Length];
             for (int i = 0; i < valueTypes.Length; i++) {
                 var item = encodedTuple.Items [i];
