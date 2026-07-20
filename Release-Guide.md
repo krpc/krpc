@@ -1,37 +1,62 @@
 # Release guide for kRPC
 
-This document details the steps necessary to make a release of kRPC.
+A release is a sequence of small Python scripts in `tools/release/`, run in numbered order, with a
+few manual steps in between. Each script does one step, can be re-run if something fails, and asks
+for confirmation before publishing anything externally. They can be run from any directory; they
+locate the repository root themselves. They need nothing beyond a Python 3.12 interpreter and the
+tools of the step being run.
 
-1. The repository should be clean from changes. Also run a `bazel clean --expunge`.
-1. Bump the kRPC version number in `config.bzl` and commit the file.
-1. Make an annotated tag for the new version (using `git tag -a vx.x.x) and move the latest-version
-   tag to this commit.
-1. Run `tools/build-against-all-versions.sh` to check that the mod at least builds against all
-   supported versions of KSP.
-1. Build kRPC and run all of the tests locally to check that they pass using
-   `bazel build //... && bazel test //:test`
-1. Push the vx.x.x commit and tag to the main branch on GitHub using `git push && git push --tags`
-1. Wait for the CI workflow to pass.
-1. Run `tools/dist/assets.sh` to build all files and place them in `assets/...`
-1. Do the release on Github:
-   1. Use `tools/dist/changes.py github` to get changelog to include with the release
-   1. Upload the assets from the `assets` directory (11 files in total)
-1. Update the documentation website by pushing the `vx.x.x` tag (done above). The docs GitHub
-   workflow builds the docs and freezes them under `/<version>/`, then regenerates the version
-   dropdown so the new release appears in every already-published page. Merges to `main` separately
-   refresh the rolling `/dev/` build. No manual `docs`-branch merge is needed any more.
-1. Do a release on Curse
-1. Do a release on SpaceDock
-1. Bump the version number on [KSP AVC online](https://ksp-avc.cybutek.net/)
-1. Release all the clients and tools to their various platforms:
-   1. Upload the Python client to pypi using twine
-   1. Upload krpctools to pypi using twine
-   1. Release C# client on nuget.org
-   1. Run `tools/update-arduino-library.sh push` to update Arduino library repository and then run
-      `tools/update-arduino-library.sh release` to push a new version of Arduino library.
-   1. Upload Lua client to `s3://krpc/lua/...` and release the rockspec file on luarocks.org
-   1. Build and push docker image for TestServer using the makefile in `tools/TestServer/docker`
-1. Post release details to various forums etc:
-   1. Update release and dev thread on forums, and post an update notice to the release thread.
-   1. Post on Discord
-   1. Post on Reddit
+All the credentials live in one git-ignored TOML file at the root of the repository. Copy
+`tools/release/release-credentials.toml.template` to `release-credentials.toml`, fill in every value, and `chmod 600` it; the template says what each one is and where to get it. The scripts pass these to `gh`, `twine`,
+`dotnet`, `luarocks`, `aws` and `docker` explicitly, so none of those tools needs to be configured
+or logged in beforehand, and whatever account they are already set up with is ignored. Git is the
+exception: pushes to `krpc/krpc` and `krpc-arduino` use your normal git setup.
+
+## 1. Prepare
+
+1. Bump `version` in `config.bzl`, make sure every component with user-facing changes has a
+   `vx.x.x` section in its `CHANGES.txt` (components without user-facing changes get no section
+   and are omitted from the release notes), and commit and push to `main`.
+2. `tools/release/10-preflight.py` — checks the tree is clean and in sync with `origin/main`,
+   reports which components have changelog sections for the new version, and checks the needed
+   tools are installed and every credential is present. Read-only, so run it as often as you like.
+3. `tools/release/20-build-and-test.py` — builds everything and runs the full headless test and
+   lint suites. Pass `--expunge` to start from a pristine Bazel state.
+
+## 2. Tag
+
+4. `tools/release/30-tag.py` — makes the annotated `vx.x.x` tag, moves the `latest-version` tag,
+   and pushes the branch and both tags. Pushing the version tag also triggers the docs workflow,
+   which freezes the documentation website under `/<version>/` and adds the release to the version
+   dropdown — no manual docs step is needed.
+5. Wait for the CI workflow on `main` to pass (the tag script prints a `gh run watch` command).
+
+## 3. Release on GitHub
+
+6. `tools/release/40-build-assets.py` — builds all the release archives and collects them in
+   `assets/`, along with a SHA256 checksum file.
+7. `tools/release/50-release-github.py` — creates a **draft** GitHub release for the tag with the
+   changelog as release notes and the assets attached. Review the draft on GitHub and publish it
+   from there.
+
+## 4. Release the clients and tools
+
+Each of these publishes one package, and they can be run in any order. Each builds and re-tests
+the component first, and prompts before uploading.
+
+8. `tools/release/60-release-python.py` — Python client to PyPI.
+9. `tools/release/61-release-krpctools.py` — krpctools to PyPI.
+10. `tools/release/62-release-nuget.py` — C# client to nuget.org.
+11. `tools/release/63-release-arduino.py` — updates and tags the `krpc-arduino` repository.
+12. `tools/release/64-release-lua.py` — Lua client archive to S3 and the rockspec to luarocks.org.
+13. `tools/release/65-release-docker.py` — TestServer image to ghcr.io.
+
+## 5. Publish the mod and announce
+
+14. `tools/release/70-announcements.py` — prints the changelog formatted for the mod-hosting
+    sites and the checklist of remaining manual steps:
+    * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, with the changelog.
+    * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
+    * Update the forum release and development threads, and post an update notice to the release
+      thread.
+    * Post on Discord and Reddit.

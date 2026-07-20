@@ -74,7 +74,7 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
-        run: tools/dist/genfiles.sh
+        run: tools/release/genfiles.py
       - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
