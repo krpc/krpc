@@ -1,4 +1,5 @@
 v0.6.0
+ * Requires Python 3.10+
  * Allow calling static class methods from a class instance (#832)
  * Update to protobuf v7.35.1
  * Emit a DeprecationWarning when calling a deprecated member, and note deprecation in docstrings (#904)

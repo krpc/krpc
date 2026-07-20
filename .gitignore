@@ -10,3 +10,4 @@ obj
 *.pyc
 packages
 assets
+/release-credentials.toml

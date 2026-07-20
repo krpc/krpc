@@ -1,5 +1,15 @@
 v0.6.0
+ * Requires Python 3.10+
+ * krpc-servicedefs now runs the ServiceDefinitions tool on the .NET 8 runtime; Mono is
+   no longer required
  * Surface deprecated members in generated documentation and client stubs (#904)
+ * Fix generated Java clients failing to compile when a service has enough procedures to
+   push the generated type tables past the JVM's method size limit
+ * Generated C-nano functions are now defined as static inline, so the generated service
+   headers can be safely included from multiple translation units
+ * Fix C-nano client generation emitting zero-sized argument arrays for procedures with
+   no parameters
+ * Fix C-nano documentation rendering an entire service's API as an indented block quote
  * Fix docgen dropping remarks in service-level documentation
  * Fix cross-service member references not resolving in generated C# and Lua documentation (#897)
  * Fix member references in generated Python documentation using lowerCamelCase

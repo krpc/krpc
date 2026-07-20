@@ -1,3 +1,6 @@
+v0.6.0
+ * Fix RemoteTech.Available incorrectly reporting false in game scenes other than flight
+
 v0.3.7
  * Add RemoteTech.Available
  * Change required RemoteTech version to 1.8.0
