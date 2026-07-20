@@ -1,4 +1,5 @@
 local krpc = require 'krpc'
+local List = require 'pl.List'
 local conn = krpc.connect('Visual Debugging')
 local vessel = conn.space_center.active_vessel
 
