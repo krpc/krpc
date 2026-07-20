@@ -1,7 +1,7 @@
 Protocol Buffers over TCP/IP
 ============================
 
-This communication protocol allows languages that can communication over a TCP/IP connection to
+This communication protocol allows languages that can communicate over a TCP/IP connection to
 interact with a kRPC server.
 
 .. note:: If a client library is available for your language, you do not need to implement this
@@ -108,10 +108,6 @@ The following Python code connects to the RPC server at address 127.0.0.1 and po
 name "Jeb". Next, it connects to the stream server on port 50001. It then invokes the
 ``KRPC.GetStatus`` RPC, receives and decodes the result and prints out the server version number
 from the response.
-
-The following python code connects to the RPC server at address 127.0.0.1 and port 50000, using the
-name "Jeb". Next, it connects to the stream server on port 50001. Finally it invokes the
-``KRPC.GetStatus`` procedure, and receives, decodes and prints the result.
 
 To send and receive messages to the server, they need to be encoded and decoded from their binary
 format:
