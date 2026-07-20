@@ -107,6 +107,20 @@ service_definitions(
     visibility = ["//visibility:public"],
 )
 
+# The XML documentation file of the net8.0 build, for packaging beside
+# KRPC.Core.dll in published tools: the server and the ServiceDefinitions tool
+# read API documentation from the XML file next to the assembly at runtime.
+genrule(
+    name = "KRPC.Core.net8-xmldoc",
+    srcs = [":KRPC.Core.net8"],
+    outs = ["xmldoc-net8/KRPC.Core.xml"],
+    cmd = 'for f in $(SRCS); do case "$$f" in *.xml) cp "$$f" "$@";; esac; done',
+    visibility = [
+        "//tools/TestServer:__pkg__",
+        "//tools/krpctools:__pkg__",
+    ],
+)
+
 csharp_assembly_info(
     name = "TestAssemblyInfo",
     cls_compliant = False,

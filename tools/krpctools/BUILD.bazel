@@ -51,6 +51,7 @@ py_sdist(
         "//:COPYING",
         "//:python_version",
         "//:version",
+        "//core:KRPC.Core.net8-xmldoc",
         "//tools/ServiceDefinitions:publish",
         "//tools/TestServer:ServiceDefinitions",
         "//tools/TestServer:archive",
@@ -63,6 +64,7 @@ py_sdist(
     ]),
     path_map = {
         "version.py": "krpctools/version.py",
+        "core/xmldoc-net8/": "krpctools/bin/",
         "tools/krpctools/": "",
         "tools/ServiceDefinitions/publish/publish/linux-x64/": "krpctools/bin/",
         "tools/TestServer/TestService.json": "krpctools/test/TestService.json",

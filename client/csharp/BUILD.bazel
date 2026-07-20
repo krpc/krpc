@@ -40,7 +40,7 @@ nuget_package(
     project_url = "https://github.com/krpc/krpc",
     version = nuget_version,
     deps = {
-        "Google.Protobuf": "3.22.0",
+        "Google.Protobuf": "3.35.1",
     },
 )
 
