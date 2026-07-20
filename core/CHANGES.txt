@@ -1,5 +1,6 @@
 v0.6.0
  * Add Version property to Core, set by the server plugin on startup
+ * Enable TCP_NODELAY on client TCP connections, reducing RPC round-trip latency
  * Make logger configurable in where it writes to (#780)
  * Surface deprecated members (annotated with [Obsolete]) in the service definition and over the wire (#904)
  * Rename KRPC.CurrentGameScene to KRPC.GameScene and make it settable to switch the current game scene (#897)

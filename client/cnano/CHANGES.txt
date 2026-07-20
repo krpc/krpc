@@ -1,9 +1,9 @@
 v0.6.0
  * Distribute via vcpkg
  * Drop autotools build; CMake is now the only supported build system
- * Modernise CMake build: require CMake 3.15+, target-based usage requirements (#834)
- * nanopb is now an external dependency (fetched via FetchContent or found on the system) rather than being bundled in the release archive
- * krpc.proto is bundled in the release archive; CMake generates the protocol buffer code at build time using the nanopb generator
+ * Modernize CMake build: require CMake 3.15+, target-based usage requirements (#834)
+ * nanopb is now an external dependency (fetched via FetchContent or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb
+ * Pre-generated protocol buffer code and krpc.proto are bundled in the release archive; set KRPC_REGENERATE_PROTO=ON to regenerate the code from krpc.proto using the nanopb generator
  * Add CMake package config so consumers can use find_package(krpc_cnano CONFIG REQUIRED)
  * CMake dependency options (KRPC_FETCH_PROTOBUF, KRPC_FETCH_NANOPB): when OFF
    (default) the system install is required; when ON FetchContent is used.
