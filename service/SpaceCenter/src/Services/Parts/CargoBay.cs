@@ -59,25 +59,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The state of the cargo bay.
         /// </summary>
         /// <remarks>
+        /// This describes where the bay's doors are, which is not the same as whether the parts
+        /// inside are sheltered: a bay whose open end has nothing attached to it never shelters
+        /// anything, however tightly shut it is. Use <see cref="Part.Shielded"/> for that.
+        ///
         /// A cargo bay is never <see cref="DeployableState.Broken" />, as the game
         /// does not track damage for them.
         /// </remarks>
         [KRPCProperty]
         public DeployableState State {
             get {
-                if (bay.ClosedAndLocked ())
-                    return DeployableState.Retracted;
-                if (!animation.IsMoving ())
-                    return DeployableState.Deployed;
-                // The animation plays forwards, towards a scalar of 1, while animSwitch is false,
-                // and backwards towards 0 while it is true. closedPosition is the scalar at which
-                // the bay is closed, so which direction opens the bay depends on which end of the
-                // animation that is.
-                var playingForwards = !animation.animSwitch;
-                var opensForwards = bay.closedPosition < 0.5f;
-                return playingForwards == opensForwards
-                    ? DeployableState.Deploying
-                    : DeployableState.Retracting;
+                if (animation.IsMoving ())
+                    return OpeningOrOpen
+                        ? DeployableState.Deploying
+                        : DeployableState.Retracting;
+                return OpeningOrOpen
+                    ? DeployableState.Deployed
+                    : DeployableState.Retracted;
             }
         }
 
@@ -86,17 +84,32 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Open {
-            get {
-                var state = State;
-                return state == DeployableState.Deployed || state == DeployableState.Deploying;
-            }
+            get { return OpeningOrOpen; }
             set {
-                if (value == Open)
+                if (value == OpeningOrOpen)
                     return;
                 var toggle = ToggleEvent;
                 if (toggle != null)
                     toggle.Invoke ();
             }
+        }
+
+        /// <summary>
+        /// Whether the bay is open, or travelling that way.
+        /// </summary>
+        /// <remarks>
+        /// The animation runs forwards, towards a scalar of 1, while animSwitch is false, and
+        /// backwards towards 0 while it is true. closedPosition is the scalar at which the bay is
+        /// shut, so which of those opens it depends on which end of the animation that is.
+        ///
+        /// A bay that is not moving is sitting at whichever end it last travelled to, so the same
+        /// answer covers a moving and a stationary bay alike. Reading the direction rather than
+        /// the position matters: the animation stops fractionally short of its end, so comparing
+        /// the scalar against closedPosition reports a shut bay as open for as long as it takes
+        /// the last frame to land.
+        /// </remarks>
+        bool OpeningOrOpen {
+            get { return !animation.animSwitch == (bay.closedPosition < 0.5f); }
         }
 
         /// <summary>
