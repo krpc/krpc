@@ -13,7 +13,7 @@ void setup() {
   // Set up communication with the server
   krpc_connect(conn, "Arduino Example");
 
-  // Indicate succesful connection by lighting the on-board LED
+  // Indicate successful connection by lighting the on-board LED
   digitalWrite(LED_BUILTIN, HIGH);
 }
 
