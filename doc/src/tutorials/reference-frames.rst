@@ -558,6 +558,11 @@ below:
 .. image:: /images/reference-frames/vessel-surface-velocity.png
    :align: center
 
+.. seealso:: If you only need the surface prograde or retrograde direction as a
+   vector, rather than a reference frame to point the auto-pilot at,
+   :attr:`Flight.surface_prograde` and :attr:`Flight.surface_retrograde` return
+   it directly, matching the navball's surface mode.
+
 .. _tutorial-reference-frames-vessel-speed:
 
 Vessel Speed
