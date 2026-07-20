@@ -119,7 +119,7 @@ close to the target apoapsis.
          :lineno-start: 33
          :linenos:
 
-Next, the program fine tunes the apoapsis, using 10% thrust, then waits until
+Next, the program fine tunes the apoapsis, using 25% thrust, then waits until
 the rocket has left Kerbin's atmosphere.
 
 .. tabs::
