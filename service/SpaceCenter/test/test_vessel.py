@@ -37,6 +37,21 @@ class TestVessel(krpctest.TestCase):
     def test_packed(self):
         self.assertFalse(self.vessel.packed)
 
+    def test_physics_range(self):
+        # Defaults to the stock pack distance for the vessel's situation, which in orbit
+        # is far shorter than the 2500m unload distance
+        self.assertEqual(self.Situation.orbiting, self.vessel.situation)
+        self.assertAlmostEqual(350, self.vessel.physics_range, places=1)
+        try:
+            self.vessel.physics_range = 50000
+            self.assertAlmostEqual(50000, self.vessel.physics_range, places=1)
+            self.wait(0.5)
+            # Survives being re-applied by the addon
+            self.assertAlmostEqual(50000, self.vessel.physics_range, places=1)
+        finally:
+            self.vessel.physics_range = 0
+        self.assertAlmostEqual(350, self.vessel.physics_range, places=1)
+
     def test_recoverable(self):
         self.assertFalse(self.vessel.recoverable)
         self.assertRaises(RuntimeError, self.vessel.recover)

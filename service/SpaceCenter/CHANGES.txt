@@ -58,6 +58,10 @@ v0.6.0
    individual part (#459)
  * Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (#827)
  * Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
+ * Add Vessel.PhysicsRange to set how far from the active vessel a vessel keeps running its
+   physics simulation, so that it stays controllable beyond the game's default range. The
+   range applies to that vessel only, and persists until it is set back to zero or the game
+   is exited
  * Add Engine.Flameout (#311)
  * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
  * Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById,

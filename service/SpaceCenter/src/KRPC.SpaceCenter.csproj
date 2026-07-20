@@ -95,6 +95,7 @@
     <Compile Include="PilotAddon.cs" />
     <Compile Include="ResourceHarvesterAddon.cs" />
     <Compile Include="ResourceTransferAddon.cs" />
+    <Compile Include="VesselPhysicsRangeAddon.cs" />
     <Compile Include="Services\Alarm.cs" />
     <Compile Include="Services\AlarmManager.cs" />
     <Compile Include="Services\AlarmMessageAction.cs" />

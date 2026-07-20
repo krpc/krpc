@@ -173,6 +173,7 @@ SpaceCenter.Vessel.Type
 SpaceCenter.Vessel.Situation
 SpaceCenter.Vessel.Loaded
 SpaceCenter.Vessel.Packed
+SpaceCenter.Vessel.PhysicsRange
 SpaceCenter.Vessel.Recoverable
 SpaceCenter.Vessel.Recover
 SpaceCenter.Vessel.MET
