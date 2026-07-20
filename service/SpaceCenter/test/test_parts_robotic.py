@@ -181,11 +181,17 @@ class TestPartsRobotic(krpctest.TestCase):
         module = next(
             m for m in hinge.part.modules if m.name == "ModuleRoboticServoHinge"
         )
-        self.assertTrue(controller.add_axis(module, "Target Angle"))
+        # Axes are named by field name, not by the label shown in the part's
+        # menu, so that the names round trip through axes() and do not change
+        # with the language the game is running in
+        self.assertTrue(controller.add_axis(module, "targetAngle"))
         self.assertTrue(controller.has_part(hinge.part))
-        self.assertTrue(controller.add_key_frame(module, "Target Angle", 0, 0))
-        self.assertGreater(len(controller.axes()), 0)
-        self.assertTrue(controller.clear_axis(module, "Target Angle"))
+        self.assertTrue(controller.add_key_frame(module, "targetAngle", 0, 0))
+        self.assertIn("targetAngle", [axis[1] for axis in controller.axes()])
+        self.assertTrue(controller.clear_axis(module, "targetAngle"))
+
+        # The display name is not accepted
+        self.assertFalse(controller.add_axis(module, "Target Angle"))
 
 
 if __name__ == "__main__":
