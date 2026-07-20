@@ -1209,21 +1209,6 @@ Module
 
       :Game Scenes: All
 
-   .. property:: System.Collections.Generic.IDictionary<string,string> AllFieldsById { get; }
-
-      .. warning:: Deprecated. Use :prop:`Module.FieldList` instead.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      This is the same as :prop:`Module.FieldsById`, except that it also includes
-      fields that are not visible in the right-click menu of the part.
-
-      :Game Scenes: All
-
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same identifier.
-
    .. method:: bool HasField(string name)
 
       .. warning:: Deprecated. Filter :prop:`Module.FieldList` by :prop:`PartField.GuiName` instead.

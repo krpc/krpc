@@ -90,7 +90,6 @@ SpaceCenter service
 * Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
 * Add Engine.Flameout (:issue:`311`)
 * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (:issue:`827`)
-* Add Module.AllFieldsById to expose all part module field values, including those not visible in the UI (:issue:`858`)
 * Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById, SetFieldStringById, SetFieldBoolById and ResetFieldById to also access fields not visible in the UI (:issue:`858`)
 * Add to Alarm: Node, OriginBody, DestinationBody, WarpAction, MessageAction, PlaySound, DeleteOnDismiss, Triggered and Actioned (:issue:`853`)
 * Add AlarmType, AlarmWarpAction and AlarmMessageAction enumerations (:issue:`853`)

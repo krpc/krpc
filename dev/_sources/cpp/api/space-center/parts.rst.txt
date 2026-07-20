@@ -1191,20 +1191,6 @@ Module
 
    
 
-   .. function:: std::map<std::string, std::string> all_fields_by_id()
-
-      .. warning:: Deprecated. Use :func:`Module::field_list` instead.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      This is the same as :func:`Module::fields_by_id`, except that it also includes
-      fields that are not visible in the right-click menu of the part.
-
-   
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same identifier.
-
    .. function:: bool has_field(std::string name)
 
       .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::gui_name` instead.

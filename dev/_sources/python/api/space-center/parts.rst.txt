@@ -1378,22 +1378,6 @@ Module
       :rtype: dict(str, str)
    
 
-   .. attribute:: all_fields_by_id
-
-      .. warning:: Deprecated. Use :attr:`Module.field_list` instead.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      This is the same as :attr:`Module.fields_by_id`, except that it also includes
-      fields that are not visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: dict(str, str)
-   
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same identifier.
-
    .. method:: has_field(name)
 
       .. warning:: Deprecated. Filter :attr:`Module.field_list` by :attr:`PartField.gui_name` instead.

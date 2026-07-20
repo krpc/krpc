@@ -1243,21 +1243,6 @@ Module
       :Attribute: Read-only, cannot be set
       :rtype: Map
 
-   .. attribute:: all_fields_by_id: Map
-
-      .. warning:: Deprecated. Use :attr:`SpaceCenter.Module.field_list` instead.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      This is the same as :attr:`SpaceCenter.Module.fields_by_id`, except that it also includes
-      fields that are not visible in the right-click menu of the part.
-
-      :Attribute: Read-only, cannot be set
-      :rtype: Map
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same identifier.
-
    .. method:: has_field(name)
 
       .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.field_list` by :attr:`SpaceCenter.PartField.gui_name` instead.

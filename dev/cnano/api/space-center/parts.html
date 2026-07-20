@@ -2028,22 +2028,6 @@ These are the values visible in the right-click menu of the part.</p>
 </dd></dl>
 
 <dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Module_t.krpc_SpaceCenter_Module_AllFieldsById">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Module_AllFieldsById</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_dictionary_string_string_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Module_t.krpc_SpaceCenter_Module_AllFieldsById" title="Link to this definition">#</a><br /></dt>
-<dd><div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>Deprecated. Use <a class="reference internal" href="#c.krpc_SpaceCenter_Module_t.krpc_SpaceCenter_Module_FieldList" title="krpc_SpaceCenter_Module_FieldList"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Module_FieldList()</span></code></a> instead.</p>
-</div>
-<p>The modules field identifiers and their associated values, as a dictionary.
-This is the same as <a class="reference internal" href="#c.krpc_SpaceCenter_Module_t.krpc_SpaceCenter_Module_FieldsById" title="krpc_SpaceCenter_Module_FieldsById"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Module_FieldsById()</span></code></a>, except that it also includes
-fields that are not visible in the right-click menu of the part.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Throws an exception if there is more than one field with the same identifier.</p>
-</div>
-</dd></dl>
-
-<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Module_t.krpc_SpaceCenter_Module_HasField">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Module_HasField</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Module_t.krpc_SpaceCenter_Module_HasField" title="Link to this definition">#</a><br /></dt>
 <dd><div class="admonition warning">
@@ -6754,7 +6738,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/897ebc0">897ebc0</a>
+  <a href="https://github.com/krpc/krpc/commit/4398434">4398434</a>
 </p></div>
       
     </div>

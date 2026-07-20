@@ -1253,21 +1253,6 @@ Module
 
    
 
-   .. method:: java.util.Map<String,String> getAllFieldsById()
-
-
-      .. warning:: Deprecated. Use :meth:`Module.getFieldList()` instead.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      This is the same as :meth:`Module.getFieldsById()`, except that it also includes
-      fields that are not visible in the right-click menu of the part.
-
-   
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same identifier.
-
    .. method:: boolean hasField(String name)
 
       .. warning:: Deprecated. Filter :meth:`Module.getFieldList()` by :meth:`PartField.getGuiName()` instead.

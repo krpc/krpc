@@ -1190,20 +1190,6 @@ Module
 
    
 
-   .. function:: krpc_error_t krpc_SpaceCenter_Module_AllFieldsById(krpc_connection_t connection, krpc_dictionary_string_string_t * result)
-
-      .. warning:: Deprecated. Use :func:`krpc_SpaceCenter_Module_FieldList` instead.
-
-      The modules field identifiers and their associated values, as a dictionary.
-      This is the same as :func:`krpc_SpaceCenter_Module_FieldsById`, except that it also includes
-      fields that are not visible in the right-click menu of the part.
-
-   
-
-      .. note::
-
-         Throws an exception if there is more than one field with the same identifier.
-
    .. function:: krpc_error_t krpc_SpaceCenter_Module_HasField(krpc_connection_t connection, bool * result, const char * name)
 
       .. warning:: Deprecated. Filter :func:`krpc_SpaceCenter_Module_FieldList` by :func:`krpc_SpaceCenter_PartField_GuiName` instead.
