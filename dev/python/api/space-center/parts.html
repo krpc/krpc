@@ -4216,6 +4216,9 @@ to boost the power.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>This describes where the bay’s doors are, which is not the same as whether the parts
+inside are sheltered: a bay whose open end has nothing attached to it never shelters
+anything, however tightly shut it is. Use <a class="reference internal" href="#SpaceCenter.Part.shielded" title="SpaceCenter.Part.shielded"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.shielded</span></code></a> for that.</p>
 <p>A cargo bay is never <a class="reference internal" href="#SpaceCenter.DeployableState.broken" title="SpaceCenter.DeployableState.broken"><code class="xref py py-attr docutils literal notranslate"><span class="pre">DeployableState.broken</span></code></a>, as the game
 does not track damage for them.</p>
 </div>
@@ -7353,8 +7356,8 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><em>Module</em></a>)</p></li>
-<li><p><strong>field_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>module</strong> (<a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><em>Module</em></a>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> (<em>str</em>) – The name of the axis field, as returned by <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -7373,10 +7376,10 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><em>Module</em></a>)</p></li>
-<li><p><strong>field_name</strong> (<em>str</em>)</p></li>
-<li><p><strong>time</strong> (<a class="reference internal" href="#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>)</p></li>
-<li><p><strong>value</strong> (<a class="reference internal" href="#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>)</p></li>
+<li><p><strong>module</strong> (<a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><em>Module</em></a>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> (<em>str</em>) – The name of the axis field, as returned by <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p></li>
+<li><p><strong>time</strong> (<a class="reference internal" href="#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – The time of the key frame.</p></li>
+<li><p><strong>value</strong> (<a class="reference internal" href="#SpaceCenter.FieldType.float" title="SpaceCenter.FieldType.float"><em>float</em></a>) – The value of the key frame.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -7395,8 +7398,8 @@ See <a class="reference internal" href="#SpaceCenter.ResourceDrain.drain_mode" t
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><em>Module</em></a>)</p></li>
-<li><p><strong>field_name</strong> (<em>str</em>)</p></li>
+<li><p><strong>module</strong> (<a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><em>Module</em></a>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> (<em>str</em>) – The name of the axis field, as returned by <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -8473,7 +8476,10 @@ to the ratios at which they are consumed by the RCS.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the same readout string shown in the part’s right-click menu
-in-game. For programmatic access to the underlying quantities, consider
+in-game, and is intended for display rather than for parsing. Both its
+units and the way it formats numbers follow the language the game is
+running in, so it is not stable across locales. For programmatic access
+to the underlying quantities, use
 <a class="reference internal" href="#SpaceCenter.Part.temperature" title="SpaceCenter.Part.temperature"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.temperature</span></code></a> (temperature sensors),
 <a class="reference internal" href="flight.html#SpaceCenter.Flight.g_force" title="SpaceCenter.Flight.g_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.g_force</span></code></a> (accelerometers) or
 <a class="reference internal" href="flight.html#SpaceCenter.Flight.static_pressure" title="SpaceCenter.Flight.static_pressure"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.static_pressure</span></code></a> (barometers).</p>
@@ -9649,7 +9655,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/34b1de8">34b1de8</a>
+  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
 </p></div>
       
     </div>

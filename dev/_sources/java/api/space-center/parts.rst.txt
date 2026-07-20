@@ -1988,6 +1988,10 @@ Cargo Bay
 
       .. note::
 
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :meth:`Part.getShielded()` for that.
+
          A cargo bay is never :meth:`DeployableState.BROKEN`, as the game
          does not track damage for them.
 
@@ -3925,8 +3929,8 @@ Robotic Controller
 
       Add an axis to the controller.
 
-      :param Module module:
-      :param String fieldName:
+      :param Module module: The part module that the axis belongs to.
+      :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
       :returns: Returns ``true`` if the axis is added successfully.
    
 
@@ -3934,10 +3938,10 @@ Robotic Controller
 
       Add key frame value for controller axis.
 
-      :param Module module:
-      :param String fieldName:
-      :param float time:
-      :param float value:
+      :param Module module: The part module that the axis belongs to.
+      :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
+      :param float time: The time of the key frame.
+      :param float value: The value of the key frame.
       :returns: Returns ``true`` if the key frame is added successfully.
    
 
@@ -3945,8 +3949,8 @@ Robotic Controller
 
       Clear axis.
 
-      :param Module module:
-      :param String fieldName:
+      :param Module module: The part module that the axis belongs to.
+      :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
       :returns: Returns ``true`` if the axis is cleared successfully.
    
 
@@ -4581,7 +4585,10 @@ Sensor
       .. note::
 
          This is the same readout string shown in the part's right-click menu
-         in-game. For programmatic access to the underlying quantities, consider
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
          :meth:`Part.getTemperature()` (temperature sensors),
          :meth:`Flight.getGForce()` (accelerometers) or
          :meth:`Flight.getStaticPressure()` (barometers).

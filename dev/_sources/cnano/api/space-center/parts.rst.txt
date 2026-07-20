@@ -1974,6 +1974,10 @@ Cargo Bay
 
       .. note::
 
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :func:`krpc_SpaceCenter_Part_Shielded` for that.
+
          A cargo bay is never :macro:`KRPC_SPACECENTER_DEPLOYABLESTATE_BROKEN`, as the game
          does not track damage for them.
 
@@ -3826,8 +3830,8 @@ Robotic Controller
 
       :Parameters:
 
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **fieldName** -- The name of the axis field, as returned by :func:`krpc_SpaceCenter_RoboticController_Axes`.
 
       :returns: Returns ``true`` if the axis is added successfully.
    
@@ -3838,10 +3842,10 @@ Robotic Controller
 
       :Parameters:
 
-
-
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **fieldName** -- The name of the axis field, as returned by :func:`krpc_SpaceCenter_RoboticController_Axes`.
+       * **time** -- The time of the key frame.
+       * **value** -- The value of the key frame.
 
       :returns: Returns ``true`` if the key frame is added successfully.
    
@@ -3852,8 +3856,8 @@ Robotic Controller
 
       :Parameters:
 
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **fieldName** -- The name of the axis field, as returned by :func:`krpc_SpaceCenter_RoboticController_Axes`.
 
       :returns: Returns ``true`` if the axis is cleared successfully.
    
@@ -4423,7 +4427,10 @@ Sensor
       .. note::
 
          This is the same readout string shown in the part's right-click menu
-         in-game. For programmatic access to the underlying quantities, consider
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
          :func:`krpc_SpaceCenter_Part_Temperature` (temperature sensors),
          :func:`krpc_SpaceCenter_Flight_GForce` (accelerometers) or
          :func:`krpc_SpaceCenter_Flight_StaticPressure` (barometers).

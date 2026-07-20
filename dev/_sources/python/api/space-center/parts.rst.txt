@@ -2161,6 +2161,10 @@ Cargo Bay
 
       .. note::
 
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :attr:`Part.shielded` for that.
+
          A cargo bay is never :attr:`DeployableState.broken`, as the game
          does not track damage for them.
 
@@ -4231,8 +4235,8 @@ Robotic Controller
 
       Add an axis to the controller.
 
-      :param Module module:
-      :param str field_name:
+      :param Module module: The part module that the axis belongs to.
+      :param str field_name: The name of the axis field, as returned by :meth:`RoboticController.axes`.
       :returns: Returns ``True`` if the axis is added successfully.
       :rtype: bool
    
@@ -4241,10 +4245,10 @@ Robotic Controller
 
       Add key frame value for controller axis.
 
-      :param Module module:
-      :param str field_name:
-      :param float time:
-      :param float value:
+      :param Module module: The part module that the axis belongs to.
+      :param str field_name: The name of the axis field, as returned by :meth:`RoboticController.axes`.
+      :param float time: The time of the key frame.
+      :param float value: The value of the key frame.
       :returns: Returns ``True`` if the key frame is added successfully.
       :rtype: bool
    
@@ -4253,8 +4257,8 @@ Robotic Controller
 
       Clear axis.
 
-      :param Module module:
-      :param str field_name:
+      :param Module module: The part module that the axis belongs to.
+      :param str field_name: The name of the axis field, as returned by :meth:`RoboticController.axes`.
       :returns: Returns ``True`` if the axis is cleared successfully.
       :rtype: bool
    
@@ -4918,7 +4922,10 @@ Sensor
       .. note::
 
          This is the same readout string shown in the part's right-click menu
-         in-game. For programmatic access to the underlying quantities, consider
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
          :attr:`Part.temperature` (temperature sensors),
          :attr:`Flight.g_force` (accelerometers) or
          :attr:`Flight.static_pressure` (barometers).

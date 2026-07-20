@@ -1996,6 +1996,10 @@ Cargo Bay
 
       .. note::
 
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :prop:`Part.Shielded` for that.
+
          A cargo bay is never :enum:`DeployableState.Broken`, as the game
          does not track damage for them.
 
@@ -3817,8 +3821,8 @@ Robotic Controller
 
       :parameters:
 
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **fieldName** -- The name of the axis field, as returned by :meth:`RoboticController.Axes`.
 
       :returns: Returns ``true`` if the axis is added successfully.
       :Game Scenes: All
@@ -3829,10 +3833,10 @@ Robotic Controller
 
       :parameters:
 
-
-
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **fieldName** -- The name of the axis field, as returned by :meth:`RoboticController.Axes`.
+       * **time** -- The time of the key frame.
+       * **value** -- The value of the key frame.
 
       :returns: Returns ``true`` if the key frame is added successfully.
       :Game Scenes: All
@@ -3843,8 +3847,8 @@ Robotic Controller
 
       :parameters:
 
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **fieldName** -- The name of the axis field, as returned by :meth:`RoboticController.Axes`.
 
       :returns: Returns ``true`` if the axis is cleared successfully.
       :Game Scenes: All
@@ -4374,7 +4378,10 @@ Sensor
       .. note::
 
          This is the same readout string shown in the part's right-click menu
-         in-game. For programmatic access to the underlying quantities, consider
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
          :prop:`Part.Temperature` (temperature sensors),
          :prop:`Flight.GForce` (accelerometers) or
          :prop:`Flight.StaticPressure` (barometers).

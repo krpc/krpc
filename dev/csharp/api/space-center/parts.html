@@ -3837,6 +3837,9 @@ to boost the power.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>This describes where the bay’s doors are, which is not the same as whether the parts
+inside are sheltered: a bay whose open end has nothing attached to it never shelters
+anything, however tightly shut it is. Use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Shielded" title="KRPC.Client.Services.SpaceCenter.Part.Shielded property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.Shielded</span></code></a> for that.</p>
 <p>A cargo bay is never <a class="reference internal" href="#value-KRPC.Client.Services.SpaceCenter.DeployableState.Broken" title="KRPC.Client.Services.SpaceCenter.DeployableState.Broken value"><code class="xref csharp csharp-enum docutils literal notranslate"><span class="pre">DeployableState.Broken</span></code></a>, as the game
 does not track damage for them.</p>
 </div>
@@ -6611,7 +6614,11 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dd><p>Add an axis to the controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – The part module that the axis belongs to.</p></li>
+<li><p><strong>fieldName</strong> – The name of the axis field, as returned by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.RoboticController.Axes" title="KRPC.Client.Services.SpaceCenter.RoboticController.Axes method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">RoboticController.Axes</span></code></a>.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the axis is added successfully.</p>
 </dd>
@@ -6627,7 +6634,13 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dd><p>Add key frame value for controller axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – The part module that the axis belongs to.</p></li>
+<li><p><strong>fieldName</strong> – The name of the axis field, as returned by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.RoboticController.Axes" title="KRPC.Client.Services.SpaceCenter.RoboticController.Axes method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">RoboticController.Axes</span></code></a>.</p></li>
+<li><p><strong>time</strong> – The time of the key frame.</p></li>
+<li><p><strong>value</strong> – The value of the key frame.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the key frame is added successfully.</p>
 </dd>
@@ -6643,7 +6656,11 @@ See <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 <dd><p>Clear axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – The part module that the axis belongs to.</p></li>
+<li><p><strong>fieldName</strong> – The name of the axis field, as returned by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.RoboticController.Axes" title="KRPC.Client.Services.SpaceCenter.RoboticController.Axes method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">RoboticController.Axes</span></code></a>.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the axis is cleared successfully.</p>
 </dd>
@@ -7526,7 +7543,10 @@ to the ratios at which they are consumed by the RCS.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the same readout string shown in the part’s right-click menu
-in-game. For programmatic access to the underlying quantities, consider
+in-game, and is intended for display rather than for parsing. Both its
+units and the way it formats numbers follow the language the game is
+running in, so it is not stable across locales. For programmatic access
+to the underlying quantities, use
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Part.Temperature" title="KRPC.Client.Services.SpaceCenter.Part.Temperature property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.Temperature</span></code></a> (temperature sensors),
 <a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.GForce" title="KRPC.Client.Services.SpaceCenter.Flight.GForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.GForce</span></code></a> (accelerometers) or
 <a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.StaticPressure" title="KRPC.Client.Services.SpaceCenter.Flight.StaticPressure property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.StaticPressure</span></code></a> (barometers).</p>
@@ -8605,7 +8625,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/34b1de8">34b1de8</a>
+  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
 </p></div>
       
     </div>

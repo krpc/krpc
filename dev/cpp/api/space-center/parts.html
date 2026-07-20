@@ -2976,6 +2976,9 @@ to boost the power.</p>
 <dd><p>The state of the cargo bay.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>This describes where the bay’s doors are, which is not the same as whether the parts
+inside are sheltered: a bay whose open end has nothing attached to it never shelters
+anything, however tightly shut it is. Use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part8shieldedEv" title="krpc::services::SpaceCenter::Part::shielded"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::shielded()</span></code></a> for that.</p>
 <p>A cargo bay is never <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter15DeployableState6brokenE" title="krpc::services::SpaceCenter::DeployableState::broken"><code class="xref cpp cpp-enumerator docutils literal notranslate"><span class="pre">DeployableState::broken</span></code></a>, as the game
 does not track damage for them.</p>
 </div>
@@ -5029,7 +5032,11 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dd><p>Add an axis to the controller.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> – The name of the axis field, as returned by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController4axesEv" title="krpc::services::SpaceCenter::RoboticController::axes"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RoboticController::axes()</span></code></a>.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the axis is added successfully.</p>
 </dd>
@@ -5042,7 +5049,13 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dd><p>Add key frame value for controller axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> – The name of the axis field, as returned by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController4axesEv" title="krpc::services::SpaceCenter::RoboticController::axes"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RoboticController::axes()</span></code></a>.</p></li>
+<li><p><strong>time</strong> – The time of the key frame.</p></li>
+<li><p><strong>value</strong> – The value of the key frame.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the key frame is added successfully.</p>
 </dd>
@@ -5055,7 +5068,11 @@ See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13Res
 <dd><p>Clear axis.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p></p></dd>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>module</strong> – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> – The name of the axis field, as returned by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter17RoboticController4axesEv" title="krpc::services::SpaceCenter::RoboticController::axes"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">RoboticController::axes()</span></code></a>.</p></li>
+</ul>
+</dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the axis is cleared successfully.</p>
 </dd>
@@ -5780,7 +5797,10 @@ to the ratios at which they are consumed by the RCS.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the same readout string shown in the part’s right-click menu
-in-game. For programmatic access to the underlying quantities, consider
+in-game, and is intended for display rather than for parsing. Both its
+units and the way it formats numbers follow the language the game is
+running in, so it is not stable across locales. For programmatic access
+to the underlying quantities, use
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4Part11temperatureEv" title="krpc::services::SpaceCenter::Part::temperature"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::temperature()</span></code></a> (temperature sensors),
 <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight7g_forceEv" title="krpc::services::SpaceCenter::Flight::g_force"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::g_force()</span></code></a> (accelerometers) or
 <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight15static_pressureEv" title="krpc::services::SpaceCenter::Flight::static_pressure"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::static_pressure()</span></code></a> (barometers).</p>
@@ -6701,7 +6721,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/34b1de8">34b1de8</a>
+  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
 </p></div>
       
     </div>

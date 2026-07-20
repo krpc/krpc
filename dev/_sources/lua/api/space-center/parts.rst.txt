@@ -1951,6 +1951,10 @@ Cargo Bay
 
       .. note::
 
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :attr:`SpaceCenter.Part.shielded` for that.
+
          A cargo bay is never :attr:`SpaceCenter.DeployableState.broken`, as the game
          does not track damage for them.
 
@@ -3815,8 +3819,8 @@ Robotic Controller
 
       Add an axis to the controller.
 
-      :param SpaceCenter.Module module:
-      :param string field_name:
+      :param SpaceCenter.Module module: The part module that the axis belongs to.
+      :param string field_name: The name of the axis field, as returned by :meth:`SpaceCenter.RoboticController.axes`.
       :returns: Returns ``True`` if the axis is added successfully.
       :rtype: boolean
 
@@ -3824,10 +3828,10 @@ Robotic Controller
 
       Add key frame value for controller axis.
 
-      :param SpaceCenter.Module module:
-      :param string field_name:
-      :param number time:
-      :param number value:
+      :param SpaceCenter.Module module: The part module that the axis belongs to.
+      :param string field_name: The name of the axis field, as returned by :meth:`SpaceCenter.RoboticController.axes`.
+      :param number time: The time of the key frame.
+      :param number value: The value of the key frame.
       :returns: Returns ``True`` if the key frame is added successfully.
       :rtype: boolean
 
@@ -3835,8 +3839,8 @@ Robotic Controller
 
       Clear axis.
 
-      :param SpaceCenter.Module module:
-      :param string field_name:
+      :param SpaceCenter.Module module: The part module that the axis belongs to.
+      :param string field_name: The name of the axis field, as returned by :meth:`SpaceCenter.RoboticController.axes`.
       :returns: Returns ``True`` if the axis is cleared successfully.
       :rtype: boolean
 
@@ -4424,7 +4428,10 @@ Sensor
       .. note::
 
          This is the same readout string shown in the part's right-click menu
-         in-game. For programmatic access to the underlying quantities, consider
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
          :attr:`SpaceCenter.Part.temperature` (temperature sensors),
          :attr:`SpaceCenter.Flight.g_force` (accelerometers) or
          :attr:`SpaceCenter.Flight.static_pressure` (barometers).

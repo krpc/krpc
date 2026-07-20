@@ -3023,6 +3023,9 @@ to boost the power.</p>
 <dd><p>The state of the cargo bay.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>This describes where the bay’s doors are, which is not the same as whether the parts
+inside are sheltered: a bay whose open end has nothing attached to it never shelters
+anything, however tightly shut it is. Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getShielded()" title="krpc.client.services.SpaceCenter.Part.getShielded()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getShielded()</span></code></a> for that.</p>
 <p>A cargo bay is never <a class="reference internal" href="#krpc.client.services.SpaceCenter.DeployableState.BROKEN" title="krpc.client.services.SpaceCenter.DeployableState.BROKEN"><code class="xref java java-meth docutils literal notranslate"><span class="pre">DeployableState.BROKEN</span></code></a>, as the game
 does not track damage for them.</p>
 </div>
@@ -5087,8 +5090,8 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><code class="xref java java-type docutils literal notranslate"><span class="pre">Module</span></code></a></span>)</p></li>
-<li><p><strong>fieldName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>module</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><code class="xref java java-type docutils literal notranslate"><span class="pre">Module</span></code></a></span>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>fieldName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the axis field, as returned by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RoboticController.axes()" title="krpc.client.services.SpaceCenter.RoboticController.axes()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -5104,10 +5107,10 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><code class="xref java java-type docutils literal notranslate"><span class="pre">Module</span></code></a></span>)</p></li>
-<li><p><strong>fieldName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
-<li><p><strong>time</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
-<li><p><strong>value</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>)</p></li>
+<li><p><strong>module</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><code class="xref java java-type docutils literal notranslate"><span class="pre">Module</span></code></a></span>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>fieldName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the axis field, as returned by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RoboticController.axes()" title="krpc.client.services.SpaceCenter.RoboticController.axes()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p></li>
+<li><p><strong>time</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The time of the key frame.</p></li>
+<li><p><strong>value</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The value of the key frame.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -5123,8 +5126,8 @@ See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><code class="xref java java-type docutils literal notranslate"><span class="pre">Module</span></code></a></span>)</p></li>
-<li><p><strong>fieldName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>module</strong> (<span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><code class="xref java java-type docutils literal notranslate"><span class="pre">Module</span></code></a></span>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>fieldName</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The name of the axis field, as returned by <a class="reference internal" href="#krpc.client.services.SpaceCenter.RoboticController.axes()" title="krpc.client.services.SpaceCenter.RoboticController.axes()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">RoboticController.axes()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -5851,7 +5854,10 @@ to the ratios at which they are consumed by the RCS.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the same readout string shown in the part’s right-click menu
-in-game. For programmatic access to the underlying quantities, consider
+in-game, and is intended for display rather than for parsing. Both its
+units and the way it formats numbers follow the language the game is
+running in, so it is not stable across locales. For programmatic access
+to the underlying quantities, use
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.getTemperature()" title="krpc.client.services.SpaceCenter.Part.getTemperature()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getTemperature()</span></code></a> (temperature sensors),
 <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getGForce()" title="krpc.client.services.SpaceCenter.Flight.getGForce()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getGForce()</span></code></a> (accelerometers) or
 <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getStaticPressure()" title="krpc.client.services.SpaceCenter.Flight.getStaticPressure()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getStaticPressure()</span></code></a> (barometers).</p>
@@ -6788,7 +6794,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/34b1de8">34b1de8</a>
+  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
 </p></div>
       
     </div>

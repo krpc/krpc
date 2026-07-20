@@ -1976,6 +1976,10 @@ Cargo Bay
 
       .. note::
 
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :func:`Part::shielded` for that.
+
          A cargo bay is never :enumerator:`DeployableState::broken`, as the game
          does not track damage for them.
 
@@ -3834,8 +3838,8 @@ Robotic Controller
 
       :Parameters:
 
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
 
       :returns: Returns ``true`` if the axis is added successfully.
    
@@ -3846,10 +3850,10 @@ Robotic Controller
 
       :Parameters:
 
-
-
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
+       * **time** -- The time of the key frame.
+       * **value** -- The value of the key frame.
 
       :returns: Returns ``true`` if the key frame is added successfully.
    
@@ -3860,8 +3864,8 @@ Robotic Controller
 
       :Parameters:
 
-
-
+       * **module** -- The part module that the axis belongs to.
+       * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
 
       :returns: Returns ``true`` if the axis is cleared successfully.
    
@@ -4431,7 +4435,10 @@ Sensor
       .. note::
 
          This is the same readout string shown in the part's right-click menu
-         in-game. For programmatic access to the underlying quantities, consider
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
          :func:`Part::temperature` (temperature sensors),
          :func:`Flight::g_force` (accelerometers) or
          :func:`Flight::static_pressure` (barometers).

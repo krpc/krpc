@@ -11,6 +11,7 @@ Changelog
    * *(SpaceCenter service)* Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating
    * *(SpaceCenter service)* ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated
    * *(SpaceCenter service)* Control.SAS now throws an exception when set to true while the autopilot is engaged, matching AutoPilot.SAS. Previously the write was accepted and the autopilot silently switched SAS back off on the next physics tick (:issue:`492`)
+   * *(SpaceCenter service)* RoboticController.AddAxis, AddKeyFrame and ClearAxis now identify an axis by the name of its field, for example targetAngle, instead of by the label shown in the part's menu, for example "Target Angle". The names now match those returned by RoboticController.Axes, which previously could not be passed back in, and no longer change with the language the game is running in
 
 
 
@@ -49,6 +50,7 @@ Core
 * Reduce copying and allocation when receiving messages: protobuf messages are now parsed directly from the receive buffer, without allocating intermediate buffers or streams
 * Fix the websocket servers rejecting connection requests that arrive split across multiple reads; requests are now buffered until complete
 * Fix websocket connection URL query parameter parsing: parameters are now found in any position and are percent-decoded
+* Fix type codes in the service description, and HTTP and websocket protocol tokens, being case converted using the machine's locale; under Turkish locales this produced values that clients could not match
 
 
 SpaceCenter service
@@ -57,6 +59,7 @@ SpaceCenter service
 * Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating
 * ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated
 * Control.SAS now throws an exception when set to true while the autopilot is engaged, matching AutoPilot.SAS. Previously the write was accepted and the autopilot silently switched SAS back off on the next physics tick (:issue:`492`)
+* RoboticController.AddAxis, AddKeyFrame and ClearAxis now identify an axis by the name of its field, for example targetAngle, instead of by the label shown in the part's menu, for example "Target Angle". The names now match those returned by RoboticController.Axes, which previously could not be passed back in, and no longer change with the language the game is running in
 * Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in flight (the KSP fields they read are only refreshed while the part action window is open)
 * Add SpaceCenter.Expansions to report the installed KSP expansions
 * Add Parts.RoboticControllers
@@ -170,6 +173,19 @@ SpaceCenter service
 * Improve performance of CommNode.IsVessel, CommNode.Vessel, Vessel.AngularVelocity and reference frame angular velocities
 * Add Parachute.SafeState reporting whether it is currently safe to deploy the parachute (safe, risky, unsafe, or not applicable)
 * Add Contract.DateAccepted, DateDeadline, DateExpire and DateFinished
+* Fix DockingPort.Undock doing nothing when the game is not running in English
+* Fix Fairing.Jettison doing nothing, and Fairing.Jettisoned always reporting true, when the game is not running in English
+* Fix CargoBay.Open neither opening nor closing the bay when the game is not running in English
+* Fix ResourceConverter.State only ever reporting Running when the game is not running in English, leaving MissingResource, StorageFull and Capacity unreachable
+* Fix DockingPort.State reporting Shielded instead of Moving while a shield is opening or closing, when the game is not running in English
+* Fix CargoBay.State reporting Deployed for a closed cargo ramp, and reporting a resting state while the bay was still moving
+* Fix part module field values being formatted using the machine's locale, so that Module.Fields, Module.GetField and PartField.Value returned numbers that clients running under a locale that writes decimals with a comma could not parse
+
+
+UI service
+^^^^^^^^^^
+
+* Fix UI.Message showing its size tag as literal text when the size is not a whole number and the machine's locale writes decimals with a comma
 
 
 InfernalRobotics service
@@ -254,6 +270,7 @@ Lua client
 ^^^^^^^^^^
 
 * Fix attributes module to always return boolean for is\_a\_class\_member and is\_a\_class\_property\_accessor
+* Fix service, method and property names being converted to snake case using the machine's locale, which renamed every member the client exposes under Turkish locales
 
 
 krpctools
@@ -263,6 +280,7 @@ krpctools
 * Fix docgen dropping remarks in service-level documentation
 * Fix cross-service member references not resolving in generated C# and Lua documentation (:issue:`897`)
 * Fix member references in generated Python documentation using lowerCamelCase instead of snake\_case
+* Fix generating client stubs and documentation from a KSP install failing when the machine's locale is not UTF-8 and a service's documentation contains non-ASCII characters
 
 
 0.5.4

@@ -4216,6 +4216,9 @@ to boost the power.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
+<p>This describes where the bay’s doors are, which is not the same as whether the parts
+inside are sheltered: a bay whose open end has nothing attached to it never shelters
+anything, however tightly shut it is. Use <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.shielded" title="SpaceCenter.SpaceCenter.Part.shielded"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.shielded</span></code></a> for that.</p>
 <p>A cargo bay is never <a class="reference internal" href="#SpaceCenter.DeployableState.broken" title="SpaceCenter.DeployableState.broken"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.DeployableState.broken</span></code></a>, as the game
 does not track damage for them.</p>
 </div>
@@ -7353,8 +7356,8 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<span><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a></span>)</p></li>
-<li><p><strong>field_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p></li>
+<li><p><strong>module</strong> (<span><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a></span>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the axis field, as returned by <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.RoboticController.axes()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -7373,10 +7376,10 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<span><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a></span>)</p></li>
-<li><p><strong>field_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p></li>
-<li><p><strong>time</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>)</p></li>
-<li><p><strong>value</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>)</p></li>
+<li><p><strong>module</strong> (<span><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a></span>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the axis field, as returned by <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.RoboticController.axes()</span></code></a>.</p></li>
+<li><p><strong>time</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The time of the key frame.</p></li>
+<li><p><strong>value</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – The value of the key frame.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -7395,8 +7398,8 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.ResourceDrain.d
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>module</strong> (<span><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a></span>)</p></li>
-<li><p><strong>field_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>)</p></li>
+<li><p><strong>module</strong> (<span><a class="reference internal" href="#SpaceCenter.Module" title="SpaceCenter.Module"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Module</span></code></a></span>) – The part module that the axis belongs to.</p></li>
+<li><p><strong>field_name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The name of the axis field, as returned by <a class="reference internal" href="#SpaceCenter.RoboticController.axes" title="SpaceCenter.RoboticController.axes"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.RoboticController.axes()</span></code></a>.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -8473,7 +8476,10 @@ to the ratios at which they are consumed by the RCS.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the same readout string shown in the part’s right-click menu
-in-game. For programmatic access to the underlying quantities, consider
+in-game, and is intended for display rather than for parsing. Both its
+units and the way it formats numbers follow the language the game is
+running in, so it is not stable across locales. For programmatic access
+to the underlying quantities, use
 <a class="reference internal" href="#SpaceCenter.SpaceCenter.Part.temperature" title="SpaceCenter.SpaceCenter.Part.temperature"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Part.temperature</span></code></a> (temperature sensors),
 <a class="reference internal" href="flight.html#SpaceCenter.SpaceCenter.Flight.g_force" title="SpaceCenter.SpaceCenter.Flight.g_force"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Flight.g_force</span></code></a> (accelerometers) or
 <a class="reference internal" href="flight.html#SpaceCenter.SpaceCenter.Flight.static_pressure" title="SpaceCenter.SpaceCenter.Flight.static_pressure"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Flight.static_pressure</span></code></a> (barometers).</p>
@@ -9653,7 +9659,7 @@ stages in which each part of the vessel will be <em>decoupled</em>.</p>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/34b1de8">34b1de8</a>
+  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
 </p></div>
       
     </div>

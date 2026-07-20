@@ -604,6 +604,7 @@
 <li><p><em>(SpaceCenter service)</em> Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating</p></li>
 <li><p><em>(SpaceCenter service)</em> ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated</p></li>
 <li><p><em>(SpaceCenter service)</em> Control.SAS now throws an exception when set to true while the autopilot is engaged, matching AutoPilot.SAS. Previously the write was accepted and the autopilot silently switched SAS back off on the next physics tick (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/492">#492</a>)</p></li>
+<li><p><em>(SpaceCenter service)</em> RoboticController.AddAxis, AddKeyFrame and ClearAxis now identify an axis by the name of its field, for example targetAngle, instead of by the label shown in the part’s menu, for example “Target Angle”. The names now match those returned by RoboticController.Axes, which previously could not be passed back in, and no longer change with the language the game is running in</p></li>
 </ul>
 </div>
 <div class="admonition note">
@@ -642,6 +643,7 @@
 <li><p>Reduce copying and allocation when receiving messages: protobuf messages are now parsed directly from the receive buffer, without allocating intermediate buffers or streams</p></li>
 <li><p>Fix the websocket servers rejecting connection requests that arrive split across multiple reads; requests are now buffered until complete</p></li>
 <li><p>Fix websocket connection URL query parameter parsing: parameters are now found in any position and are percent-decoded</p></li>
+<li><p>Fix type codes in the service description, and HTTP and websocket protocol tokens, being case converted using the machine’s locale; under Turkish locales this produced values that clients could not match</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -650,6 +652,7 @@
 <li><p>Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating</p></li>
 <li><p>ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated</p></li>
 <li><p>Control.SAS now throws an exception when set to true while the autopilot is engaged, matching AutoPilot.SAS. Previously the write was accepted and the autopilot silently switched SAS back off on the next physics tick (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/492">#492</a>)</p></li>
+<li><p>RoboticController.AddAxis, AddKeyFrame and ClearAxis now identify an axis by the name of its field, for example targetAngle, instead of by the label shown in the part’s menu, for example “Target Angle”. The names now match those returned by RoboticController.Axes, which previously could not be passed back in, and no longer change with the language the game is running in</p></li>
 <li><p>Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in flight (the KSP fields they read are only refreshed while the part action window is open)</p></li>
 <li><p>Add SpaceCenter.Expansions to report the installed KSP expansions</p></li>
 <li><p>Add Parts.RoboticControllers</p></li>
@@ -763,6 +766,19 @@
 <li><p>Improve performance of CommNode.IsVessel, CommNode.Vessel, Vessel.AngularVelocity and reference frame angular velocities</p></li>
 <li><p>Add Parachute.SafeState reporting whether it is currently safe to deploy the parachute (safe, risky, unsafe, or not applicable)</p></li>
 <li><p>Add Contract.DateAccepted, DateDeadline, DateExpire and DateFinished</p></li>
+<li><p>Fix DockingPort.Undock doing nothing when the game is not running in English</p></li>
+<li><p>Fix Fairing.Jettison doing nothing, and Fairing.Jettisoned always reporting true, when the game is not running in English</p></li>
+<li><p>Fix CargoBay.Open neither opening nor closing the bay when the game is not running in English</p></li>
+<li><p>Fix ResourceConverter.State only ever reporting Running when the game is not running in English, leaving MissingResource, StorageFull and Capacity unreachable</p></li>
+<li><p>Fix DockingPort.State reporting Shielded instead of Moving while a shield is opening or closing, when the game is not running in English</p></li>
+<li><p>Fix CargoBay.State reporting Deployed for a closed cargo ramp, and reporting a resting state while the bay was still moving</p></li>
+<li><p>Fix part module field values being formatted using the machine’s locale, so that Module.Fields, Module.GetField and PartField.Value returned numbers that clients running under a locale that writes decimals with a comma could not parse</p></li>
+</ul>
+</section>
+<section id="ui-service">
+<h3>UI service<a class="headerlink" href="#ui-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix UI.Message showing its size tag as literal text when the size is not a whole number and the machine’s locale writes decimals with a comma</p></li>
 </ul>
 </section>
 <section id="infernalrobotics-service">
@@ -847,6 +863,7 @@
 <h3>Lua client<a class="headerlink" href="#lua-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix attributes module to always return boolean for is_a_class_member and is_a_class_property_accessor</p></li>
+<li><p>Fix service, method and property names being converted to snake case using the machine’s locale, which renamed every member the client exposes under Turkish locales</p></li>
 </ul>
 </section>
 <section id="krpctools">
@@ -856,6 +873,7 @@
 <li><p>Fix docgen dropping remarks in service-level documentation</p></li>
 <li><p>Fix cross-service member references not resolving in generated C# and Lua documentation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
 <li><p>Fix member references in generated Python documentation using lowerCamelCase instead of snake_case</p></li>
+<li><p>Fix generating client stubs and documentation from a KSP install failing when the machine’s locale is not UTF-8 and a service’s documentation contains non-ASCII characters</p></li>
 </ul>
 </section>
 </section>
@@ -1911,31 +1929,31 @@
 <li><p>Make ReferenceFrame type, underlying object and its transform accessible via public properties (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/290">#290</a>)</p></li>
 </ul>
 </section>
-<section id="ui-service">
-<h3>UI service<a class="headerlink" href="#ui-service" title="Link to this heading">#</a></h3>
+<section id="id143">
+<h3>UI service<a class="headerlink" href="#id143" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add Canvas class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/281">#281</a>)</p></li>
 <li><p>Add UI.StockCanvas to get the stock KSP UI canvas and UI.AddCanvas to create additional canvases</p></li>
 <li><p>Move UI.AddPanel and UI.RectTransform to Canvas class</p></li>
 </ul>
 </section>
-<section id="id143">
-<h3>InfernalRobotics service<a class="headerlink" href="#id143" title="Link to this heading">#</a></h3>
+<section id="id144">
+<h3>InfernalRobotics service<a class="headerlink" href="#id144" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add vessel parameter to ServoGroups, Servos and ServoWithName (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/282">#282</a>)</p></li>
 <li><p>Add Servo.Part</p></li>
 <li><p>Add ServoGroup.Parts</p></li>
 </ul>
 </section>
-<section id="id144">
-<h3>Python client<a class="headerlink" href="#id144" title="Link to this heading">#</a></h3>
+<section id="id145">
+<h3>Python client<a class="headerlink" href="#id145" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add check for number of elements in a tuple before invoking an RPC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/276">#276</a>)</p></li>
 <li><p>Fix unicode issue (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/284">#284</a>)</p></li>
 </ul>
 </section>
-<section id="id145">
-<h3>C# client<a class="headerlink" href="#id145" title="Link to this heading">#</a></h3>
+<section id="id146">
+<h3>C# client<a class="headerlink" href="#id146" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix race condition where the connection constructor returns before the stream server connection has been established</p></li>
 <li><p>Make Connection and StreamManager disposable so that they clean up resources correctly</p></li>
@@ -1944,10 +1962,10 @@
 </ul>
 </section>
 </section>
-<section id="id146">
-<h2>0.3.4<a class="headerlink" href="#id146" title="Link to this heading">#</a></h2>
 <section id="id147">
-<h3>Server<a class="headerlink" href="#id147" title="Link to this heading">#</a></h3>
+<h2>0.3.4<a class="headerlink" href="#id147" title="Link to this heading">#</a></h2>
+<section id="id148">
+<h3>Server<a class="headerlink" href="#id148" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update protobuf to v3.0.0-beta-3 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/270">#270</a>)</p></li>
 <li><p>Move settings.cfg to PluginData directory to avoid trashing module managers cache</p></li>
@@ -1956,67 +1974,67 @@
 <li><p>Renamed Parameter.default_argument to default_value in protobuf definitions</p></li>
 </ul>
 </section>
-<section id="id148">
-<h3>SpaceCenter service<a class="headerlink" href="#id148" title="Link to this heading">#</a></h3>
+<section id="id149">
+<h3>SpaceCenter service<a class="headerlink" href="#id149" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Move drawing functionality into new Drawing service (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/253">#253</a>)</p></li>
 <li><p>Add Light.Color</p></li>
 <li><p>Add RPCs for setting PartModule fields: Module.ResetField, SetFieldInt, SetFieldFloat and SetFieldString</p></li>
 </ul>
 </section>
-<section id="id149">
-<h3>Drawing service<a class="headerlink" href="#id149" title="Link to this heading">#</a></h3>
+<section id="id150">
+<h3>Drawing service<a class="headerlink" href="#id150" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/253">#253</a>)</p></li>
 </ul>
 </section>
-<section id="id150">
-<h3>UI service<a class="headerlink" href="#id150" title="Link to this heading">#</a></h3>
+<section id="id151">
+<h3>UI service<a class="headerlink" href="#id151" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
-<section id="id151">
-<h3>Python client<a class="headerlink" href="#id151" title="Link to this heading">#</a></h3>
+<section id="id152">
+<h3>Python client<a class="headerlink" href="#id152" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update protobuf to v3.0.0-beta-3</p></li>
 </ul>
 </section>
-<section id="id152">
-<h3>C# client<a class="headerlink" href="#id152" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Update to protobuf v3.0.0-beta-3</p></li>
-</ul>
-</section>
 <section id="id153">
-<h3>C++ client<a class="headerlink" href="#id153" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id153" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.0.0-beta-3</p></li>
 </ul>
 </section>
 <section id="id154">
-<h3>Java client<a class="headerlink" href="#id154" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id154" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.0.0-beta-3</p></li>
 </ul>
 </section>
 <section id="id155">
-<h3>krpctools<a class="headerlink" href="#id155" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id155" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.0.0-beta-3</p></li>
+</ul>
+</section>
+<section id="id156">
+<h3>krpctools<a class="headerlink" href="#id156" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update protobuf to v3.0.0-beta-3</p></li>
 </ul>
 </section>
 </section>
-<section id="id156">
-<h2>0.3.3<a class="headerlink" href="#id156" title="Link to this heading">#</a></h2>
 <section id="id157">
-<h3>Server<a class="headerlink" href="#id157" title="Link to this heading">#</a></h3>
+<h2>0.3.3<a class="headerlink" href="#id157" title="Link to this heading">#</a></h2>
+<section id="id158">
+<h3>Server<a class="headerlink" href="#id158" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix popup dialogs not displaying (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/266">#266</a>)</p></li>
 </ul>
 </section>
-<section id="id158">
-<h3>SpaceCenter service<a class="headerlink" href="#id158" title="Link to this heading">#</a></h3>
+<section id="id159">
+<h3>SpaceCenter service<a class="headerlink" href="#id159" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add AvailableTorque properties to vessels, reaction wheels, RCS, engines and control surfaces</p></li>
 <li><p>Rename ReactionWheel.Torque to ReactionWheel.MaxTorque</p></li>
@@ -2024,14 +2042,14 @@
 <li><p>Move RemoteTech functionality to separate RemoteTech service</p></li>
 </ul>
 </section>
-<section id="id159">
-<h3>InfernalRobotics service<a class="headerlink" href="#id159" title="Link to this heading">#</a></h3>
+<section id="id160">
+<h3>InfernalRobotics service<a class="headerlink" href="#id160" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Rename ControlGroup to ServoGroup</p></li>
 </ul>
 </section>
-<section id="id160">
-<h3>RemoteTech service<a class="headerlink" href="#id160" title="Link to this heading">#</a></h3>
+<section id="id161">
+<h3>RemoteTech service<a class="headerlink" href="#id161" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Moved from SpaceCenter to separate service</p></li>
 <li><p>Support RemoteTech 1.7</p></li>
@@ -2040,25 +2058,25 @@
 </ul>
 </section>
 </section>
-<section id="id161">
-<h2>0.3.2<a class="headerlink" href="#id161" title="Link to this heading">#</a></h2>
 <section id="id162">
-<h3>Server<a class="headerlink" href="#id162" title="Link to this heading">#</a></h3>
+<h2>0.3.2<a class="headerlink" href="#id162" title="Link to this heading">#</a></h2>
+<section id="id163">
+<h3>Server<a class="headerlink" href="#id163" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix KRPC.CurrentGameScene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/262">#262</a>)</p></li>
 </ul>
 </section>
-<section id="id163">
-<h3>SpaceCenter service<a class="headerlink" href="#id163" title="Link to this heading">#</a></h3>
+<section id="id164">
+<h3>SpaceCenter service<a class="headerlink" href="#id164" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix Control.SpeedMode (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/258">#258</a>)</p></li>
 </ul>
 </section>
 </section>
-<section id="id164">
-<h2>0.3.0<a class="headerlink" href="#id164" title="Link to this heading">#</a></h2>
 <section id="id165">
-<h3>SpaceCenter service<a class="headerlink" href="#id165" title="Link to this heading">#</a></h3>
+<h2>0.3.0<a class="headerlink" href="#id165" title="Link to this heading">#</a></h2>
+<section id="id166">
+<h3>SpaceCenter service<a class="headerlink" href="#id166" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support for KSP 1.1</p></li>
 <li><p>Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)</p></li>
@@ -2085,25 +2103,25 @@
 </ul>
 </section>
 </section>
-<section id="id166">
-<h2>0.2.4<a class="headerlink" href="#id166" title="Link to this heading">#</a></h2>
 <section id="id167">
-<h3>Server<a class="headerlink" href="#id167" title="Link to this heading">#</a></h3>
+<h2>0.2.4<a class="headerlink" href="#id167" title="Link to this heading">#</a></h2>
+<section id="id168">
+<h3>Server<a class="headerlink" href="#id168" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Shut down server when switching to main menu (or any other non-game scene)</p></li>
 </ul>
 </section>
 </section>
-<section id="id168">
-<h2>0.2.3<a class="headerlink" href="#id168" title="Link to this heading">#</a></h2>
 <section id="id169">
-<h3>Server<a class="headerlink" href="#id169" title="Link to this heading">#</a></h3>
+<h2>0.2.3<a class="headerlink" href="#id169" title="Link to this heading">#</a></h2>
+<section id="id170">
+<h3>Server<a class="headerlink" href="#id170" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Added KRPC.CurrentGameScene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/237">#237</a>)</p></li>
 </ul>
 </section>
-<section id="id170">
-<h3>SpaceCenter service<a class="headerlink" href="#id170" title="Link to this heading">#</a></h3>
+<section id="id171">
+<h3>SpaceCenter service<a class="headerlink" href="#id171" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add support for engine mode switching (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/219">#219</a>)</p></li>
 <li><p>Engine.GimbalLimit and GimbalLocked now return an error if the engine is not gimballed</p></li>
@@ -2116,14 +2134,14 @@
 <li><p>Fix bug with translation inputs in Control class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/223">#223</a>)</p></li>
 </ul>
 </section>
-<section id="id171">
-<h3>C# client<a class="headerlink" href="#id171" title="Link to this heading">#</a></h3>
+<section id="id172">
+<h3>C# client<a class="headerlink" href="#id172" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Make client thread safe</p></li>
 </ul>
 </section>
-<section id="id172">
-<h3>C++ client<a class="headerlink" href="#id172" title="Link to this heading">#</a></h3>
+<section id="id173">
+<h3>C++ client<a class="headerlink" href="#id173" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Make client thread safe</p></li>
 <li><p>Add checks for asio.hpp and protobuf library to cmake script</p></li>
@@ -2131,18 +2149,18 @@
 <li><p>Fix compiler warnings reported by MSVC</p></li>
 </ul>
 </section>
-<section id="id173">
-<h3>Java client<a class="headerlink" href="#id173" title="Link to this heading">#</a></h3>
+<section id="id174">
+<h3>Java client<a class="headerlink" href="#id174" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Make client thread safe</p></li>
 <li><p>Support JDK 1.7+</p></li>
 </ul>
 </section>
 </section>
-<section id="id174">
-<h2>0.2.2<a class="headerlink" href="#id174" title="Link to this heading">#</a></h2>
 <section id="id175">
-<h3>Server<a class="headerlink" href="#id175" title="Link to this heading">#</a></h3>
+<h2>0.2.2<a class="headerlink" href="#id175" title="Link to this heading">#</a></h2>
+<section id="id176">
+<h3>Server<a class="headerlink" href="#id176" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Stream updates are only sent to clients when the result changes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/170">#170</a>)</p></li>
 <li><p>Removed support for protobuf enumerations and custom protobuf messages as RPC parameter/return values. Note: these features were not used anywhere, and only cause complications for client libraries</p></li>
@@ -2150,8 +2168,8 @@
 <li><p>Remove support for blizzy’s toolbar, in favour of using the stock applauncher</p></li>
 </ul>
 </section>
-<section id="id176">
-<h3>SpaceCenter service<a class="headerlink" href="#id176" title="Link to this heading">#</a></h3>
+<section id="id177">
+<h3>SpaceCenter service<a class="headerlink" href="#id177" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add Part.IsFuelLine</p></li>
 <li><p>Fix bug with Part.FuelLinesTo (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/193">#193</a>)</p></li>
@@ -2161,22 +2179,22 @@
 <li><p>Fix bug with vessel’s surface velocity reference frame (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/194">#194</a>)</p></li>
 </ul>
 </section>
-<section id="id177">
-<h3>Python client<a class="headerlink" href="#id177" title="Link to this heading">#</a></h3>
+<section id="id178">
+<h3>Python client<a class="headerlink" href="#id178" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix exception when stream thread shuts down (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/197">#197</a>)</p></li>
 <li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
 <li><p>Add comparison methods to remote objects so that they are sortable</p></li>
 </ul>
 </section>
-<section id="id178">
-<h3>C# client<a class="headerlink" href="#id178" title="Link to this heading">#</a></h3>
+<section id="id179">
+<h3>C# client<a class="headerlink" href="#id179" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
 </ul>
 </section>
-<section id="id179">
-<h3>C++ client<a class="headerlink" href="#id179" title="Link to this heading">#</a></h3>
+<section id="id180">
+<h3>C++ client<a class="headerlink" href="#id180" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add support for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/175">#175</a>)</p></li>
 <li><p>Add documentation to service header files</p></li>
@@ -2186,161 +2204,161 @@
 <li><p>Add comparison operations for remote objects</p></li>
 </ul>
 </section>
-<section id="id180">
-<h3>Java client<a class="headerlink" href="#id180" title="Link to this heading">#</a></h3>
+<section id="id181">
+<h3>Java client<a class="headerlink" href="#id181" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
-<section id="id181">
-<h3>Lua client<a class="headerlink" href="#id181" title="Link to this heading">#</a></h3>
+<section id="id182">
+<h3>Lua client<a class="headerlink" href="#id182" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
 </ul>
 </section>
-<section id="id182">
-<h3>krpctools<a class="headerlink" href="#id182" title="Link to this heading">#</a></h3>
+<section id="id183">
+<h3>krpctools<a class="headerlink" href="#id183" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Refactor into ‘krpctools’ package containing ‘krpc-clientgen’, ‘krpc-docgen’ and ‘krpc-servicedefs’.</p></li>
 <li><p>Fixes caused by removal of support for protobuf enumeration and custom protobuf messages from server and clients</p></li>
 </ul>
 </section>
 </section>
-<section id="id183">
-<h2>0.2.1<a class="headerlink" href="#id183" title="Link to this heading">#</a></h2>
 <section id="id184">
-<h3>Server<a class="headerlink" href="#id184" title="Link to this heading">#</a></h3>
+<h2>0.2.1<a class="headerlink" href="#id184" title="Link to this heading">#</a></h2>
+<section id="id185">
+<h3>Server<a class="headerlink" href="#id185" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add “Any” option to server address drop down</p></li>
 </ul>
 </section>
-<section id="id185">
-<h3>SpaceCenter service<a class="headerlink" href="#id185" title="Link to this heading">#</a></h3>
+<section id="id186">
+<h3>SpaceCenter service<a class="headerlink" href="#id186" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix Orbit.Speed always returning 0</p></li>
 <li><p>Add CelestialBody.SurfaceHeight, BedrockHeight, MSLPosition, SurfacePosition, BedrockPosition (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/186">#186</a>)</p></li>
 </ul>
 </section>
-<section id="id186">
-<h3>Python client<a class="headerlink" href="#id186" title="Link to this heading">#</a></h3>
+<section id="id187">
+<h3>Python client<a class="headerlink" href="#id187" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix bug with setup.py on Windows</p></li>
 <li><p>Add version number to python module</p></li>
 </ul>
 </section>
-<section id="id187">
-<h3>C# client<a class="headerlink" href="#id187" title="Link to this heading">#</a></h3>
+<section id="id188">
+<h3>C# client<a class="headerlink" href="#id188" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add documentation to generated service code</p></li>
 <li><p>Add support for streams</p></li>
 </ul>
 </section>
-<section id="id188">
-<h3>C++ client<a class="headerlink" href="#id188" title="Link to this heading">#</a></h3>
+<section id="id189">
+<h3>C++ client<a class="headerlink" href="#id189" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Remove dependency on boost</p></li>
 <li><p>Use standalone ASIO library for network communication</p></li>
 </ul>
 </section>
-<section id="id189">
-<h3>Lua client<a class="headerlink" href="#id189" title="Link to this heading">#</a></h3>
+<section id="id190">
+<h3>Lua client<a class="headerlink" href="#id190" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None</p></li>
 </ul>
 </section>
-<section id="id190">
-<h3>krpctools<a class="headerlink" href="#id190" title="Link to this heading">#</a></h3>
+<section id="id191">
+<h3>krpctools<a class="headerlink" href="#id191" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
 </section>
-<section id="id191">
-<h2>0.2.0<a class="headerlink" href="#id191" title="Link to this heading">#</a></h2>
 <section id="id192">
-<h3>Server<a class="headerlink" href="#id192" title="Link to this heading">#</a></h3>
+<h2>0.2.0<a class="headerlink" href="#id192" title="Link to this heading">#</a></h2>
+<section id="id193">
+<h3>Server<a class="headerlink" href="#id193" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf 3.0.0-beta-2</p></li>
 </ul>
 </section>
-<section id="id193">
-<h3>SpaceCenter service<a class="headerlink" href="#id193" title="Link to this heading">#</a></h3>
+<section id="id194">
+<h3>SpaceCenter service<a class="headerlink" href="#id194" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix SpaceCenter.HorizontalSpeed calculation</p></li>
 <li><p>Added support for resource harvesters and converters (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/166">#166</a>,:issue:<cite>182</cite>)</p></li>
 <li><p>Fix bug with Flight.SideslipAngle (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/189">#189</a>)</p></li>
 </ul>
 </section>
-<section id="id194">
-<h3>Python client<a class="headerlink" href="#id194" title="Link to this heading">#</a></h3>
+<section id="id195">
+<h3>Python client<a class="headerlink" href="#id195" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update protobuf 3.0.0-beta-2</p></li>
 <li><p>Fix bug in keyword arg handling (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/168">#168</a>)</p></li>
 <li><p>Removed TestServer.exe and associated binaries from release archive</p></li>
 </ul>
 </section>
-<section id="id195">
-<h3>C# client<a class="headerlink" href="#id195" title="Link to this heading">#</a></h3>
+<section id="id196">
+<h3>C# client<a class="headerlink" href="#id196" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
-<section id="id196">
-<h3>C++ client<a class="headerlink" href="#id196" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Update to protobuf 3.0.0-beta-2</p></li>
-</ul>
-</section>
 <section id="id197">
-<h3>Lua client<a class="headerlink" href="#id197" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id197" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf 3.0.0-beta-2</p></li>
 </ul>
-</section>
 </section>
 <section id="id198">
-<h2>0.1.12<a class="headerlink" href="#id198" title="Link to this heading">#</a></h2>
-<section id="id199">
-<h3>Server<a class="headerlink" href="#id199" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id198" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Built for KSP 1.0.5</p></li>
+<li><p>Update to protobuf 3.0.0-beta-2</p></li>
 </ul>
 </section>
+</section>
+<section id="id199">
+<h2>0.1.12<a class="headerlink" href="#id199" title="Link to this heading">#</a></h2>
 <section id="id200">
-<h3>SpaceCenter service<a class="headerlink" href="#id200" title="Link to this heading">#</a></h3>
+<h3>Server<a class="headerlink" href="#id200" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Built for KSP 1.0.5</p></li>
 </ul>
 </section>
 <section id="id201">
-<h3>KerbalAlarmClock service<a class="headerlink" href="#id201" title="Link to this heading">#</a></h3>
+<h3>SpaceCenter service<a class="headerlink" href="#id201" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Built for KSP 1.0.5</p></li>
+</ul>
+</section>
+<section id="id202">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id202" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Renamed Alarm.Delete to Alarm.Remove (to not clash with C++ keyword)</p></li>
 </ul>
 </section>
-<section id="id202">
-<h3>Python client<a class="headerlink" href="#id202" title="Link to this heading">#</a></h3>
+<section id="id203">
+<h3>Python client<a class="headerlink" href="#id203" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Server connection method now retries 10 times every 0.1 seconds</p></li>
 </ul>
 </section>
-<section id="id203">
-<h3>C++ client<a class="headerlink" href="#id203" title="Link to this heading">#</a></h3>
+<section id="id204">
+<h3>C++ client<a class="headerlink" href="#id204" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
-<section id="id204">
-<h3>Lua client<a class="headerlink" href="#id204" title="Link to this heading">#</a></h3>
+<section id="id205">
+<h3>Lua client<a class="headerlink" href="#id205" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None, bumped version number</p></li>
 </ul>
 </section>
 </section>
-<section id="id205">
-<h2>0.1.11<a class="headerlink" href="#id205" title="Link to this heading">#</a></h2>
 <section id="id206">
-<h3>Server<a class="headerlink" href="#id206" title="Link to this heading">#</a></h3>
+<h2>0.1.11<a class="headerlink" href="#id206" title="Link to this heading">#</a></h2>
+<section id="id207">
+<h3>Server<a class="headerlink" href="#id207" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Documentation returned by calling KRPC.GetServices (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
 <li><p>Fix bug preventing disconnection of clients from the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/161">#161</a>)</p></li>
@@ -2349,8 +2367,8 @@
 <li><p>Documentation at <a class="reference external" href="http://djungelorm.github.io/krpc/docs/">http://djungelorm.github.io/krpc/docs/</a> generated by calling KRPC.GetServices (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
 </ul>
 </section>
-<section id="id207">
-<h3>SpaceCenter service<a class="headerlink" href="#id207" title="Link to this heading">#</a></h3>
+<section id="id208">
+<h3>SpaceCenter service<a class="headerlink" href="#id208" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Rename maxRate parameter in SpaceCenter.WarpTo to maxRailsRate</p></li>
 <li><p>Add more thermal properties to Part class (for new thermal model in KSP 1.0.3) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/155">#155</a>)</p></li>
@@ -2364,31 +2382,31 @@
 <li><p>Update aero methods to use FAR 0.15 if available</p></li>
 </ul>
 </section>
-<section id="id208">
-<h3>Python client<a class="headerlink" href="#id208" title="Link to this heading">#</a></h3>
+<section id="id209">
+<h3>Python client<a class="headerlink" href="#id209" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Docstrings generated from documentation returned by KRPC.GetServices (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
 </ul>
 </section>
-<section id="id209">
-<h3>Lua client<a class="headerlink" href="#id209" title="Link to this heading">#</a></h3>
+<section id="id210">
+<h3>Lua client<a class="headerlink" href="#id210" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
 </section>
-<section id="id210">
-<h2>0.1.10<a class="headerlink" href="#id210" title="Link to this heading">#</a></h2>
 <section id="id211">
-<h3>Server<a class="headerlink" href="#id211" title="Link to this heading">#</a></h3>
+<h2>0.1.10<a class="headerlink" href="#id211" title="Link to this heading">#</a></h2>
+<section id="id212">
+<h3>Server<a class="headerlink" href="#id212" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>KSP 1.0.4 support (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/151">#151</a>)</p></li>
 <li><p>Performance improvements (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/129">#129</a>,:issue:<cite>131</cite>,:issue:<cite>139</cite>)</p></li>
 <li><p>Fix UI disappearing bug (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/133">#133</a>)</p></li>
 </ul>
 </section>
-<section id="id212">
-<h3>SpaceCenter service<a class="headerlink" href="#id212" title="Link to this heading">#</a></h3>
+<section id="id213">
+<h3>SpaceCenter service<a class="headerlink" href="#id213" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>KSP 1.0.4 support (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/151">#151</a>)</p></li>
 <li><p>Add more time warp functionality: SpaceCenter.WarpMode, WarpRate, WarpFactor, RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/134">#134</a>)</p></li>
@@ -2401,29 +2419,29 @@
 <li><p>Rename SpaceCenter.ClearDirections to SpaceCenter.ClearDrawing</p></li>
 </ul>
 </section>
-<section id="id213">
-<h3>KerbalAlarmClock service<a class="headerlink" href="#id213" title="Link to this heading">#</a></h3>
+<section id="id214">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id214" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Service now available in all game scenes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/135">#135</a>)</p></li>
 </ul>
 </section>
-<section id="id214">
-<h3>Python client<a class="headerlink" href="#id214" title="Link to this heading">#</a></h3>
+<section id="id215">
+<h3>Python client<a class="headerlink" href="#id215" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Bump version number</p></li>
 </ul>
 </section>
 </section>
-<section id="id215">
-<h2>0.1.9<a class="headerlink" href="#id215" title="Link to this heading">#</a></h2>
 <section id="id216">
-<h3>Server<a class="headerlink" href="#id216" title="Link to this heading">#</a></h3>
+<h2>0.1.9<a class="headerlink" href="#id216" title="Link to this heading">#</a></h2>
+<section id="id217">
+<h3>Server<a class="headerlink" href="#id217" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None</p></li>
 </ul>
 </section>
-<section id="id217">
-<h3>SpaceCenter service<a class="headerlink" href="#id217" title="Link to this heading">#</a></h3>
+<section id="id218">
+<h3>SpaceCenter service<a class="headerlink" href="#id218" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix bug with combined specific impulse calculations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/117">#117</a>)</p></li>
 <li><p>Add Engine.PropellantRatios (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/118">#118</a>)</p></li>
@@ -2431,36 +2449,36 @@
 <li><p>Add Resources.Density</p></li>
 </ul>
 </section>
-<section id="id218">
-<h3>InfernalRobotics service<a class="headerlink" href="#id218" title="Link to this heading">#</a></h3>
+<section id="id219">
+<h3>InfernalRobotics service<a class="headerlink" href="#id219" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version - API for InfernalRobotics (<a class="reference external" href="http://forum.kerbalspaceprogram.com/threads/116064">http://forum.kerbalspaceprogram.com/threads/116064</a>)</p></li>
 </ul>
 </section>
-<section id="id219">
-<h3>KerbalAlarmClock service<a class="headerlink" href="#id219" title="Link to this heading">#</a></h3>
+<section id="id220">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id220" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version - API for Kerbal Alarm Clock (<a class="reference external" href="http://forum.kerbalspaceprogram.com/threads/24786">http://forum.kerbalspaceprogram.com/threads/24786</a>)</p></li>
 </ul>
 </section>
-<section id="id220">
-<h3>Python client<a class="headerlink" href="#id220" title="Link to this heading">#</a></h3>
+<section id="id221">
+<h3>Python client<a class="headerlink" href="#id221" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Bump version number</p></li>
 </ul>
 </section>
 </section>
-<section id="id221">
-<h2>0.1.8<a class="headerlink" href="#id221" title="Link to this heading">#</a></h2>
 <section id="id222">
-<h3>Server<a class="headerlink" href="#id222" title="Link to this heading">#</a></h3>
+<h2>0.1.8<a class="headerlink" href="#id222" title="Link to this heading">#</a></h2>
+<section id="id223">
+<h3>Server<a class="headerlink" href="#id223" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>KSP 1.0.2 support (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/114">#114</a>)</p></li>
 <li><p>Add support for static class methods (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/106">#106</a>)</p></li>
 </ul>
 </section>
-<section id="id223">
-<h3>SpaceCenter service<a class="headerlink" href="#id223" title="Link to this heading">#</a></h3>
+<section id="id224">
+<h3>SpaceCenter service<a class="headerlink" href="#id224" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add Engine.MaxVacuumThrust</p></li>
 <li><p>Add Engine.Throttle</p></li>
@@ -2472,8 +2490,8 @@
 <li><p>Add CelestialBody.AtmosphereDepth and HasAtmosphericOxygen</p></li>
 </ul>
 </section>
-<section id="id224">
-<h3>Python client<a class="headerlink" href="#id224" title="Link to this heading">#</a></h3>
+<section id="id225">
+<h3>Python client<a class="headerlink" href="#id225" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Improved dynamic creation of service methods</p></li>
 <li><p>Support for static class methods (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/106">#106</a>)</p></li>
@@ -2482,16 +2500,16 @@
 </ul>
 </section>
 </section>
-<section id="id225">
-<h2>0.1.7<a class="headerlink" href="#id225" title="Link to this heading">#</a></h2>
 <section id="id226">
-<h3>Server<a class="headerlink" href="#id226" title="Link to this heading">#</a></h3>
+<h2>0.1.7<a class="headerlink" href="#id226" title="Link to this heading">#</a></h2>
+<section id="id227">
+<h3>Server<a class="headerlink" href="#id227" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix CKAN install bug on Windows (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/105">#105</a>)</p></li>
 </ul>
 </section>
-<section id="id227">
-<h3>SpaceCenter service<a class="headerlink" href="#id227" title="Link to this heading">#</a></h3>
+<section id="id228">
+<h3>SpaceCenter service<a class="headerlink" href="#id228" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add AutoPilot.SAS, SASMode and SpeedMode (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/94">#94</a>)</p></li>
 <li><p>Update AutoPilot.Error to also return SAS error (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/94">#94</a>)</p></li>
@@ -2502,8 +2520,8 @@
 <li><p>Rename Engine.Activated to Engine.Active to match other parts</p></li>
 </ul>
 </section>
-<section id="id228">
-<h3>Python client<a class="headerlink" href="#id228" title="Link to this heading">#</a></h3>
+<section id="id229">
+<h3>Python client<a class="headerlink" href="#id229" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support for Python 3</p></li>
 <li><p>Upgrade to Protocol Buffers 3.0.0-alpha-1</p></li>
@@ -2514,17 +2532,17 @@
 </ul>
 </section>
 </section>
-<section id="id229">
-<h2>0.1.6<a class="headerlink" href="#id229" title="Link to this heading">#</a></h2>
 <section id="id230">
-<h3>Server<a class="headerlink" href="#id230" title="Link to this heading">#</a></h3>
+<h2>0.1.6<a class="headerlink" href="#id230" title="Link to this heading">#</a></h2>
+<section id="id231">
+<h3>Server<a class="headerlink" href="#id231" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Nicer errors returned to client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/97">#97</a>)</p></li>
 <li><p>Include protobuf source and compiled Python, Java and C++ versions in release (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/100">#100</a>)</p></li>
 </ul>
 </section>
-<section id="id231">
-<h3>SpaceCenter service<a class="headerlink" href="#id231" title="Link to this heading">#</a></h3>
+<section id="id232">
+<h3>SpaceCenter service<a class="headerlink" href="#id232" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Parts</p></li>
 <li><p>Targeting of vessels, bodies and docking ports</p></li>
@@ -2532,17 +2550,17 @@
 <li><p>Fix AutoPilot.Error and add AutoPilot.RollError (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/98">#98</a>)</p></li>
 </ul>
 </section>
-<section id="id232">
-<h3>Python client<a class="headerlink" href="#id232" title="Link to this heading">#</a></h3>
+<section id="id233">
+<h3>Python client<a class="headerlink" href="#id233" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None, bumped version to match server version</p></li>
 </ul>
 </section>
 </section>
-<section id="id233">
-<h2>0.1.5<a class="headerlink" href="#id233" title="Link to this heading">#</a></h2>
 <section id="id234">
-<h3>Server<a class="headerlink" href="#id234" title="Link to this heading">#</a></h3>
+<h2>0.1.5<a class="headerlink" href="#id234" title="Link to this heading">#</a></h2>
+<section id="id235">
+<h3>Server<a class="headerlink" href="#id235" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Server now persists across game scene changes</p></li>
 <li><p>Services specify during which game scenes they are available</p></li>
@@ -2553,8 +2571,8 @@
 <li><p>Fix bug where yielded continuations are run more than once per update</p></li>
 </ul>
 </section>
-<section id="id235">
-<h3>SpaceCenter service<a class="headerlink" href="#id235" title="Link to this heading">#</a></h3>
+<section id="id236">
+<h3>SpaceCenter service<a class="headerlink" href="#id236" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add SpaceCenter.DrawDirection and ClearDirections for visual debugging</p></li>
 <li><p>Add Vessel.Comms to interact with RemoteTech</p></li>
@@ -2576,17 +2594,17 @@
 <li><p>Change AutoPilot to set SAS to false when it’s disengaged</p></li>
 </ul>
 </section>
-<section id="id236">
-<h3>Python client<a class="headerlink" href="#id236" title="Link to this heading">#</a></h3>
+<section id="id237">
+<h3>Python client<a class="headerlink" href="#id237" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add Client.close()</p></li>
 </ul>
 </section>
 </section>
-<section id="id237">
-<h2>0.1.4<a class="headerlink" href="#id237" title="Link to this heading">#</a></h2>
 <section id="id238">
-<h3>Server<a class="headerlink" href="#id238" title="Link to this heading">#</a></h3>
+<h2>0.1.4<a class="headerlink" href="#id238" title="Link to this heading">#</a></h2>
+<section id="id239">
+<h3>Server<a class="headerlink" href="#id239" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Support for KSP 0.90.0</p></li>
 <li><p>Add support for tuples (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/49">#49</a>,:issue:<cite>50</cite>)</p></li>
@@ -2597,8 +2615,8 @@
 <li><p>Performance improvements (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/68">#68</a>)</p></li>
 </ul>
 </section>
-<section id="id239">
-<h3>SpaceCenter service<a class="headerlink" href="#id239" title="Link to this heading">#</a></h3>
+<section id="id240">
+<h3>SpaceCenter service<a class="headerlink" href="#id240" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Major refactoring of reference frames (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/66">#66</a>)</p></li>
 <li><p>Add Control.Nodes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/53">#53</a>)</p></li>
@@ -2614,8 +2632,8 @@
 <li><p>Fix bug with Vessel.HorizontalSpeed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/67">#67</a>)</p></li>
 </ul>
 </section>
-<section id="id240">
-<h3>Python client<a class="headerlink" href="#id240" title="Link to this heading">#</a></h3>
+<section id="id241">
+<h3>Python client<a class="headerlink" href="#id241" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Improved network code to fix bugs and make it more robust</p></li>
 <li><p>Add python version checks</p></li>
@@ -2623,16 +2641,16 @@
 </ul>
 </section>
 </section>
-<section id="id241">
-<h2>0.1.3<a class="headerlink" href="#id241" title="Link to this heading">#</a></h2>
 <section id="id242">
-<h3>Server<a class="headerlink" href="#id242" title="Link to this heading">#</a></h3>
+<h2>0.1.3<a class="headerlink" href="#id242" title="Link to this heading">#</a></h2>
+<section id="id243">
+<h3>Server<a class="headerlink" href="#id243" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add support for collections (lists, dictionaries and sets)</p></li>
 </ul>
 </section>
-<section id="id243">
-<h3>SpaceCenter service<a class="headerlink" href="#id243" title="Link to this heading">#</a></h3>
+<section id="id244">
+<h3>SpaceCenter service<a class="headerlink" href="#id244" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add SpaceCenter.Vessels</p></li>
 <li><p>Add SpaceCenter.Bodies</p></li>
@@ -2655,23 +2673,23 @@
 <li><p>Improvements to Resources class</p></li>
 </ul>
 </section>
-<section id="id244">
-<h3>Python client<a class="headerlink" href="#id244" title="Link to this heading">#</a></h3>
+<section id="id245">
+<h3>Python client<a class="headerlink" href="#id245" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix bug with encoding/decoding of infinities and NaNs</p></li>
 </ul>
 </section>
 </section>
-<section id="id245">
-<h2>0.1.2<a class="headerlink" href="#id245" title="Link to this heading">#</a></h2>
 <section id="id246">
-<h3>Server<a class="headerlink" href="#id246" title="Link to this heading">#</a></h3>
+<h2>0.1.2<a class="headerlink" href="#id246" title="Link to this heading">#</a></h2>
+<section id="id247">
+<h3>Server<a class="headerlink" href="#id247" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None</p></li>
 </ul>
 </section>
-<section id="id247">
-<h3>SpaceCenter service<a class="headerlink" href="#id247" title="Link to this heading">#</a></h3>
+<section id="id248">
+<h3>SpaceCenter service<a class="headerlink" href="#id248" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Include reference frame velocity in orbital direction vectors</p></li>
 <li><p>Remove ReferenceFrame.SurfaceVelocity and ReferenceFrame.TargetVelocity</p></li>
@@ -2679,50 +2697,50 @@
 <li><p>Use Pa instead of kPa for atmospheric pressure</p></li>
 </ul>
 </section>
-<section id="id248">
-<h3>Python client<a class="headerlink" href="#id248" title="Link to this heading">#</a></h3>
+<section id="id249">
+<h3>Python client<a class="headerlink" href="#id249" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Convert parameter names to snake_case</p></li>
 </ul>
 </section>
 </section>
-<section id="id249">
-<h2>0.1.1<a class="headerlink" href="#id249" title="Link to this heading">#</a></h2>
 <section id="id250">
-<h3>Server<a class="headerlink" href="#id250" title="Link to this heading">#</a></h3>
+<h2>0.1.1<a class="headerlink" href="#id250" title="Link to this heading">#</a></h2>
+<section id="id251">
+<h3>Server<a class="headerlink" href="#id251" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Minor server code improvements</p></li>
 </ul>
 </section>
-<section id="id251">
-<h3>SpaceCenter service<a class="headerlink" href="#id251" title="Link to this heading">#</a></h3>
+<section id="id252">
+<h3>SpaceCenter service<a class="headerlink" href="#id252" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add new functionality to SpaceCenter service</p></li>
 </ul>
 </section>
-<section id="id252">
-<h3>Python client<a class="headerlink" href="#id252" title="Link to this heading">#</a></h3>
+<section id="id253">
+<h3>Python client<a class="headerlink" href="#id253" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update example script</p></li>
 </ul>
 </section>
 </section>
-<section id="id253">
-<h2>0.1.0<a class="headerlink" href="#id253" title="Link to this heading">#</a></h2>
 <section id="id254">
-<h3>Server<a class="headerlink" href="#id254" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Initial pre-release</p></li>
-</ul>
-</section>
+<h2>0.1.0<a class="headerlink" href="#id254" title="Link to this heading">#</a></h2>
 <section id="id255">
-<h3>SpaceCenter service<a class="headerlink" href="#id255" title="Link to this heading">#</a></h3>
+<h3>Server<a class="headerlink" href="#id255" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial pre-release</p></li>
 </ul>
 </section>
 <section id="id256">
-<h3>Python client<a class="headerlink" href="#id256" title="Link to this heading">#</a></h3>
+<h3>SpaceCenter service<a class="headerlink" href="#id256" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial pre-release</p></li>
+</ul>
+</section>
+<section id="id257">
+<h3>Python client<a class="headerlink" href="#id257" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial pre-release</p></li>
 </ul>
@@ -2772,6 +2790,7 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core">Core</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spacecenter-service">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ui-service">UI service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infernalrobotics-service">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kerbalalarmclock-service">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-client">Python client</a></li>
@@ -2976,165 +2995,165 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id140">0.3.5</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id141">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id142">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ui-service">UI service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id143">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id144">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id145">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id143">UI service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id144">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id145">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id146">C# client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id146">0.3.4</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id147">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id148">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id149">Drawing service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id150">UI service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id151">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id152">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id153">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id154">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id155">krpctools</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id147">0.3.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id148">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id149">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id150">Drawing service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id151">UI service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id152">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id153">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id154">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id155">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id156">krpctools</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id156">0.3.3</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id157">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id158">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id159">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id160">RemoteTech service</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id157">0.3.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id158">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id159">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id160">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id161">RemoteTech service</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id161">0.3.2</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id162">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id163">SpaceCenter service</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id162">0.3.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id163">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id164">SpaceCenter service</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id164">0.3.0</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id165">SpaceCenter service</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id165">0.3.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id166">SpaceCenter service</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id166">0.2.4</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id167">Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id167">0.2.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id168">Server</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id168">0.2.3</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id169">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id170">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id171">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id172">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id173">Java client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id169">0.2.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id170">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id171">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id172">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id173">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id174">Java client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id174">0.2.2</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id175">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id176">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id177">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id178">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id179">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id180">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id181">Lua client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id182">krpctools</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id175">0.2.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id176">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id177">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id178">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id179">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id180">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id181">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id182">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id183">krpctools</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id183">0.2.1</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id184">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id185">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id186">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id187">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id188">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id189">Lua client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id190">krpctools</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id184">0.2.1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id185">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id186">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id187">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id188">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id189">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id190">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id191">krpctools</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id191">0.2.0</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id192">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id193">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id194">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id195">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id196">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id197">Lua client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id192">0.2.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id193">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id194">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id195">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id196">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id197">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id198">Lua client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id198">0.1.12</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id199">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id200">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id201">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id202">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id203">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id204">Lua client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id199">0.1.12</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id200">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id201">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id202">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id203">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id204">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id205">Lua client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id205">0.1.11</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id206">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id207">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id208">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id209">Lua client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id206">0.1.11</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id207">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id208">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id209">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id210">Lua client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id210">0.1.10</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id211">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id212">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id213">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id214">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id211">0.1.10</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id212">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id213">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id214">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id215">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id215">0.1.9</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id216">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id217">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id218">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id219">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id220">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id216">0.1.9</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id217">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id218">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id219">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id220">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id221">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id221">0.1.8</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id222">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id223">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id224">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id222">0.1.8</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id223">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id224">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id225">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id225">0.1.7</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id226">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id227">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id228">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id226">0.1.7</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id227">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id228">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id229">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id229">0.1.6</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id230">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id231">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id232">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id230">0.1.6</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id231">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id232">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id233">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id233">0.1.5</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id234">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id235">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id236">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id234">0.1.5</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id235">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id236">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id237">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id237">0.1.4</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id238">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id239">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id240">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id238">0.1.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id239">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id240">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id241">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id241">0.1.3</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id242">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id243">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id244">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id242">0.1.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id243">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id244">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id245">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id245">0.1.2</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id246">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id247">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id248">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id246">0.1.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id247">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id248">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id249">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id249">0.1.1</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id250">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id251">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id252">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id250">0.1.1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id251">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id252">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id253">Python client</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id253">0.1.0</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id254">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id255">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id256">Python client</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#id254">0.1.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id255">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id256">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id257">Python client</a></li>
 </ul>
 </li>
 </ul>
@@ -3196,7 +3215,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/34b1de8">34b1de8</a>
+  <a href="https://github.com/krpc/krpc/commit/a195b59">a195b59</a>
 </p></div>
       
     </div>
