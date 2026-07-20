@@ -78,48 +78,48 @@ Compilation Options
 The following options control how the library operates. They must be specified at compile time as an
 argument to the compiler.
 
- * Error handling
+* Error handling
 
-   * ``KRPC_ERROR_CHECK_RETURN`` (the default) -- when a remote procedure call gets an error, it
-     returns the error code.
-   * ``KRPC_ERROR_CHECK_EXIT`` -- terminates the program (by calling ``exit()``) when an error
-     occurs in a remote procedure call.
-   * ``KRPC_ERROR_CHECK_ASSERT`` -- fails a debug assertion (by calling ``assert()``) when an error
-     occurs in a remote procedure call.
-   * ``KRPC_ERROR_CHECK_FN`` -- specifies the ``krpc_error_handler`` function should be called when
-     an error occurs in a remote procedure call. This should be set to a pointer to a function that
-     takes a single parameter of type ``krpc_error_t``.
+  * ``KRPC_ERROR_CHECK_RETURN`` (the default) -- when a remote procedure call gets an error, it
+    returns the error code.
+  * ``KRPC_ERROR_CHECK_EXIT`` -- terminates the program (by calling ``exit()``) when an error
+    occurs in a remote procedure call.
+  * ``KRPC_ERROR_CHECK_ASSERT`` -- fails a debug assertion (by calling ``assert()``) when an error
+    occurs in a remote procedure call.
+  * ``KRPC_ERROR_CHECK_FN`` -- specifies the ``krpc_error_handler`` function should be called when
+    an error occurs in a remote procedure call. This should be set to a pointer to a function that
+    takes a single parameter of type ``krpc_error_t``.
 
-   * ``KRPC_PRINT_ERRORS_TO_STDERR`` -- enables printing of a descriptive error message to stderr
-     when an error occurs
-   * ``PB_NO_ERRMSG`` -- disables error messages in the nanopb library, which kRPC uses to
-     communicate with the server. Enabled by default in the Arduino version of the library.
+  * ``KRPC_PRINT_ERRORS_TO_STDERR`` -- enables printing of a descriptive error message to stderr
+    when an error occurs
+  * ``PB_NO_ERRMSG`` -- disables error messages in the nanopb library, which kRPC uses to
+    communicate with the server. Enabled by default in the Arduino version of the library.
 
- * Communication
+* Communication
 
-   * ``KRPC_COMMUNICATION_POSIX`` -- Specifies that the library should be built to communicate over
-     a serial port using POSIX read/write functions communication mechanisms. This is the default
-     when no other platform is detected.
-   * ``KRPC_COMMUNICATION_WINDOWS`` -- Specifies that the library should be built to communicate
-     over a serial port using the Windows API. The Windows platform will be auto-detected so you do
-     not need to specify this manually.
-   * ``KRPC_COMMUNICATION_ARDUINO`` -- Specifies that the library should be built using Arduino
-     serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
-     to specify this manually.
-   * ``KRPC_COMMUNICATION_CUSTOM`` -- Allows you to provide your own implementation for the
-     communication mechanism.
+  * ``KRPC_COMMUNICATION_POSIX`` -- Specifies that the library should be built to communicate over
+    a serial port using POSIX read/write functions communication mechanisms. This is the default
+    when no other platform is detected.
+  * ``KRPC_COMMUNICATION_WINDOWS`` -- Specifies that the library should be built to communicate
+    over a serial port using the Windows API. The Windows platform will be auto-detected so you do
+    not need to specify this manually.
+  * ``KRPC_COMMUNICATION_ARDUINO`` -- Specifies that the library should be built using Arduino
+    serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
+    to specify this manually.
+  * ``KRPC_COMMUNICATION_CUSTOM`` -- Allows you to provide your own implementation for the
+    communication mechanism.
 
- * Memory allocation
+* Memory allocation
 
-   * ``KRPC_ALLOC_BLOCK_SIZE`` -- The size of collections (lists, sets, etc.) are not know ahead of
-     time, so when they are received from the server they are decoded into dynamically allocated
-     memory on the heap. This option controls how many items to increase the capacity of the
-     collection by when its space is exhausted. Setting this to 1 will consume the least amount of
-     heap memory, but will require one heap allocation call per item. Setting this to a higher value
-     will consume more memory, but require fewer allocations.
-   * ``KRPC_CUSTOM_MEMORY_ALLOC`` -- Disables the default implementation of memory allocation
-     functions ``krpc_malloc``, ``krpc_calloc``, ``krpc_recalloc`` and krpc_free so that you can
-     provide your own implementation.
+  * ``KRPC_ALLOC_BLOCK_SIZE`` -- The size of collections (lists, sets, etc.) are not know ahead of
+    time, so when they are received from the server they are decoded into dynamically allocated
+    memory on the heap. This option controls how many items to increase the capacity of the
+    collection by when its space is exhausted. Setting this to 1 will consume the least amount of
+    heap memory, but will require one heap allocation call per item. Setting this to a higher value
+    will consume more memory, but require fewer allocations.
+  * ``KRPC_CUSTOM_MEMORY_ALLOC`` -- Disables the default implementation of memory allocation
+    functions ``krpc_malloc``, ``krpc_calloc``, ``krpc_recalloc`` and krpc_free so that you can
+    provide your own implementation.
 
 .. note::
 

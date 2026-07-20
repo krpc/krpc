@@ -14,10 +14,10 @@ Installation
 
 1. Download and install the kRPC server plugin from one of these locations:
 
- * `Github <https://github.com/krpc/krpc/releases>`_
- * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
- * `Curse <https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python>`_
- * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
+   * `Github <https://github.com/krpc/krpc/releases>`_
+   * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
+   * `Curse <https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python>`_
+   * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
 
 2. Start up KSP and load a save game.
 
@@ -97,16 +97,14 @@ Run KSP and start the server with the default settings. Then run the following p
 
 
 .. code-block:: python
-   :linenos:
 
    import krpc
    conn = krpc.connect(name='Hello World')
    vessel = conn.space_center.active_vessel
    print(vessel.name)
 
-This does the following: line 1 loads the kRPC python module, line 2 opens a new connection to the
-server, line 3 gets the active vessel and line 4 prints out the name of the vessel. You should see
-something like the following:
+This loads the kRPC python module, opens a new connection to the server, gets the active vessel and
+prints out the name of the vessel. You should see something like the following:
 
 .. image:: /images/getting-started/hello-world.png
 
@@ -115,13 +113,10 @@ Congratulations! You've written your first script that communicates with KSP.
 Going further...
 ----------------
 
- * For some more interesting examples of what you can do with kRPC, check out the
-   :doc:`tutorials <tutorials>`.
- * A script is not limited to the game scene it connected in: setting ``KRPC.GameScene``
-   switches the current game scene, for example from the space center to the tracking
-   station, and can open and close space center facilities such as mission control.
- * Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
-   :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
-   :doc:`Lua <lua/client>`.
- * It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
-   any language you like.
+* For some more interesting examples of what you can do with kRPC, check out the
+  :doc:`tutorials <tutorials>`.
+* Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
+  :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
+  :doc:`Lua <lua/client>`.
+* It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
+  any language you like.

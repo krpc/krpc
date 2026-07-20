@@ -129,15 +129,15 @@ error.
 
 The fields of an error message are:
 
- * ``service`` - If the error was caused by an exception, this is the name of the service in which the
-   exception type is defined.
+* ``service`` - If the error was caused by an exception, this is the name of the service in which the
+  exception type is defined.
 
- * ``name`` - If the error was caused by an exception, this is the name of the exception type.
+* ``name`` - If the error was caused by an exception, this is the name of the exception type.
 
- * ``description`` - A human readable description of the error
+* ``description`` - A human readable description of the error
 
- * ``stack_trace`` - If the error was caused by an exception, this is a server-side stack trace for
-   the exception.
+* ``stack_trace`` - If the error was caused by an exception, this is a server-side stack trace for
+  the exception.
 
 Example RPC invocation
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -412,14 +412,14 @@ The fields are:
 * ``parameters`` - A list of ``Parameter`` messages containing details of the
   procedure's parameters, with the following fields:
 
-   * ``name`` - The name of the parameter, to allow parameter passing by name.
+  * ``name`` - The name of the parameter, to allow parameter passing by name.
 
-   * ``type`` - The :ref:`type <communication-protocol-type>` of the parameter.
+  * ``type`` - The :ref:`type <communication-protocol-type>` of the parameter.
 
-   * ``default_value`` - The value of the default value of the parameter, if any, :ref:`encoded
-     using Protocol Buffer format <communication-protocol-protobuf-encoding>`.
+  * ``default_value`` - The value of the default value of the parameter, if any, :ref:`encoded
+    using Protocol Buffer format <communication-protocol-protobuf-encoding>`.
 
-   * ``nullable`` - If the parameter has a class type, indicates whether null can be passed.
+  * ``nullable`` - If the parameter has a class type, indicates whether null can be passed.
 
 * ``return_type`` - The :ref:`return type <communication-protocol-type>` of the procedure. If the
   procedure does not return anything its type is set to ``NONE``.
@@ -548,13 +548,13 @@ Procedure Names
 Procedures names are CamelCase. Whether a procedure is a service procedure, class method, class
 property, and what class (if any) it belongs to is determined by its name:
 
- * ``ProcedureName`` - a standard procedure that is just part of a service.
- * ``get_PropertyName`` - a procedure that returns the value of a property in a service.
- * ``set_PropertyName`` - a procedure that sets the value of a property in a service.
- * ``ClassName_MethodName`` - a class method.
- * ``ClassName_static_StaticMethodName`` - a static class method.
- * ``ClassName_get_PropertyName`` - a class property getter.
- * ``ClassName_set_PropertyName`` - a class property setter.
+* ``ProcedureName`` - a standard procedure that is just part of a service.
+* ``get_PropertyName`` - a procedure that returns the value of a property in a service.
+* ``set_PropertyName`` - a procedure that sets the value of a property in a service.
+* ``ClassName_MethodName`` - a class method.
+* ``ClassName_static_StaticMethodName`` - a static class method.
+* ``ClassName_get_PropertyName`` - a class property getter.
+* ``ClassName_set_PropertyName`` - a class property setter.
 
 Only letters and numbers are permitted in class, method and property names. Underscores can
 therefore be used to split the name into its constituent parts.
@@ -617,10 +617,10 @@ fields are empty.
 
 For collection types the ``types`` repeated field will contain the sub-types:
 
- * ``TUPLE`` types contain 1 or more types in the ``types`` field.
- * ``LIST`` and ``SET`` types contain a single type in the ``types`` field.
- * ``DICTIONARY`` types contain a 2 types in the ``types`` field - the key and value types, in that
-   order.
+* ``TUPLE`` types contain 1 or more types in the ``types`` field.
+* ``LIST`` and ``SET`` types contain a single type in the ``types`` field.
+* ``DICTIONARY`` types contain a 2 types in the ``types`` field - the key and value types, in that
+  order.
 
 For all other types the ``types`` field is empty.
 
