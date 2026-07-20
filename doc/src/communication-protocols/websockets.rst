@@ -38,14 +38,14 @@ protobuf binary format.
 
 To send a message to the server:
 
- 1. Encode the message using the Protocol Buffers format.
- 2. Send a binary websockets message to the server, with payload containing the encoded message
-    data.
+1. Encode the message using the Protocol Buffers format.
+2. Send a binary websockets message to the server, with payload containing the encoded message
+   data.
 
 To receive a message from the server, do the reverse:
 
- 1. Receive a binary websockets message from the server.
- 2. Decode the messages payload using the Protocol Buffers format.
+1. Receive a binary websockets message from the server.
+2. Decode the messages payload using the Protocol Buffers format.
 
 Invoking Remote Procedures
 --------------------------

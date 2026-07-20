@@ -14,10 +14,10 @@ Installation
 
 1. Download and install the kRPC server plugin from one of these locations:
 
- * `Github <https://github.com/krpc/krpc/releases>`_
- * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
- * `Curse <https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python>`_
- * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
+   * `Github <https://github.com/krpc/krpc/releases>`_
+   * `SpaceDock <https://spacedock.info/mod/69/kRPC>`_
+   * `Curse <https://mods.curse.com/ksp-mods/kerbal/220219-krpc-control-the-game-using-c-c-java-lua-python>`_
+   * Or the install it using `CKAN <https://forum.kerbalspaceprogram.com/index.php?/topic/90246-the-comprehensive-kerbal-archive-network-ckan-package-manager-v1180-19-june-2016/>`_
 
 2. Start up KSP and load a save game.
 
@@ -113,10 +113,10 @@ Congratulations! You've written your first script that communicates with KSP.
 Going further...
 ----------------
 
- * For some more interesting examples of what you can do with kRPC, check out the
-   :doc:`tutorials <tutorials>`.
- * Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
-   :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
-   :doc:`Lua <lua/client>`.
- * It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
-   any language you like.
+* For some more interesting examples of what you can do with kRPC, check out the
+  :doc:`tutorials <tutorials>`.
+* Client libraries are available for other languages too, including :doc:`C# <csharp/client>`,
+  :doc:`C++ <cpp/client>`, :doc:`C <cnano/client>`, :doc:`Java <java/client>` and
+  :doc:`Lua <lua/client>`.
+* It is also possible to :doc:`communicate with the server manually <communication-protocols>` from
+  any language you like.

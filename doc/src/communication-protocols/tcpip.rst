@@ -16,17 +16,17 @@ size, in bytes, encoded as a Protocol Buffers varint.
 
 To send a message to the server:
 
- 1. Encode the message using the Protocol Buffers format.
- 2. Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
-    varint.
- 3. Send the encoded length followed by the encoded message data.
+1. Encode the message using the Protocol Buffers format.
+2. Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
+   varint.
+3. Send the encoded length followed by the encoded message data.
 
 To receive a message from the server, do the reverse:
 
- 1. Receive the size of the message as a Protocol Buffers encoded varint.
- 2. Decode the message size.
- 3. Receive message size bytes of message data.
- 4. Decode the message data.
+1. Receive the size of the message as a Protocol Buffers encoded varint.
+2. Decode the message size.
+3. Receive message size bytes of message data.
+4. Decode the message data.
 
 Connecting to the RPC Server
 ----------------------------
@@ -34,48 +34,48 @@ Connecting to the RPC Server
 A client invokes remote procedures by communicating with the *RPC server*. To establish a
 connection, a client must do the following:
 
- 1. Open a TCP socket to the server on its RPC port (which defaults to 50000).
+1. Open a TCP socket to the server on its RPC port (which defaults to 50000).
 
- 2. Send a ``ConnectionRequest`` message to the server. This message is defined as:
+2. Send a ``ConnectionRequest`` message to the server. This message is defined as:
 
-    .. code-block:: protobuf
+   .. code-block:: protobuf
 
-       message ConnectionRequest {
-         Type type = 1;
-         string client_name = 2;
-         bytes client_identifier = 3;
-         enum Type {
-           RPC = 0;
-           STREAM = 1;
-         };
-       }
+      message ConnectionRequest {
+        Type type = 1;
+        string client_name = 2;
+        bytes client_identifier = 3;
+        enum Type {
+          RPC = 0;
+          STREAM = 1;
+        };
+      }
 
-    The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
-    be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
-    be left blank.
+   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
+   be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
+   be left blank.
 
- 3. Receive a `ConnectionResponse` message from the server. This message is defined as:
+3. Receive a `ConnectionResponse` message from the server. This message is defined as:
 
-    .. code-block:: protobuf
+   .. code-block:: protobuf
 
-       message ConnectionResponse {
-         Status status = 1;
-         enum Status {
-           OK = 0;
-           MALFORMED_MESSAGE = 1;
-           TIMEOUT = 2;
-           WRONG_TYPE = 3;
-         }
-         string message = 2;
-         bytes client_identifier = 3;
-       }
+      message ConnectionResponse {
+        Status status = 1;
+        enum Status {
+          OK = 0;
+          MALFORMED_MESSAGE = 1;
+          TIMEOUT = 2;
+          WRONG_TYPE = 3;
+        }
+        string message = 2;
+        bytes client_identifier = 3;
+      }
 
-    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was
-    successful. If not, the ``message`` field contains a description of what went wrong.
+   If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was
+   successful. If not, the ``message`` field contains a description of what went wrong.
 
-    When the connection is successful, the ``client_identifier`` contains a unique 16-byte
-    identifier for the client. This is required when connecting to the stream server (described
-    below).
+   When the connection is successful, the ``client_identifier`` contains a unique 16-byte
+   identifier for the client. This is required when connecting to the stream server (described
+   below).
 
 Connecting to the Stream Server
 -------------------------------
@@ -112,12 +112,12 @@ from the response.
 To send and receive messages to the server, they need to be encoded and decoded from their binary
 format:
 
- * The ``encode_varint`` and ``decode_varint`` functions convert between Python integers and
-   Protocol Buffer varint encoded integers.
- * ``send_message`` encodes a message, sends the length of the message to the server as a Protocol
-   Buffer varint encoded integer, and then sends the message data.
- * ``recv_message`` receives the size of the message, decodes it, receives the message data, and
-   decodes it.
+* The ``encode_varint`` and ``decode_varint`` functions convert between Python integers and
+  Protocol Buffer varint encoded integers.
+* ``send_message`` encodes a message, sends the length of the message to the server as a Protocol
+  Buffer varint encoded integer, and then sends the message data.
+* ``recv_message`` receives the size of the message, decodes it, receives the message data, and
+  decodes it.
 
 .. literalinclude:: /scripts/communication-protocol-rpc.py
    :language: python

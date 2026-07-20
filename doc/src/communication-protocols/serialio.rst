@@ -24,17 +24,17 @@ size, in bytes, encoded as a Protocol Buffers varint.
 
 To send a message to the server:
 
- 1. Encode the message using the Protocol Buffers format.
- 2. Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
-    varint.
- 3. Write the encoded length followed by the encoded message data to the serial port.
+1. Encode the message using the Protocol Buffers format.
+2. Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
+   varint.
+3. Write the encoded length followed by the encoded message data to the serial port.
 
 To receive a message from the server, do the reverse:
 
- 1. Read the size of the message as a Protocol Buffers encoded varint from the serial port.
- 2. Decode the message size.
- 3. Read message size bytes of message data from the serial port.
- 4. Decode the message data.
+1. Read the size of the message as a Protocol Buffers encoded varint from the serial port.
+2. Decode the message size.
+3. Read message size bytes of message data from the serial port.
+4. Decode the message data.
 
 Unlike the TCP/IP and WebSockets protocols, all messages sent to the server after the initial
 connection handshake are wrapped in a ``MultiplexedRequest`` message, and all messages received
@@ -58,45 +58,45 @@ Connecting to the Server
 There is a single serial port connection for both RPC calls and stream updates. To establish a
 connection, a client must do the following:
 
- 1. Open a connection to the serial port.
+1. Open a connection to the serial port.
 
- 2. Send a ``MultiplexedRequest`` message to the server with its ``connection_request`` field
-    populated. The ``ConnectionRequest`` message is defined as:
+2. Send a ``MultiplexedRequest`` message to the server with its ``connection_request`` field
+   populated. The ``ConnectionRequest`` message is defined as:
 
-    .. code-block:: protobuf
+   .. code-block:: protobuf
 
-       message ConnectionRequest {
-         Type type = 1;
-         string client_name = 2;
-         bytes client_identifier = 3;
-         enum Type {
-           RPC = 0;
-           STREAM = 1;
-         };
-       }
+      message ConnectionRequest {
+        Type type = 1;
+        string client_name = 2;
+        bytes client_identifier = 3;
+        enum Type {
+          RPC = 0;
+          STREAM = 1;
+        };
+      }
 
-    The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
-    be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
-    be left blank.
+   The ``type`` field should be set to ``ConnectionRequest.RPC`` and the ``client_name`` field can
+   be set to the name of the client to display on the in-game UI. The ``client_identifier`` should
+   be left blank.
 
- 3. Receive a ``ConnectionResponse`` message from the server. This message is defined as:
+3. Receive a ``ConnectionResponse`` message from the server. This message is defined as:
 
-    .. code-block:: protobuf
+   .. code-block:: protobuf
 
-       message ConnectionResponse {
-         Status status = 1;
-         enum Status {
-           OK = 0;
-           MALFORMED_MESSAGE = 1;
-           TIMEOUT = 2;
-           WRONG_TYPE = 3;
-         }
-         string message = 2;
-         bytes client_identifier = 3;
-       }
+      message ConnectionResponse {
+        Status status = 1;
+        enum Status {
+          OK = 0;
+          MALFORMED_MESSAGE = 1;
+          TIMEOUT = 2;
+          WRONG_TYPE = 3;
+        }
+        string message = 2;
+        bytes client_identifier = 3;
+      }
 
-    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
-    If not, the ``message`` field contains a description of what went wrong.
+   If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
+   If not, the ``message`` field contains a description of what went wrong.
 
 Receiving Stream Updates
 ------------------------
