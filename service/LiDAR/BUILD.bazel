@@ -53,3 +53,13 @@ service_definitions(
     service = "LiDAR",
     visibility = ["//visibility:public"],
 )
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)

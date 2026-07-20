@@ -128,3 +128,13 @@ csharp_binary(
     warning_level = 4,
     deps = exe_deps,
 )
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)

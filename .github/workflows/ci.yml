@@ -107,6 +107,8 @@ jobs:
         run: |
           dotnet build KRPC.sln -c Debug -warnaserror
           dotnet build KRPC.sln -c Release -warnaserror
+      - name: test
+        run: bazel test //:csproj-test
 
   build-client-cnano-cmake-linux:
     needs: test-client-cnano

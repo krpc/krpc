@@ -253,3 +253,13 @@ clientgen_csharp(
         "//:__pkg__",
     ],
 )
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)

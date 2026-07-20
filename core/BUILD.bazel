@@ -157,3 +157,13 @@ csharp_nunit_test(
         "//tools/build/dotnet:System.IO.Ports",
     ],
 )
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)
