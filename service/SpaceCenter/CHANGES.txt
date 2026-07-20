@@ -55,8 +55,6 @@ v0.6.0
  * Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
  * Add Engine.Flameout (#311)
  * Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (#827)
- * Add Module.AllFieldsById to expose all part module field values, including those not
-   visible in the UI (#858)
  * Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById,
    SetFieldStringById, SetFieldBoolById and ResetFieldById to also access fields not
    visible in the UI (#858)

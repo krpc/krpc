@@ -743,7 +743,6 @@ SpaceCenter.Module.EventList
 SpaceCenter.Module.ActionList
 SpaceCenter.Module.Fields
 SpaceCenter.Module.FieldsById
-SpaceCenter.Module.AllFieldsById
 SpaceCenter.Module.HasField
 SpaceCenter.Module.HasFieldWithId
 SpaceCenter.Module.GetField

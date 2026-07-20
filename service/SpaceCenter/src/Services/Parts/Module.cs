@@ -204,25 +204,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The modules field identifiers and their associated values, as a dictionary.
-        /// This is the same as <see cref="FieldsById"/>, except that it also includes
-        /// fields that are not visible in the right-click menu of the part.
-        /// </summary>
-        /// <remarks>
-        /// Throws an exception if there is more than one field with the same identifier.
-        /// </remarks>
-        [Obsolete("Use <see cref='FieldList'/> instead.")]
-        [KRPCProperty]
-        public IDictionary<string,string> AllFieldsById {
-            get {
-                var result = new Dictionary<string,string> ();
-                foreach (var f in AllBaseFields)
-                    result.Add (f.name, f.GetValue (module).ToString ());
-                return result;
-            }
-        }
-
-        /// <summary>
         /// Returns <c>true</c> if the module has a field with the given name.
         /// </summary>
         /// <param name="name">Name of the field.</param>
