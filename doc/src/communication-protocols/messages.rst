@@ -643,7 +643,14 @@ follows:
      EDITOR_VAB = 3;
      EDITOR_SPH = 4;
      MISSION_BUILDER = 5;
+     ASTRONAUT_COMPLEX = 6;
+     MISSION_CONTROL = 7;
+     RESEARCH_AND_DEVELOPMENT = 8;
+     ADMINISTRATION = 9;
    };
+
+The astronaut complex, mission control, research and development and administration scenes are
+facilities that open within the space center scene.
 
 .. _communication-protocol-proxy-objects:
 

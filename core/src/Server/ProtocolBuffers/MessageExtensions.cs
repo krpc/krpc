@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Messages;
@@ -95,9 +96,31 @@ namespace KRPC.Server.ProtocolBuffers
             if (procedure.ReturnType != null)
                 result.ReturnType = procedure.ReturnType.ToProtobufMessage ();
             result.ReturnIsNullable = procedure.ReturnIsNullable;
+            result.GameScenes.Add (ToProtobufMessage (procedure.GameScene));
             result.Documentation = procedure.Documentation;
             result.Deprecated = procedure.Deprecated;
             result.DeprecatedReason = procedure.DeprecatedReason;
+            return result;
+        }
+
+        /// <summary>
+        /// Convert a game scene mask into wire enumeration values. Scenes are matched by the
+        /// same names used by the JSON service definitions, so the wire enumeration only needs
+        /// its values to be named consistently to stay in step; any scene it does not name is
+        /// omitted. A procedure available in every scene encodes as an empty list, which the
+        /// protocol defines to mean all scenes.
+        /// </summary>
+        static IList<Schema.KRPC.Procedure.Types.GameScene> ToProtobufMessage (GameScene scenes)
+        {
+            var result = new List<Schema.KRPC.Procedure.Types.GameScene> ();
+            if (scenes == GameScene.All)
+                return result;
+            var descriptor = Schema.KRPC.Procedure.Descriptor.EnumTypes.Single ();
+            foreach (var name in GameSceneUtils.Serialize (scenes)) {
+                var value = descriptor.FindValueByName (name);
+                if (value != null)
+                    result.Add ((Schema.KRPC.Procedure.Types.GameScene)value.Number);
+            }
             return result;
         }
 

@@ -43,6 +43,7 @@
     <Compile Include="Server\HTTP\RequestTest.cs" />
     <Compile Include="Server\HTTP\ResponseTest.cs" />
     <Compile Include="Server\ProtocolBuffers\EncoderTest.cs" />
+    <Compile Include="Server\ProtocolBuffers\MessageExtensionsTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\RPCStreamTest.cs" />
     <Compile Include="Server\ProtocolBuffers\SchemaTest.cs" />
