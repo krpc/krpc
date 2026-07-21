@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import krpc.client.services.KRPC;
 import krpc.client.services.TestService;
+import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.Status;
 import org.javatuples.Pair;
 import org.junit.Before;
@@ -228,6 +229,39 @@ public class ConnectionTest {
     assertEquals(2, list.size());
     assertEquals("value=jeb", list.get(0).getValue());
     assertEquals("value=bob", list.get(1).getValue());
+  }
+
+  // A method name is matched by value, so one assembled at runtime resolves the same as a
+  // literal, which is interned and so happened to work when the two were compared by identity.
+  @Test
+  public void testGetCallWithNonInternedMethodName() throws RPCException {
+    String name = new StringBuilder("floatToString").toString();
+    assertEquals(
+        connection.getCall(TestService.class, "floatToString", 3.14159f),
+        connection.getCall(TestService.class, name, 3.14159f));
+  }
+
+  // Arguments of the wrong type do not match, rather than any method of the same name taking
+  // the same number of arguments.
+  @Test
+  public void testGetCallWithWrongArgumentType() {
+    RPCException e = assertThrows(RPCException.class,
+        () -> connection.getCall(TestService.class, "floatToString", "not a float"));
+    assertTrue(e.getMessage().contains("not found"));
+  }
+
+  // An error naming a type this client has no stubs for still reports what went wrong, rather
+  // than failing while trying to construct the exception for it.
+  @Test
+  public void testUnknownExceptionType() {
+    Error error = Error.newBuilder()
+        .setService("NotAService")
+        .setName("NotAnException")
+        .setDescription("something went wrong")
+        .build();
+    RPCException e = assertThrows(RPCException.class, () -> connection.throwException(error));
+    assertTrue(e.getMessage().contains("NotAService.NotAnException"));
+    assertTrue(e.getMessage().contains("something went wrong"));
   }
 
   @Test

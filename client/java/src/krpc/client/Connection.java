@@ -24,6 +24,19 @@ public class Connection implements AutoCloseable {
   private CodedInputStream rpcInputStream;
   StreamManager streamManager;
 
+  private static final Map<Class<?>, Class<?>> WRAPPER_TYPES = new HashMap<Class<?>, Class<?>>();
+
+  static {
+    WRAPPER_TYPES.put(boolean.class, Boolean.class);
+    WRAPPER_TYPES.put(byte.class, Byte.class);
+    WRAPPER_TYPES.put(char.class, Character.class);
+    WRAPPER_TYPES.put(short.class, Short.class);
+    WRAPPER_TYPES.put(int.class, Integer.class);
+    WRAPPER_TYPES.put(long.class, Long.class);
+    WRAPPER_TYPES.put(float.class, Float.class);
+    WRAPPER_TYPES.put(double.class, Double.class);
+  }
+
   private static String EMPTY_NAME = "";
   private static InetAddress DEFAULT_ADDRESS = InetAddress.getLoopbackAddress();
   private static int DEFAULT_RPC_PORT = 50000;
@@ -288,13 +301,21 @@ public class Connection implements AutoCloseable {
         throw new IndexOutOfBoundsException(message);
       }
       Class<?> exnType = exceptionTypes.get(key);
-      Constructor<?>[] ctors = exnType.getDeclaredConstructors();
       Constructor<?> ctor = null;
-      for (int i = 0; i < ctors.length; i++) {
-        ctor = ctors[i];
-        if (ctor.getParameterTypes().length == 1) {
-          break;
+      if (exnType != null) {
+        for (Constructor<?> candidate : exnType.getDeclaredConstructors()) {
+          if (candidate.getParameterTypes().length == 1) {
+            ctor = candidate;
+            break;
+          }
         }
+      }
+      if (ctor == null) {
+        // The type is unknown here if the service it belongs to has no generated stubs loaded,
+        // and has no usable constructor if it was not generated as an exception type. Report
+        // the error itself, named by its type on the server, rather than the failure to build
+        // an exception for it, which would say nothing about what actually went wrong.
+        throw new RPCException(key + ": " + message);
       }
       try {
         ctor.setAccessible(true);
@@ -443,16 +464,21 @@ public class Connection implements AutoCloseable {
       throws RPCException {
     Method[] methods = clazz.getMethods();
     for (Method method : methods) {
-      if (method.getName() == methodName) {
-        Class<?>[] paramTypes = method.getParameterTypes();
-        if (args.length != paramTypes.length) {
-          continue;
+      if (!method.getName().equals(methodName)) {
+        continue;
+      }
+      Class<?>[] paramTypes = method.getParameterTypes();
+      if (args.length != paramTypes.length) {
+        continue;
+      }
+      boolean matches = true;
+      for (int i = 0; i < args.length; i++) {
+        if (!isArgumentAssignable(paramTypes[i], args[i])) {
+          matches = false;
+          break;
         }
-        for (int i = 0; i < args.length; i++) {
-          if (!paramTypes[i].isAssignableFrom(args.getClass())) {
-            continue;
-          }
-        }
+      }
+      if (matches) {
         return method;
       }
     }
@@ -461,9 +487,20 @@ public class Connection implements AutoCloseable {
       if (i > 0) {
         params += ",";
       }
-      params += args[i].getClass().toString();
+      params += args[i] == null ? "null" : args[i].getClass().toString();
     }
     throw new RPCException(
       "Method " + clazz.getName() + "." + methodName + "(" + params + ") not found.");
+  }
+
+  // Whether an argument can be passed as a parameter of the given type. Arguments arrive boxed,
+  // having been passed through an Object..., so a primitive parameter type is compared against
+  // its wrapper type. Null is accepted by any parameter that is not a primitive.
+  private static boolean isArgumentAssignable(Class<?> paramType, Object arg) {
+    if (arg == null) {
+      return !paramType.isPrimitive();
+    }
+    Class<?> type = paramType.isPrimitive() ? WRAPPER_TYPES.get(paramType) : paramType;
+    return type.isAssignableFrom(arg.getClass());
   }
 }

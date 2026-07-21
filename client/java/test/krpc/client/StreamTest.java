@@ -418,6 +418,55 @@ public class StreamTest {
     assertEquals(testCallbackValue, 5);
   }
 
+  // The update thread must not hold the update lock while waiting for a stream's condition. A
+  // caller holding that condition -- which is how waiting for an update is documented to work --
+  // otherwise blocks forever on anything needing the update lock, and the update thread blocks
+  // on the condition, deadlocking both. The timeout catches it, as it hangs the test outright.
+  @Test(timeout = 30000)
+  public void testRemoveWhileHoldingCondition()
+      throws RPCException, StreamException, InterruptedException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testRemoveWhileHoldingCondition", 1);
+    stream.start();
+    synchronized (stream.getCondition()) {
+      stream.waitForUpdate();
+      // Let the update thread reach the next update and block on this condition
+      Thread.sleep(200);
+      stream.remove();
+    }
+  }
+
+  private volatile int testCallbackThrowsCount = 0;
+  private volatile boolean testCallbackThrowsStop = false;
+
+  // A callback that throws must not take the update thread down with it, which would stop
+  // every stream on the connection. The timeout catches that, as the loop below would
+  // otherwise never see another update.
+  @Test(timeout = 30000)
+  public void testCallbackThrows()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testCallbackThrows", 10);
+    stream.addCallback(
+        (Integer value) -> {
+          throw new IllegalStateException("callback failed");
+      });
+    stream.addCallback(
+        (Integer value) -> {
+          if (value > 5) {
+            testCallbackThrowsStop = true;
+          } else {
+            testCallbackThrowsCount++;
+          }
+      });
+    stream.start();
+    while (!testCallbackThrowsStop) {
+    }
+    stream.remove();
+    // The callback registered after the one that threw still ran
+    assertTrue(testCallbackThrowsCount > 0);
+  }
+
   private volatile boolean testRemoveCallbackCalled1 = false;
   private volatile boolean testRemoveCallbackCalled2 = false;
 
@@ -475,6 +524,19 @@ public class StreamTest {
     stream.remove();
     assertFalse(testRateError);
     assertEquals(testRateValue, 5);
+  }
+
+  @Test
+  public void testGetRate()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testGetRate", 1);
+    assertEquals(0, stream.getRate(), 0.0001);
+    stream.setRate(5);
+    assertEquals(5, stream.getRate(), 0.0001);
+    stream.setRate(0);
+    assertEquals(0, stream.getRate(), 0.0001);
+    stream.remove();
   }
 
   @Test
