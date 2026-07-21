@@ -224,6 +224,7 @@ v0.6.0
  * Fix part module field values being formatted using the machine's locale, so that
    Module.Fields, Module.GetField and PartField.Value returned numbers that clients running
    under a locale that writes decimals with a comma could not parse
+ * Add CrewMember.Part and per-part CrewCapacity and Crew properties
 
 v0.5.4
  * Fix vessel recovery (#782)
