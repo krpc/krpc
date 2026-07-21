@@ -12,6 +12,15 @@ v0.6.0
  * Mark deprecated functions with the KRPC_DEPRECATED attribute macro (#904)
  * Generated functions are now defined as static inline, so the generated
    service headers can be safely included from multiple translation units
+ * **Breaking:** On Arduino, a read now fails with KRPC_ERROR_EOF when the serial timeout
+   elapses without a single byte being received, instead of retrying forever and hanging the
+   sketch when the server goes away. The timeout applies to each byte, so a slow but
+   progressing reply is unaffected; use Serial.setTimeout to control how long to wait
+ * Add the KRPC_ERROR_MESSAGES option, which captures the message describing an error returned
+   by the server so that it can be read using krpc_get_error_message. Without it every server
+   error is indistinguishable, as they all return KRPC_ERROR_RPC_FAILED
+ * Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than
+   were asked for
 
 v0.5.2
  * The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.
