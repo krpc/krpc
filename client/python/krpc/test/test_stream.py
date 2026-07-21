@@ -2,7 +2,10 @@ import threading
 import time
 import unittest
 
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import StreamError
+from krpc import streammanager
+from krpc.streammanager import StreamManager
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -344,6 +347,34 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertTrue(stop.is_set())
         self.assertFalse(error.is_set())
         self.assertEqual(self.test_callback_value, 5)
+
+    def test_update_does_not_resurrect_a_removed_stream(self) -> None:
+        # A value decoded before the stream was removed must not overwrite the error that
+        # remove() stored. The stream is gone from the registry, so nothing would ever
+        # replace that value and it would be returned as though still live.
+        manager = StreamManager(None)
+        stream = manager.get_stream(self.conn._types.string_type, 1)
+        # Stands in for the error remove() stores to mark the stream as gone
+        stream.value = StreamError("Stream does not exist")
+
+        # Remove the stream midway through the update, while its value is being decoded
+        class RemovingDecoder:
+            # pylint: disable=unused-argument
+            @staticmethod
+            def decode(client: object, data: bytes, typ: object) -> str:
+                del manager._streams[1]
+                return "a stale value"
+
+        result = KRPC.StreamResult(id=1)
+        result.result.value = b"whatever"
+        decoder = streammanager.Decoder
+        streammanager.Decoder = RemovingDecoder  # type: ignore[misc]
+        try:
+            manager.update([result])
+        finally:
+            streammanager.Decoder = decoder  # type: ignore[misc]
+
+        self.assertIsInstance(stream.value, StreamError)
 
     def test_remove_while_holding_condition(self) -> None:
         # The update thread must not hold the update lock while waiting for a stream's

@@ -194,13 +194,20 @@ class StreamManager:
                     value = Decoder.decode(
                         self._client, result.result.value, stream.return_type
                     )
-                decoded.append((stream, value, stream.callbacks))
+                decoded.append((result.id, stream, value, stream.callbacks))
             update_callbacks = self._callbacks
 
         # Store each value in the cache and notify anything waiting on it
-        for stream, value, callbacks in decoded:
+        for stream_id, stream, value, callbacks in decoded:
             with stream.condition:
-                stream.value = value
+                with self._update_lock:
+                    # The stream can be removed while its new value is being decoded, in
+                    # which case remove() has already stored the error saying so and this
+                    # value must not overwrite it - the stream is gone from the registry,
+                    # so nothing would ever replace it and it would be returned forever.
+                    if stream_id not in self._streams:
+                        continue
+                    stream.value = value
                 stream.condition.notify_all()
             for fn in callbacks:
                 _invoke_callback(fn, value)
