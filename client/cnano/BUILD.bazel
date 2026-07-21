@@ -198,12 +198,25 @@ test_srcs = glob([
     "test/*.hpp",
 ]) + [":services-test-service"]
 
+# The tests are built with server error messages enabled, so that they cover decoding them. The
+# default build, with them disabled, is covered by the krpc_cnano library itself.
+cc_library(
+    name = "krpc_cnano_error_messages",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_ERROR_MESSAGES"],
+    includes = ["include"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
 cc_binary(
     name = "cnanotest",
+    testonly = True,
     srcs = test_srcs,
     includes = ["test"],
     deps = [
-        ":krpc_cnano",
+        ":krpc_cnano_error_messages",
         "@cpp_googletest//:gmock",
         "@cpp_googletest//:gtest",
     ],

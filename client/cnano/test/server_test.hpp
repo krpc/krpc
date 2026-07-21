@@ -1,6 +1,19 @@
 #pragma once
 
+#include <gmock/gmock.h>
 #include <krpc_cnano.h>
+
+// Check the message for the last error returned by the server, when the client is built with
+// support for them. Only the start of the message is compared, as the server also sends a stack
+// trace, which is truncated to fit the message buffer.
+#ifdef KRPC_ERROR_MESSAGES
+#define ASSERT_ERROR_MESSAGE(expected) \
+  ASSERT_THAT(krpc_get_error_message(), testing::StartsWith(expected))
+#else
+#define ASSERT_ERROR_MESSAGE(expected) \
+  do {                                 \
+  } while (false)
+#endif
 
 class server_test : public ::testing::Test {
  public:
