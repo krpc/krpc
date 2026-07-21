@@ -1,3 +1,16 @@
+"""Autopilot integration tests.
+
+The full suites are too slow to run on every change. The quick gate is
+TestAutoPilotAttitude*.test_orbital_directions, TestAutoPilotLaunch*.test_launch and
+TestAutoPilotLaunch*.test_smooth_turn, which covers pointing in vacuum and in atmosphere. Omit
+TestAutoPilotAttitudeSlow, which is far slower than the rest. The deeper oscillation suites are
+worth running at decision points, not routinely.
+
+Tests disabled here are disabled deliberately; the suite as committed is the one to run. Changing
+the controller can legitimately invalidate the calibrated assertions, but retuning them belongs in
+a deliberate recalibration pass rather than alongside the change that tripped them.
+"""
+
 # pylint: disable=too-many-lines
 import math
 import time
