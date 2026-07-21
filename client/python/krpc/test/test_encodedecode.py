@@ -74,6 +74,11 @@ class TestEncodeDecode(unittest.TestCase):
             (300, "d804"),
             (1234567890000, "a091d89fee47"),
             (-33, "41"),
+            # Values from 2**62 up set bit 63 of the zigzag payload, which must not be
+            # read as a sign bit
+            (4611686018427387904, "80808080808080808001"),
+            (9223372036854775807, "feffffffffffffffff01"),
+            (-9223372036854775808, "ffffffffffffffffff01"),
         ]
         self._run_test_encode_value(self.types.sint64_type, cases)
         self._run_test_decode_value(self.types.sint64_type, cases)

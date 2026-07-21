@@ -137,7 +137,10 @@ class _ValueDecoder:
 
     @classmethod
     def _decode_signed_varint(cls, data: bytes) -> int:
-        value = protobuf_decoder._DecodeSignedVarint(data, 0)[0]  # type: ignore[attr-defined]
+        # The zigzag payload is an unsigned varint. Reading it as a signed one would sign
+        # extend it as two's complement first, which corrupts anything from 2**62 up once
+        # the payload sets bit 63 - long.MaxValue would decode as -1.
+        value = protobuf_decoder._DecodeVarint(data, 0)[0]  # type: ignore[attr-defined]
         return cast(int, protobuf_wire_format.ZigZagDecode(value))  # type: ignore[no-untyped-call]
 
     @classmethod
