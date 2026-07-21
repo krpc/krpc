@@ -863,6 +863,9 @@
 <li><p>Add support for serial port communication on Windows</p></li>
 <li><p>Mark deprecated functions with the KRPC_DEPRECATED attribute macro (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
 <li><p>Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> On Arduino, a read now fails with KRPC_ERROR_EOF when the serial timeout elapses without a single byte being received, instead of retrying forever and hanging the sketch when the server goes away. The timeout applies to each byte, so a slow but progressing reply is unaffected; use Serial.setTimeout to control how long to wait</p></li>
+<li><p>Add the KRPC_ERROR_MESSAGES option, which captures the message describing an error returned by the server so that it can be read using krpc_get_error_message. Without it every server error is indistinguishable, as they all return KRPC_ERROR_RPC_FAILED</p></li>
+<li><p>Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than were asked for</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -3239,7 +3242,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/155d474">155d474</a>
+  <a href="https://github.com/krpc/krpc/commit/6b93f67">6b93f67</a>
 </p></div>
       
     </div>

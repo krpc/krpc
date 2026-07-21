@@ -278,6 +278,9 @@ C-nano client
 * Add support for serial port communication on Windows
 * Mark deprecated functions with the KRPC\_DEPRECATED attribute macro (:issue:`904`)
 * Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units
+* :breaking:`Breaking` On Arduino, a read now fails with KRPC\_ERROR\_EOF when the serial timeout elapses without a single byte being received, instead of retrying forever and hanging the sketch when the server goes away. The timeout applies to each byte, so a slow but progressing reply is unaffected; use Serial.setTimeout to control how long to wait
+* Add the KRPC\_ERROR\_MESSAGES option, which captures the message describing an error returned by the server so that it can be read using krpc\_get\_error\_message. Without it every server error is indistinguishable, as they all return KRPC\_ERROR\_RPC\_FAILED
+* Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than were asked for
 
 
 Java client

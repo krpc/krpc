@@ -746,6 +746,12 @@ an error occurs in a remote procedure call. This should be set to a pointer to a
 takes a single parameter of type <code class="docutils literal notranslate"><span class="pre">krpc_error_t</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> – enables printing of a descriptive error message to stderr
 when an error occurs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> – captures the message describing an error returned by the server,
+which can then be read using <a class="reference internal" href="#c.krpc_get_error_message" title="krpc_get_error_message"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_get_error_message()</span></code></a>. Without this every server error
+is indistinguishable, as they all return <code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_RPC_FAILED</span></code>. Enabling it costs
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> bytes of static storage.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code> – the size of the buffer used to store the message described
+above, defaulting to 256 bytes. Longer messages are truncated to fit.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> – disables error messages in the nanopb library, which kRPC uses to
 communicate with the server. Enabled by default in the Arduino version of the library.</p></li>
 </ul>
@@ -930,6 +936,14 @@ bits in the structure are used to initialize the connection. For example:</p>
 <span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">);</span>
 </pre></div>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A serial connection has no end-of-file, so on Arduino a read fails with
+<code class="xref c c-macro docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> when the serial timeout elapses without a single byte arriving.
+This timeout is one second by default and applies to each byte, so a slow but progressing
+reply never trips it. If the server can take longer than this to start replying, raise the
+timeout with <code class="docutils literal notranslate"><span class="pre">Serial.setTimeout</span></code> before calling <a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -1012,6 +1026,18 @@ server and appears in the in-game server window.</p></li>
 <dt class="sig sig-object c" id="c.krpc_get_error">
 <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">error</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error" title="Link to this definition">#</a><br /></dt>
 <dd><p>Returns a descriptive string for the given error code.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_get_error_message">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error_message</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">void</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error_message" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns the message describing the most recent error returned by the server, or an empty
+string if there has not been one. It is formatted as <code class="docutils literal notranslate"><span class="pre">service.name:</span> <span class="pre">description</span></code>, for
+example <code class="docutils literal notranslate"><span class="pre">SpaceCenter.InvalidOperationException:</span> <span class="pre">Vessel</span> <span class="pre">does</span> <span class="pre">not</span> <span class="pre">exist</span></code>, followed by the
+server stack trace when the server is configured to send one, and is truncated to fit
+<code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGE_LENGTH</span></code>.</p>
+<p>This function is only available when the library is built with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code>
+defined, as storing the message is not free.</p>
 </dd></dl>
 
 </section>
@@ -1141,7 +1167,7 @@ server and appears in the in-game server window.</p></li>
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/155d474">155d474</a>
+  <a href="https://github.com/krpc/krpc/commit/6b93f67">6b93f67</a>
 </p></div>
       
     </div>
