@@ -4,6 +4,8 @@ import threading
 import warnings
 from typing import Callable
 import krpc
+import krpc.schema.KRPC_pb2 as KRPC
+from krpc.error import RPCError
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -343,6 +345,20 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual(
             {1: False, 2: True}, self.conn.test_service.dictionary_default()
         )
+
+    def test_unknown_exception_type(self) -> None:
+        # An error naming a service or type this client does not know about still reports
+        # what went wrong, rather than failing while building the exception for it
+        for service, name in (
+            ("NotAService", "NotAnException"),
+            ("KRPC", "NotAnException"),
+        ):
+            error = KRPC.Error(
+                service=service, name=name, description="something went wrong"
+            )
+            exn = self.conn._build_error(error)
+            self.assertIsInstance(exn, RPCError)
+            self.assertEqual("%s.%s: something went wrong" % (service, name), str(exn))
 
     def test_invalid_operation_exception(self) -> None:
         with self.assertRaises(RuntimeError) as cm:

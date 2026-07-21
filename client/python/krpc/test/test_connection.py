@@ -1,6 +1,7 @@
 import unittest
 import threading
 import socket
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.connection import Connection
 
 
@@ -90,9 +91,31 @@ class TestConnection(unittest.TestCase):
         self.assertRaises(socket.error, conn.receive, 1)
 
     def test_partial_receive_on_remote_closed_connection(self) -> None:
+        # Reports end of file, as receive does. Returning no data here would be
+        # indistinguishable from nothing having arrived yet, and callers retry that
+        # immediately and forever.
         conn = self.connect()
         self.server_close_connection(conn)
-        self.assertEqual(b"", conn.partial_receive(1))
+        self.assertRaises(socket.error, conn.partial_receive, 1)
+
+    def test_receive_message_on_remote_closed_connection(self) -> None:
+        # The loop reading the message size must give up rather than retry a closed
+        # connection at full speed forever. Run on a thread so a regression fails here
+        # instead of hanging the suite.
+        conn = self.connect()
+        self.server_close_connection(conn)
+        raised = []
+
+        def run() -> None:
+            try:
+                conn.receive_message(KRPC.Response)
+            except socket.error as exn:
+                raised.append(exn)
+
+        thread = threading.Thread(target=run, daemon=True)
+        thread.start()
+        thread.join(10)
+        self.assertEqual(1, len(raised))
 
     def test_send_on_closed_connection(self) -> None:
         conn = self.connect()

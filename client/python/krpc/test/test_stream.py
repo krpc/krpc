@@ -2,7 +2,10 @@ import threading
 import time
 import unittest
 
+import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import StreamError
+from krpc import streammanager
+from krpc.streammanager import StreamManager
 from krpc.test.servertestcase import ServerTestCase
 
 
@@ -344,6 +347,148 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertTrue(stop.is_set())
         self.assertFalse(error.is_set())
         self.assertEqual(self.test_callback_value, 5)
+
+    def test_remove_wakes_a_waiting_thread(self) -> None:
+        # Nothing further will update a removed stream, so a thread waiting on it has to be
+        # woken by the removal or it waits forever. The value streamed here never changes,
+        # so the server sends nothing more after the first update and the removal is the
+        # only thing that can wake the waiter.
+        conn = self.connect()
+        try:
+            x = conn.add_stream(conn.test_service.int32_to_string, 42)
+            self.assertEqual("42", x())
+            woke = threading.Event()
+
+            def wait_for_update() -> None:
+                with x.condition:
+                    x.wait()
+                woke.set()
+
+            thread = threading.Thread(target=wait_for_update, daemon=True)
+            thread.start()
+            time.sleep(0.2)
+            x.remove()
+            self.assertTrue(woke.wait(10))
+        finally:
+            conn.close()
+
+    def test_close_wakes_a_waiting_thread(self) -> None:
+        # Same for closing the client, which stops every stream at once
+        conn = self.connect()
+        x = conn.add_stream(conn.test_service.int32_to_string, 43)
+        self.assertEqual("43", x())
+        woke = threading.Event()
+
+        def wait_for_update() -> None:
+            with x.condition:
+                x.wait()
+            woke.set()
+
+        thread = threading.Thread(target=wait_for_update, daemon=True)
+        thread.start()
+        time.sleep(0.2)
+        conn.close()
+        self.assertTrue(woke.wait(10))
+
+    def test_close_from_a_callback(self) -> None:
+        # Callbacks run on the update thread, so closing the client from one must not try
+        # to join that thread, which would raise and leave the client half closed
+        conn = self.connect()
+        closed = threading.Event()
+
+        def callback(x: int) -> None:  # pylint: disable=unused-argument
+            conn.close()
+            closed.set()
+
+        stream = conn.add_stream(
+            conn.test_service.counter, "TestStream.test_close_from_a_callback", 1
+        )
+        stream.add_callback(callback)
+        stream.start()
+        self.assertTrue(closed.wait(10))
+
+    def test_update_does_not_resurrect_a_removed_stream(self) -> None:
+        # A value decoded before the stream was removed must not overwrite the error that
+        # remove() stored. The stream is gone from the registry, so nothing would ever
+        # replace that value and it would be returned as though still live.
+        manager = StreamManager(None)
+        stream = manager.get_stream(self.conn._types.string_type, 1)
+        # Stands in for the error remove() stores to mark the stream as gone
+        stream.value = StreamError("Stream does not exist")
+
+        # Remove the stream midway through the update, while its value is being decoded
+        class RemovingDecoder:
+            # pylint: disable=unused-argument
+            @staticmethod
+            def decode(client: object, data: bytes, typ: object) -> str:
+                del manager._streams[1]
+                return "a stale value"
+
+        result = KRPC.StreamResult(id=1)
+        result.result.value = b"whatever"
+        decoder = streammanager.Decoder
+        streammanager.Decoder = RemovingDecoder  # type: ignore[misc]
+        try:
+            manager.update([result])
+        finally:
+            streammanager.Decoder = decoder  # type: ignore[misc]
+
+        self.assertIsInstance(stream.value, StreamError)
+
+    def test_remove_while_holding_condition(self) -> None:
+        # The update thread must not hold the update lock while waiting for a stream's
+        # condition. A caller holding that condition - which is how waiting for an update
+        # is documented to work - otherwise blocks forever on anything needing the update
+        # lock, and the update thread blocks on the condition, deadlocking both.
+        done = threading.Event()
+        # Uses its own connection, so that a regression deadlocks only this test rather
+        # than stalling every later test sharing the class connection
+        conn = self.connect()
+
+        def run() -> None:
+            x = conn.add_stream(
+                conn.test_service.counter,
+                "TestStream.test_remove_while_holding_condition",
+                1,
+            )
+            x.start()
+            with x.condition:
+                x.wait()
+                # Let the update thread reach the next update and block on this condition
+                time.sleep(0.2)
+                x.remove()
+            done.set()
+
+        thread = threading.Thread(target=run, daemon=True)
+        thread.start()
+        thread.join(10)
+        self.assertTrue(done.is_set())
+
+    def test_callback_that_raises(self) -> None:
+        # A callback that raises must not end the update thread, which would stop every
+        # stream on the connection from updating again
+        called = threading.Event()
+        stop = threading.Event()
+
+        def failing_callback(x: int) -> None:  # pylint: disable=unused-argument
+            called.set()
+            raise RuntimeError("callback failed")
+
+        def callback(x: int) -> None:
+            if x > 5:
+                stop.set()
+
+        with self.conn.stream(
+            self.conn.test_service.counter, "TestStream.test_callback_that_raises", 10
+        ) as x:
+            x.add_callback(failing_callback)
+            x.add_callback(callback)
+            x.start()
+            stop.wait(10)
+
+        self.assertTrue(called.is_set())
+        # Updates kept arriving, and the callback added after the one that raised ran
+        self.assertTrue(stop.is_set())
 
     def test_remove_callback(self) -> None:
         called1 = threading.Event()

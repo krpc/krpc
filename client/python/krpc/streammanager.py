@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import cast, Callable, Iterable, List, Optional, TYPE_CHECKING
+import sys
 import threading
 from krpc.stream import Stream
 from krpc.types import TypeBase
@@ -10,6 +11,20 @@ import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
+
+
+def _invoke_callback(fn: Callable[..., None], *args: object) -> None:
+    """Run a stream callback, reporting anything it raises rather than letting it
+    propagate. It runs on the update thread, which has no caller to propagate to and
+    would end if it escaped, stopping every stream on the connection from updating
+    again. Report it through the thread excepthook, so it is visible by default and an
+    application can route it elsewhere."""
+    try:
+        fn(*args)
+    except Exception:  # pylint: disable=broad-except
+        threading.excepthook(
+            threading.ExceptHookArgs(sys.exc_info() + (threading.current_thread(),))
+        )
 
 
 class StreamImpl:
@@ -62,8 +77,11 @@ class StreamImpl:
     @value.setter
     def value(self, value: object) -> None:
         with self._update_lock:
-            self._updated = True
+            # Set the value before the flag that says there is one. A reader checks the
+            # flag first and takes no lock, so the other order lets it see the flag set
+            # and read the value that has not been stored yet.
             self._value = value
+            self._updated = True
 
     @property
     def updated(self) -> bool:
@@ -95,8 +113,12 @@ class StreamImpl:
 
     def remove(self) -> None:
         self._client._stream_manager.remove_stream(self._stream_id)
-        with self._update_lock:
-            self._value = StreamError("Stream does not exist")
+        with self._condition:
+            with self._update_lock:
+                self._value = StreamError("Stream does not exist")
+            # No further update will ever arrive for this stream, so anything waiting on it
+            # has to be woken here or it waits forever. It sees the error above on waking.
+            self._condition.notify_all()
 
 
 class StreamManager:
@@ -157,35 +179,61 @@ class StreamManager:
             self._callbacks = [x for x in self._callbacks if x != callback]
             return self._callbacks
 
+    def notify_closed(self) -> None:
+        """Wake everything waiting for a stream update, after the connection has closed and
+        no further update can arrive."""
+        with self._update_lock:
+            streams = list(self._streams.values())
+        for stream in streams:
+            with stream.condition:
+                stream.condition.notify_all()
+        with self._condition:
+            self._condition.notify_all()
+
     def update(self, results: Iterable[KRPC.StreamResult]) -> None:
+        # The update lock is held only to find the streams and decode their new values, and
+        # is released before any stream condition is taken. A thread waiting for an update
+        # holds a condition and then needs the update lock - Event.wait resets the stream
+        # value while holding it, as its documented use requires - so taking the two in the
+        # opposite order here deadlocks. The callbacks are read under the lock for the same
+        # reason: they run below without it held.
+        decoded = []
         with self._update_lock:
             for result in results:
                 if result.id not in self._streams:
                     continue
 
                 # Check for an error response
+                stream = self._streams[result.id]
                 if result.result.HasField("error"):
-                    self._update_stream(
-                        result.id, self._client._build_error(result.result.error)
+                    value = self._client._build_error(result.result.error)
+                else:
+                    # Decode the return value
+                    value = Decoder.decode(
+                        self._client, result.result.value, stream.return_type
                     )
-                    continue
+                decoded.append((result.id, stream, value, stream.callbacks))
+            update_callbacks = self._callbacks
 
-                # Decode the return value and store it in the cache
-                typ = self._streams[result.id].return_type
-                value = Decoder.decode(self._client, result.result.value, typ)
-                self._update_stream(result.id, value)
-            with self._condition:
-                self._condition.notify_all()
-            for fn in self._callbacks:
-                fn()
+        # Store each value in the cache and notify anything waiting on it
+        for stream_id, stream, value, callbacks in decoded:
+            with stream.condition:
+                with self._update_lock:
+                    # The stream can be removed while its new value is being decoded, in
+                    # which case remove() has already stored the error saying so and this
+                    # value must not overwrite it - the stream is gone from the registry,
+                    # so nothing would ever replace it and it would be returned forever.
+                    if stream_id not in self._streams:
+                        continue
+                    stream.value = value
+                stream.condition.notify_all()
+            for fn in callbacks:
+                _invoke_callback(fn, value)
 
-    def _update_stream(self, stream_id: int, value: object) -> None:
-        stream = self._streams[stream_id]
-        with stream.condition:
-            stream.value = value
-            stream.condition.notify_all()
-        for fn in stream.callbacks:
-            fn(value)
+        with self._condition:
+            self._condition.notify_all()
+        for fn in update_callbacks:
+            _invoke_callback(fn)
 
 
 def update_thread(
