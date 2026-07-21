@@ -71,12 +71,19 @@ class Connection:
         return data
 
     def partial_receive(self, length: int, timeout: float = 0.01) -> bytes:
-        """Receive up to length bytes of data from the connection."""
+        """Receive up to length bytes of data from the connection.
+        Returns no data if none arrived within the timeout."""
         assert length > 0
         try:
             ready = select.select([self._socket], [], [], timeout)
         except ValueError as exn:
             raise socket.error("Connection closed") from exn
         if ready[0]:
-            return self._socket.recv(length)
+            data = self._socket.recv(length)
+            # A readable socket that yields nothing has reached end of file. Reporting it
+            # as no data would be indistinguishable from nothing having arrived yet, and
+            # callers retry that immediately and forever.
+            if not data:
+                raise socket.error("Connection closed")
+            return data
         return b""
