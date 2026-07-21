@@ -325,6 +325,55 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestCallbackThatThrows () {
+            // A callback that throws must not take the update thread down with it, which
+            // would stop every stream on the connection. The timeout catches that, as the
+            // wait below would otherwise never be satisfied.
+            var stop = new ManualResetEvent (false);
+            var called = false;
+            var s = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestCallbackThatThrows", 10));
+            s.AddCallback ((int x) => {
+                called = true;
+                throw new System.InvalidOperationException ("callback failed");
+            });
+            s.AddCallback ((int x) => {
+                if (x > 5)
+                    stop.Set ();
+            });
+            s.Start ();
+            Assert.IsTrue (stop.WaitOne (30000));
+            s.Remove ();
+            Assert.IsTrue (called);
+        }
+
+        [Test]
+        public void TestRemoveWhileWaitingOnCondition () {
+            // The update thread must not hold the update lock while waiting for a stream's
+            // condition. A caller holding that condition -- which is how waiting for an
+            // update is documented to work -- otherwise blocks forever on anything needing
+            // the update lock, and the update thread blocks on the condition, deadlocking
+            // both. Run on a thread so a regression fails here instead of hanging the suite.
+            var done = new ManualResetEvent (false);
+            var thread = new Thread (() => {
+                var s = Connection.AddStream (
+                    () => Connection.TestService ().Counter (
+                        "StreamTest.TestRemoveWhileWaitingOnCondition", 1));
+                s.Start ();
+                lock (s.Condition) {
+                    s.Wait ();
+                    // Let the update thread reach the next update and block on this condition
+                    Thread.Sleep (200);
+                    s.Remove ();
+                }
+                done.Set ();
+            });
+            thread.IsBackground = true;
+            thread.Start ();
+            Assert.IsTrue (done.WaitOne (30000));
+        }
+
+        [Test]
         public void TestRemoveCallback () {
             var stop = new ManualResetEvent (false);
             var called1 = false;
