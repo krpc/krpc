@@ -831,6 +831,10 @@
 <li><p>Requires .NET Framework 4.7.2 or later</p></li>
 <li><p>Update to protobuf v3.35.1</p></li>
 <li><p>Mark deprecated members with the [Obsolete] attribute (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
+<li><p>Disposing a connection now stops and joins the stream update thread, instead of leaving it to end by itself when its socket was closed underneath it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1005">#1005</a>)</p></li>
+<li><p>An error from a service whose exception types were never registered now raises an RPCException describing it, instead of a KeyNotFoundException naming the missing type (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1005">#1005</a>)</p></li>
+<li><p>An exception thrown by a stream or event callback no longer escapes the stream update thread, which ended the process, and the remaining callbacks still run (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1005">#1005</a>)</p></li>
+<li><p>Fix a deadlock between the stream update thread and a thread waiting for an update while holding a stream or event condition, as waiting for one requires (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1005">#1005</a>)</p></li>
 </ul>
 </section>
 <section id="id2">
@@ -3249,7 +3253,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/c8395de">c8395de</a>
+  <a href="https://github.com/krpc/krpc/commit/c4bc903">c4bc903</a>
 </p></div>
       
     </div>
