@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <exception>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <string>
 #include <utility>
@@ -80,7 +81,22 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
     }
   }
   stream->get_condition().notify_all();
-  for (const auto& callback : stream->get_callbacks()) callback.second(stream->get_data());
+  // A stream in an error state has no value to give a callback: a callback takes the encoded
+  // value and there is nowhere to put an exception, so reading the stream would rethrow the
+  // error into this thread. Skip them for such an update. Anything a callback itself throws
+  // is contained here too, as an exception leaving the update thread calls std::terminate and
+  // ends the process.
+  if (!result.has_error()) {
+    for (const auto& callback : stream->get_callbacks()) {
+      try {
+        callback.second(stream->get_data());
+      } catch (const std::exception& exn) {
+        std::cerr << "kRPC: exception thrown by a stream callback: " << exn.what() << "\n";
+      } catch (...) {
+        std::cerr << "kRPC: unknown exception thrown by a stream callback\n";
+      }
+    }
+  }
 }
 
 void StreamManager::freeze() {
