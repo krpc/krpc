@@ -390,6 +390,23 @@ class TestStream(ServerTestCase, unittest.TestCase):
         conn.close()
         self.assertTrue(woke.wait(10))
 
+    def test_close_from_a_callback(self) -> None:
+        # Callbacks run on the update thread, so closing the client from one must not try
+        # to join that thread, which would raise and leave the client half closed
+        conn = self.connect()
+        closed = threading.Event()
+
+        def callback(x: int) -> None:  # pylint: disable=unused-argument
+            conn.close()
+            closed.set()
+
+        stream = conn.add_stream(
+            conn.test_service.counter, "TestStream.test_close_from_a_callback", 1
+        )
+        stream.add_callback(callback)
+        stream.start()
+        self.assertTrue(closed.wait(10))
+
     def test_update_does_not_resurrect_a_removed_stream(self) -> None:
         # A value decoded before the stream was removed must not overwrite the error that
         # remove() stored. The stream is gone from the registry, so nothing would ever

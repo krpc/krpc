@@ -88,7 +88,10 @@ class Client(krpc.services.Client):
         self._rpc_connection.close()
         if self._stream_thread is not None:
             self._stream_thread_stop.set()
-            self._stream_thread.join()
+            # Callbacks run on the update thread, so a client closed from one would be
+            # joining the thread it is running on, which raises
+            if threading.current_thread() is not self._stream_thread:
+                self._stream_thread.join()
         # No further updates will arrive, so wake anything waiting for one rather than
         # leaving it blocked for good
         self._stream_manager.notify_closed()
