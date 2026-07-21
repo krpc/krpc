@@ -103,6 +103,13 @@ namespace KRPC.Client
                     rpcClient.Close ();
                     if (streamClient != null)
                         streamClient.Close ();
+                    // Join the update thread, so that it has ended by the time this returns
+                    // rather than at some later point of its own choosing. This has to come
+                    // after the sockets are closed: the thread spends its time blocked in a
+                    // read that does not observe the stop event, and closing the socket
+                    // underneath it is what releases it.
+                    if (StreamManager != null)
+                        StreamManager.Dispose ();
                 }
                 disposed = true;
             }
