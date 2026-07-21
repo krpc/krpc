@@ -14,6 +14,11 @@ def _get_src_dir(srcs, short_path = False):
 
 def _build_impl(ctx):
     srcs = ctx.files.srcs
+
+    # sphinx-build is given the source directory, never the list of .rst files. Sphinx resolves
+    # symlinks in filenames passed on the command line and then skips any that do not resolve
+    # inside the source dir. The sources here are Bazel symlinks pointing outside the staged
+    # tree, so passing them individually would silently build an empty doctree rather than fail.
     src_dir = _get_src_dir(srcs)
     out = ctx.outputs.out
     sphinx_build = ctx.executable.sphinx_build

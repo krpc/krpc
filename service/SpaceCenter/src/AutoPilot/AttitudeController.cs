@@ -12,6 +12,22 @@ namespace KRPC.SpaceCenter.AutoPilot
     /// <see cref="Fly"/>; the <see cref="Services.AutoPilot"/> API objects are transient views
     /// onto it. Engagement is controller state: which client (if any) currently has the
     /// auto-pilot flying the vessel.
+    ///
+    /// This class holds the control law: the outer loop turning a pointing error into a commanded
+    /// angular velocity (<see cref="ComputeTargetAngularVelocity"/>, which splits into
+    /// <see cref="ComputeAxisVelocity"/> for roll and <see cref="ComputePitchYawVelocity"/> for the
+    /// coupled pitch/yaw pair), the feedforward that differentiates that command, and the auto-tuner
+    /// (<see cref="DoAutoTuneAxis"/>). The inner rate loop is a <see cref="PIDController"/> per axis.
+    ///
+    /// The flexible-craft handling around it is split three ways, so that the gating thresholds all
+    /// live in one place: <see cref="OscillationDetectors"/> observes, with no control-path side
+    /// effects; <see cref="MitigationPolicy"/> decides; and the RateFilter and OutputFilter
+    /// primitives act, making no decisions of their own. <see cref="DiagnosticLogBuffer"/> records a
+    /// row per tick.
+    ///
+    /// How the control law works — the cascade, the roll-invariant frame, the velocity profile, the
+    /// pole placement behind the auto-tuner and the oscillation mitigation — is documented in
+    /// doc/src/tutorials/autopilot.rst, under "How it works".
     /// </summary>
     sealed class AttitudeController
     {

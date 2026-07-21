@@ -1,3 +1,16 @@
+"""Autopilot integration tests.
+
+The full suites are too slow to run on every change. The quick gate is
+TestAutoPilotAttitude*.test_orbital_directions, TestAutoPilotLaunch*.test_launch and
+TestAutoPilotLaunch*.test_smooth_turn, which covers pointing in vacuum and in atmosphere. Omit
+TestAutoPilotAttitudeSlow, which is far slower than the rest. The deeper oscillation suites are
+worth running at decision points, not routinely.
+
+Tests disabled here are disabled deliberately; the suite as committed is the one to run. Changing
+the controller can legitimately invalidate the calibrated assertions, but retuning them belongs in
+a deliberate recalibration pass rather than alongside the change that tripped them.
+"""
+
 # pylint: disable=too-many-lines
 import math
 import time
@@ -1800,7 +1813,7 @@ TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
 
 # Shuttle-style craft: gimbal + aero control, no clean reaction-wheel torque model, so the
 # autotuned loop is too hot for the actual actuator authority and limit-cycles until the
-# control-oscillation latch floors the bandwidth (see AUTOPILOT.md, control-oscillation latch).
+# control-oscillation latch floors the bandwidth.
 # It also starts ~8.6 deg pitched on the pad, so the launch capture takes a few seconds.
 # FIXME: holds cleanly now, but large continuous slews are still flaky in the floored regime
 # (the floored loop occasionally releases / the feedforward whips, spiking the error to ~5 deg),
@@ -1808,7 +1821,7 @@ TestAutoPilotLaunchLearstarA1 = _make_autopilot_launch_test_class(
 # genuine ~0.6 Hz rigid-body motion, in-band, not a structural mode in the measurement): the real
 # fix is modelling the gimbal/aero actuator bandwidth so the autotuner can place the loop
 # crossover with real phase margin and run faster than the blunt 1.0 rad/s floor while keeping the
-# feedforward through the slew. Root cause is the constant-max-torque model (see AUTOPILOT.md).
+# feedforward through the slew. Root cause is the constant-max-torque model.
 TestAutoPilotLaunchDynawing = _make_autopilot_launch_test_class(
     "TestAutoPilotLaunchDynawing",
     "Dynawing",

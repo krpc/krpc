@@ -631,6 +631,10 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                 case ReferenceFrameType.Thrust:
+                    // The vessel's velocity, taken at its center of mass. A part offset from the
+                    // center of mass on a rotating vessel also moves at omega x (part - CoM), and
+                    // that term is not included here, so this understates the part's true velocity
+                    // by the tangential contribution of the vessel's spin.
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.DockingPort:
                     return dockingPort.vessel.GetOrbit ().GetVel ();
