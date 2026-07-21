@@ -418,6 +418,37 @@ public class StreamTest {
     assertEquals(testCallbackValue, 5);
   }
 
+  private volatile int testCallbackThrowsCount = 0;
+  private volatile boolean testCallbackThrowsStop = false;
+
+  // A callback that throws must not take the update thread down with it, which would stop
+  // every stream on the connection. The timeout catches that, as the loop below would
+  // otherwise never see another update.
+  @Test(timeout = 30000)
+  public void testCallbackThrows()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testCallbackThrows", 10);
+    stream.addCallback(
+        (Integer value) -> {
+          throw new IllegalStateException("callback failed");
+      });
+    stream.addCallback(
+        (Integer value) -> {
+          if (value > 5) {
+            testCallbackThrowsStop = true;
+          } else {
+            testCallbackThrowsCount++;
+          }
+      });
+    stream.start();
+    while (!testCallbackThrowsStop) {
+    }
+    stream.remove();
+    // The callback registered after the one that threw still ran
+    assertTrue(testCallbackThrowsCount > 0);
+  }
+
   private volatile boolean testRemoveCallbackCalled1 = false;
   private volatile boolean testRemoveCallbackCalled2 = false;
 

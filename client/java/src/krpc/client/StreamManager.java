@@ -83,7 +83,16 @@ class StreamManager {
         condition.notifyAll();
       }
       for (Consumer<Object> callback : stream.getCallbacks().values()) {
-        callback.accept(value);
+        try {
+          callback.accept(value);
+        } catch (RuntimeException exn) {
+          // A callback that throws must not stop the remaining callbacks running, nor escape
+          // and end the update thread, which would silently stop every stream on the
+          // connection. There is no caller to propagate it to, so hand it to the thread's
+          // uncaught exception handler, which by default reports it on stderr.
+          Thread thread = Thread.currentThread();
+          thread.getUncaughtExceptionHandler().uncaughtException(thread, exn);
+        }
       }
     }
   }
