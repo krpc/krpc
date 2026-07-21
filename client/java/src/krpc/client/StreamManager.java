@@ -90,7 +90,16 @@ class StreamManager {
     }
     Object condition = stream.getCondition();
     synchronized (condition) {
-      stream.setValue(value);
+      synchronized (updateLock) {
+        // The stream can be removed while its new value is being decoded, in which case
+        // remove() has already stored the error saying so and this value must not overwrite
+        // it - the stream is gone from the registry, so nothing would ever replace it and it
+        // would be returned as though the stream were still live.
+        if (!streams.containsKey(id)) {
+          return;
+        }
+        stream.setValue(value);
+      }
       condition.notifyAll();
     }
     for (Consumer<Object> callback : callbacks) {
