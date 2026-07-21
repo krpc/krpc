@@ -75,6 +75,9 @@ function Client:_build_request(service, procedure, args, param_names, param_type
       valid = typ.lua_type:class_of(value)
     end
     if not valid then
+      -- Only ok is declared here; value is the loop variable and must stay so, as the
+      -- coerced value is read below, outside this block
+      local ok
       ok,value = pcall(self._types.coerce_to, self._types, value, typ)
       if not ok then
         error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))

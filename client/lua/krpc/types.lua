@@ -349,7 +349,7 @@ function Types.EnumerationType:_init(protobuf_type)
 end
 
 function Types.EnumerationType:set_values(values)
-  self.lua_type = _create_enum_type(self._service_name, self._enum_name, values)
+  self.lua_type = _create_enum_type(self._service_name, self._class_name, values)
 end
 
 Types.TupleType = class(Types.TypeBase)

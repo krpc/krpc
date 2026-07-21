@@ -68,12 +68,6 @@ local function _encode_value(x, typ)
   error('Failed to encode data')
 end
 
-function encoder.client_name(name)
-  name = name or ''
-  name = name:sub(1, encoder.CLIENT_NAME_LENGTH)
-  return name .. string.rep('\0', encoder.CLIENT_NAME_LENGTH - name:len())
-end
-
 function encoder.encode(x, typ)
   if typ:is_a(Types.MessageType) then
     return x:SerializeToString()
