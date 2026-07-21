@@ -264,15 +264,18 @@ class Client(krpc.services.Client):
         if error.service and error.name:
             service_name = snake_case(error.service)
             type_name = error.name
+            # The service is missing here if it is not one this client knows about, and the
+            # type is missing if it is not one the service declares as an exception. Report
+            # the error itself, named by its type on the server, rather than the failure to
+            # build an exception for it, which would say nothing about what went wrong.
             if not hasattr(self, service_name):
-                raise RuntimeError(
-                    "Error building exception; service '%s' not found" % service_name
+                return RPCError(
+                    "%s.%s: %s" % (error.service, type_name, self._error_message(error))
                 )
             service = getattr(self, service_name)
             if not hasattr(service, type_name):
-                raise RuntimeError(
-                    "Error building exception; type '%s.%s' not found"
-                    % (service_name, type_name)
+                return RPCError(
+                    "%s.%s: %s" % (error.service, type_name, self._error_message(error))
                 )
             if error.service == "KRPC" and error.name in EXCEPTION_TYPES:
                 # Use a built-in exception type if it's in the mapping
