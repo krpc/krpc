@@ -103,8 +103,18 @@ namespace KRPC.Client
                     stream.Value = value;
                     Monitor.PulseAll (condition);
                 }
-                foreach (var callback in stream.Callbacks.Values)
-                    callback (value);
+                foreach (var callback in stream.Callbacks.Values) {
+                    try {
+                        callback (value);
+                    } catch (System.Exception exn) {
+                        // A callback that throws must not stop the remaining callbacks
+                        // running, nor escape and end the update thread. On .NET that ends
+                        // the process outright, taking down every stream and the application
+                        // with it. There is no caller to propagate it to, so report it and
+                        // carry on.
+                        Console.Error.WriteLine ("Exception in kRPC stream callback: " + exn);
+                    }
+                }
             }
         }
 

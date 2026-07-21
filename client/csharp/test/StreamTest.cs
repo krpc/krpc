@@ -325,6 +325,29 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void TestCallbackThatThrows () {
+            // A callback that throws must not take the update thread down with it, which
+            // would stop every stream on the connection. The timeout catches that, as the
+            // wait below would otherwise never be satisfied.
+            var stop = new ManualResetEvent (false);
+            var called = false;
+            var s = Connection.AddStream (
+                () => Connection.TestService ().Counter ("StreamTest.TestCallbackThatThrows", 10));
+            s.AddCallback ((int x) => {
+                called = true;
+                throw new System.InvalidOperationException ("callback failed");
+            });
+            s.AddCallback ((int x) => {
+                if (x > 5)
+                    stop.Set ();
+            });
+            s.Start ();
+            Assert.IsTrue (stop.WaitOne (30000));
+            s.Remove ();
+            Assert.IsTrue (called);
+        }
+
+        [Test]
         public void TestRemoveCallback () {
             var stop = new ManualResetEvent (false);
             var called1 = false;
