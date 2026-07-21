@@ -1,5 +1,6 @@
 from __future__ import annotations
 from typing import cast, Callable, Iterable, List, Optional, TYPE_CHECKING
+import sys
 import threading
 from krpc.stream import Stream
 from krpc.types import TypeBase
@@ -10,6 +11,20 @@ import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
+
+
+def _invoke_callback(fn: Callable[..., None], *args: object) -> None:
+    """Run a stream callback, reporting anything it raises rather than letting it
+    propagate. It runs on the update thread, which has no caller to propagate to and
+    would end if it escaped, stopping every stream on the connection from updating
+    again. Report it through the thread excepthook, so it is visible by default and an
+    application can route it elsewhere."""
+    try:
+        fn(*args)
+    except Exception:  # pylint: disable=broad-except
+        threading.excepthook(
+            threading.ExceptHookArgs(sys.exc_info() + (threading.current_thread(),))
+        )
 
 
 class StreamImpl:
@@ -177,7 +192,7 @@ class StreamManager:
             with self._condition:
                 self._condition.notify_all()
             for fn in self._callbacks:
-                fn()
+                _invoke_callback(fn)
 
     def _update_stream(self, stream_id: int, value: object) -> None:
         stream = self._streams[stream_id]
@@ -185,7 +200,7 @@ class StreamManager:
             stream.value = value
             stream.condition.notify_all()
         for fn in stream.callbacks:
-            fn(value)
+            _invoke_callback(fn, value)
 
 
 def update_thread(

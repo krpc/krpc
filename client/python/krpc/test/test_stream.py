@@ -345,6 +345,32 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertFalse(error.is_set())
         self.assertEqual(self.test_callback_value, 5)
 
+    def test_callback_that_raises(self) -> None:
+        # A callback that raises must not end the update thread, which would stop every
+        # stream on the connection from updating again
+        called = threading.Event()
+        stop = threading.Event()
+
+        def failing_callback(x: int) -> None:  # pylint: disable=unused-argument
+            called.set()
+            raise RuntimeError("callback failed")
+
+        def callback(x: int) -> None:
+            if x > 5:
+                stop.set()
+
+        with self.conn.stream(
+            self.conn.test_service.counter, "TestStream.test_callback_that_raises", 10
+        ) as x:
+            x.add_callback(failing_callback)
+            x.add_callback(callback)
+            x.start()
+            stop.wait(10)
+
+        self.assertTrue(called.is_set())
+        # Updates kept arriving, and the callback added after the one that raised ran
+        self.assertTrue(stop.is_set())
+
     def test_remove_callback(self) -> None:
         called1 = threading.Event()
         called2 = threading.Event()
