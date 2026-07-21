@@ -89,6 +89,9 @@ class Client(krpc.services.Client):
         if self._stream_thread is not None:
             self._stream_thread_stop.set()
             self._stream_thread.join()
+        # No further updates will arrive, so wake anything waiting for one rather than
+        # leaving it blocked for good
+        self._stream_manager.notify_closed()
 
     def __enter__(self) -> Client:
         return self

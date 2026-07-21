@@ -110,8 +110,12 @@ class StreamImpl:
 
     def remove(self) -> None:
         self._client._stream_manager.remove_stream(self._stream_id)
-        with self._update_lock:
-            self._value = StreamError("Stream does not exist")
+        with self._condition:
+            with self._update_lock:
+                self._value = StreamError("Stream does not exist")
+            # No further update will ever arrive for this stream, so anything waiting on it
+            # has to be woken here or it waits forever. It sees the error above on waking.
+            self._condition.notify_all()
 
 
 class StreamManager:
@@ -171,6 +175,17 @@ class StreamManager:
         with self._update_lock:
             self._callbacks = [x for x in self._callbacks if x != callback]
             return self._callbacks
+
+    def notify_closed(self) -> None:
+        """Wake everything waiting for a stream update, after the connection has closed and
+        no further update can arrive."""
+        with self._update_lock:
+            streams = list(self._streams.values())
+        for stream in streams:
+            with stream.condition:
+                stream.condition.notify_all()
+        with self._condition:
+            self._condition.notify_all()
 
     def update(self, results: Iterable[KRPC.StreamResult]) -> None:
         # The update lock is held only to find the streams and decode their new values, and

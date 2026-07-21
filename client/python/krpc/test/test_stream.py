@@ -348,6 +348,48 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertFalse(error.is_set())
         self.assertEqual(self.test_callback_value, 5)
 
+    def test_remove_wakes_a_waiting_thread(self) -> None:
+        # Nothing further will update a removed stream, so a thread waiting on it has to be
+        # woken by the removal or it waits forever. The value streamed here never changes,
+        # so the server sends nothing more after the first update and the removal is the
+        # only thing that can wake the waiter.
+        conn = self.connect()
+        try:
+            x = conn.add_stream(conn.test_service.int32_to_string, 42)
+            self.assertEqual("42", x())
+            woke = threading.Event()
+
+            def wait_for_update() -> None:
+                with x.condition:
+                    x.wait()
+                woke.set()
+
+            thread = threading.Thread(target=wait_for_update, daemon=True)
+            thread.start()
+            time.sleep(0.2)
+            x.remove()
+            self.assertTrue(woke.wait(10))
+        finally:
+            conn.close()
+
+    def test_close_wakes_a_waiting_thread(self) -> None:
+        # Same for closing the client, which stops every stream at once
+        conn = self.connect()
+        x = conn.add_stream(conn.test_service.int32_to_string, 43)
+        self.assertEqual("43", x())
+        woke = threading.Event()
+
+        def wait_for_update() -> None:
+            with x.condition:
+                x.wait()
+            woke.set()
+
+        thread = threading.Thread(target=wait_for_update, daemon=True)
+        thread.start()
+        time.sleep(0.2)
+        conn.close()
+        self.assertTrue(woke.wait(10))
+
     def test_update_does_not_resurrect_a_removed_stream(self) -> None:
         # A value decoded before the stream was removed must not overwrite the error that
         # remove() stored. The stream is gone from the registry, so nothing would ever
