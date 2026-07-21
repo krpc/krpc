@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import krpc.client.services.KRPC;
 import krpc.client.services.TestService;
+import krpc.schema.KRPC.Error;
 import krpc.schema.KRPC.Status;
 import org.javatuples.Pair;
 import org.junit.Before;
@@ -247,6 +248,20 @@ public class ConnectionTest {
     RPCException e = assertThrows(RPCException.class,
         () -> connection.getCall(TestService.class, "floatToString", "not a float"));
     assertTrue(e.getMessage().contains("not found"));
+  }
+
+  // An error naming a type this client has no stubs for still reports what went wrong, rather
+  // than failing while trying to construct the exception for it.
+  @Test
+  public void testUnknownExceptionType() {
+    Error error = Error.newBuilder()
+        .setService("NotAService")
+        .setName("NotAnException")
+        .setDescription("something went wrong")
+        .build();
+    RPCException e = assertThrows(RPCException.class, () -> connection.throwException(error));
+    assertTrue(e.getMessage().contains("NotAService.NotAnException"));
+    assertTrue(e.getMessage().contains("something went wrong"));
   }
 
   @Test

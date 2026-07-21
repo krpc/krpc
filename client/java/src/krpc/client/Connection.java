@@ -301,13 +301,21 @@ public class Connection implements AutoCloseable {
         throw new IndexOutOfBoundsException(message);
       }
       Class<?> exnType = exceptionTypes.get(key);
-      Constructor<?>[] ctors = exnType.getDeclaredConstructors();
       Constructor<?> ctor = null;
-      for (int i = 0; i < ctors.length; i++) {
-        ctor = ctors[i];
-        if (ctor.getParameterTypes().length == 1) {
-          break;
+      if (exnType != null) {
+        for (Constructor<?> candidate : exnType.getDeclaredConstructors()) {
+          if (candidate.getParameterTypes().length == 1) {
+            ctor = candidate;
+            break;
+          }
         }
+      }
+      if (ctor == null) {
+        // The type is unknown here if the service it belongs to has no generated stubs loaded,
+        // and has no usable constructor if it was not generated as an exception type. Report
+        // the error itself, named by its type on the server, rather than the failure to build
+        // an exception for it, which would say nothing about what actually went wrong.
+        throw new RPCException(key + ": " + message);
       }
       try {
         ctor.setAccessible(true);
