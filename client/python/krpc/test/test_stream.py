@@ -345,6 +345,35 @@ class TestStream(ServerTestCase, unittest.TestCase):
         self.assertFalse(error.is_set())
         self.assertEqual(self.test_callback_value, 5)
 
+    def test_remove_while_holding_condition(self) -> None:
+        # The update thread must not hold the update lock while waiting for a stream's
+        # condition. A caller holding that condition - which is how waiting for an update
+        # is documented to work - otherwise blocks forever on anything needing the update
+        # lock, and the update thread blocks on the condition, deadlocking both.
+        done = threading.Event()
+        # Uses its own connection, so that a regression deadlocks only this test rather
+        # than stalling every later test sharing the class connection
+        conn = self.connect()
+
+        def run() -> None:
+            x = conn.add_stream(
+                conn.test_service.counter,
+                "TestStream.test_remove_while_holding_condition",
+                1,
+            )
+            x.start()
+            with x.condition:
+                x.wait()
+                # Let the update thread reach the next update and block on this condition
+                time.sleep(0.2)
+                x.remove()
+            done.set()
+
+        thread = threading.Thread(target=run, daemon=True)
+        thread.start()
+        thread.join(10)
+        self.assertTrue(done.is_set())
+
     def test_callback_that_raises(self) -> None:
         # A callback that raises must not end the update thread, which would stop every
         # stream on the connection from updating again

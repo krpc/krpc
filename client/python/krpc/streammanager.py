@@ -173,34 +173,42 @@ class StreamManager:
             return self._callbacks
 
     def update(self, results: Iterable[KRPC.StreamResult]) -> None:
+        # The update lock is held only to find the streams and decode their new values, and
+        # is released before any stream condition is taken. A thread waiting for an update
+        # holds a condition and then needs the update lock - Event.wait resets the stream
+        # value while holding it, as its documented use requires - so taking the two in the
+        # opposite order here deadlocks. The callbacks are read under the lock for the same
+        # reason: they run below without it held.
+        decoded = []
         with self._update_lock:
             for result in results:
                 if result.id not in self._streams:
                     continue
 
                 # Check for an error response
+                stream = self._streams[result.id]
                 if result.result.HasField("error"):
-                    self._update_stream(
-                        result.id, self._client._build_error(result.result.error)
+                    value = self._client._build_error(result.result.error)
+                else:
+                    # Decode the return value
+                    value = Decoder.decode(
+                        self._client, result.result.value, stream.return_type
                     )
-                    continue
+                decoded.append((stream, value, stream.callbacks))
+            update_callbacks = self._callbacks
 
-                # Decode the return value and store it in the cache
-                typ = self._streams[result.id].return_type
-                value = Decoder.decode(self._client, result.result.value, typ)
-                self._update_stream(result.id, value)
-            with self._condition:
-                self._condition.notify_all()
-            for fn in self._callbacks:
-                _invoke_callback(fn)
+        # Store each value in the cache and notify anything waiting on it
+        for stream, value, callbacks in decoded:
+            with stream.condition:
+                stream.value = value
+                stream.condition.notify_all()
+            for fn in callbacks:
+                _invoke_callback(fn, value)
 
-    def _update_stream(self, stream_id: int, value: object) -> None:
-        stream = self._streams[stream_id]
-        with stream.condition:
-            stream.value = value
-            stream.condition.notify_all()
-        for fn in stream.callbacks:
-            _invoke_callback(fn, value)
+        with self._condition:
+            self._condition.notify_all()
+        for fn in update_callbacks:
+            _invoke_callback(fn)
 
 
 def update_thread(
