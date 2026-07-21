@@ -89,31 +89,47 @@ namespace KRPC.Client
 
         void Update (ulong id, ProcedureResult result)
         {
+            StreamImpl stream;
+            object value;
+            IList<Action<object>> callbacks;
+            // The update lock is held only to find the stream and decode its new value, and is
+            // released before the stream's condition is taken. A thread waiting for an update
+            // holds the condition and then needs the update lock -- Event.Wait resets the
+            // stream value while holding it, as its documented use requires -- so taking the
+            // two in the opposite order here deadlocks. The callbacks are copied for the same
+            // reason: they run below without the lock held.
             lock (updateLock) {
                 if (!streams.ContainsKey (id))
                     return;
-                var stream = streams [id];
-                object value;
+                stream = streams [id];
                 if (result.Error == null)
                     value = Encoder.Decode (result.Value, stream.ReturnType, connection);
                 else
                     value = connection.GetException (result.Error);
-                var condition = stream.Condition;
-                lock (condition) {
+                callbacks = new List<Action<object>> (stream.Callbacks.Values);
+            }
+            var condition = stream.Condition;
+            lock (condition) {
+                lock (updateLock) {
+                    // The stream can be removed while its new value is being decoded, in which
+                    // case Remove has already stored the error saying so and this value must
+                    // not overwrite it. The stream is gone from the registry, so nothing would
+                    // ever replace it and it would be returned as though still live.
+                    if (!streams.ContainsKey (id))
+                        return;
                     stream.Value = value;
-                    Monitor.PulseAll (condition);
                 }
-                foreach (var callback in stream.Callbacks.Values) {
-                    try {
-                        callback (value);
-                    } catch (System.Exception exn) {
-                        // A callback that throws must not stop the remaining callbacks
-                        // running, nor escape and end the update thread. On .NET that ends
-                        // the process outright, taking down every stream and the application
-                        // with it. There is no caller to propagate it to, so report it and
-                        // carry on.
-                        Console.Error.WriteLine ("Exception in kRPC stream callback: " + exn);
-                    }
+                Monitor.PulseAll (condition);
+            }
+            foreach (var callback in callbacks) {
+                try {
+                    callback (value);
+                } catch (System.Exception exn) {
+                    // A callback that throws must not stop the remaining callbacks running,
+                    // nor escape and end the update thread, which would silently stop every
+                    // stream on the connection. There is no caller to propagate it to, so
+                    // report it and carry on.
+                    Console.Error.WriteLine ("Exception in kRPC stream callback: " + exn);
                 }
             }
         }
