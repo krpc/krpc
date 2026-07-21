@@ -187,6 +187,14 @@ function TestClient:test_collections()
   luaunit.assertError(self.conn.test_service.increment_dictionary, Types.none)
 end
 
+function TestClient:test_coercion_does_not_leak_a_global()
+  -- Coercing an argument, as passing a plain table where a list is expected does, must
+  -- not leave the status of its pcall behind in the global namespace
+  rawset(_G, 'ok', nil)
+  luaunit.assertEquals(List{1,2,3}, self.conn.test_service.increment_list({0,1,2}))
+  luaunit.assertNil(rawget(_G, 'ok'))
+end
+
 function TestClient:test_nested_collections()
   luaunit.assertEquals(Map{}, self.conn.test_service.increment_nested_collection(Map{}))
   luaunit.assertEquals(Map{a=List{1, 2}, b=List{}, c=List{3}},
