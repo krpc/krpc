@@ -294,6 +294,21 @@ TEST_F(test_client, test_test_service_enum_members) {
   ASSERT_EQ(2, static_cast<int>(krpc::services::TestService::TestEnum::value_c));
 }
 
+// An error naming a service whose generated header was never instantiated has no registered
+// thrower, and must be reported rather than looked up past the end of the map. This client
+// deliberately never constructs the TestService object, so nothing registers its exceptions.
+TEST_F(test_client, test_unknown_exception_type) {
+  krpc::Client client = krpc::connect("C++ClientTestUnknownExceptionType", "localhost",
+                                      get_rpc_port(), get_stream_port());
+  try {
+    client.invoke("TestService", "ThrowCustomException");
+    FAIL() << "expected an exception";
+  } catch (const krpc::RPCError& exn) {
+    ASSERT_THAT(std::string(exn.what()), testing::HasSubstr("TestService.CustomException"));
+    ASSERT_THAT(std::string(exn.what()), testing::HasSubstr("A custom kRPC exception"));
+  }
+}
+
 TEST_F(test_client, test_invalid_operation_exception) {
   ASSERT_THROW(test_service.throw_invalid_operation_exception(),
                krpc::services::KRPC::InvalidOperationException);

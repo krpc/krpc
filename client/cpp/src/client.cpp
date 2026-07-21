@@ -115,8 +115,15 @@ void Client::add_exception_thrower(const std::string& service, const std::string
 void Client::throw_exception(const schema::Error& error) const {
   if (!error.service().empty() && !error.name().empty()) {
     auto key = std::make_pair(error.service(), error.name());
-    auto thrower = exception_throwers.find(key)->second;
-    thrower(error.description());
+    auto thrower = exception_throwers.find(key);
+    if (thrower == exception_throwers.end()) {
+      // The type is unknown here if the generated header for its service was never
+      // instantiated in this translation unit, so nothing registered a thrower for it.
+      // Report the error itself, named by its type on the server, rather than dereferencing
+      // the end of the map.
+      throw RPCError(error.service() + "." + error.name() + ": " + error.description());
+    }
+    thrower->second(error.description());
   } else {
     throw RPCError(error.description());
   }
