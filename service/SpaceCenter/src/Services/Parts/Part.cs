@@ -403,6 +403,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
+        /// The number of crew members that can occupy the part.
+        /// </summary>
+        [KRPCProperty]
+        public int CrewCapacity {
+            get { return InternalPart.CrewCapacity; }
+        }
+
+        /// <summary>
+        /// The crew members occupying the part.
+        /// </summary>
+        [KRPCProperty]
+        public IList<CrewMember> Crew {
+            get { return InternalPart.protoModuleCrew.Select (x => new CrewMember (x)).ToList (); }
+        }
+
+        /// <summary>
         /// How many open seats the part has.
         /// </summary>
         [KRPCProperty]

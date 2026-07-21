@@ -1,3 +1,4 @@
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -139,6 +140,29 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public RosterStatus RosterStatus {
             get { return (RosterStatus)InternalCrewMember.rosterStatus; }
+        }
+
+        /// <summary>
+        /// The part containing the crew member. Returns <c>null</c> if the crew member is not
+        /// occupying a part, or the vessel containing the part is not loaded.
+        /// </summary>
+        [KRPCProperty (Nullable = true, GameScene = GameScene.Flight)]
+        public Parts.Part Part {
+            get {
+                var crewMember = InternalCrewMember;
+                if (crewMember == null)
+                    return null;
+                var seat = crewMember.seat;
+                var part = seat == null ? null : seat.part;
+                if (part == null || !part.protoModuleCrew.Contains (crewMember)) {
+                    // The seat is null when the part's IVA model is not instantiated, but the
+                    // part's crew manifest remains available.
+                    part = FlightGlobals.VesselsLoaded
+                        .SelectMany (vessel => vessel.parts)
+                        .FirstOrDefault (candidate => candidate.protoModuleCrew.Contains (crewMember));
+                }
+                return part == null ? null : new Parts.Part (part);
+            }
         }
 
         /// <summary>

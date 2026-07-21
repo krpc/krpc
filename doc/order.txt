@@ -552,6 +552,7 @@ SpaceCenter.CrewMember.Veteran
 SpaceCenter.CrewMember.Trait
 SpaceCenter.CrewMember.Gender
 SpaceCenter.CrewMember.RosterStatus
+SpaceCenter.CrewMember.Part
 SpaceCenter.CrewMember.SuitType
 SpaceCenter.CrewMember.CareerLogFlights
 SpaceCenter.CrewMember.CareerLogTypes
@@ -667,6 +668,8 @@ SpaceCenter.Part.ThermalConvectionFlux
 SpaceCenter.Part.ThermalRadiationFlux
 SpaceCenter.Part.ThermalInternalFlux
 SpaceCenter.Part.ThermalSkinToInternalFlux
+SpaceCenter.Part.CrewCapacity
+SpaceCenter.Part.Crew
 SpaceCenter.Part.AvailableSeats
 SpaceCenter.Part.Resources
 SpaceCenter.Part.Crossfeed
