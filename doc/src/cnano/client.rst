@@ -92,6 +92,12 @@ argument to the compiler.
 
   * ``KRPC_PRINT_ERRORS_TO_STDERR`` -- enables printing of a descriptive error message to stderr
     when an error occurs
+  * ``KRPC_ERROR_MESSAGES`` -- captures the message describing an error returned by the server,
+    which can then be read using :func:`krpc_get_error_message`. Without this every server error
+    is indistinguishable, as they all return :macro:`KRPC_ERROR_RPC_FAILED`. Enabling it costs
+    ``KRPC_ERROR_MESSAGE_LENGTH`` bytes of static storage.
+  * ``KRPC_ERROR_MESSAGE_LENGTH`` -- the size of the buffer used to store the message described
+    above, defaulting to 256 bytes. Longer messages are truncated to fit.
   * ``PB_NO_ERRMSG`` -- disables error messages in the nanopb library, which kRPC uses to
     communicate with the server. Enabled by default in the Arduino version of the library.
 
@@ -243,6 +249,14 @@ Client API Reference
      config.config = SERIAL_5N1;
      krpc_open(&conn, &config);
 
+   .. note::
+
+     A serial connection has no end-of-file, so on Arduino a read fails with
+     :macro:`KRPC_ERROR_EOF` when the serial timeout elapses without a single byte arriving.
+     This timeout is one second by default and applies to each byte, so a slow but progressing
+     reply never trips it. If the server can take longer than this to start replying, raise the
+     timeout with ``Serial.setTimeout`` before calling :func:`krpc_open`.
+
 .. function:: krpc_error_t krpc_connect(krpc_connection_t connection, const char * name)
 
    Connect to a kRPC server.
@@ -297,3 +311,14 @@ Client API Reference
 .. function:: const char * krpc_get_error(krpc_error_t error)
 
    Returns a descriptive string for the given error code.
+
+.. function:: const char * krpc_get_error_message(void)
+
+   Returns the message describing the most recent error returned by the server, or an empty
+   string if there has not been one. It is formatted as ``service.name: description``, for
+   example ``SpaceCenter.InvalidOperationException: Vessel does not exist``, followed by the
+   server stack trace when the server is configured to send one, and is truncated to fit
+   ``KRPC_ERROR_MESSAGE_LENGTH``.
+
+   This function is only available when the library is built with ``KRPC_ERROR_MESSAGES``
+   defined, as storing the message is not free.

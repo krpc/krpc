@@ -6,6 +6,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#ifdef KRPC_ERROR_MESSAGES
+#include <string.h>
+#endif
 
 static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count);
 static bool read_callback(pb_istream_t *stream, uint8_t *buf, size_t count);
@@ -45,10 +48,60 @@ krpc_error_t krpc_connect(krpc_connection_t connection, const char *client_name)
   return KRPC_OK;
 }
 
+#ifdef KRPC_ERROR_MESSAGES
+
+static char krpc_error_message[KRPC_ERROR_MESSAGE_LENGTH];
+
+const char *krpc_get_error_message(void) { return krpc_error_message; }
+
+/* Append to the error message, discarding whatever does not fit */
+static void krpc_append_error_message(const char *str, size_t length) {
+  size_t used = strlen(krpc_error_message);
+  size_t space = KRPC_ERROR_MESSAGE_LENGTH - used - 1;
+  if (length > space) length = space;
+  memcpy(krpc_error_message + used, str, length);
+  krpc_error_message[used + length] = '\0';
+}
+
+/* Decode one of the string fields of an error message onto the end of the error message,
+ * preceded by the separator passed as arg. The separator is skipped when nothing has been
+ * appended yet, so that fields the server left empty do not leave stray punctuation behind.
+ * The string is copied in chunks to avoid needing a buffer as large as the field. */
+static bool krpc_decode_callback_error_string(pb_istream_t *stream, const pb_field_t *field,
+                                              void **arg) {
+  (void)field;
+  if (stream->bytes_left == 0) return true;
+  if (krpc_error_message[0] != '\0') {
+    const char *separator = (const char *)(*arg);
+    krpc_append_error_message(separator, strlen(separator));
+  }
+  char chunk[32];
+  while (stream->bytes_left > 0) {
+    size_t size = stream->bytes_left < sizeof(chunk) ? stream->bytes_left : sizeof(chunk);
+    if (!pb_read(stream, (pb_byte_t *)chunk, size))
+      KRPC_CALLBACK_RETURN_STREAM_ERROR("failed to decode error message field", stream);
+    krpc_append_error_message(chunk, size);
+  }
+  return true;
+}
+
+#endif
+
 static bool krpc_decode_callback_error(pb_istream_t *stream, const pb_field_t *field, void **arg) {
   krpc_error_t *error_code = (krpc_error_t *)(*arg);
   *error_code = KRPC_ERROR_RPC_FAILED;
   krpc_schema_Error error = krpc_schema_Error_init_default;
+#ifdef KRPC_ERROR_MESSAGES
+  krpc_error_message[0] = '\0';
+  error.service.funcs.decode = &krpc_decode_callback_error_string;
+  error.service.arg = (void *)"";
+  error.name.funcs.decode = &krpc_decode_callback_error_string;
+  error.name.arg = (void *)".";
+  error.description.funcs.decode = &krpc_decode_callback_error_string;
+  error.description.arg = (void *)": ";
+  error.stack_trace.funcs.decode = &krpc_decode_callback_error_string;
+  error.stack_trace.arg = (void *)"\nServer stack trace:\n";
+#endif
   if (!pb_decode(stream, krpc_schema_Error_fields, &error))
     KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode error message", stream);
   return true;
@@ -87,7 +140,13 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
     if (!pb_decode_delimited(&istream, krpc_schema_MultiplexedResponse_fields, &m_response))
       KRPC_RETURN_STREAM_ERROR(DECODING_FAILED, "failed to decode response message", &istream);
 
-    if (rpc_error != KRPC_OK) KRPC_RETURN_ERROR(RPC_FAILED, "rpc returned an error");
+    if (rpc_error != KRPC_OK) {
+#ifdef KRPC_ERROR_MESSAGES
+      KRPC_RETURN_ERROR(RPC_FAILED, krpc_get_error_message());
+#else
+      KRPC_RETURN_ERROR(RPC_FAILED, "rpc returned an error");
+#endif
+    }
 
     // Extract the procedure result message from the response
     krpc_schema_Response *response = &m_response.response;

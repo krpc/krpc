@@ -389,25 +389,30 @@ TEST_F(test_client, test_collections_of_objects) {
 TEST_F(test_client, test_invalid_operation_exception) {
   int32_t value;
   ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowInvalidOperationException(conn, &value));
+  ASSERT_ERROR_MESSAGE("KRPC.InvalidOperationException: Invalid operation");
 }
 
 TEST_F(test_client, test_argument_exception) {
   int32_t value;
   ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowArgumentException(conn, &value));
+  ASSERT_ERROR_MESSAGE("KRPC.ArgumentException: Invalid argument");
 }
 
 TEST_F(test_client, test_argument_null_exception) {
   int32_t value;
   ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowArgumentNullException(conn, &value, ""));
+  ASSERT_ERROR_MESSAGE("KRPC.ArgumentNullException: ");
 }
 
 TEST_F(test_client, test_argument_out_of_range_exception) {
   int32_t value;
   ASSERT_EQ(KRPC_ERROR_RPC_FAILED,
             krpc_TestService_ThrowArgumentOutOfRangeException(conn, &value, 0));
+  ASSERT_ERROR_MESSAGE("KRPC.ArgumentOutOfRangeException: ");
 }
 
 TEST_F(test_client, test_custom_exception) {
   int32_t value;
   ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_ThrowCustomException(conn, &value));
+  ASSERT_ERROR_MESSAGE("TestService.CustomException: A custom kRPC exception");
 }

@@ -22,6 +22,24 @@ typedef enum {
 /* Convert an error code to a string */
 const char* krpc_get_error(krpc_error_t error);
 
+/* Messages describing errors returned by the server.
+ * When KRPC_ERROR_MESSAGES is defined, an error returned by the server is captured into a fixed
+ * size buffer as it is decoded, and can be retrieved using krpc_get_error_message. This costs
+ * KRPC_ERROR_MESSAGE_LENGTH bytes of static storage. When it is not defined nothing is stored
+ * and the message is discarded as it is decoded, so every server error is only distinguishable
+ * as KRPC_ERROR_RPC_FAILED.
+ */
+#ifdef KRPC_ERROR_MESSAGES
+#ifndef KRPC_ERROR_MESSAGE_LENGTH
+#define KRPC_ERROR_MESSAGE_LENGTH 256
+#endif
+
+/* Get the message for the most recent error returned by the server, or an empty string if there
+ * has not been one. Formatted as "service.name: description", followed by the stack trace when
+ * the server is sending them, and truncated to fit KRPC_ERROR_MESSAGE_LENGTH. */
+const char* krpc_get_error_message(void);
+#endif
+
 /* Print an error message when it occurs */
 #if !defined(KRPC_PRINT_ERROR)
 #ifdef KRPC_PRINT_ERRORS_TO_STDERR
