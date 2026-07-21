@@ -875,6 +875,11 @@
 <li><p>Update dependencies: guava 33.4.8-jre, antlr4-runtime 4.13.2</p></li>
 <li><p>Mark deprecated members with the &#64;Deprecated annotation and an &#64;deprecated javadoc tag (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
 <li><p>Reduce copying when encoding values</p></li>
+<li><p>Fix Stream.getRate always returning zero, whatever the rate had been set to (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1004">#1004</a>)</p></li>
+<li><p>Fix looking up the method to stream or call: a method name built at runtime is now matched the same as a literal one, and the arguments are checked against the parameters of each candidate, so a mismatch is reported instead of resolving to any method taking the same number of arguments and failing later while encoding (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1004">#1004</a>)</p></li>
+<li><p>An exception thrown by a stream or event callback no longer ends the stream update thread, which stopped every stream and event on the connection from updating again. It is passed to the thread’s uncaught exception handler and the remaining callbacks still run (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1004">#1004</a>)</p></li>
+<li><p>Fix a deadlock between the stream update thread and a thread waiting for an update while holding a stream or event condition, as waiting for one requires (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1004">#1004</a>)</p></li>
+<li><p>An error from a service with no generated stubs loaded now raises an RPCException describing it, instead of a NullPointerException raised while building the exception for it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1004">#1004</a>)</p></li>
 </ul>
 </section>
 <section id="lua-client">
@@ -3244,7 +3249,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/041c97f">041c97f</a>
+  <a href="https://github.com/krpc/krpc/commit/c8395de">c8395de</a>
 </p></div>
       
     </div>
