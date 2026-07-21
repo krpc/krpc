@@ -187,6 +187,16 @@ class TestVessel(krpctest.TestCase):
         self.assertTrue(crew_member.name.endswith(" Kerman"))
         self.assertEqual(self.space_center.CrewMemberType.crew, crew_member.type)
         self.assertTrue(crew_member.on_mission)
+        part = crew_member.part
+        self.assertIsNotNone(part)
+        self.assertEqual(1, part.crew_capacity)
+        self.assertEqual([crew_member], part.crew)
+        crewless_part = next(
+            candidate
+            for candidate in self.vessel.parts.all
+            if candidate.crew_capacity == 0
+        )
+        self.assertEqual([], crewless_part.crew)
         # pylint: disable=pointless-statement
         crew_member.courage
         # pylint: disable=pointless-statement
