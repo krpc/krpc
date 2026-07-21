@@ -77,8 +77,11 @@ class StreamImpl:
     @value.setter
     def value(self, value: object) -> None:
         with self._update_lock:
-            self._updated = True
+            # Set the value before the flag that says there is one. A reader checks the
+            # flag first and takes no lock, so the other order lets it see the flag set
+            # and read the value that has not been stored yet.
             self._value = value
+            self._updated = True
 
     @property
     def updated(self) -> bool:
