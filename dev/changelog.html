@@ -842,6 +842,9 @@
 <h3>C++ client<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Distribute via vcpkg</p></li>
+<li><p>An error from a service whose generated header is not included now throws an RPCError describing it, instead of running off the end of the exception thrower map (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1007">#1007</a>)</p></li>
+<li><p>An exception thrown by a stream or event callback no longer escapes the stream update thread, which ended the process, and the remaining callbacks still run. Callbacks are not invoked for an update carrying an error, as there is no value to give them; reading the stream still reports the error (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1007">#1007</a>)</p></li>
+<li><p>Fix a data race on the exception thrower map between constructing a service and handling an error (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1007">#1007</a>)</p></li>
 <li><p>Update to protobuf v35.1</p></li>
 <li><p>Update to ASIO 1.38.0</p></li>
 <li><p>Drop autotools build; CMake is now the only supported build system</p></li>
