@@ -79,6 +79,11 @@ class Client {
   std::shared_ptr<std::mutex> lock;
   std::map<std::pair<std::string, std::string>, std::function<void(std::string)>>
       exception_throwers;
+  // Guards exception_throwers. Services register their throwers as they are constructed,
+  // which can happen on any thread and at any time, while errors are turned into exceptions
+  // on both the calling thread and the stream update thread. Held by shared pointer as the
+  // client is copyable and a mutex is not.
+  std::shared_ptr<std::mutex> exception_throwers_lock;
 };
 
 }  // namespace krpc

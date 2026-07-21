@@ -15,11 +15,11 @@ namespace krpc {
 
 class StreamImpl;
 
-Client::Client() : lock(new std::mutex) {}
+Client::Client() : lock(new std::mutex), exception_throwers_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
                unsigned int stream_port)
-    : lock(new std::mutex) {
+    : lock(new std::mutex), exception_throwers_lock(new std::mutex) {
   // Connect to RPC server
   rpc_connection = std::make_shared<Connection>(address, rpc_port);
   rpc_connection->connect();
@@ -109,12 +109,14 @@ schema::ProcedureCall Client::build_call(const std::string& service, const std::
 
 void Client::add_exception_thrower(const std::string& service, const std::string& name,
                                    const std::function<void(std::string)>& thrower) {
+  std::lock_guard<std::mutex> guard(*exception_throwers_lock);
   exception_throwers[std::make_pair(service, name)] = thrower;
 }
 
 void Client::throw_exception(const schema::Error& error) const {
   if (!error.service().empty() && !error.name().empty()) {
     auto key = std::make_pair(error.service(), error.name());
+    std::unique_lock<std::mutex> guard(*exception_throwers_lock);
     auto thrower = exception_throwers.find(key);
     if (thrower == exception_throwers.end()) {
       // The type is unknown here if the generated header for its service was never
@@ -123,7 +125,11 @@ void Client::throw_exception(const schema::Error& error) const {
       // the end of the map.
       throw RPCError(error.service() + "." + error.name() + ": " + error.description());
     }
-    thrower->second(error.description());
+    // Copy the thrower and release the lock before calling it: it throws, and it must not
+    // be holding this lock while the exception propagates out through the caller.
+    auto fn = thrower->second;
+    guard.unlock();
+    fn(error.description());
   } else {
     throw RPCError(error.description());
   }
