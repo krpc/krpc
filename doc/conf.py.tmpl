@@ -30,16 +30,15 @@ htmlhelp_basename = 'krpc-doc'
 html_static_path = ['crafts', 'scripts', '_static']
 templates_path = ['_templates']
 html_css_files = ['custom.css']
-html_js_files = ['external-links.js']
+html_js_files = ['external-links.js', 'build-info.js']
 
-# A dev build's version carries a "-<build>-<sha>" suffix (set-version.py); a
-# release version does not. Surface that commit sha as a footer link so a dev
-# page shows which commit it was built from. %BUILDVERSION% is the full
-# config.bzl version, substituted by the :conf genrule.
-build_version = '%BUILDVERSION%'
-html_context = {}
-if '-' in build_version:
-    html_context['build_commit'] = build_version.rsplit('-', 1)[-1]
+# A dev build is published under /dev/ and overwritten on every merge to main.
+# Its footer names the commit it was built from, but the sha is not baked into
+# the pages: build-info.js fetches it from build-info.json, written alongside
+# the HTML by the publish step, so a rebuild leaves every page byte-identical
+# and the published commits stay small. Only dev builds carry the footer, so
+# the pages need to know the channel rather than the commit.
+html_context = {'build_info': '%SUBPATH%' == 'dev'}
 
 # Per-version publishing. %SUBPATH% is
 # the path this build is published under: a release version (e.g. '0.5.4') or

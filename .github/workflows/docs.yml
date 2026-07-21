@@ -82,6 +82,14 @@ jobs:
           mkdir -p "gh-pages/${SUBPATH}"
           (cd "gh-pages/${SUBPATH}" && unzip -q "${GITHUB_WORKSPACE}/bazel-bin/doc/html.zip")
 
+          # The commit a dev build came from, read at page-load time by
+          # build-info.js to fill in the footer link. Keeping it out of the HTML
+          # means republishing /dev/ rewrites this file alone rather than every
+          # page. Release builds are frozen and carry no such footer.
+          if [ "$SUBPATH" = "dev" ]; then
+            printf '{"commit": "%s"}\n' "$GITHUB_SHA" > "gh-pages/${SUBPATH}/build-info.json"
+          fi
+
           # Regenerate the runtime dropdown list and the root redirect.
           doc/gen_docs_index.py gh-pages
 
