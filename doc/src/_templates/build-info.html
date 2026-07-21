@@ -1,6 +1,3 @@
-{%- if build_commit %}
-<p class="build-info">
-  Built from commit
-  <a href="https://github.com/krpc/krpc/commit/{{ build_commit }}">{{ build_commit }}</a>
-</p>
+{%- if build_info %}
+<p class="build-info" data-build-info-url="{{ pathto('build-info.json', 1) }}"></p>
 {%- endif %}
