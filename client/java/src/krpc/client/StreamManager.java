@@ -4,7 +4,9 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import krpc.client.services.KRPC;
@@ -66,33 +68,41 @@ class StreamManager {
   }
 
   void update(long id, ProcedureResult result) throws StreamException {
+    StreamImpl stream;
+    Object value;
+    List<Consumer<Object>> callbacks;
+    // The update lock is held only to find the stream and decode its new value, and is released
+    // before the stream's condition is taken. A thread waiting for an update holds the condition
+    // and then needs the update lock -- Event.waitFor resets the stream value while holding it,
+    // as its documented use requires -- so taking the two in the opposite order here deadlocks.
+    // The callbacks are copied for the same reason: they run below without the lock held.
     synchronized (updateLock) {
       if (!streams.containsKey(id)) {
         return;
       }
-      StreamImpl stream = streams.get(id);
-      Object value;
+      stream = streams.get(id);
       if (!result.hasError()) {
         value = Encoder.decode(result.getValue(), stream.getReturnType(), connection);
       } else {
         value = result.getError();
       }
-      Object condition = stream.getCondition();
-      synchronized (condition) {
-        stream.setValue(value);
-        condition.notifyAll();
-      }
-      for (Consumer<Object> callback : stream.getCallbacks().values()) {
-        try {
-          callback.accept(value);
-        } catch (RuntimeException exn) {
-          // A callback that throws must not stop the remaining callbacks running, nor escape
-          // and end the update thread, which would silently stop every stream on the
-          // connection. There is no caller to propagate it to, so hand it to the thread's
-          // uncaught exception handler, which by default reports it on stderr.
-          Thread thread = Thread.currentThread();
-          thread.getUncaughtExceptionHandler().uncaughtException(thread, exn);
-        }
+      callbacks = new ArrayList<Consumer<Object>>(stream.getCallbacks().values());
+    }
+    Object condition = stream.getCondition();
+    synchronized (condition) {
+      stream.setValue(value);
+      condition.notifyAll();
+    }
+    for (Consumer<Object> callback : callbacks) {
+      try {
+        callback.accept(value);
+      } catch (RuntimeException exn) {
+        // A callback that throws must not stop the remaining callbacks running, nor escape
+        // and end the update thread, which would silently stop every stream on the
+        // connection. There is no caller to propagate it to, so hand it to the thread's
+        // uncaught exception handler, which by default reports it on stderr.
+        Thread thread = Thread.currentThread();
+        thread.getUncaughtExceptionHandler().uncaughtException(thread, exn);
       }
     }
   }

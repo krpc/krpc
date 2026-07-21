@@ -418,6 +418,24 @@ public class StreamTest {
     assertEquals(testCallbackValue, 5);
   }
 
+  // The update thread must not hold the update lock while waiting for a stream's condition. A
+  // caller holding that condition -- which is how waiting for an update is documented to work --
+  // otherwise blocks forever on anything needing the update lock, and the update thread blocks
+  // on the condition, deadlocking both. The timeout catches it, as it hangs the test outright.
+  @Test(timeout = 30000)
+  public void testRemoveWhileHoldingCondition()
+      throws RPCException, StreamException, InterruptedException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testRemoveWhileHoldingCondition", 1);
+    stream.start();
+    synchronized (stream.getCondition()) {
+      stream.waitForUpdate();
+      // Let the update thread reach the next update and block on this condition
+      Thread.sleep(200);
+      stream.remove();
+    }
+  }
+
   private volatile int testCallbackThrowsCount = 0;
   private volatile boolean testCallbackThrowsStop = false;
 
