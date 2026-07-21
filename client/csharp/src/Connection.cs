@@ -381,7 +381,14 @@ namespace KRPC.Client
                     return new ArgumentNullException (string.Empty, message);
                 if (key == "KRPC.ArgumentOutOfRangeException")
                     return new ArgumentOutOfRangeException (string.Empty, message);
-                var exnType = exceptionTypes [key];
+                System.Type exnType;
+                if (!exceptionTypes.TryGetValue (key, out exnType)) {
+                    // The type is unknown here if the service it belongs to was never
+                    // registered. Report the error itself, named by its type on the server,
+                    // rather than the failure to build an exception for it, which would say
+                    // nothing about what actually went wrong.
+                    return new RPCException (key + ": " + message);
+                }
                 return (System.Exception)Activator.CreateInstance (exnType, new [] { message });
             }
             return new RPCException (message);

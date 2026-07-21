@@ -252,6 +252,22 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void UnknownExceptionType ()
+        {
+            // An error naming a type this client has no registered types for still reports
+            // what went wrong, rather than failing while constructing the exception for it
+            var error = new KRPC.Schema.KRPC.Error {
+                Service = "NotAService",
+                Name = "NotAnException",
+                Description = "something went wrong"
+            };
+            var exn = Connection.GetException (error);
+            Assert.IsInstanceOf<RPCException> (exn);
+            Assert.That (exn.Message, Does.Contain ("NotAService.NotAnException"));
+            Assert.That (exn.Message, Does.Contain ("something went wrong"));
+        }
+
+        [Test]
         public void InvalidOperationException ()
         {
             var exn = Assert.Throws<System.InvalidOperationException> (() => Connection.TestService ().ThrowInvalidOperationException ());
