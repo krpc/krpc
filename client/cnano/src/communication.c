@@ -23,7 +23,7 @@ krpc_error_t krpc_close(krpc_connection_t connection) {
 krpc_error_t krpc_read(krpc_connection_t connection, uint8_t* buf, size_t count) {
   size_t total = 0;
   while (total < count) {
-    ssize_t result = read(connection, buf, count);
+    ssize_t result = read(connection, buf + total, count - total);
     if (result == -1) {
       KRPC_RETURN_ERROR(IO, "read failed");
     } else if (result == 0) {
