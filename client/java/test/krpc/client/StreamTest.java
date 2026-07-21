@@ -478,6 +478,19 @@ public class StreamTest {
   }
 
   @Test
+  public void testGetRate()
+      throws RPCException, StreamException {
+    Stream<Integer> stream = connection.addStream(
+        TestService.class, "counter", "StreamTest.testGetRate", 1);
+    assertEquals(0, stream.getRate(), 0.0001);
+    stream.setRate(5);
+    assertEquals(5, stream.getRate(), 0.0001);
+    stream.setRate(0);
+    assertEquals(0, stream.getRate(), 0.0001);
+    stream.remove();
+  }
+
+  @Test
   public void testEquality()
       throws RPCException, StreamException {
     Stream<Integer> stream0 = connection.addStream(

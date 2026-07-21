@@ -52,6 +52,7 @@ class StreamImpl {
 
   public void setRate(float rate) throws RPCException {
     KRPC.newInstance(connection).setStreamRate(id, rate);
+    this.rate = rate;
   }
 
   public Object getValue() throws StreamException {
