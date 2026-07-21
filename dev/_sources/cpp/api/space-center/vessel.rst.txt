@@ -980,6 +980,13 @@ Vessel
 
    
 
+   .. function:: Part part()
+
+      The part containing the crew member. Returns ``NULL`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Game Scenes: Flight
+
    .. function:: SuitType suit_type()
    .. function:: void set_suit_type(SuitType value)
 

@@ -2292,6 +2292,21 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.Vessel.situatio
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CrewMember.part">
+<span class="sig-name descname"><span class="pre">part</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CrewMember.part" title="Link to this definition">#</a></dt>
+<dd><p>The part containing the crew member. Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the crew member is not
+occupying a part, or the vessel containing the part is not loaded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CrewMember.suit_type">
 <span class="sig-name descname"><span class="pre">suit_type</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.SuitType</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CrewMember.suit_type" title="Link to this definition">#</a></dt>
 <dd><p>The crew member’s suit type.</p>
@@ -2558,7 +2573,7 @@ See <a class="reference internal" href="#SpaceCenter.SpaceCenter.CrewMember.suit
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2d11aca">2d11aca</a>
+  <a href="https://github.com/krpc/krpc/commit/155d474">155d474</a>
 </p></div>
       
     </div>

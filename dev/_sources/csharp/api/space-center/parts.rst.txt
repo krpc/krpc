@@ -581,6 +581,18 @@ Part
 
       :Game Scenes: All
 
+   .. property:: int CrewCapacity { get; }
+
+      The number of crew members that can occupy the part.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<CrewMember> Crew { get; }
+
+      The crew members occupying the part.
+
+      :Game Scenes: All
+
    .. property:: uint AvailableSeats { get; }
 
       How many open seats the part has.

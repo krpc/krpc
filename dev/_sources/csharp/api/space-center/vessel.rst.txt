@@ -969,6 +969,13 @@ Vessel
 
       :Game Scenes: All
 
+   .. property:: Part Part { get; }
+
+      The part containing the crew member. Returns ``null`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Game Scenes: Flight
+
    .. property:: SuitType SuitType { get; set; }
 
       The crew member's suit type.

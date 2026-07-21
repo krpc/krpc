@@ -1074,6 +1074,15 @@ Vessel
       :rtype: :class:`RosterStatus`
    
 
+   .. attribute:: part
+
+      The part containing the crew member. Returns ``None`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+      :Game Scenes: Flight
+
    .. attribute:: suit_type
 
       The crew member's suit type.

@@ -610,6 +610,20 @@ Part
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: crew_capacity: number
+
+      The number of crew members that can occupy the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: crew: List
+
+      The crew members occupying the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
    .. attribute:: available_seats: number
 
       How many open seats the part has.

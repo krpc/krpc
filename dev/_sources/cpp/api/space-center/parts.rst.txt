@@ -573,6 +573,18 @@ Part
 
    
 
+   .. function:: int32_t crew_capacity()
+
+      The number of crew members that can occupy the part.
+
+   
+
+   .. function:: std::vector<CrewMember> crew()
+
+      The crew members occupying the part.
+
+   
+
    .. function:: uint32_t available_seats()
 
       How many open seats the part has.

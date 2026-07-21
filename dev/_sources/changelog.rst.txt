@@ -180,6 +180,7 @@ SpaceCenter service
 * Fix ResourceConverter.State only ever reporting Running when the game is not running in English, leaving MissingResource, StorageFull and Capacity unreachable
 * Fix DockingPort.State reporting Shielded instead of Moving while a shield is opening or closing, when the game is not running in English
 * Fix part module field values being formatted using the machine's locale, so that Module.Fields, Module.GetField and PartField.Value returned numbers that clients running under a locale that writes decimals with a comma could not parse
+* Add CrewMember.Part and per-part CrewCapacity and Crew properties
 
 
 UI service

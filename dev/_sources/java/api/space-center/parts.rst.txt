@@ -615,6 +615,20 @@ Part
 
    
 
+   .. method:: int getCrewCapacity()
+
+
+      The number of crew members that can occupy the part.
+
+   
+
+   .. method:: java.util.List<CrewMember> getCrew()
+
+
+      The crew members occupying the part.
+
+   
+
    .. method:: int getAvailableSeats()
 
 

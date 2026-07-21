@@ -979,6 +979,14 @@ Vessel
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.RosterStatus`
 
+   .. attribute:: part: SpaceCenter.Part
+
+      The part containing the crew member. Returns ``nil`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
    .. attribute:: suit_type: SpaceCenter.SuitType
 
       The crew member's suit type.

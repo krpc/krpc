@@ -765,6 +765,7 @@
 <li><p>Fix ResourceConverter.State only ever reporting Running when the game is not running in English, leaving MissingResource, StorageFull and Capacity unreachable</p></li>
 <li><p>Fix DockingPort.State reporting Shielded instead of Moving while a shield is opening or closing, when the game is not running in English</p></li>
 <li><p>Fix part module field values being formatted using the machine’s locale, so that Module.Fields, Module.GetField and PartField.Value returned numbers that clients running under a locale that writes decimals with a comma could not parse</p></li>
+<li><p>Add CrewMember.Part and per-part CrewCapacity and Crew properties</p></li>
 </ul>
 </section>
 <section id="ui-service">
@@ -3238,7 +3239,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2d11aca">2d11aca</a>
+  <a href="https://github.com/krpc/krpc/commit/155d474">155d474</a>
 </p></div>
       
     </div>

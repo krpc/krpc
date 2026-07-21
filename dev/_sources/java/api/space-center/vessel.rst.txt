@@ -1000,6 +1000,14 @@ Vessel
 
    
 
+   .. method:: Part getPart()
+
+
+      The part containing the crew member. Returns ``null`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Game Scenes: Flight
+
    .. method:: SuitType getSuitType()
 
    .. method:: void setSuitType(SuitType value)

@@ -573,6 +573,18 @@ Part
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_CrewCapacity(krpc_connection_t connection, int32_t * result)
+
+      The number of crew members that can occupy the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Crew(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The crew members occupying the part.
+
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_Part_AvailableSeats(krpc_connection_t connection, uint32_t * result)
 
       How many open seats the part has.

@@ -1706,10 +1706,10 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_bool">constant_bool() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_bool">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_double">constant_double() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_double">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_float">constant_float() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_float">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_int">constant_int() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_int">[1]</a>
@@ -1894,10 +1894,18 @@
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-type.html#krpc.client.services.KerbalAlarmClock.AlarmType.CREW">CREW (Java field)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMemberType.CREW">[1]</a>
 </li>
-      <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.crew">crew (Vessel attribute)</a>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.crew">crew (Part attribute)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.crew">(Vessel attribute)</a>
 </li>
-      <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.crew_capacity">crew_capacity (Vessel attribute)</a>
+      </ul></li>
+      <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.crew_capacity">crew_capacity (Part attribute)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.crew_capacity">(Vessel attribute)</a>
 </li>
+      </ul></li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.crew_count">crew_count (Vessel attribute)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.CrewMember">CrewMember (class in SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember">[1]</a>
@@ -3102,9 +3110,9 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getCourage()">getCourage() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getCrew()">getCrew() (Java method)</a>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getCrew()">getCrew() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getCrew()">[1]</a>
 </li>
-      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getCrewCapacity()">getCrewCapacity() (Java method)</a>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getCrewCapacity()">getCrewCapacity() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getCrewCapacity()">[1]</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getCrewCount()">getCrewCount() (Java method)</a>
 </li>
@@ -3746,7 +3754,7 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getParent()">getParent() (Java method)</a>
 </li>
-      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.Camera.getPart()">getPart() (Java method)</a>, <a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getPart()">[1]</a>, <a href="java/api/lidar/laser.html#krpc.client.services.LiDAR.Laser.getPart()">[2]</a>, <a href="java/api/remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getPart()">[3]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ActionGroupAction.getPart()">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Antenna.getPart()">[5]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.CargoBay.getPart()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getPart()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Decoupler.getPart()">[8]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getPart()">[9]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getPart()">[10]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getPart()">[11]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Fairing.getPart()">[12]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.getPart()">[13]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Intake.getPart()">[14]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.LaunchClamp.getPart()">[15]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Leg.getPart()">[16]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getPart()">[17]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getPart()">[18]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getPart()">[19]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getPart()">[20]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Radiator.getPart()">[21]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ReactionWheel.getPart()">[22]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverter.getPart()">[23]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceDrain.getPart()">[24]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceHarvester.getPart()">[25]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticController.getPart()">[26]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getPart()">[27]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getPart()">[28]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getPart()">[29]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getPart()">[30]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Sensor.getPart()">[31]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.SolarPanel.getPart()">[32]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.getPart()">[33]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getPart()">[34]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resource.getPart()">[35]</a>
+      <li><a href="java/api/docking-camera/camera.html#krpc.client.services.DockingCamera.Camera.getPart()">getPart() (Java method)</a>, <a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getPart()">[1]</a>, <a href="java/api/lidar/laser.html#krpc.client.services.LiDAR.Laser.getPart()">[2]</a>, <a href="java/api/remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getPart()">[3]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ActionGroupAction.getPart()">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Antenna.getPart()">[5]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.CargoBay.getPart()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getPart()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Decoupler.getPart()">[8]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getPart()">[9]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getPart()">[10]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getPart()">[11]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Fairing.getPart()">[12]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.getPart()">[13]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Intake.getPart()">[14]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.LaunchClamp.getPart()">[15]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Leg.getPart()">[16]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getPart()">[17]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Module.getPart()">[18]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Parachute.getPart()">[19]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getPart()">[20]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Radiator.getPart()">[21]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ReactionWheel.getPart()">[22]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverter.getPart()">[23]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceDrain.getPart()">[24]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceHarvester.getPart()">[25]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticController.getPart()">[26]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getPart()">[27]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getPart()">[28]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getPart()">[29]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getPart()">[30]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Sensor.getPart()">[31]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.SolarPanel.getPart()">[32]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.getPart()">[33]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getPart()">[34]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resource.getPart()">[35]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getPart()">[36]</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getParts()">getParts() (Java method)</a>, <a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getParts()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getParts()">[2]</a>
 </li>
@@ -6760,6 +6768,8 @@
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember10on_missionEv">krpc::services::SpaceCenter::CrewMember::on_mission (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember4partEv">krpc::services::SpaceCenter::CrewMember::part (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember13roster_statusEv">krpc::services::SpaceCenter::CrewMember::roster_status (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember10set_badassEb">krpc::services::SpaceCenter::CrewMember::set_badass (C++ function)</a>
@@ -7633,6 +7643,10 @@
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part15control_surfaceEv">krpc::services::SpaceCenter::Part::control_surface (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part4costEv">krpc::services::SpaceCenter::Part::cost (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part4crewEv">krpc::services::SpaceCenter::Part::crew (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part13crew_capacityEv">krpc::services::SpaceCenter::Part::crew_capacity (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/parts.html#_CPPv4N4krpc8services11SpaceCenter4Part9crossfeedEv">krpc::services::SpaceCenter::Part::crossfeed (C++ function)</a>
 </li>
@@ -11030,6 +11044,8 @@
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_OnMission">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_OnMission (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Part">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Part (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_RosterStatus">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_RosterStatus (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_set_Badass">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_set_Badass (C function)</a>
@@ -11903,6 +11919,10 @@
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_ControlSurface">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_ControlSurface (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Cost">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Cost (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Crew">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Crew (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_CrewCapacity">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_CrewCapacity (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/parts.html#c.krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Crossfeed">krpc_SpaceCenter_Part_t.krpc_SpaceCenter_Part_Crossfeed (C function)</a>
 </li>
@@ -14435,6 +14455,8 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ControlSurface.part">part (ControlSurface attribute)</a>
 
       <ul>
+        <li><a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.part">(CrewMember attribute)</a>
+</li>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Decoupler.part">(Decoupler attribute)</a>
 </li>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.DockingPort.part">(DockingPort attribute)</a>
@@ -16768,6 +16790,8 @@
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.CrewMember.on_mission">SpaceCenter.SpaceCenter.CrewMember.on_mission (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.CrewMember.part">SpaceCenter.SpaceCenter.CrewMember.part (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.CrewMember.roster_status">SpaceCenter.SpaceCenter.CrewMember.roster_status (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.CrewMember.stupidity">SpaceCenter.SpaceCenter.CrewMember.stupidity (attribute)</a>
@@ -17209,6 +17233,10 @@
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Part.control_surface">SpaceCenter.SpaceCenter.Part.control_surface (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Part.cost">SpaceCenter.SpaceCenter.Part.cost (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Part.crew">SpaceCenter.SpaceCenter.Part.crew (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Part.crew_capacity">SpaceCenter.SpaceCenter.Part.crew_capacity (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Part.crossfeed">SpaceCenter.SpaceCenter.Part.crossfeed (attribute)</a>
 </li>
@@ -19205,7 +19233,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/2d11aca">2d11aca</a>
+  <a href="https://github.com/krpc/krpc/commit/155d474">155d474</a>
 </p></div>
       
     </div>

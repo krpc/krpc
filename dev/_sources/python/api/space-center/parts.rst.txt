@@ -680,6 +680,22 @@ Part
       :rtype: float
    
 
+   .. attribute:: crew_capacity
+
+      The number of crew members that can occupy the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: crew
+
+      The crew members occupying the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`CrewMember`)
+   
+
    .. attribute:: available_seats
 
       How many open seats the part has.

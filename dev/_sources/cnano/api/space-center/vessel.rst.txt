@@ -978,6 +978,13 @@ Vessel
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part containing the crew member. Returns ``nullptr`` if the crew member is not
+      occupying a part, or the vessel containing the part is not loaded.
+
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_SuitType(krpc_connection_t connection, krpc_SpaceCenter_SuitType_t * result)
    .. function:: void krpc_SpaceCenter_CrewMember_set_SuitType(krpc_SpaceCenter_SuitType_t value)
 
