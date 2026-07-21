@@ -882,6 +882,8 @@
 <ul class="simple">
 <li><p>Fix attributes module to always return boolean for is_a_class_member and is_a_class_property_accessor</p></li>
 <li><p>Fix service, method and property names being converted to snake case using the machine’s locale, which renamed every member the client exposes under Turkish locales</p></li>
+<li><p>Calling a procedure with an argument that needs coercing no longer leaves a global named ok behind (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1003">#1003</a>)</p></li>
+<li><p>Remove encoder.client_name, which raised an error whatever it was passed, as the length it padded names to was never defined. It was a leftover from before the protocol used protocol buffers (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1003">#1003</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">
@@ -3242,7 +3244,7 @@
         <div class="footer-item">
 <p class="build-info">
   Built from commit
-  <a href="https://github.com/krpc/krpc/commit/6b93f67">6b93f67</a>
+  <a href="https://github.com/krpc/krpc/commit/041c97f">041c97f</a>
 </p></div>
       
     </div>

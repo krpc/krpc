@@ -297,6 +297,8 @@ Lua client
 
 * Fix attributes module to always return boolean for is\_a\_class\_member and is\_a\_class\_property\_accessor
 * Fix service, method and property names being converted to snake case using the machine's locale, which renamed every member the client exposes under Turkish locales
+* Calling a procedure with an argument that needs coercing no longer leaves a global named ok behind (:issue:`1003`)
+* Remove encoder.client\_name, which raised an error whatever it was passed, as the length it padded names to was never defined. It was a leftover from before the protocol used protocol buffers (:issue:`1003`)
 
 
 krpctools
