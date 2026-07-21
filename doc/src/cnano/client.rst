@@ -243,6 +243,14 @@ Client API Reference
      config.config = SERIAL_5N1;
      krpc_open(&conn, &config);
 
+   .. note::
+
+     A serial connection has no end-of-file, so on Arduino a read fails with
+     :macro:`KRPC_ERROR_EOF` when the serial timeout elapses without a single byte arriving.
+     This timeout is one second by default and applies to each byte, so a slow but progressing
+     reply never trips it. If the server can take longer than this to start replying, raise the
+     timeout with ``Serial.setTimeout`` before calling :func:`krpc_open`.
+
 .. function:: krpc_error_t krpc_connect(krpc_connection_t connection, const char * name)
 
    Connect to a kRPC server.

@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
@@ -152,9 +152,33 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
+        ":arduino",
         ":client",
         ":lint",
     ],
+)
+
+# Builds the Arduino communication backend for the host, against a stand-in for the Arduino
+# HardwareSerial class, so it can be tested without hardware. It deliberately does not depend
+# on krpc_cnano, whose copy of communication.c is built for the host platform instead and
+# defines the same functions.
+cc_test(
+    name = "arduino",
+    size = "small",
+    srcs = [
+        "include/krpc_cnano/communication.h",
+        "include/krpc_cnano/error.h",
+        "src/communication.c",
+        "test/arduino/HardwareSerial.h",
+        "test/arduino/test_communication_arduino.cpp",
+    ],
+    copts = ["-xc++"],
+    includes = [
+        "include",
+        "test/arduino",
+    ],
+    local_defines = ["ARDUINO"],
+    deps = ["@cpp_googletest//:gtest"],
 )
 
 client_test(

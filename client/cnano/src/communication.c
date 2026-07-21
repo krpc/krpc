@@ -103,11 +103,17 @@ krpc_error_t krpc_close(krpc_connection_t connection) {
 }
 
 krpc_error_t krpc_read(krpc_connection_t connection, uint8_t* buf, size_t count) {
-  size_t read = 0;
-  while (true) {
-    read += connection->readBytes(buf + read, count - read);
-    if (read == count) return KRPC_OK;
+  size_t total = 0;
+  while (total < count) {
+    // A serial link has no end-of-file, so the only sign the peer has gone is silence.
+    // readBytes waits up to the serial timeout for each byte, so it returns nothing only
+    // when not a single byte arrived in that time; a slow but progressing stream keeps
+    // going. Use Serial.setTimeout to control how long to wait before giving up.
+    size_t result = connection->readBytes(buf + total, count - total);
+    if (result == 0) KRPC_RETURN_ERROR(EOF, "eof received");
+    total += result;
   }
+  return KRPC_OK;
 }
 
 krpc_error_t krpc_write(krpc_connection_t connection, const uint8_t* buf, size_t count) {
