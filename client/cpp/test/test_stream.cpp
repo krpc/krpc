@@ -347,6 +347,45 @@ TEST_F(test_stream, test_callback) {
   ASSERT_EQ(test_callback_value, 5);
 }
 
+// A callback that throws must not escape the update thread: an exception leaving it calls
+// std::terminate and ends the process, not merely the stream updates.
+TEST_F(test_stream, test_callback_that_throws) {
+  std::atomic_flag called;
+  called.test_and_set();
+  std::atomic_flag stop;
+  stop.test_and_set();
+
+  auto x = test_service.counter_stream("test_stream.test_callback_that_throws", 10);
+  x.add_callback([&called](int value) {
+    called.clear();
+    throw std::runtime_error("callback failed");
+  });
+  x.add_callback([&stop](int value) {
+    if (value > 5) stop.clear();
+  });
+  x.start();
+  while (stop.test_and_set()) {
+  }
+  x.remove();
+  ASSERT_FALSE(called.test_and_set());
+}
+
+// An errored stream has no value to give a callback, and reading one rethrows the error. That
+// must not escape the update thread either.
+TEST_F(test_stream, test_callback_on_errored_stream) {
+  std::atomic_flag called;
+  called.test_and_set();
+
+  auto x = test_service.throw_invalid_operation_exception_stream();
+  x.add_callback([&called](int value) { called.clear(); });
+  x.start(false);
+  for (int i = 0; i < 5; i++) wait();
+
+  // The stream still reports its error to a reader, and the callback was never given a value
+  ASSERT_THROW(x(), krpc::services::KRPC::InvalidOperationException);
+  ASSERT_TRUE(called.test_and_set());
+}
+
 TEST_F(test_stream, test_remove_callback) {
   std::atomic_flag called1;
   called1.test_and_set();
