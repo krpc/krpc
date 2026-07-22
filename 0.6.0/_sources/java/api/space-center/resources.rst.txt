@@ -1,0 +1,210 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Resources
+=========
+
+
+.. type:: public class Resources
+
+   Represents the collection of resources stored in a vessel, stage or part.
+   Created by calling :meth:`Vessel.getResources()`,
+   :meth:`Vessel.resourcesInDecoupleStage(int, boolean)` or
+   :meth:`Part.getResources()`.
+
+   .. method:: java.util.List<Resource> getAll()
+
+
+      All the individual resources that can be stored.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Resource> withResource(String name)
+
+      All the individual resources with the given name that can be stored.
+
+      :param String name:
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<String> getNames()
+
+
+      A list of resource names that can be stored.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean hasResource(String name)
+
+      Check whether the named resource can be stored.
+
+      :param String name: The name of the resource.
+      :Game Scenes: Flight
+
+   .. method:: float amount(String name)
+
+      Returns the amount of a resource that is currently stored.
+
+      :param String name: The name of the resource.
+      :Game Scenes: Flight
+
+   .. method:: float max(String name)
+
+      Returns the amount of a resource that can be stored.
+
+      :param String name: The name of the resource.
+      :Game Scenes: Flight
+
+   .. method:: static float density(Connection connection, String name)
+
+      Returns the density of a resource, in :math:`kg/l`.
+
+      :param String name: The name of the resource.
+      :Game Scenes: Flight
+
+   .. method:: static ResourceFlowMode flowMode(Connection connection, String name)
+
+      Returns the flow mode of a resource.
+
+      :param String name: The name of the resource.
+      :Game Scenes: Flight
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether use of all the resources are enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is ``true`` if all of the resources are enabled.
+         If any of the resources are not enabled, this is ``false``.
+
+
+
+.. type:: public class Resource
+
+   An individual resource stored within a part.
+   Created using methods in the :type:`Resources` class.
+
+   .. method:: String getName()
+
+
+      The name of the resource.
+
+   
+
+   .. method:: Part getPart()
+
+
+      The part containing the resource.
+
+   
+
+   .. method:: float getAmount()
+
+
+      The amount of the resource that is currently stored in the part.
+
+   
+
+   .. method:: float getMax()
+
+
+      The total amount of the resource that can be stored in the part.
+
+   
+
+   .. method:: float getDensity()
+
+
+      The density of the resource, in :math:`kg/l`.
+
+   
+
+   .. method:: ResourceFlowMode getFlowMode()
+
+
+      The flow mode of the resource.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether use of this resource is enabled.
+
+   
+
+
+
+.. type:: public class ResourceTransfer
+
+   Transfer resources between parts.
+
+   .. method:: static ResourceTransfer start(Connection connection, Part fromPart, Part toPart, String resource, float maxAmount)
+
+      Start transferring a resource transfer between a pair of parts. The transfer will move
+      at most *maxAmount* units of the resource, depending on how much of
+      the resource is available in the source part and how much storage is available in the
+      destination part.
+      Use :meth:`ResourceTransfer.getComplete()` to check if the transfer is complete.
+      Use :meth:`ResourceTransfer.getAmount()` to see how much of the resource has been transferred.
+
+      :param Part fromPart: The part to transfer to.
+      :param Part toPart: The part to transfer from.
+      :param String resource: The name of the resource to transfer.
+      :param float maxAmount: The maximum amount of resource to transfer.
+   
+
+      .. note::
+
+         The transfer is canceled if the client that started it disconnects;
+         a canceled transfer is marked as complete.
+
+   .. method:: float getAmount()
+
+
+      The amount of the resource that has been transferred.
+
+   
+
+   .. method:: boolean getComplete()
+
+
+      Whether the transfer has completed. Also becomes true if the transfer is
+      canceled because the client that started it disconnected.
+
+   
+
+
+
+.. type:: public enum ResourceFlowMode
+
+   The way in which a resource flows between parts. See :meth:`Resources.flowMode(String)`.
+
+
+   .. field:: public ResourceFlowMode VESSEL
+
+      The resource flows to any part in the vessel. For example, electric charge.
+
+
+   .. field:: public ResourceFlowMode STAGE
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+
+   .. field:: public ResourceFlowMode ADJACENT
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+
+   .. field:: public ResourceFlowMode NONE
+
+      The resource does not flow. For example, solid fuel.

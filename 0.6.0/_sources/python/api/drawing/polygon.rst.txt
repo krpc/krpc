@@ -1,0 +1,66 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+Polygon
+=======
+
+
+.. class:: Polygon
+
+   A polygon. Created using :meth:`add_polygon`.
+
+   .. attribute:: vertices
+
+      Vertices for the polygon.
+
+      :Attribute: Can be read or written
+      :rtype: list(tuple(float, float, float))
+      :Game Scenes: Flight
+
+   .. attribute:: reference_frame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight
+
+   .. attribute:: color
+
+      Set the color
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: material
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: thickness
+
+      Set the thickness
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight

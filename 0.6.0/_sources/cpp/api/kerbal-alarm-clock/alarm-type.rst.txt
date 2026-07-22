@@ -1,0 +1,113 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KerbalAlarmClock
+
+AlarmType
+=========
+
+
+.. namespace:: krpc::services::KerbalAlarmClock
+.. enum-struct:: AlarmType
+
+   The type of an alarm.
+
+
+   .. enumerator:: raw
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. enumerator:: maneuver
+
+      An alarm based on the next maneuver node on the current ships flight path.
+      This node will be stored and can be restored when you come back to the ship.
+
+
+   .. enumerator:: maneuver_auto
+
+      See :enumerator:`AlarmType::maneuver`.
+
+
+   .. enumerator:: apoapsis
+
+      An alarm for furthest part of the orbit from the planet.
+
+
+   .. enumerator:: periapsis
+
+      An alarm for nearest part of the orbit from the planet.
+
+
+   .. enumerator:: ascending_node
+
+      Ascending node for the targeted object, or equatorial ascending node.
+
+
+   .. enumerator:: descending_node
+
+      Descending node for the targeted object, or equatorial descending node.
+
+
+   .. enumerator:: closest
+
+      An alarm based on the closest approach of this vessel to the targeted
+      vessel, some number of orbits into the future.
+
+
+   .. enumerator:: contract
+
+      An alarm based on the expiry or deadline of contracts in career modes.
+
+
+   .. enumerator:: contract_auto
+
+      See :enumerator:`AlarmType::contract`.
+
+
+   .. enumerator:: crew
+
+      An alarm that is attached to a crew member.
+
+
+   .. enumerator:: distance
+
+      An alarm that is triggered when a selected target comes within a chosen distance.
+
+
+   .. enumerator:: earth_time
+
+      An alarm based on the time in the "Earth" alternative Universe (aka the Real World).
+
+
+   .. enumerator:: launch_rendevous
+
+      An alarm that fires as your landed craft passes under the orbit of your target.
+
+
+   .. enumerator:: soi_change
+
+      An alarm manually based on when the next SOI point is on the flight path
+      or set to continually monitor the active flight path and add alarms as it
+      detects SOI changes.
+
+
+   .. enumerator:: soi_change_auto
+
+      See :enumerator:`AlarmType::soi_change`.
+
+
+   .. enumerator:: transfer
+
+      An alarm based on Interplanetary Transfer Phase Angles, i.e. when should
+      I launch to planet X? Based on Kosmo Not's post and used in Olex's
+      Calculator.
+
+
+   .. enumerator:: transfer_modelled
+
+      See :enumerator:`AlarmType::transfer`.
+
+
+   .. enumerator:: science_lab
+
+      An alarm for when a science lab has finished processing data.

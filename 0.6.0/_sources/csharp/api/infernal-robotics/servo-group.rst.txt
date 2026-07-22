@@ -1,0 +1,146 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.InfernalRobotics
+
+ServoGroup
+==========
+
+
+.. class:: ServoGroup
+
+   A group of servos, obtained by calling :meth:`InfernalRobotics.ServoGroups <InfernalRobotics.InfernalRobotics.ServoGroups>`
+   or :meth:`InfernalRobotics.ServoGroupWithName <InfernalRobotics.InfernalRobotics.ServoGroupWithName>`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. property:: string Name { get; set; }
+
+      The name of the group.
+
+      :Game Scenes: Flight
+
+   .. property:: string ForwardKey { get; set; }
+
+      The key assigned to be the "forward" key for the group.
+
+      :Game Scenes: Flight
+
+   .. property:: string ReverseKey { get; set; }
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Game Scenes: Flight
+
+   .. property:: float Speed { get; set; }
+
+      The speed multiplier for the group.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Expanded { get; set; }
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.Vessel Vessel { get; }
+
+      The vessel the group belongs to, or ``null`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. property:: int MovingDirection { get; }
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AdvancedMode { get; set; }
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. property:: float ElectricChargeRequired { get; }
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. property:: bool BuildAid { get; set; }
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IKActive { get; set; }
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<Servo> Servos { get; }
+
+      The servos that are in the group.
+
+      :Game Scenes: Flight
+
+   .. method:: Servo ServoWithName(string name)
+
+      Returns the servo with the given *name* from this group,
+      or ``null`` if none exists.
+
+      :parameters:
+
+       * **name** -- Name of servo to find.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<SpaceCenter.Part> Parts { get; }
+
+      The parts containing the servos in the group.
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveRight()
+
+      Moves all of the servos in the group to the right.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveLeft()
+
+      Moves all of the servos in the group to the left.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveCenter()
+
+      Moves all of the servos in the group to the center.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveNextPreset()
+
+      Moves all of the servos in the group to the next preset.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MovePrevPreset()
+
+      Moves all of the servos in the group to the previous preset.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void Stop()
+
+      Stops the servos in the group.
+
+
+      :Game Scenes: Flight

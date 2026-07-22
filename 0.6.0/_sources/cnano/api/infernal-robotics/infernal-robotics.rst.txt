@@ -1,0 +1,78 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+InfernalRobotics
+================
+
+
+This service provides functionality to interact with
+`Infernal Robotics <https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/>`_.
+
+
+.. function:: krpc_error_t krpc_InfernalRobotics_Available(krpc_connection_t connection, bool * result)
+
+   Whether Infernal Robotics is installed.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_InfernalRobotics_Ready(krpc_connection_t connection, bool * result)
+
+   Whether Infernal Robotics API is ready.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_InfernalRobotics_ServoGroups(krpc_connection_t connection, krpc_list_object_t * result, krpc_SpaceCenter_Vessel_t vessel)
+
+   A list of all the servo groups in the given *vessel*.
+
+   :Parameters:
+
+
+
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+      support movement and per-servo control, but not preset, key, speed-factor or
+      expanded state, which are only tracked by Infernal Robotics for the active vessel.
+
+
+
+
+.. function:: krpc_error_t krpc_InfernalRobotics_ServoGroupWithName(krpc_connection_t connection, krpc_InfernalRobotics_ServoGroup_t * result, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+
+   Returns the servo group in the given *vessel* with the given *name*,
+   or ``nullptr`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+   :Parameters:
+
+    * **vessel** -- Vessel to check.
+    * **name** -- Name of servo group to find.
+
+   :Game Scenes: Flight
+
+
+
+
+
+.. function:: krpc_error_t krpc_InfernalRobotics_ServoWithName(krpc_connection_t connection, krpc_InfernalRobotics_Servo_t * result, krpc_SpaceCenter_Vessel_t vessel, const char * name)
+
+   Returns the servo in the given *vessel* with the given *name* or
+   ``nullptr`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+   :Parameters:
+
+    * **vessel** -- Vessel to check.
+    * **name** -- Name of the servo to find.
+
+   :Game Scenes: Flight

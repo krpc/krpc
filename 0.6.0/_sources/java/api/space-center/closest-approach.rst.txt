@@ -1,0 +1,128 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Closest Approach
+================
+
+
+.. type:: public class ClosestApproach
+
+   A close approach between an orbit and a target orbit. Obtained by calling
+   :meth:`Orbit.nextClosestApproach(Orbit)` or :meth:`Orbit.closestApproaches(Orbit, int)`.
+
+   .. note::
+
+      A close approach is a snapshot: the time of closest approach is estimated once
+      when the object is created, and every member describes the state at that time.
+      Relative quantities are the target relative to the orbiting object (target minus
+      self).
+
+   .. method:: double getUT()
+
+
+      The universal time of the closest approach, in seconds.
+
+   
+
+   .. method:: double getTimeTo()
+
+
+      The time until the closest approach, in seconds.
+
+   
+
+   .. method:: double getDistance()
+
+
+      The distance between the objects at the closest approach, in meters.
+
+   
+
+   .. method:: double getRelativeSpeed()
+
+
+      The relative speed of the objects at the closest approach, in meters per
+      second. This is the magnitude of :meth:`ClosestApproach.relativeVelocity(ReferenceFrame)`, and does
+      not depend on the choice of reference frame.
+
+   
+
+   .. method:: Vessel getVessel()
+
+
+      The vessel doing the approaching, or ``null`` if it is not a vessel.
+
+   
+
+   .. method:: CelestialBody getBody()
+
+
+      The celestial body doing the approaching, or ``null`` if it is not a
+      celestial body.
+
+   
+
+   .. method:: Vessel getTargetVessel()
+
+
+      The vessel being approached, or ``null`` if the target is not a vessel.
+
+   
+
+   .. method:: CelestialBody getTargetBody()
+
+
+      The celestial body being approached, or ``null`` if the target is not a
+      celestial body.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the orbiting object at the closest approach.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> targetPosition(ReferenceFrame referenceFrame)
+
+      The position of the target object at the closest approach.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The velocity of the orbiting object at the closest approach.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The velocity as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> targetVelocity(ReferenceFrame referenceFrame)
+
+      The velocity of the target object at the closest approach.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The velocity as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> relativePosition(ReferenceFrame referenceFrame)
+
+      The position of the target relative to the orbiting object at the closest
+      approach.
+
+      :param ReferenceFrame referenceFrame: The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The relative position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> relativeVelocity(ReferenceFrame referenceFrame)
+
+      The velocity of the target relative to the orbiting object at the closest
+      approach.
+
+      :param ReferenceFrame referenceFrame: The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+      :returns: The relative velocity as a vector.

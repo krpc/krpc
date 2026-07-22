@@ -1,0 +1,759 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Control
+=======
+
+
+.. type:: krpc_SpaceCenter_Control_t
+
+   Used to manipulate the controls of a vessel. This includes adjusting the
+   throttle, enabling/disabling systems such as SAS and RCS, or altering the
+   direction in which the vessel is pointing.
+   Obtained by calling :func:`krpc_SpaceCenter_Vessel_Control`.
+
+   .. note::
+
+      Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+      and the custom axes) are zeroed when all clients that have set one or more of
+      these inputs are no longer connected. The throttle is an exception: it keeps
+      its value when clients disconnect.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Source(krpc_connection_t connection, krpc_SpaceCenter_ControlSource_t * result)
+
+      The source of the vessels control, for example by a kerbal or a probe core.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_State(krpc_connection_t connection, krpc_SpaceCenter_ControlState_t * result)
+
+      The control state of the vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SAS(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_SAS(bool value)
+
+      The state of SAS.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`krpc_SpaceCenter_AutoPilot_SAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SASMode(krpc_connection_t connection, krpc_SpaceCenter_SASMode_t * result)
+   .. function:: void krpc_SpaceCenter_Control_set_SASMode(krpc_SpaceCenter_SASMode_t value)
+
+      The current :func:`krpc_SpaceCenter_Control_SASMode`.
+      These modes are equivalent to the mode buttons to
+      the left of the navball that appear when SAS is enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`krpc_SpaceCenter_AutoPilot_SASMode`
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SpeedMode(krpc_connection_t connection, krpc_SpaceCenter_SpeedMode_t * result)
+   .. function:: void krpc_SpaceCenter_Control_set_SpeedMode(krpc_SpaceCenter_SpeedMode_t value)
+
+      The current :func:`krpc_SpaceCenter_Control_SpeedMode` of the navball.
+      This is the mode displayed next to the speed at the top of the navball.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_EngineGimbals(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_EngineGimbals(bool value)
+
+      Returns whether all gimballed engines on the vessel have gimbal enabled,
+      and sets the gimbal enabled state of all gimballed engines.
+      See :func:`krpc_SpaceCenter_Engine_GimbalLocked`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ThrustReversers(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_ThrustReversers(bool value)
+
+      Returns whether all engines with a thrust reverser on the vessel have
+      their thrust reverser engaged, and sets the thrust reverser state of all
+      such engines.
+      See :func:`krpc_SpaceCenter_Engine_ThrustReversed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_AeroSurfaces(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_AeroSurfaces(bool value)
+
+      Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+      and sets the pitch, yaw and roll enabled state of all control surfaces.
+      See :func:`krpc_SpaceCenter_ControlSurface_PitchEnabled`,
+      :func:`krpc_SpaceCenter_ControlSurface_YawEnabled` and
+      :func:`krpc_SpaceCenter_ControlSurface_RollEnabled`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_RCS(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_RCS(bool value)
+
+      The state of RCS.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ReactionWheels(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_ReactionWheels(bool value)
+
+      Returns whether all reactive wheels on the vessel are active,
+      and sets the active state of all reaction wheels.
+      See :func:`krpc_SpaceCenter_ReactionWheel_Active`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Gear(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Gear(bool value)
+
+      The state of the landing gear/legs.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Legs(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Legs(bool value)
+
+      Returns whether all landing legs on the vessel are deployed,
+      and sets the deployment state of all landing legs.
+      Does not include wheels (for example landing gear).
+      See :func:`krpc_SpaceCenter_Leg_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Wheels(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Wheels(bool value)
+
+      Returns whether all wheels on the vessel are deployed,
+      and sets the deployment state of all wheels.
+      Does not include landing legs.
+      See :func:`krpc_SpaceCenter_Wheel_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Lights(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Lights(bool value)
+
+      The state of the lights.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Brakes(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Brakes(bool value)
+
+      The state of the wheel brakes.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Antennas(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Antennas(bool value)
+
+      Returns whether all antennas on the vessel are deployed,
+      and sets the deployment state of all antennas.
+      See :func:`krpc_SpaceCenter_Antenna_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CargoBays(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_CargoBays(bool value)
+
+      Returns whether any of the cargo bays on the vessel are open,
+      and sets the open state of all cargo bays.
+      See :func:`krpc_SpaceCenter_CargoBay_Open`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Intakes(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Intakes(bool value)
+
+      Returns whether all of the air intakes on the vessel are open,
+      and sets the open state of all air intakes.
+      See :func:`krpc_SpaceCenter_Intake_Open`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Parachutes(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Parachutes(bool value)
+
+      Returns whether all parachutes on the vessel are deployed,
+      and sets the deployment state of all parachutes.
+      Cannot be set to ``false``.
+      See :func:`krpc_SpaceCenter_Parachute_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Radiators(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Radiators(bool value)
+
+      Returns whether all radiators on the vessel are deployed,
+      and sets the deployment state of all radiators.
+      See :func:`krpc_SpaceCenter_Radiator_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ResourceHarvesters(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_ResourceHarvesters(bool value)
+
+      Returns whether all of the resource harvesters on the vessel are deployed,
+      and sets the deployment state of all resource harvesters.
+      See :func:`krpc_SpaceCenter_ResourceHarvester_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ResourceHarvestersActive(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_ResourceHarvestersActive(bool value)
+
+      Returns whether any of the resource harvesters on the vessel are active,
+      and sets the active state of all resource harvesters.
+      See :func:`krpc_SpaceCenter_ResourceHarvester_Active`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SolarPanels(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_SolarPanels(bool value)
+
+      Returns whether all solar panels on the vessel are deployed,
+      and sets the deployment state of all solar panels.
+      See :func:`krpc_SpaceCenter_SolarPanel_Deployed`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Abort(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Abort(bool value)
+
+      The state of the abort action group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Throttle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Throttle(float value)
+
+      The state of the throttle. A value between 0 and 1.
+      Unlike the other control inputs, the throttle is not zeroed when the
+      clients that set it disconnect.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_InputMode(krpc_connection_t connection, krpc_SpaceCenter_ControlInputMode_t * result)
+   .. function:: void krpc_SpaceCenter_Control_set_InputMode(krpc_SpaceCenter_ControlInputMode_t value)
+
+      Sets the behavior of the pitch, yaw, roll and translation control inputs.
+      When set to additive, these inputs are added to the vessels current inputs.
+      This mode is the default.
+      When set to override, these inputs (if non-zero) override the vessels inputs.
+      This mode prevents keyboard control, or SAS, from interfering with the controls when
+      they are set.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Pitch(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Pitch(float value)
+
+      The state of the pitch control.
+      A value between -1 and 1.
+      Equivalent to the w and s keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Yaw(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Yaw(float value)
+
+      The state of the yaw control.
+      A value between -1 and 1.
+      Equivalent to the a and d keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Roll(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Roll(float value)
+
+      The state of the roll control.
+      A value between -1 and 1.
+      Equivalent to the q and e keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_PitchTrim(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_PitchTrim(float value)
+
+      The state of the pitch trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+W and Alt+S keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_YawTrim(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_YawTrim(float value)
+
+      The state of the yaw trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+A and Alt+D keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_RollTrim(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_RollTrim(float value)
+
+      The state of the roll trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+Q and Alt+E keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Forward(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Forward(float value)
+
+      The state of the forward translational control.
+      A value between -1 and 1.
+      Equivalent to the h and n keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Up(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Up(float value)
+
+      The state of the up translational control.
+      A value between -1 and 1.
+      Equivalent to the i and k keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Right(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_Right(float value)
+
+      The state of the right translational control.
+      A value between -1 and 1.
+      Equivalent to the j and l keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelThrottle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_WheelThrottle(float value)
+
+      The state of the wheel throttle.
+      A value between -1 and 1.
+      A value of 1 rotates the wheels forwards, a value of -1 rotates
+      the wheels backwards.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_WheelSteering(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_WheelSteering(float value)
+
+      The state of the wheel steering.
+      A value between -1 and 1.
+      A value of 1 steers to the left, and a value of -1 steers to the right.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis01(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis01(float value)
+
+      The state of CustomAxis01.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis02(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis02(float value)
+
+      The state of CustomAxis02.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis03(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis03(float value)
+
+      The state of CustomAxis03.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CustomAxis04(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Control_set_CustomAxis04(float value)
+
+      The state of CustomAxis04.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_CurrentStage(krpc_connection_t connection, int32_t * result)
+
+      The current stage of the vessel. Corresponds to the stage number in
+      the in-game UI.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ActivateNextStage(krpc_connection_t connection, krpc_list_object_t * result)
+
+      Activates the next stage. Equivalent to pressing the space bar in-game.
+
+
+      :returns: A list of vessel objects that are jettisoned from the active vessel.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :func:`krpc_SpaceCenter_ActiveVessel` no longer refer to the active vessel.
+         Throws an exception if staging is locked.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_StageLock(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Control_set_StageLock(bool value)
+
+      Whether staging is locked on the vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is equivalent to locking the staging using Alt+L
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroup(krpc_connection_t connection, bool * result, uint32_t group)
+
+      Returns ``true`` if the given action group is enabled.
+
+      :Parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_SetActionGroup(krpc_connection_t connection, uint32_t group, bool state)
+
+      Sets the state of the given action group.
+
+      :Parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ToggleActionGroup(krpc_connection_t connection, uint32_t group)
+
+      Toggles the state of the given action group.
+
+      :Parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GetActionGroupActions(krpc_connection_t connection, krpc_list_object_t * result, uint32_t group)
+
+      Returns a list of all the part actions that are assigned to the given action group.
+      Each entry identifies the part, the part module, and the action's name and identifier.
+      Returns an empty list if no actions are assigned to the group.
+
+      :Parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For stock action groups, the assignments are read from each part action directly.
+         When the Extended Action Groups mod is installed, the assignments are queried from
+         the mod instead, so that actions assigned to its additional groups are included.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_AddNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * result, double ut, float prograde, float normal, float radial)
+
+      Creates a maneuver node at the given universal time, and returns a
+      :type:`krpc_SpaceCenter_Node_t` object that can be used to modify it.
+      Optionally sets the magnitude of the delta-v for the maneuver node
+      in the prograde, normal and radial directions.
+
+      :Parameters:
+
+       * **ut** -- Universal time of the maneuver node.
+       * **prograde** -- Delta-v in the prograde direction.
+       * **normal** -- Delta-v in the normal direction.
+       * **radial** -- Delta-v in the radial direction.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Nodes(krpc_connection_t connection, krpc_list_object_t * result)
+
+      Returns a list of all existing maneuver nodes, ordered by time from first to last.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_RemoveNodes(krpc_connection_t connection)
+
+      Remove all maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_SpaceCenter_ActionGroupAction_t
+
+   An action, belonging to a part module, that is assigned to an action group.
+   Obtained by calling :func:`krpc_SpaceCenter_Control_GetActionGroupActions`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part that the action acts on.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Module(krpc_connection_t connection, krpc_SpaceCenter_Module_t * result)
+
+      The part module that the action belongs to. Returns ``nullptr`` for a
+      part-level action that is not associated with a module. This only occurs when
+      the Extended Action Groups mod is installed, as it can assign actions defined
+      directly on a part, rather than on one of its modules, to an action group.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Name(krpc_connection_t connection, char * * result)
+
+      The human-readable name of the action, as shown in the action group editor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ActionGroupAction_Id(krpc_connection_t connection, char * * result)
+
+      The non-localized identifier for the action.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ControlState_t
+
+   The control state of a vessel.
+   See :func:`krpc_SpaceCenter_Control_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLSTATE_FULL
+
+      Full controllable.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLSTATE_PARTIAL
+
+      Partially controllable.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLSTATE_NONE
+
+      Not controllable.
+
+
+
+.. type:: krpc_SpaceCenter_ControlSource_t
+
+   The control source of a vessel.
+   See :func:`krpc_SpaceCenter_Control_Source`.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLSOURCE_KERBAL
+
+      Vessel is controlled by a Kerbal.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLSOURCE_PROBE
+
+      Vessel is controlled by a probe core.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLSOURCE_NONE
+
+      Vessel is not controlled.
+
+
+
+.. type:: krpc_SpaceCenter_SASMode_t
+
+   The behavior of the SAS auto-pilot. See :func:`krpc_SpaceCenter_AutoPilot_SASMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_STABILITYASSIST
+
+      Stability assist mode. Dampen out any rotation.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_MANEUVER
+
+      Point in the burn direction of the next maneuver node.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_PROGRADE
+
+      Point in the prograde direction.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_RETROGRADE
+
+      Point in the retrograde direction.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_NORMAL
+
+      Point in the orbit normal direction.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_ANTINORMAL
+
+      Point in the orbit anti-normal direction.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_RADIAL
+
+      Point in the orbit radial direction.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_ANTIRADIAL
+
+      Point in the orbit anti-radial direction.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_TARGET
+
+      Point in the direction of the current target.
+
+
+   .. macro:: KRPC_SPACECENTER_SASMODE_ANTITARGET
+
+      Point away from the current target.
+
+
+
+.. type:: krpc_SpaceCenter_SpeedMode_t
+
+   The mode of the speed reported in the navball.
+   See :func:`krpc_SpaceCenter_Control_SpeedMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_SPEEDMODE_ORBIT
+
+      Speed is relative to the vessel's orbit.
+
+
+   .. macro:: KRPC_SPACECENTER_SPEEDMODE_SURFACE
+
+      Speed is relative to the surface of the body being orbited.
+
+
+   .. macro:: KRPC_SPACECENTER_SPEEDMODE_TARGET
+
+      Speed is relative to the current target.
+
+
+
+.. type:: krpc_SpaceCenter_ControlInputMode_t
+
+   See :func:`krpc_SpaceCenter_Control_InputMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLINPUTMODE_ADDITIVE
+
+      Control inputs are added to the vessels current control inputs.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTROLINPUTMODE_OVERRIDE
+
+      Control inputs (when they are non-zero) override the vessels current control inputs.

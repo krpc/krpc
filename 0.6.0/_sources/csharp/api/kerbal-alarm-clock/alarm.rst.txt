@@ -1,0 +1,137 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalAlarmClock
+
+Alarm
+=====
+
+
+.. class:: Alarm
+
+   Represents an alarm. Obtained by calling
+   :prop:`KerbalAlarmClock.Alarms <KerbalAlarmClock.KerbalAlarmClock.Alarms>`,
+   :meth:`KerbalAlarmClock.AlarmWithName <KerbalAlarmClock.KerbalAlarmClock.AlarmWithName>` or
+   :meth:`KerbalAlarmClock.AlarmsWithType <KerbalAlarmClock.KerbalAlarmClock.AlarmsWithType>`.
+
+   .. property:: AlarmAction Action { get; set; }
+
+      The action that the alarm triggers.
+
+      :Game Scenes: All
+
+   .. property:: double Margin { get; set; }
+
+      The number of seconds before the event that the alarm will fire.
+
+      :Game Scenes: All
+
+   .. property:: double Time { get; set; }
+
+      The time at which the alarm will fire.
+
+      :Game Scenes: All
+
+   .. property:: AlarmType Type { get; }
+
+      The type of the alarm.
+
+      :Game Scenes: All
+
+   .. property:: string ID { get; }
+
+      The unique identifier for the alarm.
+
+      :Game Scenes: All
+
+   .. property:: string Name { get; set; }
+
+      The short name of the alarm.
+
+      :Game Scenes: All
+
+   .. property:: string Notes { get; set; }
+
+      The long description of the alarm.
+
+      :Game Scenes: All
+
+   .. property:: double Remaining { get; }
+
+      The number of seconds until the alarm will fire.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+      :Game Scenes: All
+
+   .. property:: bool PlaySound { get; set; }
+
+      Whether the alarm plays a sound when it fires.
+
+      :Game Scenes: All
+
+   .. property:: bool Triggered { get; }
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+      :Game Scenes: All
+
+   .. property:: bool Repeat { get; set; }
+
+      Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :prop:`Alarm.SupportsRepeat`).
+
+      :Game Scenes: All
+
+   .. property:: bool SupportsRepeat { get; }
+
+      Whether this alarm's type supports repeating
+      (see :prop:`Alarm.Repeat`).
+
+      :Game Scenes: All
+
+   .. property:: double RepeatPeriod { get; set; }
+
+      The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :prop:`Alarm.SupportsRepeatPeriod`).
+
+      :Game Scenes: All
+
+   .. property:: bool SupportsRepeatPeriod { get; }
+
+      Whether this alarm's type supports a repeat period
+      (see :prop:`Alarm.RepeatPeriod`).
+
+      :Game Scenes: All
+
+   .. property:: SpaceCenter.Vessel Vessel { get; set; }
+
+      The vessel that the alarm is attached to.
+
+      :Game Scenes: All
+
+   .. property:: SpaceCenter.CelestialBody XferOriginBody { get; set; }
+
+      The celestial body the vessel is departing from.
+
+      :Game Scenes: All
+
+   .. property:: SpaceCenter.CelestialBody XferTargetBody { get; set; }
+
+      The celestial body the vessel is arriving at.
+
+      :Game Scenes: All
+
+   .. method:: void Remove()
+
+      Removes the alarm. Any further use of this object throws an exception.
+
+
+      :Game Scenes: All

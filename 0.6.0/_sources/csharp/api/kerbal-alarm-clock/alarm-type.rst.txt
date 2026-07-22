@@ -1,0 +1,112 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalAlarmClock
+
+AlarmType
+=========
+
+
+.. enum:: AlarmType
+
+   The type of an alarm.
+
+
+   .. value:: Raw
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. value:: Maneuver
+
+      An alarm based on the next maneuver node on the current ships flight path.
+      This node will be stored and can be restored when you come back to the ship.
+
+
+   .. value:: ManeuverAuto
+
+      See :enum:`AlarmType.Maneuver`.
+
+
+   .. value:: Apoapsis
+
+      An alarm for furthest part of the orbit from the planet.
+
+
+   .. value:: Periapsis
+
+      An alarm for nearest part of the orbit from the planet.
+
+
+   .. value:: AscendingNode
+
+      Ascending node for the targeted object, or equatorial ascending node.
+
+
+   .. value:: DescendingNode
+
+      Descending node for the targeted object, or equatorial descending node.
+
+
+   .. value:: Closest
+
+      An alarm based on the closest approach of this vessel to the targeted
+      vessel, some number of orbits into the future.
+
+
+   .. value:: Contract
+
+      An alarm based on the expiry or deadline of contracts in career modes.
+
+
+   .. value:: ContractAuto
+
+      See :enum:`AlarmType.Contract`.
+
+
+   .. value:: Crew
+
+      An alarm that is attached to a crew member.
+
+
+   .. value:: Distance
+
+      An alarm that is triggered when a selected target comes within a chosen distance.
+
+
+   .. value:: EarthTime
+
+      An alarm based on the time in the "Earth" alternative Universe (aka the Real World).
+
+
+   .. value:: LaunchRendevous
+
+      An alarm that fires as your landed craft passes under the orbit of your target.
+
+
+   .. value:: SOIChange
+
+      An alarm manually based on when the next SOI point is on the flight path
+      or set to continually monitor the active flight path and add alarms as it
+      detects SOI changes.
+
+
+   .. value:: SOIChangeAuto
+
+      See :enum:`AlarmType.SOIChange`.
+
+
+   .. value:: Transfer
+
+      An alarm based on Interplanetary Transfer Phase Angles, i.e. when should
+      I launch to planet X? Based on Kosmo Not's post and used in Olex's
+      Calculator.
+
+
+   .. value:: TransferModelled
+
+      See :enum:`AlarmType.Transfer`.
+
+
+   .. value:: ScienceLab
+
+      An alarm for when a science lab has finished processing data.

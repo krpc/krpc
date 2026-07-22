@@ -1,0 +1,124 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :func:`add_text`.
+
+   .. function:: std::tuple<double, double, double> position()
+   .. function:: void set_position(std::tuple<double, double, double> value)
+
+      Position of the text.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double, double> rotation()
+   .. function:: void set_rotation(std::tuple<double, double, double, double> value)
+
+      Rotation of the text as a quaternion.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight
+
+   .. function:: std::string content()
+   .. function:: void set_content(std::string value)
+
+      The text string
+
+      :Game Scenes: Flight
+
+   .. function:: std::string font()
+   .. function:: void set_font(std::string value)
+
+      Name of the font
+
+      :Game Scenes: Flight
+
+   .. function:: static std::vector<std::string> available_fonts(Client& connection)
+
+      A list of all available fonts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t size()
+   .. function:: void set_size(int32_t value)
+
+      Font size.
+
+      :Game Scenes: Flight
+
+   .. function:: float character_size()
+   .. function:: void set_character_size(float value)
+
+      Character size.
+
+      :Game Scenes: Flight
+
+   .. function:: UI::FontStyle style()
+   .. function:: void set_style(UI::FontStyle value)
+
+      Font style.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double> value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. function:: std::string material()
+   .. function:: void set_material(std::string value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight
+
+   .. function:: UI::TextAlignment alignment()
+   .. function:: void set_alignment(UI::TextAlignment value)
+
+      Alignment.
+
+      :Game Scenes: Flight
+
+   .. function:: float line_spacing()
+   .. function:: void set_line_spacing(float value)
+
+      Line spacing.
+
+      :Game Scenes: Flight
+
+   .. function:: UI::TextAnchor anchor()
+   .. function:: void set_anchor(UI::TextAnchor value)
+
+      Anchor.
+
+      :Game Scenes: Flight

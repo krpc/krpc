@@ -1,0 +1,60 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+InputField
+==========
+
+
+.. class:: InputField
+
+   An input field. See :meth:`UI.Panel.add_input_field`.
+
+   .. attribute:: rect_transform: UI.RectTransform
+
+      The rect transform for the input field.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: visible: boolean
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: value: string
+
+      The value of the input field.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: text: UI.Text
+
+      The text component of the input field.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.Text`
+
+      .. note::
+
+         Use :attr:`UI.InputField.value` to get and set the value in the field.
+         This object can be used to alter the style of the input field's text.
+
+   .. attribute:: changed: boolean
+
+      Whether the input field has been changed.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         This property is set to true when the user modifies the value of the input field.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. method:: remove()
+
+      Remove the UI object.

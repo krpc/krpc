@@ -1,0 +1,160 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+.. _csharp-api-stage:
+
+Stage
+=====
+
+
+.. class:: Stage
+
+   A single stage of a vessel. Obtain activation (burn) stages from
+   ``Vessel.Stages`` / ``Vessel.StageAt``, and decouple stages from
+   ``Vessel.DecoupleStages`` / ``Vessel.DecoupleStageAt``.
+
+   .. note::
+
+      Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
+      available on activation stages. On decouple stages those members throw
+      InvalidOperationException because stock delta-v data does not
+      apply. Thrust is reported in newtons and masses in kilograms (stock values
+      are converted from kilonewtons and tonnes).
+
+   .. property:: int Number { get; }
+
+      The stage number (activation stage for burn stages, decouple stage otherwise).
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Part> Parts { get; }
+
+      The parts that belong to this stage.
+
+      :Game Scenes: All
+
+   .. method:: Resources Resources(bool cumulative = true)
+
+      Returns a :meth:`Stage.Resources` object for this stage.
+
+      :parameters:
+
+       * **cumulative** -- When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+
+      :Game Scenes: All
+
+
+      .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+                The default ``cumulative=true`` matches the legacy
+                :meth:`Vessel.ResourcesInDecoupleStage` RPC.
+                For decouple stages, grouping is the same as that deprecated method.
+                For activation stages, unstaged resource containers (for example fuel tanks)
+                are grouped with the first higher activation stage before they detach, matching
+                the C# ``Resources()`` documentation.
+
+   .. property:: float DeltaV { get; }
+
+      Delta-v for this stage in the current situation, in m/s.
+
+      :Game Scenes: All
+
+
+      .. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+                Calling this on a decouple stage raises an error.
+
+   .. property:: float VacuumDeltaV { get; }
+
+      Vacuum delta-v for this stage, in m/s.
+
+      :Game Scenes: All
+
+   .. property:: float SeaLevelDeltaV { get; }
+
+      Sea-level delta-v for this stage, in m/s.
+
+      :Game Scenes: All
+
+   .. property:: float Thrust { get; }
+
+      Thrust in the current situation, in newtons.
+
+      :Game Scenes: All
+
+   .. property:: float VacuumThrust { get; }
+
+      Vacuum thrust, in newtons.
+
+      :Game Scenes: All
+
+   .. property:: float SeaLevelThrust { get; }
+
+      Sea-level thrust, in newtons.
+
+      :Game Scenes: All
+
+   .. property:: float TWR { get; }
+
+      Thrust-to-weight ratio in the current situation.
+
+      :Game Scenes: All
+
+   .. property:: float VacuumTWR { get; }
+
+      Vacuum thrust-to-weight ratio.
+
+      :Game Scenes: All
+
+   .. property:: float SeaLevelTWR { get; }
+
+      Sea-level thrust-to-weight ratio.
+
+      :Game Scenes: All
+
+   .. property:: float SpecificImpulse { get; }
+
+      Specific impulse in the current situation, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float VacuumSpecificImpulse { get; }
+
+      Vacuum specific impulse, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float SeaLevelSpecificImpulse { get; }
+
+      Sea-level specific impulse, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float BurnTime { get; }
+
+      Burn time for this stage, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: float StartMass { get; }
+
+      Start mass for this stage, in kg.
+
+      :Game Scenes: All
+
+   .. property:: float EndMass { get; }
+
+      End mass for this stage, in kg.
+
+      :Game Scenes: All
+
+   .. property:: float DryMass { get; }
+
+      Dry mass for this stage, in kg.
+
+      :Game Scenes: All
+
+   .. property:: float FuelMass { get; }
+
+      Fuel mass for this stage, in kg.
+
+      :Game Scenes: All

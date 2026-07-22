@@ -1,0 +1,174 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+.. _lua-api-stage:
+
+Stage
+=====
+
+
+.. class:: Stage
+
+   A single stage of a vessel. Obtain activation (burn) stages from
+   ``Vessel.Stages`` / ``Vessel.StageAt``, and decouple stages from
+   ``Vessel.DecoupleStages`` / ``Vessel.DecoupleStageAt``.
+
+   .. note::
+
+      Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
+      available on activation stages. On decouple stages those members throw
+      InvalidOperationException because stock delta-v data does not
+      apply. Thrust is reported in newtons and masses in kilograms (stock values
+      are converted from kilonewtons and tonnes).
+
+   .. attribute:: number: number
+
+      The stage number (activation stage for burn stages, decouple stage otherwise).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: parts: List
+
+      The parts that belong to this stage.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: resources([cumulative = True])
+
+      Returns a :meth:`SpaceCenter.Stage.resources` object for this stage.
+
+      :param boolean cumulative: When ``False``, only resources assigned to this stage. When ``True``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``True`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+      :rtype: :class:`SpaceCenter.Resources`
+
+      .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+                The default ``cumulative=true`` matches the legacy
+                :meth:`SpaceCenter.Vessel.resources_in_decouple_stage` RPC.
+                For decouple stages, grouping is the same as that deprecated method.
+                For activation stages, unstaged resource containers (for example fuel tanks)
+                are grouped with the first higher activation stage before they detach, matching
+                the C# ``Resources()`` documentation.
+
+   .. attribute:: delta_v: number
+
+      Delta-v for this stage in the current situation, in m/s.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+      .. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+                Calling this on a decouple stage raises an error.
+
+   .. attribute:: vacuum_delta_v: number
+
+      Vacuum delta-v for this stage, in m/s.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sea_level_delta_v: number
+
+      Sea-level delta-v for this stage, in m/s.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: thrust: number
+
+      Thrust in the current situation, in newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vacuum_thrust: number
+
+      Vacuum thrust, in newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sea_level_thrust: number
+
+      Sea-level thrust, in newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: twr: number
+
+      Thrust-to-weight ratio in the current situation.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vacuum_twr: number
+
+      Vacuum thrust-to-weight ratio.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sea_level_twr: number
+
+      Sea-level thrust-to-weight ratio.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: specific_impulse: number
+
+      Specific impulse in the current situation, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vacuum_specific_impulse: number
+
+      Vacuum specific impulse, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sea_level_specific_impulse: number
+
+      Sea-level specific impulse, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: burn_time: number
+
+      Burn time for this stage, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: start_mass: number
+
+      Start mass for this stage, in kg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: end_mass: number
+
+      End mass for this stage, in kg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: dry_mass: number
+
+      Dry mass for this stage, in kg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: fuel_mass: number
+
+      Fuel mass for this stage, in kg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number

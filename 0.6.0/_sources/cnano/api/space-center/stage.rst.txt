@@ -1,0 +1,156 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+.. _cnano-api-stage:
+
+Stage
+=====
+
+
+.. type:: krpc_SpaceCenter_Stage_t
+
+   A single stage of a vessel. Obtain activation (burn) stages from
+   ``Vessel.Stages`` / ``Vessel.StageAt``, and decouple stages from
+   ``Vessel.DecoupleStages`` / ``Vessel.DecoupleStageAt``.
+
+   .. note::
+
+      Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
+      available on activation stages. On decouple stages those members throw
+      InvalidOperationException because stock delta-v data does not
+      apply. Thrust is reported in newtons and masses in kilograms (stock values
+      are converted from kilonewtons and tonnes).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_Number(krpc_connection_t connection, int32_t * result)
+
+      The stage number (activation stage for burn stages, decouple stage otherwise).
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_Parts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The parts that belong to this stage.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result, bool cumulative)
+
+      Returns a :func:`krpc_SpaceCenter_Stage_Resources` object for this stage.
+
+      :Parameters:
+
+       * **cumulative** -- When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+
+   
+
+      .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+                The default ``cumulative=true`` matches the legacy
+                :func:`krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage` RPC.
+                For decouple stages, grouping is the same as that deprecated method.
+                For activation stages, unstaged resource containers (for example fuel tanks)
+                are grouped with the first higher activation stage before they detach, matching
+                the C# ``Resources()`` documentation.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_DeltaV(krpc_connection_t connection, float * result)
+
+      Delta-v for this stage in the current situation, in m/s.
+
+   
+
+      .. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+                Calling this on a decouple stage raises an error.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_VacuumDeltaV(krpc_connection_t connection, float * result)
+
+      Vacuum delta-v for this stage, in m/s.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_SeaLevelDeltaV(krpc_connection_t connection, float * result)
+
+      Sea-level delta-v for this stage, in m/s.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_Thrust(krpc_connection_t connection, float * result)
+
+      Thrust in the current situation, in newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_VacuumThrust(krpc_connection_t connection, float * result)
+
+      Vacuum thrust, in newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_SeaLevelThrust(krpc_connection_t connection, float * result)
+
+      Sea-level thrust, in newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_TWR(krpc_connection_t connection, float * result)
+
+      Thrust-to-weight ratio in the current situation.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_VacuumTWR(krpc_connection_t connection, float * result)
+
+      Vacuum thrust-to-weight ratio.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_SeaLevelTWR(krpc_connection_t connection, float * result)
+
+      Sea-level thrust-to-weight ratio.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_SpecificImpulse(krpc_connection_t connection, float * result)
+
+      Specific impulse in the current situation, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_VacuumSpecificImpulse(krpc_connection_t connection, float * result)
+
+      Vacuum specific impulse, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_SeaLevelSpecificImpulse(krpc_connection_t connection, float * result)
+
+      Sea-level specific impulse, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_BurnTime(krpc_connection_t connection, float * result)
+
+      Burn time for this stage, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_StartMass(krpc_connection_t connection, float * result)
+
+      Start mass for this stage, in kg.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_EndMass(krpc_connection_t connection, float * result)
+
+      End mass for this stage, in kg.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_DryMass(krpc_connection_t connection, float * result)
+
+      Dry mass for this stage, in kg.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Stage_FuelMass(krpc_connection_t connection, float * result)
+
+      Fuel mass for this stage, in kg.

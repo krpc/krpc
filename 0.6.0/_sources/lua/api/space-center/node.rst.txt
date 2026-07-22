@@ -1,0 +1,155 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Node
+====
+
+
+.. class:: Node
+
+   Represents a maneuver node. Can be created using :meth:`SpaceCenter.Control.add_node`.
+
+   .. attribute:: prograde: number
+
+      The magnitude of the maneuver nodes delta-v in the prograde direction,
+      in meters per second.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: normal: number
+
+      The magnitude of the maneuver nodes delta-v in the normal direction,
+      in meters per second.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: radial: number
+
+      The magnitude of the maneuver nodes delta-v in the radial direction,
+      in meters per second.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: delta_v: number
+
+      The delta-v of the maneuver node, in meters per second.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         Does not change when executing the maneuver node. See :attr:`SpaceCenter.Node.remaining_delta_v`.
+
+   .. attribute:: remaining_delta_v: number
+
+      Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the
+      node is executed. This is equivalent to the delta-v reported in-game.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: burn_vector([reference_frame = None])
+
+      Returns the burn vector for the maneuver node.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`SpaceCenter.Vessel.orbital_reference_frame`.
+      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
+      :rtype: Tuple
+
+      .. note::
+
+         Does not change when executing the maneuver node. See :meth:`SpaceCenter.Node.remaining_burn_vector`.
+
+   .. method:: remaining_burn_vector([reference_frame = None])
+
+      Returns the remaining burn vector for the maneuver node.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned vector is in. Defaults to :attr:`SpaceCenter.Vessel.orbital_reference_frame`.
+      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
+      :rtype: Tuple
+
+      .. note::
+
+         Changes as the maneuver node is executed. See :meth:`SpaceCenter.Node.burn_vector`.
+
+   .. attribute:: ut: number
+
+      The universal time at which the maneuver will occur, in seconds.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: time_to: number
+
+      The time until the maneuver node will be encountered, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: orbit: SpaceCenter.Orbit
+
+      The orbit that results from executing the maneuver node.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Orbit`
+
+   .. method:: remove()
+
+      Removes the maneuver node.
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      The reference frame that is fixed relative to the maneuver node's burn.
+
+      * The origin is at the position of the maneuver node.
+      * The y-axis points in the direction of the burn.
+      * The x-axis and z-axis point in arbitrary but fixed directions.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: orbital_reference_frame: SpaceCenter.ReferenceFrame
+
+      The reference frame that is fixed relative to the maneuver node, and
+      orientated with the orbital prograde/normal/radial directions of the
+      original orbit at the maneuver node's position.
+
+      * The origin is at the position of the maneuver node.
+      * The x-axis points in the orbital anti-radial direction of the original
+        orbit, at the position of the maneuver node.
+      * The y-axis points in the orbital prograde direction of the original
+        orbit, at the position of the maneuver node.
+      * The z-axis points in the orbital normal direction of the original orbit,
+        at the position of the maneuver node.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. method:: position(reference_frame)
+
+      The position vector of the maneuver node in the given reference frame.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: Tuple
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of the maneuver nodes burn.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :rtype: Tuple
+
+   .. method:: direction(reference_frame)
+
+      The direction of the maneuver nodes burn.
+
+      :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: Tuple

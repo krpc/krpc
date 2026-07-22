@@ -1,0 +1,158 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.InfernalRobotics
+
+ServoGroup
+==========
+
+
+.. type:: public class ServoGroup
+
+   A group of servos, obtained by calling :meth:`servoGroups(SpaceCenter.Vessel)`
+   or :meth:`servoGroupWithName(SpaceCenter.Vessel, String)`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. method:: String getName()
+
+   .. method:: void setName(String value)
+
+      The name of the group.
+
+      :Game Scenes: Flight
+
+   .. method:: String getForwardKey()
+
+   .. method:: void setForwardKey(String value)
+
+      The key assigned to be the "forward" key for the group.
+
+      :Game Scenes: Flight
+
+   .. method:: String getReverseKey()
+
+   .. method:: void setReverseKey(String value)
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Game Scenes: Flight
+
+   .. method:: float getSpeed()
+
+   .. method:: void setSpeed(float value)
+
+      The speed multiplier for the group.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getExpanded()
+
+   .. method:: void setExpanded(boolean value)
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Game Scenes: Flight
+
+   .. method:: SpaceCenter.Vessel getVessel()
+
+
+      The vessel the group belongs to, or ``null`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. method:: int getMovingDirection()
+
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getAdvancedMode()
+
+   .. method:: void setAdvancedMode(boolean value)
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. method:: float getElectricChargeRequired()
+
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getBuildAid()
+
+   .. method:: void setBuildAid(boolean value)
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getIKActive()
+
+   .. method:: void setIKActive(boolean value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<Servo> getServos()
+
+
+      The servos that are in the group.
+
+      :Game Scenes: Flight
+
+   .. method:: Servo servoWithName(String name)
+
+      Returns the servo with the given *name* from this group,
+      or ``null`` if none exists.
+
+      :param String name: Name of servo to find.
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<SpaceCenter.Part> getParts()
+
+
+      The parts containing the servos in the group.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveRight()
+
+      Moves all of the servos in the group to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveLeft()
+
+      Moves all of the servos in the group to the left.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveCenter()
+
+      Moves all of the servos in the group to the center.
+
+      :Game Scenes: Flight
+
+   .. method:: void moveNextPreset()
+
+      Moves all of the servos in the group to the next preset.
+
+      :Game Scenes: Flight
+
+   .. method:: void movePrevPreset()
+
+      Moves all of the servos in the group to the previous preset.
+
+      :Game Scenes: Flight
+
+   .. method:: void stop()
+
+      Stops the servos in the group.
+
+      :Game Scenes: Flight

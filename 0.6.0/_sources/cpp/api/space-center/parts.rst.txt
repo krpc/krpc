@@ -1,0 +1,5171 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+
+
+.. _cpp-api-parts:
+
+Parts
+=====
+
+The following classes allow interaction with a vessels individual parts.
+
+.. contents::
+   :local:
+
+Parts
+-----
+
+
+.. class:: Parts
+
+   Instances of this class are used to interact with the parts of a vessel.
+   An instance can be obtained by calling :func:`Vessel::parts`.
+
+   .. function:: std::vector<Part> all()
+
+      A list of all of the vessels parts.
+
+   
+
+   .. function:: Part root()
+
+      The vessels root part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
+
+   .. function:: Part controlling()
+   .. function:: void set_controlling(Part value)
+
+      The part from which the vessel is controlled.
+
+   
+
+   .. function:: std::vector<Part> with_name(std::string name)
+
+      A list of parts whose :func:`Part::name` is *name*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<Part> with_title(std::string title)
+
+      A list of all parts whose :func:`Part::title` is *title*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<Part> with_tag(std::string tag)
+
+      A list of all parts whose :func:`Part::tag` is *tag*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<Part> with_module(std::string module_name)
+
+      A list of all parts that contain a :class:`Module` whose
+      :func:`Module::name` is *module_name*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<Part> in_stage(int32_t stage)
+
+      .. warning:: Deprecated. Use :func:`Stage::parts` from the object returned by :func:`Vessel::stage_at` instead.
+
+      A list of all parts that are activated in the given *stage*.
+
+      :Parameters:
+
+
+
+   
+
+      .. note:: Deprecated. Use :func:`Vessel::stage_at` and
+                :func:`Stage::parts` instead. See the discussion on
+                :rst:ref:`cpp-api-parts-staging`.
+
+   .. function:: std::vector<Part> in_decouple_stage(int32_t stage)
+
+      .. warning:: Deprecated. Use :func:`Stage::parts` from the object returned by :func:`Vessel::decouple_stage_at` instead.
+
+      A list of all parts that are decoupled in the given *stage*.
+
+      :Parameters:
+
+
+
+   
+
+      .. note:: Deprecated. Use :func:`Vessel::decouple_stage_at` and
+                :func:`Stage::parts` instead. See the discussion on
+                :rst:ref:`cpp-api-parts-staging`.
+
+   .. function:: std::vector<Module> modules_with_name(std::string module_name)
+
+      A list of modules (combined across all parts in the vessel) whose
+      :func:`Module::name` is *module_name*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<Antenna> antennas()
+
+      A list of all antennas in the vessel.
+
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return an empty list.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. function:: std::vector<CargoBay> cargo_bays()
+
+      A list of all cargo bays in the vessel.
+
+   
+
+   .. function:: std::vector<ControlSurface> control_surfaces()
+
+      A list of all control surfaces in the vessel.
+
+   
+
+   .. function:: std::vector<Decoupler> decouplers()
+
+      A list of all decouplers in the vessel.
+
+   
+
+   .. function:: std::vector<DockingPort> docking_ports()
+
+      A list of all docking ports in the vessel.
+
+   
+
+   .. function:: std::vector<Engine> engines()
+
+      A list of all engines in the vessel.
+
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters, jet engines and
+         RCS thrusters.
+
+   .. function:: std::vector<Experiment> experiments()
+
+      A list of all science experiments in the vessel.
+
+   
+
+   .. function:: std::vector<Fairing> fairings()
+
+      A list of all fairings in the vessel.
+
+   
+
+   .. function:: std::vector<Intake> intakes()
+
+      A list of all intakes in the vessel.
+
+   
+
+   .. function:: std::vector<Leg> legs()
+
+      A list of all landing legs attached to the vessel.
+
+   
+
+   .. function:: std::vector<LaunchClamp> launch_clamps()
+
+      A list of all launch clamps attached to the vessel.
+
+   
+
+   .. function:: std::vector<Light> lights()
+
+      A list of all lights in the vessel.
+
+   
+
+   .. function:: std::vector<Parachute> parachutes()
+
+      A list of all parachutes in the vessel.
+
+   
+
+   .. function:: std::vector<Radiator> radiators()
+
+      A list of all radiators in the vessel.
+
+   
+
+   .. function:: std::vector<ResourceDrain> resource_drains()
+
+      A list of all resource drains in the vessel.
+
+   
+
+   .. function:: std::vector<RCS> rcs()
+
+      A list of all RCS blocks/thrusters in the vessel.
+
+   
+
+   .. function:: std::vector<ReactionWheel> reaction_wheels()
+
+      A list of all reaction wheels in the vessel.
+
+   
+
+   .. function:: std::vector<ResourceConverter> resource_converters()
+
+      A list of all resource converters in the vessel.
+
+   
+
+   .. function:: std::vector<ResourceHarvester> resource_harvesters()
+
+      A list of all resource harvesters in the vessel.
+
+   
+
+   .. function:: std::vector<RoboticController> robotic_controllers()
+
+      A list of all robotic controllers in the vessel.
+
+   
+
+   .. function:: std::vector<RoboticHinge> robotic_hinges()
+
+      A list of all robotic hinges in the vessel.
+
+   
+
+   .. function:: std::vector<RoboticPiston> robotic_pistons()
+
+      A list of all robotic pistons in the vessel.
+
+   
+
+   .. function:: std::vector<RoboticRotation> robotic_rotations()
+
+      A list of all robotic rotations in the vessel.
+
+   
+
+   .. function:: std::vector<RoboticRotor> robotic_rotors()
+
+      A list of all robotic rotors in the vessel.
+
+   
+
+   .. function:: std::vector<Sensor> sensors()
+
+      A list of all sensors in the vessel.
+
+   
+
+   .. function:: std::vector<SolarPanel> solar_panels()
+
+      A list of all solar panels in the vessel.
+
+   
+
+   .. function:: std::vector<Wheel> wheels()
+
+      A list of all wheels in the vessel.
+
+   
+
+
+
+Part
+----
+
+
+.. class:: Part
+
+   Represents an individual part. Vessels are made up of multiple parts.
+   Instances of this class can be obtained by several methods in :class:`Parts`.
+
+   .. function:: std::string name()
+
+      Internal name of the part, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      For example "Mark1-2Pod".
+
+   
+
+   .. function:: std::string title()
+
+      Title of the part, as shown when the part is right clicked in-game. For example "Mk1-2 Command Pod".
+
+   
+
+   .. function:: ConfigNode config()
+
+      The static configuration of the part, as found in its
+      `part cfg file <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      This provides access to data that is not exposed elsewhere, such as the
+      configuration of the part's modules. Returns ``NULL`` if the part has no
+      associated configuration node.
+
+   
+
+   .. function:: std::string tag()
+   .. function:: void set_tag(std::string value)
+
+      The name tag for the part. Can be set to a custom string using the
+      in-game user interface.
+
+   
+
+      .. note::
+
+         This string is shared with
+         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
+         if it is installed.
+
+   .. function:: std::string flag_url()
+   .. function:: void set_flag_url(std::string value)
+
+      The asset URL for the part's flag.
+
+   
+
+   .. function:: bool highlighted()
+   .. function:: void set_highlighted(bool value)
+
+      Whether the part is highlighted.
+
+   
+
+      .. note::
+
+         The highlighting is removed when the client that enabled it disconnects.
+
+   .. function:: std::tuple<double, double, double> highlight_color()
+   .. function:: void set_highlight_color(std::tuple<double, double, double> value)
+
+      The color used to highlight the part, as an RGB triple.
+
+   
+
+   .. function:: double cost()
+
+      The cost of the part, in units of funds.
+
+   
+
+   .. function:: Vessel vessel()
+
+      The vessel that contains this part.
+
+   
+
+   .. function:: Part parent()
+
+      The parts parent. Returns ``NULL`` if the part does not have a parent.
+      This, in combination with :func:`Part::children`, can be used to traverse the vessels
+      parts tree.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
+
+   .. function:: std::vector<Part> children()
+
+      The parts children. Returns an empty list if the part has no children.
+      This, in combination with :func:`Part::parent`, can be used to traverse the vessels
+      parts tree.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-trees-of-parts`.
+
+   .. function:: bool axially_attached()
+
+      Whether the part is axially attached to its parent, i.e. on the top
+      or bottom of its parent. If the part has no parent, returns ``false``.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-attachment-modes`.
+
+   .. function:: bool radially_attached()
+
+      Whether the part is radially attached to its parent, i.e. on the side of its parent.
+      If the part has no parent, returns ``false``.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-attachment-modes`.
+
+   .. function:: int32_t stage()
+
+      The stage in which this part will be activated. Returns -1 if the part is not
+      activated by staging.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-staging`.
+
+   .. function:: int32_t decouple_stage()
+
+      The stage in which this part will be decoupled. Returns -1 if the part is never
+      decoupled from the vessel.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-staging`.
+
+   .. function:: bool massless()
+
+      Whether the part is
+      `massless <https://wiki.kerbalspaceprogram.com/wiki/Massless_part>`_.
+
+   
+
+   .. function:: double mass()
+
+      The current mass of the part, including resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+   
+
+   .. function:: double dry_mass()
+
+      The mass of the part, not including any resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+   
+
+   .. function:: bool shielded()
+
+      Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+
+   
+
+   .. function:: float dynamic_pressure()
+
+      The dynamic pressure acting on the part, in Pascals.
+
+   
+
+   .. function:: double impact_tolerance()
+
+      The impact tolerance of the part, in meters per second.
+
+   
+
+   .. function:: double temperature()
+
+      Temperature of the part, in Kelvin.
+
+   
+
+   .. function:: double skin_temperature()
+
+      Temperature of the skin of the part, in Kelvin.
+
+   
+
+   .. function:: double max_temperature()
+
+      Maximum temperature that the part can survive, in Kelvin.
+
+   
+
+   .. function:: double max_skin_temperature()
+
+      Maximum temperature that the skin of the part can survive, in Kelvin.
+
+   
+
+   .. function:: float thermal_mass()
+
+      A measure of how much energy it takes to increase the internal temperature of the part,
+      in Joules per Kelvin.
+
+   
+
+   .. function:: float thermal_skin_mass()
+
+      A measure of how much energy it takes to increase the skin temperature of the part,
+      in Joules per Kelvin.
+
+   
+
+   .. function:: float thermal_resource_mass()
+
+      A measure of how much energy it takes to increase the temperature of the resources
+      contained in the part, in Joules per Kelvin.
+
+   
+
+   .. function:: float thermal_conduction_flux()
+
+      The rate at which heat energy is conducting into or out of the part via contact with
+      other parts. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. function:: float thermal_convection_flux()
+
+      The rate at which heat energy is convecting into or out of the part from the
+      surrounding atmosphere. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. function:: float thermal_radiation_flux()
+
+      The rate at which heat energy is radiating into or out of the part from the surrounding
+      environment. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. function:: float thermal_internal_flux()
+
+      The rate at which heat energy is begin generated by the part.
+      For example, some engines generate heat by combusting fuel.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is losing
+      heat energy.
+
+   
+
+   .. function:: float thermal_skin_to_internal_flux()
+
+      The rate at which heat energy is transferring between the part's skin and its internals.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part's internals are gaining heat energy,
+      and negative means its skin is gaining heat energy.
+
+   
+
+   .. function:: int32_t crew_capacity()
+
+      The number of crew members that can occupy the part.
+
+   
+
+   .. function:: std::vector<CrewMember> crew()
+
+      The crew members occupying the part.
+
+   
+
+   .. function:: uint32_t available_seats()
+
+      How many open seats the part has.
+
+   
+
+   .. function:: Resources resources()
+
+      A :func:`Part::resources` object for the part.
+
+   
+
+   .. function:: bool crossfeed()
+
+      Whether this part is crossfeed capable.
+
+   
+
+   .. function:: bool is_fuel_line()
+
+      Whether this part is a fuel line.
+
+   
+
+   .. function:: std::vector<Part> fuel_lines_from()
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is into this part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-fuel-lines`.
+
+   .. function:: std::vector<Part> fuel_lines_to()
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is out of this part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cpp-api-parts-fuel-lines`.
+
+   .. function:: std::vector<Module> modules()
+
+      The modules for this part.
+
+   
+
+   .. function:: Antenna antenna()
+
+      An :func:`Part::antenna` if the part is an antenna, otherwise ``NULL``.
+
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return ``NULL``.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. function:: CargoBay cargo_bay()
+
+      A :func:`Part::cargo_bay` if the part is a cargo bay, otherwise ``NULL``.
+
+   
+
+   .. function:: ControlSurface control_surface()
+
+      A :func:`Part::control_surface` if the part is an aerodynamic control surface,
+      otherwise ``NULL``.
+
+   
+
+   .. function:: Decoupler decoupler()
+
+      A :func:`Part::decoupler` if the part is a decoupler, otherwise ``NULL``.
+
+   
+
+   .. function:: DockingPort docking_port()
+
+      A :func:`Part::docking_port` if the part is a docking port, otherwise ``NULL``.
+
+   
+
+   .. function:: Engine engine()
+
+      An :func:`Part::engine` if the part is an engine, otherwise ``NULL``.
+
+   
+
+   .. function:: Experiment experiment()
+
+      An :func:`Part::experiment` if the part contains a
+      single science experiment, otherwise ``NULL``.
+
+   
+
+      .. note::
+
+         Throws an exception if the part contains more than one experiment.
+         In that case, use :func:`Part::experiments` to get the list of experiments in the part.
+
+   .. function:: std::vector<Experiment> experiments()
+
+      A list of :func:`Part::experiment` objects that the part contains.
+
+   
+
+   .. function:: Fairing fairing()
+
+      A :func:`Part::fairing` if the part is a fairing, otherwise ``NULL``.
+
+   
+
+   .. function:: Intake intake()
+
+      An :func:`Part::intake` if the part is an intake, otherwise ``NULL``.
+
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
+         For RCS thrusters see :func:`Part::rcs`.
+
+   .. function:: Leg leg()
+
+      A :func:`Part::leg` if the part is a landing leg, otherwise ``NULL``.
+
+   
+
+   .. function:: LaunchClamp launch_clamp()
+
+      A :func:`Part::launch_clamp` if the part is a launch clamp, otherwise ``NULL``.
+
+   
+
+   .. function:: Light light()
+
+      A :func:`Part::light` if the part is a light, otherwise ``NULL``.
+
+   
+
+   .. function:: Parachute parachute()
+
+      A :func:`Part::parachute` if the part is a parachute, otherwise ``NULL``.
+
+   
+
+   .. function:: Radiator radiator()
+
+      A :func:`Part::radiator` if the part is a radiator, otherwise ``NULL``.
+
+   
+
+   .. function:: ResourceDrain resource_drain()
+
+      A :func:`Part::resource_drain` if the part is a resource drain, otherwise ``NULL``.
+
+   
+
+   .. function:: RCS rcs()
+
+      A :func:`Part::rcs` if the part is an RCS block/thruster, otherwise ``NULL``.
+
+   
+
+   .. function:: ReactionWheel reaction_wheel()
+
+      A :func:`Part::reaction_wheel` if the part is a reaction wheel, otherwise ``NULL``.
+
+   
+
+   .. function:: ResourceConverter resource_converter()
+
+      A :func:`Part::resource_converter` if the part is a resource converter,
+      otherwise ``NULL``.
+
+   
+
+   .. function:: ResourceHarvester resource_harvester()
+
+      A :func:`Part::resource_harvester` if the part is a resource harvester,
+      otherwise ``NULL``.
+
+   
+
+   .. function:: RoboticController robotic_controller()
+
+      A :func:`Part::robotic_controller` if the part is a robotic controller,
+      otherwise ``NULL``.
+
+   
+
+   .. function:: RoboticHinge robotic_hinge()
+
+      A :func:`Part::robotic_hinge` if the part is a robotic hinge, otherwise ``NULL``.
+
+   
+
+   .. function:: RoboticPiston robotic_piston()
+
+      A :func:`Part::robotic_piston` if the part is a robotic piston, otherwise ``NULL``.
+
+   
+
+   .. function:: RoboticRotation robotic_rotation()
+
+      A :func:`Part::robotic_rotation` if the part is a robotic rotation servo, otherwise ``NULL``.
+
+   
+
+   .. function:: RoboticRotor robotic_rotor()
+
+      A :func:`Part::robotic_rotor` if the part is a robotic rotor, otherwise ``NULL``.
+
+   
+
+   .. function:: Sensor sensor()
+
+      A :func:`Part::sensor` if the part is a sensor, otherwise ``NULL``.
+
+   
+
+   .. function:: SolarPanel solar_panel()
+
+      A :func:`Part::solar_panel` if the part is a solar panel, otherwise ``NULL``.
+
+   
+
+   .. function:: Wheel wheel()
+
+      A :func:`Part::wheel` if the part is a wheel, otherwise ``NULL``.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the part in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+      .. note::
+
+         This is a fixed position in the part, defined by the parts model.
+         It s not necessarily the same as the parts center of mass.
+         Use :func:`Part::center_of_mass` to get the parts center of mass.
+
+   .. function:: std::tuple<double, double, double> center_of_mass(ReferenceFrame reference_frame)
+
+      The position of the parts center of mass in the given reference frame.
+      If the part is physicsless, this is equivalent to :func:`Part::position`.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> bounding_box(ReferenceFrame reference_frame)
+
+      The axis-aligned bounding box of the part in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vectors are in.
+
+      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+   
+
+      .. note::
+
+         This is computed from the collision mesh of the part.
+         If the part is not collidable, the box has zero volume and is centered on
+         the :func:`Part::position` of the part.
+
+   .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
+
+      The direction the part points in, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame)
+
+      The linear velocity of the part in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned velocity vector is in.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
+
+      The rotation of the part, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+   
+
+   .. function:: std::tuple<double, double, double> lift(ReferenceFrame reference_frame)
+
+      The aerodynamic `lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the part.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+      .. note::
+
+         Not available when the Ferram Aerospace Research mod is installed.
+
+   .. function:: std::tuple<double, double, double> drag(ReferenceFrame reference_frame)
+
+      The aerodynamic `drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the part.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned vector is in.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+      .. note::
+
+         Not available when the Ferram Aerospace Research mod is installed.
+
+   .. function:: std::tuple<double, double, double> moment_of_inertia()
+
+      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      in the parts reference frame (:func:`Part::reference_frame`).
+
+   
+
+   .. function:: std::vector<double> inertia_tensor()
+
+      The inertia tensor of the part in the parts reference frame
+      (:func:`Part::reference_frame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+   
+
+   .. function:: ReferenceFrame reference_frame()
+
+      The reference frame that is fixed relative to this part, and centered on a fixed
+      position within the part, defined by the parts model.
+
+      * The origin is at the position of the part, as returned by
+        :func:`Part::position`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :func:`DockingPort::reference_frame`.
+
+      .. figure:: /images/reference-frames/part.png
+         :align: center
+
+         Mk1 Command Pod reference frame origin and axes
+
+   .. function:: ReferenceFrame center_of_mass_reference_frame()
+
+      The reference frame that is fixed relative to this part, and centered on its
+      center of mass.
+
+      * The origin is at the center of mass of the part, as returned by
+        :func:`Part::center_of_mass`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :func:`DockingPort::reference_frame`.
+
+   .. function:: Force add_force(std::tuple<double, double, double> force, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      Exert a constant force on the part, acting at the given position.
+
+      :Parameters:
+
+       * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+       * **position** -- The position at which the force acts, as a vector.
+       * **reference_frame** -- The reference frame that the force and position are in.
+
+      :returns: An object that can be used to remove or modify the force.
+   
+
+      .. note::
+
+         The force is removed when the client that added it disconnects.
+
+   .. function:: void instantaneous_force(std::tuple<double, double, double> force, std::tuple<double, double, double> position, ReferenceFrame reference_frame)
+
+      Exert an instantaneous force on the part, acting at the given position.
+
+      :Parameters:
+
+       * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+       * **position** -- The position at which the force acts, as a vector.
+       * **reference_frame** -- The reference frame that the force and position are in.
+
+   
+
+      .. note::
+
+         The force is applied instantaneously in a single physics update.
+
+   .. function:: void set_glow(bool value)
+
+      Whether the part is glowing.
+
+   
+
+   .. function:: AutoStrutMode auto_strut_mode()
+
+      Auto-strut mode.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: AutoStrutMode
+
+   The state of an auto-strut. :func:`Part::auto_strut_mode`
+
+
+   .. enumerator:: off
+
+      Off
+
+
+   .. enumerator:: root
+
+      Root
+
+
+   .. enumerator:: heaviest
+
+      Heaviest
+
+
+   .. enumerator:: grandparent
+
+      Grandparent
+
+
+   .. enumerator:: force_root
+
+      ForceRoot
+
+
+   .. enumerator:: force_heaviest
+
+      ForceHeaviest
+
+
+   .. enumerator:: force_grandparent
+
+      ForceGrandparent
+
+
+
+.. class:: Force
+
+   Obtained by calling :func:`Part::add_force`.
+
+   .. function:: Part part()
+
+      The part that this force is applied to.
+
+   
+
+   .. function:: std::tuple<double, double, double> force_vector()
+   .. function:: void set_force_vector(std::tuple<double, double, double> value)
+
+      The force vector, in Newtons.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+   .. function:: std::tuple<double, double, double> position()
+   .. function:: void set_position(std::tuple<double, double, double> value)
+
+      The position at which the force acts, in reference frame :func:`Force::reference_frame`.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame of the force vector and position.
+
+   
+
+   .. function:: void remove()
+
+      Remove the force.
+
+
+   
+
+
+
+Module
+------
+
+
+.. class:: Module
+
+   This can be used to interact with a specific part module. This includes part modules in
+   stock KSP, and those added by mods.
+
+   In KSP, each part has zero or more
+   `PartModules <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_
+   associated with it. Each one contains some of the functionality of the part.
+   For example, an engine has a "ModuleEngines" part module that contains all the
+   functionality of an engine.
+
+   .. function:: std::string name()
+
+      Name of the PartModule. For example, "ModuleEngines".
+
+   
+
+   .. function:: Part part()
+
+      The part that contains this module.
+
+   
+
+   .. function:: ConfigNode config()
+
+      The static configuration of the module, as found in the part's
+      `cfg file <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_.
+      This provides access to data that is not exposed as a field, such as the
+      resources produced by a generator. Returns ``NULL`` if the module's
+      configuration node cannot be found.
+
+   
+
+   .. function:: std::vector<PartField> field_list()
+
+      A list of all the fields of the module, including those not visible in the right-click
+      menu of the part. Filter by :func:`PartField::visible` to get just the visible ones.
+
+   
+
+   .. function:: std::vector<PartEvent> event_list()
+
+      A list of all the events of the module, including those not currently visible or active.
+      Events are the clickable buttons visible in the right-click menu of the part. Filter by
+      :func:`PartEvent::visible` and :func:`PartEvent::active` to get just the ones
+      shown in the menu.
+
+   
+
+   .. function:: std::vector<PartAction> action_list()
+
+      A list of all the actions of the module. These are the parts actions that can be assigned
+      to action groups in the in-game editor.
+
+   
+
+   .. function:: std::map<std::string, std::string> fields()
+
+      .. warning:: Deprecated. Use :func:`Module::field_list` instead, filtering by :func:`PartField::visible`.
+
+      The modules field names and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+   
+
+      .. note::
+
+         Throws an exception if there is more than one field with the same name.
+         In that case, use :func:`Module::fields_by_id` to get the fields by identifier.
+
+   .. function:: std::map<std::string, std::string> fields_by_id()
+
+      .. warning:: Deprecated. Use :func:`Module::field_list` instead, filtering by :func:`PartField::visible`.
+
+      The modules field identifiers and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+   
+
+   .. function:: bool has_field(std::string name)
+
+      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::gui_name` instead.
+
+      Returns ``true`` if the module has a field with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+
+   
+
+   .. function:: bool has_field_with_id(std::string id)
+
+      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::name` instead.
+
+      Returns ``true`` if the module has a field with the given identifier.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+
+   
+
+   .. function:: std::string get_field(std::string name)
+
+      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::gui_name` and read :func:`PartField::value` instead.
+
+      Returns the value of a field with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+
+   
+
+   .. function:: std::string get_field_by_id(std::string id)
+
+      .. warning:: Deprecated. Filter :func:`Module::field_list` by :func:`PartField::name` and read :func:`PartField::value` instead.
+
+      Returns the value of a field with the given identifier.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+
+   
+
+   .. function:: void set_field_int(std::string name, int32_t value)
+
+      .. warning:: Deprecated. Set :func:`PartField::int_value` instead.
+
+      Set the value of a field to the given integer number.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_int_by_id(std::string id, int32_t value)
+
+      .. warning:: Deprecated. Set :func:`PartField::int_value` instead.
+
+      Set the value of a field to the given integer number.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_float(std::string name, float value)
+
+      .. warning:: Deprecated. Set :func:`PartField::float_value` instead.
+
+      Set the value of a field to the given floating point number.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_float_by_id(std::string id, float value)
+
+      .. warning:: Deprecated. Set :func:`PartField::float_value` instead.
+
+      Set the value of a field to the given floating point number.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_string(std::string name, std::string value)
+
+      .. warning:: Deprecated. Set :func:`PartField::value` instead.
+
+      Set the value of a field to the given string.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_string_by_id(std::string id, std::string value)
+
+      .. warning:: Deprecated. Set :func:`PartField::value` instead.
+
+      Set the value of a field to the given string.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_bool(std::string name, bool value)
+
+      .. warning:: Deprecated. Set :func:`PartField::bool_value` instead.
+
+      Set the value of a field to true or false.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void set_field_bool_by_id(std::string id, bool value)
+
+      .. warning:: Deprecated. Set :func:`PartField::bool_value` instead.
+
+      Set the value of a field to true or false.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: void reset_field(std::string name)
+
+      .. warning:: Deprecated. Use :func:`PartField::reset` instead.
+
+      Set the value of a field to its original value.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+
+   
+
+   .. function:: void reset_field_by_id(std::string id)
+
+      .. warning:: Deprecated. Use :func:`PartField::reset` instead.
+
+      Set the value of a field to its original value.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+
+   
+
+      .. note::
+
+         The original value is the value the field had when the part was loaded.
+
+   .. function:: std::vector<std::string> events()
+
+      .. warning:: Deprecated. Use :func:`Module::event_list` instead, filtering by :func:`PartEvent::visible` and :func:`PartEvent::active`.
+
+      A list of the names of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+   
+
+   .. function:: std::vector<std::string> events_by_id()
+
+      .. warning:: Deprecated. Use :func:`Module::event_list` instead, filtering by :func:`PartEvent::visible` and :func:`PartEvent::active`.
+
+      A list of the identifiers of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+   
+
+   .. function:: bool has_event(std::string name)
+
+      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::gui_name` instead.
+
+      ``true`` if the module has an event with the given name.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: bool has_event_with_id(std::string id)
+
+      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::name` instead.
+
+      ``true`` if the module has an event with the given identifier.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: void trigger_event(std::string name)
+
+      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::gui_name` and call :func:`PartEvent::trigger` instead.
+
+      Trigger the named event. Equivalent to clicking the button in the right-click menu
+      of the part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: void trigger_event_by_id(std::string id)
+
+      .. warning:: Deprecated. Filter :func:`Module::event_list` by :func:`PartEvent::name` and call :func:`PartEvent::trigger` instead.
+
+      Trigger the event with the given identifier.
+      Equivalent to clicking the button in the right-click menu of the part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<std::string> actions()
+
+      .. warning:: Deprecated. Use :func:`Module::action_list` instead.
+
+      A list of all the names of the modules actions. These are the parts actions that can
+      be assigned to action groups in the in-game editor.
+
+   
+
+   .. function:: std::vector<std::string> actions_by_id()
+
+      .. warning:: Deprecated. Use :func:`Module::action_list` instead.
+
+      A list of all the identifiers of the modules actions. These are the parts actions
+      that can be assigned to action groups in the in-game editor.
+
+   
+
+   .. function:: bool has_action(std::string name)
+
+      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::gui_name` instead.
+
+      ``true`` if the part has an action with the given name.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: bool has_action_with_id(std::string id)
+
+      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::name` instead.
+
+      ``true`` if the part has an action with the given identifier.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: void set_action(std::string name, bool value = true)
+
+      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::gui_name` and set :func:`PartAction::set_activated` instead.
+
+      Set the value of an action with the given name.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: void set_action_by_id(std::string id, bool value = true)
+
+      .. warning:: Deprecated. Filter :func:`Module::action_list` by :func:`PartAction::name` and set :func:`PartAction::set_activated` instead.
+
+      Set the value of an action with the given identifier.
+
+      :Parameters:
+
+
+
+
+   
+
+
+
+.. class:: PartField
+
+   A field of a part module. Obtained by calling :func:`Module::field_list`.
+
+   .. function:: Module module()
+
+      The part module that contains this field.
+
+   
+
+   .. function:: std::string name()
+
+      The identifier of the field. This is stable and does not change between game versions,
+      unlike :func:`PartField::gui_name`.
+
+   
+
+   .. function:: std::string gui_name()
+
+      The name of the field, as displayed in the right-click menu of the part. This may be
+      empty for fields that are not visible in the menu.
+
+   
+
+   .. function:: bool visible()
+
+      Whether the field is visible in the right-click menu of the part, in the current scene
+      (flight or editor).
+
+   
+
+   .. function:: FieldType type()
+
+      The type of the field.
+
+   
+
+   .. function:: std::string value()
+   .. function:: void set_value(std::string value)
+
+      The value of the field, as a string. This works for fields of any type, and returns the
+      same string that is shown in the right-click menu of the part.
+
+   
+
+      .. note::
+
+         Setting the value using this property is only permitted for string fields. Use the typed
+         properties (:func:`PartField::bool_value`, :func:`PartField::int_value`, :func:`PartField::float_value`,
+         :func:`PartField::double_value`) to set fields of other types.
+
+   .. function:: bool bool_value()
+   .. function:: void set_bool_value(bool value)
+
+      The value of a boolean field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not a boolean field
+         (see :func:`PartField::type`).
+
+   .. function:: int32_t int_value()
+   .. function:: void set_int_value(int32_t value)
+
+      The value of an integer field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not an integer field
+         (see :func:`PartField::type`).
+
+   .. function:: float float_value()
+   .. function:: void set_float_value(float value)
+
+      The value of a single precision floating point field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not a single precision floating point
+         field (see :func:`PartField::type`).
+
+   .. function:: double double_value()
+   .. function:: void set_double_value(double value)
+
+      The value of a double precision floating point field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not a double precision floating point
+         field (see :func:`PartField::type`).
+
+   .. function:: void reset()
+
+      Set the value of the field to its original value.
+
+
+   
+
+      .. note::
+
+         The original value is the value the field had when the part was loaded.
+         Works for any field, including those not visible in the right-click menu.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: FieldType
+
+   The type of a part module field. See :func:`PartField::type`.
+
+
+   .. enumerator:: boolean
+
+      A boolean field. Access using :func:`PartField::bool_value`.
+
+
+   .. enumerator:: integer
+
+      An integer field. Access using :func:`PartField::int_value`.
+
+
+   .. enumerator:: float__
+
+      A single precision floating point field. Access using :func:`PartField::float_value`.
+
+
+   .. enumerator:: double__
+
+      A double precision floating point field. Access using :func:`PartField::double_value`.
+
+
+   .. enumerator:: string
+
+      A string field. Access using :func:`PartField::value`.
+
+
+   .. enumerator:: unknown
+
+      A field whose type is not one of the above. Its value can still be read as a
+      string using :func:`PartField::value`.
+
+
+
+.. class:: PartEvent
+
+   An event of a part module. Events are the clickable buttons visible in the right-click menu
+   of the part. Obtained by calling :func:`Module::event_list`.
+
+   .. function:: Module module()
+
+      The part module that contains this event.
+
+   
+
+   .. function:: std::string name()
+
+      The identifier of the event. This is stable and does not change between game versions,
+      unlike :func:`PartEvent::gui_name`.
+
+   
+
+   .. function:: std::string gui_name()
+
+      The name of the event, as displayed in the right-click menu of the part.
+
+   
+
+   .. function:: bool visible()
+
+      Whether the event is visible in the right-click menu of the part, in the current scene
+      (flight or editor).
+
+   
+
+   .. function:: bool active()
+
+      Whether the event is currently active.
+
+   
+
+   .. function:: void trigger()
+
+      Trigger the event. Equivalent to clicking the button in the right-click menu of the part.
+
+
+   
+
+
+
+.. class:: PartAction
+
+   An action of a part module. These are the part actions that can be assigned to action groups
+   in the in-game editor. Obtained by calling :func:`Module::action_list`.
+
+   .. function:: Module module()
+
+      The part module that contains this action.
+
+   
+
+   .. function:: std::string name()
+
+      The identifier of the action. This is stable and does not change between game versions,
+      unlike :func:`PartAction::gui_name`.
+
+   
+
+   .. function:: std::string gui_name()
+
+      The name of the action, as displayed in the in-game editor.
+
+   
+
+   .. function:: void set_activated(bool value)
+
+      Activate or deactivate the action. Equivalent to triggering the action from an action
+      group. Set to ``true`` to activate the action, or ``false`` to deactivate it.
+
+   
+
+
+
+Config Node
+-----------
+
+
+.. class:: ConfigNode
+
+   Represents a configuration node, as found in a part's configuration file. A node has a
+   name, a set of named values and a set of child nodes. This is used to access the
+   static configuration of a part or part module, for example via
+   :func:`Part::config` and :func:`Module::config`.
+
+   .. function:: std::string name()
+
+      The name of the configuration node. For example "MODULE".
+
+   
+
+   .. function:: std::map<std::string, std::string> values()
+
+      The values stored in the node, as a dictionary mapping names to values.
+
+   
+
+      .. note::
+
+         If a name appears more than once, only the first value is included. Use
+         :func:`ConfigNode::get_values` to get all of the values with a given name.
+
+   .. function:: bool has_value(std::string name)
+
+      Returns ``true`` if the node has a value with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the value.
+
+   
+
+   .. function:: std::string get_value(std::string name)
+
+      Returns the value with the given name. If there is more than one value with
+      the given name, the first is returned. Throws an exception if there is no
+      value with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the value.
+
+   
+
+   .. function:: std::vector<std::string> get_values(std::string name)
+
+      Returns all of the values with the given name, as a list.
+
+      :Parameters:
+
+       * **name** -- Name of the values.
+
+   
+
+   .. function:: std::vector<ConfigNode> nodes()
+
+      The child nodes contained in this node.
+
+   
+
+   .. function:: bool has_node(std::string name)
+
+      Returns ``true`` if the node has a child node with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the child node.
+
+   
+
+   .. function:: ConfigNode get_node(std::string name)
+
+      Returns the child node with the given name. If there is more than one child
+      node with the given name, the first is returned. Throws an exception if there
+      is no child node with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the child node.
+
+   
+
+   .. function:: std::vector<ConfigNode> get_nodes(std::string name)
+
+      Returns all of the child nodes with the given name, as a list.
+
+      :Parameters:
+
+       * **name** -- Name of the child nodes.
+
+   
+
+
+
+Specific Types of Part
+----------------------
+
+The following classes provide functionality for specific types of part.
+
+.. contents::
+   :local:
+
+Antenna
+^^^^^^^
+
+.. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
+          This class is only for stock KSP antennas.
+
+
+.. class:: Antenna
+
+   An antenna. Obtained by calling :func:`Part::antenna`.
+
+   .. function:: Part part()
+
+      The part object for this antenna.
+
+   
+
+   .. function:: DeployableState state()
+
+      The current state of the antenna.
+
+   
+
+   .. function:: bool deployable()
+
+      Whether the antenna is deployable.
+
+   
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      Whether the antenna is deployed.
+
+   
+
+      .. note::
+
+         Fixed antennas are always deployed.
+         Returns an error if you try to deploy a fixed antenna.
+
+   .. function:: bool can_transmit()
+
+      Whether data can be transmitted by this antenna.
+
+   
+
+   .. function:: void transmit()
+
+      Transmit data.
+
+
+   
+
+   .. function:: void cancel()
+
+      Cancel current transmission of data.
+
+
+   
+
+   .. function:: bool allow_partial()
+   .. function:: void set_allow_partial(bool value)
+
+      Whether partial data transmission is permitted.
+
+   
+
+   .. function:: double power()
+
+      The power of the antenna.
+
+   
+
+   .. function:: bool combinable()
+
+      Whether the antenna can be combined with other antennae on the vessel
+      to boost the power.
+
+   
+
+   .. function:: double combinable_exponent()
+
+      Exponent used to calculate the combined power of multiple antennae on a vessel.
+
+   
+
+   .. function:: float packet_interval()
+
+      Interval between sending packets in seconds.
+
+   
+
+   .. function:: float packet_size()
+
+      Amount of data sent per packet in Mits.
+
+   
+
+   .. function:: double packet_resource_cost()
+
+      Units of electric charge consumed per packet sent.
+
+   
+
+
+
+Cargo Bay
+^^^^^^^^^
+
+
+.. class:: CargoBay
+
+   A cargo bay. Obtained by calling :func:`Part::cargo_bay`.
+
+   .. function:: Part part()
+
+      The part object for this cargo bay.
+
+   
+
+   .. function:: DeployableState state()
+
+      The state of the cargo bay.
+
+   
+
+      .. note::
+
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :func:`Part::shielded` for that.
+
+         A cargo bay is never :enumerator:`DeployableState::broken`, as the game
+         does not track damage for them.
+
+   .. function:: bool open()
+   .. function:: void set_open(bool value)
+
+      Whether the cargo bay is open.
+
+   
+
+
+
+Control Surface
+^^^^^^^^^^^^^^^
+
+
+.. class:: ControlSurface
+
+   An aerodynamic control surface. Obtained by calling :func:`Part::control_surface`.
+
+   .. function:: Part part()
+
+      The part object for this control surface.
+
+   
+
+   .. function:: bool pitch_enabled()
+   .. function:: void set_pitch_enabled(bool value)
+
+      Whether the control surface has pitch control enabled.
+
+   
+
+   .. function:: bool yaw_enabled()
+   .. function:: void set_yaw_enabled(bool value)
+
+      Whether the control surface has yaw control enabled.
+
+   
+
+   .. function:: bool roll_enabled()
+   .. function:: void set_roll_enabled(bool value)
+
+      Whether the control surface has roll control enabled.
+
+   
+
+   .. function:: float authority_limiter()
+   .. function:: void set_authority_limiter(float value)
+
+      The authority limiter for the control surface, which controls how far the
+      control surface will move.
+
+   
+
+   .. function:: bool inverted()
+   .. function:: void set_inverted(bool value)
+
+      Whether the control surface movement is inverted.
+
+   
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      Whether the control surface has been fully deployed.
+
+   
+
+   .. function:: bool deflection_override()
+   .. function:: void set_deflection_override(bool value)
+
+      Whether the control surface deflection is being set directly, bypassing the vessel's
+      normal flight control. When enabled, the surface holds the deflection set by
+      :func:`ControlSurface::deflection` instead of responding to pitch, yaw and roll control inputs.
+      The prior state is restored when the override is released, when the
+      controlling client disconnects, or when the vessel changes.
+
+   
+
+   .. function:: float deflection()
+   .. function:: void set_deflection(float value)
+
+      The deflection command applied when :func:`ControlSurface::deflection_override` is enabled, as a
+      value between -1 and 1, mapped onto the surface's deploy angle range.
+
+   
+
+   .. function:: float surface_area()
+
+      Surface area of the control surface in :math:`m^2`.
+
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+
+      The available torque, in Newton meters, that can be produced by this control surface,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
+
+   
+
+
+
+Decoupler
+^^^^^^^^^
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained by calling :func:`Part::decoupler`
+
+   .. function:: Part part()
+
+      The part object for this decoupler.
+
+   
+
+   .. function:: Vessel decouple()
+
+      Fires the decoupler. Returns the new vessel created when the decoupler fires.
+      Throws an exception if the decoupler has already fired.
+
+
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :func:`active_vessel` no longer refer to the active vessel.
+
+   .. function:: bool decoupled()
+
+      Whether the decoupler has fired.
+
+   
+
+   .. function:: bool staged()
+
+      Whether the decoupler is enabled in the staging sequence.
+
+   
+
+   .. function:: float impulse()
+
+      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+
+   
+
+   .. function:: bool is_omni_decoupler()
+
+      Whether the decoupler is an omni-decoupler (e.g. stack separator)
+
+   
+
+   .. function:: Part attached_part()
+
+      The part attached to this decoupler's explosive node.
+
+   
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: DeployableState
+
+   The state of a deployable part.
+   :func:`Antenna::state`, :func:`CargoBay::state`,
+   :func:`Leg::state`, :func:`Radiator::state`,
+   :func:`ResourceHarvester::state`, :func:`SolarPanel::state`,
+   :func:`Wheel::state`
+
+
+   .. enumerator:: deployed
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. enumerator:: retracted
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. enumerator:: deploying
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. enumerator:: retracting
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. enumerator:: broken
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
+
+
+
+Docking Port
+^^^^^^^^^^^^
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained by calling :func:`Part::docking_port`
+
+   .. function:: Part part()
+
+      The part object for this docking port.
+
+   
+
+   .. function:: DockingPortState state()
+
+      The current state of the docking port.
+
+   
+
+   .. function:: Part docked_part()
+
+      The part that this docking port is docked to. Returns ``NULL`` if this
+      docking port is not docked to anything.
+
+   
+
+   .. function:: Vessel undock()
+
+      Undocks the docking port and returns the new :class:`Vessel` that is created.
+      This method can be called for either docking port in a docked pair.
+      Throws an exception if the docking port is not docked to anything.
+
+
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :func:`active_vessel` no longer refer to the active vessel.
+
+   .. function:: float reengage_distance()
+
+      The distance a docking port must move away when it undocks before it
+      becomes ready to dock with another port, in meters.
+
+   
+
+   .. function:: bool has_shield()
+
+      Whether the docking port has a shield.
+
+   
+
+   .. function:: bool shielded()
+   .. function:: void set_shielded(bool value)
+
+      The state of the docking ports shield, if it has one.
+
+      Returns ``true`` if the docking port has a shield, and the shield is
+      closed. Otherwise returns ``false``. When set to ``true``, the shield is
+      closed, and when set to ``false`` the shield is opened. If the docking
+      port does not have a shield, setting this attribute has no effect.
+
+   
+
+   .. function:: bool can_rotate()
+
+      Whether the docking port can be commanded to rotate while docked.
+
+   
+
+   .. function:: float maximum_rotation()
+
+      Maximum rotation angle in degrees.
+
+   
+
+   .. function:: float minimum_rotation()
+
+      Minimum rotation angle in degrees.
+
+   
+
+   .. function:: float rotation_target()
+   .. function:: void set_rotation_target(float value)
+
+      Rotation target angle in degrees.
+
+   
+
+   .. function:: bool rotation_locked()
+   .. function:: void set_rotation_locked(bool value)
+
+      Lock rotation. When locked, allows auto-strut to work across the joint.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame)
+
+      The position of the docking port, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> direction(ReferenceFrame reference_frame)
+
+      The direction that docking port points in, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation(ReferenceFrame reference_frame)
+
+      The rotation of the docking port, in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+   
+
+   .. function:: ReferenceFrame reference_frame()
+
+      The reference frame that is fixed relative to this docking port, and
+      oriented with the port.
+
+      * The origin is at the position of the docking port.
+      * The axes rotate with the docking port.
+      * The x-axis points out to the right side of the docking port.
+      * The y-axis points in the direction the docking port is facing.
+      * The z-axis points out of the bottom off the docking port.
+
+   
+
+      .. note::
+
+         This reference frame is not necessarily equivalent to the reference frame
+         for the part, returned by :func:`Part::reference_frame`.
+
+      .. figure:: /images/reference-frames/docking-port.png
+         :align: center
+
+         Docking port reference frame origin and axes
+
+      .. figure:: /images/reference-frames/docking-port-inline.png
+         :align: center
+
+         Inline docking port reference frame origin and axes
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: DockingPortState
+
+   The state of a docking port. See :func:`DockingPort::state`.
+
+
+   .. enumerator:: ready
+
+      The docking port is ready to dock to another docking port.
+
+
+   .. enumerator:: docked
+
+      The docking port is docked to another docking port, or docked to
+      another part (from the VAB/SPH).
+
+
+   .. enumerator:: docking
+
+      The docking port is very close to another docking port,
+      but has not docked. It is using magnetic force to acquire a solid dock.
+
+
+   .. enumerator:: undocking
+
+      The docking port has just been undocked from another docking port,
+      and is disabled until it moves away by a sufficient distance
+      (:func:`DockingPort::reengage_distance`).
+
+
+   .. enumerator:: shielded
+
+      The docking port has a shield, and the shield is closed.
+
+
+   .. enumerator:: moving
+
+      The docking ports shield is currently opening/closing.
+
+
+
+Engine
+^^^^^^
+
+
+.. class:: Engine
+
+   An engine, including ones of various types.
+   For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
+   Obtained by calling :func:`Part::engine`.
+
+   .. note::
+
+      For RCS thrusters :func:`Part::rcs`.
+
+   .. function:: Part part()
+
+      The part object for this engine.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the engine is active. Setting this attribute may have no effect,
+      depending on :func:`Engine::can_shutdown` and :func:`Engine::can_restart`.
+
+   
+
+   .. function:: float thrust()
+
+      The current amount of thrust being produced by the engine, in Newtons.
+
+   
+
+   .. function:: float available_thrust()
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the engine's current :func:`Engine::thrust_limit` and atmospheric conditions
+      into account.
+
+   
+
+   .. function:: float available_thrust_at(double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the given pressure into account.
+
+      :Parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+   
+
+   .. function:: float max_thrust()
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+
+   
+
+   .. function:: float max_thrust_at(double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+      Takes the given pressure into account.
+
+      :Parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+   
+
+   .. function:: float max_vacuum_thrust()
+
+      The maximum amount of thrust that can be produced by the engine in a
+      vacuum, in Newtons. This is the amount of thrust produced by the engine
+      when activated, :func:`Engine::thrust_limit` is set to 100%, the main
+      vessel's throttle is set to 100% and the engine is in a vacuum.
+
+   
+
+   .. function:: float thrust_limit()
+   .. function:: void set_thrust_limit(float value)
+
+      The thrust limiter of the engine. A value between 0 and 1. Setting this
+      attribute may have no effect, for example the thrust limit for a solid
+      rocket booster cannot be changed in flight.
+
+   
+
+   .. function:: std::vector<Thruster> thrusters()
+
+      The components of the engine that generate thrust.
+
+   
+
+      .. note::
+
+         For example, this corresponds to the rocket nozzel on a solid rocket booster,
+         or the individual nozzels on a RAPIER engine.
+         The overall thrust produced by the engine, as reported by :func:`Engine::available_thrust`,
+         :func:`Engine::max_thrust` and others, is the sum of the thrust generated by each thruster.
+
+   .. function:: float specific_impulse()
+
+      The current specific impulse of the engine, in seconds. Returns zero
+      if the engine is not active.
+
+   
+
+   .. function:: float specific_impulse_at(double pressure)
+
+      The specific impulse of the engine under the given pressure, in seconds. Returns zero
+      if the engine is not active.
+
+      :Parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+   
+
+   .. function:: float vacuum_specific_impulse()
+
+      The vacuum specific impulse of the engine, in seconds.
+
+   
+
+   .. function:: float kerbin_sea_level_specific_impulse()
+
+      The specific impulse of the engine at sea level on Kerbin, in seconds.
+
+   
+
+   .. function:: std::vector<std::string> propellant_names()
+
+      The names of the propellants that the engine consumes.
+
+   
+
+   .. function:: std::map<std::string, float> propellant_ratios()
+
+      The ratio of resources that the engine consumes. A dictionary mapping resource names
+      to the ratio at which they are consumed by the engine.
+
+   
+
+      .. note::
+
+         For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every
+         0.6 units of LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+
+   .. function:: std::vector<Propellant> propellants()
+
+      The propellants that the engine consumes.
+
+   
+
+   .. function:: bool has_fuel()
+
+      Whether the engine has any fuel available.
+
+   
+
+   .. function:: bool flameout()
+
+      Whether the engine has flamed out - it is active but has run out of
+      propellant, so it is producing no thrust. This is the signal a client
+      can use to decide when to activate the next stage. Note that on a
+      vessel with drop tanks or asparagus staging some engines can flame out
+      while others keep burning.
+
+   
+
+   .. function:: float throttle()
+   .. function:: void set_throttle(float value)
+
+      The current throttle setting for the engine. A value between 0 and 1.
+      This is not necessarily the same as the vessel's main throttle
+      setting, as some engines take time to adjust their throttle
+      (such as jet engines), or independent throttle may be enabled.
+
+      When the engine's independent throttle is enabled
+      (see :func:`Engine::independent_throttle`), can be used to set the throttle percentage.
+
+   
+
+   .. function:: bool throttle_locked()
+
+      Whether the :func:`Control::throttle` affects the engine. For example,
+      this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
+      boosters.
+
+   
+
+   .. function:: bool independent_throttle()
+   .. function:: void set_independent_throttle(bool value)
+
+      Whether the independent throttle is enabled for the engine.
+
+   
+
+   .. function:: bool can_restart()
+
+      Whether the engine can be restarted once shutdown. If the engine cannot be shutdown,
+      returns ``false``. For example, this is ``true`` for liquid fueled rockets
+      and ``false`` for solid rocket boosters.
+
+   
+
+   .. function:: bool can_shutdown()
+
+      Whether the engine can be shutdown once activated. For example, this is
+      ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
+
+   
+
+   .. function:: bool has_modes()
+
+      Whether the engine has multiple modes of operation.
+
+   
+
+   .. function:: std::string mode()
+   .. function:: void set_mode(std::string value)
+
+      The name of the current engine mode.
+
+   
+
+   .. function:: std::map<std::string, Engine> modes()
+
+      The available modes for the engine.
+      A dictionary mapping mode names to :class:`Engine` objects.
+
+   
+
+   .. function:: void toggle_mode()
+
+      Toggle the current engine mode.
+
+
+   
+
+   .. function:: bool auto_mode_switch()
+   .. function:: void set_auto_mode_switch(bool value)
+
+      Whether the engine will automatically switch modes.
+
+   
+
+   .. function:: bool gimballed()
+
+      Whether the engine is gimballed.
+
+   
+
+   .. function:: float gimbal_range()
+
+      The range over which the gimbal can move, in degrees.
+      Returns 0 if the engine is not gimballed.
+
+   
+
+   .. function:: bool gimbal_locked()
+   .. function:: void set_gimbal_locked(bool value)
+
+      Whether the engines gimbal is locked in place. Setting this attribute has
+      no effect if the engine is not gimballed.
+
+   
+
+   .. function:: float gimbal_limit()
+   .. function:: void set_gimbal_limit(float value)
+
+      The gimbal limiter of the engine. A value between 0 and 1.
+      Returns 0 if the gimbal is locked.
+
+   
+
+   .. function:: bool gimbal_override()
+   .. function:: void set_gimbal_override(bool value)
+
+      Whether the gimbal is being controlled directly, bypassing the vessel's normal
+      flight controls. When enabled, the gimbal deflection is set by
+      :func:`Engine::gimbal_actuation` instead of the normal control inputs.
+      The override is automatically released if the controlling client disconnects or the
+      vessel changes. Has no effect if the engine is not gimballed.
+
+   
+
+   .. function:: std::tuple<double, double, double> gimbal_actuation()
+   .. function:: void set_gimbal_actuation(std::tuple<double, double, double> value)
+
+      The gimbal actuation command applied when :func:`Engine::gimbal_override` is enabled, in
+      the pitch, roll and yaw axes. Each component is a normalized control input between -1
+      and 1. The physical deflection is scaled by :func:`Engine::gimbal_range`
+      and :func:`Engine::gimbal_limit`. When the gimbal is not being overridden,
+      returns the current actuation.
+
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+
+      The available torque, in Newton meters, that can be produced by this engine,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
+      Returns zero if the engine is inactive, or not gimballed.
+
+   
+
+   .. function:: bool can_reverse_thrust()
+
+      Whether the engine has a recognized thrust reverser. This is ``true`` for
+      stock engines with a thrust reverser (such as the J-33 "Wheesley" and
+      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      ``false`` for engines whose reverser is not recognized, as KSP provides no
+      standard way to detect one.
+
+   
+
+   .. function:: bool thrust_reversed()
+   .. function:: void set_thrust_reversed(bool value)
+
+      Whether the engine's thrust reverser is engaged, reversing the
+      direction of thrust. While the reverser is still moving, this reports
+      the state it is moving to, so a read immediately after a set returns
+      the value that was set and setting the same value again has no effect.
+      Raises an exception if the engine does not have a thrust reverser
+      (see :func:`Engine::can_reverse_thrust`).
+
+   
+
+   .. function:: void toggle_thrust_reversal()
+
+      Toggle the engine's thrust reverser. Raises an exception if the engine
+      does not have a thrust reverser (see :func:`Engine::can_reverse_thrust`).
+
+
+   
+
+
+
+.. class:: Propellant
+
+   A propellant for an engine. Obtains by calling :func:`Engine::propellants`.
+
+   .. function:: std::string name()
+
+      The name of the propellant.
+
+   
+
+   .. function:: double current_amount()
+
+      The current amount of propellant consumed in the current physics update.
+
+   
+
+   .. function:: double current_requirement()
+
+      The required amount of propellant for the current physics update.
+
+   
+
+   .. function:: double total_resource_available()
+
+      The total amount of the underlying resource currently reachable given
+      resource flow rules.
+
+   
+
+   .. function:: double total_resource_capacity()
+
+      The total vehicle capacity for the underlying propellant resource,
+      restricted by resource flow rules.
+
+   
+
+   .. function:: bool ignore_for_isp()
+
+      If this propellant should be ignored when calculating required mass flow
+      given specific impulse.
+
+   
+
+   .. function:: bool ignore_for_thrust_curve()
+
+      If this propellant should be ignored for thrust curve calculations.
+
+   
+
+   .. function:: bool draw_stack_gauge()
+
+      If this propellant has a stack gauge or not.
+
+   
+
+   .. function:: bool is_deprived()
+
+      If this propellant is deprived.
+
+   
+
+   .. function:: float ratio()
+
+      The propellant ratio.
+
+   
+
+
+
+Experiment
+^^^^^^^^^^
+
+
+.. class:: Experiment
+
+   Obtained by calling :func:`Part::experiment`.
+
+   .. function:: Part part()
+
+      The part object for this experiment.
+
+   
+
+   .. function:: std::string name()
+
+      Internal name of the experiment, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+
+   
+
+   .. function:: std::string title()
+
+      Title of the experiment, as shown on the in-game UI.
+
+   
+
+   .. function:: void run()
+
+      Run the experiment.
+
+
+   
+
+   .. function:: void transmit()
+
+      Transmit all experimental data contained by this part.
+
+
+   
+
+   .. function:: void dump()
+
+      Dump the experimental data contained by the experiment.
+
+
+   
+
+   .. function:: void reset()
+
+      Reset the experiment.
+
+
+   
+
+   .. function:: bool deployed()
+
+      Whether the experiment has been deployed.
+
+   
+
+   .. function:: bool rerunnable()
+
+      Whether the experiment can be re-run.
+
+   
+
+   .. function:: bool inoperable()
+
+      Whether the experiment is inoperable.
+
+   
+
+   .. function:: bool has_data()
+
+      Whether the experiment contains data.
+
+   
+
+   .. function:: std::vector<ScienceData> data()
+
+      The data contained in this experiment.
+
+   
+
+   .. function:: std::string biome()
+
+      The name of the biome the experiment is currently in.
+
+   
+
+   .. function:: bool available()
+
+      Determines if the experiment is available given the current conditions.
+
+   
+
+   .. function:: ScienceSubject science_subject()
+
+      Containing information on the corresponding specific science result for the current
+      conditions. Returns ``NULL`` if the experiment is unavailable.
+
+   
+
+
+
+.. class:: ScienceData
+
+   Obtained by calling :func:`Experiment::data`.
+
+   .. function:: float data_amount()
+
+      Data amount.
+
+   
+
+   .. function:: float science_value()
+
+      Science value.
+
+   
+
+   .. function:: float transmit_value()
+
+      Transmit value.
+
+   
+
+
+
+.. class:: ScienceSubject
+
+   Obtained by calling :func:`Experiment::science_subject`.
+
+   .. function:: std::string title()
+
+      Title of science subject, displayed in science archives
+
+   
+
+   .. function:: bool is_complete()
+
+      Whether the subject has been fully researched. This is true once the science banked for
+      the subject reaches the science cap. As the banked science (see :func:`ScienceSubject::science`) is
+      only updated after transmission/recovery, this reflects fully mining the subject over
+      repeated experiments, not whether a single run has produced data. To check whether a run
+      has produced data, and how valuable it is, use :func:`Experiment::has_data` and
+      :func:`ScienceData::transmit_value`.
+
+   
+
+   .. function:: float science()
+
+      Amount of science already earned from this subject, not updated until after
+      transmission/recovery.
+
+   
+
+   .. function:: float science_cap()
+
+      Total science allowable for this subject.
+
+   
+
+   .. function:: float data_scale()
+
+      Multiply science value by this to determine data amount in mits.
+
+   
+
+   .. function:: float subject_value()
+
+      Multiplier for specific Celestial Body/Experiment Situation combination.
+
+   
+
+   .. function:: float scientific_value()
+
+      Diminishing value multiplier for decreasing the science value returned from repeated
+      experiments.
+
+   
+
+
+
+Fairing
+^^^^^^^
+
+
+.. class:: Fairing
+
+   A fairing. Obtained by calling :func:`Part::fairing`.
+   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. function:: Part part()
+
+      The part object for this fairing.
+
+   
+
+   .. function:: void jettison()
+
+      Jettison the fairing. Has no effect if it has already been jettisoned.
+
+
+   
+
+   .. function:: bool jettisoned()
+
+      Whether the fairing has been jettisoned.
+
+   
+
+
+
+Intake
+^^^^^^
+
+
+.. class:: Intake
+
+   An air intake. Obtained by calling :func:`Part::intake`.
+
+   .. function:: Part part()
+
+      The part object for this intake.
+
+   
+
+   .. function:: bool open()
+   .. function:: void set_open(bool value)
+
+      Whether the intake is open.
+
+   
+
+   .. function:: float speed()
+
+      Speed of the flow into the intake, in :math:`m/s`.
+
+   
+
+   .. function:: float flow()
+
+      The rate of flow into the intake, in units of resource per second.
+
+   
+
+   .. function:: float area()
+
+      The area of the intake's opening, in square meters.
+
+   
+
+
+
+Leg
+^^^
+
+
+.. class:: Leg
+
+   A landing leg. Obtained by calling :func:`Part::leg`.
+
+   .. function:: Part part()
+
+      The part object for this landing leg.
+
+   
+
+   .. function:: DeployableState state()
+
+      The current state of the landing leg.
+
+   
+
+   .. function:: bool deployable()
+
+      Whether the leg is deployable.
+
+   
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      Whether the landing leg is deployed.
+
+   
+
+      .. note::
+
+         Fixed landing legs are always deployed.
+         Returns an error if you try to deploy fixed landing gear.
+
+   .. function:: bool is_grounded()
+
+      Returns whether the leg is touching the ground.
+
+   
+
+
+
+Launch Clamp
+^^^^^^^^^^^^
+
+
+.. class:: LaunchClamp
+
+   A launch clamp. Obtained by calling :func:`Part::launch_clamp`.
+
+   .. function:: Part part()
+
+      The part object for this launch clamp.
+
+   
+
+   .. function:: void release()
+
+      Releases the docking clamp. Has no effect if the clamp has already been released.
+
+
+   
+
+
+
+Light
+^^^^^
+
+
+.. class:: Light
+
+   A light. Obtained by calling :func:`Part::light`.
+
+   .. function:: Part part()
+
+      The part object for this light.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the light is switched on.
+
+   
+
+   .. function:: std::tuple<float, float, float> color()
+   .. function:: void set_color(std::tuple<float, float, float> value)
+
+      The color of the light, as an RGB triple.
+
+   
+
+   .. function:: bool blink()
+   .. function:: void set_blink(bool value)
+
+      Whether blinking is enabled.
+
+   
+
+   .. function:: float blink_rate()
+   .. function:: void set_blink_rate(float value)
+
+      The blink rate of the light.
+
+   
+
+   .. function:: float power_usage()
+
+      The current power usage, in units of charge per second.
+
+   
+
+
+
+Parachute
+^^^^^^^^^
+
+
+.. class:: Parachute
+
+   A parachute. Obtained by calling :func:`Part::parachute`.
+
+   .. function:: Part part()
+
+      The part object for this parachute.
+
+   
+
+   .. function:: void deploy()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been deployed.
+
+
+   
+
+   .. function:: bool deployed()
+
+      Whether the parachute has been deployed.
+
+   
+
+   .. function:: void arm()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been armed or deployed.
+
+
+   
+
+   .. function:: bool armed()
+
+      Whether the parachute has been armed or deployed.
+
+   
+
+   .. function:: void cut()
+
+      Cuts the parachute.
+
+
+   
+
+   .. function:: ParachuteState state()
+
+      The current state of the parachute.
+
+   
+
+   .. function:: float deploy_altitude()
+   .. function:: void set_deploy_altitude(float value)
+
+      The altitude at which the parachute will full deploy, in meters.
+      Only applicable to stock parachutes.
+
+   
+
+   .. function:: float deploy_min_pressure()
+   .. function:: void set_deploy_min_pressure(float value)
+
+      The minimum pressure at which the parachute will semi-deploy, in atmospheres.
+      Only applicable to stock parachutes.
+
+   
+
+   .. function:: ParachuteSafeState safe_state()
+
+      Whether it is currently safe to deploy the parachute, given the vessel's
+      flight conditions. Computed by KSP from the current airspeed, pressure and
+      temperature. Only applicable to stock parachutes.
+      Note that KSP reports :enumerator:`ParachuteSafeState::unsafe` for the first
+      second after the vessel unpacks, before its thermal data is valid.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: ParachuteState
+
+   The state of a parachute. See :func:`Parachute::state`.
+
+
+   .. enumerator:: stowed
+
+      The parachute is safely tucked away inside its housing.
+
+
+   .. enumerator:: armed
+
+      The parachute is armed for deployment.
+
+
+   .. enumerator:: semi_deployed
+
+      The parachute has been deployed and is providing some drag,
+      but is not fully deployed yet. (Stock parachutes only)
+
+
+   .. enumerator:: deployed
+
+      The parachute is fully deployed.
+
+
+   .. enumerator:: cut
+
+      The parachute has been cut.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: ParachuteSafeState
+
+   The safety state of deploying a parachute. See :func:`Parachute::safe_state`.
+
+
+   .. enumerator:: safe
+
+      The parachute is safe to deploy.
+
+
+   .. enumerator:: risky
+
+      Deploying the parachute is risky, and it may break off.
+
+
+   .. enumerator:: unsafe
+
+      The parachute is unsafe to deploy, and will break off.
+
+
+   .. enumerator:: none
+
+      The safety state is not available, because the vessel is not in an
+      atmosphere or the parachute has already been deployed or cut.
+
+
+
+Radiator
+^^^^^^^^
+
+
+.. class:: Radiator
+
+   A radiator. Obtained by calling :func:`Part::radiator`.
+
+   .. function:: Part part()
+
+      The part object for this radiator.
+
+   
+
+   .. function:: bool deployable()
+
+      Whether the radiator is deployable.
+
+   
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      For a deployable radiator, ``true`` if the radiator is extended.
+      If the radiator is not deployable, this is always ``true``.
+
+   
+
+   .. function:: DeployableState state()
+
+      The current state of the radiator.
+
+   
+
+      .. note::
+
+         A fixed radiator is always :enumerator:`DeployableState::deployed`.
+
+
+
+Resource Converter
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: ResourceConverter
+
+   A resource converter. Obtained by calling :func:`Part::resource_converter`.
+
+   .. function:: Part part()
+
+      The part object for this converter.
+
+   
+
+   .. function:: int32_t count()
+
+      The number of converters in the part.
+
+   
+
+   .. function:: std::string name(int32_t index)
+
+      The name of the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: bool active(int32_t index)
+
+      True if the specified converter is active.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: void start(int32_t index)
+
+      Start the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: void stop(int32_t index)
+
+      Stop the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: ResourceConverterState state(int32_t index)
+
+      The state of the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: std::string status_info(int32_t index)
+
+      Status information for the specified converter.
+      This is the full status message shown in the in-game UI.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: std::vector<std::string> inputs(int32_t index)
+
+      List of the names of resources consumed by the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: std::vector<std::string> outputs(int32_t index)
+
+      List of the names of resources produced by the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: float optimum_core_temperature()
+
+      The core temperature at which the converter will operate with peak efficiency, in Kelvin.
+
+   
+
+   .. function:: float core_temperature()
+
+      The core temperature of the converter, in Kelvin.
+
+   
+
+   .. function:: float thermal_efficiency()
+
+      The thermal efficiency of the converter, as a percentage of its maximum.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: ResourceConverterState
+
+   The state of a resource converter. See :func:`ResourceConverter::state`.
+
+
+   .. enumerator:: running
+
+      Converter is running.
+
+
+   .. enumerator:: idle
+
+      Converter is idle.
+
+
+   .. enumerator:: missing_resource
+
+      Converter is missing a required resource.
+
+
+   .. enumerator:: storage_full
+
+      No available storage for output resource.
+
+
+   .. enumerator:: capacity
+
+      At preset resource capacity.
+
+
+   .. enumerator:: unknown
+
+      Unknown state. Possible with modified resource converters.
+      In this case, check :func:`ResourceConverter::status_info` for more information.
+
+
+
+Resource Harvester
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: ResourceHarvester
+
+   A resource harvester (drill). Obtained by calling :func:`Part::resource_harvester`.
+
+   .. function:: Part part()
+
+      The part object for this harvester.
+
+   
+
+   .. function:: DeployableState state()
+
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :func:`ResourceHarvester::active`.
+
+   
+
+      .. note::
+
+         A harvester is never :enumerator:`DeployableState::broken`, as the game
+         does not track damage for them.
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      Whether the harvester is deployed.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the harvester is actively drilling.
+
+   
+
+      .. note::
+
+         A value set while the harvester is deploying is applied when the
+         deploy completes, so it can be set immediately after setting
+         :func:`ResourceHarvester::deployed` without waiting for the deploy animation.
+         Setting it has no effect while the harvester is retracted or
+         retracting.
+
+   .. function:: float extraction_rate()
+
+      The rate at which the drill is extracting ore, in units per second.
+
+   
+
+   .. function:: float thermal_efficiency()
+
+      The thermal efficiency of the drill, as a percentage of its maximum.
+
+   
+
+   .. function:: float core_temperature()
+
+      The core temperature of the drill, in Kelvin.
+
+   
+
+   .. function:: float optimum_core_temperature()
+
+      The core temperature at which the drill will operate with peak efficiency, in Kelvin.
+
+   
+
+
+
+Reaction Wheel
+^^^^^^^^^^^^^^
+
+
+.. class:: ReactionWheel
+
+   A reaction wheel. Obtained by calling :func:`Part::reaction_wheel`.
+
+   .. function:: Part part()
+
+      The part object for this reaction wheel.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the reaction wheel is active.
+
+   
+
+   .. function:: bool broken()
+
+      Whether the reaction wheel is broken.
+
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+
+      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
+      Returns zero if the reaction wheel is inactive or broken.
+
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> max_torque()
+
+      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
+      These axes correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
+
+   
+
+   .. function:: float authority_limiter()
+   .. function:: void set_authority_limiter(float value)
+
+      The authority limiter for the reaction wheel, as a percentage of maximum torque.
+      A value between 0 and 1.
+
+   
+
+
+
+Resource Drain
+^^^^^^^^^^^^^^
+
+
+.. class:: ResourceDrain
+
+   A resource drain. Obtained by calling :func:`Part::resource_drain`.
+
+   .. function:: Part part()
+
+      The part object for this resource drain.
+
+   
+
+   .. function:: std::vector<Resource> available_resources()
+
+      List of available resources.
+
+   
+
+   .. function:: void set_resource(Resource resource, bool enabled)
+
+      Whether the given resource should be drained.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: bool check_resource(Resource resource)
+
+      Whether the provided resource is enabled for draining.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: DrainMode drain_mode()
+   .. function:: void set_drain_mode(DrainMode value)
+
+      The drain mode.
+
+   
+
+   .. function:: float min_rate()
+
+      Minimum possible drain rate
+
+   
+
+   .. function:: float max_rate()
+
+      Maximum possible drain rate.
+
+   
+
+   .. function:: float rate()
+   .. function:: void set_rate(float value)
+
+      Current drain rate.
+
+   
+
+   .. function:: void start()
+
+      Activates resource draining for all enabled parts.
+
+
+   
+
+   .. function:: void stop()
+
+      Turns off resource draining.
+
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: DrainMode
+
+   Resource drain mode.
+   See :func:`ResourceDrain::drain_mode`.
+
+
+   .. enumerator:: part
+
+      Drains from the parent part.
+
+
+   .. enumerator:: vessel
+
+      Drains from all available parts.
+
+
+
+Robotic Controller
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: RoboticController
+
+   A robotic controller. Obtained by calling :func:`Part::robotic_controller`.
+
+   .. function:: Part part()
+
+      The part object for this controller.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the controller is enabled.
+
+   
+
+   .. function:: bool playing()
+
+      Whether the controller's sequence is currently playing.
+
+   
+
+   .. function:: float position()
+   .. function:: void set_position(float value)
+
+      The current position along the sequence, in seconds.
+
+   
+
+   .. function:: float length()
+
+      The length of the sequence, in seconds.
+
+   
+
+   .. function:: float play_speed()
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+   
+
+   .. function:: void play()
+
+      Start playing the controller's sequence.
+
+
+   
+
+   .. function:: void stop()
+
+      Stop playing the controller's sequence.
+
+
+   
+
+   .. function:: bool has_part(Part part)
+
+      Whether the controller has a part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<std::vector<std::string>> axes()
+
+      The axes for the controller.
+
+
+   
+
+   .. function:: bool add_axis(Module module, std::string field_name)
+
+      Add an axis to the controller.
+
+      :Parameters:
+
+       * **module** -- The part module that the axis belongs to.
+       * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
+
+      :returns: Returns ``true`` if the axis is added successfully.
+   
+
+   .. function:: bool add_key_frame(Module module, std::string field_name, float time, float value)
+
+      Add key frame value for controller axis.
+
+      :Parameters:
+
+       * **module** -- The part module that the axis belongs to.
+       * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
+       * **time** -- The time of the key frame.
+       * **value** -- The value of the key frame.
+
+      :returns: Returns ``true`` if the key frame is added successfully.
+   
+
+   .. function:: bool clear_axis(Module module, std::string field_name)
+
+      Clear axis.
+
+      :Parameters:
+
+       * **module** -- The part module that the axis belongs to.
+       * **field_name** -- The name of the axis field, as returned by :func:`RoboticController::axes`.
+
+      :returns: Returns ``true`` if the axis is cleared successfully.
+   
+
+
+
+Robotic Hinge
+^^^^^^^^^^^^^
+
+
+.. class:: RoboticHinge
+
+   A robotic hinge. Obtained by calling :func:`Part::robotic_hinge`.
+
+   .. function:: Part part()
+
+      The part object for this robotic hinge.
+
+   
+
+   .. function:: float target_angle()
+   .. function:: void set_target_angle(float value)
+
+      Target angle.
+
+   
+
+   .. function:: float current_angle()
+
+      Current angle.
+
+   
+
+   .. function:: float min_angle()
+   .. function:: void set_min_angle(float value)
+
+      The minimum angle the hinge can move to, in degrees.
+
+   
+
+   .. function:: float max_angle()
+   .. function:: void set_max_angle(float value)
+
+      The maximum angle the hinge can move to, in degrees.
+
+   
+
+   .. function:: float rate()
+   .. function:: void set_rate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. function:: float damping()
+   .. function:: void set_damping(float value)
+
+      Damping percentage.
+
+   
+
+   .. function:: bool locked()
+   .. function:: void set_locked(bool value)
+
+      Lock movement.
+
+   
+
+   .. function:: bool motor_engaged()
+   .. function:: void set_motor_engaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: bool is_moving()
+
+      Whether the servo is currently moving.
+
+   
+
+   .. function:: void move_home()
+
+      Move hinge to its built position.
+
+
+   
+
+
+
+Robotic Piston
+^^^^^^^^^^^^^^
+
+
+.. class:: RoboticPiston
+
+   A robotic piston part. Obtained by calling :func:`Part::robotic_piston`.
+
+   .. function:: Part part()
+
+      The part object for this robotic piston.
+
+   
+
+   .. function:: float target_extension()
+   .. function:: void set_target_extension(float value)
+
+      Target extension of the piston.
+
+   
+
+   .. function:: float current_extension()
+
+      Current extension of the piston.
+
+   
+
+   .. function:: float min_extension()
+   .. function:: void set_min_extension(float value)
+
+      The minimum extension of the piston, in meters.
+
+   
+
+   .. function:: float max_extension()
+   .. function:: void set_max_extension(float value)
+
+      The maximum extension of the piston, in meters.
+
+   
+
+   .. function:: float rate()
+   .. function:: void set_rate(float value)
+
+      Target movement rate in meters per second.
+
+   
+
+   .. function:: float damping()
+   .. function:: void set_damping(float value)
+
+      Damping percentage.
+
+   
+
+   .. function:: bool locked()
+   .. function:: void set_locked(bool value)
+
+      Lock movement.
+
+   
+
+   .. function:: bool motor_engaged()
+   .. function:: void set_motor_engaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: bool is_moving()
+
+      Whether the servo is currently moving.
+
+   
+
+   .. function:: void move_home()
+
+      Move piston to its built position.
+
+
+   
+
+
+
+Robotic Rotation
+^^^^^^^^^^^^^^^^
+
+
+.. class:: RoboticRotation
+
+   A robotic rotation servo. Obtained by calling :func:`Part::robotic_rotation`.
+
+   .. function:: Part part()
+
+      The part object for this robotic rotation servo.
+
+   
+
+   .. function:: float target_angle()
+   .. function:: void set_target_angle(float value)
+
+      Target angle.
+
+   
+
+   .. function:: float current_angle()
+
+      Current angle.
+
+   
+
+   .. function:: float min_angle()
+   .. function:: void set_min_angle(float value)
+
+      The minimum angle the servo can rotate to, in degrees.
+
+   
+
+   .. function:: float max_angle()
+   .. function:: void set_max_angle(float value)
+
+      The maximum angle the servo can rotate to, in degrees.
+
+   
+
+   .. function:: bool allow_full_rotation()
+   .. function:: void set_allow_full_rotation(bool value)
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+   
+
+   .. function:: float rate()
+   .. function:: void set_rate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. function:: float damping()
+   .. function:: void set_damping(float value)
+
+      Damping percentage.
+
+   
+
+   .. function:: bool locked()
+   .. function:: void set_locked(bool value)
+
+      Lock Movement
+
+   
+
+   .. function:: bool motor_engaged()
+   .. function:: void set_motor_engaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: bool is_moving()
+
+      Whether the servo is currently moving.
+
+   
+
+   .. function:: void move_home()
+
+      Move rotation servo to its built position.
+
+
+   
+
+
+
+Robotic Rotor
+^^^^^^^^^^^^^
+
+
+.. class:: RoboticRotor
+
+   A robotic rotor. Obtained by calling :func:`Part::robotic_rotor`.
+
+   .. function:: Part part()
+
+      The part object for this robotic rotor.
+
+   
+
+   .. function:: float target_rpm()
+   .. function:: void set_target_rpm(float value)
+
+      Target RPM.
+
+   
+
+   .. function:: float current_rpm()
+
+      Current RPM.
+
+   
+
+   .. function:: bool inverted()
+   .. function:: void set_inverted(bool value)
+
+      Whether the rotor direction is inverted.
+
+   
+
+   .. function:: float torque_limit()
+   .. function:: void set_torque_limit(float value)
+
+      Torque limit percentage.
+
+   
+
+   .. function:: float max_torque()
+   .. function:: void set_max_torque(float value)
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+   
+
+   .. function:: float brake_percentage()
+   .. function:: void set_brake_percentage(float value)
+
+      The percentage of braking force applied to the rotor.
+
+   
+
+   .. function:: bool locked()
+   .. function:: void set_locked(bool value)
+
+      Lock movement.
+
+   
+
+   .. function:: bool motor_engaged()
+   .. function:: void set_motor_engaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: bool is_moving()
+
+      Whether the rotor is currently moving.
+
+   
+
+
+
+RCS
+^^^
+
+
+.. class:: RCS
+
+   An RCS block or thruster. Obtained by calling :func:`Part::rcs`.
+
+   .. function:: Part part()
+
+      The part object for this RCS.
+
+   
+
+   .. function:: bool active()
+
+      Whether the RCS thrusters are active.
+      An RCS thruster is inactive if the RCS action group is disabled
+      (:func:`Control::rcs`), the RCS thruster itself is not enabled
+      (:func:`RCS::enabled`), or it is covered by a fairing
+      (:func:`Part::shielded`) and cannot thrust while shielded.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether the RCS thrusters are enabled.
+
+   
+
+   .. function:: bool pitch_enabled()
+   .. function:: void set_pitch_enabled(bool value)
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+   
+
+   .. function:: bool yaw_enabled()
+   .. function:: void set_yaw_enabled(bool value)
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+   
+
+   .. function:: bool roll_enabled()
+   .. function:: void set_roll_enabled(bool value)
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+   
+
+   .. function:: bool forward_enabled()
+   .. function:: void set_forward_enabled(bool value)
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+   
+
+   .. function:: bool up_enabled()
+   .. function:: void set_up_enabled(bool value)
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+   
+
+   .. function:: bool right_enabled()
+   .. function:: void set_right_enabled(bool value)
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+   
+
+   .. function:: bool input_override()
+   .. function:: void set_input_override(bool value)
+
+      Whether the RCS control is being set directly, bypassing the vessel's
+      normal flight controls. When enabled, the rotation and translation demand is set by
+      :func:`RCS::rotation_override` and :func:`RCS::translation_override` instead of the
+      normal control inputs. The override is automatically released if the
+      controlling client disconnects or the vessel changes.
+
+   
+
+   .. function:: std::tuple<double, double, double> rotation_override()
+   .. function:: void set_rotation_override(std::tuple<double, double, double> value)
+
+      The rotation demand applied when :func:`RCS::input_override` is enabled, in the pitch,
+      roll and yaw axes. Each component is a normalized control input between -1 and 1.
+
+   
+
+   .. function:: std::tuple<double, double, double> translation_override()
+   .. function:: void set_translation_override(std::tuple<double, double, double> value)
+
+      The translation demand applied when :func:`RCS::input_override` is enabled, in the
+      right, up and forward axes. Each component is a normalized control input between -1
+      and 1.
+
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
+
+      The available torque, in Newton meters, that can be produced by this RCS,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
+      Returns zero if RCS is disable.
+
+   
+
+   .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_force()
+
+      The available force, in Newtons, that can be produced by this RCS,
+      in the positive and negative x, y and z axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`Vessel::reference_frame`.
+      Returns zero if RCS is disabled.
+
+   
+
+   .. function:: float available_thrust()
+
+      The amount of thrust, in Newtons, that would be produced by the thruster when activated.
+      Returns zero if the thruster does not have any fuel.
+      Takes the thrusters current :func:`RCS::thrust_limit` and atmospheric conditions
+      into account.
+
+   
+
+   .. function:: float max_thrust()
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active,
+      in Newtons, with the :func:`RCS::thrust_limit` set to 100%.
+      Takes atmospheric conditions into account.
+
+   
+
+   .. function:: float max_vacuum_thrust()
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active
+      in a vacuum, in Newtons.
+
+   
+
+   .. function:: float thrust_limit()
+   .. function:: void set_thrust_limit(float value)
+
+      The thrust limiter of the thruster. A value between 0 and 1.
+
+   
+
+   .. function:: std::vector<Thruster> thrusters()
+
+      A list of thrusters, one of each nozzel in the RCS part.
+
+   
+
+   .. function:: float specific_impulse()
+
+      The current specific impulse of the RCS, in seconds. Returns zero
+      if the RCS is not active.
+
+   
+
+   .. function:: float vacuum_specific_impulse()
+
+      The vacuum specific impulse of the RCS, in seconds.
+
+   
+
+   .. function:: float kerbin_sea_level_specific_impulse()
+
+      The specific impulse of the RCS at sea level on Kerbin, in seconds.
+
+   
+
+   .. function:: std::vector<std::string> propellants()
+
+      The names of resources that the RCS consumes.
+
+   
+
+   .. function:: std::map<std::string, float> propellant_ratios()
+
+      The ratios of resources that the RCS consumes. A dictionary mapping resource names
+      to the ratios at which they are consumed by the RCS.
+
+   
+
+   .. function:: bool has_fuel()
+
+      Whether the RCS has fuel available.
+
+   
+
+
+
+Sensor
+^^^^^^
+
+
+.. class:: Sensor
+
+   A sensor, such as a thermometer. Obtained by calling :func:`Part::sensor`.
+
+   .. function:: Part part()
+
+      The part object for this sensor.
+
+   
+
+   .. function:: bool active()
+   .. function:: void set_active(bool value)
+
+      Whether the sensor is active.
+
+   
+
+   .. function:: std::string value()
+
+      The current value of the sensor.
+
+   
+
+      .. note::
+
+         This is the same readout string shown in the part's right-click menu
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
+         :func:`Part::temperature` (temperature sensors),
+         :func:`Flight::g_force` (accelerometers) or
+         :func:`Flight::static_pressure` (barometers).
+
+
+
+Solar Panel
+^^^^^^^^^^^
+
+
+.. class:: SolarPanel
+
+   A solar panel. Obtained by calling :func:`Part::solar_panel`.
+
+   .. function:: Part part()
+
+      The part object for this solar panel.
+
+   
+
+   .. function:: bool deployable()
+
+      Whether the solar panel is deployable.
+
+   
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      Whether the solar panel is extended.
+
+   
+
+   .. function:: DeployableState state()
+
+      The current state of the solar panel.
+
+   
+
+   .. function:: float energy_flow()
+
+      The current amount of energy being generated by the solar panel, in
+      units of charge per second.
+
+   
+
+   .. function:: float sun_exposure()
+
+      The current amount of sunlight that is incident on the solar panel,
+      as a percentage. A value between 0 and 1.
+
+   
+
+
+
+Thruster
+^^^^^^^^
+
+
+.. class:: Thruster
+
+   The component of an :class:`Engine` or :class:`RCS` part that generates thrust.
+   Can obtained by calling :func:`Engine::thrusters` or :func:`RCS::thrusters`.
+
+   .. note::
+
+      Engines can consist of multiple thrusters.
+      For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
+      four thrusters.
+
+   .. function:: Part part()
+
+      The :func:`Thruster::part` that contains this thruster.
+
+   
+
+   .. function:: std::tuple<double, double, double> thrust_position(ReferenceFrame reference_frame)
+
+      The position at which the thruster generates thrust, in the given reference frame.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> thrust_direction(ReferenceFrame reference_frame)
+
+      The direction of the force generated by the thruster, in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: ReferenceFrame thrust_reference_frame()
+
+      A reference frame that is fixed relative to the thruster and orientated with
+      its thrust direction (:func:`Thruster::thrust_direction`).
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      * The origin is at the position of thrust for this thruster
+        (:func:`Thruster::thrust_position`).
+      * The axes rotate with the thrust direction.
+        This is the direction in which the thruster expels propellant, including any gimballing.
+      * The y-axis points along the thrust direction.
+      * The x-axis and z-axis are perpendicular to the thrust direction.
+
+   
+
+   .. function:: bool gimballed()
+
+      Whether the thruster is gimballed.
+
+   
+
+   .. function:: std::tuple<double, double, double> gimbal_position(ReferenceFrame reference_frame)
+
+      Position around which the gimbal pivots.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> gimbal_angle()
+
+      The current gimbal angle in the pitch, roll and yaw axes, in degrees.
+
+   
+
+   .. function:: std::tuple<double, double, double> initial_thrust_position(ReferenceFrame reference_frame)
+
+      The position at which the thruster generates thrust, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+      .. note::
+
+         This position can move when the gimbal rotates. This is because the thrust position and
+         gimbal position are not necessarily the same.
+
+   .. function:: std::tuple<double, double, double> initial_thrust_direction(ReferenceFrame reference_frame)
+
+      The direction of the force generated by the thruster, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+
+
+Wheel
+^^^^^
+
+
+.. class:: Wheel
+
+   A wheel. Includes landing gear and rover wheels.
+   Obtained by calling :func:`Part::wheel`.
+   Can be used to control the motors, steering and deployment of wheels, among other things.
+
+   .. function:: Part part()
+
+      The part object for this wheel.
+
+   
+
+   .. function:: DeployableState state()
+
+      The current state of the wheel.
+
+   
+
+   .. function:: float radius()
+
+      Radius of the wheel, in meters.
+
+   
+
+   .. function:: bool grounded()
+
+      Whether the wheel is touching the ground.
+
+   
+
+   .. function:: bool has_brakes()
+
+      Whether the wheel has brakes.
+
+   
+
+   .. function:: float brakes()
+   .. function:: void set_brakes(float value)
+
+      The braking force, as a percentage of maximum, when the brakes are applied.
+
+   
+
+   .. function:: bool auto_friction_control()
+   .. function:: void set_auto_friction_control(bool value)
+
+      Whether automatic friction control is enabled.
+
+   
+
+   .. function:: float manual_friction_control()
+   .. function:: void set_manual_friction_control(float value)
+
+      Manual friction control value. Only has an effect if automatic friction control is disabled.
+      A value between 0 and 5 inclusive.
+
+   
+
+   .. function:: bool deployable()
+
+      Whether the wheel is deployable.
+
+   
+
+   .. function:: bool deployed()
+   .. function:: void set_deployed(bool value)
+
+      Whether the wheel is deployed.
+
+   
+
+   .. function:: bool powered()
+
+      Whether the wheel is powered by a motor.
+
+   
+
+   .. function:: bool motor_enabled()
+   .. function:: void set_motor_enabled(bool value)
+
+      Whether the motor is enabled.
+
+   
+
+   .. function:: bool motor_inverted()
+   .. function:: void set_motor_inverted(bool value)
+
+      Whether the direction of the motor is inverted.
+
+   
+
+   .. function:: MotorState motor_state()
+
+      Whether the direction of the motor is inverted.
+
+   
+
+   .. function:: float motor_output()
+
+      The output of the motor. This is the torque currently being generated, in Newton meters.
+
+   
+
+   .. function:: bool traction_control_enabled()
+   .. function:: void set_traction_control_enabled(bool value)
+
+      Whether automatic traction control is enabled.
+      A wheel only has traction control if it is powered.
+
+   
+
+   .. function:: float traction_control()
+   .. function:: void set_traction_control(float value)
+
+      Setting for the traction control.
+      Only takes effect if the wheel has automatic traction control enabled.
+      A value between 0 and 5 inclusive.
+
+   
+
+   .. function:: float drive_limiter()
+   .. function:: void set_drive_limiter(float value)
+
+      Manual setting for the motor limiter.
+      Only takes effect if the wheel has automatic traction control disabled.
+      A value between 0 and 100 inclusive.
+
+   
+
+   .. function:: bool steerable()
+
+      Whether the wheel has steering.
+
+   
+
+   .. function:: bool steering_enabled()
+   .. function:: void set_steering_enabled(bool value)
+
+      Whether the wheel steering is enabled.
+
+   
+
+   .. function:: bool steering_inverted()
+   .. function:: void set_steering_inverted(bool value)
+
+      Whether the wheel steering is inverted.
+
+   
+
+   .. function:: bool steering_angle_auto()
+   .. function:: void set_steering_angle_auto(bool value)
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :func:`Wheel::steering_angle_limit`.
+
+   
+
+   .. function:: float steering_angle_limit()
+   .. function:: void set_steering_angle_limit(float value)
+
+      The steering angle limit.
+
+   
+
+   .. function:: float steering_response_time()
+   .. function:: void set_steering_response_time(float value)
+
+      Steering response time.
+
+   
+
+   .. function:: bool has_suspension()
+
+      Whether the wheel has suspension.
+
+   
+
+   .. function:: float suspension_spring_strength()
+
+      Suspension spring strength, as set in the editor.
+
+   
+
+   .. function:: float suspension_damper_strength()
+
+      Suspension damper strength, as set in the editor.
+
+   
+
+   .. function:: bool broken()
+
+      Whether the wheel is broken.
+
+   
+
+   .. function:: bool repairable()
+
+      Whether the wheel is repairable.
+
+   
+
+   .. function:: float stress()
+
+      Current stress on the wheel.
+
+   
+
+   .. function:: float stress_tolerance()
+
+      Stress tolerance of the wheel.
+
+   
+
+   .. function:: float stress_percentage()
+
+      Current stress on the wheel as a percentage of its stress tolerance.
+
+   
+
+   .. function:: float deflection()
+
+      Current deflection of the wheel.
+
+   
+
+   .. function:: float slip()
+
+      Current slip of the wheel.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: MotorState
+
+   The state of the motor on a powered wheel. See :func:`Wheel::motor_state`.
+
+
+   .. enumerator:: idle
+
+      The motor is idle.
+
+
+   .. enumerator:: running
+
+      The motor is running.
+
+
+   .. enumerator:: disabled
+
+      The motor is disabled.
+
+
+   .. enumerator:: inoperable
+
+      The motor is inoperable.
+
+
+   .. enumerator:: not_enough_resources
+
+      The motor does not have enough resources to run.
+
+
+
+.. _cpp-api-parts-trees-of-parts:
+
+Trees of Parts
+--------------
+
+Vessels in KSP are comprised of a number of parts, connected to one another in a
+*tree* structure. An example vessel is shown in Figure 1, and the corresponding
+tree of parts in Figure 2. The craft file for this example can also be
+:download:`downloaded here </crafts/PartsTree.craft>`.
+
+.. only:: html
+
+   .. container:: clearer
+
+      ..
+
+   .. figure:: /images/api/parts.png
+      :align: left
+      :figwidth: 275
+
+      **Figure 1** -- Example parts making up a vessel.
+
+   .. figure:: /images/api/parts-tree.png
+      :align: right
+      :figwidth: 275
+
+      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+
+   .. container:: clearer
+
+      ..
+
+.. only:: latex
+
+   .. figure:: /images/api/parts.png
+      :align: center
+      :width: 55%
+
+      **Figure 1** -- Example parts making up a vessel.
+
+   .. figure:: /images/api/parts-tree.png
+      :align: center
+      :width: 55%
+
+      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+
+
+Traversing the Tree
+^^^^^^^^^^^^^^^^^^^
+
+The tree of parts can be traversed using the attributes :func:`Parts::root`,
+:func:`Part::parent` and :func:`Part::children`.
+
+The root of the tree is the same as the vessels *root part* (part number 1 in
+the example above) and can be obtained by calling :func:`Parts::root`.
+A parts children can be obtained by calling :func:`Part::children`.
+If the part does not have any children, :func:`Part::children`
+returns an empty list. A parts parent can be obtained by calling
+:func:`Part::parent`. If the part does not have a parent
+(as is the case for the root part), :func:`Part::parent`
+returns ``NULL``.
+
+The following C++ example uses these attributes to perform a
+depth-first traversal over all of the parts in a vessel:
+
+.. literalinclude:: /scripts/services/space-center/TreeTraversal.cpp
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+    Command Pod Mk1
+     TR-18A Stack Decoupler
+      FL-T400 Fuel Tank
+       LV-909 Liquid Fuel Engine
+        TR-18A Stack Decoupler
+         FL-T800 Fuel Tank
+          LV-909 Liquid Fuel Engine
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+       LT-1 Landing Struts
+       LT-1 Landing Struts
+     Mk16 Parachute
+
+.. _cpp-api-parts-attachment-modes:
+
+Attachment Modes
+^^^^^^^^^^^^^^^^
+
+Parts can be attached to other parts either *radially* (on the side of the
+parent part) or *axially* (on the end of the parent part, to form a stack).
+
+For example, in the vessel pictured above, the parachute (part 2) is *axially*
+connected to its parent (the command pod -- part 1), and the landing leg
+(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
+
+The root part of a vessel (for example the command pod -- part 1) does not have
+a parent part, so does not have an attachment mode. However, the part is
+consider to be *axially* attached to nothing.
+
+The following C++ example does a depth-first traversal as before,
+but also prints out the attachment mode used by the part:
+
+.. literalinclude:: /scripts/services/space-center/AttachmentModes.cpp
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+ Command Pod Mk1 - axial
+  TR-18A Stack Decoupler - axial
+   FL-T400 Fuel Tank - axial
+    LV-909 Liquid Fuel Engine - axial
+     TR-18A Stack Decoupler - axial
+      FL-T800 Fuel Tank - axial
+       LV-909 Liquid Fuel Engine - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+    LT-1 Landing Struts - radial
+    LT-1 Landing Struts - radial
+  Mk16 Parachute - axial
+
+.. _cpp-api-parts-fuel-lines:
+
+Fuel Lines
+----------
+
+.. only:: html
+
+   .. figure:: /images/api/parts-fuel-lines.png
+      :align: right
+      :figwidth: 200
+
+      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-fuel-lines.png
+      :align: center
+      :width: 55%
+
+      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+
+
+.. only:: html
+
+   .. figure:: /images/api/parts-fuel-lines-tree.png
+      :align: right
+      :figwidth: 200
+
+      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-fuel-lines-tree.png
+      :align: center
+      :width: 55%
+
+      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+
+Fuel lines are considered parts, and are included in the parts tree (for
+example, as pictured in Figure 4). However, the parts tree does not contain
+information about which parts fuel lines connect to. The parent part of a fuel
+line is the part from which it will take fuel (as shown in Figure 4) however the
+part that it will send fuel to is not represented in the parts tree.
+
+Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
+line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
+feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
+a child of part 11, but its connection to part 9 is not represented in the tree.
+
+The attributes :func:`Part::fuel_lines_from` and
+:func:`Part::fuel_lines_to` can be used to discover these
+connections. In the example in Figure 5, when
+:func:`Part::fuel_lines_to` is called on fuel tank part
+11, it will return a list of parts containing just fuel tank part 9 (the blue
+part). When :func:`Part::fuel_lines_from` is called on
+fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
+(the parts colored green).
+
+.. _cpp-api-parts-staging:
+
+Staging
+-------
+
+For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
+stage), use the :rst:ref:`cpp-api-stage` class via
+:func:`Vessel::stages` and
+:func:`Vessel::decouple_stages`. Legacy helpers
+:func:`Parts::in_stage`,
+:func:`Parts::in_decouple_stage`, and
+:func:`Vessel::resources_in_decouple_stage` remain available but
+are deprecated.
+
+.. only:: html
+
+   .. figure:: /images/api/parts-staging.png
+      :align: right
+      :figwidth: 340
+
+      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-staging.png
+      :align: center
+      :width: 55%
+
+      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+
+Each part has two staging numbers associated with it: the stage in which the
+part is *activated* and the stage in which the part is *decoupled*. These values
+can be obtained using :func:`Part::stage` and
+:func:`Part::decouple_stage` respectively. For parts that
+are not activated by staging, :func:`Part::stage` returns
+-1. For parts that are never decoupled,
+:func:`Part::decouple_stage` returns a value of -1.
+
+Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
+stages in which each part of the vessel will be *activated*. Figure 8 shows the
+stages in which each part of the vessel will be *decoupled*.
+
+.. only:: html
+
+   .. container:: clearer
+
+      ..
+
+   .. figure:: /images/api/parts-staging-activate.png
+      :align: left
+      :figwidth: 250
+
+      **Figure 7** -- The stage in which each part is *activated*.
+
+   .. figure:: /images/api/parts-staging-decouple.png
+      :align: right
+      :figwidth: 250
+
+      **Figure 8** -- The stage in which each part is *decoupled*.
+
+   .. container:: clearer
+
+      ..
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-staging-activate.png
+      :align: center
+      :width: 55%
+
+      **Figure 7** -- The stage in which each part is *activated*.
+
+   .. figure:: /images/api/parts-staging-decouple.png
+      :align: center
+      :width: 55%
+
+      **Figure 8** -- The stage in which each part is *decoupled*.

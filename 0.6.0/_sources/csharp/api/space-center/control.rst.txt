@@ -1,0 +1,719 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Control
+=======
+
+
+.. class:: Control
+
+   Used to manipulate the controls of a vessel. This includes adjusting the
+   throttle, enabling/disabling systems such as SAS and RCS, or altering the
+   direction in which the vessel is pointing.
+   Obtained by calling :prop:`Vessel.Control`.
+
+   .. note::
+
+      Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+      and the custom axes) are zeroed when all clients that have set one or more of
+      these inputs are no longer connected. The throttle is an exception: it keeps
+      its value when clients disconnect.
+
+   .. property:: ControlSource Source { get; }
+
+      The source of the vessels control, for example by a kerbal or a probe core.
+
+      :Game Scenes: Flight
+
+   .. property:: ControlState State { get; }
+
+      The control state of the vessel.
+
+      :Game Scenes: Flight
+
+   .. property:: bool SAS { get; set; }
+
+      The state of SAS.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :prop:`AutoPilot.SAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. property:: SASMode SASMode { get; set; }
+
+      The current :prop:`Control.SASMode`.
+      These modes are equivalent to the mode buttons to
+      the left of the navball that appear when SAS is enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :prop:`AutoPilot.SASMode`
+
+   .. property:: SpeedMode SpeedMode { get; set; }
+
+      The current :prop:`Control.SpeedMode` of the navball.
+      This is the mode displayed next to the speed at the top of the navball.
+
+      :Game Scenes: Flight
+
+   .. property:: bool EngineGimbals { get; set; }
+
+      Returns whether all gimballed engines on the vessel have gimbal enabled,
+      and sets the gimbal enabled state of all gimballed engines.
+      See :prop:`Engine.GimbalLocked`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ThrustReversers { get; set; }
+
+      Returns whether all engines with a thrust reverser on the vessel have
+      their thrust reverser engaged, and sets the thrust reverser state of all
+      such engines.
+      See :prop:`Engine.ThrustReversed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool AeroSurfaces { get; set; }
+
+      Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+      and sets the pitch, yaw and roll enabled state of all control surfaces.
+      See :prop:`ControlSurface.PitchEnabled`,
+      :prop:`ControlSurface.YawEnabled` and
+      :prop:`ControlSurface.RollEnabled`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool RCS { get; set; }
+
+      The state of RCS.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ReactionWheels { get; set; }
+
+      Returns whether all reactive wheels on the vessel are active,
+      and sets the active state of all reaction wheels.
+      See :prop:`ReactionWheel.Active`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Gear { get; set; }
+
+      The state of the landing gear/legs.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Legs { get; set; }
+
+      Returns whether all landing legs on the vessel are deployed,
+      and sets the deployment state of all landing legs.
+      Does not include wheels (for example landing gear).
+      See :prop:`Leg.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Wheels { get; set; }
+
+      Returns whether all wheels on the vessel are deployed,
+      and sets the deployment state of all wheels.
+      Does not include landing legs.
+      See :prop:`Wheel.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Lights { get; set; }
+
+      The state of the lights.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Brakes { get; set; }
+
+      The state of the wheel brakes.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Antennas { get; set; }
+
+      Returns whether all antennas on the vessel are deployed,
+      and sets the deployment state of all antennas.
+      See :prop:`Antenna.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool CargoBays { get; set; }
+
+      Returns whether any of the cargo bays on the vessel are open,
+      and sets the open state of all cargo bays.
+      See :prop:`CargoBay.Open`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Intakes { get; set; }
+
+      Returns whether all of the air intakes on the vessel are open,
+      and sets the open state of all air intakes.
+      See :prop:`Intake.Open`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Parachutes { get; set; }
+
+      Returns whether all parachutes on the vessel are deployed,
+      and sets the deployment state of all parachutes.
+      Cannot be set to ``false``.
+      See :prop:`Parachute.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Radiators { get; set; }
+
+      Returns whether all radiators on the vessel are deployed,
+      and sets the deployment state of all radiators.
+      See :prop:`Radiator.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ResourceHarvesters { get; set; }
+
+      Returns whether all of the resource harvesters on the vessel are deployed,
+      and sets the deployment state of all resource harvesters.
+      See :prop:`ResourceHarvester.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool ResourceHarvestersActive { get; set; }
+
+      Returns whether any of the resource harvesters on the vessel are active,
+      and sets the active state of all resource harvesters.
+      See :prop:`ResourceHarvester.Active`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool SolarPanels { get; set; }
+
+      Returns whether all solar panels on the vessel are deployed,
+      and sets the deployment state of all solar panels.
+      See :prop:`SolarPanel.Deployed`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Abort { get; set; }
+
+      The state of the abort action group.
+
+      :Game Scenes: Flight
+
+   .. property:: float Throttle { get; set; }
+
+      The state of the throttle. A value between 0 and 1.
+      Unlike the other control inputs, the throttle is not zeroed when the
+      clients that set it disconnect.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: ControlInputMode InputMode { get; set; }
+
+      Sets the behavior of the pitch, yaw, roll and translation control inputs.
+      When set to additive, these inputs are added to the vessels current inputs.
+      This mode is the default.
+      When set to override, these inputs (if non-zero) override the vessels inputs.
+      This mode prevents keyboard control, or SAS, from interfering with the controls when
+      they are set.
+
+      :Game Scenes: Flight
+
+   .. property:: float Pitch { get; set; }
+
+      The state of the pitch control.
+      A value between -1 and 1.
+      Equivalent to the w and s keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float Yaw { get; set; }
+
+      The state of the yaw control.
+      A value between -1 and 1.
+      Equivalent to the a and d keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float Roll { get; set; }
+
+      The state of the roll control.
+      A value between -1 and 1.
+      Equivalent to the q and e keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float PitchTrim { get; set; }
+
+      The state of the pitch trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+W and Alt+S keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. property:: float YawTrim { get; set; }
+
+      The state of the yaw trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+A and Alt+D keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. property:: float RollTrim { get; set; }
+
+      The state of the roll trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+Q and Alt+E keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Game Scenes: Flight
+
+   .. property:: float Forward { get; set; }
+
+      The state of the forward translational control.
+      A value between -1 and 1.
+      Equivalent to the h and n keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float Up { get; set; }
+
+      The state of the up translational control.
+      A value between -1 and 1.
+      Equivalent to the i and k keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float Right { get; set; }
+
+      The state of the right translational control.
+      A value between -1 and 1.
+      Equivalent to the j and l keys.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float WheelThrottle { get; set; }
+
+      The state of the wheel throttle.
+      A value between -1 and 1.
+      A value of 1 rotates the wheels forwards, a value of -1 rotates
+      the wheels backwards.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float WheelSteering { get; set; }
+
+      The state of the wheel steering.
+      A value between -1 and 1.
+      A value of 1 steers to the left, and a value of -1 steers to the right.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. property:: float CustomAxis01 { get; set; }
+
+      The state of CustomAxis01.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. property:: float CustomAxis02 { get; set; }
+
+      The state of CustomAxis02.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. property:: float CustomAxis03 { get; set; }
+
+      The state of CustomAxis03.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. property:: float CustomAxis04 { get; set; }
+
+      The state of CustomAxis04.
+      A value between -1 and 1.
+
+      :Game Scenes: Flight
+
+   .. property:: int CurrentStage { get; }
+
+      The current stage of the vessel. Corresponds to the stage number in
+      the in-game UI.
+
+      :Game Scenes: Flight
+
+   .. method:: System.Collections.Generic.IList<Vessel> ActivateNextStage()
+
+      Activates the next stage. Equivalent to pressing the space bar in-game.
+
+
+      :returns: A list of vessel objects that are jettisoned from the active vessel.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :prop:`SpaceCenter.ActiveVessel <SpaceCenter.SpaceCenter.ActiveVessel>` no longer refer to the active vessel.
+         Throws an exception if staging is locked.
+
+   .. property:: bool StageLock { get; set; }
+
+      Whether staging is locked on the vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is equivalent to locking the staging using Alt+L
+
+   .. method:: bool GetActionGroup(uint group)
+
+      Returns ``true`` if the given action group is enabled.
+
+      :parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+      :Game Scenes: Flight
+
+   .. method:: void SetActionGroup(uint group, bool state)
+
+      Sets the state of the given action group.
+
+      :parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void ToggleActionGroup(uint group)
+
+      Toggles the state of the given action group.
+
+      :parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+      :Game Scenes: Flight
+
+   .. method:: System.Collections.Generic.IList<ActionGroupAction> GetActionGroupActions(uint group)
+
+      Returns a list of all the part actions that are assigned to the given action group.
+      Each entry identifies the part, the part module, and the action's name and identifier.
+      Returns an empty list if no actions are assigned to the group.
+
+      :parameters:
+
+       * **group** -- A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         For stock action groups, the assignments are read from each part action directly.
+         When the Extended Action Groups mod is installed, the assignments are queried from
+         the mod instead, so that actions assigned to its additional groups are included.
+
+   .. method:: Node AddNode(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
+
+      Creates a maneuver node at the given universal time, and returns a
+      :type:`Node` object that can be used to modify it.
+      Optionally sets the magnitude of the delta-v for the maneuver node
+      in the prograde, normal and radial directions.
+
+      :parameters:
+
+       * **ut** -- Universal time of the maneuver node.
+       * **prograde** -- Delta-v in the prograde direction.
+       * **normal** -- Delta-v in the normal direction.
+       * **radial** -- Delta-v in the radial direction.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<Node> Nodes { get; }
+
+      Returns a list of all existing maneuver nodes, ordered by time from first to last.
+
+      :Game Scenes: Flight
+
+   .. method:: void RemoveNodes()
+
+      Remove all maneuver nodes.
+
+
+      :Game Scenes: Flight
+
+
+
+.. class:: ActionGroupAction
+
+   An action, belonging to a part module, that is assigned to an action group.
+   Obtained by calling :meth:`Control.GetActionGroupActions`.
+
+   .. property:: Part Part { get; }
+
+      The part that the action acts on.
+
+      :Game Scenes: All
+
+   .. property:: Module Module { get; }
+
+      The part module that the action belongs to. Returns ``null`` for a
+      part-level action that is not associated with a module. This only occurs when
+      the Extended Action Groups mod is installed, as it can assign actions defined
+      directly on a part, rather than on one of its modules, to an action group.
+
+      :Game Scenes: All
+
+   .. property:: string Name { get; }
+
+      The human-readable name of the action, as shown in the action group editor.
+
+      :Game Scenes: All
+
+   .. property:: string Id { get; }
+
+      The non-localized identifier for the action.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ControlState
+
+   The control state of a vessel.
+   See :prop:`Control.State`.
+
+
+   .. value:: Full
+
+      Full controllable.
+
+
+   .. value:: Partial
+
+      Partially controllable.
+
+
+   .. value:: None
+
+      Not controllable.
+
+
+
+.. enum:: ControlSource
+
+   The control source of a vessel.
+   See :prop:`Control.Source`.
+
+
+   .. value:: Kerbal
+
+      Vessel is controlled by a Kerbal.
+
+
+   .. value:: Probe
+
+      Vessel is controlled by a probe core.
+
+
+   .. value:: None
+
+      Vessel is not controlled.
+
+
+
+.. enum:: SASMode
+
+   The behavior of the SAS auto-pilot. See :prop:`AutoPilot.SASMode`.
+
+
+   .. value:: StabilityAssist
+
+      Stability assist mode. Dampen out any rotation.
+
+
+   .. value:: Maneuver
+
+      Point in the burn direction of the next maneuver node.
+
+
+   .. value:: Prograde
+
+      Point in the prograde direction.
+
+
+   .. value:: Retrograde
+
+      Point in the retrograde direction.
+
+
+   .. value:: Normal
+
+      Point in the orbit normal direction.
+
+
+   .. value:: AntiNormal
+
+      Point in the orbit anti-normal direction.
+
+
+   .. value:: Radial
+
+      Point in the orbit radial direction.
+
+
+   .. value:: AntiRadial
+
+      Point in the orbit anti-radial direction.
+
+
+   .. value:: Target
+
+      Point in the direction of the current target.
+
+
+   .. value:: AntiTarget
+
+      Point away from the current target.
+
+
+
+.. enum:: SpeedMode
+
+   The mode of the speed reported in the navball.
+   See :prop:`Control.SpeedMode`.
+
+
+   .. value:: Orbit
+
+      Speed is relative to the vessel's orbit.
+
+
+   .. value:: Surface
+
+      Speed is relative to the surface of the body being orbited.
+
+
+   .. value:: Target
+
+      Speed is relative to the current target.
+
+
+
+.. enum:: ControlInputMode
+
+   See :prop:`Control.InputMode`.
+
+
+   .. value:: Additive
+
+      Control inputs are added to the vessels current control inputs.
+
+
+   .. value:: Override
+
+      Control inputs (when they are non-zero) override the vessels current control inputs.

@@ -1,0 +1,70 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::InfernalRobotics
+
+InfernalRobotics
+================
+
+
+.. namespace:: krpc::services
+.. class:: InfernalRobotics : public krpc::Service
+
+   This service provides functionality to interact with
+   `Infernal Robotics <https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/>`_.
+
+   .. function:: InfernalRobotics(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether Infernal Robotics is installed.
+
+   
+
+   .. function:: bool ready()
+
+      Whether Infernal Robotics API is ready.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<ServoGroup> servo_groups(SpaceCenter::Vessel vessel)
+
+      A list of all the servo groups in the given *vessel*.
+
+      :Parameters:
+
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Works for any loaded vessel, not just the active one. Groups on a non-active vessel
+         support movement and per-servo control, but not preset, key, speed-factor or
+         expanded state, which are only tracked by Infernal Robotics for the active vessel.
+
+   .. function:: ServoGroup servo_group_with_name(SpaceCenter::Vessel vessel, std::string name)
+
+      Returns the servo group in the given *vessel* with the given *name*,
+      or ``NULL`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+      :Parameters:
+
+       * **vessel** -- Vessel to check.
+       * **name** -- Name of servo group to find.
+
+      :Game Scenes: Flight
+
+   .. function:: Servo servo_with_name(SpaceCenter::Vessel vessel, std::string name)
+
+      Returns the servo in the given *vessel* with the given *name* or
+      ``NULL`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+      :Parameters:
+
+       * **vessel** -- Vessel to check.
+       * **name** -- Name of the servo to find.
+
+      :Game Scenes: Flight

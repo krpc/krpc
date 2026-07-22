@@ -1,0 +1,374 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Alarms
+======
+
+
+.. type:: krpc_SpaceCenter_AlarmManager_t
+
+   Alarm manager.
+   Obtained by calling :func:`krpc_SpaceCenter_AlarmManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_Alarms(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all alarms.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AlarmsWithType(krpc_connection_t connection, krpc_list_object_t * result, krpc_SpaceCenter_AlarmType_t type)
+
+      A list of all alarms of the given type.
+
+      :Parameters:
+
+       * **type** -- The type of alarm to return.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AlarmWithName(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, const char * name)
+
+      Returns the first alarm with the given title, or ``nullptr`` if no such
+      alarm exists. Alarm titles are not guaranteed to be unique; if more than
+      one alarm shares the given title, the first one found is returned.
+
+      :Parameters:
+
+       * **name** -- The title of the alarm to return.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, double time, const char * title, const char * description)
+
+      Create an alarm.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddVesselAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, double time, krpc_SpaceCenter_Vessel_t vessel, const char * title, const char * description)
+
+      Create an alarm linked to a vessel.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **vessel** -- Vessel to link the alarm to.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddApoapsisAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, double offset, const char * title, const char * description)
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddPeriapsisAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, double offset, const char * title, const char * description)
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddManeuverNodeAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, krpc_SpaceCenter_Node_t node, double offset, bool addBurnTime, const char * title, const char * description)
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **node** -- The maneuver node.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **addBurnTime** -- Whether the node's burn time should be included in the alarm.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddSOIAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, double offset, const char * title, const char * description)
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddTransferWindowAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, krpc_SpaceCenter_CelestialBody_t target, const char * title, const char * description)
+
+      Create an alarm for the next planetary transfer window from the vessel's
+      current parent body to the target body.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **target** -- The target body.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+      .. note::
+
+         This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+         compute a transfer from the vessel's current parent body to the target,
+         the resulting alarm may not fire at a useful time; in that case the
+         properties on the returned alarm can still be used to inspect or adjust it.
+
+
+
+.. type:: krpc_SpaceCenter_Alarm_t
+
+   An alarm. Can be accessed using :func:`krpc_SpaceCenter_AlarmManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_ID(krpc_connection_t connection, uint32_t * result)
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Type(krpc_connection_t connection, krpc_SpaceCenter_AlarmType_t * result)
+
+      Type of alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Title(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_Title(const char * value)
+
+      Title of the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Description(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_Description(const char * value)
+
+      Description of the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Time(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_Time(double value)
+
+      Time the alarm will trigger, in seconds since epoch.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_TimeUntil(krpc_connection_t connection, double * result)
+
+      Time until the alarm triggers, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_EventOffset(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_EventOffset(double value)
+
+      Seconds between the alarm going off and the event it references.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      Vessel the alarm references. ``nullptr`` if it does not reference a vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Node(krpc_connection_t connection, krpc_SpaceCenter_Node_t * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_Node(krpc_SpaceCenter_Node_t value)
+
+      Maneuver node the alarm references. Only valid for alarms of type
+      :macro:`KRPC_SPACECENTER_ALARMTYPE_MANEUVER`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :macro:`KRPC_SPACECENTER_ALARMTYPE_MANEUVER`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_OriginBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_OriginBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      Origin body for the transfer window. Only valid for alarms of type
+      :macro:`KRPC_SPACECENTER_ALARMTYPE_TRANSFERWINDOW`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :macro:`KRPC_SPACECENTER_ALARMTYPE_TRANSFERWINDOW`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_DestinationBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_DestinationBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      Destination body for the transfer window. Only valid for alarms of type
+      :macro:`KRPC_SPACECENTER_ALARMTYPE_TRANSFERWINDOW`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :macro:`KRPC_SPACECENTER_ALARMTYPE_TRANSFERWINDOW`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_WarpAction(krpc_connection_t connection, krpc_SpaceCenter_AlarmWarpAction_t * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_WarpAction(krpc_SpaceCenter_AlarmWarpAction_t value)
+
+      The action taken on time warp when the alarm fires.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_MessageAction(krpc_connection_t connection, krpc_SpaceCenter_AlarmMessageAction_t * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_MessageAction(krpc_SpaceCenter_AlarmMessageAction_t value)
+
+      The on-screen message behavior when the alarm fires.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_PlaySound(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_PlaySound(bool value)
+
+      Whether the alarm plays a sound when it fires.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_DeleteOnDismiss(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Alarm_set_DeleteOnDismiss(bool value)
+
+      Whether the alarm is deleted automatically once the player has dismissed
+      the triggered message.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Triggered(krpc_connection_t connection, bool * result)
+
+      Whether the time of the alarm has passed and its actions have been triggered.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Actioned(krpc_connection_t connection, bool * result)
+
+      Whether the alarm's actions were triggered and then completed or closed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Remove(krpc_connection_t connection)
+
+      Removes the alarm.
+
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_AlarmType_t
+
+   The type of an alarm. See :func:`krpc_SpaceCenter_Alarm_Type`.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_RAW
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_APOAPSIS
+
+      An alarm for the next apoapsis of a vessel.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_PERIAPSIS
+
+      An alarm for the next periapsis of a vessel.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_MANEUVER
+
+      An alarm based on a maneuver node on the vessel's flight path.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_SOICHANGE
+
+      An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_TRANSFERWINDOW
+
+      An alarm for the next planetary transfer window from the vessel's current
+      orbit to a target body.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMTYPE_UNKNOWN
+
+      The alarm is of a type not recognized by kRPC. Typically this is a type
+      introduced by a mod.
+
+
+
+.. type:: krpc_SpaceCenter_AlarmWarpAction_t
+
+   The warp action taken when an alarm fires.
+   See :func:`krpc_SpaceCenter_Alarm_WarpAction`.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMWARPACTION_NOCHANGE
+
+      Do not change time warp when the alarm fires.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMWARPACTION_STOPWARP
+
+      Drop out of time warp when the alarm fires.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMWARPACTION_PAUSEGAME
+
+      Pause the game when the alarm fires.
+
+
+
+.. type:: krpc_SpaceCenter_AlarmMessageAction_t
+
+   The on-screen message action taken when an alarm fires.
+   See :func:`krpc_SpaceCenter_Alarm_MessageAction`.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMMESSAGEACTION_NOMESSAGE
+
+      Do not display a message when the alarm fires.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMMESSAGEACTION_MESSAGE
+
+      Display a message when the alarm fires.
+
+
+   .. macro:: KRPC_SPACECENTER_ALARMMESSAGEACTION_MESSAGEIFNOTACTIVEVESSEL
+
+      Display a message only if the alarm's vessel is not the currently active vessel.

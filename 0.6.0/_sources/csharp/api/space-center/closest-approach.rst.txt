@@ -1,0 +1,139 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Closest Approach
+================
+
+
+.. class:: ClosestApproach
+
+   A close approach between an orbit and a target orbit. Obtained by calling
+   :meth:`Orbit.NextClosestApproach` or :meth:`Orbit.ClosestApproaches`.
+
+   .. note::
+
+      A close approach is a snapshot: the time of closest approach is estimated once
+      when the object is created, and every member describes the state at that time.
+      Relative quantities are the target relative to the orbiting object (target minus
+      self).
+
+   .. property:: double UT { get; }
+
+      The universal time of the closest approach, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double TimeTo { get; }
+
+      The time until the closest approach, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double Distance { get; }
+
+      The distance between the objects at the closest approach, in meters.
+
+      :Game Scenes: All
+
+   .. property:: double RelativeSpeed { get; }
+
+      The relative speed of the objects at the closest approach, in meters per
+      second. This is the magnitude of :meth:`ClosestApproach.RelativeVelocity`, and does
+      not depend on the choice of reference frame.
+
+      :Game Scenes: All
+
+   .. property:: Vessel Vessel { get; }
+
+      The vessel doing the approaching, or ``null`` if it is not a vessel.
+
+      :Game Scenes: All
+
+   .. property:: CelestialBody Body { get; }
+
+      The celestial body doing the approaching, or ``null`` if it is not a
+      celestial body.
+
+      :Game Scenes: All
+
+   .. property:: Vessel TargetVessel { get; }
+
+      The vessel being approached, or ``null`` if the target is not a vessel.
+
+      :Game Scenes: All
+
+   .. property:: CelestialBody TargetBody { get; }
+
+      The celestial body being approached, or ``null`` if the target is not a
+      celestial body.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame = null)
+
+      The position of the orbiting object at the closest approach.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> TargetPosition(ReferenceFrame referenceFrame = null)
+
+      The position of the target object at the closest approach.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame = null)
+
+      The velocity of the orbiting object at the closest approach.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The velocity as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> TargetVelocity(ReferenceFrame referenceFrame = null)
+
+      The velocity of the target object at the closest approach.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The velocity as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> RelativePosition(ReferenceFrame referenceFrame = null)
+
+      The position of the target relative to the orbiting object at the closest
+      approach.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The relative position as a vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> RelativeVelocity(ReferenceFrame referenceFrame = null)
+
+      The velocity of the target relative to the orbiting object at the closest
+      approach.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The relative velocity as a vector.
+      :Game Scenes: All

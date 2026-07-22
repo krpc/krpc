@@ -1,0 +1,220 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Resources
+=========
+
+
+.. class:: Resources
+
+   Represents the collection of resources stored in a vessel, stage or part.
+   Created by calling :func:`Vessel::resources`,
+   :func:`Vessel::resources_in_decouple_stage` or
+   :func:`Part::resources`.
+
+   .. function:: std::vector<Resource> all()
+
+      All the individual resources that can be stored.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<Resource> with_resource(std::string name)
+
+      All the individual resources with the given name that can be stored.
+
+      :Parameters:
+
+
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<std::string> names()
+
+      A list of resource names that can be stored.
+
+      :Game Scenes: Flight
+
+   .. function:: bool has_resource(std::string name)
+
+      Check whether the named resource can be stored.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: float amount(std::string name)
+
+      Returns the amount of a resource that is currently stored.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: float max(std::string name)
+
+      Returns the amount of a resource that can be stored.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: static float density(Client& connection, std::string name)
+
+      Returns the density of a resource, in :math:`kg/l`.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: static ResourceFlowMode flow_mode(Client& connection, std::string name)
+
+      Returns the flow mode of a resource.
+
+      :Parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether use of all the resources are enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is ``true`` if all of the resources are enabled.
+         If any of the resources are not enabled, this is ``false``.
+
+
+
+.. class:: Resource
+
+   An individual resource stored within a part.
+   Created using methods in the :class:`Resources` class.
+
+   .. function:: std::string name()
+
+      The name of the resource.
+
+   
+
+   .. function:: Part part()
+
+      The part containing the resource.
+
+   
+
+   .. function:: float amount()
+
+      The amount of the resource that is currently stored in the part.
+
+   
+
+   .. function:: float max()
+
+      The total amount of the resource that can be stored in the part.
+
+   
+
+   .. function:: float density()
+
+      The density of the resource, in :math:`kg/l`.
+
+   
+
+   .. function:: ResourceFlowMode flow_mode()
+
+      The flow mode of the resource.
+
+   
+
+   .. function:: bool enabled()
+   .. function:: void set_enabled(bool value)
+
+      Whether use of this resource is enabled.
+
+   
+
+
+
+.. class:: ResourceTransfer
+
+   Transfer resources between parts.
+
+   .. function:: static ResourceTransfer start(Client& connection, Part from_part, Part to_part, std::string resource, float max_amount)
+
+      Start transferring a resource transfer between a pair of parts. The transfer will move
+      at most *max_amount* units of the resource, depending on how much of
+      the resource is available in the source part and how much storage is available in the
+      destination part.
+      Use :func:`ResourceTransfer::complete` to check if the transfer is complete.
+      Use :func:`ResourceTransfer::amount` to see how much of the resource has been transferred.
+
+      :Parameters:
+
+       * **from_part** -- The part to transfer to.
+       * **to_part** -- The part to transfer from.
+       * **resource** -- The name of the resource to transfer.
+       * **max_amount** -- The maximum amount of resource to transfer.
+
+   
+
+      .. note::
+
+         The transfer is canceled if the client that started it disconnects;
+         a canceled transfer is marked as complete.
+
+   .. function:: float amount()
+
+      The amount of the resource that has been transferred.
+
+   
+
+   .. function:: bool complete()
+
+      Whether the transfer has completed. Also becomes true if the transfer is
+      canceled because the client that started it disconnected.
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: ResourceFlowMode
+
+   The way in which a resource flows between parts. See :func:`Resources::flow_mode`.
+
+
+   .. enumerator:: vessel
+
+      The resource flows to any part in the vessel. For example, electric charge.
+
+
+   .. enumerator:: stage
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+
+   .. enumerator:: adjacent
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+
+   .. enumerator:: none
+
+      The resource does not flow. For example, solid fuel.

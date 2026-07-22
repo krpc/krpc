@@ -1,0 +1,55 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KerbalAlarmClock
+
+AlarmAction
+===========
+
+
+.. enum:: AlarmAction
+
+   The action performed by an alarm when it fires.
+
+
+   .. value:: DoNothing
+
+      Don't do anything at all...
+
+
+   .. value:: DoNothingDeleteWhenPassed
+
+      Don't do anything, and delete the alarm.
+
+
+   .. value:: KillWarp
+
+      Drop out of time warp and display a message.
+
+
+   .. value:: KillWarpOnly
+
+      Drop out of time warp, without displaying a message.
+
+
+   .. value:: MessageOnly
+
+      Display a message, without affecting time warp.
+
+
+   .. value:: PauseGame
+
+      Pause the game and display a message.
+
+
+   .. value:: Custom
+
+      A combination of actions configured in the Kerbal Alarm Clock user
+      interface that does not correspond to any of the other values.
+      Setting an alarm's action to this value has no effect.
+
+
+   .. value:: Converted
+
+      The alarm was converted from an older version of Kerbal Alarm Clock
+      and its action has not been set since.
+      Setting an alarm's action to this value has no effect.

@@ -1,0 +1,164 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: InfernalRobotics
+
+ServoGroup
+==========
+
+
+.. class:: ServoGroup
+
+   A group of servos, obtained by calling :meth:`servo_groups`
+   or :meth:`servo_group_with_name`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. attribute:: name
+
+      The name of the group.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: forward_key
+
+      The key assigned to be the "forward" key for the group.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: reverse_key
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: speed
+
+      The speed multiplier for the group.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: expanded
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: vessel
+
+      The vessel the group belongs to, or ``None`` if it is not available.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Vessel`
+      :Game Scenes: Flight
+
+   .. attribute:: moving_direction
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: advanced_mode
+
+      Whether the group is in advanced mode.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: electric_charge_required
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: build_aid
+
+      Whether the build aid is enabled for the group.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: ik_active
+
+      Whether inverse kinematics is active for the group.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: servos
+
+      The servos that are in the group.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Servo`)
+      :Game Scenes: Flight
+
+   .. method:: servo_with_name(name)
+
+      Returns the servo with the given *name* from this group,
+      or ``None`` if none exists.
+
+      :param str name: Name of servo to find.
+      :rtype: :class:`Servo`
+      :Game Scenes: Flight
+
+   .. attribute:: parts
+
+      The parts containing the servos in the group.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`SpaceCenter.Part`)
+      :Game Scenes: Flight
+
+   .. method:: move_right()
+
+      Moves all of the servos in the group to the right.
+
+      :Game Scenes: Flight
+
+   .. method:: move_left()
+
+      Moves all of the servos in the group to the left.
+
+      :Game Scenes: Flight
+
+   .. method:: move_center()
+
+      Moves all of the servos in the group to the center.
+
+      :Game Scenes: Flight
+
+   .. method:: move_next_preset()
+
+      Moves all of the servos in the group to the next preset.
+
+      :Game Scenes: Flight
+
+   .. method:: move_prev_preset()
+
+      Moves all of the servos in the group to the previous preset.
+
+      :Game Scenes: Flight
+
+   .. method:: stop()
+
+      Stops the servos in the group.
+
+      :Game Scenes: Flight

@@ -1,0 +1,39 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.RemoteTech
+
+RemoteTech
+==========
+
+
+.. type:: public class RemoteTech
+
+   This service provides functionality to interact with
+   `RemoteTech <https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/>`_.
+
+   .. method:: boolean getAvailable()
+
+
+      Whether RemoteTech is installed.
+
+   
+
+   .. method:: java.util.List<String> getGroundStations()
+
+
+      The names of the ground stations.
+
+   
+
+   .. method:: Antenna antenna(SpaceCenter.Part part)
+
+      Get the antenna object for a particular part.
+
+      :param SpaceCenter.Part part:
+   
+
+   .. method:: Comms comms(SpaceCenter.Vessel vessel)
+
+      Get a communications object, representing the communication capability of a particular vessel.
+
+      :param SpaceCenter.Vessel vessel:

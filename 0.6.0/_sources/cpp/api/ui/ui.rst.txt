@@ -1,0 +1,94 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+UI
+==
+
+
+.. namespace:: krpc::services
+.. class:: UI : public krpc::Service
+
+   Provides functionality for drawing and interacting with in-game user interface elements.
+
+   .. note::
+
+      For drawing 3D objects in the flight scene, see the Drawing service.
+      User interface elements created by a client are removed when that client
+      disconnects.
+
+   .. function:: UI(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: Canvas stock_canvas()
+
+      The stock UI canvas.
+
+   
+
+   .. function:: Canvas add_canvas()
+
+      Add a new canvas.
+
+
+   
+
+      .. note::
+
+         If you want to add UI elements to KSPs stock UI canvas, use :func:`stock_canvas`.
+
+   .. function:: void message(std::string content, float duration = 1.0, MessagePosition position = static_cast<MessagePosition>(1), std::tuple<double, double, double> color = std::tuple<double, double, double>(1.0, 0.92, 0.016), float size = 20.0)
+
+      Display a message on the screen.
+
+      :Parameters:
+
+       * **content** -- Message content.
+       * **duration** -- Duration before the message disappears, in seconds.
+       * **position** -- Position to display the message.
+       * **color** -- The color of the message.
+       * **size** -- Size of the message, differs per position.
+
+   
+
+      .. note::
+
+         The message appears just like a stock message, for example quicksave or quickload messages.
+
+   .. function:: void clear(bool client_only = false)
+
+      Remove all user interface elements.
+
+      :Parameters:
+
+       * **client_only** -- If true, only remove objects created by the calling client.
+
+   
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: MessagePosition
+
+   Message position.
+
+
+   .. enumerator:: top_left
+
+      Top left.
+
+
+   .. enumerator:: top_center
+
+      Top center.
+
+
+   .. enumerator:: top_right
+
+      Top right.
+
+
+   .. enumerator:: bottom_center
+
+      Bottom center.

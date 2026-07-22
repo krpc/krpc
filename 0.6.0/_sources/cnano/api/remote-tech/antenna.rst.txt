@@ -1,0 +1,86 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Antenna
+=======
+
+
+.. type:: krpc_RemoteTech_Antenna_t
+
+   A RemoteTech antenna. Obtained by calling :func:`krpc_RemoteTech_Comms_Antennas` or :func:`krpc_RemoteTech_Antenna`.
+
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      Get the part containing this antenna.
+
+   
+
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_HasConnection(krpc_connection_t connection, bool * result)
+
+      Whether the antenna has a connection.
+
+   
+
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_Target(krpc_connection_t connection, krpc_RemoteTech_Target_t * result)
+   .. function:: void krpc_RemoteTech_Antenna_set_Target(krpc_RemoteTech_Target_t value)
+
+      The object that the antenna is targetting.
+      This property can be used to set the target to :macro:`KRPC_REMOTETECH_TARGET_NONE` or :macro:`KRPC_REMOTETECH_TARGET_ACTIVEVESSEL`.
+      To set the target to a celestial body, ground station or vessel see :func:`krpc_RemoteTech_Antenna_TargetBody`,
+      :func:`krpc_RemoteTech_Antenna_TargetGroundStation` and :func:`krpc_RemoteTech_Antenna_TargetVessel`.
+
+   
+
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_RemoteTech_Antenna_set_TargetBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      The celestial body the antenna is targetting.
+
+   
+
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetGroundStation(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_RemoteTech_Antenna_set_TargetGroundStation(const char * value)
+
+      The ground station the antenna is targetting.
+
+   
+
+   .. function:: krpc_error_t krpc_RemoteTech_Antenna_TargetVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+   .. function:: void krpc_RemoteTech_Antenna_set_TargetVessel(krpc_SpaceCenter_Vessel_t value)
+
+      The vessel the antenna is targetting.
+
+   
+
+
+
+.. type:: krpc_RemoteTech_Target_t
+
+   The type of object an antenna is targetting.
+   See :func:`krpc_RemoteTech_Antenna_Target`.
+
+
+   .. macro:: KRPC_REMOTETECH_TARGET_ACTIVEVESSEL
+
+      The active vessel.
+
+
+   .. macro:: KRPC_REMOTETECH_TARGET_CELESTIALBODY
+
+      A celestial body.
+
+
+   .. macro:: KRPC_REMOTETECH_TARGET_GROUNDSTATION
+
+      A ground station.
+
+
+   .. macro:: KRPC_REMOTETECH_TARGET_VESSEL
+
+      A specific vessel.
+
+
+   .. macro:: KRPC_REMOTETECH_TARGET_NONE
+
+      No target.

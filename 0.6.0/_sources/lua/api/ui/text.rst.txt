@@ -1,0 +1,183 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+Text
+====
+
+
+.. class:: Text
+
+   A text label. See :meth:`UI.Panel.add_text`.
+
+   .. attribute:: rect_transform: UI.RectTransform
+
+      The rect transform for the text.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: visible: boolean
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: content: string
+
+      The text string
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: font: string
+
+      Name of the font
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: available_fonts: List
+
+      A list of all available fonts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. attribute:: size: number
+
+      Font size.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: style: UI.FontStyle
+
+      Font style.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.FontStyle`
+
+   .. attribute:: color: Tuple
+
+      Set the color
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: alignment: UI.TextAnchor
+
+      Alignment.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.TextAnchor`
+
+   .. attribute:: line_spacing: number
+
+      Line spacing.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. method:: remove()
+
+      Remove the UI object.
+
+
+
+.. class:: FontStyle
+
+   Font style.
+
+
+   .. data:: normal
+
+      Normal.
+
+
+   .. data:: bold
+
+      Bold.
+
+
+   .. data:: italic
+
+      Italic.
+
+
+   .. data:: bold_and_italic
+
+      Bold and italic.
+
+
+
+.. class:: TextAlignment
+
+   Text alignment.
+
+
+   .. data:: left
+
+      Left aligned.
+
+
+   .. data:: right
+
+      Right aligned.
+
+
+   .. data:: center
+
+      Center aligned.
+
+
+
+.. class:: TextAnchor
+
+   Text alignment.
+
+
+   .. data:: lower_center
+
+      Lower center.
+
+
+   .. data:: lower_left
+
+      Lower left.
+
+
+   .. data:: lower_right
+
+      Lower right.
+
+
+   .. data:: middle_center
+
+      Middle center.
+
+
+   .. data:: middle_left
+
+      Middle left.
+
+
+   .. data:: middle_right
+
+      Middle right.
+
+
+   .. data:: upper_center
+
+      Upper center.
+
+
+   .. data:: upper_left
+
+      Upper left.
+
+
+   .. data:: upper_right
+
+      Upper right.

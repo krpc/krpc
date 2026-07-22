@@ -1,0 +1,357 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Contracts
+=========
+
+
+.. class:: ContractManager
+
+   Contracts manager.
+   Obtained by calling :prop:`SpaceCenter.ContractManager <SpaceCenter.SpaceCenter.ContractManager>`.
+
+   .. property:: System.Collections.Generic.ISet<string> Types { get; }
+
+      A list of all contract types.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Contract> AllContracts { get; }
+
+      A list of all contracts.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Contract> ActiveContracts { get; }
+
+      A list of all active contracts.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Contract> OfferedContracts { get; }
+
+      A list of all offered, but unaccepted, contracts.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Contract> CompletedContracts { get; }
+
+      A list of all completed contracts.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<Contract> FailedContracts { get; }
+
+      A list of all failed contracts.
+
+      :Game Scenes: All
+
+
+
+.. class:: Contract
+
+   A contract. Can be accessed using :prop:`SpaceCenter.ContractManager <SpaceCenter.SpaceCenter.ContractManager>`.
+
+   .. property:: string Type { get; }
+
+      Type of the contract.
+
+      :Game Scenes: All
+
+   .. property:: string Title { get; }
+
+      Title of the contract.
+
+      :Game Scenes: All
+
+   .. property:: string Description { get; }
+
+      Description of the contract.
+
+      :Game Scenes: All
+
+   .. property:: string Notes { get; }
+
+      Notes for the contract.
+
+      :Game Scenes: All
+
+   .. property:: string Synopsis { get; }
+
+      Synopsis for the contract.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Keywords { get; }
+
+      Keywords for the contract.
+
+      :Game Scenes: All
+
+   .. property:: ContractState State { get; }
+
+      State of the contract.
+
+      :Game Scenes: All
+
+   .. property:: bool Seen { get; }
+
+      Whether the contract has been seen.
+
+      :Game Scenes: All
+
+   .. property:: bool Read { get; }
+
+      Whether the contract has been read.
+
+      :Game Scenes: All
+
+   .. property:: bool Active { get; }
+
+      Whether the contract is active.
+
+      :Game Scenes: All
+
+   .. property:: bool Failed { get; }
+
+      Whether the contract has been failed.
+
+      :Game Scenes: All
+
+   .. property:: bool CanBeCanceled { get; }
+
+      Whether the contract can be canceled.
+
+      :Game Scenes: All
+
+   .. property:: bool CanBeDeclined { get; }
+
+      Whether the contract can be declined.
+
+      :Game Scenes: All
+
+   .. property:: bool CanBeFailed { get; }
+
+      Whether the contract can be failed.
+
+      :Game Scenes: All
+
+   .. method:: void Accept()
+
+      Accept an offered contract.
+
+
+      :Game Scenes: All
+
+   .. method:: void Cancel()
+
+      Cancel an active contract.
+
+
+      :Game Scenes: All
+
+   .. method:: void Decline()
+
+      Decline an offered contract.
+
+
+      :Game Scenes: All
+
+   .. property:: double FundsAdvance { get; }
+
+      Funds received when accepting the contract.
+
+      :Game Scenes: All
+
+   .. property:: double FundsCompletion { get; }
+
+      Funds received on completion of the contract.
+
+      :Game Scenes: All
+
+   .. property:: double FundsFailure { get; }
+
+      Funds lost if the contract is failed.
+
+      :Game Scenes: All
+
+   .. property:: double ReputationCompletion { get; }
+
+      Reputation gained on completion of the contract.
+
+      :Game Scenes: All
+
+   .. property:: double ReputationFailure { get; }
+
+      Reputation lost if the contract is failed.
+
+      :Game Scenes: All
+
+   .. property:: double ScienceCompletion { get; }
+
+      Science gained on completion of the contract.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ContractParameter> Parameters { get; }
+
+      Parameters for the contract.
+
+      :Game Scenes: All
+
+   .. property:: double DateAccepted { get; }
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+      :Game Scenes: All
+
+   .. property:: double DateDeadline { get; }
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+      :Game Scenes: All
+
+   .. property:: double DateExpire { get; }
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+      :Game Scenes: All
+
+   .. property:: double DateFinished { get; }
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ContractState
+
+   The state of a contract. See :prop:`Contract.State`.
+
+
+   .. value:: Active
+
+      The contract is active.
+
+
+   .. value:: Canceled
+
+      The contract has been canceled.
+
+
+   .. value:: Completed
+
+      The contract has been completed.
+
+
+   .. value:: DeadlineExpired
+
+      The deadline for the contract has expired.
+
+
+   .. value:: Declined
+
+      The contract has been declined.
+
+
+   .. value:: Failed
+
+      The contract has been failed.
+
+
+   .. value:: Generated
+
+      The contract has been generated.
+
+
+   .. value:: Offered
+
+      The contract has been offered to the player.
+
+
+   .. value:: OfferExpired
+
+      The contract was offered to the player, but the offer expired.
+
+
+   .. value:: Withdrawn
+
+      The contract has been withdrawn.
+
+
+
+.. class:: ContractParameter
+
+   A contract parameter. See :prop:`Contract.Parameters`.
+
+   .. property:: string Title { get; }
+
+      Title of the parameter.
+
+      :Game Scenes: All
+
+   .. property:: string Notes { get; }
+
+      Notes for the parameter.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<ContractParameter> Children { get; }
+
+      Child contract parameters.
+
+      :Game Scenes: All
+
+   .. property:: bool Completed { get; }
+
+      Whether the parameter has been completed.
+
+      :Game Scenes: All
+
+   .. property:: bool Failed { get; }
+
+      Whether the parameter has been failed.
+
+      :Game Scenes: All
+
+   .. property:: bool Optional { get; }
+
+      Whether the contract parameter is optional.
+
+      :Game Scenes: All
+
+   .. property:: double FundsCompletion { get; }
+
+      Funds received on completion of the contract parameter.
+
+      :Game Scenes: All
+
+   .. property:: double FundsFailure { get; }
+
+      Funds lost if the contract parameter is failed.
+
+      :Game Scenes: All
+
+   .. property:: double ReputationCompletion { get; }
+
+      Reputation gained on completion of the contract parameter.
+
+      :Game Scenes: All
+
+   .. property:: double ReputationFailure { get; }
+
+      Reputation lost if the contract parameter is failed.
+
+      :Game Scenes: All
+
+   .. property:: double ScienceCompletion { get; }
+
+      Science gained on completion of the contract parameter.
+
+      :Game Scenes: All

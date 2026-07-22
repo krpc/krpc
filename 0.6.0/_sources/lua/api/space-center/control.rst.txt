@@ -1,0 +1,732 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Control
+=======
+
+
+.. class:: Control
+
+   Used to manipulate the controls of a vessel. This includes adjusting the
+   throttle, enabling/disabling systems such as SAS and RCS, or altering the
+   direction in which the vessel is pointing.
+   Obtained by calling :attr:`SpaceCenter.Vessel.control`.
+
+   .. note::
+
+      Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+      and the custom axes) are zeroed when all clients that have set one or more of
+      these inputs are no longer connected. The throttle is an exception: it keeps
+      its value when clients disconnect.
+
+   .. attribute:: source: SpaceCenter.ControlSource
+
+      The source of the vessels control, for example by a kerbal or a probe core.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ControlSource`
+
+   .. attribute:: state: SpaceCenter.ControlState
+
+      The control state of the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ControlState`
+
+   .. attribute:: sas: boolean
+
+      The state of SAS.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         Equivalent to :attr:`SpaceCenter.AutoPilot.sas`.
+         Throws an exception if set to ``True`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. attribute:: sas_mode: SpaceCenter.SASMode
+
+      The current :attr:`SpaceCenter.Control.sas_mode`.
+      These modes are equivalent to the mode buttons to
+      the left of the navball that appear when SAS is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.SASMode`
+
+      .. note::
+
+         Equivalent to :attr:`SpaceCenter.AutoPilot.sas_mode`
+
+   .. attribute:: speed_mode: SpaceCenter.SpeedMode
+
+      The current :attr:`SpaceCenter.Control.speed_mode` of the navball.
+      This is the mode displayed next to the speed at the top of the navball.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.SpeedMode`
+
+   .. attribute:: engine_gimbals: boolean
+
+      Returns whether all gimballed engines on the vessel have gimbal enabled,
+      and sets the gimbal enabled state of all gimballed engines.
+      See :attr:`SpaceCenter.Engine.gimbal_locked`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: thrust_reversers: boolean
+
+      Returns whether all engines with a thrust reverser on the vessel have
+      their thrust reverser engaged, and sets the thrust reverser state of all
+      such engines.
+      See :attr:`SpaceCenter.Engine.thrust_reversed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: aero_surfaces: boolean
+
+      Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+      and sets the pitch, yaw and roll enabled state of all control surfaces.
+      See :attr:`SpaceCenter.ControlSurface.pitch_enabled`,
+      :attr:`SpaceCenter.ControlSurface.yaw_enabled` and
+      :attr:`SpaceCenter.ControlSurface.roll_enabled`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: rcs: boolean
+
+      The state of RCS.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: reaction_wheels: boolean
+
+      Returns whether all reactive wheels on the vessel are active,
+      and sets the active state of all reaction wheels.
+      See :attr:`SpaceCenter.ReactionWheel.active`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: gear: boolean
+
+      The state of the landing gear/legs.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: legs: boolean
+
+      Returns whether all landing legs on the vessel are deployed,
+      and sets the deployment state of all landing legs.
+      Does not include wheels (for example landing gear).
+      See :attr:`SpaceCenter.Leg.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: wheels: boolean
+
+      Returns whether all wheels on the vessel are deployed,
+      and sets the deployment state of all wheels.
+      Does not include landing legs.
+      See :attr:`SpaceCenter.Wheel.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: lights: boolean
+
+      The state of the lights.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: brakes: boolean
+
+      The state of the wheel brakes.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: antennas: boolean
+
+      Returns whether all antennas on the vessel are deployed,
+      and sets the deployment state of all antennas.
+      See :attr:`SpaceCenter.Antenna.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: cargo_bays: boolean
+
+      Returns whether any of the cargo bays on the vessel are open,
+      and sets the open state of all cargo bays.
+      See :attr:`SpaceCenter.CargoBay.open`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: intakes: boolean
+
+      Returns whether all of the air intakes on the vessel are open,
+      and sets the open state of all air intakes.
+      See :attr:`SpaceCenter.Intake.open`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: parachutes: boolean
+
+      Returns whether all parachutes on the vessel are deployed,
+      and sets the deployment state of all parachutes.
+      Cannot be set to ``False``.
+      See :attr:`SpaceCenter.Parachute.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: radiators: boolean
+
+      Returns whether all radiators on the vessel are deployed,
+      and sets the deployment state of all radiators.
+      See :attr:`SpaceCenter.Radiator.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: resource_harvesters: boolean
+
+      Returns whether all of the resource harvesters on the vessel are deployed,
+      and sets the deployment state of all resource harvesters.
+      See :attr:`SpaceCenter.ResourceHarvester.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: resource_harvesters_active: boolean
+
+      Returns whether any of the resource harvesters on the vessel are active,
+      and sets the active state of all resource harvesters.
+      See :attr:`SpaceCenter.ResourceHarvester.active`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: solar_panels: boolean
+
+      Returns whether all solar panels on the vessel are deployed,
+      and sets the deployment state of all solar panels.
+      See :attr:`SpaceCenter.SolarPanel.deployed`.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: abort: boolean
+
+      The state of the abort action group.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: throttle: number
+
+      The state of the throttle. A value between 0 and 1.
+      Unlike the other control inputs, the throttle is not zeroed when the
+      clients that set it disconnect.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: input_mode: SpaceCenter.ControlInputMode
+
+      Sets the behavior of the pitch, yaw, roll and translation control inputs.
+      When set to additive, these inputs are added to the vessels current inputs.
+      This mode is the default.
+      When set to override, these inputs (if non-zero) override the vessels inputs.
+      This mode prevents keyboard control, or SAS, from interfering with the controls when
+      they are set.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ControlInputMode`
+
+   .. attribute:: pitch: number
+
+      The state of the pitch control.
+      A value between -1 and 1.
+      Equivalent to the w and s keys.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: yaw: number
+
+      The state of the yaw control.
+      A value between -1 and 1.
+      Equivalent to the a and d keys.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: roll: number
+
+      The state of the roll control.
+      A value between -1 and 1.
+      Equivalent to the q and e keys.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: pitch_trim: number
+
+      The state of the pitch trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+W and Alt+S keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: yaw_trim: number
+
+      The state of the yaw trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+A and Alt+D keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: roll_trim: number
+
+      The state of the roll trim.
+      A value between -1 and 1.
+      Equivalent to the Alt+Q and Alt+E keys.
+      This is a persistent trim that remains latched until changed or reset,
+      and can only be accessed for the active vessel.
+      Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+      when clients disconnect.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: forward: number
+
+      The state of the forward translational control.
+      A value between -1 and 1.
+      Equivalent to the h and n keys.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: up: number
+
+      The state of the up translational control.
+      A value between -1 and 1.
+      Equivalent to the i and k keys.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: right: number
+
+      The state of the right translational control.
+      A value between -1 and 1.
+      Equivalent to the j and l keys.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: wheel_throttle: number
+
+      The state of the wheel throttle.
+      A value between -1 and 1.
+      A value of 1 rotates the wheels forwards, a value of -1 rotates
+      the wheels backwards.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: wheel_steering: number
+
+      The state of the wheel steering.
+      A value between -1 and 1.
+      A value of 1 steers to the left, and a value of -1 steers to the right.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+      .. note::
+
+         The getter returns the input currently applied to the vessel, which
+         combines the input set by kRPC with any keyboard, SAS and trim input.
+         It refreshes one physics tick after a set, so a read immediately after
+         a set returns the previously applied value rather than the value just set.
+
+   .. attribute:: custom_axis01: number
+
+      The state of CustomAxis01.
+      A value between -1 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: custom_axis02: number
+
+      The state of CustomAxis02.
+      A value between -1 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: custom_axis03: number
+
+      The state of CustomAxis03.
+      A value between -1 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: custom_axis04: number
+
+      The state of CustomAxis04.
+      A value between -1 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: current_stage: number
+
+      The current stage of the vessel. Corresponds to the stage number in
+      the in-game UI.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. method:: activate_next_stage()
+
+      Activates the next stage. Equivalent to pressing the space bar in-game.
+
+      :returns: A list of vessel objects that are jettisoned from the active vessel.
+      :rtype: List
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :attr:`SpaceCenter.active_vessel <SpaceCenter.SpaceCenter.active_vessel>` no longer refer to the active vessel.
+         Throws an exception if staging is locked.
+
+   .. attribute:: stage_lock: boolean
+
+      Whether staging is locked on the vessel.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         This is equivalent to locking the staging using Alt+L
+
+   .. method:: get_action_group(group)
+
+      Returns ``True`` if the given action group is enabled.
+
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :rtype: boolean
+
+   .. method:: set_action_group(group, state)
+
+      Sets the state of the given action group.
+
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :param boolean state:
+
+   .. method:: toggle_action_group(group)
+
+      Toggles the state of the given action group.
+
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+
+   .. method:: get_action_group_actions(group)
+
+      Returns a list of all the part actions that are assigned to the given action group.
+      Each entry identifies the part, the part module, and the action's name and identifier.
+      Returns an empty list if no actions are assigned to the group.
+
+      :param number group: A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the `Extended Action Groups mod <https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/>`_ is installed.
+      :rtype: List
+
+      .. note::
+
+         For stock action groups, the assignments are read from each part action directly.
+         When the Extended Action Groups mod is installed, the assignments are queried from
+         the mod instead, so that actions assigned to its additional groups are included.
+
+   .. method:: add_node(ut, [prograde = 0.0], [normal = 0.0], [radial = 0.0])
+
+      Creates a maneuver node at the given universal time, and returns a
+      :class:`SpaceCenter.Node` object that can be used to modify it.
+      Optionally sets the magnitude of the delta-v for the maneuver node
+      in the prograde, normal and radial directions.
+
+      :param number ut: Universal time of the maneuver node.
+      :param number prograde: Delta-v in the prograde direction.
+      :param number normal: Delta-v in the normal direction.
+      :param number radial: Delta-v in the radial direction.
+      :rtype: :class:`SpaceCenter.Node`
+
+   .. attribute:: nodes: List
+
+      Returns a list of all existing maneuver nodes, ordered by time from first to last.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: remove_nodes()
+
+      Remove all maneuver nodes.
+
+
+
+.. class:: ActionGroupAction
+
+   An action, belonging to a part module, that is assigned to an action group.
+   Obtained by calling :meth:`SpaceCenter.Control.get_action_group_actions`.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part that the action acts on.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: module: SpaceCenter.Module
+
+      The part module that the action belongs to. Returns ``nil`` for a
+      part-level action that is not associated with a module. This only occurs when
+      the Extended Action Groups mod is installed, as it can assign actions defined
+      directly on a part, rather than on one of its modules, to an action group.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Module`
+
+   .. attribute:: name: string
+
+      The human-readable name of the action, as shown in the action group editor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: id: string
+
+      The non-localized identifier for the action.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+
+
+.. class:: ControlState
+
+   The control state of a vessel.
+   See :attr:`SpaceCenter.Control.state`.
+
+
+   .. data:: full
+
+      Full controllable.
+
+
+   .. data:: partial
+
+      Partially controllable.
+
+
+   .. data:: none
+
+      Not controllable.
+
+
+
+.. class:: ControlSource
+
+   The control source of a vessel.
+   See :attr:`SpaceCenter.Control.source`.
+
+
+   .. data:: kerbal
+
+      Vessel is controlled by a Kerbal.
+
+
+   .. data:: probe
+
+      Vessel is controlled by a probe core.
+
+
+   .. data:: none
+
+      Vessel is not controlled.
+
+
+
+.. class:: SASMode
+
+   The behavior of the SAS auto-pilot. See :attr:`SpaceCenter.AutoPilot.sas_mode`.
+
+
+   .. data:: stability_assist
+
+      Stability assist mode. Dampen out any rotation.
+
+
+   .. data:: maneuver
+
+      Point in the burn direction of the next maneuver node.
+
+
+   .. data:: prograde
+
+      Point in the prograde direction.
+
+
+   .. data:: retrograde
+
+      Point in the retrograde direction.
+
+
+   .. data:: normal
+
+      Point in the orbit normal direction.
+
+
+   .. data:: anti_normal
+
+      Point in the orbit anti-normal direction.
+
+
+   .. data:: radial
+
+      Point in the orbit radial direction.
+
+
+   .. data:: anti_radial
+
+      Point in the orbit anti-radial direction.
+
+
+   .. data:: target
+
+      Point in the direction of the current target.
+
+
+   .. data:: anti_target
+
+      Point away from the current target.
+
+
+
+.. class:: SpeedMode
+
+   The mode of the speed reported in the navball.
+   See :attr:`SpaceCenter.Control.speed_mode`.
+
+
+   .. data:: orbit
+
+      Speed is relative to the vessel's orbit.
+
+
+   .. data:: surface
+
+      Speed is relative to the surface of the body being orbited.
+
+
+   .. data:: target
+
+      Speed is relative to the current target.
+
+
+
+.. class:: ControlInputMode
+
+   See :attr:`SpaceCenter.Control.input_mode`.
+
+
+   .. data:: additive
+
+      Control inputs are added to the vessels current control inputs.
+
+
+   .. data:: override
+
+      Control inputs (when they are non-zero) override the vessels current control inputs.

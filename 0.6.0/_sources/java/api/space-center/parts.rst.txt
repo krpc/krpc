@@ -1,0 +1,5351 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+
+
+.. _java-api-parts:
+
+Parts
+=====
+
+The following classes allow interaction with a vessels individual parts.
+
+.. contents::
+   :local:
+
+Parts
+-----
+
+
+.. type:: public class Parts
+
+   Instances of this class are used to interact with the parts of a vessel.
+   An instance can be obtained by calling :meth:`Vessel.getParts()`.
+
+   .. method:: java.util.List<Part> getAll()
+
+
+      A list of all of the vessels parts.
+
+   
+
+   .. method:: Part getRoot()
+
+
+      The vessels root part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-trees-of-parts`.
+
+   .. method:: Part getControlling()
+
+   .. method:: void setControlling(Part value)
+
+      The part from which the vessel is controlled.
+
+   
+
+   .. method:: java.util.List<Part> withName(String name)
+
+      A list of parts whose :meth:`Part.getName()` is *name*.
+
+      :param String name:
+   
+
+   .. method:: java.util.List<Part> withTitle(String title)
+
+      A list of all parts whose :meth:`Part.getTitle()` is *title*.
+
+      :param String title:
+   
+
+   .. method:: java.util.List<Part> withTag(String tag)
+
+      A list of all parts whose :meth:`Part.getTag()` is *tag*.
+
+      :param String tag:
+   
+
+   .. method:: java.util.List<Part> withModule(String moduleName)
+
+      A list of all parts that contain a :type:`Module` whose
+      :meth:`Module.getName()` is *moduleName*.
+
+      :param String moduleName:
+   
+
+   .. method:: java.util.List<Part> inStage(int stage)
+
+      .. warning:: Deprecated. Use :meth:`Stage.getParts()` from the object returned by :meth:`Vessel.stageAt(int)` instead.
+
+      A list of all parts that are activated in the given *stage*.
+
+      :param int stage:
+   
+
+      .. note:: Deprecated. Use :meth:`Vessel.stageAt(int)` and
+                :meth:`Stage.getParts()` instead. See the discussion on
+                :rst:ref:`java-api-parts-staging`.
+
+   .. method:: java.util.List<Part> inDecoupleStage(int stage)
+
+      .. warning:: Deprecated. Use :meth:`Stage.getParts()` from the object returned by :meth:`Vessel.decoupleStageAt(int)` instead.
+
+      A list of all parts that are decoupled in the given *stage*.
+
+      :param int stage:
+   
+
+      .. note:: Deprecated. Use :meth:`Vessel.decoupleStageAt(int)` and
+                :meth:`Stage.getParts()` instead. See the discussion on
+                :rst:ref:`java-api-parts-staging`.
+
+   .. method:: java.util.List<Module> modulesWithName(String moduleName)
+
+      A list of modules (combined across all parts in the vessel) whose
+      :meth:`Module.getName()` is *moduleName*.
+
+      :param String moduleName:
+   
+
+   .. method:: java.util.List<Antenna> getAntennas()
+
+
+      A list of all antennas in the vessel.
+
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return an empty list.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. method:: java.util.List<CargoBay> getCargoBays()
+
+
+      A list of all cargo bays in the vessel.
+
+   
+
+   .. method:: java.util.List<ControlSurface> getControlSurfaces()
+
+
+      A list of all control surfaces in the vessel.
+
+   
+
+   .. method:: java.util.List<Decoupler> getDecouplers()
+
+
+      A list of all decouplers in the vessel.
+
+   
+
+   .. method:: java.util.List<DockingPort> getDockingPorts()
+
+
+      A list of all docking ports in the vessel.
+
+   
+
+   .. method:: java.util.List<Engine> getEngines()
+
+
+      A list of all engines in the vessel.
+
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters, jet engines and
+         RCS thrusters.
+
+   .. method:: java.util.List<Experiment> getExperiments()
+
+
+      A list of all science experiments in the vessel.
+
+   
+
+   .. method:: java.util.List<Fairing> getFairings()
+
+
+      A list of all fairings in the vessel.
+
+   
+
+   .. method:: java.util.List<Intake> getIntakes()
+
+
+      A list of all intakes in the vessel.
+
+   
+
+   .. method:: java.util.List<Leg> getLegs()
+
+
+      A list of all landing legs attached to the vessel.
+
+   
+
+   .. method:: java.util.List<LaunchClamp> getLaunchClamps()
+
+
+      A list of all launch clamps attached to the vessel.
+
+   
+
+   .. method:: java.util.List<Light> getLights()
+
+
+      A list of all lights in the vessel.
+
+   
+
+   .. method:: java.util.List<Parachute> getParachutes()
+
+
+      A list of all parachutes in the vessel.
+
+   
+
+   .. method:: java.util.List<Radiator> getRadiators()
+
+
+      A list of all radiators in the vessel.
+
+   
+
+   .. method:: java.util.List<ResourceDrain> getResourceDrains()
+
+
+      A list of all resource drains in the vessel.
+
+   
+
+   .. method:: java.util.List<RCS> getRCS()
+
+
+      A list of all RCS blocks/thrusters in the vessel.
+
+   
+
+   .. method:: java.util.List<ReactionWheel> getReactionWheels()
+
+
+      A list of all reaction wheels in the vessel.
+
+   
+
+   .. method:: java.util.List<ResourceConverter> getResourceConverters()
+
+
+      A list of all resource converters in the vessel.
+
+   
+
+   .. method:: java.util.List<ResourceHarvester> getResourceHarvesters()
+
+
+      A list of all resource harvesters in the vessel.
+
+   
+
+   .. method:: java.util.List<RoboticController> getRoboticControllers()
+
+
+      A list of all robotic controllers in the vessel.
+
+   
+
+   .. method:: java.util.List<RoboticHinge> getRoboticHinges()
+
+
+      A list of all robotic hinges in the vessel.
+
+   
+
+   .. method:: java.util.List<RoboticPiston> getRoboticPistons()
+
+
+      A list of all robotic pistons in the vessel.
+
+   
+
+   .. method:: java.util.List<RoboticRotation> getRoboticRotations()
+
+
+      A list of all robotic rotations in the vessel.
+
+   
+
+   .. method:: java.util.List<RoboticRotor> getRoboticRotors()
+
+
+      A list of all robotic rotors in the vessel.
+
+   
+
+   .. method:: java.util.List<Sensor> getSensors()
+
+
+      A list of all sensors in the vessel.
+
+   
+
+   .. method:: java.util.List<SolarPanel> getSolarPanels()
+
+
+      A list of all solar panels in the vessel.
+
+   
+
+   .. method:: java.util.List<Wheel> getWheels()
+
+
+      A list of all wheels in the vessel.
+
+   
+
+
+
+Part
+----
+
+
+.. type:: public class Part
+
+   Represents an individual part. Vessels are made up of multiple parts.
+   Instances of this class can be obtained by several methods in :type:`Parts`.
+
+   .. method:: String getName()
+
+
+      Internal name of the part, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      For example "Mark1-2Pod".
+
+   
+
+   .. method:: String getTitle()
+
+
+      Title of the part, as shown when the part is right clicked in-game. For example "Mk1-2 Command Pod".
+
+   
+
+   .. method:: ConfigNode getConfig()
+
+
+      The static configuration of the part, as found in its
+      `part cfg file <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      This provides access to data that is not exposed elsewhere, such as the
+      configuration of the part's modules. Returns ``null`` if the part has no
+      associated configuration node.
+
+   
+
+   .. method:: String getTag()
+
+   .. method:: void setTag(String value)
+
+      The name tag for the part. Can be set to a custom string using the
+      in-game user interface.
+
+   
+
+      .. note::
+
+         This string is shared with
+         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
+         if it is installed.
+
+   .. method:: String getFlagURL()
+
+   .. method:: void setFlagURL(String value)
+
+      The asset URL for the part's flag.
+
+   
+
+   .. method:: boolean getHighlighted()
+
+   .. method:: void setHighlighted(boolean value)
+
+      Whether the part is highlighted.
+
+   
+
+      .. note::
+
+         The highlighting is removed when the client that enabled it disconnects.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getHighlightColor()
+
+   .. method:: void setHighlightColor(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The color used to highlight the part, as an RGB triple.
+
+   
+
+   .. method:: double getCost()
+
+
+      The cost of the part, in units of funds.
+
+   
+
+   .. method:: Vessel getVessel()
+
+
+      The vessel that contains this part.
+
+   
+
+   .. method:: Part getParent()
+
+
+      The parts parent. Returns ``null`` if the part does not have a parent.
+      This, in combination with :meth:`Part.getChildren()`, can be used to traverse the vessels
+      parts tree.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-trees-of-parts`.
+
+   .. method:: java.util.List<Part> getChildren()
+
+
+      The parts children. Returns an empty list if the part has no children.
+      This, in combination with :meth:`Part.getParent()`, can be used to traverse the vessels
+      parts tree.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-trees-of-parts`.
+
+   .. method:: boolean getAxiallyAttached()
+
+
+      Whether the part is axially attached to its parent, i.e. on the top
+      or bottom of its parent. If the part has no parent, returns ``false``.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-attachment-modes`.
+
+   .. method:: boolean getRadiallyAttached()
+
+
+      Whether the part is radially attached to its parent, i.e. on the side of its parent.
+      If the part has no parent, returns ``false``.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-attachment-modes`.
+
+   .. method:: int getStage()
+
+
+      The stage in which this part will be activated. Returns -1 if the part is not
+      activated by staging.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-staging`.
+
+   .. method:: int getDecoupleStage()
+
+
+      The stage in which this part will be decoupled. Returns -1 if the part is never
+      decoupled from the vessel.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-staging`.
+
+   .. method:: boolean getMassless()
+
+
+      Whether the part is
+      `massless <https://wiki.kerbalspaceprogram.com/wiki/Massless_part>`_.
+
+   
+
+   .. method:: double getMass()
+
+
+      The current mass of the part, including resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+   
+
+   .. method:: double getDryMass()
+
+
+      The mass of the part, not including any resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+   
+
+   .. method:: boolean getShielded()
+
+
+      Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+
+   
+
+   .. method:: float getDynamicPressure()
+
+
+      The dynamic pressure acting on the part, in Pascals.
+
+   
+
+   .. method:: double getImpactTolerance()
+
+
+      The impact tolerance of the part, in meters per second.
+
+   
+
+   .. method:: double getTemperature()
+
+
+      Temperature of the part, in Kelvin.
+
+   
+
+   .. method:: double getSkinTemperature()
+
+
+      Temperature of the skin of the part, in Kelvin.
+
+   
+
+   .. method:: double getMaxTemperature()
+
+
+      Maximum temperature that the part can survive, in Kelvin.
+
+   
+
+   .. method:: double getMaxSkinTemperature()
+
+
+      Maximum temperature that the skin of the part can survive, in Kelvin.
+
+   
+
+   .. method:: float getThermalMass()
+
+
+      A measure of how much energy it takes to increase the internal temperature of the part,
+      in Joules per Kelvin.
+
+   
+
+   .. method:: float getThermalSkinMass()
+
+
+      A measure of how much energy it takes to increase the skin temperature of the part,
+      in Joules per Kelvin.
+
+   
+
+   .. method:: float getThermalResourceMass()
+
+
+      A measure of how much energy it takes to increase the temperature of the resources
+      contained in the part, in Joules per Kelvin.
+
+   
+
+   .. method:: float getThermalConductionFlux()
+
+
+      The rate at which heat energy is conducting into or out of the part via contact with
+      other parts. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. method:: float getThermalConvectionFlux()
+
+
+      The rate at which heat energy is convecting into or out of the part from the
+      surrounding atmosphere. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. method:: float getThermalRadiationFlux()
+
+
+      The rate at which heat energy is radiating into or out of the part from the surrounding
+      environment. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. method:: float getThermalInternalFlux()
+
+
+      The rate at which heat energy is begin generated by the part.
+      For example, some engines generate heat by combusting fuel.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is losing
+      heat energy.
+
+   
+
+   .. method:: float getThermalSkinToInternalFlux()
+
+
+      The rate at which heat energy is transferring between the part's skin and its internals.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part's internals are gaining heat energy,
+      and negative means its skin is gaining heat energy.
+
+   
+
+   .. method:: int getCrewCapacity()
+
+
+      The number of crew members that can occupy the part.
+
+   
+
+   .. method:: java.util.List<CrewMember> getCrew()
+
+
+      The crew members occupying the part.
+
+   
+
+   .. method:: int getAvailableSeats()
+
+
+      How many open seats the part has.
+
+   
+
+   .. method:: Resources getResources()
+
+
+      A :meth:`Part.getResources()` object for the part.
+
+   
+
+   .. method:: boolean getCrossfeed()
+
+
+      Whether this part is crossfeed capable.
+
+   
+
+   .. method:: boolean getIsFuelLine()
+
+
+      Whether this part is a fuel line.
+
+   
+
+   .. method:: java.util.List<Part> getFuelLinesFrom()
+
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is into this part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-fuel-lines`.
+
+   .. method:: java.util.List<Part> getFuelLinesTo()
+
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is out of this part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`java-api-parts-fuel-lines`.
+
+   .. method:: java.util.List<Module> getModules()
+
+
+      The modules for this part.
+
+   
+
+   .. method:: Antenna getAntenna()
+
+
+      An :meth:`Part.getAntenna()` if the part is an antenna, otherwise ``null``.
+
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return ``null``.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. method:: CargoBay getCargoBay()
+
+
+      A :meth:`Part.getCargoBay()` if the part is a cargo bay, otherwise ``null``.
+
+   
+
+   .. method:: ControlSurface getControlSurface()
+
+
+      A :meth:`Part.getControlSurface()` if the part is an aerodynamic control surface,
+      otherwise ``null``.
+
+   
+
+   .. method:: Decoupler getDecoupler()
+
+
+      A :meth:`Part.getDecoupler()` if the part is a decoupler, otherwise ``null``.
+
+   
+
+   .. method:: DockingPort getDockingPort()
+
+
+      A :meth:`Part.getDockingPort()` if the part is a docking port, otherwise ``null``.
+
+   
+
+   .. method:: Engine getEngine()
+
+
+      An :meth:`Part.getEngine()` if the part is an engine, otherwise ``null``.
+
+   
+
+   .. method:: Experiment getExperiment()
+
+
+      An :meth:`Part.getExperiment()` if the part contains a
+      single science experiment, otherwise ``null``.
+
+   
+
+      .. note::
+
+         Throws an exception if the part contains more than one experiment.
+         In that case, use :meth:`Part.getExperiments()` to get the list of experiments in the part.
+
+   .. method:: java.util.List<Experiment> getExperiments()
+
+
+      A list of :meth:`Part.getExperiment()` objects that the part contains.
+
+   
+
+   .. method:: Fairing getFairing()
+
+
+      A :meth:`Part.getFairing()` if the part is a fairing, otherwise ``null``.
+
+   
+
+   .. method:: Intake getIntake()
+
+
+      An :meth:`Part.getIntake()` if the part is an intake, otherwise ``null``.
+
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
+         For RCS thrusters see :meth:`Part.getRCS()`.
+
+   .. method:: Leg getLeg()
+
+
+      A :meth:`Part.getLeg()` if the part is a landing leg, otherwise ``null``.
+
+   
+
+   .. method:: LaunchClamp getLaunchClamp()
+
+
+      A :meth:`Part.getLaunchClamp()` if the part is a launch clamp, otherwise ``null``.
+
+   
+
+   .. method:: Light getLight()
+
+
+      A :meth:`Part.getLight()` if the part is a light, otherwise ``null``.
+
+   
+
+   .. method:: Parachute getParachute()
+
+
+      A :meth:`Part.getParachute()` if the part is a parachute, otherwise ``null``.
+
+   
+
+   .. method:: Radiator getRadiator()
+
+
+      A :meth:`Part.getRadiator()` if the part is a radiator, otherwise ``null``.
+
+   
+
+   .. method:: ResourceDrain getResourceDrain()
+
+
+      A :meth:`Part.getResourceDrain()` if the part is a resource drain, otherwise ``null``.
+
+   
+
+   .. method:: RCS getRCS()
+
+
+      A :meth:`Part.getRCS()` if the part is an RCS block/thruster, otherwise ``null``.
+
+   
+
+   .. method:: ReactionWheel getReactionWheel()
+
+
+      A :meth:`Part.getReactionWheel()` if the part is a reaction wheel, otherwise ``null``.
+
+   
+
+   .. method:: ResourceConverter getResourceConverter()
+
+
+      A :meth:`Part.getResourceConverter()` if the part is a resource converter,
+      otherwise ``null``.
+
+   
+
+   .. method:: ResourceHarvester getResourceHarvester()
+
+
+      A :meth:`Part.getResourceHarvester()` if the part is a resource harvester,
+      otherwise ``null``.
+
+   
+
+   .. method:: RoboticController getRoboticController()
+
+
+      A :meth:`Part.getRoboticController()` if the part is a robotic controller,
+      otherwise ``null``.
+
+   
+
+   .. method:: RoboticHinge getRoboticHinge()
+
+
+      A :meth:`Part.getRoboticHinge()` if the part is a robotic hinge, otherwise ``null``.
+
+   
+
+   .. method:: RoboticPiston getRoboticPiston()
+
+
+      A :meth:`Part.getRoboticPiston()` if the part is a robotic piston, otherwise ``null``.
+
+   
+
+   .. method:: RoboticRotation getRoboticRotation()
+
+
+      A :meth:`Part.getRoboticRotation()` if the part is a robotic rotation servo, otherwise ``null``.
+
+   
+
+   .. method:: RoboticRotor getRoboticRotor()
+
+
+      A :meth:`Part.getRoboticRotor()` if the part is a robotic rotor, otherwise ``null``.
+
+   
+
+   .. method:: Sensor getSensor()
+
+
+      A :meth:`Part.getSensor()` if the part is a sensor, otherwise ``null``.
+
+   
+
+   .. method:: SolarPanel getSolarPanel()
+
+
+      A :meth:`Part.getSolarPanel()` if the part is a solar panel, otherwise ``null``.
+
+   
+
+   .. method:: Wheel getWheel()
+
+
+      A :meth:`Part.getWheel()` if the part is a wheel, otherwise ``null``.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+      .. note::
+
+         This is a fixed position in the part, defined by the parts model.
+         It s not necessarily the same as the parts center of mass.
+         Use :meth:`Part.centerOfMass(ReferenceFrame)` to get the parts center of mass.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> centerOfMass(ReferenceFrame referenceFrame)
+
+      The position of the parts center of mass in the given reference frame.
+      If the part is physicsless, this is equivalent to :meth:`Part.position(ReferenceFrame)`.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> boundingBox(ReferenceFrame referenceFrame)
+
+      The axis-aligned bounding box of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
+      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+   
+
+      .. note::
+
+         This is computed from the collision mesh of the part.
+         If the part is not collidable, the box has zero volume and is centered on
+         the :meth:`Part.position(ReferenceFrame)` of the part.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
+
+      The direction the part points in, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
+
+      The linear velocity of the part in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the part, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> lift(ReferenceFrame referenceFrame)
+
+      The aerodynamic `lift <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the part.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned vector is in.
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+      .. note::
+
+         Not available when the Ferram Aerospace Research mod is installed.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> drag(ReferenceFrame referenceFrame)
+
+      The aerodynamic `drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_
+      currently acting on the part.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned vector is in.
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+      .. note::
+
+         Not available when the Ferram Aerospace Research mod is installed.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getMomentOfInertia()
+
+
+      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      in the parts reference frame (:meth:`Part.getReferenceFrame()`).
+
+   
+
+   .. method:: java.util.List<Double> getInertiaTensor()
+
+
+      The inertia tensor of the part in the parts reference frame
+      (:meth:`Part.getReferenceFrame()`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame that is fixed relative to this part, and centered on a fixed
+      position within the part, defined by the parts model.
+
+      * The origin is at the position of the part, as returned by
+        :meth:`Part.position(ReferenceFrame)`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :meth:`DockingPort.getReferenceFrame()`.
+
+      .. figure:: /images/reference-frames/part.png
+         :align: center
+
+         Mk1 Command Pod reference frame origin and axes
+
+   .. method:: ReferenceFrame getCenterOfMassReferenceFrame()
+
+
+      The reference frame that is fixed relative to this part, and centered on its
+      center of mass.
+
+      * The origin is at the center of mass of the part, as returned by
+        :meth:`Part.centerOfMass(ReferenceFrame)`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :meth:`DockingPort.getReferenceFrame()`.
+
+   .. method:: Force addForce(org.javatuples.Triplet<Double,Double,Double> force, org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      Exert a constant force on the part, acting at the given position.
+
+      :param org.javatuples.Triplet<Double,Double,Double> force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position at which the force acts, as a vector.
+      :param ReferenceFrame referenceFrame: The reference frame that the force and position are in.
+      :returns: An object that can be used to remove or modify the force.
+   
+
+      .. note::
+
+         The force is removed when the client that added it disconnects.
+
+   .. method:: void instantaneousForce(org.javatuples.Triplet<Double,Double,Double> force, org.javatuples.Triplet<Double,Double,Double> position, ReferenceFrame referenceFrame)
+
+      Exert an instantaneous force on the part, acting at the given position.
+
+      :param org.javatuples.Triplet<Double,Double,Double> force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The position at which the force acts, as a vector.
+      :param ReferenceFrame referenceFrame: The reference frame that the force and position are in.
+   
+
+      .. note::
+
+         The force is applied instantaneously in a single physics update.
+
+   .. method:: void setGlow(boolean value)
+
+      Whether the part is glowing.
+
+   
+
+   .. method:: AutoStrutMode getAutoStrutMode()
+
+
+      Auto-strut mode.
+
+   
+
+
+
+.. type:: public enum AutoStrutMode
+
+   The state of an auto-strut. :meth:`Part.getAutoStrutMode()`
+
+
+   .. field:: public AutoStrutMode OFF
+
+      Off
+
+
+   .. field:: public AutoStrutMode ROOT
+
+      Root
+
+
+   .. field:: public AutoStrutMode HEAVIEST
+
+      Heaviest
+
+
+   .. field:: public AutoStrutMode GRANDPARENT
+
+      Grandparent
+
+
+   .. field:: public AutoStrutMode FORCE_ROOT
+
+      ForceRoot
+
+
+   .. field:: public AutoStrutMode FORCE_HEAVIEST
+
+      ForceHeaviest
+
+
+   .. field:: public AutoStrutMode FORCE_GRANDPARENT
+
+      ForceGrandparent
+
+
+
+.. type:: public class Force
+
+   Obtained by calling :meth:`Part.addForce(org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, ReferenceFrame)`.
+
+   .. method:: Part getPart()
+
+
+      The part that this force is applied to.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getForceVector()
+
+   .. method:: void setForceVector(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The force vector, in Newtons.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
+
+   .. method:: void setPosition(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The position at which the force acts, in reference frame :meth:`Force.getReferenceFrame()`.
+
+      :returns: The position as a vector.
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(ReferenceFrame value)
+
+      The reference frame of the force vector and position.
+
+   
+
+   .. method:: void remove()
+
+      Remove the force.
+
+   
+
+
+
+Module
+------
+
+
+.. type:: public class Module
+
+   This can be used to interact with a specific part module. This includes part modules in
+   stock KSP, and those added by mods.
+
+   In KSP, each part has zero or more
+   `PartModules <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_
+   associated with it. Each one contains some of the functionality of the part.
+   For example, an engine has a "ModuleEngines" part module that contains all the
+   functionality of an engine.
+
+   .. method:: String getName()
+
+
+      Name of the PartModule. For example, "ModuleEngines".
+
+   
+
+   .. method:: Part getPart()
+
+
+      The part that contains this module.
+
+   
+
+   .. method:: ConfigNode getConfig()
+
+
+      The static configuration of the module, as found in the part's
+      `cfg file <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_.
+      This provides access to data that is not exposed as a field, such as the
+      resources produced by a generator. Returns ``null`` if the module's
+      configuration node cannot be found.
+
+   
+
+   .. method:: java.util.List<PartField> getFieldList()
+
+
+      A list of all the fields of the module, including those not visible in the right-click
+      menu of the part. Filter by :meth:`PartField.getVisible()` to get just the visible ones.
+
+   
+
+   .. method:: java.util.List<PartEvent> getEventList()
+
+
+      A list of all the events of the module, including those not currently visible or active.
+      Events are the clickable buttons visible in the right-click menu of the part. Filter by
+      :meth:`PartEvent.getVisible()` and :meth:`PartEvent.getActive()` to get just the ones
+      shown in the menu.
+
+   
+
+   .. method:: java.util.List<PartAction> getActionList()
+
+
+      A list of all the actions of the module. These are the parts actions that can be assigned
+      to action groups in the in-game editor.
+
+   
+
+   .. method:: java.util.Map<String,String> getFields()
+
+
+      .. warning:: Deprecated. Use :meth:`Module.getFieldList()` instead, filtering by :meth:`PartField.getVisible()`.
+
+      The modules field names and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+   
+
+      .. note::
+
+         Throws an exception if there is more than one field with the same name.
+         In that case, use :meth:`Module.getFieldsById()` to get the fields by identifier.
+
+   .. method:: java.util.Map<String,String> getFieldsById()
+
+
+      .. warning:: Deprecated. Use :meth:`Module.getFieldList()` instead, filtering by :meth:`PartField.getVisible()`.
+
+      The modules field identifiers and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+   
+
+   .. method:: boolean hasField(String name)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getFieldList()` by :meth:`PartField.getGuiName()` instead.
+
+      Returns ``true`` if the module has a field with the given name.
+
+      :param String name: Name of the field.
+   
+
+   .. method:: boolean hasFieldWithId(String id)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getFieldList()` by :meth:`PartField.getName()` instead.
+
+      Returns ``true`` if the module has a field with the given identifier.
+
+      :param String id: Identifier of the field.
+   
+
+   .. method:: String getField(String name)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getFieldList()` by :meth:`PartField.getGuiName()` and read :meth:`PartField.getValue()` instead.
+
+      Returns the value of a field with the given name.
+
+      :param String name: Name of the field.
+   
+
+   .. method:: String getFieldById(String id)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getFieldList()` by :meth:`PartField.getName()` and read :meth:`PartField.getValue()` instead.
+
+      Returns the value of a field with the given identifier.
+
+      :param String id: Identifier of the field.
+   
+
+   .. method:: void setFieldInt(String name, int value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getIntValue()` instead.
+
+      Set the value of a field to the given integer number.
+
+      :param String name: Name of the field.
+      :param int value: Value to set.
+   
+
+   .. method:: void setFieldIntById(String id, int value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getIntValue()` instead.
+
+      Set the value of a field to the given integer number.
+
+      :param String id: Identifier of the field.
+      :param int value: Value to set.
+   
+
+   .. method:: void setFieldFloat(String name, float value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getFloatValue()` instead.
+
+      Set the value of a field to the given floating point number.
+
+      :param String name: Name of the field.
+      :param float value: Value to set.
+   
+
+   .. method:: void setFieldFloatById(String id, float value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getFloatValue()` instead.
+
+      Set the value of a field to the given floating point number.
+
+      :param String id: Identifier of the field.
+      :param float value: Value to set.
+   
+
+   .. method:: void setFieldString(String name, String value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getValue()` instead.
+
+      Set the value of a field to the given string.
+
+      :param String name: Name of the field.
+      :param String value: Value to set.
+   
+
+   .. method:: void setFieldStringById(String id, String value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getValue()` instead.
+
+      Set the value of a field to the given string.
+
+      :param String id: Identifier of the field.
+      :param String value: Value to set.
+   
+
+   .. method:: void setFieldBool(String name, boolean value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getBoolValue()` instead.
+
+      Set the value of a field to true or false.
+
+      :param String name: Name of the field.
+      :param boolean value: Value to set.
+   
+
+   .. method:: void setFieldBoolById(String id, boolean value)
+
+      .. warning:: Deprecated. Set :meth:`PartField.getBoolValue()` instead.
+
+      Set the value of a field to true or false.
+
+      :param String id: Identifier of the field.
+      :param boolean value: Value to set.
+   
+
+   .. method:: void resetField(String name)
+
+      .. warning:: Deprecated. Use :meth:`PartField.reset()` instead.
+
+      Set the value of a field to its original value.
+
+      :param String name: Name of the field.
+   
+
+   .. method:: void resetFieldById(String id)
+
+      .. warning:: Deprecated. Use :meth:`PartField.reset()` instead.
+
+      Set the value of a field to its original value.
+
+      :param String id: Identifier of the field.
+   
+
+      .. note::
+
+         The original value is the value the field had when the part was loaded.
+
+   .. method:: java.util.List<String> getEvents()
+
+
+      .. warning:: Deprecated. Use :meth:`Module.getEventList()` instead, filtering by :meth:`PartEvent.getVisible()` and :meth:`PartEvent.getActive()`.
+
+      A list of the names of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+   
+
+   .. method:: java.util.List<String> getEventsById()
+
+
+      .. warning:: Deprecated. Use :meth:`Module.getEventList()` instead, filtering by :meth:`PartEvent.getVisible()` and :meth:`PartEvent.getActive()`.
+
+      A list of the identifiers of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+   
+
+   .. method:: boolean hasEvent(String name)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getEventList()` by :meth:`PartEvent.getGuiName()` instead.
+
+      ``true`` if the module has an event with the given name.
+
+      :param String name:
+   
+
+   .. method:: boolean hasEventWithId(String id)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getEventList()` by :meth:`PartEvent.getName()` instead.
+
+      ``true`` if the module has an event with the given identifier.
+
+      :param String id:
+   
+
+   .. method:: void triggerEvent(String name)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getEventList()` by :meth:`PartEvent.getGuiName()` and call :meth:`PartEvent.trigger()` instead.
+
+      Trigger the named event. Equivalent to clicking the button in the right-click menu
+      of the part.
+
+      :param String name:
+   
+
+   .. method:: void triggerEventById(String id)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getEventList()` by :meth:`PartEvent.getName()` and call :meth:`PartEvent.trigger()` instead.
+
+      Trigger the event with the given identifier.
+      Equivalent to clicking the button in the right-click menu of the part.
+
+      :param String id:
+   
+
+   .. method:: java.util.List<String> getActions()
+
+
+      .. warning:: Deprecated. Use :meth:`Module.getActionList()` instead.
+
+      A list of all the names of the modules actions. These are the parts actions that can
+      be assigned to action groups in the in-game editor.
+
+   
+
+   .. method:: java.util.List<String> getActionsById()
+
+
+      .. warning:: Deprecated. Use :meth:`Module.getActionList()` instead.
+
+      A list of all the identifiers of the modules actions. These are the parts actions
+      that can be assigned to action groups in the in-game editor.
+
+   
+
+   .. method:: boolean hasAction(String name)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getActionList()` by :meth:`PartAction.getGuiName()` instead.
+
+      ``true`` if the part has an action with the given name.
+
+      :param String name:
+   
+
+   .. method:: boolean hasActionWithId(String id)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getActionList()` by :meth:`PartAction.getName()` instead.
+
+      ``true`` if the part has an action with the given identifier.
+
+      :param String id:
+   
+
+   .. method:: void setAction(String name, boolean value)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getActionList()` by :meth:`PartAction.getGuiName()` and set :meth:`PartAction.setActivated(boolean)` instead.
+
+      Set the value of an action with the given name.
+
+      :param String name:
+      :param boolean value:
+   
+
+   .. method:: void setActionById(String id, boolean value)
+
+      .. warning:: Deprecated. Filter :meth:`Module.getActionList()` by :meth:`PartAction.getName()` and set :meth:`PartAction.setActivated(boolean)` instead.
+
+      Set the value of an action with the given identifier.
+
+      :param String id:
+      :param boolean value:
+   
+
+
+
+.. type:: public class PartField
+
+   A field of a part module. Obtained by calling :meth:`Module.getFieldList()`.
+
+   .. method:: Module getModule()
+
+
+      The part module that contains this field.
+
+   
+
+   .. method:: String getName()
+
+
+      The identifier of the field. This is stable and does not change between game versions,
+      unlike :meth:`PartField.getGuiName()`.
+
+   
+
+   .. method:: String getGuiName()
+
+
+      The name of the field, as displayed in the right-click menu of the part. This may be
+      empty for fields that are not visible in the menu.
+
+   
+
+   .. method:: boolean getVisible()
+
+
+      Whether the field is visible in the right-click menu of the part, in the current scene
+      (flight or editor).
+
+   
+
+   .. method:: FieldType getType()
+
+
+      The type of the field.
+
+   
+
+   .. method:: String getValue()
+
+   .. method:: void setValue(String value)
+
+      The value of the field, as a string. This works for fields of any type, and returns the
+      same string that is shown in the right-click menu of the part.
+
+   
+
+      .. note::
+
+         Setting the value using this property is only permitted for string fields. Use the typed
+         properties (:meth:`PartField.getBoolValue()`, :meth:`PartField.getIntValue()`, :meth:`PartField.getFloatValue()`,
+         :meth:`PartField.getDoubleValue()`) to set fields of other types.
+
+   .. method:: boolean getBoolValue()
+
+   .. method:: void setBoolValue(boolean value)
+
+      The value of a boolean field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not a boolean field
+         (see :meth:`PartField.getType()`).
+
+   .. method:: int getIntValue()
+
+   .. method:: void setIntValue(int value)
+
+      The value of an integer field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not an integer field
+         (see :meth:`PartField.getType()`).
+
+   .. method:: float getFloatValue()
+
+   .. method:: void setFloatValue(float value)
+
+      The value of a single precision floating point field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not a single precision floating point
+         field (see :meth:`PartField.getType()`).
+
+   .. method:: double getDoubleValue()
+
+   .. method:: void setDoubleValue(double value)
+
+      The value of a double precision floating point field.
+
+   
+
+      .. note::
+
+         The getter throws an exception if the field is not a double precision floating point
+         field (see :meth:`PartField.getType()`).
+
+   .. method:: void reset()
+
+      Set the value of the field to its original value.
+
+   
+
+      .. note::
+
+         The original value is the value the field had when the part was loaded.
+         Works for any field, including those not visible in the right-click menu.
+
+
+
+.. type:: public enum FieldType
+
+   The type of a part module field. See :meth:`PartField.getType()`.
+
+
+   .. field:: public FieldType BOOLEAN
+
+      A boolean field. Access using :meth:`PartField.getBoolValue()`.
+
+
+   .. field:: public FieldType INTEGER
+
+      An integer field. Access using :meth:`PartField.getIntValue()`.
+
+
+   .. field:: public FieldType FLOAT
+
+      A single precision floating point field. Access using :meth:`PartField.getFloatValue()`.
+
+
+   .. field:: public FieldType DOUBLE
+
+      A double precision floating point field. Access using :meth:`PartField.getDoubleValue()`.
+
+
+   .. field:: public FieldType STRING
+
+      A string field. Access using :meth:`PartField.getValue()`.
+
+
+   .. field:: public FieldType UNKNOWN
+
+      A field whose type is not one of the above. Its value can still be read as a
+      string using :meth:`PartField.getValue()`.
+
+
+
+.. type:: public class PartEvent
+
+   An event of a part module. Events are the clickable buttons visible in the right-click menu
+   of the part. Obtained by calling :meth:`Module.getEventList()`.
+
+   .. method:: Module getModule()
+
+
+      The part module that contains this event.
+
+   
+
+   .. method:: String getName()
+
+
+      The identifier of the event. This is stable and does not change between game versions,
+      unlike :meth:`PartEvent.getGuiName()`.
+
+   
+
+   .. method:: String getGuiName()
+
+
+      The name of the event, as displayed in the right-click menu of the part.
+
+   
+
+   .. method:: boolean getVisible()
+
+
+      Whether the event is visible in the right-click menu of the part, in the current scene
+      (flight or editor).
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether the event is currently active.
+
+   
+
+   .. method:: void trigger()
+
+      Trigger the event. Equivalent to clicking the button in the right-click menu of the part.
+
+   
+
+
+
+.. type:: public class PartAction
+
+   An action of a part module. These are the part actions that can be assigned to action groups
+   in the in-game editor. Obtained by calling :meth:`Module.getActionList()`.
+
+   .. method:: Module getModule()
+
+
+      The part module that contains this action.
+
+   
+
+   .. method:: String getName()
+
+
+      The identifier of the action. This is stable and does not change between game versions,
+      unlike :meth:`PartAction.getGuiName()`.
+
+   
+
+   .. method:: String getGuiName()
+
+
+      The name of the action, as displayed in the in-game editor.
+
+   
+
+   .. method:: void setActivated(boolean value)
+
+      Activate or deactivate the action. Equivalent to triggering the action from an action
+      group. Set to ``true`` to activate the action, or ``false`` to deactivate it.
+
+   
+
+
+
+Config Node
+-----------
+
+
+.. type:: public class ConfigNode
+
+   Represents a configuration node, as found in a part's configuration file. A node has a
+   name, a set of named values and a set of child nodes. This is used to access the
+   static configuration of a part or part module, for example via
+   :meth:`Part.getConfig()` and :meth:`Module.getConfig()`.
+
+   .. method:: String getName()
+
+
+      The name of the configuration node. For example "MODULE".
+
+   
+
+   .. method:: java.util.Map<String,String> getValues()
+
+
+      The values stored in the node, as a dictionary mapping names to values.
+
+   
+
+      .. note::
+
+         If a name appears more than once, only the first value is included. Use
+         :meth:`ConfigNode.getValues(String)` to get all of the values with a given name.
+
+   .. method:: boolean hasValue(String name)
+
+      Returns ``true`` if the node has a value with the given name.
+
+      :param String name: Name of the value.
+   
+
+   .. method:: String getValue(String name)
+
+      Returns the value with the given name. If there is more than one value with
+      the given name, the first is returned. Throws an exception if there is no
+      value with the given name.
+
+      :param String name: Name of the value.
+   
+
+   .. method:: java.util.List<String> getValues(String name)
+
+      Returns all of the values with the given name, as a list.
+
+      :param String name: Name of the values.
+   
+
+   .. method:: java.util.List<ConfigNode> getNodes()
+
+
+      The child nodes contained in this node.
+
+   
+
+   .. method:: boolean hasNode(String name)
+
+      Returns ``true`` if the node has a child node with the given name.
+
+      :param String name: Name of the child node.
+   
+
+   .. method:: ConfigNode getNode(String name)
+
+      Returns the child node with the given name. If there is more than one child
+      node with the given name, the first is returned. Throws an exception if there
+      is no child node with the given name.
+
+      :param String name: Name of the child node.
+   
+
+   .. method:: java.util.List<ConfigNode> getNodes(String name)
+
+      Returns all of the child nodes with the given name, as a list.
+
+      :param String name: Name of the child nodes.
+   
+
+
+
+Specific Types of Part
+----------------------
+
+The following classes provide functionality for specific types of part.
+
+.. contents::
+   :local:
+
+Antenna
+^^^^^^^
+
+.. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
+          This class is only for stock KSP antennas.
+
+
+.. type:: public class Antenna
+
+   An antenna. Obtained by calling :meth:`Part.getAntenna()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this antenna.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The current state of the antenna.
+
+   
+
+   .. method:: boolean getDeployable()
+
+
+      Whether the antenna is deployable.
+
+   
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      Whether the antenna is deployed.
+
+   
+
+      .. note::
+
+         Fixed antennas are always deployed.
+         Returns an error if you try to deploy a fixed antenna.
+
+   .. method:: boolean getCanTransmit()
+
+
+      Whether data can be transmitted by this antenna.
+
+   
+
+   .. method:: void transmit()
+
+      Transmit data.
+
+   
+
+   .. method:: void cancel()
+
+      Cancel current transmission of data.
+
+   
+
+   .. method:: boolean getAllowPartial()
+
+   .. method:: void setAllowPartial(boolean value)
+
+      Whether partial data transmission is permitted.
+
+   
+
+   .. method:: double getPower()
+
+
+      The power of the antenna.
+
+   
+
+   .. method:: boolean getCombinable()
+
+
+      Whether the antenna can be combined with other antennae on the vessel
+      to boost the power.
+
+   
+
+   .. method:: double getCombinableExponent()
+
+
+      Exponent used to calculate the combined power of multiple antennae on a vessel.
+
+   
+
+   .. method:: float getPacketInterval()
+
+
+      Interval between sending packets in seconds.
+
+   
+
+   .. method:: float getPacketSize()
+
+
+      Amount of data sent per packet in Mits.
+
+   
+
+   .. method:: double getPacketResourceCost()
+
+
+      Units of electric charge consumed per packet sent.
+
+   
+
+
+
+Cargo Bay
+^^^^^^^^^
+
+
+.. type:: public class CargoBay
+
+   A cargo bay. Obtained by calling :meth:`Part.getCargoBay()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this cargo bay.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The state of the cargo bay.
+
+   
+
+      .. note::
+
+         This describes where the bay's doors are, which is not the same as whether the parts
+         inside are sheltered: a bay whose open end has nothing attached to it never shelters
+         anything, however tightly shut it is. Use :meth:`Part.getShielded()` for that.
+
+         A cargo bay is never :meth:`DeployableState.BROKEN`, as the game
+         does not track damage for them.
+
+   .. method:: boolean getOpen()
+
+   .. method:: void setOpen(boolean value)
+
+      Whether the cargo bay is open.
+
+   
+
+
+
+Control Surface
+^^^^^^^^^^^^^^^
+
+
+.. type:: public class ControlSurface
+
+   An aerodynamic control surface. Obtained by calling :meth:`Part.getControlSurface()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this control surface.
+
+   
+
+   .. method:: boolean getPitchEnabled()
+
+   .. method:: void setPitchEnabled(boolean value)
+
+      Whether the control surface has pitch control enabled.
+
+   
+
+   .. method:: boolean getYawEnabled()
+
+   .. method:: void setYawEnabled(boolean value)
+
+      Whether the control surface has yaw control enabled.
+
+   
+
+   .. method:: boolean getRollEnabled()
+
+   .. method:: void setRollEnabled(boolean value)
+
+      Whether the control surface has roll control enabled.
+
+   
+
+   .. method:: float getAuthorityLimiter()
+
+   .. method:: void setAuthorityLimiter(float value)
+
+      The authority limiter for the control surface, which controls how far the
+      control surface will move.
+
+   
+
+   .. method:: boolean getInverted()
+
+   .. method:: void setInverted(boolean value)
+
+      Whether the control surface movement is inverted.
+
+   
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      Whether the control surface has been fully deployed.
+
+   
+
+   .. method:: boolean getDeflectionOverride()
+
+   .. method:: void setDeflectionOverride(boolean value)
+
+      Whether the control surface deflection is being set directly, bypassing the vessel's
+      normal flight control. When enabled, the surface holds the deflection set by
+      :meth:`ControlSurface.getDeflection()` instead of responding to pitch, yaw and roll control inputs.
+      The prior state is restored when the override is released, when the
+      controlling client disconnects, or when the vessel changes.
+
+   
+
+   .. method:: float getDeflection()
+
+   .. method:: void setDeflection(float value)
+
+      The deflection command applied when :meth:`ControlSurface.getDeflectionOverride()` is enabled, as a
+      value between -1 and 1, mapped onto the surface's deploy angle range.
+
+   
+
+   .. method:: float getSurfaceArea()
+
+
+      Surface area of the control surface in :math:`m^2`.
+
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+
+
+      The available torque, in Newton meters, that can be produced by this control surface,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
+
+   
+
+
+
+Decoupler
+^^^^^^^^^
+
+
+.. type:: public class Decoupler
+
+   A decoupler. Obtained by calling :meth:`Part.getDecoupler()`
+
+   .. method:: Part getPart()
+
+
+      The part object for this decoupler.
+
+   
+
+   .. method:: Vessel decouple()
+
+      Fires the decoupler. Returns the new vessel created when the decoupler fires.
+      Throws an exception if the decoupler has already fired.
+
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :meth:`getActiveVessel()` no longer refer to the active vessel.
+
+   .. method:: boolean getDecoupled()
+
+
+      Whether the decoupler has fired.
+
+   
+
+   .. method:: boolean getStaged()
+
+
+      Whether the decoupler is enabled in the staging sequence.
+
+   
+
+   .. method:: float getImpulse()
+
+
+      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+
+   
+
+   .. method:: boolean getIsOmniDecoupler()
+
+
+      Whether the decoupler is an omni-decoupler (e.g. stack separator)
+
+   
+
+   .. method:: Part getAttachedPart()
+
+
+      The part attached to this decoupler's explosive node.
+
+   
+
+
+
+Deployable State
+^^^^^^^^^^^^^^^^
+
+The deployment state shared by antennas, cargo bays, landing legs, radiators,
+resource harvesters, solar panels and wheels.
+
+
+.. type:: public enum DeployableState
+
+   The state of a deployable part.
+   :meth:`Antenna.getState()`, :meth:`CargoBay.getState()`,
+   :meth:`Leg.getState()`, :meth:`Radiator.getState()`,
+   :meth:`ResourceHarvester.getState()`, :meth:`SolarPanel.getState()`,
+   :meth:`Wheel.getState()`
+
+
+   .. field:: public DeployableState DEPLOYED
+
+      The part is fully deployed. A cargo bay in this state is fully open.
+      Parts that cannot be retracted, such as fixed radiators, solar panels,
+      antennas, landing legs and wheels, are always in this state.
+
+
+   .. field:: public DeployableState RETRACTED
+
+      The part is fully retracted. A cargo bay in this state is closed and locked.
+
+
+   .. field:: public DeployableState DEPLOYING
+
+      The part is being deployed. A cargo bay in this state is opening.
+
+
+   .. field:: public DeployableState RETRACTING
+
+      The part is being retracted. A cargo bay in this state is closing.
+
+
+   .. field:: public DeployableState BROKEN
+
+      The part is broken. Cargo bays and resource harvesters never report
+      this state, as the game does not track damage for them.
+
+
+
+Docking Port
+^^^^^^^^^^^^
+
+
+.. type:: public class DockingPort
+
+   A docking port. Obtained by calling :meth:`Part.getDockingPort()`
+
+   .. method:: Part getPart()
+
+
+      The part object for this docking port.
+
+   
+
+   .. method:: DockingPortState getState()
+
+
+      The current state of the docking port.
+
+   
+
+   .. method:: Part getDockedPart()
+
+
+      The part that this docking port is docked to. Returns ``null`` if this
+      docking port is not docked to anything.
+
+   
+
+   .. method:: Vessel undock()
+
+      Undocks the docking port and returns the new :type:`Vessel` that is created.
+      This method can be called for either docking port in a docked pair.
+      Throws an exception if the docking port is not docked to anything.
+
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :meth:`getActiveVessel()` no longer refer to the active vessel.
+
+   .. method:: float getReengageDistance()
+
+
+      The distance a docking port must move away when it undocks before it
+      becomes ready to dock with another port, in meters.
+
+   
+
+   .. method:: boolean getHasShield()
+
+
+      Whether the docking port has a shield.
+
+   
+
+   .. method:: boolean getShielded()
+
+   .. method:: void setShielded(boolean value)
+
+      The state of the docking ports shield, if it has one.
+
+      Returns ``true`` if the docking port has a shield, and the shield is
+      closed. Otherwise returns ``false``. When set to ``true``, the shield is
+      closed, and when set to ``false`` the shield is opened. If the docking
+      port does not have a shield, setting this attribute has no effect.
+
+   
+
+   .. method:: boolean getCanRotate()
+
+
+      Whether the docking port can be commanded to rotate while docked.
+
+   
+
+   .. method:: float getMaximumRotation()
+
+
+      Maximum rotation angle in degrees.
+
+   
+
+   .. method:: float getMinimumRotation()
+
+
+      Minimum rotation angle in degrees.
+
+   
+
+   .. method:: float getRotationTarget()
+
+   .. method:: void setRotationTarget(float value)
+
+      Rotation target angle in degrees.
+
+   
+
+   .. method:: boolean getRotationLocked()
+
+   .. method:: void setRotationLocked(boolean value)
+
+      Lock rotation. When locked, allows auto-strut to work across the joint.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
+
+      The position of the docking port, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
+
+      The direction that docking port points in, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
+
+      The rotation of the docking port, in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+   
+
+   .. method:: ReferenceFrame getReferenceFrame()
+
+
+      The reference frame that is fixed relative to this docking port, and
+      oriented with the port.
+
+      * The origin is at the position of the docking port.
+      * The axes rotate with the docking port.
+      * The x-axis points out to the right side of the docking port.
+      * The y-axis points in the direction the docking port is facing.
+      * The z-axis points out of the bottom off the docking port.
+
+   
+
+      .. note::
+
+         This reference frame is not necessarily equivalent to the reference frame
+         for the part, returned by :meth:`Part.getReferenceFrame()`.
+
+      .. figure:: /images/reference-frames/docking-port.png
+         :align: center
+
+         Docking port reference frame origin and axes
+
+      .. figure:: /images/reference-frames/docking-port-inline.png
+         :align: center
+
+         Inline docking port reference frame origin and axes
+
+
+
+.. type:: public enum DockingPortState
+
+   The state of a docking port. See :meth:`DockingPort.getState()`.
+
+
+   .. field:: public DockingPortState READY
+
+      The docking port is ready to dock to another docking port.
+
+
+   .. field:: public DockingPortState DOCKED
+
+      The docking port is docked to another docking port, or docked to
+      another part (from the VAB/SPH).
+
+
+   .. field:: public DockingPortState DOCKING
+
+      The docking port is very close to another docking port,
+      but has not docked. It is using magnetic force to acquire a solid dock.
+
+
+   .. field:: public DockingPortState UNDOCKING
+
+      The docking port has just been undocked from another docking port,
+      and is disabled until it moves away by a sufficient distance
+      (:meth:`DockingPort.getReengageDistance()`).
+
+
+   .. field:: public DockingPortState SHIELDED
+
+      The docking port has a shield, and the shield is closed.
+
+
+   .. field:: public DockingPortState MOVING
+
+      The docking ports shield is currently opening/closing.
+
+
+
+Engine
+^^^^^^
+
+
+.. type:: public class Engine
+
+   An engine, including ones of various types.
+   For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
+   Obtained by calling :meth:`Part.getEngine()`.
+
+   .. note::
+
+      For RCS thrusters :meth:`Part.getRCS()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this engine.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the engine is active. Setting this attribute may have no effect,
+      depending on :meth:`Engine.getCanShutdown()` and :meth:`Engine.getCanRestart()`.
+
+   
+
+   .. method:: float getThrust()
+
+
+      The current amount of thrust being produced by the engine, in Newtons.
+
+   
+
+   .. method:: float getAvailableThrust()
+
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the engine's current :meth:`Engine.getThrustLimit()` and atmospheric conditions
+      into account.
+
+   
+
+   .. method:: float availableThrustAt(double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the given pressure into account.
+
+      :param double pressure: Atmospheric pressure in atmospheres
+   
+
+   .. method:: float getMaxThrust()
+
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+
+   
+
+   .. method:: float maxThrustAt(double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+      Takes the given pressure into account.
+
+      :param double pressure: Atmospheric pressure in atmospheres
+   
+
+   .. method:: float getMaxVacuumThrust()
+
+
+      The maximum amount of thrust that can be produced by the engine in a
+      vacuum, in Newtons. This is the amount of thrust produced by the engine
+      when activated, :meth:`Engine.getThrustLimit()` is set to 100%, the main
+      vessel's throttle is set to 100% and the engine is in a vacuum.
+
+   
+
+   .. method:: float getThrustLimit()
+
+   .. method:: void setThrustLimit(float value)
+
+      The thrust limiter of the engine. A value between 0 and 1. Setting this
+      attribute may have no effect, for example the thrust limit for a solid
+      rocket booster cannot be changed in flight.
+
+   
+
+   .. method:: java.util.List<Thruster> getThrusters()
+
+
+      The components of the engine that generate thrust.
+
+   
+
+      .. note::
+
+         For example, this corresponds to the rocket nozzel on a solid rocket booster,
+         or the individual nozzels on a RAPIER engine.
+         The overall thrust produced by the engine, as reported by :meth:`Engine.getAvailableThrust()`,
+         :meth:`Engine.getMaxThrust()` and others, is the sum of the thrust generated by each thruster.
+
+   .. method:: float getSpecificImpulse()
+
+
+      The current specific impulse of the engine, in seconds. Returns zero
+      if the engine is not active.
+
+   
+
+   .. method:: float specificImpulseAt(double pressure)
+
+      The specific impulse of the engine under the given pressure, in seconds. Returns zero
+      if the engine is not active.
+
+      :param double pressure: Atmospheric pressure in atmospheres
+   
+
+   .. method:: float getVacuumSpecificImpulse()
+
+
+      The vacuum specific impulse of the engine, in seconds.
+
+   
+
+   .. method:: float getKerbinSeaLevelSpecificImpulse()
+
+
+      The specific impulse of the engine at sea level on Kerbin, in seconds.
+
+   
+
+   .. method:: java.util.List<String> getPropellantNames()
+
+
+      The names of the propellants that the engine consumes.
+
+   
+
+   .. method:: java.util.Map<String,Float> getPropellantRatios()
+
+
+      The ratio of resources that the engine consumes. A dictionary mapping resource names
+      to the ratio at which they are consumed by the engine.
+
+   
+
+      .. note::
+
+         For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every
+         0.6 units of LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+
+   .. method:: java.util.List<Propellant> getPropellants()
+
+
+      The propellants that the engine consumes.
+
+   
+
+   .. method:: boolean getHasFuel()
+
+
+      Whether the engine has any fuel available.
+
+   
+
+   .. method:: boolean getFlameout()
+
+
+      Whether the engine has flamed out - it is active but has run out of
+      propellant, so it is producing no thrust. This is the signal a client
+      can use to decide when to activate the next stage. Note that on a
+      vessel with drop tanks or asparagus staging some engines can flame out
+      while others keep burning.
+
+   
+
+   .. method:: float getThrottle()
+
+   .. method:: void setThrottle(float value)
+
+      The current throttle setting for the engine. A value between 0 and 1.
+      This is not necessarily the same as the vessel's main throttle
+      setting, as some engines take time to adjust their throttle
+      (such as jet engines), or independent throttle may be enabled.
+
+      When the engine's independent throttle is enabled
+      (see :meth:`Engine.getIndependentThrottle()`), can be used to set the throttle percentage.
+
+   
+
+   .. method:: boolean getThrottleLocked()
+
+
+      Whether the :meth:`Control.getThrottle()` affects the engine. For example,
+      this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
+      boosters.
+
+   
+
+   .. method:: boolean getIndependentThrottle()
+
+   .. method:: void setIndependentThrottle(boolean value)
+
+      Whether the independent throttle is enabled for the engine.
+
+   
+
+   .. method:: boolean getCanRestart()
+
+
+      Whether the engine can be restarted once shutdown. If the engine cannot be shutdown,
+      returns ``false``. For example, this is ``true`` for liquid fueled rockets
+      and ``false`` for solid rocket boosters.
+
+   
+
+   .. method:: boolean getCanShutdown()
+
+
+      Whether the engine can be shutdown once activated. For example, this is
+      ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
+
+   
+
+   .. method:: boolean getHasModes()
+
+
+      Whether the engine has multiple modes of operation.
+
+   
+
+   .. method:: String getMode()
+
+   .. method:: void setMode(String value)
+
+      The name of the current engine mode.
+
+   
+
+   .. method:: java.util.Map<String,Engine> getModes()
+
+
+      The available modes for the engine.
+      A dictionary mapping mode names to :type:`Engine` objects.
+
+   
+
+   .. method:: void toggleMode()
+
+      Toggle the current engine mode.
+
+   
+
+   .. method:: boolean getAutoModeSwitch()
+
+   .. method:: void setAutoModeSwitch(boolean value)
+
+      Whether the engine will automatically switch modes.
+
+   
+
+   .. method:: boolean getGimballed()
+
+
+      Whether the engine is gimballed.
+
+   
+
+   .. method:: float getGimbalRange()
+
+
+      The range over which the gimbal can move, in degrees.
+      Returns 0 if the engine is not gimballed.
+
+   
+
+   .. method:: boolean getGimbalLocked()
+
+   .. method:: void setGimbalLocked(boolean value)
+
+      Whether the engines gimbal is locked in place. Setting this attribute has
+      no effect if the engine is not gimballed.
+
+   
+
+   .. method:: float getGimbalLimit()
+
+   .. method:: void setGimbalLimit(float value)
+
+      The gimbal limiter of the engine. A value between 0 and 1.
+      Returns 0 if the gimbal is locked.
+
+   
+
+   .. method:: boolean getGimbalOverride()
+
+   .. method:: void setGimbalOverride(boolean value)
+
+      Whether the gimbal is being controlled directly, bypassing the vessel's normal
+      flight controls. When enabled, the gimbal deflection is set by
+      :meth:`Engine.getGimbalActuation()` instead of the normal control inputs.
+      The override is automatically released if the controlling client disconnects or the
+      vessel changes. Has no effect if the engine is not gimballed.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getGimbalActuation()
+
+   .. method:: void setGimbalActuation(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The gimbal actuation command applied when :meth:`Engine.getGimbalOverride()` is enabled, in
+      the pitch, roll and yaw axes. Each component is a normalized control input between -1
+      and 1. The physical deflection is scaled by :meth:`Engine.getGimbalRange()`
+      and :meth:`Engine.getGimbalLimit()`. When the gimbal is not being overridden,
+      returns the current actuation.
+
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+
+
+      The available torque, in Newton meters, that can be produced by this engine,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
+      Returns zero if the engine is inactive, or not gimballed.
+
+   
+
+   .. method:: boolean getCanReverseThrust()
+
+
+      Whether the engine has a recognized thrust reverser. This is ``true`` for
+      stock engines with a thrust reverser (such as the J-33 "Wheesley" and
+      J-90 "Goliath" turbofan engines) and for selected mod engines. It is
+      ``false`` for engines whose reverser is not recognized, as KSP provides no
+      standard way to detect one.
+
+   
+
+   .. method:: boolean getThrustReversed()
+
+   .. method:: void setThrustReversed(boolean value)
+
+      Whether the engine's thrust reverser is engaged, reversing the
+      direction of thrust. While the reverser is still moving, this reports
+      the state it is moving to, so a read immediately after a set returns
+      the value that was set and setting the same value again has no effect.
+      Raises an exception if the engine does not have a thrust reverser
+      (see :meth:`Engine.getCanReverseThrust()`).
+
+   
+
+   .. method:: void toggleThrustReversal()
+
+      Toggle the engine's thrust reverser. Raises an exception if the engine
+      does not have a thrust reverser (see :meth:`Engine.getCanReverseThrust()`).
+
+   
+
+
+
+.. type:: public class Propellant
+
+   A propellant for an engine. Obtains by calling :meth:`Engine.getPropellants()`.
+
+   .. method:: String getName()
+
+
+      The name of the propellant.
+
+   
+
+   .. method:: double getCurrentAmount()
+
+
+      The current amount of propellant consumed in the current physics update.
+
+   
+
+   .. method:: double getCurrentRequirement()
+
+
+      The required amount of propellant for the current physics update.
+
+   
+
+   .. method:: double getTotalResourceAvailable()
+
+
+      The total amount of the underlying resource currently reachable given
+      resource flow rules.
+
+   
+
+   .. method:: double getTotalResourceCapacity()
+
+
+      The total vehicle capacity for the underlying propellant resource,
+      restricted by resource flow rules.
+
+   
+
+   .. method:: boolean getIgnoreForIsp()
+
+
+      If this propellant should be ignored when calculating required mass flow
+      given specific impulse.
+
+   
+
+   .. method:: boolean getIgnoreForThrustCurve()
+
+
+      If this propellant should be ignored for thrust curve calculations.
+
+   
+
+   .. method:: boolean getDrawStackGauge()
+
+
+      If this propellant has a stack gauge or not.
+
+   
+
+   .. method:: boolean getIsDeprived()
+
+
+      If this propellant is deprived.
+
+   
+
+   .. method:: float getRatio()
+
+
+      The propellant ratio.
+
+   
+
+
+
+Experiment
+^^^^^^^^^^
+
+
+.. type:: public class Experiment
+
+   Obtained by calling :meth:`Part.getExperiment()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this experiment.
+
+   
+
+   .. method:: String getName()
+
+
+      Internal name of the experiment, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+
+   
+
+   .. method:: String getTitle()
+
+
+      Title of the experiment, as shown on the in-game UI.
+
+   
+
+   .. method:: void run()
+
+      Run the experiment.
+
+   
+
+   .. method:: void transmit()
+
+      Transmit all experimental data contained by this part.
+
+   
+
+   .. method:: void dump()
+
+      Dump the experimental data contained by the experiment.
+
+   
+
+   .. method:: void reset()
+
+      Reset the experiment.
+
+   
+
+   .. method:: boolean getDeployed()
+
+
+      Whether the experiment has been deployed.
+
+   
+
+   .. method:: boolean getRerunnable()
+
+
+      Whether the experiment can be re-run.
+
+   
+
+   .. method:: boolean getInoperable()
+
+
+      Whether the experiment is inoperable.
+
+   
+
+   .. method:: boolean getHasData()
+
+
+      Whether the experiment contains data.
+
+   
+
+   .. method:: java.util.List<ScienceData> getData()
+
+
+      The data contained in this experiment.
+
+   
+
+   .. method:: String getBiome()
+
+
+      The name of the biome the experiment is currently in.
+
+   
+
+   .. method:: boolean getAvailable()
+
+
+      Determines if the experiment is available given the current conditions.
+
+   
+
+   .. method:: ScienceSubject getScienceSubject()
+
+
+      Containing information on the corresponding specific science result for the current
+      conditions. Returns ``null`` if the experiment is unavailable.
+
+   
+
+
+
+.. type:: public class ScienceData
+
+   Obtained by calling :meth:`Experiment.getData()`.
+
+   .. method:: float getDataAmount()
+
+
+      Data amount.
+
+   
+
+   .. method:: float getScienceValue()
+
+
+      Science value.
+
+   
+
+   .. method:: float getTransmitValue()
+
+
+      Transmit value.
+
+   
+
+
+
+.. type:: public class ScienceSubject
+
+   Obtained by calling :meth:`Experiment.getScienceSubject()`.
+
+   .. method:: String getTitle()
+
+
+      Title of science subject, displayed in science archives
+
+   
+
+   .. method:: boolean getIsComplete()
+
+
+      Whether the subject has been fully researched. This is true once the science banked for
+      the subject reaches the science cap. As the banked science (see :meth:`ScienceSubject.getScience()`) is
+      only updated after transmission/recovery, this reflects fully mining the subject over
+      repeated experiments, not whether a single run has produced data. To check whether a run
+      has produced data, and how valuable it is, use :meth:`Experiment.getHasData()` and
+      :meth:`ScienceData.getTransmitValue()`.
+
+   
+
+   .. method:: float getScience()
+
+
+      Amount of science already earned from this subject, not updated until after
+      transmission/recovery.
+
+   
+
+   .. method:: float getScienceCap()
+
+
+      Total science allowable for this subject.
+
+   
+
+   .. method:: float getDataScale()
+
+
+      Multiply science value by this to determine data amount in mits.
+
+   
+
+   .. method:: float getSubjectValue()
+
+
+      Multiplier for specific Celestial Body/Experiment Situation combination.
+
+   
+
+   .. method:: float getScientificValue()
+
+
+      Diminishing value multiplier for decreasing the science value returned from repeated
+      experiments.
+
+   
+
+
+
+Fairing
+^^^^^^^
+
+
+.. type:: public class Fairing
+
+   A fairing. Obtained by calling :meth:`Part.getFairing()`.
+   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. method:: Part getPart()
+
+
+      The part object for this fairing.
+
+   
+
+   .. method:: void jettison()
+
+      Jettison the fairing. Has no effect if it has already been jettisoned.
+
+   
+
+   .. method:: boolean getJettisoned()
+
+
+      Whether the fairing has been jettisoned.
+
+   
+
+
+
+Intake
+^^^^^^
+
+
+.. type:: public class Intake
+
+   An air intake. Obtained by calling :meth:`Part.getIntake()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this intake.
+
+   
+
+   .. method:: boolean getOpen()
+
+   .. method:: void setOpen(boolean value)
+
+      Whether the intake is open.
+
+   
+
+   .. method:: float getSpeed()
+
+
+      Speed of the flow into the intake, in :math:`m/s`.
+
+   
+
+   .. method:: float getFlow()
+
+
+      The rate of flow into the intake, in units of resource per second.
+
+   
+
+   .. method:: float getArea()
+
+
+      The area of the intake's opening, in square meters.
+
+   
+
+
+
+Leg
+^^^
+
+
+.. type:: public class Leg
+
+   A landing leg. Obtained by calling :meth:`Part.getLeg()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this landing leg.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The current state of the landing leg.
+
+   
+
+   .. method:: boolean getDeployable()
+
+
+      Whether the leg is deployable.
+
+   
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      Whether the landing leg is deployed.
+
+   
+
+      .. note::
+
+         Fixed landing legs are always deployed.
+         Returns an error if you try to deploy fixed landing gear.
+
+   .. method:: boolean getIsGrounded()
+
+
+      Returns whether the leg is touching the ground.
+
+   
+
+
+
+Launch Clamp
+^^^^^^^^^^^^
+
+
+.. type:: public class LaunchClamp
+
+   A launch clamp. Obtained by calling :meth:`Part.getLaunchClamp()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this launch clamp.
+
+   
+
+   .. method:: void release()
+
+      Releases the docking clamp. Has no effect if the clamp has already been released.
+
+   
+
+
+
+Light
+^^^^^
+
+
+.. type:: public class Light
+
+   A light. Obtained by calling :meth:`Part.getLight()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this light.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the light is switched on.
+
+   
+
+   .. method:: org.javatuples.Triplet<Float,Float,Float> getColor()
+
+   .. method:: void setColor(org.javatuples.Triplet<Float,Float,Float> value)
+
+      The color of the light, as an RGB triple.
+
+   
+
+   .. method:: boolean getBlink()
+
+   .. method:: void setBlink(boolean value)
+
+      Whether blinking is enabled.
+
+   
+
+   .. method:: float getBlinkRate()
+
+   .. method:: void setBlinkRate(float value)
+
+      The blink rate of the light.
+
+   
+
+   .. method:: float getPowerUsage()
+
+
+      The current power usage, in units of charge per second.
+
+   
+
+
+
+Parachute
+^^^^^^^^^
+
+
+.. type:: public class Parachute
+
+   A parachute. Obtained by calling :meth:`Part.getParachute()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this parachute.
+
+   
+
+   .. method:: void deploy()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been deployed.
+
+   
+
+   .. method:: boolean getDeployed()
+
+
+      Whether the parachute has been deployed.
+
+   
+
+   .. method:: void arm()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been armed or deployed.
+
+   
+
+   .. method:: boolean getArmed()
+
+
+      Whether the parachute has been armed or deployed.
+
+   
+
+   .. method:: void cut()
+
+      Cuts the parachute.
+
+   
+
+   .. method:: ParachuteState getState()
+
+
+      The current state of the parachute.
+
+   
+
+   .. method:: float getDeployAltitude()
+
+   .. method:: void setDeployAltitude(float value)
+
+      The altitude at which the parachute will full deploy, in meters.
+      Only applicable to stock parachutes.
+
+   
+
+   .. method:: float getDeployMinPressure()
+
+   .. method:: void setDeployMinPressure(float value)
+
+      The minimum pressure at which the parachute will semi-deploy, in atmospheres.
+      Only applicable to stock parachutes.
+
+   
+
+   .. method:: ParachuteSafeState getSafeState()
+
+
+      Whether it is currently safe to deploy the parachute, given the vessel's
+      flight conditions. Computed by KSP from the current airspeed, pressure and
+      temperature. Only applicable to stock parachutes.
+      Note that KSP reports :meth:`ParachuteSafeState.UNSAFE` for the first
+      second after the vessel unpacks, before its thermal data is valid.
+
+   
+
+
+
+.. type:: public enum ParachuteState
+
+   The state of a parachute. See :meth:`Parachute.getState()`.
+
+
+   .. field:: public ParachuteState STOWED
+
+      The parachute is safely tucked away inside its housing.
+
+
+   .. field:: public ParachuteState ARMED
+
+      The parachute is armed for deployment.
+
+
+   .. field:: public ParachuteState SEMI_DEPLOYED
+
+      The parachute has been deployed and is providing some drag,
+      but is not fully deployed yet. (Stock parachutes only)
+
+
+   .. field:: public ParachuteState DEPLOYED
+
+      The parachute is fully deployed.
+
+
+   .. field:: public ParachuteState CUT
+
+      The parachute has been cut.
+
+
+
+.. type:: public enum ParachuteSafeState
+
+   The safety state of deploying a parachute. See :meth:`Parachute.getSafeState()`.
+
+
+   .. field:: public ParachuteSafeState SAFE
+
+      The parachute is safe to deploy.
+
+
+   .. field:: public ParachuteSafeState RISKY
+
+      Deploying the parachute is risky, and it may break off.
+
+
+   .. field:: public ParachuteSafeState UNSAFE
+
+      The parachute is unsafe to deploy, and will break off.
+
+
+   .. field:: public ParachuteSafeState NONE
+
+      The safety state is not available, because the vessel is not in an
+      atmosphere or the parachute has already been deployed or cut.
+
+
+
+Radiator
+^^^^^^^^
+
+
+.. type:: public class Radiator
+
+   A radiator. Obtained by calling :meth:`Part.getRadiator()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this radiator.
+
+   
+
+   .. method:: boolean getDeployable()
+
+
+      Whether the radiator is deployable.
+
+   
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      For a deployable radiator, ``true`` if the radiator is extended.
+      If the radiator is not deployable, this is always ``true``.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The current state of the radiator.
+
+   
+
+      .. note::
+
+         A fixed radiator is always :meth:`DeployableState.DEPLOYED`.
+
+
+
+Resource Converter
+^^^^^^^^^^^^^^^^^^
+
+
+.. type:: public class ResourceConverter
+
+   A resource converter. Obtained by calling :meth:`Part.getResourceConverter()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this converter.
+
+   
+
+   .. method:: int getCount()
+
+
+      The number of converters in the part.
+
+   
+
+   .. method:: String name(int index)
+
+      The name of the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: boolean active(int index)
+
+      True if the specified converter is active.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: void start(int index)
+
+      Start the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: void stop(int index)
+
+      Stop the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: ResourceConverterState state(int index)
+
+      The state of the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: String statusInfo(int index)
+
+      Status information for the specified converter.
+      This is the full status message shown in the in-game UI.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: java.util.List<String> inputs(int index)
+
+      List of the names of resources consumed by the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: java.util.List<String> outputs(int index)
+
+      List of the names of resources produced by the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: float getOptimumCoreTemperature()
+
+
+      The core temperature at which the converter will operate with peak efficiency, in Kelvin.
+
+   
+
+   .. method:: float getCoreTemperature()
+
+
+      The core temperature of the converter, in Kelvin.
+
+   
+
+   .. method:: float getThermalEfficiency()
+
+
+      The thermal efficiency of the converter, as a percentage of its maximum.
+
+   
+
+
+
+.. type:: public enum ResourceConverterState
+
+   The state of a resource converter. See :meth:`ResourceConverter.state(int)`.
+
+
+   .. field:: public ResourceConverterState RUNNING
+
+      Converter is running.
+
+
+   .. field:: public ResourceConverterState IDLE
+
+      Converter is idle.
+
+
+   .. field:: public ResourceConverterState MISSING_RESOURCE
+
+      Converter is missing a required resource.
+
+
+   .. field:: public ResourceConverterState STORAGE_FULL
+
+      No available storage for output resource.
+
+
+   .. field:: public ResourceConverterState CAPACITY
+
+      At preset resource capacity.
+
+
+   .. field:: public ResourceConverterState UNKNOWN
+
+      Unknown state. Possible with modified resource converters.
+      In this case, check :meth:`ResourceConverter.statusInfo(int)` for more information.
+
+
+
+Resource Harvester
+^^^^^^^^^^^^^^^^^^
+
+
+.. type:: public class ResourceHarvester
+
+   A resource harvester (drill). Obtained by calling :meth:`Part.getResourceHarvester()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this harvester.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The deployment state of the harvester. Whether it is drilling is
+      reported separately by :meth:`ResourceHarvester.getActive()`.
+
+   
+
+      .. note::
+
+         A harvester is never :meth:`DeployableState.BROKEN`, as the game
+         does not track damage for them.
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      Whether the harvester is deployed.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the harvester is actively drilling.
+
+   
+
+      .. note::
+
+         A value set while the harvester is deploying is applied when the
+         deploy completes, so it can be set immediately after setting
+         :meth:`ResourceHarvester.getDeployed()` without waiting for the deploy animation.
+         Setting it has no effect while the harvester is retracted or
+         retracting.
+
+   .. method:: float getExtractionRate()
+
+
+      The rate at which the drill is extracting ore, in units per second.
+
+   
+
+   .. method:: float getThermalEfficiency()
+
+
+      The thermal efficiency of the drill, as a percentage of its maximum.
+
+   
+
+   .. method:: float getCoreTemperature()
+
+
+      The core temperature of the drill, in Kelvin.
+
+   
+
+   .. method:: float getOptimumCoreTemperature()
+
+
+      The core temperature at which the drill will operate with peak efficiency, in Kelvin.
+
+   
+
+
+
+Reaction Wheel
+^^^^^^^^^^^^^^
+
+
+.. type:: public class ReactionWheel
+
+   A reaction wheel. Obtained by calling :meth:`Part.getReactionWheel()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this reaction wheel.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the reaction wheel is active.
+
+   
+
+   .. method:: boolean getBroken()
+
+
+      Whether the reaction wheel is broken.
+
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+
+
+      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
+      Returns zero if the reaction wheel is inactive or broken.
+
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getMaxTorque()
+
+
+      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
+      These axes correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
+
+   
+
+   .. method:: float getAuthorityLimiter()
+
+   .. method:: void setAuthorityLimiter(float value)
+
+      The authority limiter for the reaction wheel, as a percentage of maximum torque.
+      A value between 0 and 1.
+
+   
+
+
+
+Resource Drain
+^^^^^^^^^^^^^^
+
+
+.. type:: public class ResourceDrain
+
+   A resource drain. Obtained by calling :meth:`Part.getResourceDrain()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this resource drain.
+
+   
+
+   .. method:: java.util.List<Resource> getAvailableResources()
+
+
+      List of available resources.
+
+   
+
+   .. method:: void setResource(Resource resource, boolean enabled)
+
+      Whether the given resource should be drained.
+
+      :param Resource resource:
+      :param boolean enabled:
+   
+
+   .. method:: boolean checkResource(Resource resource)
+
+      Whether the provided resource is enabled for draining.
+
+      :param Resource resource:
+   
+
+   .. method:: DrainMode getDrainMode()
+
+   .. method:: void setDrainMode(DrainMode value)
+
+      The drain mode.
+
+   
+
+   .. method:: float getMinRate()
+
+
+      Minimum possible drain rate
+
+   
+
+   .. method:: float getMaxRate()
+
+
+      Maximum possible drain rate.
+
+   
+
+   .. method:: float getRate()
+
+   .. method:: void setRate(float value)
+
+      Current drain rate.
+
+   
+
+   .. method:: void start()
+
+      Activates resource draining for all enabled parts.
+
+   
+
+   .. method:: void stop()
+
+      Turns off resource draining.
+
+   
+
+
+
+.. type:: public enum DrainMode
+
+   Resource drain mode.
+   See :meth:`ResourceDrain.getDrainMode()`.
+
+
+   .. field:: public DrainMode PART
+
+      Drains from the parent part.
+
+
+   .. field:: public DrainMode VESSEL
+
+      Drains from all available parts.
+
+
+
+Robotic Controller
+^^^^^^^^^^^^^^^^^^
+
+
+.. type:: public class RoboticController
+
+   A robotic controller. Obtained by calling :meth:`Part.getRoboticController()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this controller.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the controller is enabled.
+
+   
+
+   .. method:: boolean getPlaying()
+
+
+      Whether the controller's sequence is currently playing.
+
+   
+
+   .. method:: float getPosition()
+
+   .. method:: void setPosition(float value)
+
+      The current position along the sequence, in seconds.
+
+   
+
+   .. method:: float getLength()
+
+
+      The length of the sequence, in seconds.
+
+   
+
+   .. method:: float getPlaySpeed()
+
+
+      The speed at which the sequence is played back, as a multiple of normal speed.
+
+   
+
+   .. method:: void play()
+
+      Start playing the controller's sequence.
+
+   
+
+   .. method:: void stop()
+
+      Stop playing the controller's sequence.
+
+   
+
+   .. method:: boolean hasPart(Part part)
+
+      Whether the controller has a part.
+
+      :param Part part:
+   
+
+   .. method:: java.util.List<java.util.List<String>> axes()
+
+      The axes for the controller.
+
+   
+
+   .. method:: boolean addAxis(Module module, String fieldName)
+
+      Add an axis to the controller.
+
+      :param Module module: The part module that the axis belongs to.
+      :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
+      :returns: Returns ``true`` if the axis is added successfully.
+   
+
+   .. method:: boolean addKeyFrame(Module module, String fieldName, float time, float value)
+
+      Add key frame value for controller axis.
+
+      :param Module module: The part module that the axis belongs to.
+      :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
+      :param float time: The time of the key frame.
+      :param float value: The value of the key frame.
+      :returns: Returns ``true`` if the key frame is added successfully.
+   
+
+   .. method:: boolean clearAxis(Module module, String fieldName)
+
+      Clear axis.
+
+      :param Module module: The part module that the axis belongs to.
+      :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
+      :returns: Returns ``true`` if the axis is cleared successfully.
+   
+
+
+
+Robotic Hinge
+^^^^^^^^^^^^^
+
+
+.. type:: public class RoboticHinge
+
+   A robotic hinge. Obtained by calling :meth:`Part.getRoboticHinge()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this robotic hinge.
+
+   
+
+   .. method:: float getTargetAngle()
+
+   .. method:: void setTargetAngle(float value)
+
+      Target angle.
+
+   
+
+   .. method:: float getCurrentAngle()
+
+
+      Current angle.
+
+   
+
+   .. method:: float getMinAngle()
+
+   .. method:: void setMinAngle(float value)
+
+      The minimum angle the hinge can move to, in degrees.
+
+   
+
+   .. method:: float getMaxAngle()
+
+   .. method:: void setMaxAngle(float value)
+
+      The maximum angle the hinge can move to, in degrees.
+
+   
+
+   .. method:: float getRate()
+
+   .. method:: void setRate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. method:: float getDamping()
+
+   .. method:: void setDamping(float value)
+
+      Damping percentage.
+
+   
+
+   .. method:: boolean getLocked()
+
+   .. method:: void setLocked(boolean value)
+
+      Lock movement.
+
+   
+
+   .. method:: boolean getMotorEngaged()
+
+   .. method:: void setMotorEngaged(boolean value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is currently moving.
+
+   
+
+   .. method:: void moveHome()
+
+      Move hinge to its built position.
+
+   
+
+
+
+Robotic Piston
+^^^^^^^^^^^^^^
+
+
+.. type:: public class RoboticPiston
+
+   A robotic piston part. Obtained by calling :meth:`Part.getRoboticPiston()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this robotic piston.
+
+   
+
+   .. method:: float getTargetExtension()
+
+   .. method:: void setTargetExtension(float value)
+
+      Target extension of the piston.
+
+   
+
+   .. method:: float getCurrentExtension()
+
+
+      Current extension of the piston.
+
+   
+
+   .. method:: float getMinExtension()
+
+   .. method:: void setMinExtension(float value)
+
+      The minimum extension of the piston, in meters.
+
+   
+
+   .. method:: float getMaxExtension()
+
+   .. method:: void setMaxExtension(float value)
+
+      The maximum extension of the piston, in meters.
+
+   
+
+   .. method:: float getRate()
+
+   .. method:: void setRate(float value)
+
+      Target movement rate in meters per second.
+
+   
+
+   .. method:: float getDamping()
+
+   .. method:: void setDamping(float value)
+
+      Damping percentage.
+
+   
+
+   .. method:: boolean getLocked()
+
+   .. method:: void setLocked(boolean value)
+
+      Lock movement.
+
+   
+
+   .. method:: boolean getMotorEngaged()
+
+   .. method:: void setMotorEngaged(boolean value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is currently moving.
+
+   
+
+   .. method:: void moveHome()
+
+      Move piston to its built position.
+
+   
+
+
+
+Robotic Rotation
+^^^^^^^^^^^^^^^^
+
+
+.. type:: public class RoboticRotation
+
+   A robotic rotation servo. Obtained by calling :meth:`Part.getRoboticRotation()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this robotic rotation servo.
+
+   
+
+   .. method:: float getTargetAngle()
+
+   .. method:: void setTargetAngle(float value)
+
+      Target angle.
+
+   
+
+   .. method:: float getCurrentAngle()
+
+
+      Current angle.
+
+   
+
+   .. method:: float getMinAngle()
+
+   .. method:: void setMinAngle(float value)
+
+      The minimum angle the servo can rotate to, in degrees.
+
+   
+
+   .. method:: float getMaxAngle()
+
+   .. method:: void setMaxAngle(float value)
+
+      The maximum angle the servo can rotate to, in degrees.
+
+   
+
+   .. method:: boolean getAllowFullRotation()
+
+   .. method:: void setAllowFullRotation(boolean value)
+
+      Whether the servo is allowed to rotate freely through a full revolution,
+      ignoring the angle limits.
+
+   
+
+   .. method:: float getRate()
+
+   .. method:: void setRate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. method:: float getDamping()
+
+   .. method:: void setDamping(float value)
+
+      Damping percentage.
+
+   
+
+   .. method:: boolean getLocked()
+
+   .. method:: void setLocked(boolean value)
+
+      Lock Movement
+
+   
+
+   .. method:: boolean getMotorEngaged()
+
+   .. method:: void setMotorEngaged(boolean value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. method:: boolean getIsMoving()
+
+
+      Whether the servo is currently moving.
+
+   
+
+   .. method:: void moveHome()
+
+      Move rotation servo to its built position.
+
+   
+
+
+
+Robotic Rotor
+^^^^^^^^^^^^^
+
+
+.. type:: public class RoboticRotor
+
+   A robotic rotor. Obtained by calling :meth:`Part.getRoboticRotor()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this robotic rotor.
+
+   
+
+   .. method:: float getTargetRPM()
+
+   .. method:: void setTargetRPM(float value)
+
+      Target RPM.
+
+   
+
+   .. method:: float getCurrentRPM()
+
+
+      Current RPM.
+
+   
+
+   .. method:: boolean getInverted()
+
+   .. method:: void setInverted(boolean value)
+
+      Whether the rotor direction is inverted.
+
+   
+
+   .. method:: float getTorqueLimit()
+
+   .. method:: void setTorqueLimit(float value)
+
+      Torque limit percentage.
+
+   
+
+   .. method:: float getMaxTorque()
+
+   .. method:: void setMaxTorque(float value)
+
+      The maximum torque the rotor can generate, in kilonewtons.
+
+   
+
+   .. method:: float getBrakePercentage()
+
+   .. method:: void setBrakePercentage(float value)
+
+      The percentage of braking force applied to the rotor.
+
+   
+
+   .. method:: boolean getLocked()
+
+   .. method:: void setLocked(boolean value)
+
+      Lock movement.
+
+   
+
+   .. method:: boolean getMotorEngaged()
+
+   .. method:: void setMotorEngaged(boolean value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. method:: boolean getIsMoving()
+
+
+      Whether the rotor is currently moving.
+
+   
+
+
+
+RCS
+^^^
+
+
+.. type:: public class RCS
+
+   An RCS block or thruster. Obtained by calling :meth:`Part.getRCS()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this RCS.
+
+   
+
+   .. method:: boolean getActive()
+
+
+      Whether the RCS thrusters are active.
+      An RCS thruster is inactive if the RCS action group is disabled
+      (:meth:`Control.getRCS()`), the RCS thruster itself is not enabled
+      (:meth:`RCS.getEnabled()`), or it is covered by a fairing
+      (:meth:`Part.getShielded()`) and cannot thrust while shielded.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the RCS thrusters are enabled.
+
+   
+
+   .. method:: boolean getPitchEnabled()
+
+   .. method:: void setPitchEnabled(boolean value)
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+   
+
+   .. method:: boolean getYawEnabled()
+
+   .. method:: void setYawEnabled(boolean value)
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+   
+
+   .. method:: boolean getRollEnabled()
+
+   .. method:: void setRollEnabled(boolean value)
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+   
+
+   .. method:: boolean getForwardEnabled()
+
+   .. method:: void setForwardEnabled(boolean value)
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+   
+
+   .. method:: boolean getUpEnabled()
+
+   .. method:: void setUpEnabled(boolean value)
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+   
+
+   .. method:: boolean getRightEnabled()
+
+   .. method:: void setRightEnabled(boolean value)
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+   
+
+   .. method:: boolean getInputOverride()
+
+   .. method:: void setInputOverride(boolean value)
+
+      Whether the RCS control is being set directly, bypassing the vessel's
+      normal flight controls. When enabled, the rotation and translation demand is set by
+      :meth:`RCS.getRotationOverride()` and :meth:`RCS.getTranslationOverride()` instead of the
+      normal control inputs. The override is automatically released if the
+      controlling client disconnects or the vessel changes.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getRotationOverride()
+
+   .. method:: void setRotationOverride(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The rotation demand applied when :meth:`RCS.getInputOverride()` is enabled, in the pitch,
+      roll and yaw axes. Each component is a normalized control input between -1 and 1.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getTranslationOverride()
+
+   .. method:: void setTranslationOverride(org.javatuples.Triplet<Double,Double,Double> value)
+
+      The translation demand applied when :meth:`RCS.getInputOverride()` is enabled, in the
+      right, up and forward axes. Each component is a normalized control input between -1
+      and 1.
+
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
+
+
+      The available torque, in Newton meters, that can be produced by this RCS,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
+      Returns zero if RCS is disable.
+
+   
+
+   .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableForce()
+
+
+      The available force, in Newtons, that can be produced by this RCS,
+      in the positive and negative x, y and z axes of the vessel. These axes
+      correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
+      Returns zero if RCS is disabled.
+
+   
+
+   .. method:: float getAvailableThrust()
+
+
+      The amount of thrust, in Newtons, that would be produced by the thruster when activated.
+      Returns zero if the thruster does not have any fuel.
+      Takes the thrusters current :meth:`RCS.getThrustLimit()` and atmospheric conditions
+      into account.
+
+   
+
+   .. method:: float getMaxThrust()
+
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active,
+      in Newtons, with the :meth:`RCS.getThrustLimit()` set to 100%.
+      Takes atmospheric conditions into account.
+
+   
+
+   .. method:: float getMaxVacuumThrust()
+
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active
+      in a vacuum, in Newtons.
+
+   
+
+   .. method:: float getThrustLimit()
+
+   .. method:: void setThrustLimit(float value)
+
+      The thrust limiter of the thruster. A value between 0 and 1.
+
+   
+
+   .. method:: java.util.List<Thruster> getThrusters()
+
+
+      A list of thrusters, one of each nozzel in the RCS part.
+
+   
+
+   .. method:: float getSpecificImpulse()
+
+
+      The current specific impulse of the RCS, in seconds. Returns zero
+      if the RCS is not active.
+
+   
+
+   .. method:: float getVacuumSpecificImpulse()
+
+
+      The vacuum specific impulse of the RCS, in seconds.
+
+   
+
+   .. method:: float getKerbinSeaLevelSpecificImpulse()
+
+
+      The specific impulse of the RCS at sea level on Kerbin, in seconds.
+
+   
+
+   .. method:: java.util.List<String> getPropellants()
+
+
+      The names of resources that the RCS consumes.
+
+   
+
+   .. method:: java.util.Map<String,Float> getPropellantRatios()
+
+
+      The ratios of resources that the RCS consumes. A dictionary mapping resource names
+      to the ratios at which they are consumed by the RCS.
+
+   
+
+   .. method:: boolean getHasFuel()
+
+
+      Whether the RCS has fuel available.
+
+   
+
+
+
+Sensor
+^^^^^^
+
+
+.. type:: public class Sensor
+
+   A sensor, such as a thermometer. Obtained by calling :meth:`Part.getSensor()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this sensor.
+
+   
+
+   .. method:: boolean getActive()
+
+   .. method:: void setActive(boolean value)
+
+      Whether the sensor is active.
+
+   
+
+   .. method:: String getValue()
+
+
+      The current value of the sensor.
+
+   
+
+      .. note::
+
+         This is the same readout string shown in the part's right-click menu
+         in-game, and is intended for display rather than for parsing. Both its
+         units and the way it formats numbers follow the language the game is
+         running in, so it is not stable across locales. For programmatic access
+         to the underlying quantities, use
+         :meth:`Part.getTemperature()` (temperature sensors),
+         :meth:`Flight.getGForce()` (accelerometers) or
+         :meth:`Flight.getStaticPressure()` (barometers).
+
+
+
+Solar Panel
+^^^^^^^^^^^
+
+
+.. type:: public class SolarPanel
+
+   A solar panel. Obtained by calling :meth:`Part.getSolarPanel()`.
+
+   .. method:: Part getPart()
+
+
+      The part object for this solar panel.
+
+   
+
+   .. method:: boolean getDeployable()
+
+
+      Whether the solar panel is deployable.
+
+   
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      Whether the solar panel is extended.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The current state of the solar panel.
+
+   
+
+   .. method:: float getEnergyFlow()
+
+
+      The current amount of energy being generated by the solar panel, in
+      units of charge per second.
+
+   
+
+   .. method:: float getSunExposure()
+
+
+      The current amount of sunlight that is incident on the solar panel,
+      as a percentage. A value between 0 and 1.
+
+   
+
+
+
+Thruster
+^^^^^^^^
+
+
+.. type:: public class Thruster
+
+   The component of an :type:`Engine` or :type:`RCS` part that generates thrust.
+   Can obtained by calling :meth:`Engine.getThrusters()` or :meth:`RCS.getThrusters()`.
+
+   .. note::
+
+      Engines can consist of multiple thrusters.
+      For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
+      four thrusters.
+
+   .. method:: Part getPart()
+
+
+      The :meth:`Thruster.getPart()` that contains this thruster.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> thrustPosition(ReferenceFrame referenceFrame)
+
+      The position at which the thruster generates thrust, in the given reference frame.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> thrustDirection(ReferenceFrame referenceFrame)
+
+      The direction of the force generated by the thruster, in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: ReferenceFrame getThrustReferenceFrame()
+
+
+      A reference frame that is fixed relative to the thruster and orientated with
+      its thrust direction (:meth:`Thruster.thrustDirection(ReferenceFrame)`).
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      * The origin is at the position of thrust for this thruster
+        (:meth:`Thruster.thrustPosition(ReferenceFrame)`).
+      * The axes rotate with the thrust direction.
+        This is the direction in which the thruster expels propellant, including any gimballing.
+      * The y-axis points along the thrust direction.
+      * The x-axis and z-axis are perpendicular to the thrust direction.
+
+   
+
+   .. method:: boolean getGimballed()
+
+
+      Whether the thruster is gimballed.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> gimbalPosition(ReferenceFrame referenceFrame)
+
+      Position around which the gimbal pivots.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getGimbalAngle()
+
+
+      The current gimbal angle in the pitch, roll and yaw axes, in degrees.
+
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> initialThrustPosition(ReferenceFrame referenceFrame)
+
+      The position at which the thruster generates thrust, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+      .. note::
+
+         This position can move when the gimbal rotates. This is because the thrust position and
+         gimbal position are not necessarily the same.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> initialThrustDirection(ReferenceFrame referenceFrame)
+
+      The direction of the force generated by the thruster, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+
+
+Wheel
+^^^^^
+
+
+.. type:: public class Wheel
+
+   A wheel. Includes landing gear and rover wheels.
+   Obtained by calling :meth:`Part.getWheel()`.
+   Can be used to control the motors, steering and deployment of wheels, among other things.
+
+   .. method:: Part getPart()
+
+
+      The part object for this wheel.
+
+   
+
+   .. method:: DeployableState getState()
+
+
+      The current state of the wheel.
+
+   
+
+   .. method:: float getRadius()
+
+
+      Radius of the wheel, in meters.
+
+   
+
+   .. method:: boolean getGrounded()
+
+
+      Whether the wheel is touching the ground.
+
+   
+
+   .. method:: boolean getHasBrakes()
+
+
+      Whether the wheel has brakes.
+
+   
+
+   .. method:: float getBrakes()
+
+   .. method:: void setBrakes(float value)
+
+      The braking force, as a percentage of maximum, when the brakes are applied.
+
+   
+
+   .. method:: boolean getAutoFrictionControl()
+
+   .. method:: void setAutoFrictionControl(boolean value)
+
+      Whether automatic friction control is enabled.
+
+   
+
+   .. method:: float getManualFrictionControl()
+
+   .. method:: void setManualFrictionControl(float value)
+
+      Manual friction control value. Only has an effect if automatic friction control is disabled.
+      A value between 0 and 5 inclusive.
+
+   
+
+   .. method:: boolean getDeployable()
+
+
+      Whether the wheel is deployable.
+
+   
+
+   .. method:: boolean getDeployed()
+
+   .. method:: void setDeployed(boolean value)
+
+      Whether the wheel is deployed.
+
+   
+
+   .. method:: boolean getPowered()
+
+
+      Whether the wheel is powered by a motor.
+
+   
+
+   .. method:: boolean getMotorEnabled()
+
+   .. method:: void setMotorEnabled(boolean value)
+
+      Whether the motor is enabled.
+
+   
+
+   .. method:: boolean getMotorInverted()
+
+   .. method:: void setMotorInverted(boolean value)
+
+      Whether the direction of the motor is inverted.
+
+   
+
+   .. method:: MotorState getMotorState()
+
+
+      Whether the direction of the motor is inverted.
+
+   
+
+   .. method:: float getMotorOutput()
+
+
+      The output of the motor. This is the torque currently being generated, in Newton meters.
+
+   
+
+   .. method:: boolean getTractionControlEnabled()
+
+   .. method:: void setTractionControlEnabled(boolean value)
+
+      Whether automatic traction control is enabled.
+      A wheel only has traction control if it is powered.
+
+   
+
+   .. method:: float getTractionControl()
+
+   .. method:: void setTractionControl(float value)
+
+      Setting for the traction control.
+      Only takes effect if the wheel has automatic traction control enabled.
+      A value between 0 and 5 inclusive.
+
+   
+
+   .. method:: float getDriveLimiter()
+
+   .. method:: void setDriveLimiter(float value)
+
+      Manual setting for the motor limiter.
+      Only takes effect if the wheel has automatic traction control disabled.
+      A value between 0 and 100 inclusive.
+
+   
+
+   .. method:: boolean getSteerable()
+
+
+      Whether the wheel has steering.
+
+   
+
+   .. method:: boolean getSteeringEnabled()
+
+   .. method:: void setSteeringEnabled(boolean value)
+
+      Whether the wheel steering is enabled.
+
+   
+
+   .. method:: boolean getSteeringInverted()
+
+   .. method:: void setSteeringInverted(boolean value)
+
+      Whether the wheel steering is inverted.
+
+   
+
+   .. method:: boolean getSteeringAngleAuto()
+
+   .. method:: void setSteeringAngleAuto(boolean value)
+
+      Whether the steering angle is automatically limited based on the vessel's speed,
+      reducing the maximum angle as the vessel moves faster. See also
+      :meth:`Wheel.getSteeringAngleLimit()`.
+
+   
+
+   .. method:: float getSteeringAngleLimit()
+
+   .. method:: void setSteeringAngleLimit(float value)
+
+      The steering angle limit.
+
+   
+
+   .. method:: float getSteeringResponseTime()
+
+   .. method:: void setSteeringResponseTime(float value)
+
+      Steering response time.
+
+   
+
+   .. method:: boolean getHasSuspension()
+
+
+      Whether the wheel has suspension.
+
+   
+
+   .. method:: float getSuspensionSpringStrength()
+
+
+      Suspension spring strength, as set in the editor.
+
+   
+
+   .. method:: float getSuspensionDamperStrength()
+
+
+      Suspension damper strength, as set in the editor.
+
+   
+
+   .. method:: boolean getBroken()
+
+
+      Whether the wheel is broken.
+
+   
+
+   .. method:: boolean getRepairable()
+
+
+      Whether the wheel is repairable.
+
+   
+
+   .. method:: float getStress()
+
+
+      Current stress on the wheel.
+
+   
+
+   .. method:: float getStressTolerance()
+
+
+      Stress tolerance of the wheel.
+
+   
+
+   .. method:: float getStressPercentage()
+
+
+      Current stress on the wheel as a percentage of its stress tolerance.
+
+   
+
+   .. method:: float getDeflection()
+
+
+      Current deflection of the wheel.
+
+   
+
+   .. method:: float getSlip()
+
+
+      Current slip of the wheel.
+
+   
+
+
+
+.. type:: public enum MotorState
+
+   The state of the motor on a powered wheel. See :meth:`Wheel.getMotorState()`.
+
+
+   .. field:: public MotorState IDLE
+
+      The motor is idle.
+
+
+   .. field:: public MotorState RUNNING
+
+      The motor is running.
+
+
+   .. field:: public MotorState DISABLED
+
+      The motor is disabled.
+
+
+   .. field:: public MotorState INOPERABLE
+
+      The motor is inoperable.
+
+
+   .. field:: public MotorState NOT_ENOUGH_RESOURCES
+
+      The motor does not have enough resources to run.
+
+
+
+.. _java-api-parts-trees-of-parts:
+
+Trees of Parts
+--------------
+
+Vessels in KSP are comprised of a number of parts, connected to one another in a
+*tree* structure. An example vessel is shown in Figure 1, and the corresponding
+tree of parts in Figure 2. The craft file for this example can also be
+:download:`downloaded here </crafts/PartsTree.craft>`.
+
+.. only:: html
+
+   .. container:: clearer
+
+      ..
+
+   .. figure:: /images/api/parts.png
+      :align: left
+      :figwidth: 275
+
+      **Figure 1** -- Example parts making up a vessel.
+
+   .. figure:: /images/api/parts-tree.png
+      :align: right
+      :figwidth: 275
+
+      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+
+   .. container:: clearer
+
+      ..
+
+.. only:: latex
+
+   .. figure:: /images/api/parts.png
+      :align: center
+      :width: 55%
+
+      **Figure 1** -- Example parts making up a vessel.
+
+   .. figure:: /images/api/parts-tree.png
+      :align: center
+      :width: 55%
+
+      **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from the parent part to the child part.
+
+
+Traversing the Tree
+^^^^^^^^^^^^^^^^^^^
+
+The tree of parts can be traversed using the attributes :meth:`Parts.getRoot()`,
+:meth:`Part.getParent()` and :meth:`Part.getChildren()`.
+
+The root of the tree is the same as the vessels *root part* (part number 1 in
+the example above) and can be obtained by calling :meth:`Parts.getRoot()`.
+A parts children can be obtained by calling :meth:`Part.getChildren()`.
+If the part does not have any children, :meth:`Part.getChildren()`
+returns an empty list. A parts parent can be obtained by calling
+:meth:`Part.getParent()`. If the part does not have a parent
+(as is the case for the root part), :meth:`Part.getParent()`
+returns ``null``.
+
+The following Java example uses these attributes to perform a
+depth-first traversal over all of the parts in a vessel:
+
+.. literalinclude:: /scripts/services/space-center/TreeTraversal.java
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+    Command Pod Mk1
+     TR-18A Stack Decoupler
+      FL-T400 Fuel Tank
+       LV-909 Liquid Fuel Engine
+        TR-18A Stack Decoupler
+         FL-T800 Fuel Tank
+          LV-909 Liquid Fuel Engine
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+       LT-1 Landing Struts
+       LT-1 Landing Struts
+     Mk16 Parachute
+
+.. _java-api-parts-attachment-modes:
+
+Attachment Modes
+^^^^^^^^^^^^^^^^
+
+Parts can be attached to other parts either *radially* (on the side of the
+parent part) or *axially* (on the end of the parent part, to form a stack).
+
+For example, in the vessel pictured above, the parachute (part 2) is *axially*
+connected to its parent (the command pod -- part 1), and the landing leg
+(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
+
+The root part of a vessel (for example the command pod -- part 1) does not have
+a parent part, so does not have an attachment mode. However, the part is
+consider to be *axially* attached to nothing.
+
+The following Java example does a depth-first traversal as before,
+but also prints out the attachment mode used by the part:
+
+.. literalinclude:: /scripts/services/space-center/AttachmentModes.java
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+ Command Pod Mk1 - axial
+  TR-18A Stack Decoupler - axial
+   FL-T400 Fuel Tank - axial
+    LV-909 Liquid Fuel Engine - axial
+     TR-18A Stack Decoupler - axial
+      FL-T800 Fuel Tank - axial
+       LV-909 Liquid Fuel Engine - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+    LT-1 Landing Struts - radial
+    LT-1 Landing Struts - radial
+  Mk16 Parachute - axial
+
+.. _java-api-parts-fuel-lines:
+
+Fuel Lines
+----------
+
+.. only:: html
+
+   .. figure:: /images/api/parts-fuel-lines.png
+      :align: right
+      :figwidth: 200
+
+      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-fuel-lines.png
+      :align: center
+      :width: 55%
+
+      **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the parts highlighted in green, into the part highlighted in blue.
+
+
+.. only:: html
+
+   .. figure:: /images/api/parts-fuel-lines-tree.png
+      :align: right
+      :figwidth: 200
+
+      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-fuel-lines-tree.png
+      :align: center
+      :width: 55%
+
+      **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+
+Fuel lines are considered parts, and are included in the parts tree (for
+example, as pictured in Figure 4). However, the parts tree does not contain
+information about which parts fuel lines connect to. The parent part of a fuel
+line is the part from which it will take fuel (as shown in Figure 4) however the
+part that it will send fuel to is not represented in the parts tree.
+
+Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
+line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
+feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
+a child of part 11, but its connection to part 9 is not represented in the tree.
+
+The attributes :meth:`Part.getFuelLinesFrom()` and
+:meth:`Part.getFuelLinesTo()` can be used to discover these
+connections. In the example in Figure 5, when
+:meth:`Part.getFuelLinesTo()` is called on fuel tank part
+11, it will return a list of parts containing just fuel tank part 9 (the blue
+part). When :meth:`Part.getFuelLinesFrom()` is called on
+fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
+(the parts colored green).
+
+.. _java-api-parts-staging:
+
+Staging
+-------
+
+For vessel-level summaries (delta-v, thrust, fuel, and resources grouped per
+stage), use the :rst:ref:`java-api-stage` class via
+:meth:`Vessel.getStages()` and
+:meth:`Vessel.getDecoupleStages()`. Legacy helpers
+:meth:`Parts.inStage(int)`,
+:meth:`Parts.inDecoupleStage(int)`, and
+:meth:`Vessel.resourcesInDecoupleStage(int, boolean)` remain available but
+are deprecated.
+
+.. only:: html
+
+   .. figure:: /images/api/parts-staging.png
+      :align: right
+      :figwidth: 340
+
+      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-staging.png
+      :align: center
+      :width: 55%
+
+      **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+
+Each part has two staging numbers associated with it: the stage in which the
+part is *activated* and the stage in which the part is *decoupled*. These values
+can be obtained using :meth:`Part.getStage()` and
+:meth:`Part.getDecoupleStage()` respectively. For parts that
+are not activated by staging, :meth:`Part.getStage()` returns
+-1. For parts that are never decoupled,
+:meth:`Part.getDecoupleStage()` returns a value of -1.
+
+Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
+stages in which each part of the vessel will be *activated*. Figure 8 shows the
+stages in which each part of the vessel will be *decoupled*.
+
+.. only:: html
+
+   .. container:: clearer
+
+      ..
+
+   .. figure:: /images/api/parts-staging-activate.png
+      :align: left
+      :figwidth: 250
+
+      **Figure 7** -- The stage in which each part is *activated*.
+
+   .. figure:: /images/api/parts-staging-decouple.png
+      :align: right
+      :figwidth: 250
+
+      **Figure 8** -- The stage in which each part is *decoupled*.
+
+   .. container:: clearer
+
+      ..
+
+.. only:: latex
+
+   .. figure:: /images/api/parts-staging-activate.png
+      :align: center
+      :width: 55%
+
+      **Figure 7** -- The stage in which each part is *activated*.
+
+   .. figure:: /images/api/parts-staging-decouple.png
+      :align: center
+      :width: 55%
+
+      **Figure 8** -- The stage in which each part is *decoupled*.

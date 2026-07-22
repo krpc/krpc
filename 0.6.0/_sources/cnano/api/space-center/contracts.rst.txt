@@ -1,0 +1,355 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Contracts
+=========
+
+
+.. type:: krpc_SpaceCenter_ContractManager_t
+
+   Contracts manager.
+   Obtained by calling :func:`krpc_SpaceCenter_ContractManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_Types(krpc_connection_t connection, krpc_set_string_t * result)
+
+      A list of all contract types.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_AllContracts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all contracts.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_ActiveContracts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all active contracts.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_OfferedContracts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all offered, but unaccepted, contracts.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_CompletedContracts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all completed contracts.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractManager_FailedContracts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all failed contracts.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_Contract_t
+
+   A contract. Can be accessed using :func:`krpc_SpaceCenter_ContractManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Type(krpc_connection_t connection, char * * result)
+
+      Type of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Title(krpc_connection_t connection, char * * result)
+
+      Title of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Description(krpc_connection_t connection, char * * result)
+
+      Description of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Notes(krpc_connection_t connection, char * * result)
+
+      Notes for the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Synopsis(krpc_connection_t connection, char * * result)
+
+      Synopsis for the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Keywords(krpc_connection_t connection, krpc_list_string_t * result)
+
+      Keywords for the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_State(krpc_connection_t connection, krpc_SpaceCenter_ContractState_t * result)
+
+      State of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Seen(krpc_connection_t connection, bool * result)
+
+      Whether the contract has been seen.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Read(krpc_connection_t connection, bool * result)
+
+      Whether the contract has been read.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Active(krpc_connection_t connection, bool * result)
+
+      Whether the contract is active.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Failed(krpc_connection_t connection, bool * result)
+
+      Whether the contract has been failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_CanBeCanceled(krpc_connection_t connection, bool * result)
+
+      Whether the contract can be canceled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_CanBeDeclined(krpc_connection_t connection, bool * result)
+
+      Whether the contract can be declined.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_CanBeFailed(krpc_connection_t connection, bool * result)
+
+      Whether the contract can be failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Accept(krpc_connection_t connection)
+
+      Accept an offered contract.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Cancel(krpc_connection_t connection)
+
+      Cancel an active contract.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Decline(krpc_connection_t connection)
+
+      Decline an offered contract.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_FundsAdvance(krpc_connection_t connection, double * result)
+
+      Funds received when accepting the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_FundsCompletion(krpc_connection_t connection, double * result)
+
+      Funds received on completion of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_FundsFailure(krpc_connection_t connection, double * result)
+
+      Funds lost if the contract is failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_ReputationCompletion(krpc_connection_t connection, double * result)
+
+      Reputation gained on completion of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_ReputationFailure(krpc_connection_t connection, double * result)
+
+      Reputation lost if the contract is failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_ScienceCompletion(krpc_connection_t connection, double * result)
+
+      Science gained on completion of the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_Parameters(krpc_connection_t connection, krpc_list_object_t * result)
+
+      Parameters for the contract.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateAccepted(krpc_connection_t connection, double * result)
+
+      Universal time at which the contract was accepted, in seconds.
+      Zero if the contract has not been accepted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateDeadline(krpc_connection_t connection, double * result)
+
+      Universal time by which the contract must be completed, in seconds.
+      Zero if the contract has no deadline.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateExpire(krpc_connection_t connection, double * result)
+
+      Universal time at which the contract offer expires, in seconds.
+      Zero if the contract has no expiry date.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Contract_DateFinished(krpc_connection_t connection, double * result)
+
+      Universal time at which the contract was completed or failed, in seconds.
+      Zero if the contract has not finished or KSP did not record a finish time.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ContractState_t
+
+   The state of a contract. See :func:`krpc_SpaceCenter_Contract_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_ACTIVE
+
+      The contract is active.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_CANCELED
+
+      The contract has been canceled.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_COMPLETED
+
+      The contract has been completed.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_DEADLINEEXPIRED
+
+      The deadline for the contract has expired.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_DECLINED
+
+      The contract has been declined.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_FAILED
+
+      The contract has been failed.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_GENERATED
+
+      The contract has been generated.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_OFFERED
+
+      The contract has been offered to the player.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_OFFEREXPIRED
+
+      The contract was offered to the player, but the offer expired.
+
+
+   .. macro:: KRPC_SPACECENTER_CONTRACTSTATE_WITHDRAWN
+
+      The contract has been withdrawn.
+
+
+
+.. type:: krpc_SpaceCenter_ContractParameter_t
+
+   A contract parameter. See :func:`krpc_SpaceCenter_Contract_Parameters`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Title(krpc_connection_t connection, char * * result)
+
+      Title of the parameter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Notes(krpc_connection_t connection, char * * result)
+
+      Notes for the parameter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Children(krpc_connection_t connection, krpc_list_object_t * result)
+
+      Child contract parameters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Completed(krpc_connection_t connection, bool * result)
+
+      Whether the parameter has been completed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Failed(krpc_connection_t connection, bool * result)
+
+      Whether the parameter has been failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_Optional(krpc_connection_t connection, bool * result)
+
+      Whether the contract parameter is optional.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_FundsCompletion(krpc_connection_t connection, double * result)
+
+      Funds received on completion of the contract parameter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_FundsFailure(krpc_connection_t connection, double * result)
+
+      Funds lost if the contract parameter is failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_ReputationCompletion(krpc_connection_t connection, double * result)
+
+      Reputation gained on completion of the contract parameter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_ReputationFailure(krpc_connection_t connection, double * result)
+
+      Reputation lost if the contract parameter is failed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ContractParameter_ScienceCompletion(krpc_connection_t connection, double * result)
+
+      Science gained on completion of the contract parameter.
