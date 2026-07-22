@@ -1,0 +1,1973 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Control &#8212; kRPC v0.6.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/space-center/control';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/java/api/space-center/control.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Communications" href="comms.html" />
+    <link rel="prev" title="Closest Approach" href="closest-approach.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.6.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">Java Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../java.html" class="nav-link">Java</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Control</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="control">
+<span id="package-krpc.client.services.SpaceCenter"></span><h1>Control<a class="headerlink" href="#control" title="Link to this heading">#</a></h1>
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Control</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control" title="Link to this definition">#</a></dt>
+<dd><p>Used to manipulate the controls of a vessel. This includes adjusting the
+throttle, enabling/disabling systems such as SAS and RCS, or altering the
+direction in which the vessel is pointing.
+Obtained by calling <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.getControl()" title="krpc.client.services.SpaceCenter.Vessel.getControl()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getControl()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Control inputs (pitch, yaw, roll, translation, wheel throttle, wheel steering
+and the custom axes) are zeroed when all clients that have set one or more of
+these inputs are no longer connected. The throttle is an exception: it keeps
+its value when clients disconnect.</p>
+</div>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getSource()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlSource" title="krpc.client.services.SpaceCenter.ControlSource"><span class="pre">ControlSource</span></a> <span class="sig-name descname"><span class="pre">getSource</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getSource()" title="Link to this definition">#</a></dt>
+<dd><p>The source of the vessels control, for example by a kerbal or a probe core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getState()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlState" title="krpc.client.services.SpaceCenter.ControlState"><span class="pre">ControlState</span></a> <span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getState()" title="Link to this definition">#</a></dt>
+<dd><p>The control state of the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getSAS()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSAS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getSAS()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setSAS(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSAS</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setSAS(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>The state of SAS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSAS()" title="krpc.client.services.SpaceCenter.AutoPilot.getSAS()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getSAS()</span></code></a>.
+Throws an exception if set to <code class="docutils literal notranslate"><span class="pre">true</span></code> while the auto-pilot is engaged, as the
+auto-pilot holds SAS off for as long as it is flying the vessel.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getSASMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">getSASMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getSASMode()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setSASMode(SASMode)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSASMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setSASMode(SASMode)" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getSASMode()" title="krpc.client.services.SpaceCenter.Control.getSASMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getSASMode()</span></code></a>.
+These modes are equivalent to the mode buttons to
+the left of the navball that appear when SAS is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSASMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getSASMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getSASMode()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getSpeedMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpeedMode" title="krpc.client.services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a> <span class="sig-name descname"><span class="pre">getSpeedMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getSpeedMode()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setSpeedMode(SpeedMode)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSpeedMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.SpeedMode" title="krpc.client.services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setSpeedMode(SpeedMode)" title="Link to this definition">#</a></dt>
+<dd><p>The current <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getSpeedMode()" title="krpc.client.services.SpaceCenter.Control.getSpeedMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getSpeedMode()</span></code></a> of the navball.
+This is the mode displayed next to the speed at the top of the navball.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getEngineGimbals()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getEngineGimbals</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getEngineGimbals()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setEngineGimbals(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEngineGimbals</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setEngineGimbals(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all gimballed engines on the vessel have gimbal enabled,
+and sets the gimbal enabled state of all gimballed engines.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.getGimbalLocked()" title="krpc.client.services.SpaceCenter.Engine.getGimbalLocked()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.getGimbalLocked()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getThrustReversers()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getThrustReversers</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getThrustReversers()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setThrustReversers(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setThrustReversers</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setThrustReversers(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all engines with a thrust reverser on the vessel have
+their thrust reverser engaged, and sets the thrust reverser state of all
+such engines.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Engine.getThrustReversed()" title="krpc.client.services.SpaceCenter.Engine.getThrustReversed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Engine.getThrustReversed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getAeroSurfaces()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAeroSurfaces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getAeroSurfaces()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setAeroSurfaces(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAeroSurfaces</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setAeroSurfaces(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all control surfaces on the vessel have pitch, yaw and roll enabled,
+and sets the pitch, yaw and roll enabled state of all control surfaces.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.ControlSurface.getPitchEnabled()" title="krpc.client.services.SpaceCenter.ControlSurface.getPitchEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ControlSurface.getPitchEnabled()</span></code></a>,
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.ControlSurface.getYawEnabled()" title="krpc.client.services.SpaceCenter.ControlSurface.getYawEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ControlSurface.getYawEnabled()</span></code></a> and
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.ControlSurface.getRollEnabled()" title="krpc.client.services.SpaceCenter.ControlSurface.getRollEnabled()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ControlSurface.getRollEnabled()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getRCS()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRCS</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getRCS()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setRCS(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRCS</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setRCS(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>The state of RCS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getReactionWheels()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getReactionWheels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getReactionWheels()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setReactionWheels(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setReactionWheels</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setReactionWheels(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all reactive wheels on the vessel are active,
+and sets the active state of all reaction wheels.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.ReactionWheel.getActive()" title="krpc.client.services.SpaceCenter.ReactionWheel.getActive()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ReactionWheel.getActive()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getGear()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getGear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getGear()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setGear(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setGear</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setGear(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the landing gear/legs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getLegs()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLegs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getLegs()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setLegs(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLegs</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setLegs(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all landing legs on the vessel are deployed,
+and sets the deployment state of all landing legs.
+Does not include wheels (for example landing gear).
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Leg.getDeployed()" title="krpc.client.services.SpaceCenter.Leg.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Leg.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getWheels()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getWheels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getWheels()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setWheels(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWheels</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setWheels(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all wheels on the vessel are deployed,
+and sets the deployment state of all wheels.
+Does not include landing legs.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Wheel.getDeployed()" title="krpc.client.services.SpaceCenter.Wheel.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Wheel.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getLights()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getLights</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getLights()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setLights(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setLights</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setLights(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the lights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getBrakes()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getBrakes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getBrakes()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setBrakes(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setBrakes</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setBrakes(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the wheel brakes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getAntennas()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAntennas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getAntennas()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setAntennas(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAntennas</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setAntennas(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all antennas on the vessel are deployed,
+and sets the deployment state of all antennas.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Antenna.getDeployed()" title="krpc.client.services.SpaceCenter.Antenna.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Antenna.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getCargoBays()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getCargoBays</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getCargoBays()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setCargoBays(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCargoBays</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setCargoBays(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether any of the cargo bays on the vessel are open,
+and sets the open state of all cargo bays.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.CargoBay.getOpen()" title="krpc.client.services.SpaceCenter.CargoBay.getOpen()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">CargoBay.getOpen()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getIntakes()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getIntakes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getIntakes()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setIntakes(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setIntakes</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setIntakes(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all of the air intakes on the vessel are open,
+and sets the open state of all air intakes.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Intake.getOpen()" title="krpc.client.services.SpaceCenter.Intake.getOpen()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Intake.getOpen()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getParachutes()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getParachutes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getParachutes()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setParachutes(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setParachutes</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setParachutes(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all parachutes on the vessel are deployed,
+and sets the deployment state of all parachutes.
+Cannot be set to <code class="docutils literal notranslate"><span class="pre">false</span></code>.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Parachute.getDeployed()" title="krpc.client.services.SpaceCenter.Parachute.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Parachute.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getRadiators()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getRadiators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getRadiators()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setRadiators(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRadiators</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setRadiators(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all radiators on the vessel are deployed,
+and sets the deployment state of all radiators.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Radiator.getDeployed()" title="krpc.client.services.SpaceCenter.Radiator.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Radiator.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getResourceHarvesters()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getResourceHarvesters</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getResourceHarvesters()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setResourceHarvesters(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setResourceHarvesters</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setResourceHarvesters(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all of the resource harvesters on the vessel are deployed,
+and sets the deployment state of all resource harvesters.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.ResourceHarvester.getDeployed()" title="krpc.client.services.SpaceCenter.ResourceHarvester.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ResourceHarvester.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getResourceHarvestersActive()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getResourceHarvestersActive</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getResourceHarvestersActive()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setResourceHarvestersActive(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setResourceHarvestersActive</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setResourceHarvestersActive(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether any of the resource harvesters on the vessel are active,
+and sets the active state of all resource harvesters.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.ResourceHarvester.getActive()" title="krpc.client.services.SpaceCenter.ResourceHarvester.getActive()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ResourceHarvester.getActive()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getSolarPanels()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getSolarPanels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getSolarPanels()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setSolarPanels(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setSolarPanels</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setSolarPanels(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Returns whether all solar panels on the vessel are deployed,
+and sets the deployment state of all solar panels.
+See <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.SolarPanel.getDeployed()" title="krpc.client.services.SpaceCenter.SolarPanel.getDeployed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">SolarPanel.getDeployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getAbort()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getAbort</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getAbort()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setAbort(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setAbort</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setAbort(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the abort action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getThrottle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getThrottle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getThrottle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setThrottle(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setThrottle</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setThrottle(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the throttle. A value between 0 and 1.
+Unlike the other control inputs, the throttle is not zeroed when the
+clients that set it disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getInputMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlInputMode" title="krpc.client.services.SpaceCenter.ControlInputMode"><span class="pre">ControlInputMode</span></a> <span class="sig-name descname"><span class="pre">getInputMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getInputMode()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setInputMode(ControlInputMode)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setInputMode</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlInputMode" title="krpc.client.services.SpaceCenter.ControlInputMode"><span class="pre">ControlInputMode</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setInputMode(ControlInputMode)" title="Link to this definition">#</a></dt>
+<dd><p>Sets the behavior of the pitch, yaw, roll and translation control inputs.
+When set to additive, these inputs are added to the vessels current inputs.
+This mode is the default.
+When set to override, these inputs (if non-zero) override the vessels inputs.
+This mode prevents keyboard control, or SAS, from interfering with the controls when
+they are set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getPitch()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPitch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getPitch()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setPitch(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPitch</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setPitch(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the pitch control.
+A value between -1 and 1.
+Equivalent to the w and s keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getYaw()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getYaw</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getYaw()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setYaw(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setYaw</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setYaw(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the yaw control.
+A value between -1 and 1.
+Equivalent to the a and d keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getRoll()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRoll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getRoll()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setRoll(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRoll</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setRoll(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the roll control.
+A value between -1 and 1.
+Equivalent to the q and e keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getPitchTrim()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getPitchTrim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getPitchTrim()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setPitchTrim(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPitchTrim</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setPitchTrim(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the pitch trim.
+A value between -1 and 1.
+Equivalent to the Alt+W and Alt+S keys.
+This is a persistent trim that remains latched until changed or reset,
+and can only be accessed for the active vessel.
+Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+when clients disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getYawTrim()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getYawTrim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getYawTrim()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setYawTrim(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setYawTrim</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setYawTrim(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the yaw trim.
+A value between -1 and 1.
+Equivalent to the Alt+A and Alt+D keys.
+This is a persistent trim that remains latched until changed or reset,
+and can only be accessed for the active vessel.
+Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+when clients disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getRollTrim()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRollTrim</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getRollTrim()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setRollTrim(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRollTrim</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setRollTrim(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the roll trim.
+A value between -1 and 1.
+Equivalent to the Alt+Q and Alt+E keys.
+This is a persistent trim that remains latched until changed or reset,
+and can only be accessed for the active vessel.
+Unlike the pitch, yaw and roll control inputs, the trim is not cleared
+when clients disconnect.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getForward()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getForward</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getForward()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setForward(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setForward</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setForward(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the forward translational control.
+A value between -1 and 1.
+Equivalent to the h and n keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getUp()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getUp()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setUp(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setUp(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the up translational control.
+A value between -1 and 1.
+Equivalent to the i and k keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getRight()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getRight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getRight()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setRight(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRight</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setRight(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the right translational control.
+A value between -1 and 1.
+Equivalent to the j and l keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getWheelThrottle()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWheelThrottle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getWheelThrottle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setWheelThrottle(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWheelThrottle</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setWheelThrottle(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the wheel throttle.
+A value between -1 and 1.
+A value of 1 rotates the wheels forwards, a value of -1 rotates
+the wheels backwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getWheelSteering()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWheelSteering</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getWheelSteering()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setWheelSteering(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWheelSteering</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setWheelSteering(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of the wheel steering.
+A value between -1 and 1.
+A value of 1 steers to the left, and a value of -1 steers to the right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The getter returns the input currently applied to the vessel, which
+combines the input set by kRPC with any keyboard, SAS and trim input.
+It refreshes one physics tick after a set, so a read immediately after
+a set returns the previously applied value rather than the value just set.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getCustomAxis01()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCustomAxis01</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getCustomAxis01()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setCustomAxis01(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCustomAxis01</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setCustomAxis01(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of CustomAxis01.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getCustomAxis02()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCustomAxis02</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getCustomAxis02()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setCustomAxis02(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCustomAxis02</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setCustomAxis02(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of CustomAxis02.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getCustomAxis03()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCustomAxis03</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getCustomAxis03()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setCustomAxis03(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCustomAxis03</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setCustomAxis03(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of CustomAxis03.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getCustomAxis04()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCustomAxis04</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getCustomAxis04()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setCustomAxis04(float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCustomAxis04</span></span><span class="sig-paren">(</span><span class="pre">float</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setCustomAxis04(float)" title="Link to this definition">#</a></dt>
+<dd><p>The state of CustomAxis04.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getCurrentStage()">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCurrentStage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getCurrentStage()" title="Link to this definition">#</a></dt>
+<dd><p>The current stage of the vessel. Corresponds to the stage number in
+the in-game UI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.activateNextStage()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">activateNextStage</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.activateNextStage()" title="Link to this definition">#</a></dt>
+<dd><p>Activates the next stage. Equivalent to pressing the space bar in-game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of vessel objects that are jettisoned from the active vessel.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When called, the active vessel may change. It is therefore possible that,
+after calling this function, the object(s) returned by previous call(s) to
+<a class="reference internal" href="space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()" title="krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getActiveVessel()</span></code></a> no longer refer to the active vessel.
+Throws an exception if staging is locked.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getStageLock()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getStageLock</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getStageLock()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setStageLock(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setStageLock</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setStageLock(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether staging is locked on the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equivalent to locking the staging using Alt+L</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getActionGroup(int)">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getActionGroup</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getActionGroup(int)" title="Link to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the given action group is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.setActionGroup(int, boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActionGroup</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">group</span></em>, <span class="pre">boolean</span><em> <span class="pre">state</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.setActionGroup(int, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Sets the state of the given action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+</p></li>
+<li><p><strong>state</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.toggleActionGroup(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">toggleActionGroup</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.toggleActionGroup(int)" title="Link to this definition">#</a></dt>
+<dd><p>Toggles the state of the given action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getActionGroupActions(int)">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.ActionGroupAction" title="krpc.client.services.SpaceCenter.ActionGroupAction"><span class="pre">ActionGroupAction</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getActionGroupActions</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">group</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getActionGroupActions(int)" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of all the part actions that are assigned to the given action group.
+Each entry identifies the part, the part module, and the action’s name and identifier.
+Returns an empty list if no actions are assigned to the group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – <p>A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For stock action groups, the assignments are read from each part action directly.
+When the Extended Action Groups mod is installed, the assignments are queried from
+the mod instead, so that actions assigned to its additional groups are included.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.addNode(double, float, float, float)">
+ <a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a> <span class="sig-name descname"><span class="pre">addNode</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">ut</span></em>, <span class="pre">float</span><em> <span class="pre">prograde</span></em>, <span class="pre">float</span><em> <span class="pre">normal</span></em>, <span class="pre">float</span><em> <span class="pre">radial</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.addNode(double, float, float, float)" title="Link to this definition">#</a></dt>
+<dd><p>Creates a maneuver node at the given universal time, and returns a
+<a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><code class="xref java java-type docutils literal notranslate"><span class="pre">Node</span></code></a> object that can be used to modify it.
+Optionally sets the magnitude of the delta-v for the maneuver node
+in the prograde, normal and radial directions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – Universal time of the maneuver node.</p></li>
+<li><p><strong>prograde</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – Delta-v in the prograde direction.</p></li>
+<li><p><strong>normal</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – Delta-v in the normal direction.</p></li>
+<li><p><strong>radial</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – Delta-v in the radial direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.getNodes()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="node.html#krpc.client.services.SpaceCenter.Node" title="krpc.client.services.SpaceCenter.Node"><span class="pre">Node</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getNodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.getNodes()" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of all existing maneuver nodes, ordered by time from first to last.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Control.removeNodes()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">removeNodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Control.removeNodes()" title="Link to this definition">#</a></dt>
+<dd><p>Remove all maneuver nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ActionGroupAction">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">ActionGroupAction</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ActionGroupAction" title="Link to this definition">#</a></dt>
+<dd><p>An action, belonging to a part module, that is assigned to an action group.
+Obtained by calling <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getActionGroupActions(int)" title="krpc.client.services.SpaceCenter.Control.getActionGroupActions(int)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getActionGroupActions(int)</span></code></a>.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ActionGroupAction.getPart()">
+ <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ActionGroupAction.getPart()" title="Link to this definition">#</a></dt>
+<dd><p>The part that the action acts on.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ActionGroupAction.getModule()">
+ <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Module" title="krpc.client.services.SpaceCenter.Module"><span class="pre">Module</span></a> <span class="sig-name descname"><span class="pre">getModule</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ActionGroupAction.getModule()" title="Link to this definition">#</a></dt>
+<dd><p>The part module that the action belongs to. Returns <code class="docutils literal notranslate"><span class="pre">null</span></code> for a
+part-level action that is not associated with a module. This only occurs when
+the Extended Action Groups mod is installed, as it can assign actions defined
+directly on a part, rather than on one of its modules, to an action group.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ActionGroupAction.getName()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ActionGroupAction.getName()" title="Link to this definition">#</a></dt>
+<dd><p>The human-readable name of the action, as shown in the action group editor.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ActionGroupAction.getId()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getId</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ActionGroupAction.getId()" title="Link to this definition">#</a></dt>
+<dd><p>The non-localized identifier for the action.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlState">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">ControlState</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlState" title="Link to this definition">#</a></dt>
+<dd><p>The control state of a vessel.
+See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getState()" title="krpc.client.services.SpaceCenter.Control.getState()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getState()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlState.FULL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlState" title="krpc.client.services.SpaceCenter.ControlState"><span class="pre">ControlState</span></a> <span class="sig-name descname"><span class="pre">FULL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlState.FULL" title="Link to this definition">#</a></dt>
+<dd><p>Full controllable.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlState.PARTIAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlState" title="krpc.client.services.SpaceCenter.ControlState"><span class="pre">ControlState</span></a> <span class="sig-name descname"><span class="pre">PARTIAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlState.PARTIAL" title="Link to this definition">#</a></dt>
+<dd><p>Partially controllable.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlState.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlState" title="krpc.client.services.SpaceCenter.ControlState"><span class="pre">ControlState</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlState.NONE" title="Link to this definition">#</a></dt>
+<dd><p>Not controllable.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSource">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">ControlSource</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSource" title="Link to this definition">#</a></dt>
+<dd><p>The control source of a vessel.
+See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getSource()" title="krpc.client.services.SpaceCenter.Control.getSource()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getSource()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSource.KERBAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlSource" title="krpc.client.services.SpaceCenter.ControlSource"><span class="pre">ControlSource</span></a> <span class="sig-name descname"><span class="pre">KERBAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSource.KERBAL" title="Link to this definition">#</a></dt>
+<dd><p>Vessel is controlled by a Kerbal.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSource.PROBE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlSource" title="krpc.client.services.SpaceCenter.ControlSource"><span class="pre">ControlSource</span></a> <span class="sig-name descname"><span class="pre">PROBE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSource.PROBE" title="Link to this definition">#</a></dt>
+<dd><p>Vessel is controlled by a probe core.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlSource.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlSource" title="krpc.client.services.SpaceCenter.ControlSource"><span class="pre">ControlSource</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlSource.NONE" title="Link to this definition">#</a></dt>
+<dd><p>Vessel is not controlled.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">SASMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode" title="Link to this definition">#</a></dt>
+<dd><p>The behavior of the SAS auto-pilot. See <a class="reference internal" href="auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getSASMode()" title="krpc.client.services.SpaceCenter.AutoPilot.getSASMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getSASMode()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.STABILITY_ASSIST">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">STABILITY_ASSIST</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.STABILITY_ASSIST" title="Link to this definition">#</a></dt>
+<dd><p>Stability assist mode. Dampen out any rotation.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.MANEUVER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">MANEUVER</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.MANEUVER" title="Link to this definition">#</a></dt>
+<dd><p>Point in the burn direction of the next maneuver node.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.PROGRADE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">PROGRADE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.PROGRADE" title="Link to this definition">#</a></dt>
+<dd><p>Point in the prograde direction.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.RETROGRADE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">RETROGRADE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.RETROGRADE" title="Link to this definition">#</a></dt>
+<dd><p>Point in the retrograde direction.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.NORMAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">NORMAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.NORMAL" title="Link to this definition">#</a></dt>
+<dd><p>Point in the orbit normal direction.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.ANTI_NORMAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">ANTI_NORMAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.ANTI_NORMAL" title="Link to this definition">#</a></dt>
+<dd><p>Point in the orbit anti-normal direction.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.RADIAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">RADIAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.RADIAL" title="Link to this definition">#</a></dt>
+<dd><p>Point in the orbit radial direction.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.ANTI_RADIAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">ANTI_RADIAL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.ANTI_RADIAL" title="Link to this definition">#</a></dt>
+<dd><p>Point in the orbit anti-radial direction.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.TARGET">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">TARGET</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.TARGET" title="Link to this definition">#</a></dt>
+<dd><p>Point in the direction of the current target.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SASMode.ANTI_TARGET">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SASMode" title="krpc.client.services.SpaceCenter.SASMode"><span class="pre">SASMode</span></a> <span class="sig-name descname"><span class="pre">ANTI_TARGET</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SASMode.ANTI_TARGET" title="Link to this definition">#</a></dt>
+<dd><p>Point away from the current target.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpeedMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">SpeedMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpeedMode" title="Link to this definition">#</a></dt>
+<dd><p>The mode of the speed reported in the navball.
+See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getSpeedMode()" title="krpc.client.services.SpaceCenter.Control.getSpeedMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getSpeedMode()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpeedMode.ORBIT">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpeedMode" title="krpc.client.services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a> <span class="sig-name descname"><span class="pre">ORBIT</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpeedMode.ORBIT" title="Link to this definition">#</a></dt>
+<dd><p>Speed is relative to the vessel’s orbit.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpeedMode.SURFACE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpeedMode" title="krpc.client.services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a> <span class="sig-name descname"><span class="pre">SURFACE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpeedMode.SURFACE" title="Link to this definition">#</a></dt>
+<dd><p>Speed is relative to the surface of the body being orbited.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpeedMode.TARGET">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpeedMode" title="krpc.client.services.SpaceCenter.SpeedMode"><span class="pre">SpeedMode</span></a> <span class="sig-name descname"><span class="pre">TARGET</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpeedMode.TARGET" title="Link to this definition">#</a></dt>
+<dd><p>Speed is relative to the current target.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlInputMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">ControlInputMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlInputMode" title="Link to this definition">#</a></dt>
+<dd><p>See <a class="reference internal" href="#krpc.client.services.SpaceCenter.Control.getInputMode()" title="krpc.client.services.SpaceCenter.Control.getInputMode()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Control.getInputMode()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlInputMode.ADDITIVE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlInputMode" title="krpc.client.services.SpaceCenter.ControlInputMode"><span class="pre">ControlInputMode</span></a> <span class="sig-name descname"><span class="pre">ADDITIVE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlInputMode.ADDITIVE" title="Link to this definition">#</a></dt>
+<dd><p>Control inputs are added to the vessels current control inputs.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ControlInputMode.OVERRIDE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.ControlInputMode" title="krpc.client.services.SpaceCenter.ControlInputMode"><span class="pre">ControlInputMode</span></a> <span class="sig-name descname"><span class="pre">OVERRIDE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ControlInputMode.OVERRIDE" title="Link to this definition">#</a></dt>
+<dd><p>Control inputs (when they are non-zero) override the vessels current control inputs.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="closest-approach.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Closest Approach</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="comms.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Communications</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/java/api/space-center/control.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

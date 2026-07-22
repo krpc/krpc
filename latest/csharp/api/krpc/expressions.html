@@ -1,0 +1,1661 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Expressions &#8212; kRPC v0.6.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=8fa8b3e9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'csharp/api/krpc/expressions';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.6.0';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.6.0/csharp/api/krpc/expressions.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="SpaceCenter API" href="../space-center.html" />
+    <link rel="prev" title="KRPC" href="krpc.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.6.0" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">C# Client</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="krpc.html">KRPC</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../csharp.html" class="nav-link">C#</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../krpc.html" class="nav-link">KRPC API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Expressions</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="expressions">
+<h1>Expressions<a class="headerlink" href="#expressions" title="Link to this heading">#</a></h1>
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.Expression">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Expression</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.Expression" title="Link to this definition">#</a></dt>
+<dd><p>A server side expression.</p>
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ConstantDouble">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ConstantDouble</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ConstantDouble" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of double precision floating point type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ConstantFloat">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ConstantFloat</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ConstantFloat" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of single precision floating point type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ConstantInt">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ConstantInt</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ConstantInt" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of integer type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ConstantBool">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ConstantBool</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <em><span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ConstantBool" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of boolean type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ConstantString">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ConstantString</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ConstantString" title="Link to this definition">#</a></dt>
+<dd><p>A constant value of string type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Call">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Call</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <span class="pre">KRPC.Schema.KRPC.ProcedureCall</span> <em><span class="pre">call</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Call" title="Link to this definition">#</a></dt>
+<dd><p>An RPC call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Equal">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Equal</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Equal" title="Link to this definition">#</a></dt>
+<dd><p>Equality comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.NotEqual">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">NotEqual</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.NotEqual" title="Link to this definition">#</a></dt>
+<dd><p>Inequality comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.GreaterThan">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">GreaterThan</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.GreaterThan" title="Link to this definition">#</a></dt>
+<dd><p>Greater than numerical comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.GreaterThanOrEqual">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">GreaterThanOrEqual</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.GreaterThanOrEqual" title="Link to this definition">#</a></dt>
+<dd><p>Greater than or equal numerical comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.LessThan">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">LessThan</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.LessThan" title="Link to this definition">#</a></dt>
+<dd><p>Less than numerical comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.LessThanOrEqual">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">LessThanOrEqual</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.LessThanOrEqual" title="Link to this definition">#</a></dt>
+<dd><p>Less than or equal numerical comparison.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.And">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">And</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.And" title="Link to this definition">#</a></dt>
+<dd><p>Boolean and operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Or">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Or</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Or" title="Link to this definition">#</a></dt>
+<dd><p>Boolean or operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ExclusiveOr">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ExclusiveOr</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ExclusiveOr" title="Link to this definition">#</a></dt>
+<dd><p>Boolean exclusive-or operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Not">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Not</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Not" title="Link to this definition">#</a></dt>
+<dd><p>Boolean negation operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Add">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Add</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Add" title="Link to this definition">#</a></dt>
+<dd><p>Numerical addition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Subtract">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Subtract</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Subtract" title="Link to this definition">#</a></dt>
+<dd><p>Numerical subtraction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Multiply">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Multiply</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Multiply" title="Link to this definition">#</a></dt>
+<dd><p>Numerical multiplication.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Divide">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Divide</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Divide" title="Link to this definition">#</a></dt>
+<dd><p>Numerical division.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Modulo">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Modulo</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Modulo" title="Link to this definition">#</a></dt>
+<dd><p>Numerical modulo operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The remainder of arg0 divided by arg1</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Power">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Power</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Power" title="Link to this definition">#</a></dt>
+<dd><p>Numerical power operator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>arg0 raised to the power of arg1, with type of arg0</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.LeftShift">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">LeftShift</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.LeftShift" title="Link to this definition">#</a></dt>
+<dd><p>Bitwise left shift.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.RightShift">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">RightShift</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg0</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.RightShift" title="Link to this definition">#</a></dt>
+<dd><p>Bitwise right shift.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Cast">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Cast</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <em><span class="pre">type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Cast" title="Link to this definition">#</a></dt>
+<dd><p>Perform a cast to the given type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>type</strong> – Type to cast the argument to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Parameter">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Parameter</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <em><span class="pre">type</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Parameter" title="Link to this definition">#</a></dt>
+<dd><p>A named parameter of type double.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – The name of the parameter.</p></li>
+<li><p><strong>type</strong> – The type of the parameter.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A named parameter.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Function">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Function</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">parameters</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">body</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Function" title="Link to this definition">#</a></dt>
+<dd><p>A function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parameters</strong> – The parameters of the function.</p></li>
+<li><p><strong>body</strong> – The body of the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Invoke">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Invoke</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">function</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.idictionary-2" title="System.Collections.Generic.IDictionary"><span class="pre">IDictionary</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a><span class="pre">,</span> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">args</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Invoke" title="Link to this definition">#</a></dt>
+<dd><p>A function call.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>function</strong> – The function to call.</p></li>
+<li><p><strong>args</strong> – The arguments to call the function with.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A function call.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.CreateTuple">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">CreateTuple</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">elements</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.CreateTuple" title="Link to this definition">#</a></dt>
+<dd><p>Construct a tuple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>elements</strong> – The elements.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The tuple.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.CreateList">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">CreateList</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">values</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.CreateList" title="Link to this definition">#</a></dt>
+<dd><p>Construct a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – The value. Should all be of the same type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The list.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.CreateSet">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">CreateSet</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.iset-1" title="System.Collections.Generic.ISet"><span class="pre">ISet</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">values</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.CreateSet" title="Link to this definition">#</a></dt>
+<dd><p>Construct a set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>values</strong> – The values. Should all be of the same type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The set.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.CreateDictionary">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">CreateDictionary</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">keys</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a><span class="pre">&gt;</span> <em><span class="pre">values</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.CreateDictionary" title="Link to this definition">#</a></dt>
+<dd><p>Construct a dictionary, from a list of corresponding keys and values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>keys</strong> – The keys. Should all be of the same type.</p></li>
+<li><p><strong>values</strong> – The values. Should all be of the same type.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The dictionary.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ToList">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ToList</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ToList" title="Link to this definition">#</a></dt>
+<dd><p>Convert a collection to a list.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The collection as a list.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.ToSet">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">ToSet</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.ToSet" title="Link to this definition">#</a></dt>
+<dd><p>Convert a collection to a set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The collection as a set.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Get">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Get</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">index</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Get" title="Link to this definition">#</a></dt>
+<dd><p>Access an element in a tuple, list or dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The tuple, list or dictionary.</p></li>
+<li><p><strong>index</strong> – The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The element.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Count">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Count</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Count" title="Link to this definition">#</a></dt>
+<dd><p>Number of elements in a collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list, set or dictionary.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The number of elements in the collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Sum">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Sum</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Sum" title="Link to this definition">#</a></dt>
+<dd><p>Sum all elements of a collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list or set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The sum of the elements in the collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Max">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Max</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Max" title="Link to this definition">#</a></dt>
+<dd><p>Maximum of all elements in a collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list or set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The maximum elements in the collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Min">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Min</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Min" title="Link to this definition">#</a></dt>
+<dd><p>Minimum of all elements in a collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list or set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The minimum elements in the collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Average">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Average</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Average" title="Link to this definition">#</a></dt>
+<dd><p>Minimum of all elements in a collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list or set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The minimum elements in the collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Select">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Select</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Select" title="Link to this definition">#</a></dt>
+<dd><p>Run a function on every element in the collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list or set.</p></li>
+<li><p><strong>func</strong> – The function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modified collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Where">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Where</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Where" title="Link to this definition">#</a></dt>
+<dd><p>Run a function on every element in the collection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The list or set.</p></li>
+<li><p><strong>func</strong> – The function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The modified collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Contains">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Contains</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Contains" title="Link to this definition">#</a></dt>
+<dd><p>Determine if a collection contains a value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+<li><p><strong>value</strong> – The value to look for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether the collection contains a value.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Aggregate">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Aggregate</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Aggregate" title="Link to this definition">#</a></dt>
+<dd><p>Applies an accumulator function over a sequence.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+<li><p><strong>func</strong> – The accumulator function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The accumulated value.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.AggregateWithSeed">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">AggregateWithSeed</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">seed</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">func</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.AggregateWithSeed" title="Link to this definition">#</a></dt>
+<dd><p>Applies an accumulator function over a sequence, with a given seed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+<li><p><strong>seed</strong> – The seed value.</p></li>
+<li><p><strong>func</strong> – The accumulator function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The accumulated value.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Concat">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Concat</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg1</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg2</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Concat" title="Link to this definition">#</a></dt>
+<dd><p>Concatenate two sequences.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg1</strong> – The first sequence.</p></li>
+<li><p><strong>arg2</strong> – The second sequence.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The first sequence followed by the second sequence.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.OrderBy">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">OrderBy</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">key</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.OrderBy" title="Link to this definition">#</a></dt>
+<dd><p>Order a collection using a key function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection to order.</p></li>
+<li><p><strong>key</strong> – A function that takes a value from the collection and generates a key to sort on.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The ordered collection.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.All">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">All</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">predicate</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.All" title="Link to this definition">#</a></dt>
+<dd><p>Determine whether all items in a collection satisfy a boolean predicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+<li><p><strong>predicate</strong> – The predicate function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether all items satisfy the predicate.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Expression.Any">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <span class="sig-name descname"><span class="pre">Any</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">arg</span></em>, <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Expression" title="KRPC.Client.Services.KRPC.Expression class"><span class="pre">Expression</span></a> <em><span class="pre">predicate</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Expression.Any" title="Link to this definition">#</a></dt>
+<dd><p>Determine whether any item in a collection satisfies a boolean predicate.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arg</strong> – The collection.</p></li>
+<li><p><strong>predicate</strong> – The predicate function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether any item satisfies the predicate.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp class">
+<dt class="sig sig-object csharp" id="class-KRPC.Client.Services.KRPC.Type">
+<span class="sig-name descname"><span class="pre">class</span> <span class="pre">Type</span></span><a class="headerlink" href="#class-KRPC.Client.Services.KRPC.Type" title="Link to this definition">#</a></dt>
+<dd><p>A server side expression.</p>
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Type.Double">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">Double</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Type.Double" title="Link to this definition">#</a></dt>
+<dd><p>Double type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Type.Float">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">Float</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Type.Float" title="Link to this definition">#</a></dt>
+<dd><p>Float type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Type.Int">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">Int</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Type.Int" title="Link to this definition">#</a></dt>
+<dd><p>Int type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Type.Bool">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">Bool</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Type.Bool" title="Link to this definition">#</a></dt>
+<dd><p>Bool type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.KRPC.Type.String">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.KRPC.Type" title="KRPC.Client.Services.KRPC.Type class"><span class="pre">Type</span></a> <span class="sig-name descname"><span class="pre">String</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.KRPC.Type.String" title="Link to this definition">#</a></dt>
+<dd><p>String type.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="krpc.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">KRPC</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../space-center.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">SpaceCenter API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/csharp/api/krpc/expressions.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

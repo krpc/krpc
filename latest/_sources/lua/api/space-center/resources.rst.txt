@@ -1,0 +1,207 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+Resources
+=========
+
+
+.. class:: Resources
+
+   Represents the collection of resources stored in a vessel, stage or part.
+   Created by calling :attr:`SpaceCenter.Vessel.resources`,
+   :meth:`SpaceCenter.Vessel.resources_in_decouple_stage` or
+   :attr:`SpaceCenter.Part.resources`.
+
+   .. attribute:: all: List
+
+      All the individual resources that can be stored.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: with_resource(name)
+
+      All the individual resources with the given name that can be stored.
+
+      :param string name:
+      :rtype: List
+
+   .. attribute:: names: List
+
+      A list of resource names that can be stored.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: has_resource(name)
+
+      Check whether the named resource can be stored.
+
+      :param string name: The name of the resource.
+      :rtype: boolean
+
+   .. method:: amount(name)
+
+      Returns the amount of a resource that is currently stored.
+
+      :param string name: The name of the resource.
+      :rtype: number
+
+   .. method:: max(name)
+
+      Returns the amount of a resource that can be stored.
+
+      :param string name: The name of the resource.
+      :rtype: number
+
+   .. staticmethod:: density(name)
+
+      Returns the density of a resource, in :math:`kg/l`.
+
+      :param string name: The name of the resource.
+      :rtype: number
+
+   .. staticmethod:: flow_mode(name)
+
+      Returns the flow mode of a resource.
+
+      :param string name: The name of the resource.
+      :rtype: :class:`SpaceCenter.ResourceFlowMode`
+
+   .. attribute:: enabled: boolean
+
+      Whether use of all the resources are enabled.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         This is ``True`` if all of the resources are enabled.
+         If any of the resources are not enabled, this is ``False``.
+
+
+
+.. class:: Resource
+
+   An individual resource stored within a part.
+   Created using methods in the :class:`SpaceCenter.Resources` class.
+
+   .. attribute:: name: string
+
+      The name of the resource.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part containing the resource.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: amount: number
+
+      The amount of the resource that is currently stored in the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max: number
+
+      The total amount of the resource that can be stored in the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: density: number
+
+      The density of the resource, in :math:`kg/l`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: flow_mode: SpaceCenter.ResourceFlowMode
+
+      The flow mode of the resource.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.ResourceFlowMode`
+
+   .. attribute:: enabled: boolean
+
+      Whether use of this resource is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+
+
+.. class:: ResourceTransfer
+
+   Transfer resources between parts.
+
+   .. staticmethod:: start(from_part, to_part, resource, max_amount)
+
+      Start transferring a resource transfer between a pair of parts. The transfer will move
+      at most *max_amount* units of the resource, depending on how much of
+      the resource is available in the source part and how much storage is available in the
+      destination part.
+      Use :attr:`SpaceCenter.ResourceTransfer.complete` to check if the transfer is complete.
+      Use :attr:`SpaceCenter.ResourceTransfer.amount` to see how much of the resource has been transferred.
+
+      :param SpaceCenter.Part from_part: The part to transfer to.
+      :param SpaceCenter.Part to_part: The part to transfer from.
+      :param string resource: The name of the resource to transfer.
+      :param number max_amount: The maximum amount of resource to transfer.
+      :rtype: :class:`SpaceCenter.ResourceTransfer`
+
+      .. note::
+
+         The transfer is canceled if the client that started it disconnects;
+         a canceled transfer is marked as complete.
+
+   .. attribute:: amount: number
+
+      The amount of the resource that has been transferred.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: complete: boolean
+
+      Whether the transfer has completed. Also becomes true if the transfer is
+      canceled because the client that started it disconnected.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+
+
+.. class:: ResourceFlowMode
+
+   The way in which a resource flows between parts. See :meth:`SpaceCenter.Resources.flow_mode`.
+
+
+   .. data:: vessel
+
+      The resource flows to any part in the vessel. For example, electric charge.
+
+
+   .. data:: stage
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+
+   .. data:: adjacent
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+
+   .. data:: none
+
+      The resource does not flow. For example, solid fuel.

@@ -1,0 +1,50 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Button
+======
+
+
+.. type:: public class Button
+
+   A text label. See :meth:`Panel.addButton(String, boolean)`.
+
+   .. method:: RectTransform getRectTransform()
+
+
+      The rect transform for the text.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. method:: Text getText()
+
+
+      The text for the button.
+
+   
+
+   .. method:: boolean getClicked()
+
+   .. method:: void setClicked(boolean value)
+
+      Whether the button has been clicked.
+
+   
+
+      .. note::
+
+         This property is set to true when the user clicks the button.
+         A client script should reset the property to false in order to detect subsequent button presses.
+
+   .. method:: void remove()
+
+      Remove the UI object.

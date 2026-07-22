@@ -1,0 +1,112 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalAlarmClock
+
+AlarmType
+=========
+
+
+.. type:: public enum AlarmType
+
+   The type of an alarm.
+
+
+   .. field:: public AlarmType RAW
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. field:: public AlarmType MANEUVER
+
+      An alarm based on the next maneuver node on the current ships flight path.
+      This node will be stored and can be restored when you come back to the ship.
+
+
+   .. field:: public AlarmType MANEUVER_AUTO
+
+      See :meth:`AlarmType.MANEUVER`.
+
+
+   .. field:: public AlarmType APOAPSIS
+
+      An alarm for furthest part of the orbit from the planet.
+
+
+   .. field:: public AlarmType PERIAPSIS
+
+      An alarm for nearest part of the orbit from the planet.
+
+
+   .. field:: public AlarmType ASCENDING_NODE
+
+      Ascending node for the targeted object, or equatorial ascending node.
+
+
+   .. field:: public AlarmType DESCENDING_NODE
+
+      Descending node for the targeted object, or equatorial descending node.
+
+
+   .. field:: public AlarmType CLOSEST
+
+      An alarm based on the closest approach of this vessel to the targeted
+      vessel, some number of orbits into the future.
+
+
+   .. field:: public AlarmType CONTRACT
+
+      An alarm based on the expiry or deadline of contracts in career modes.
+
+
+   .. field:: public AlarmType CONTRACT_AUTO
+
+      See :meth:`AlarmType.CONTRACT`.
+
+
+   .. field:: public AlarmType CREW
+
+      An alarm that is attached to a crew member.
+
+
+   .. field:: public AlarmType DISTANCE
+
+      An alarm that is triggered when a selected target comes within a chosen distance.
+
+
+   .. field:: public AlarmType EARTH_TIME
+
+      An alarm based on the time in the "Earth" alternative Universe (aka the Real World).
+
+
+   .. field:: public AlarmType LAUNCH_RENDEVOUS
+
+      An alarm that fires as your landed craft passes under the orbit of your target.
+
+
+   .. field:: public AlarmType SOI_CHANGE
+
+      An alarm manually based on when the next SOI point is on the flight path
+      or set to continually monitor the active flight path and add alarms as it
+      detects SOI changes.
+
+
+   .. field:: public AlarmType SOI_CHANGE_AUTO
+
+      See :meth:`AlarmType.SOI_CHANGE`.
+
+
+   .. field:: public AlarmType TRANSFER
+
+      An alarm based on Interplanetary Transfer Phase Angles, i.e. when should
+      I launch to planet X? Based on Kosmo Not's post and used in Olex's
+      Calculator.
+
+
+   .. field:: public AlarmType TRANSFER_MODELLED
+
+      See :meth:`AlarmType.TRANSFER`.
+
+
+   .. field:: public AlarmType SCIENCE_LAB
+
+      An alarm for when a science lab has finished processing data.

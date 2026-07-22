@@ -1,0 +1,804 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+AutoPilot
+=========
+
+
+.. type:: krpc_SpaceCenter_AutoPilot_t
+
+   Provides basic auto-piloting utilities for a vessel.
+   Created by calling :func:`krpc_SpaceCenter_Vessel_AutoPilot`.
+
+   .. note::
+
+      If a client engages the auto-pilot and then closes its connection to the server,
+      the auto-pilot will be disengaged. Its configuration and target are left unchanged.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_SAS(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_SAS(bool value)
+
+      The state of SAS.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`krpc_SpaceCenter_Control_SAS`.
+         Throws an exception if set to ``true`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_SASMode(krpc_connection_t connection, krpc_SpaceCenter_SASMode_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_SASMode(krpc_SpaceCenter_SASMode_t value)
+
+      The current :func:`krpc_SpaceCenter_AutoPilot_SASMode`.
+      These modes are equivalent to the mode buttons to the left of the navball that appear
+      when SAS is enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`krpc_SpaceCenter_Control_SASMode`
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Engaged(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_Engaged(bool value)
+
+      Whether the auto-pilot is engaged.
+      Setting to ``true`` engages the auto-pilot; setting to ``false`` disengages it.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_ShowInfoUI(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_ShowInfoUI(bool value)
+
+      Whether an in-game window showing the auto-pilot's state (engagement, attitude error,
+      target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
+      this vessel. Defaults to ``false``. This is a debugging aid; the window is reset to
+      hidden when the game is restarted.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Reset(krpc_connection_t connection)
+
+      Disengages the auto-pilot and resets all configuration parameters to their defaults.
+      Also resets the target pitch, heading and roll, and clears all internal controller
+      state, including the oscillation detector's structural level — which otherwise
+      persists across engagements so that a craft known to be flexible re-latches quickly.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      The reference frame for the target direction (:func:`krpc_SpaceCenter_AutoPilot_TargetDirection`).
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         An error will be thrown if this property is set to a reference frame that rotates with
+         the vessel being controlled, as it is impossible to rotate the vessel in such a
+         reference frame.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetPitch(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TargetPitch(float value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
+         the nose is near vertical (pitch → ±90°); near the vertical prefer
+         :func:`krpc_SpaceCenter_AutoPilot_TargetDirection` or :func:`krpc_SpaceCenter_AutoPilot_SetDirectionAndUp`. The setter preserves the
+         current roll relative to :func:`krpc_SpaceCenter_AutoPilot_UpReference`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetHeading(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TargetHeading(float value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
+         (pitch → ±90°) — see :func:`krpc_SpaceCenter_AutoPilot_TargetPitch`. The setter preserves the current roll
+         relative to :func:`krpc_SpaceCenter_AutoPilot_UpReference`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetRoll(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TargetRoll(float value)
+
+      The target roll, in degrees, measured about the vessel's nose relative to the
+      :func:`krpc_SpaceCenter_AutoPilot_UpReference` (roll 0 aligns the vessel's dorsal/roof axis with the reference;
+      positive roll banks right). ``NaN`` if no target roll is set.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When left unset (``NaN``) the auto-pilot suppresses roll rotation — it drives the roll
+         rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+         current target to that angle relative to the up reference while keeping the nose direction.
+         With the default reference (the frame's up) this reproduces the historical roll away from
+         the vertical, and is ill-defined only when the nose points along the reference (near
+         straight up or down). To hold a well-defined roll through the vertical — for example a
+         gravity turn — set the up reference off the flight path (see
+         :func:`krpc_SpaceCenter_AutoPilot_SetDirectionAndUp` / :func:`krpc_SpaceCenter_AutoPilot_UpReference`).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_UpReference(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_UpReference(const krpc_tuple_double_double_double_t * value)
+
+      The reference direction, in the reference frame specified by :func:`krpc_SpaceCenter_AutoPilot_ReferenceFrame`,
+      that :func:`krpc_SpaceCenter_AutoPilot_TargetRoll` is measured against: at roll 0 the vessel's dorsal (roof)
+      axis is aligned with this vector's component perpendicular to the nose. Defaults to the
+      frame's up (the zenith / radial-out direction).
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting this re-anchors how roll is measured without moving the current target, so
+         the reference can be set once and then rolls commanded against it with
+         :func:`krpc_SpaceCenter_AutoPilot_TargetRoll` while the nose direction changes freely. It is also set as a side
+         effect of :func:`krpc_SpaceCenter_AutoPilot_SetDirectionAndUp`. Setting the target rotation, target direction,
+         or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
+         keeps roll well-defined through the vertical.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetPitchAndHeading(krpc_connection_t connection, float pitch, float heading)
+
+      Set target pitch and heading angles.
+
+      :Parameters:
+
+       * **pitch** -- Target pitch angle, in degrees between -90° and +90°.
+       * **heading** -- Target heading angle, in degrees between 0° and 360°.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
+         vertical (pitch → ±90°), so near the vertical prefer :func:`krpc_SpaceCenter_AutoPilot_TargetDirection` or
+         :func:`krpc_SpaceCenter_AutoPilot_SetDirectionAndUp`. Preserves the current roll relative to
+         :func:`krpc_SpaceCenter_AutoPilot_UpReference`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TargetDirection(const krpc_tuple_double_double_double_t * value)
+
+      Direction vector corresponding to the target pitch and heading.
+      This is in the reference frame specified by :func:`krpc_SpaceCenter_AutoPilot_ReferenceFrame`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TargetRotation(const krpc_tuple_double_double_double_double_t * value)
+
+      The target rotation quaternion. Setting this also sets the target roll.
+      This is in the reference frame specified by :func:`krpc_SpaceCenter_AutoPilot_ReferenceFrame`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_SetDirectionAndUp(krpc_connection_t connection, const krpc_tuple_double_double_double_t * direction, const krpc_tuple_double_double_double_t * up, float roll)
+
+      Set the target attitude from a nose direction and an up vector: point the nose along
+      *direction* and roll so the vessel's dorsal (roof) axis aligns with
+      *up* (its component perpendicular to the nose), then apply an optional
+      *roll* offset about the nose. Both vectors are in the reference frame
+      specified by :func:`krpc_SpaceCenter_AutoPilot_ReferenceFrame`.
+
+      :Parameters:
+
+       * **direction** -- The direction to point the nose in.
+       * **up** -- The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction* — its component perpendicular to the nose is used. Stored as the :func:`krpc_SpaceCenter_AutoPilot_UpReference`.
+       * **roll** -- An additional roll about the nose, in degrees (positive banks right). Defaults to 0.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the way to hold a well-defined orientation through a maneuver — for example a
+         gravity turn: pass a fixed *up* (say north) and the roll stays defined the
+         whole way, with no singularity at the vertical. It is well-defined for every nose direction
+         except *up* parallel to *direction* (asking the roof to
+         point where the nose already points), where it falls back to pointing the nose only.
+         Equivalent to setting :func:`krpc_SpaceCenter_AutoPilot_UpReference` to *up*, aiming at
+         *direction* and setting :func:`krpc_SpaceCenter_AutoPilot_TargetRoll` to
+         *roll*.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentTargetPitch(krpc_connection_t connection, float * result)
+
+      The current target pitch the auto-pilot is tracking, in degrees. When
+      :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime` is non-zero this lags the commanded
+      :func:`krpc_SpaceCenter_AutoPilot_TargetPitch` while a change is slewed in; otherwise the two are equal.
+      A convenience scalar, ill-defined near the vertical — see :func:`krpc_SpaceCenter_AutoPilot_TargetPitch`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentTargetHeading(krpc_connection_t connection, float * result)
+
+      The current target heading the auto-pilot is tracking, in degrees. When
+      :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime` is non-zero this lags the commanded
+      :func:`krpc_SpaceCenter_AutoPilot_TargetHeading` while a change is slewed in; otherwise the two are equal.
+      A convenience scalar, ill-defined near the vertical — see :func:`krpc_SpaceCenter_AutoPilot_TargetHeading`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentTargetRoll(krpc_connection_t connection, float * result)
+
+      The current target roll the auto-pilot is tracking, in degrees. When
+      :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime` is non-zero this lags the commanded
+      :func:`krpc_SpaceCenter_AutoPilot_TargetRoll` while a change is slewed in; otherwise the two are equal.
+      ``NaN`` if no target roll is set.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentTargetDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      Direction vector corresponding to the current target pitch and heading
+      (see :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetPitch`), in the reference frame specified by
+      :func:`krpc_SpaceCenter_AutoPilot_ReferenceFrame`. Lags :func:`krpc_SpaceCenter_AutoPilot_TargetDirection` while a change is
+      slewed in when :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime` is non-zero.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentTargetRotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+
+      The current target rotation quaternion the auto-pilot is tracking, in the reference frame
+      specified by :func:`krpc_SpaceCenter_AutoPilot_ReferenceFrame`. Lags :func:`krpc_SpaceCenter_AutoPilot_TargetRotation` while a
+      change is slewed in when :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime` is non-zero.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Wait(krpc_connection_t connection, double timeout)
+
+      Blocks until the vessel is pointing in the target direction and has
+      the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+
+      :Parameters:
+
+       * **timeout** -- Maximum time to wait in seconds. If not specified, waits indefinitely.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_StoppingAngleThreshold(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_StoppingAngleThreshold(float value)
+
+      The threshold, in degrees, below which the pointing error must fall for
+      :func:`krpc_SpaceCenter_AutoPilot_Wait` to return. Defaults to 1 degree.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_StoppingVelocityThreshold(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_StoppingVelocityThreshold(float value)
+
+      The threshold angular velocity, in rad/s, below which the vessel's angular
+      velocity magnitude must fall for :func:`krpc_SpaceCenter_AutoPilot_Wait` to return.
+      Defaults to 0.05 rad/s.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Error(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the direction the ship has been asked
+      to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+      has not been engaged and SAS is not enabled or is in stability assist mode.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the error relative to the commanded target. While a change is being slewed in
+         (see :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime`) it differs from :func:`krpc_SpaceCenter_AutoPilot_CurrentError`, the
+         error relative to the target the auto-pilot is currently tracking.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_AttitudeError(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      attitude and the commanded target. All three components come from one singularity-free
+      residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
+      of pitch/heading/roll angles). The scalar :func:`krpc_SpaceCenter_AutoPilot_PitchError`,
+      :func:`krpc_SpaceCenter_AutoPilot_HeadingError` and :func:`krpc_SpaceCenter_AutoPilot_RollError` are the magnitudes of the pitch, yaw
+      and roll components respectively. Throws an exception if the auto-pilot has not been
+      engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the vessels current and target pitch.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch component of :func:`krpc_SpaceCenter_AutoPilot_AttitudeError` — the pitch part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_HeadingError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the vessels current and target heading.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The yaw component of :func:`krpc_SpaceCenter_AutoPilot_AttitudeError` — the yaw part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
+         heading, which is undefined at the pole).
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the vessels current and target roll.
+      Throws an exception if the auto-pilot has not been engaged or no target roll is set.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Measured about the vessel's nose axis, so it stays well-defined near the vertical
+         singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+         ill-conditioned when the vessel points close to straight up or down.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the direction the auto-pilot is currently tracking and the
+      direction the ship is pointing in. Unlike :func:`krpc_SpaceCenter_AutoPilot_Error` (which is relative to the
+      commanded target), this is relative to the slewed target the auto-pilot is currently
+      holding, so it stays small while a smoothed change (see :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime`)
+      is fed in. Equal to :func:`krpc_SpaceCenter_AutoPilot_Error` when smoothing is off. Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentAttitudeError(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      attitude and the target the auto-pilot is currently tracking (the slewed target — see
+      :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetRotation`). Like :func:`krpc_SpaceCenter_AutoPilot_AttitudeError` but relative to the
+      current target, so it stays small while a smoothed change (see
+      :func:`krpc_SpaceCenter_AutoPilot_TargetSmoothingTime`) is fed in; equal to :func:`krpc_SpaceCenter_AutoPilot_AttitudeError` when
+      smoothing is off. Throws an exception if the auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentPitchError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
+      currently tracking (see :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetPitch`). Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch component of :func:`krpc_SpaceCenter_AutoPilot_CurrentAttitudeError`, well-defined near the vertical.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentHeadingError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the vessels current heading and the heading the auto-pilot
+      is currently tracking (see :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetHeading`). Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The yaw component of :func:`krpc_SpaceCenter_AutoPilot_CurrentAttitudeError`, well-defined near the vertical.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_CurrentRollError(krpc_connection_t connection, float * result)
+
+      The error, in degrees, between the vessels current roll and the roll the auto-pilot is
+      currently tracking (see :func:`krpc_SpaceCenter_AutoPilot_CurrentTargetRoll`). Throws an exception if the
+      auto-pilot has not been engaged or no target roll is set.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Measured about the vessel's nose axis, so it stays well-defined near the vertical
+         singularity — see :func:`krpc_SpaceCenter_AutoPilot_RollError`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollStartAngle(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_RollStartAngle(double value)
+
+      The direction error, in degrees, above which roll blending is fully suppressed.
+      Defaults to 20 degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollEngageAngle(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_RollEngageAngle(double value)
+
+      The direction error, in degrees, below which roll is fully engaged.
+      Roll blends linearly between :func:`krpc_SpaceCenter_AutoPilot_RollStartAngle` and this value.
+      Defaults to 15 degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_MaxAngularVelocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_MaxAngularVelocity(const krpc_tuple_double_double_double_t * value)
+
+      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
+      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
+      that vessels with very high torque availability do not spin faster than desired.
+      Defaults to 1 rad/s for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawAttenuationAngle(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_PitchYawAttenuationAngle(double value)
+
+      The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+      to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
+      or above this error the target velocity is at full, and below it the target velocity
+      ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
+      are controlled jointly, so a single angle applies to both. Defaults to 1°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollAttenuationAngle(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_RollAttenuationAngle(double value)
+
+      The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+      to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
+      above this error the target velocity is at full, and below it the target velocity ramps
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_AutoTune(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_AutoTune(bool value)
+
+      Whether the rotation rate controllers PID parameters should be automatically tuned
+      using the vessels moment of inertia and available torque. Defaults to ``true``.
+      See :func:`krpc_SpaceCenter_AutoPilot_TimeToPeak` and :func:`krpc_SpaceCenter_AutoPilot_Overshoot`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TimeToPeak(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TimeToPeak(const krpc_tuple_double_double_double_t * value)
+
+      The target time to peak used to autotune the PID controllers.
+      A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+      Defaults to 1 second for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_SoftStartTime(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_SoftStartTime(double value)
+
+      The duration, in seconds, over which the control output is faded in when the
+      autopilot is engaged. This soft-start spreads the engagement transient over many
+      physics ticks so engaging (on the pad or mid-flight) does not command a near-maximum
+      control deflection that can excite an oscillation. Defaults to 0.5 seconds.
+      Set to 0 to disable the fade-in.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_TargetSmoothingTime(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_TargetSmoothingTime(double value)
+
+      The duration, in seconds, over which a change to the target attitude is applied to the
+      control target. When set above zero, changing the target pitch, heading, roll, direction
+      or rotation makes the effective control target ramp smoothly (a constant-rate rotation)
+      from its current value to the new value over this many seconds, rather than jumping
+      instantly. This lets a slow control loop drive a smooth maneuver (for example a gravity
+      turn) without inducing oscillation from stepwise target changes. Defaults to 0
+      (instantaneous).
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_Overshoot(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_Overshoot(const krpc_tuple_double_double_double_t * value)
+
+      The target overshoot percentage used to autotune the PID controllers.
+      A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+      Defaults to 0.01 for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchPIDGains(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_PitchPIDGains(const krpc_tuple_double_double_double_t * value)
+
+      Gains for the pitch PID controller.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :func:`krpc_SpaceCenter_AutoPilot_AutoTune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollPIDGains(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_RollPIDGains(const krpc_tuple_double_double_double_t * value)
+
+      Gains for the roll PID controller.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :func:`krpc_SpaceCenter_AutoPilot_AutoTune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_YawPIDGains(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_YawPIDGains(const krpc_tuple_double_double_double_t * value)
+
+      Gains for the yaw PID controller.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :func:`krpc_SpaceCenter_AutoPilot_AutoTune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode(krpc_connection_t connection, krpc_SpaceCenter_RateFilterMode_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_PitchYawRateFilterMode(krpc_SpaceCenter_RateFilterMode_t value)
+
+      Controls the rate-feedback filtering (the wobble-suppression filter on the measured
+      angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
+      :macro:`KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC` (the default) the auto-pilot detects the
+      oscillation at runtime, estimates its frequency and routes it to the appropriate tool
+      (a notch filter for a low-frequency mode near the control band, a low-pass for a
+      high-frequency mode). :macro:`KRPC_SPACECENTER_RATEFILTERMODE_OFF` disables rate filtering only —
+      the other oscillation mitigations are unaffected. :macro:`KRPC_SPACECENTER_RATEFILTERMODE_NOTCH`
+      and :macro:`KRPC_SPACECENTER_RATEFILTERMODE_LOWPASS` force the respective tool unconditionally at
+      :func:`krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency`, for a vessel known in advance to be
+      flexible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollRateFilterMode(krpc_connection_t connection, krpc_SpaceCenter_RateFilterMode_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_RollRateFilterMode(krpc_SpaceCenter_RateFilterMode_t value)
+
+      Controls the rate-feedback filtering for the roll axis. Behaves as
+      :func:`krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode` but for roll, using
+      :func:`krpc_SpaceCenter_AutoPilot_RollOscillationFrequency`. Defaults to
+      :macro:`KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_PitchYawOscillationFrequency(double value)
+
+      The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
+      filter frequency in :macro:`KRPC_SPACECENTER_RATEFILTERMODE_NOTCH` / :macro:`KRPC_SPACECENTER_RATEFILTERMODE_LOWPASS`
+      mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
+      to 1.5 Hz.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollOscillationFrequency(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_RollOscillationFrequency(double value)
+
+      The structural mode frequency, in Hz, for the roll axis. Behaves as
+      :func:`krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency` but for roll. Defaults to 1.5 Hz.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationNotchQ(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_OscillationNotchQ(double value)
+
+      The quality factor of the notch filter used to suppress a low-frequency structural mode.
+      A higher value gives a narrower notch (less in-band control lag but less tolerance to the
+      mode frequency drifting); a lower value gives a wider notch. Defaults to 2.5. This is an
+      advanced tuning parameter.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloorMode(krpc_connection_t connection, krpc_SpaceCenter_MitigationMode_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloorMode(krpc_SpaceCenter_MitigationMode_t value)
+
+      Controls the bandwidth-floor mitigation: the reduction of the inner control loop
+      bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+      :macro:`KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC` (the default) it engages on a latched axis
+      while holding (and during a detected limit cycle). :macro:`KRPC_SPACECENTER_MITIGATIONMODE_OFF`
+      never reduces the bandwidth; :macro:`KRPC_SPACECENTER_MITIGATIONMODE_FORCED` keeps it fully
+      reduced at all times.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloor(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_OscillationBandwidthFloor(double value)
+
+      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
+      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
+      strongly; raising it keeps more control authority at the cost of allowing more wobble.
+      Defaults to 1 rad/s. This is an advanced tuning parameter.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationFeedforwardMode(krpc_connection_t connection, krpc_SpaceCenter_MitigationMode_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_OscillationFeedforwardMode(krpc_SpaceCenter_MitigationMode_t value)
+
+      Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
+      structurally flexible axis while holding, so it cannot re-excite a residual mode at
+      the reduced bandwidth. When :macro:`KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC` (the default) it
+      follows the hold gate on a latched axis. :macro:`KRPC_SPACECENTER_MITIGATIONMODE_OFF` never cuts
+      the feedforward; :macro:`KRPC_SPACECENTER_MITIGATIONMODE_FORCED` always cuts it fully.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationOutputFilterMode(krpc_connection_t connection, krpc_SpaceCenter_MitigationMode_t * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_OscillationOutputFilterMode(krpc_SpaceCenter_MitigationMode_t value)
+
+      Controls the output-smoothing mitigation: a low-pass on the delivered actuator
+      command that caps residual control chatter. When
+      :macro:`KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC` (the default) it engages on a latched axis
+      (and, lightly, while the oscillation detector is firing on an unlatched one).
+      :macro:`KRPC_SPACECENTER_MITIGATIONMODE_OFF` never smooths; :macro:`KRPC_SPACECENTER_MITIGATIONMODE_FORCED`
+      smooths fully at all times.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawControlOscillation(krpc_connection_t connection, double * result)
+
+      The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
+      the deviation of the delivered control about its slowly-varying trim. A settled hold sits
+      near zero; a sustained limit cycle drives it toward 1. Read-only.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollControlOscillation(krpc_connection_t connection, double * result)
+
+      The current amplitude of control-output oscillation on the roll axis, measured as the
+      deviation of the delivered control about its slowly-varying trim. Read-only. See
+      :func:`krpc_SpaceCenter_AutoPilot_PitchYawControlOscillation`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_OscillationLevel(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
+      auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
+      detected; values approaching 1 mean a sustained structural oscillation. Read-only.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawOscillationLatched(krpc_connection_t connection, bool * result)
+
+      Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
+      latched oscillation suppression on for them. Read-only. See
+      :func:`krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollOscillationLatched(krpc_connection_t connection, bool * result)
+
+      Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
+      oscillation suppression on for it. Read-only. See :func:`krpc_SpaceCenter_AutoPilot_RollRateFilterMode`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_PitchYawOscillationDetectedFrequency(krpc_connection_t connection, double * result)
+
+      The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+      pitch/yaw axis group, or ``NaN`` until the estimator acquires. The estimator runs in
+      all modes, so this is observable even when suppression is off or forced. Read-only.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_RollOscillationDetectedFrequency(krpc_connection_t connection, double * result)
+
+      The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+      roll axis, or ``NaN`` until the estimator acquires. Read-only. See
+      :func:`krpc_SpaceCenter_AutoPilot_PitchYawOscillationDetectedFrequency`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_DiagnosticLogging(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_AutoPilot_set_DiagnosticLogging(bool value)
+
+      When ``true``, records one row of diagnostic data per physics tick to an
+      in-memory buffer (see :func:`krpc_SpaceCenter_AutoPilot_DiagnosticLog`), and echoes each row to
+      Player.log prefixed with ``[KRPC.AP]``. The data is CSV: the first row is a
+      header naming every column, and each subsequent row records the auto-pilot's full
+      control-loop state for one tick (setpoints, errors, measured rates, gains,
+      velocity-profile and feedforward internals, control outputs, and the oscillation
+      detector/gate/mitigation state). The buffer is capped at 3000 data rows (one minute
+      at the 50 Hz physics rate); when full, this property switches itself back to
+      ``false`` and the buffer holds the minute following the enable. Setting to
+      ``true`` clears the buffer. Defaults to ``false``.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AutoPilot_DiagnosticLog(krpc_connection_t connection, char * * result)
+
+      The diagnostic log collected since :func:`krpc_SpaceCenter_AutoPilot_DiagnosticLogging` was last set to
+      ``true``: CSV text whose first line is the column header and each subsequent
+      line records one physics tick. Vector-valued channels use one column per component
+      (suffixed ``.p/.r/.y`` for pitch, roll, yaw); pitch-yaw-group/roll channel pairs
+      are suffixed ``.py/.roll``. Returns an empty string if diagnostic logging has
+      not been enabled or no ticks have occurred.
+
+      :Game Scenes: Flight
+
+
+
+
+.. type:: krpc_SpaceCenter_RateFilterMode_t
+
+   Controls the auto-pilot's rate-feedback filtering for an axis group — the mitigation that
+   removes a structural oscillation (wobble) from the measured angular velocity before the
+   control loops consume it.
+   See :func:`krpc_SpaceCenter_AutoPilot_PitchYawRateFilterMode` and :func:`krpc_SpaceCenter_AutoPilot_RollRateFilterMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_RATEFILTERMODE_AUTOMATIC
+
+      The default. The auto-pilot detects structural oscillation at runtime, estimates its
+      frequency and routes it to the appropriate filter: a notch for a low-frequency mode
+      near the control band, a low-pass for a high-frequency mode, or a broadband low-pass
+      while the frequency is not yet known. Rigid vessels are left untouched.
+
+
+   .. macro:: KRPC_SPACECENTER_RATEFILTERMODE_OFF
+
+      No rate filtering. The other oscillation mitigations are unaffected.
+
+
+   .. macro:: KRPC_SPACECENTER_RATEFILTERMODE_NOTCH
+
+      Force a notch filter at the manually set frequency
+      (:func:`krpc_SpaceCenter_AutoPilot_PitchYawOscillationFrequency` /
+      :func:`krpc_SpaceCenter_AutoPilot_RollOscillationFrequency`), for a vessel whose structural mode
+      is known in advance.
+
+
+   .. macro:: KRPC_SPACECENTER_RATEFILTERMODE_LOWPASS
+
+      Force a low-pass filter derived from the manually set frequency.
+
+
+
+
+.. type:: krpc_SpaceCenter_MitigationMode_t
+
+   Controls one of the auto-pilot's individually-toggleable oscillation mitigations
+   (:func:`krpc_SpaceCenter_AutoPilot_OscillationBandwidthFloorMode`,
+   :func:`krpc_SpaceCenter_AutoPilot_OscillationFeedforwardMode`,
+   :func:`krpc_SpaceCenter_AutoPilot_OscillationOutputFilterMode`).
+
+
+   .. macro:: KRPC_SPACECENTER_MITIGATIONMODE_AUTOMATIC
+
+      The default: the mitigation engages automatically, driven by the runtime oscillation
+      detector and the hold gate. Rigid vessels are left untouched.
+
+
+   .. macro:: KRPC_SPACECENTER_MITIGATIONMODE_OFF
+
+      The mitigation never engages. The other mitigations are unaffected.
+
+
+   .. macro:: KRPC_SPACECENTER_MITIGATIONMODE_FORCED
+
+      The mitigation is fully engaged at all times, regardless of what the oscillation
+      detector reports.

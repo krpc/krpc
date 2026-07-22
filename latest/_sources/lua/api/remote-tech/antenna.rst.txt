@@ -1,0 +1,88 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: RemoteTech
+
+Antenna
+=======
+
+
+.. class:: Antenna
+
+   A RemoteTech antenna. Obtained by calling :attr:`RemoteTech.Comms.antennas` or :meth:`RemoteTech.antenna`.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      Get the part containing this antenna.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: has_connection: boolean
+
+      Whether the antenna has a connection.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: target: RemoteTech.Target
+
+      The object that the antenna is targetting.
+      This property can be used to set the target to :attr:`RemoteTech.Target.none` or :attr:`RemoteTech.Target.active_vessel`.
+      To set the target to a celestial body, ground station or vessel see :attr:`RemoteTech.Antenna.target_body`,
+      :attr:`RemoteTech.Antenna.target_ground_station` and :attr:`RemoteTech.Antenna.target_vessel`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`RemoteTech.Target`
+
+   .. attribute:: target_body: SpaceCenter.CelestialBody
+
+      The celestial body the antenna is targetting.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+
+   .. attribute:: target_ground_station: string
+
+      The ground station the antenna is targetting.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: target_vessel: SpaceCenter.Vessel
+
+      The vessel the antenna is targetting.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+
+
+
+.. class:: Target
+
+   The type of object an antenna is targetting.
+   See :attr:`RemoteTech.Antenna.target`.
+
+
+   .. data:: active_vessel
+
+      The active vessel.
+
+
+   .. data:: celestial_body
+
+      A celestial body.
+
+
+   .. data:: ground_station
+
+      A ground station.
+
+
+   .. data:: vessel
+
+      A specific vessel.
+
+
+   .. data:: none
+
+      No target.

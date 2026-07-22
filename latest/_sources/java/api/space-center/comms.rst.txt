@@ -1,0 +1,149 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Communications
+==============
+
+
+.. type:: public class Comms
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :meth:`Vessel.getComms()`.
+
+   .. method:: boolean getCanCommunicate()
+
+
+      Whether the vessel can communicate with KSC.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getCanTransmitScience()
+
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Game Scenes: Flight
+
+   .. method:: double getSignalStrength()
+
+
+      Signal strength to KSC.
+
+      :Game Scenes: Flight
+
+   .. method:: double getSignalDelay()
+
+
+      Signal delay to KSC in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: double getPower()
+
+
+      The combined power of all active antennae on the vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: java.util.List<CommLink> getControlPath()
+
+
+      The communication path used to control the vessel.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public class CommLink
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. method:: CommLinkType getType()
+
+
+      The type of link.
+
+   
+
+   .. method:: double getSignalStrength()
+
+
+      Signal strength of the link.
+
+   
+
+   .. method:: CommNode getStart()
+
+
+      Start point of the link.
+
+   
+
+   .. method:: CommNode getEnd()
+
+
+      Start point of the link.
+
+   
+
+
+
+.. type:: public enum CommLinkType
+
+   The type of a communication link.
+   See :meth:`CommLink.getType()`.
+
+
+   .. field:: public CommLinkType HOME
+
+      Link is to a base station on Kerbin.
+
+
+   .. field:: public CommLinkType CONTROL
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. field:: public CommLinkType RELAY
+
+      Link is to a relay satellite.
+
+
+
+.. type:: public class CommNode
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. method:: String getName()
+
+
+      Name of the communication node.
+
+   
+
+   .. method:: boolean getIsHome()
+
+
+      Whether the communication node is on Kerbin.
+
+   
+
+   .. method:: boolean getIsControlPoint()
+
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+   
+
+   .. method:: boolean getIsVessel()
+
+
+      Whether the communication node is a vessel.
+
+   
+
+   .. method:: Vessel getVessel()
+
+
+      The vessel for this communication node.

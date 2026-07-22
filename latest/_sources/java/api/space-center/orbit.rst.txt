@@ -1,0 +1,388 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Orbit
+=====
+
+
+.. type:: public class Orbit
+
+   Describes an orbit. For example, the orbit of a vessel, obtained by calling
+   :meth:`Vessel.getOrbit()`, or a celestial body, obtained by calling
+   :meth:`CelestialBody.getOrbit()`.
+
+   .. method:: CelestialBody getBody()
+
+
+      The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+   
+
+   .. method:: double getApoapsis()
+
+
+      Gets the apoapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the apoapsis altitude reported on the in-game map view,
+         use :meth:`Orbit.getApoapsisAltitude()`.
+
+   .. method:: double getPeriapsis()
+
+
+      The periapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the periapsis altitude reported on the in-game map view,
+         use :meth:`Orbit.getPeriapsisAltitude()`.
+
+   .. method:: double getApoapsisAltitude()
+
+
+      The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :meth:`Orbit.getApoapsis()` minus the equatorial radius of the body.
+
+   .. method:: double getPeriapsisAltitude()
+
+
+      The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :meth:`Orbit.getPeriapsis()` minus the equatorial radius of the body.
+
+   .. method:: double getSemiMajorAxis()
+
+
+      The semi-major axis of the orbit, in meters.
+
+   
+
+   .. method:: double getSemiMinorAxis()
+
+
+      The semi-minor axis of the orbit, in meters.
+
+   
+
+   .. method:: double getRadius()
+
+
+      The current radius of the orbit, in meters. This is the distance between the center
+      of mass of the object in orbit, and the center of mass of the body around which it
+      is orbiting.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. method:: double radiusAt(double ut)
+
+      The orbital radius at the given time, in meters.
+
+      :param double ut: The universal time to measure the radius at.
+   
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> positionAt(double ut, ReferenceFrame referenceFrame)
+
+      The position at a given time, in the specified reference frame.
+
+      :param double ut: The universal time to measure the position at.
+      :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+   
+
+   .. method:: double getSpeed()
+
+
+      The current orbital speed of the object in meters per second.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. method:: double getPeriod()
+
+
+      The orbital period, in seconds.
+
+   
+
+   .. method:: double getTimeToApoapsis()
+
+
+      The time until the object reaches apoapsis, in seconds.
+
+   
+
+   .. method:: double getTimeToPeriapsis()
+
+
+      The time until the object reaches periapsis, in seconds.
+
+   
+
+   .. method:: double getEccentricity()
+
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. method:: double getInclination()
+
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit,
+      in radians.
+
+   
+
+   .. method:: double getLongitudeOfAscendingNode()
+
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+      .. note::
+
+         For a near-equatorial orbit, the ascending node is ill-defined and
+         this value may vary erratically over time.
+
+   .. method:: double getArgumentOfPeriapsis()
+
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+      .. note::
+
+         For a near-circular orbit, the periapsis is ill-defined and
+         this value may vary erratically over time.
+
+   .. method:: double getMeanAnomalyAtEpoch()
+
+
+      The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. method:: double getEpoch()
+
+
+      The time since the epoch (the point at which the
+      `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+      was measured, in seconds.
+
+   
+
+   .. method:: double getMeanAnomaly()
+
+
+      The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. method:: double meanAnomalyAtUT(double ut)
+
+      The mean anomaly at the given time.
+
+      :param double ut: The universal time in seconds.
+   
+
+   .. method:: double getEccentricAnomaly()
+
+
+      The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+   
+
+   .. method:: double eccentricAnomalyAtUT(double ut)
+
+      The eccentric anomaly at the given universal time.
+
+      :param double ut: The universal time, in seconds.
+   
+
+   .. method:: double getTrueAnomaly()
+
+
+      The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+   
+
+   .. method:: double trueAnomalyAtUT(double ut)
+
+      The true anomaly at the given time.
+
+      :param double ut: The universal time in seconds.
+   
+
+   .. method:: double trueAnomalyAtRadius(double radius)
+
+      The true anomaly at the given orbital radius.
+
+      :param double radius: The orbital radius in meters.
+   
+
+   .. method:: double uTAtTrueAnomaly(double trueAnomaly)
+
+      The universal time, in seconds, corresponding to the given true anomaly.
+
+      :param double trueAnomaly: True anomaly.
+   
+
+   .. method:: double radiusAtTrueAnomaly(double trueAnomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :param double trueAnomaly: The true anomaly.
+   
+
+   .. method:: double trueAnomalyAtAN(Orbit target)
+
+      The true anomaly of the ascending node with the given target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: double trueAnomalyAtDN(Orbit target)
+
+      The true anomaly of the descending node with the given target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: double getOrbitalSpeed()
+
+
+      The current orbital speed in meters per second.
+
+   
+
+   .. method:: double orbitalSpeedAt(double time)
+
+      The orbital speed at the given time, in meters per second.
+
+      :param double time: Time from now, in seconds.
+   
+
+   .. method:: double getOrbitalEnergy()
+
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+   
+
+   .. method:: static org.javatuples.Triplet<Double,Double,Double> referencePlaneNormal(Connection connection, ReferenceFrame referenceFrame)
+
+      The direction that is normal to the orbits reference plane,
+      in the given reference frame.
+      The reference plane is the plane from which the orbits inclination is measured.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: static org.javatuples.Triplet<Double,Double,Double> referencePlaneDirection(Connection connection, ReferenceFrame referenceFrame)
+
+      The direction from which the orbits longitude of ascending node is measured,
+      in the given reference frame.
+
+      :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+   
+
+   .. method:: double relativeInclination(Orbit target)
+
+      Relative inclination of this orbit and the target orbit, in radians.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: double getTimeToSOIChange()
+
+
+      The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+      if the object is not going to change sphere of influence.
+
+   
+
+   .. method:: Orbit getNextOrbit()
+
+
+      If the object is going to change sphere of influence in the future, returns the new
+      orbit after the change. Otherwise returns ``null``.
+
+   
+
+   .. method:: ClosestApproach nextClosestApproach(Orbit target)
+
+      The next closest approach to a target orbit.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: java.util.List<ClosestApproach> closestApproaches(Orbit target, int orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :param Orbit target: Target orbit.
+      :param int orbits: The number of future orbits to search.
+   
+
+   .. method:: double timeOfClosestApproach(Orbit target)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.nextClosestApproach(Orbit)` and read :meth:`ClosestApproach.getUT()` instead.
+
+      Estimates and returns the time at closest approach to a target orbit.
+
+      :param Orbit target: Target orbit.
+      :returns: The universal time at closest approach, in seconds.
+   
+
+   .. method:: double distanceAtClosestApproach(Orbit target)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.nextClosestApproach(Orbit)` and read :meth:`ClosestApproach.getDistance()` instead.
+
+      Estimates and returns the distance at closest approach to a target orbit, in meters.
+
+      :param Orbit target: Target orbit.
+   
+
+   .. method:: java.util.List<java.util.List<Double>> listClosestApproaches(Orbit target, int orbits)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.closestApproaches(Orbit, int)` instead.
+
+      Returns the times at closest approach and corresponding distances, to a target orbit.
+
+      :param Orbit target: Target orbit.
+      :param int orbits: The number of future orbits to search.
+      :returns: A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.

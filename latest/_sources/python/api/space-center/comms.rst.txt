@@ -1,0 +1,165 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Communications
+==============
+
+
+.. class:: Comms
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :attr:`Vessel.comms`.
+
+   .. attribute:: can_communicate
+
+      Whether the vessel can communicate with KSC.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: can_transmit_science
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: signal_strength
+
+      Signal strength to KSC.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: signal_delay
+
+      Signal delay to KSC in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: power
+
+      The combined power of all active antennae on the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: control_path
+
+      The communication path used to control the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`CommLink`)
+      :Game Scenes: Flight
+
+
+
+.. class:: CommLink
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. attribute:: type
+
+      The type of link.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CommLinkType`
+   
+
+   .. attribute:: signal_strength
+
+      Signal strength of the link.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: start
+
+      Start point of the link.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CommNode`
+   
+
+   .. attribute:: end
+
+      Start point of the link.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CommNode`
+   
+
+
+
+.. class:: CommLinkType
+
+   The type of a communication link.
+   See :attr:`CommLink.type`.
+
+
+   .. data:: home
+
+      Link is to a base station on Kerbin.
+
+
+   .. data:: control
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. data:: relay
+
+      Link is to a relay satellite.
+
+
+
+.. class:: CommNode
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. attribute:: name
+
+      Name of the communication node.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: is_home
+
+      Whether the communication node is on Kerbin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: is_control_point
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: is_vessel
+
+      Whether the communication node is a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: vessel
+
+      The vessel for this communication node.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vessel`

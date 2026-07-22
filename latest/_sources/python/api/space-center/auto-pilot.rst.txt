@@ -1,0 +1,876 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+AutoPilot
+=========
+
+
+.. class:: AutoPilot
+
+   Provides basic auto-piloting utilities for a vessel.
+   Created by calling :attr:`Vessel.auto_pilot`.
+
+   .. note::
+
+      If a client engages the auto-pilot and then closes its connection to the server,
+      the auto-pilot will be disengaged. Its configuration and target are left unchanged.
+
+   .. attribute:: sas
+
+      The state of SAS.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`Control.sas`.
+         Throws an exception if set to ``True`` while the auto-pilot is engaged, as the
+         auto-pilot holds SAS off for as long as it is flying the vessel.
+
+   .. attribute:: sas_mode
+
+      The current :attr:`AutoPilot.sas_mode`.
+      These modes are equivalent to the mode buttons to the left of the navball that appear
+      when SAS is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SASMode`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :attr:`Control.sas_mode`
+
+   .. attribute:: engaged
+
+      Whether the auto-pilot is engaged.
+      Setting to ``True`` engages the auto-pilot; setting to ``False`` disengages it.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: show_info_ui
+
+      Whether an in-game window showing the auto-pilot's state (engagement, attitude error,
+      target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
+      this vessel. Defaults to ``False``. This is a debugging aid; the window is reset to
+      hidden when the game is restarted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: reset()
+
+      Disengages the auto-pilot and resets all configuration parameters to their defaults.
+      Also resets the target pitch, heading and roll, and clears all internal controller
+      state, including the oscillation detector's structural level — which otherwise
+      persists across engagements so that a craft known to be flexible re-latches quickly.
+
+      :Game Scenes: Flight
+
+   .. attribute:: reference_frame
+
+      The reference frame for the target direction (:attr:`AutoPilot.target_direction`).
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         An error will be thrown if this property is set to a reference frame that rotates with
+         the vessel being controlled, as it is impossible to rotate the vessel in such a
+         reference frame.
+
+   .. attribute:: target_pitch
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle. Heading (and hence roll) is ill-defined when
+         the nose is near vertical (pitch → ±90°); near the vertical prefer
+         :attr:`AutoPilot.target_direction` or :meth:`AutoPilot.set_direction_and_up`. The setter preserves the
+         current roll relative to :attr:`AutoPilot.up_reference`.
+
+   .. attribute:: target_heading
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle, ill-defined when the nose is near vertical
+         (pitch → ±90°) — see :attr:`AutoPilot.target_pitch`. The setter preserves the current roll
+         relative to :attr:`AutoPilot.up_reference`.
+
+   .. attribute:: target_roll
+
+      The target roll, in degrees, measured about the vessel's nose relative to the
+      :attr:`AutoPilot.up_reference` (roll 0 aligns the vessel's dorsal/roof axis with the reference;
+      positive roll banks right). ``NaN`` if no target roll is set.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When left unset (``NaN``) the auto-pilot suppresses roll rotation — it drives the roll
+         rate to zero rather than holding a specific roll angle. Setting a value re-rolls the
+         current target to that angle relative to the up reference while keeping the nose direction.
+         With the default reference (the frame's up) this reproduces the historical roll away from
+         the vertical, and is ill-defined only when the nose points along the reference (near
+         straight up or down). To hold a well-defined roll through the vertical — for example a
+         gravity turn — set the up reference off the flight path (see
+         :meth:`AutoPilot.set_direction_and_up` / :attr:`AutoPilot.up_reference`).
+
+   .. attribute:: up_reference
+
+      The reference direction, in the reference frame specified by :attr:`AutoPilot.reference_frame`,
+      that :attr:`AutoPilot.target_roll` is measured against: at roll 0 the vessel's dorsal (roof)
+      axis is aligned with this vector's component perpendicular to the nose. Defaults to the
+      frame's up (the zenith / radial-out direction).
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Setting this re-anchors how roll is measured without moving the current target, so
+         the reference can be set once and then rolls commanded against it with
+         :attr:`AutoPilot.target_roll` while the nose direction changes freely. It is also set as a side
+         effect of :meth:`AutoPilot.set_direction_and_up`. Setting the target rotation, target direction,
+         or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
+         keeps roll well-defined through the vertical.
+
+   .. method:: target_pitch_and_heading(pitch, heading)
+
+      Set target pitch and heading angles.
+
+      :param float pitch: Target pitch angle, in degrees between -90° and +90°.
+      :param float heading: Target heading angle, in degrees between 0° and 360°.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A convenience for aiming the nose by angle; heading is ill-defined when the nose is near
+         vertical (pitch → ±90°), so near the vertical prefer :attr:`AutoPilot.target_direction` or
+         :meth:`AutoPilot.set_direction_and_up`. Preserves the current roll relative to
+         :attr:`AutoPilot.up_reference`.
+
+   .. attribute:: target_direction
+
+      Direction vector corresponding to the target pitch and heading.
+      This is in the reference frame specified by :attr:`AutoPilot.reference_frame`.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: target_rotation
+
+      The target rotation quaternion. Setting this also sets the target roll.
+      This is in the reference frame specified by :attr:`AutoPilot.reference_frame`.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: set_direction_and_up(direction, up, [roll = 0.0])
+
+      Set the target attitude from a nose direction and an up vector: point the nose along
+      *direction* and roll so the vessel's dorsal (roof) axis aligns with
+      *up* (its component perpendicular to the nose), then apply an optional
+      *roll* offset about the nose. Both vectors are in the reference frame
+      specified by :attr:`AutoPilot.reference_frame`.
+
+      :param tuple direction: The direction to point the nose in.
+      :param tuple up: The reference direction the roof is rolled towards. Need not be normalized or perpendicular to *direction* — its component perpendicular to the nose is used. Stored as the :attr:`AutoPilot.up_reference`.
+      :param float roll: An additional roll about the nose, in degrees (positive banks right). Defaults to 0.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the way to hold a well-defined orientation through a maneuver — for example a
+         gravity turn: pass a fixed *up* (say north) and the roll stays defined the
+         whole way, with no singularity at the vertical. It is well-defined for every nose direction
+         except *up* parallel to *direction* (asking the roof to
+         point where the nose already points), where it falls back to pointing the nose only.
+         Equivalent to setting :attr:`AutoPilot.up_reference` to *up*, aiming at
+         *direction* and setting :attr:`AutoPilot.target_roll` to
+         *roll*.
+
+   .. attribute:: current_target_pitch
+
+      The current target pitch the auto-pilot is tracking, in degrees. When
+      :attr:`AutoPilot.target_smoothing_time` is non-zero this lags the commanded
+      :attr:`AutoPilot.target_pitch` while a change is slewed in; otherwise the two are equal.
+      A convenience scalar, ill-defined near the vertical — see :attr:`AutoPilot.target_pitch`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: current_target_heading
+
+      The current target heading the auto-pilot is tracking, in degrees. When
+      :attr:`AutoPilot.target_smoothing_time` is non-zero this lags the commanded
+      :attr:`AutoPilot.target_heading` while a change is slewed in; otherwise the two are equal.
+      A convenience scalar, ill-defined near the vertical — see :attr:`AutoPilot.target_heading`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: current_target_roll
+
+      The current target roll the auto-pilot is tracking, in degrees. When
+      :attr:`AutoPilot.target_smoothing_time` is non-zero this lags the commanded
+      :attr:`AutoPilot.target_roll` while a change is slewed in; otherwise the two are equal.
+      ``NaN`` if no target roll is set.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: current_target_direction
+
+      Direction vector corresponding to the current target pitch and heading
+      (see :attr:`AutoPilot.current_target_pitch`), in the reference frame specified by
+      :attr:`AutoPilot.reference_frame`. Lags :attr:`AutoPilot.target_direction` while a change is
+      slewed in when :attr:`AutoPilot.target_smoothing_time` is non-zero.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: current_target_rotation
+
+      The current target rotation quaternion the auto-pilot is tracking, in the reference frame
+      specified by :attr:`AutoPilot.reference_frame`. Lags :attr:`AutoPilot.target_rotation` while a
+      change is slewed in when :attr:`AutoPilot.target_smoothing_time` is non-zero.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float, float)
+      :Game Scenes: Flight
+
+   .. method:: wait([timeout = -1.0])
+
+      Blocks until the vessel is pointing in the target direction and has
+      the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+
+      :param float timeout: Maximum time to wait in seconds. If not specified, waits indefinitely.
+      :Game Scenes: Flight
+
+   .. attribute:: stopping_angle_threshold
+
+      The threshold, in degrees, below which the pointing error must fall for
+      :meth:`AutoPilot.wait` to return. Defaults to 1 degree.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: stopping_velocity_threshold
+
+      The threshold angular velocity, in rad/s, below which the vessel's angular
+      velocity magnitude must fall for :meth:`AutoPilot.wait` to return.
+      Defaults to 0.05 rad/s.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: error
+
+      The error, in degrees, between the direction the ship has been asked
+      to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+      has not been engaged and SAS is not enabled or is in stability assist mode.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the error relative to the commanded target. While a change is being slewed in
+         (see :attr:`AutoPilot.target_smoothing_time`) it differs from :attr:`AutoPilot.current_error`, the
+         error relative to the target the auto-pilot is currently tracking.
+
+   .. attribute:: attitude_error
+
+      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      attitude and the commanded target. All three components come from one singularity-free
+      residual decomposition, so they stay well-defined near the vertical (unlike a subtraction
+      of pitch/heading/roll angles). The scalar :attr:`AutoPilot.pitch_error`,
+      :attr:`AutoPilot.heading_error` and :attr:`AutoPilot.roll_error` are the magnitudes of the pitch, yaw
+      and roll components respectively. Throws an exception if the auto-pilot has not been
+      engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_error
+
+      The error, in degrees, between the vessels current and target pitch.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch component of :attr:`AutoPilot.attitude_error` — the pitch part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical.
+
+   .. attribute:: heading_error
+
+      The error, in degrees, between the vessels current and target heading.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The yaw component of :attr:`AutoPilot.attitude_error` — the yaw part of the direction error
+         resolved in the roll-invariant frame, well-defined near the vertical (unlike the absolute
+         heading, which is undefined at the pole).
+
+   .. attribute:: roll_error
+
+      The error, in degrees, between the vessels current and target roll.
+      Throws an exception if the auto-pilot has not been engaged or no target roll is set.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Measured about the vessel's nose axis, so it stays well-defined near the vertical
+         singularity — unlike a subtraction of pitch/heading/roll angles, whose roll term is
+         ill-conditioned when the vessel points close to straight up or down.
+
+   .. attribute:: current_error
+
+      The error, in degrees, between the direction the auto-pilot is currently tracking and the
+      direction the ship is pointing in. Unlike :attr:`AutoPilot.error` (which is relative to the
+      commanded target), this is relative to the slewed target the auto-pilot is currently
+      holding, so it stays small while a smoothed change (see :attr:`AutoPilot.target_smoothing_time`)
+      is fed in. Equal to :attr:`AutoPilot.error` when smoothing is off. Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: current_attitude_error
+
+      The per-axis attitude error (pitch, yaw, roll), in degrees, between the vessel's current
+      attitude and the target the auto-pilot is currently tracking (the slewed target — see
+      :attr:`AutoPilot.current_target_rotation`). Like :attr:`AutoPilot.attitude_error` but relative to the
+      current target, so it stays small while a smoothed change (see
+      :attr:`AutoPilot.target_smoothing_time`) is fed in; equal to :attr:`AutoPilot.attitude_error` when
+      smoothing is off. Throws an exception if the auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: current_pitch_error
+
+      The error, in degrees, between the vessels current pitch and the pitch the auto-pilot is
+      currently tracking (see :attr:`AutoPilot.current_target_pitch`). Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch component of :attr:`AutoPilot.current_attitude_error`, well-defined near the vertical.
+
+   .. attribute:: current_heading_error
+
+      The error, in degrees, between the vessels current heading and the heading the auto-pilot
+      is currently tracking (see :attr:`AutoPilot.current_target_heading`). Throws an exception if the
+      auto-pilot has not been engaged.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The yaw component of :attr:`AutoPilot.current_attitude_error`, well-defined near the vertical.
+
+   .. attribute:: current_roll_error
+
+      The error, in degrees, between the vessels current roll and the roll the auto-pilot is
+      currently tracking (see :attr:`AutoPilot.current_target_roll`). Throws an exception if the
+      auto-pilot has not been engaged or no target roll is set.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Measured about the vessel's nose axis, so it stays well-defined near the vertical
+         singularity — see :attr:`AutoPilot.roll_error`.
+
+   .. attribute:: roll_start_angle
+
+      The direction error, in degrees, above which roll blending is fully suppressed.
+      Defaults to 20 degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_engage_angle
+
+      The direction error, in degrees, below which roll is fully engaged.
+      Roll blends linearly between :attr:`AutoPilot.roll_start_angle` and this value.
+      Defaults to 15 degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_angular_velocity
+
+      The maximum angular velocity of the vessel, in rad/s, for each of the pitch, roll
+      and yaw axes. Limits the target angular velocity computed by the bang-bang profile so
+      that vessels with very high torque availability do not spin faster than desired.
+      Defaults to 1 rad/s for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_yaw_attenuation_angle
+
+      The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+      to the target direction. This sets the high angle of the pitch/yaw pointing deadband: at
+      or above this error the target velocity is at full, and below it the target velocity
+      ramps linearly to zero at half this angle, so the vessel coasts to a stop. Pitch and yaw
+      are controlled jointly, so a single angle applies to both. Defaults to 1°.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_attenuation_angle
+
+      The angle, in degrees, at which the autopilot considers the vessel to be pointing close
+      to the target roll. This sets the high angle of the roll-axis pointing deadband: at or
+      above this error the target velocity is at full, and below it the target velocity ramps
+      linearly to zero at half this angle, so the roll coasts to a stop. Defaults to 1°.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: auto_tune
+
+      Whether the rotation rate controllers PID parameters should be automatically tuned
+      using the vessels moment of inertia and available torque. Defaults to ``True``.
+      See :attr:`AutoPilot.time_to_peak` and :attr:`AutoPilot.overshoot`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: time_to_peak
+
+      The target time to peak used to autotune the PID controllers.
+      A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+      Defaults to 1 second for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: soft_start_time
+
+      The duration, in seconds, over which the control output is faded in when the
+      autopilot is engaged. This soft-start spreads the engagement transient over many
+      physics ticks so engaging (on the pad or mid-flight) does not command a near-maximum
+      control deflection that can excite an oscillation. Defaults to 0.5 seconds.
+      Set to 0 to disable the fade-in.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: target_smoothing_time
+
+      The duration, in seconds, over which a change to the target attitude is applied to the
+      control target. When set above zero, changing the target pitch, heading, roll, direction
+      or rotation makes the effective control target ramp smoothly (a constant-rate rotation)
+      from its current value to the new value over this many seconds, rather than jumping
+      instantly. This lets a slow control loop drive a smooth maneuver (for example a gravity
+      turn) without inducing oscillation from stepwise target changes. Defaults to 0
+      (instantaneous).
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: overshoot
+
+      The target overshoot percentage used to autotune the PID controllers.
+      A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+      Defaults to 0.01 for each axis.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_pid_gains
+
+      Gains for the pitch PID controller.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :attr:`AutoPilot.auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. attribute:: roll_pid_gains
+
+      Gains for the roll PID controller.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :attr:`AutoPilot.auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. attribute:: yaw_pid_gains
+
+      Gains for the yaw PID controller.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :attr:`AutoPilot.auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. attribute:: pitch_yaw_rate_filter_mode
+
+      Controls the rate-feedback filtering (the wobble-suppression filter on the measured
+      angular velocity) for the pitch and yaw axes of a structurally flexible vessel. When
+      :attr:`RateFilterMode.automatic` (the default) the auto-pilot detects the
+      oscillation at runtime, estimates its frequency and routes it to the appropriate tool
+      (a notch filter for a low-frequency mode near the control band, a low-pass for a
+      high-frequency mode). :attr:`RateFilterMode.off` disables rate filtering only —
+      the other oscillation mitigations are unaffected. :attr:`RateFilterMode.notch`
+      and :attr:`RateFilterMode.low_pass` force the respective tool unconditionally at
+      :attr:`AutoPilot.pitch_yaw_oscillation_frequency`, for a vessel known in advance to be
+      flexible.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`RateFilterMode`
+      :Game Scenes: Flight
+
+   .. attribute:: roll_rate_filter_mode
+
+      Controls the rate-feedback filtering for the roll axis. Behaves as
+      :attr:`AutoPilot.pitch_yaw_rate_filter_mode` but for roll, using
+      :attr:`AutoPilot.roll_oscillation_frequency`. Defaults to
+      :attr:`RateFilterMode.automatic`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`RateFilterMode`
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_yaw_oscillation_frequency
+
+      The structural mode frequency, in Hz, for the pitch/yaw axis group. Used directly as the
+      filter frequency in :attr:`RateFilterMode.notch` / :attr:`RateFilterMode.low_pass`
+      mode, and as the seed for the automatic frequency estimator before it acquires. Defaults
+      to 1.5 Hz.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_oscillation_frequency
+
+      The structural mode frequency, in Hz, for the roll axis. Behaves as
+      :attr:`AutoPilot.pitch_yaw_oscillation_frequency` but for roll. Defaults to 1.5 Hz.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: oscillation_notch_q
+
+      The quality factor of the notch filter used to suppress a low-frequency structural mode.
+      A higher value gives a narrower notch (less in-band control lag but less tolerance to the
+      mode frequency drifting); a lower value gives a wider notch. Defaults to 2.5. This is an
+      advanced tuning parameter.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: oscillation_bandwidth_floor_mode
+
+      Controls the bandwidth-floor mitigation: the reduction of the inner control loop
+      bandwidth on a structurally flexible axis — the primary oscillation stabilizer. When
+      :attr:`MitigationMode.automatic` (the default) it engages on a latched axis
+      while holding (and during a detected limit cycle). :attr:`MitigationMode.off`
+      never reduces the bandwidth; :attr:`MitigationMode.forced` keeps it fully
+      reduced at all times.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`MitigationMode`
+      :Game Scenes: Flight
+
+   .. attribute:: oscillation_bandwidth_floor
+
+      The inner control loop bandwidth, in rad/s, that an axis is reduced towards while the
+      bandwidth-floor mitigation is engaged on it. Lowering it suppresses oscillation more
+      strongly; raising it keeps more control authority at the cost of allowing more wobble.
+      Defaults to 1 rad/s. This is an advanced tuning parameter.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: oscillation_feedforward_mode
+
+      Controls the feedforward-cut mitigation: removal of the acceleration feedforward on a
+      structurally flexible axis while holding, so it cannot re-excite a residual mode at
+      the reduced bandwidth. When :attr:`MitigationMode.automatic` (the default) it
+      follows the hold gate on a latched axis. :attr:`MitigationMode.off` never cuts
+      the feedforward; :attr:`MitigationMode.forced` always cuts it fully.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`MitigationMode`
+      :Game Scenes: Flight
+
+   .. attribute:: oscillation_output_filter_mode
+
+      Controls the output-smoothing mitigation: a low-pass on the delivered actuator
+      command that caps residual control chatter. When
+      :attr:`MitigationMode.automatic` (the default) it engages on a latched axis
+      (and, lightly, while the oscillation detector is firing on an unlatched one).
+      :attr:`MitigationMode.off` never smooths; :attr:`MitigationMode.forced`
+      smooths fully at all times.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`MitigationMode`
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_yaw_control_oscillation
+
+      The current amplitude of control-output oscillation on the pitch/yaw axis group, measured as
+      the deviation of the delivered control about its slowly-varying trim. A settled hold sits
+      near zero; a sustained limit cycle drives it toward 1. Read-only.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_control_oscillation
+
+      The current amplitude of control-output oscillation on the roll axis, measured as the
+      deviation of the delivered control about its slowly-varying trim. Read-only. See
+      :attr:`AutoPilot.pitch_yaw_control_oscillation`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: oscillation_level
+
+      A measure, between 0 and 1 for each of the pitch, roll and yaw axes, of how strongly the
+      auto-pilot currently detects structural oscillation (wobble) on that axis. 0 means none
+      detected; values approaching 1 mean a sustained structural oscillation. Read-only.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_yaw_oscillation_latched
+
+      Whether the auto-pilot has confirmed the pitch/yaw axes to be structurally flexible and
+      latched oscillation suppression on for them. Read-only. See
+      :attr:`AutoPilot.pitch_yaw_rate_filter_mode`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: roll_oscillation_latched
+
+      Whether the auto-pilot has confirmed the roll axis to be structurally flexible and latched
+      oscillation suppression on for it. Read-only. See :attr:`AutoPilot.roll_rate_filter_mode`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: pitch_yaw_oscillation_detected_frequency
+
+      The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+      pitch/yaw axis group, or ``NaN`` until the estimator acquires. The estimator runs in
+      all modes, so this is observable even when suppression is off or forced. Read-only.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: roll_oscillation_detected_frequency
+
+      The structural oscillation frequency, in Hz, estimated by the automatic detector for the
+      roll axis, or ``NaN`` until the estimator acquires. Read-only. See
+      :attr:`AutoPilot.pitch_yaw_oscillation_detected_frequency`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: diagnostic_logging
+
+      When ``True``, records one row of diagnostic data per physics tick to an
+      in-memory buffer (see :attr:`AutoPilot.diagnostic_log`), and echoes each row to
+      Player.log prefixed with ``[KRPC.AP]``. The data is CSV: the first row is a
+      header naming every column, and each subsequent row records the auto-pilot's full
+      control-loop state for one tick (setpoints, errors, measured rates, gains,
+      velocity-profile and feedforward internals, control outputs, and the oscillation
+      detector/gate/mitigation state). The buffer is capped at 3000 data rows (one minute
+      at the 50 Hz physics rate); when full, this property switches itself back to
+      ``False`` and the buffer holds the minute following the enable. Setting to
+      ``True`` clears the buffer. Defaults to ``False``.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: diagnostic_log
+
+      The diagnostic log collected since :attr:`AutoPilot.diagnostic_logging` was last set to
+      ``True``: CSV text whose first line is the column header and each subsequent
+      line records one physics tick. Vector-valued channels use one column per component
+      (suffixed ``.p/.r/.y`` for pitch, roll, yaw); pitch-yaw-group/roll channel pairs
+      are suffixed ``.py/.roll``. Returns an empty string if diagnostic logging has
+      not been enabled or no ticks have occurred.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+      :Game Scenes: Flight
+
+
+
+
+.. class:: RateFilterMode
+
+   Controls the auto-pilot's rate-feedback filtering for an axis group — the mitigation that
+   removes a structural oscillation (wobble) from the measured angular velocity before the
+   control loops consume it.
+   See :attr:`AutoPilot.pitch_yaw_rate_filter_mode` and :attr:`AutoPilot.roll_rate_filter_mode`.
+
+
+   .. data:: automatic
+
+      The default. The auto-pilot detects structural oscillation at runtime, estimates its
+      frequency and routes it to the appropriate filter: a notch for a low-frequency mode
+      near the control band, a low-pass for a high-frequency mode, or a broadband low-pass
+      while the frequency is not yet known. Rigid vessels are left untouched.
+
+
+   .. data:: off
+
+      No rate filtering. The other oscillation mitigations are unaffected.
+
+
+   .. data:: notch
+
+      Force a notch filter at the manually set frequency
+      (:attr:`AutoPilot.pitch_yaw_oscillation_frequency` /
+      :attr:`AutoPilot.roll_oscillation_frequency`), for a vessel whose structural mode
+      is known in advance.
+
+
+   .. data:: low_pass
+
+      Force a low-pass filter derived from the manually set frequency.
+
+
+
+
+.. class:: MitigationMode
+
+   Controls one of the auto-pilot's individually-toggleable oscillation mitigations
+   (:attr:`AutoPilot.oscillation_bandwidth_floor_mode`,
+   :attr:`AutoPilot.oscillation_feedforward_mode`,
+   :attr:`AutoPilot.oscillation_output_filter_mode`).
+
+
+   .. data:: automatic
+
+      The default: the mitigation engages automatically, driven by the runtime oscillation
+      detector and the hold gate. Rigid vessels are left untouched.
+
+
+   .. data:: off
+
+      The mitigation never engages. The other mitigations are unaffected.
+
+
+   .. data:: forced
+
+      The mitigation is fully engaged at all times, regardless of what the oscillation
+      detector reports.

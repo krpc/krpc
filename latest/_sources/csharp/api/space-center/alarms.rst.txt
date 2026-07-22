@@ -1,0 +1,367 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :prop:`SpaceCenter.AlarmManager <SpaceCenter.SpaceCenter.AlarmManager>`.
+
+   .. property:: System.Collections.Generic.IList<Alarm> Alarms { get; }
+
+      A list of all alarms.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<Alarm> AlarmsWithType(AlarmType type)
+
+      A list of all alarms of the given type.
+
+      :parameters:
+
+       * **type** -- The type of alarm to return.
+
+      :Game Scenes: All
+
+   .. method:: Alarm AlarmWithName(string name)
+
+      Returns the first alarm with the given title, or ``null`` if no such
+      alarm exists. Alarm titles are not guaranteed to be unique; if more than
+      one alarm shares the given title, the first one found is returned.
+
+      :parameters:
+
+       * **name** -- The title of the alarm to return.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddAlarm(IConnection connection, double time, string title = "Alarm", string description = "")
+
+      Create an alarm.
+
+      :parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddVesselAlarm(IConnection connection, double time, Vessel vessel, string title = "Vessel Alarm", string description = "")
+
+      Create an alarm linked to a vessel.
+
+      :parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **vessel** -- Vessel to link the alarm to.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddApoapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Apoapsis Alarm", string description = "")
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddPeriapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Periapsis Alarm", string description = "")
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddManeuverNodeAlarm(IConnection connection, Vessel vessel, Node node, double offset = 60.0, bool addBurnTime = true, string title = "Maneuver Node Alarm", string description = "")
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **node** -- The maneuver node.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **addBurnTime** -- Whether the node's burn time should be included in the alarm.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddSOIAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "SOI Change Alarm", string description = "")
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddTransferWindowAlarm(IConnection connection, Vessel vessel, CelestialBody target, string title = "Transfer Window Alarm", string description = "")
+
+      Create an alarm for the next planetary transfer window from the vessel's
+      current parent body to the target body.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **target** -- The target body.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+         compute a transfer from the vessel's current parent body to the target,
+         the resulting alarm may not fire at a useful time; in that case the
+         properties on the returned alarm can still be used to inspect or adjust it.
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :prop:`SpaceCenter.AlarmManager <SpaceCenter.SpaceCenter.AlarmManager>`.
+
+   .. property:: uint ID { get; }
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+      :Game Scenes: All
+
+   .. property:: AlarmType Type { get; }
+
+      Type of alarm.
+
+      :Game Scenes: All
+
+   .. property:: string Title { get; set; }
+
+      Title of the alarm.
+
+      :Game Scenes: All
+
+   .. property:: string Description { get; set; }
+
+      Description of the alarm.
+
+      :Game Scenes: All
+
+   .. property:: double Time { get; set; }
+
+      Time the alarm will trigger, in seconds since epoch.
+
+      :Game Scenes: All
+
+   .. property:: double TimeUntil { get; }
+
+      Time until the alarm triggers, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double EventOffset { get; set; }
+
+      Seconds between the alarm going off and the event it references.
+
+      :Game Scenes: All
+
+   .. property:: Vessel Vessel { get; }
+
+      Vessel the alarm references. ``null`` if it does not reference a vessel.
+
+      :Game Scenes: All
+
+   .. property:: Node Node { get; set; }
+
+      Maneuver node the alarm references. Only valid for alarms of type
+      :enum:`AlarmType.Maneuver`.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :enum:`AlarmType.Maneuver`.
+
+   .. property:: CelestialBody OriginBody { get; set; }
+
+      Origin body for the transfer window. Only valid for alarms of type
+      :enum:`AlarmType.TransferWindow`.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :enum:`AlarmType.TransferWindow`.
+
+   .. property:: CelestialBody DestinationBody { get; set; }
+
+      Destination body for the transfer window. Only valid for alarms of type
+      :enum:`AlarmType.TransferWindow`.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :enum:`AlarmType.TransferWindow`.
+
+   .. property:: AlarmWarpAction WarpAction { get; set; }
+
+      The action taken on time warp when the alarm fires.
+
+      :Game Scenes: All
+
+   .. property:: AlarmMessageAction MessageAction { get; set; }
+
+      The on-screen message behavior when the alarm fires.
+
+      :Game Scenes: All
+
+   .. property:: bool PlaySound { get; set; }
+
+      Whether the alarm plays a sound when it fires.
+
+      :Game Scenes: All
+
+   .. property:: bool DeleteOnDismiss { get; set; }
+
+      Whether the alarm is deleted automatically once the player has dismissed
+      the triggered message.
+
+      :Game Scenes: All
+
+   .. property:: bool Triggered { get; }
+
+      Whether the time of the alarm has passed and its actions have been triggered.
+
+      :Game Scenes: All
+
+   .. property:: bool Actioned { get; }
+
+      Whether the alarm's actions were triggered and then completed or closed.
+
+      :Game Scenes: All
+
+   .. method:: void Remove()
+
+      Removes the alarm.
+
+
+      :Game Scenes: All
+
+
+
+.. enum:: AlarmType
+
+   The type of an alarm. See :prop:`Alarm.Type`.
+
+
+   .. value:: Raw
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. value:: Apoapsis
+
+      An alarm for the next apoapsis of a vessel.
+
+
+   .. value:: Periapsis
+
+      An alarm for the next periapsis of a vessel.
+
+
+   .. value:: Maneuver
+
+      An alarm based on a maneuver node on the vessel's flight path.
+
+
+   .. value:: SOIChange
+
+      An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+   .. value:: TransferWindow
+
+      An alarm for the next planetary transfer window from the vessel's current
+      orbit to a target body.
+
+
+   .. value:: Unknown
+
+      The alarm is of a type not recognized by kRPC. Typically this is a type
+      introduced by a mod.
+
+
+
+.. enum:: AlarmWarpAction
+
+   The warp action taken when an alarm fires.
+   See :prop:`Alarm.WarpAction`.
+
+
+   .. value:: NoChange
+
+      Do not change time warp when the alarm fires.
+
+
+   .. value:: StopWarp
+
+      Drop out of time warp when the alarm fires.
+
+
+   .. value:: PauseGame
+
+      Pause the game when the alarm fires.
+
+
+
+.. enum:: AlarmMessageAction
+
+   The on-screen message action taken when an alarm fires.
+   See :prop:`Alarm.MessageAction`.
+
+
+   .. value:: NoMessage
+
+      Do not display a message when the alarm fires.
+
+
+   .. value:: Message
+
+      Display a message when the alarm fires.
+
+
+   .. value:: MessageIfNotActiveVessel
+
+      Display a message only if the alarm's vessel is not the currently active vessel.

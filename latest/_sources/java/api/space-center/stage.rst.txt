@@ -1,0 +1,172 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+.. _java-api-stage:
+
+Stage
+=====
+
+
+.. type:: public class Stage
+
+   A single stage of a vessel. Obtain activation (burn) stages from
+   ``Vessel.Stages`` / ``Vessel.StageAt``, and decouple stages from
+   ``Vessel.DecoupleStages`` / ``Vessel.DecoupleStageAt``.
+
+   .. note::
+
+      Delta-v, thrust, TWR, specific impulse, burn time and mass members are only
+      available on activation stages. On decouple stages those members throw
+      InvalidOperationException because stock delta-v data does not
+      apply. Thrust is reported in newtons and masses in kilograms (stock values
+      are converted from kilonewtons and tonnes).
+
+   .. method:: int getNumber()
+
+
+      The stage number (activation stage for burn stages, decouple stage otherwise).
+
+   
+
+   .. method:: java.util.List<Part> getParts()
+
+
+      The parts that belong to this stage.
+
+   
+
+   .. method:: Resources resources(boolean cumulative)
+
+      Returns a :meth:`Stage.resources(boolean)` object for this stage.
+
+      :param boolean cumulative: When ``false``, only resources assigned to this stage. When ``true``, resources for this stage and all later activation or decouple stage numbers are included. On activation stages, unstaged resource containers (for example fuel tanks) are grouped with the first higher activation stage before they are detached. Defaults to ``true`` so decouple-stage calls match the legacy ``Vessel.ResourcesInDecoupleStage`` RPC.
+   
+
+      .. note:: This is an RPC method: call ``resources()`` (optional ``cumulative`` argument).
+                The default ``cumulative=true`` matches the legacy
+                :meth:`Vessel.resourcesInDecoupleStage(int, boolean)` RPC.
+                For decouple stages, grouping is the same as that deprecated method.
+                For activation stages, unstaged resource containers (for example fuel tanks)
+                are grouped with the first higher activation stage before they detach, matching
+                the C# ``Resources()`` documentation.
+
+   .. method:: float getDeltaV()
+
+
+      Delta-v for this stage in the current situation, in m/s.
+
+   
+
+      .. note:: Delta-v is only defined for **activation** stages (``decouple`` is ``false``).
+                Calling this on a decouple stage raises an error.
+
+   .. method:: float getVacuumDeltaV()
+
+
+      Vacuum delta-v for this stage, in m/s.
+
+   
+
+   .. method:: float getSeaLevelDeltaV()
+
+
+      Sea-level delta-v for this stage, in m/s.
+
+   
+
+   .. method:: float getThrust()
+
+
+      Thrust in the current situation, in newtons.
+
+   
+
+   .. method:: float getVacuumThrust()
+
+
+      Vacuum thrust, in newtons.
+
+   
+
+   .. method:: float getSeaLevelThrust()
+
+
+      Sea-level thrust, in newtons.
+
+   
+
+   .. method:: float getTWR()
+
+
+      Thrust-to-weight ratio in the current situation.
+
+   
+
+   .. method:: float getVacuumTWR()
+
+
+      Vacuum thrust-to-weight ratio.
+
+   
+
+   .. method:: float getSeaLevelTWR()
+
+
+      Sea-level thrust-to-weight ratio.
+
+   
+
+   .. method:: float getSpecificImpulse()
+
+
+      Specific impulse in the current situation, in seconds.
+
+   
+
+   .. method:: float getVacuumSpecificImpulse()
+
+
+      Vacuum specific impulse, in seconds.
+
+   
+
+   .. method:: float getSeaLevelSpecificImpulse()
+
+
+      Sea-level specific impulse, in seconds.
+
+   
+
+   .. method:: float getBurnTime()
+
+
+      Burn time for this stage, in seconds.
+
+   
+
+   .. method:: float getStartMass()
+
+
+      Start mass for this stage, in kg.
+
+   
+
+   .. method:: float getEndMass()
+
+
+      End mass for this stage, in kg.
+
+   
+
+   .. method:: float getDryMass()
+
+
+      Dry mass for this stage, in kg.
+
+   
+
+   .. method:: float getFuelMass()
+
+
+      Fuel mass for this stage, in kg.

@@ -1,0 +1,22 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Camera
+======
+
+
+.. type:: krpc_DockingCamera_Camera_t
+
+   A Docking Camera.
+
+   .. function:: krpc_error_t krpc_DockingCamera_Camera_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      Get the part containing this camera.
+
+   
+
+   .. function:: krpc_error_t krpc_DockingCamera_Camera_Image(krpc_connection_t connection, krpc_bytes_t * result)
+
+      Get an image.
+      Returns an empty byte array on failure.

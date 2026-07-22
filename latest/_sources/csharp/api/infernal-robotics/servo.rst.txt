@@ -1,0 +1,320 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.InfernalRobotics
+
+Servo
+=====
+
+
+.. class:: Servo
+
+   Represents a servo. Obtained using
+   :prop:`ServoGroup.Servos`,
+   :meth:`ServoGroup.ServoWithName`
+   or :meth:`InfernalRobotics.ServoWithName <InfernalRobotics.InfernalRobotics.ServoWithName>`.
+
+   .. property:: string Name { get; set; }
+
+      The name of the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: uint UID { get; }
+
+      The unique identifier of the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.Part Part { get; }
+
+      The part containing the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: ServoMode Mode { get; }
+
+      Whether the part acts as a servo or a rotor.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Highlight { set; }
+
+      Whether the servo should be highlighted in-game.
+
+      :Game Scenes: Flight
+
+   .. property:: float Position { get; }
+
+      The position of the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: float MinConfigPosition { get; }
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxConfigPosition { get; }
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. property:: float MinPosition { get; set; }
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxPosition { get; set; }
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. property:: float ConfigSpeed { get; }
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Game Scenes: Flight
+
+   .. property:: float Speed { get; set; }
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Game Scenes: Flight
+
+   .. property:: float CurrentSpeed { get; }
+
+      The current speed at which the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. property:: float Acceleration { get; set; }
+
+      The current speed multiplier set in the UI.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsMoving { get; }
+
+      Whether the servo is moving.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsFreeMoving { get; }
+
+      Whether the servo is freely moving.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsLocked { get; set; }
+
+      Whether the servo is locked.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsAxisInverted { get; set; }
+
+      Whether the servos axis is inverted.
+
+      :Game Scenes: Flight
+
+   .. property:: float TargetPosition { get; }
+
+      The target position the servo is moving towards.
+
+      :Game Scenes: Flight
+
+   .. property:: float TargetSpeed { get; }
+
+      The target speed the servo is moving at.
+
+      :Game Scenes: Flight
+
+   .. property:: float CommandedPosition { get; }
+
+      The position the servo is currently being commanded to move to.
+
+      :Game Scenes: Flight
+
+   .. property:: float DefaultPosition { get; }
+
+      The default (built) position of the servo.
+
+      :Game Scenes: Flight
+
+   .. property:: float ForceLimit { get; set; }
+
+      The force limit of the servo, as a percentage of the maximum force.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxForce { get; }
+
+      The maximum force the servo can generate.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxAcceleration { get; }
+
+      The maximum acceleration the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. property:: float MaxSpeed { get; }
+
+      The maximum speed the servo can achieve.
+
+      :Game Scenes: Flight
+
+   .. property:: float ElectricChargeRequired { get; }
+
+      The rate at which the servo consumes electric charge, in units per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. property:: float SpringPower { get; set; }
+
+      The strength of the servo's spring, when it has one.
+
+      :Game Scenes: Flight
+
+   .. property:: float DampingPower { get; set; }
+
+      The strength of the servo's damping.
+
+      :Game Scenes: Flight
+
+   .. property:: float RotorAcceleration { get; set; }
+
+      The acceleration of the servo when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsLimited { get; set; }
+
+      Whether the servo's range of movement is limited to the configured minimum and
+      maximum positions.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsRotational { get; }
+
+      Whether the servo moves rotationally (as opposed to linearly).
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsServo { get; }
+
+      Whether the part is operating as a servo (rather than a rotor).
+
+      :Game Scenes: Flight
+
+   .. property:: bool CanHaveLimits { get; }
+
+      Whether the servo can have its range of movement limited.
+
+      :Game Scenes: Flight
+
+   .. property:: bool HasSpring { get; }
+
+      Whether the servo has a spring.
+
+      :Game Scenes: Flight
+
+   .. property:: bool IsRunning { get; }
+
+      Whether the servo is running, when operating as a rotor.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<float> PresetPositions { get; }
+
+      The list of preset positions configured for the servo.
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveRight()
+
+      Moves the servo to the right.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveLeft()
+
+      Moves the servo to the left.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveCenter()
+
+      Moves the servo to the center.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void MoveTo(float position, float speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :parameters:
+
+       * **position** -- The position to move the servo to.
+       * **speed** -- Speed multiplier for the movement.
+
+      :Game Scenes: Flight
+
+   .. method:: void Stop()
+
+      Stops the servo.
+
+
+      :Game Scenes: Flight
+
+   .. method:: void AddPreset(float position)
+
+      Adds a preset position to the servo.
+
+      :parameters:
+
+       * **position** -- The position of the preset.
+
+      :Game Scenes: Flight
+
+   .. method:: void RemovePresetAt(int index)
+
+      Removes the preset position at the given index.
+
+      :parameters:
+
+       * **index** -- The index of the preset to remove.
+
+      :Game Scenes: Flight
+
+   .. method:: void SortPresets()
+
+      Sorts the preset positions of the servo into ascending order.
+
+
+      :Game Scenes: Flight
+
+
+
+.. enum:: ServoMode
+
+   The mode a servo is operating in. See :prop:`Servo.Mode`.
+
+
+   .. value:: Servo
+
+      The part acts as a servo, driving towards a target position.
+
+
+   .. value:: Rotor
+
+      The part acts as a rotor, spinning continuously.

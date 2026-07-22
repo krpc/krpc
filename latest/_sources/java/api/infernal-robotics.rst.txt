@@ -1,0 +1,26 @@
+.. default-domain:: java
+.. highlight:: java
+
+InfernalRobotics API
+====================
+
+Provides RPCs to interact with `Infernal Robotics Next`_. Provides the following classes:
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   infernal-robotics/infernal-robotics
+   infernal-robotics/servo-group
+   infernal-robotics/servo
+
+Example
+-------
+
+The following example gets the control group named "MyGroup", prints out the
+names and positions of all of the servos in the group, then moves all of the
+servos to the right for 1 second.
+
+.. literalinclude:: /scripts/services/InfernalRoboticsExample.java
+
+.. _Infernal Robotics Next: https://forum.kerbalspaceprogram.com/index.php?/topic/170898-wip-infernal-robotics-next/

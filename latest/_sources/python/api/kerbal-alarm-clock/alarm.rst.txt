@@ -1,0 +1,170 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KerbalAlarmClock
+
+Alarm
+=====
+
+
+.. class:: Alarm
+
+   Represents an alarm. Obtained by calling
+   :attr:`alarms`,
+   :meth:`alarm_with_name` or
+   :meth:`alarms_with_type`.
+
+   .. attribute:: action
+
+      The action that the alarm triggers.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`AlarmAction`
+   
+
+   .. attribute:: margin
+
+      The number of seconds before the event that the alarm will fire.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: time
+
+      The time at which the alarm will fire.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: type
+
+      The type of the alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AlarmType`
+   
+
+   .. attribute:: id
+
+      The unique identifier for the alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: name
+
+      The short name of the alarm.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: notes
+
+      The long description of the alarm.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: remaining
+
+      The number of seconds until the alarm will fire.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: enabled
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: play_sound
+
+      Whether the alarm plays a sound when it fires.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: triggered
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: repeat
+
+      Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :attr:`Alarm.supports_repeat`).
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: supports_repeat
+
+      Whether this alarm's type supports repeating
+      (see :attr:`Alarm.repeat`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: repeat_period
+
+      The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :attr:`Alarm.supports_repeat_period`).
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: supports_repeat_period
+
+      Whether this alarm's type supports a repeat period
+      (see :attr:`Alarm.repeat_period`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: vessel
+
+      The vessel that the alarm is attached to.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.Vessel`
+   
+
+   .. attribute:: xfer_origin_body
+
+      The celestial body the vessel is departing from.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+   .. attribute:: xfer_target_body
+
+      The celestial body the vessel is arriving at.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+   
+
+   .. method:: remove()
+
+      Removes the alarm. Any further use of this object throws an exception.

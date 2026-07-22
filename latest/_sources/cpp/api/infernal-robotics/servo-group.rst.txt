@@ -1,0 +1,154 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::InfernalRobotics
+
+ServoGroup
+==========
+
+
+.. class:: ServoGroup
+
+   A group of servos, obtained by calling :func:`servo_groups`
+   or :func:`servo_group_with_name`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. function:: std::string name()
+   .. function:: void set_name(std::string value)
+
+      The name of the group.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string forward_key()
+   .. function:: void set_forward_key(std::string value)
+
+      The key assigned to be the "forward" key for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: std::string reverse_key()
+   .. function:: void set_reverse_key(std::string value)
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: float speed()
+   .. function:: void set_speed(float value)
+
+      The speed multiplier for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: bool expanded()
+   .. function:: void set_expanded(bool value)
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::Vessel vessel()
+
+      The vessel the group belongs to, or ``NULL`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. function:: int32_t moving_direction()
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. function:: bool advanced_mode()
+   .. function:: void set_advanced_mode(bool value)
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. function:: float electric_charge_required()
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. function:: bool build_aid()
+   .. function:: void set_build_aid(bool value)
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: bool ik_active()
+   .. function:: void set_ik_active(bool value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<Servo> servos()
+
+      The servos that are in the group.
+
+      :Game Scenes: Flight
+
+   .. function:: Servo servo_with_name(std::string name)
+
+      Returns the servo with the given *name* from this group,
+      or ``NULL`` if none exists.
+
+      :Parameters:
+
+       * **name** -- Name of servo to find.
+
+      :Game Scenes: Flight
+
+   .. function:: std::vector<SpaceCenter::Part> parts()
+
+      The parts containing the servos in the group.
+
+      :Game Scenes: Flight
+
+   .. function:: void move_right()
+
+      Moves all of the servos in the group to the right.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_left()
+
+      Moves all of the servos in the group to the left.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_center()
+
+      Moves all of the servos in the group to the center.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_next_preset()
+
+      Moves all of the servos in the group to the next preset.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void move_prev_preset()
+
+      Moves all of the servos in the group to the previous preset.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void stop()
+
+      Stops the servos in the group.
+
+
+      :Game Scenes: Flight

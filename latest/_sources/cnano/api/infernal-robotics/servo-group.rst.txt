@@ -1,0 +1,154 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+ServoGroup
+==========
+
+
+.. type:: krpc_InfernalRobotics_ServoGroup_t
+
+   A group of servos, obtained by calling :func:`krpc_InfernalRobotics_ServoGroups`
+   or :func:`krpc_InfernalRobotics_ServoGroupWithName`. Represents the "Servo Groups"
+   in the InfernalRobotics UI.
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Name(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_Name(const char * value)
+
+      The name of the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_ForwardKey(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_ForwardKey(const char * value)
+
+      The key assigned to be the "forward" key for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_ReverseKey(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_ReverseKey(const char * value)
+
+      The key assigned to be the "reverse" key for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Speed(krpc_connection_t connection, float * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_Speed(float value)
+
+      The speed multiplier for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Expanded(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_Expanded(bool value)
+
+      Whether the group is expanded in the InfernalRobotics UI.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      The vessel the group belongs to, or ``nullptr`` if it is not available.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MovingDirection(krpc_connection_t connection, int32_t * result)
+
+      The direction the group is currently moving in: -1 for reverse, 0 for stopped
+      and 1 for forward.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_AdvancedMode(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_AdvancedMode(bool value)
+
+      Whether the group is in advanced mode.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_ElectricChargeRequired(krpc_connection_t connection, float * result)
+
+      The total rate at which the servos in the group consume electric charge, in units
+      per second, when moving.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_BuildAid(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_BuildAid(bool value)
+
+      Whether the build aid is enabled for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_IKActive(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_InfernalRobotics_ServoGroup_set_IKActive(bool value)
+
+      Whether inverse kinematics is active for the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Servos(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The servos that are in the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_ServoWithName(krpc_connection_t connection, krpc_InfernalRobotics_Servo_t * result, const char * name)
+
+      Returns the servo with the given *name* from this group,
+      or ``nullptr`` if none exists.
+
+      :Parameters:
+
+       * **name** -- Name of servo to find.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Parts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The parts containing the servos in the group.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MoveRight(krpc_connection_t connection)
+
+      Moves all of the servos in the group to the right.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MoveLeft(krpc_connection_t connection)
+
+      Moves all of the servos in the group to the left.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MoveCenter(krpc_connection_t connection)
+
+      Moves all of the servos in the group to the center.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MoveNextPreset(krpc_connection_t connection)
+
+      Moves all of the servos in the group to the next preset.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_MovePrevPreset(krpc_connection_t connection)
+
+      Moves all of the servos in the group to the previous preset.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Stop(krpc_connection_t connection)
+
+      Stops the servos in the group.
+
+
+      :Game Scenes: Flight

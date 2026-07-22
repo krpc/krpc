@@ -1,0 +1,182 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KRPC
+
+KRPC
+====
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. namespace:: krpc::services
+.. class:: KRPC : public krpc::Service
+
+   Main kRPC service, used by clients to interact with basic server functionality.
+
+   .. function:: KRPC(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: std::string get_client_id()
+
+      Returns the identifier for the current client.
+
+
+   
+
+   .. function:: std::string get_client_name()
+
+      Returns the name of the current client.
+      This is an empty string if the client has no name.
+
+
+   
+
+   .. function:: std::vector<std::tuple<std::string, std::string, std::string>> clients()
+
+      A list of RPC clients that are currently connected to the server.
+      Each entry in the list is a clients identifier, name and address.
+
+   
+
+   .. function:: krpc::schema::Status get_status()
+
+      Returns some information about the server, such as the version.
+
+
+   
+
+   .. function:: krpc::schema::Services get_services()
+
+      Returns information on all services, procedures, classes, properties etc. provided by the server.
+      Can be used by client libraries to automatically create functionality such as stubs.
+
+
+   
+
+   .. function:: GameScene game_scene()
+   .. function:: void set_game_scene(GameScene value)
+
+      The current game scene. Setting this switches the game to the given
+      scene, or opens/closes the corresponding facility for the pseudo-scenes.
+      Scene changes happen asynchronously: setting this property returns
+      immediately, and clients should poll it until it reports the requested
+      scene. Setting it to :enumerator:`GameScene::flight` resumes the save's
+      active vessel, and fails if there is none.
+
+   
+
+   .. function:: GameScene current_game_scene()
+
+      .. warning:: Deprecated. Use :func:`game_scene` instead.
+
+      Get the current game scene.
+
+   
+
+   .. function:: bool paused()
+   .. function:: void set_paused(bool value)
+
+      Whether the game is paused.
+
+   
+
+
+
+.. namespace:: krpc::services::KRPC
+.. enum-struct:: GameScene
+
+   The game scene. See :func:`game_scene`.
+
+
+   .. enumerator:: space_center
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. enumerator:: flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. enumerator:: tracking_station
+
+      The tracking station.
+
+
+   .. enumerator:: editor_vab
+
+      The Vehicle Assembly Building.
+
+
+   .. enumerator:: editor_sph
+
+      The Space Plane Hangar.
+
+
+   .. enumerator:: mission_builder
+
+      The mission builder.
+
+
+   .. enumerator:: astronaut_complex
+
+      The astronaut complex. This is a pseudo-scene, shown when the
+      astronaut complex facility is open within the space center scene.
+
+
+   .. enumerator:: mission_control
+
+      Mission control. This is a pseudo-scene, shown when the
+      mission control facility is open within the space center scene.
+
+
+   .. enumerator:: research_and_development
+
+      Research and development. This is a pseudo-scene, shown when the
+      research and development facility is open within the space center scene.
+
+
+   .. enumerator:: administration
+
+      The administration facility. This is a pseudo-scene, shown when the
+      administration facility is open within the space center scene.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+
+
+.. namespace:: krpc::services::KRPC
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.

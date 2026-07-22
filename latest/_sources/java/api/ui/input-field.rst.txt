@@ -1,0 +1,63 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+InputField
+==========
+
+
+.. type:: public class InputField
+
+   An input field. See :meth:`Panel.addInputField(boolean)`.
+
+   .. method:: RectTransform getRectTransform()
+
+
+      The rect transform for the input field.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. method:: String getValue()
+
+   .. method:: void setValue(String value)
+
+      The value of the input field.
+
+   
+
+   .. method:: Text getText()
+
+
+      The text component of the input field.
+
+   
+
+      .. note::
+
+         Use :meth:`InputField.getValue()` to get and set the value in the field.
+         This object can be used to alter the style of the input field's text.
+
+   .. method:: boolean getChanged()
+
+   .. method:: void setChanged(boolean value)
+
+      Whether the input field has been changed.
+
+   
+
+      .. note::
+
+         This property is set to true when the user modifies the value of the input field.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. method:: void remove()
+
+      Remove the UI object.

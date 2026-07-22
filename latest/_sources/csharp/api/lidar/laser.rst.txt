@@ -1,0 +1,24 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.LiDAR
+
+Laser
+=====
+
+
+.. class:: Laser
+
+   A LaserDist laser.
+
+   .. property:: SpaceCenter.Part Part { get; }
+
+      Get the part containing this LiDAR.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<double> Cloud { get; }
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.
+
+      :Game Scenes: All

@@ -1,0 +1,380 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :attr:`alarm_manager`.
+
+   .. attribute:: alarms
+
+      A list of all alarms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Alarm`)
+   
+
+   .. method:: alarms_with_type(type)
+
+      A list of all alarms of the given type.
+
+      :param AlarmType type: The type of alarm to return.
+      :rtype: list(:class:`Alarm`)
+   
+
+   .. method:: alarm_with_name(name)
+
+      Returns the first alarm with the given title, or ``None`` if no such
+      alarm exists. Alarm titles are not guaranteed to be unique; if more than
+      one alarm shares the given title, the first one found is returned.
+
+      :param str name: The title of the alarm to return.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
+
+      Create an alarm.
+
+      :param float time: Number of seconds from now that the alarm should trigger.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_vessel_alarm(time, vessel, [title = 'Vessel Alarm'], [description = ''])
+
+      Create an alarm linked to a vessel.
+
+      :param float time: Number of seconds from now that the alarm should trigger.
+      :param Vessel vessel: Vessel to link the alarm to.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_apoapsis_alarm(vessel, [offset = 60.0], [title = 'Apoapsis Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :param Vessel vessel: The vessel.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_periapsis_alarm(vessel, [offset = 60.0], [title = 'Periapsis Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :param Vessel vessel: The vessel.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = True], [title = 'Maneuver Node Alarm'], [description = ''])
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :param Vessel vessel: The vessel.
+      :param Node node: The maneuver node.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param bool add_burn_time: Whether the node's burn time should be included in the alarm.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_soi_alarm(vessel, [offset = 60.0], [title = 'SOI Change Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :param Vessel vessel: The vessel.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_transfer_window_alarm(vessel, target, [title = 'Transfer Window Alarm'], [description = ''])
+
+      Create an alarm for the next planetary transfer window from the vessel's
+      current parent body to the target body.
+
+      :param Vessel vessel: The vessel.
+      :param CelestialBody target: The target body.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+      .. note::
+
+         This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+         compute a transfer from the vessel's current parent body to the target,
+         the resulting alarm may not fire at a useful time; in that case the
+         properties on the returned alarm can still be used to inspect or adjust it.
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :attr:`alarm_manager`.
+
+   .. attribute:: id
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: type
+
+      Type of alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AlarmType`
+   
+
+   .. attribute:: title
+
+      Title of the alarm.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: description
+
+      Description of the alarm.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: time
+
+      Time the alarm will trigger, in seconds since epoch.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: time_until
+
+      Time until the alarm triggers, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: event_offset
+
+      Seconds between the alarm going off and the event it references.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: vessel
+
+      Vessel the alarm references. ``None`` if it does not reference a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vessel`
+   
+
+   .. attribute:: node
+
+      Maneuver node the alarm references. Only valid for alarms of type
+      :attr:`AlarmType.maneuver`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Node`
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :attr:`AlarmType.maneuver`.
+
+   .. attribute:: origin_body
+
+      Origin body for the transfer window. Only valid for alarms of type
+      :attr:`AlarmType.transfer_window`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`CelestialBody`
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :attr:`AlarmType.transfer_window`.
+
+   .. attribute:: destination_body
+
+      Destination body for the transfer window. Only valid for alarms of type
+      :attr:`AlarmType.transfer_window`.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`CelestialBody`
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :attr:`AlarmType.transfer_window`.
+
+   .. attribute:: warp_action
+
+      The action taken on time warp when the alarm fires.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`AlarmWarpAction`
+   
+
+   .. attribute:: message_action
+
+      The on-screen message behavior when the alarm fires.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`AlarmMessageAction`
+   
+
+   .. attribute:: play_sound
+
+      Whether the alarm plays a sound when it fires.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: delete_on_dismiss
+
+      Whether the alarm is deleted automatically once the player has dismissed
+      the triggered message.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: triggered
+
+      Whether the time of the alarm has passed and its actions have been triggered.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: actioned
+
+      Whether the alarm's actions were triggered and then completed or closed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Removes the alarm.
+
+   
+
+
+
+.. class:: AlarmType
+
+   The type of an alarm. See :attr:`Alarm.type`.
+
+
+   .. data:: raw
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. data:: apoapsis
+
+      An alarm for the next apoapsis of a vessel.
+
+
+   .. data:: periapsis
+
+      An alarm for the next periapsis of a vessel.
+
+
+   .. data:: maneuver
+
+      An alarm based on a maneuver node on the vessel's flight path.
+
+
+   .. data:: soi_change
+
+      An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+   .. data:: transfer_window
+
+      An alarm for the next planetary transfer window from the vessel's current
+      orbit to a target body.
+
+
+   .. data:: unknown
+
+      The alarm is of a type not recognized by kRPC. Typically this is a type
+      introduced by a mod.
+
+
+
+.. class:: AlarmWarpAction
+
+   The warp action taken when an alarm fires.
+   See :attr:`Alarm.warp_action`.
+
+
+   .. data:: no_change
+
+      Do not change time warp when the alarm fires.
+
+
+   .. data:: stop_warp
+
+      Drop out of time warp when the alarm fires.
+
+
+   .. data:: pause_game
+
+      Pause the game when the alarm fires.
+
+
+
+.. class:: AlarmMessageAction
+
+   The on-screen message action taken when an alarm fires.
+   See :attr:`Alarm.message_action`.
+
+
+   .. data:: no_message
+
+      Do not display a message when the alarm fires.
+
+
+   .. data:: message
+
+      Display a message when the alarm fires.
+
+
+   .. data:: message_if_not_active_vessel
+
+      Display a message only if the alarm's vessel is not the currently active vessel.

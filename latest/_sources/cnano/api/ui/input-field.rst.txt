@@ -1,0 +1,58 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+InputField
+==========
+
+
+.. type:: krpc_UI_InputField_t
+
+   An input field. See :func:`krpc_UI_Panel_AddInputField`.
+
+   .. function:: krpc_error_t krpc_UI_InputField_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+
+      The rect transform for the input field.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_InputField_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_InputField_set_Visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_InputField_Value(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_UI_InputField_set_Value(const char * value)
+
+      The value of the input field.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_InputField_Text(krpc_connection_t connection, krpc_UI_Text_t * result)
+
+      The text component of the input field.
+
+   
+
+      .. note::
+
+         Use :func:`krpc_UI_InputField_Value` to get and set the value in the field.
+         This object can be used to alter the style of the input field's text.
+
+   .. function:: krpc_error_t krpc_UI_InputField_Changed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_InputField_set_Changed(bool value)
+
+      Whether the input field has been changed.
+
+   
+
+      .. note::
+
+         This property is set to true when the user modifies the value of the input field.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. function:: krpc_error_t krpc_UI_InputField_Remove(krpc_connection_t connection)
+
+      Remove the UI object.

@@ -1,0 +1,55 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KerbalAlarmClock
+
+AlarmAction
+===========
+
+
+.. class:: AlarmAction
+
+   The action performed by an alarm when it fires.
+
+
+   .. data:: do_nothing
+
+      Don't do anything at all...
+
+
+   .. data:: do_nothing_delete_when_passed
+
+      Don't do anything, and delete the alarm.
+
+
+   .. data:: kill_warp
+
+      Drop out of time warp and display a message.
+
+
+   .. data:: kill_warp_only
+
+      Drop out of time warp, without displaying a message.
+
+
+   .. data:: message_only
+
+      Display a message, without affecting time warp.
+
+
+   .. data:: pause_game
+
+      Pause the game and display a message.
+
+
+   .. data:: custom
+
+      A combination of actions configured in the Kerbal Alarm Clock user
+      interface that does not correspond to any of the other values.
+      Setting an alarm's action to this value has no effect.
+
+
+   .. data:: converted
+
+      The alarm was converted from an older version of Kerbal Alarm Clock
+      and its action has not been set since.
+      Setting an alarm's action to this value has no effect.

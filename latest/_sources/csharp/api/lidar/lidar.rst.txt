@@ -1,0 +1,27 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.LiDAR
+
+LiDAR
+=====
+
+
+.. class:: LiDAR
+
+   LaserDist service.
+
+   .. property:: bool Available { get; }
+
+      Check if the LaserDist API is available.
+
+      :Game Scenes: All
+
+   .. method:: Laser Laser(SpaceCenter.Part part)
+
+      Get a LaserDist part.
+
+      :parameters:
+
+
+
+      :Game Scenes: All

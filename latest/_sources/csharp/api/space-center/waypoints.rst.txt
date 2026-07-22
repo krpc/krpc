@@ -1,0 +1,173 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Waypoints
+=========
+
+
+.. class:: WaypointManager
+
+   Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+   With this structure, you can obtain coordinate data for the locations of these waypoints.
+   Obtained by calling :prop:`SpaceCenter.WaypointManager <SpaceCenter.SpaceCenter.WaypointManager>`.
+
+   .. property:: System.Collections.Generic.IList<Waypoint> Waypoints { get; }
+
+      A list of all existing waypoints.
+
+      :Game Scenes: All
+
+   .. method:: Waypoint AddWaypoint(double latitude, double longitude, CelestialBody body, string name)
+
+      Creates a waypoint at the given position at ground level, and returns a
+      :type:`Waypoint` object that can be used to modify it.
+
+      :parameters:
+
+       * **latitude** -- Latitude of the waypoint.
+       * **longitude** -- Longitude of the waypoint.
+       * **body** -- Celestial body the waypoint is attached to.
+       * **name** -- Name of the waypoint.
+
+      :Game Scenes: All
+
+   .. method:: Waypoint AddWaypointAtAltitude(double latitude, double longitude, double altitude, CelestialBody body, string name)
+
+      Creates a waypoint at the given position and altitude, and returns a
+      :type:`Waypoint` object that can be used to modify it.
+
+      :parameters:
+
+       * **latitude** -- Latitude of the waypoint.
+       * **longitude** -- Longitude of the waypoint.
+       * **altitude** -- Altitude (above sea level) of the waypoint.
+       * **body** -- Celestial body the waypoint is attached to.
+       * **name** -- Name of the waypoint.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IDictionary<string,int> Colors { get; }
+
+      An example map of known color - seed pairs.
+      Any other integers may be used as seed.
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<string> Icons { get; }
+
+      Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+      :Game Scenes: All
+
+
+
+.. class:: Waypoint
+
+   Represents a waypoint. Can be created using :meth:`WaypointManager.AddWaypoint`.
+
+   .. property:: CelestialBody Body { get; set; }
+
+      The celestial body the waypoint is attached to.
+
+      :Game Scenes: Flight
+
+   .. property:: string Name { get; set; }
+
+      The name of the waypoint as it appears on the map and the contract.
+
+      :Game Scenes: Flight
+
+   .. property:: int Color { get; set; }
+
+      The seed of the icon color. See :prop:`WaypointManager.Colors` for example colors.
+
+      :Game Scenes: Flight
+
+   .. property:: string Icon { get; set; }
+
+      The icon of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. property:: double Latitude { get; set; }
+
+      The latitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. property:: double Longitude { get; set; }
+
+      The longitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. property:: double MeanAltitude { get; set; }
+
+      The altitude of the waypoint above sea level, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double SurfaceAltitude { get; set; }
+
+      The altitude of the waypoint above the surface of the body or sea level,
+      whichever is closer, in meters.
+
+      :Game Scenes: Flight
+
+   .. property:: double BedrockAltitude { get; set; }
+
+      The altitude of the waypoint above the surface of the body, in meters.
+      When over water, this is the altitude above the sea floor.
+
+      :Game Scenes: Flight
+
+   .. property:: bool NearSurface { get; }
+
+      ``true`` if the waypoint is near to the surface of a body.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Grounded { get; }
+
+      ``true`` if the waypoint is attached to the ground.
+
+      :Game Scenes: Flight
+
+   .. property:: int Index { get; }
+
+      The integer index of this waypoint within its cluster of sibling waypoints.
+      In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+      "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+      site has index 1 and the gamma site has index 2.
+      When :prop:`Waypoint.Clustered` is ``false``, this is zero.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Clustered { get; }
+
+      ``true`` if this waypoint is part of a set of clustered waypoints with greek letter
+      names appended (Alpha, Beta, Gamma, etc).
+      If ``true``, there is a one-to-one correspondence with the greek letter name and
+      the :prop:`Waypoint.Index`.
+
+      :Game Scenes: Flight
+
+   .. property:: bool HasContract { get; }
+
+      Whether the waypoint belongs to a contract.
+
+      :Game Scenes: Flight
+
+   .. property:: Contract Contract { get; }
+
+      The associated contract.
+
+      :Game Scenes: Flight
+
+   .. method:: void Remove()
+
+      Removes the waypoint.
+
+
+      :Game Scenes: Flight

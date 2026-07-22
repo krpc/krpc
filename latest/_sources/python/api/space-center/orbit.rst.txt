@@ -1,0 +1,432 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   Describes an orbit. For example, the orbit of a vessel, obtained by calling
+   :attr:`Vessel.orbit`, or a celestial body, obtained by calling
+   :attr:`CelestialBody.orbit`.
+
+   .. attribute:: body
+
+      The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CelestialBody`
+   
+
+   .. attribute:: apoapsis
+
+      Gets the apoapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         For the apoapsis altitude reported on the in-game map view,
+         use :attr:`Orbit.apoapsis_altitude`.
+
+   .. attribute:: periapsis
+
+      The periapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         For the periapsis altitude reported on the in-game map view,
+         use :attr:`Orbit.periapsis_altitude`.
+
+   .. attribute:: apoapsis_altitude
+
+      The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         This is equal to :attr:`Orbit.apoapsis` minus the equatorial radius of the body.
+
+   .. attribute:: periapsis_altitude
+
+      The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         This is equal to :attr:`Orbit.periapsis` minus the equatorial radius of the body.
+
+   .. attribute:: semi_major_axis
+
+      The semi-major axis of the orbit, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: semi_minor_axis
+
+      The semi-minor axis of the orbit, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: radius
+
+      The current radius of the orbit, in meters. This is the distance between the center
+      of mass of the object in orbit, and the center of mass of the body around which it
+      is orbiting.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. method:: radius_at(ut)
+
+      The orbital radius at the given time, in meters.
+
+      :param float ut: The universal time to measure the radius at.
+      :rtype: float
+   
+
+   .. method:: position_at(ut, reference_frame)
+
+      The position at a given time, in the specified reference frame.
+
+      :param float ut: The universal time to measure the position at.
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: speed
+
+      The current orbital speed of the object in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. attribute:: period
+
+      The orbital period, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_to_apoapsis
+
+      The time until the object reaches apoapsis, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_to_periapsis
+
+      The time until the object reaches periapsis, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: eccentricity
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: inclination
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit,
+      in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: longitude_of_ascending_node
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         For a near-equatorial orbit, the ascending node is ill-defined and
+         this value may vary erratically over time.
+
+   .. attribute:: argument_of_periapsis
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+      .. note::
+
+         For a near-circular orbit, the periapsis is ill-defined and
+         this value may vary erratically over time.
+
+   .. attribute:: mean_anomaly_at_epoch
+
+      The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: epoch
+
+      The time since the epoch (the point at which the
+      `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+      was measured, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: mean_anomaly
+
+      The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: mean_anomaly_at_ut(ut)
+
+      The mean anomaly at the given time.
+
+      :param float ut: The universal time in seconds.
+      :rtype: float
+   
+
+   .. attribute:: eccentric_anomaly
+
+      The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: eccentric_anomaly_at_ut(ut)
+
+      The eccentric anomaly at the given universal time.
+
+      :param float ut: The universal time, in seconds.
+      :rtype: float
+   
+
+   .. attribute:: true_anomaly
+
+      The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: true_anomaly_at_ut(ut)
+
+      The true anomaly at the given time.
+
+      :param float ut: The universal time in seconds.
+      :rtype: float
+   
+
+   .. method:: true_anomaly_at_radius(radius)
+
+      The true anomaly at the given orbital radius.
+
+      :param float radius: The orbital radius in meters.
+      :rtype: float
+   
+
+   .. method:: ut_at_true_anomaly(true_anomaly)
+
+      The universal time, in seconds, corresponding to the given true anomaly.
+
+      :param float true_anomaly: True anomaly.
+      :rtype: float
+   
+
+   .. method:: radius_at_true_anomaly(true_anomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :param float true_anomaly: The true anomaly.
+      :rtype: float
+   
+
+   .. method:: true_anomaly_at_an(target)
+
+      The true anomaly of the ascending node with the given target orbit.
+
+      :param Orbit target: Target orbit.
+      :rtype: float
+   
+
+   .. method:: true_anomaly_at_dn(target)
+
+      The true anomaly of the descending node with the given target orbit.
+
+      :param Orbit target: Target orbit.
+      :rtype: float
+   
+
+   .. attribute:: orbital_speed
+
+      The current orbital speed in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: orbital_speed_at(time)
+
+      The orbital speed at the given time, in meters per second.
+
+      :param float time: Time from now, in seconds.
+      :rtype: float
+   
+
+   .. attribute:: orbital_energy
+
+      The specific orbital energy of the orbit, in Joules per kilogram
+      (equivalently, meters squared per second squared). This is the sum
+      of the orbit's specific kinetic and potential energy, and is
+      negative for a bound (elliptical) orbit.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. staticmethod:: reference_plane_normal(reference_frame)
+
+      The direction that is normal to the orbits reference plane,
+      in the given reference frame.
+      The reference plane is the plane from which the orbits inclination is measured.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. staticmethod:: reference_plane_direction(reference_frame)
+
+      The direction from which the orbits longitude of ascending node is measured,
+      in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: relative_inclination(target)
+
+      Relative inclination of this orbit and the target orbit, in radians.
+
+      :param Orbit target: Target orbit.
+      :rtype: float
+   
+
+   .. attribute:: time_to_soi_change
+
+      The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+      if the object is not going to change sphere of influence.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: next_orbit
+
+      If the object is going to change sphere of influence in the future, returns the new
+      orbit after the change. Otherwise returns ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Orbit`
+   
+
+   .. method:: next_closest_approach(target)
+
+      The next closest approach to a target orbit.
+
+      :param Orbit target: Target orbit.
+      :rtype: :class:`ClosestApproach`
+   
+
+   .. method:: closest_approaches(target, orbits)
+
+      A list of the closest approaches to a target orbit, one for each of the next
+      *orbits* orbital periods.
+
+      :param Orbit target: Target orbit.
+      :param int orbits: The number of future orbits to search.
+      :rtype: list(:class:`ClosestApproach`)
+   
+
+   .. method:: time_of_closest_approach(target)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.next_closest_approach` and read :attr:`ClosestApproach.ut` instead.
+
+      Estimates and returns the time at closest approach to a target orbit.
+
+      :param Orbit target: Target orbit.
+      :returns: The universal time at closest approach, in seconds.
+      :rtype: float
+   
+
+   .. method:: distance_at_closest_approach(target)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.next_closest_approach` and read :attr:`ClosestApproach.distance` instead.
+
+      Estimates and returns the distance at closest approach to a target orbit, in meters.
+
+      :param Orbit target: Target orbit.
+      :rtype: float
+   
+
+   .. method:: list_closest_approaches(target, orbits)
+
+      .. warning:: Deprecated. Use :meth:`Orbit.closest_approaches` instead.
+
+      Returns the times at closest approach and corresponding distances, to a target orbit.
+
+      :param Orbit target: Target orbit.
+      :param int orbits: The number of future orbits to search.
+      :returns: A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.
+      :rtype: list(list(float))

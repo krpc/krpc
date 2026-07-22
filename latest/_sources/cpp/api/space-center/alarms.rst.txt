@@ -1,0 +1,377 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :func:`alarm_manager`.
+
+   .. function:: std::vector<Alarm> alarms()
+
+      A list of all alarms.
+
+   
+
+   .. function:: std::vector<Alarm> alarms_with_type(AlarmType type)
+
+      A list of all alarms of the given type.
+
+      :Parameters:
+
+       * **type** -- The type of alarm to return.
+
+   
+
+   .. function:: Alarm alarm_with_name(std::string name)
+
+      Returns the first alarm with the given title, or ``NULL`` if no such
+      alarm exists. Alarm titles are not guaranteed to be unique; if more than
+      one alarm shares the given title, the first one found is returned.
+
+      :Parameters:
+
+       * **name** -- The title of the alarm to return.
+
+   
+
+   .. function:: static Alarm add_alarm(Client& connection, double time, std::string title = "Alarm", std::string description = "")
+
+      Create an alarm.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_vessel_alarm(Client& connection, double time, Vessel vessel, std::string title = "Vessel Alarm", std::string description = "")
+
+      Create an alarm linked to a vessel.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **vessel** -- Vessel to link the alarm to.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_apoapsis_alarm(Client& connection, Vessel vessel, double offset = 60.0, std::string title = "Apoapsis Alarm", std::string description = "")
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_periapsis_alarm(Client& connection, Vessel vessel, double offset = 60.0, std::string title = "Periapsis Alarm", std::string description = "")
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_maneuver_node_alarm(Client& connection, Vessel vessel, Node node, double offset = 60.0, bool add_burn_time = true, std::string title = "Maneuver Node Alarm", std::string description = "")
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **node** -- The maneuver node.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **add_burn_time** -- Whether the node's burn time should be included in the alarm.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_soi_alarm(Client& connection, Vessel vessel, double offset = 60.0, std::string title = "SOI Change Alarm", std::string description = "")
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: static Alarm add_transfer_window_alarm(Client& connection, Vessel vessel, CelestialBody target, std::string title = "Transfer Window Alarm", std::string description = "")
+
+      Create an alarm for the next planetary transfer window from the vessel's
+      current parent body to the target body.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **target** -- The target body.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+      .. note::
+
+         This relies on KSP's stock transfer-window alarm logic. If KSP cannot
+         compute a transfer from the vessel's current parent body to the target,
+         the resulting alarm may not fire at a useful time; in that case the
+         properties on the returned alarm can still be used to inspect or adjust it.
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :func:`alarm_manager`.
+
+   .. function:: uint32_t id()
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+   
+
+   .. function:: AlarmType type()
+
+      Type of alarm.
+
+   
+
+   .. function:: std::string title()
+   .. function:: void set_title(std::string value)
+
+      Title of the alarm.
+
+   
+
+   .. function:: std::string description()
+   .. function:: void set_description(std::string value)
+
+      Description of the alarm.
+
+   
+
+   .. function:: double time()
+   .. function:: void set_time(double value)
+
+      Time the alarm will trigger, in seconds since epoch.
+
+   
+
+   .. function:: double time_until()
+
+      Time until the alarm triggers, in seconds.
+
+   
+
+   .. function:: double event_offset()
+   .. function:: void set_event_offset(double value)
+
+      Seconds between the alarm going off and the event it references.
+
+   
+
+   .. function:: Vessel vessel()
+
+      Vessel the alarm references. ``NULL`` if it does not reference a vessel.
+
+   
+
+   .. function:: Node node()
+   .. function:: void set_node(Node value)
+
+      Maneuver node the alarm references. Only valid for alarms of type
+      :enumerator:`AlarmType::maneuver`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :enumerator:`AlarmType::maneuver`.
+
+   .. function:: CelestialBody origin_body()
+   .. function:: void set_origin_body(CelestialBody value)
+
+      Origin body for the transfer window. Only valid for alarms of type
+      :enumerator:`AlarmType::transfer_window`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :enumerator:`AlarmType::transfer_window`.
+
+   .. function:: CelestialBody destination_body()
+   .. function:: void set_destination_body(CelestialBody value)
+
+      Destination body for the transfer window. Only valid for alarms of type
+      :enumerator:`AlarmType::transfer_window`.
+
+   
+
+      .. note::
+
+         Throws an exception if the alarm is not of
+         type :enumerator:`AlarmType::transfer_window`.
+
+   .. function:: AlarmWarpAction warp_action()
+   .. function:: void set_warp_action(AlarmWarpAction value)
+
+      The action taken on time warp when the alarm fires.
+
+   
+
+   .. function:: AlarmMessageAction message_action()
+   .. function:: void set_message_action(AlarmMessageAction value)
+
+      The on-screen message behavior when the alarm fires.
+
+   
+
+   .. function:: bool play_sound()
+   .. function:: void set_play_sound(bool value)
+
+      Whether the alarm plays a sound when it fires.
+
+   
+
+   .. function:: bool delete_on_dismiss()
+   .. function:: void set_delete_on_dismiss(bool value)
+
+      Whether the alarm is deleted automatically once the player has dismissed
+      the triggered message.
+
+   
+
+   .. function:: bool triggered()
+
+      Whether the time of the alarm has passed and its actions have been triggered.
+
+   
+
+   .. function:: bool actioned()
+
+      Whether the alarm's actions were triggered and then completed or closed.
+
+   
+
+   .. function:: void remove()
+
+      Removes the alarm.
+
+
+   
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: AlarmType
+
+   The type of an alarm. See :func:`Alarm::type`.
+
+
+   .. enumerator:: raw
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. enumerator:: apoapsis
+
+      An alarm for the next apoapsis of a vessel.
+
+
+   .. enumerator:: periapsis
+
+      An alarm for the next periapsis of a vessel.
+
+
+   .. enumerator:: maneuver
+
+      An alarm based on a maneuver node on the vessel's flight path.
+
+
+   .. enumerator:: soi_change
+
+      An alarm for the next sphere of influence change on the vessel's flight path.
+
+
+   .. enumerator:: transfer_window
+
+      An alarm for the next planetary transfer window from the vessel's current
+      orbit to a target body.
+
+
+   .. enumerator:: unknown
+
+      The alarm is of a type not recognized by kRPC. Typically this is a type
+      introduced by a mod.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: AlarmWarpAction
+
+   The warp action taken when an alarm fires.
+   See :func:`Alarm::warp_action`.
+
+
+   .. enumerator:: no_change
+
+      Do not change time warp when the alarm fires.
+
+
+   .. enumerator:: stop_warp
+
+      Drop out of time warp when the alarm fires.
+
+
+   .. enumerator:: pause_game
+
+      Pause the game when the alarm fires.
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: AlarmMessageAction
+
+   The on-screen message action taken when an alarm fires.
+   See :func:`Alarm::message_action`.
+
+
+   .. enumerator:: no_message
+
+      Do not display a message when the alarm fires.
+
+
+   .. enumerator:: message
+
+      Display a message when the alarm fires.
+
+
+   .. enumerator:: message_if_not_active_vessel
+
+      Display a message only if the alarm's vessel is not the currently active vessel.

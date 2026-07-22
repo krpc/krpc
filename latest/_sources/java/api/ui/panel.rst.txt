@@ -1,0 +1,60 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Panel
+=====
+
+
+.. type:: public class Panel
+
+   A container for user interface elements. See :meth:`Canvas.addPanel(boolean)`.
+
+   .. method:: RectTransform getRectTransform()
+
+
+      The rect transform for the panel.
+
+   
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. method:: Panel addPanel(boolean visible)
+
+      Create a panel within this panel.
+
+      :param boolean visible: Whether the new panel is visible.
+   
+
+   .. method:: Text addText(String content, boolean visible)
+
+      Add text to the panel.
+
+      :param String content: The text.
+      :param boolean visible: Whether the text is visible.
+   
+
+   .. method:: InputField addInputField(boolean visible)
+
+      Add an input field to the panel.
+
+      :param boolean visible: Whether the input field is visible.
+   
+
+   .. method:: Button addButton(String content, boolean visible)
+
+      Add a button to the panel.
+
+      :param String content: The label for the button.
+      :param boolean visible: Whether the button is visible.
+   
+
+   .. method:: void remove()
+
+      Remove the UI object.

@@ -1,0 +1,99 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+UI
+==
+
+
+Provides functionality for drawing and interacting with in-game user interface elements.
+
+.. note::
+
+   For drawing 3D objects in the flight scene, see the Drawing service.
+   User interface elements created by a client are removed when that client
+   disconnects.
+
+
+
+.. function:: krpc_error_t krpc_UI_StockCanvas(krpc_connection_t connection, krpc_UI_Canvas_t * result)
+
+   The stock UI canvas.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_UI_AddCanvas(krpc_connection_t connection, krpc_UI_Canvas_t * result)
+
+   Add a new canvas.
+
+
+   
+
+   .. note::
+
+      If you want to add UI elements to KSPs stock UI canvas, use :func:`krpc_UI_StockCanvas`.
+
+
+
+
+.. function:: krpc_error_t krpc_UI_Message(krpc_connection_t connection, const char * content, float duration, krpc_UI_MessagePosition_t position, const krpc_tuple_double_double_double_t * color, float size)
+
+   Display a message on the screen.
+
+   :Parameters:
+
+    * **content** -- Message content.
+    * **duration** -- Duration before the message disappears, in seconds.
+    * **position** -- Position to display the message.
+    * **color** -- The color of the message.
+    * **size** -- Size of the message, differs per position.
+
+   
+
+   .. note::
+
+      The message appears just like a stock message, for example quicksave or quickload messages.
+
+
+
+
+.. function:: krpc_error_t krpc_UI_Clear(krpc_connection_t connection, bool clientOnly)
+
+   Remove all user interface elements.
+
+   :Parameters:
+
+    * **clientOnly** -- If true, only remove objects created by the calling client.
+
+   
+
+
+
+
+
+.. type:: krpc_UI_MessagePosition_t
+
+   Message position.
+
+
+   .. macro:: KRPC_UI_MESSAGEPOSITION_TOPLEFT
+
+      Top left.
+
+
+   .. macro:: KRPC_UI_MESSAGEPOSITION_TOPCENTER
+
+      Top center.
+
+
+   .. macro:: KRPC_UI_MESSAGEPOSITION_TOPRIGHT
+
+      Top right.
+
+
+   .. macro:: KRPC_UI_MESSAGEPOSITION_BOTTOMCENTER
+
+      Bottom center.

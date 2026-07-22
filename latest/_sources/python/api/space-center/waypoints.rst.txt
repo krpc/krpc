@@ -1,0 +1,204 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Waypoints
+=========
+
+
+.. class:: WaypointManager
+
+   Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+   With this structure, you can obtain coordinate data for the locations of these waypoints.
+   Obtained by calling :attr:`waypoint_manager`.
+
+   .. attribute:: waypoints
+
+      A list of all existing waypoints.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Waypoint`)
+   
+
+   .. method:: add_waypoint(latitude, longitude, body, name)
+
+      Creates a waypoint at the given position at ground level, and returns a
+      :class:`Waypoint` object that can be used to modify it.
+
+      :param float latitude: Latitude of the waypoint.
+      :param float longitude: Longitude of the waypoint.
+      :param CelestialBody body: Celestial body the waypoint is attached to.
+      :param str name: Name of the waypoint.
+      :rtype: :class:`Waypoint`
+   
+
+   .. method:: add_waypoint_at_altitude(latitude, longitude, altitude, body, name)
+
+      Creates a waypoint at the given position and altitude, and returns a
+      :class:`Waypoint` object that can be used to modify it.
+
+      :param float latitude: Latitude of the waypoint.
+      :param float longitude: Longitude of the waypoint.
+      :param float altitude: Altitude (above sea level) of the waypoint.
+      :param CelestialBody body: Celestial body the waypoint is attached to.
+      :param str name: Name of the waypoint.
+      :rtype: :class:`Waypoint`
+   
+
+   .. attribute:: colors
+
+      An example map of known color - seed pairs.
+      Any other integers may be used as seed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, int)
+   
+
+   .. attribute:: icons
+
+      Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+
+
+.. class:: Waypoint
+
+   Represents a waypoint. Can be created using :meth:`WaypointManager.add_waypoint`.
+
+   .. attribute:: body
+
+      The celestial body the waypoint is attached to.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`CelestialBody`
+      :Game Scenes: Flight
+
+   .. attribute:: name
+
+      The name of the waypoint as it appears on the map and the contract.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: color
+
+      The seed of the icon color. See :attr:`WaypointManager.colors` for example colors.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: icon
+
+      The icon of the waypoint.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: latitude
+
+      The latitude of the waypoint.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: longitude
+
+      The longitude of the waypoint.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: mean_altitude
+
+      The altitude of the waypoint above sea level, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: surface_altitude
+
+      The altitude of the waypoint above the surface of the body or sea level,
+      whichever is closer, in meters.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: bedrock_altitude
+
+      The altitude of the waypoint above the surface of the body, in meters.
+      When over water, this is the altitude above the sea floor.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: near_surface
+
+      ``True`` if the waypoint is near to the surface of a body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: grounded
+
+      ``True`` if the waypoint is attached to the ground.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: index
+
+      The integer index of this waypoint within its cluster of sibling waypoints.
+      In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+      "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+      site has index 1 and the gamma site has index 2.
+      When :attr:`Waypoint.clustered` is ``False``, this is zero.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: clustered
+
+      ``True`` if this waypoint is part of a set of clustered waypoints with greek letter
+      names appended (Alpha, Beta, Gamma, etc).
+      If ``True``, there is a one-to-one correspondence with the greek letter name and
+      the :attr:`Waypoint.index`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: has_contract
+
+      Whether the waypoint belongs to a contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. attribute:: contract
+
+      The associated contract.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Contract`
+      :Game Scenes: Flight
+
+   .. method:: remove()
+
+      Removes the waypoint.
+
+      :Game Scenes: Flight

@@ -1,0 +1,164 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.KerbalAlarmClock
+
+Alarm
+=====
+
+
+.. type:: public class Alarm
+
+   Represents an alarm. Obtained by calling
+   :meth:`getAlarms()`,
+   :meth:`alarmWithName(String)` or
+   :meth:`alarmsWithType(AlarmType)`.
+
+   .. method:: AlarmAction getAction()
+
+   .. method:: void setAction(AlarmAction value)
+
+      The action that the alarm triggers.
+
+   
+
+   .. method:: double getMargin()
+
+   .. method:: void setMargin(double value)
+
+      The number of seconds before the event that the alarm will fire.
+
+   
+
+   .. method:: double getTime()
+
+   .. method:: void setTime(double value)
+
+      The time at which the alarm will fire.
+
+   
+
+   .. method:: AlarmType getType()
+
+
+      The type of the alarm.
+
+   
+
+   .. method:: String getID()
+
+
+      The unique identifier for the alarm.
+
+   
+
+   .. method:: String getName()
+
+   .. method:: void setName(String value)
+
+      The short name of the alarm.
+
+   
+
+   .. method:: String getNotes()
+
+   .. method:: void setNotes(String value)
+
+      The long description of the alarm.
+
+   
+
+   .. method:: double getRemaining()
+
+
+      The number of seconds until the alarm will fire.
+
+   
+
+   .. method:: boolean getEnabled()
+
+   .. method:: void setEnabled(boolean value)
+
+      Whether the alarm is enabled. A disabled alarm does not fire.
+
+   
+
+   .. method:: boolean getPlaySound()
+
+   .. method:: void setPlaySound(boolean value)
+
+      Whether the alarm plays a sound when it fires.
+
+   
+
+   .. method:: boolean getTriggered()
+
+
+      Whether the alarm has fired. Remains true once the alarm has fired;
+      stream this or use it in an event expression to react to the alarm
+      firing.
+
+   
+
+   .. method:: boolean getRepeat()
+
+   .. method:: void setRepeat(boolean value)
+
+      Whether the alarm will be repeated after it has fired.
+      Only has an effect for alarm types that support repeating
+      (see :meth:`Alarm.getSupportsRepeat()`).
+
+   
+
+   .. method:: boolean getSupportsRepeat()
+
+
+      Whether this alarm's type supports repeating
+      (see :meth:`Alarm.getRepeat()`).
+
+   
+
+   .. method:: double getRepeatPeriod()
+
+   .. method:: void setRepeatPeriod(double value)
+
+      The time delay to automatically create an alarm after it has fired.
+      Only has an effect for alarm types that support a repeat period
+      (see :meth:`Alarm.getSupportsRepeatPeriod()`).
+
+   
+
+   .. method:: boolean getSupportsRepeatPeriod()
+
+
+      Whether this alarm's type supports a repeat period
+      (see :meth:`Alarm.getRepeatPeriod()`).
+
+   
+
+   .. method:: SpaceCenter.Vessel getVessel()
+
+   .. method:: void setVessel(SpaceCenter.Vessel value)
+
+      The vessel that the alarm is attached to.
+
+   
+
+   .. method:: SpaceCenter.CelestialBody getXferOriginBody()
+
+   .. method:: void setXferOriginBody(SpaceCenter.CelestialBody value)
+
+      The celestial body the vessel is departing from.
+
+   
+
+   .. method:: SpaceCenter.CelestialBody getXferTargetBody()
+
+   .. method:: void setXferTargetBody(SpaceCenter.CelestialBody value)
+
+      The celestial body the vessel is arriving at.
+
+   
+
+   .. method:: void remove()
+
+      Removes the alarm. Any further use of this object throws an exception.

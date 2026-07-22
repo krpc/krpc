@@ -1,0 +1,449 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: KRPC
+
+Expressions
+===========
+
+
+.. class:: Expression
+
+   A server side expression.
+
+   .. staticmethod:: constant_double(value)
+
+      A constant value of double precision floating point type.
+
+      :param number value:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: constant_float(value)
+
+      A constant value of single precision floating point type.
+
+      :param number value:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: constant_int(value)
+
+      A constant value of integer type.
+
+      :param number value:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: constant_bool(value)
+
+      A constant value of boolean type.
+
+      :param boolean value:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: constant_string(value)
+
+      A constant value of string type.
+
+      :param string value:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: call(call)
+
+      An RPC call.
+
+      :param krpc.schema.KRPC.ProcedureCall call:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: equal(arg0, arg1)
+
+      Equality comparison.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: not_equal(arg0, arg1)
+
+      Inequality comparison.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: greater_than(arg0, arg1)
+
+      Greater than numerical comparison.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: greater_than_or_equal(arg0, arg1)
+
+      Greater than or equal numerical comparison.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: less_than(arg0, arg1)
+
+      Less than numerical comparison.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: less_than_or_equal(arg0, arg1)
+
+      Less than or equal numerical comparison.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: and(arg0, arg1)
+
+      Boolean and operator.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: or(arg0, arg1)
+
+      Boolean or operator.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: exclusive_or(arg0, arg1)
+
+      Boolean exclusive-or operator.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: not(arg)
+
+      Boolean negation operator.
+
+      :param KRPC.Expression arg:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: add(arg0, arg1)
+
+      Numerical addition.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: subtract(arg0, arg1)
+
+      Numerical subtraction.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: multiply(arg0, arg1)
+
+      Numerical multiplication.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: divide(arg0, arg1)
+
+      Numerical division.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: modulo(arg0, arg1)
+
+      Numerical modulo operator.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :returns: The remainder of arg0 divided by arg1
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: power(arg0, arg1)
+
+      Numerical power operator.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :returns: arg0 raised to the power of arg1, with type of arg0
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: left_shift(arg0, arg1)
+
+      Bitwise left shift.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: right_shift(arg0, arg1)
+
+      Bitwise right shift.
+
+      :param KRPC.Expression arg0:
+      :param KRPC.Expression arg1:
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: cast(arg, type)
+
+      Perform a cast to the given type.
+
+      :param KRPC.Expression arg:
+      :param KRPC.Type type: Type to cast the argument to.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: parameter(name, type)
+
+      A named parameter of type double.
+
+      :param string name: The name of the parameter.
+      :param KRPC.Type type: The type of the parameter.
+      :returns: A named parameter.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: function(parameters, body)
+
+      A function.
+
+      :param List parameters: The parameters of the function.
+      :param KRPC.Expression body: The body of the function.
+      :returns: A function.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: invoke(function, args)
+
+      A function call.
+
+      :param KRPC.Expression function: The function to call.
+      :param Map args: The arguments to call the function with.
+      :returns: A function call.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: create_tuple(elements)
+
+      Construct a tuple.
+
+      :param List elements: The elements.
+      :returns: The tuple.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: create_list(values)
+
+      Construct a list.
+
+      :param List values: The value. Should all be of the same type.
+      :returns: The list.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: create_set(values)
+
+      Construct a set.
+
+      :param Set values: The values. Should all be of the same type.
+      :returns: The set.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: create_dictionary(keys, values)
+
+      Construct a dictionary, from a list of corresponding keys and values.
+
+      :param List keys: The keys. Should all be of the same type.
+      :param List values: The values. Should all be of the same type.
+      :returns: The dictionary.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: to_list(arg)
+
+      Convert a collection to a list.
+
+      :param KRPC.Expression arg: The collection.
+      :returns: The collection as a list.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: to_set(arg)
+
+      Convert a collection to a set.
+
+      :param KRPC.Expression arg: The collection.
+      :returns: The collection as a set.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: get(arg, index)
+
+      Access an element in a tuple, list or dictionary.
+
+      :param KRPC.Expression arg: The tuple, list or dictionary.
+      :param KRPC.Expression index: The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+      :returns: The element.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: count(arg)
+
+      Number of elements in a collection.
+
+      :param KRPC.Expression arg: The list, set or dictionary.
+      :returns: The number of elements in the collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: sum(arg)
+
+      Sum all elements of a collection.
+
+      :param KRPC.Expression arg: The list or set.
+      :returns: The sum of the elements in the collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: max(arg)
+
+      Maximum of all elements in a collection.
+
+      :param KRPC.Expression arg: The list or set.
+      :returns: The maximum elements in the collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: min(arg)
+
+      Minimum of all elements in a collection.
+
+      :param KRPC.Expression arg: The list or set.
+      :returns: The minimum elements in the collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: average(arg)
+
+      Minimum of all elements in a collection.
+
+      :param KRPC.Expression arg: The list or set.
+      :returns: The minimum elements in the collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: select(arg, func)
+
+      Run a function on every element in the collection.
+
+      :param KRPC.Expression arg: The list or set.
+      :param KRPC.Expression func: The function.
+      :returns: The modified collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: where(arg, func)
+
+      Run a function on every element in the collection.
+
+      :param KRPC.Expression arg: The list or set.
+      :param KRPC.Expression func: The function.
+      :returns: The modified collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: contains(arg, value)
+
+      Determine if a collection contains a value.
+
+      :param KRPC.Expression arg: The collection.
+      :param KRPC.Expression value: The value to look for.
+      :returns: Whether the collection contains a value.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: aggregate(arg, func)
+
+      Applies an accumulator function over a sequence.
+
+      :param KRPC.Expression arg: The collection.
+      :param KRPC.Expression func: The accumulator function.
+      :returns: The accumulated value.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: aggregate_with_seed(arg, seed, func)
+
+      Applies an accumulator function over a sequence, with a given seed.
+
+      :param KRPC.Expression arg: The collection.
+      :param KRPC.Expression seed: The seed value.
+      :param KRPC.Expression func: The accumulator function.
+      :returns: The accumulated value.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: concat(arg1, arg2)
+
+      Concatenate two sequences.
+
+      :param KRPC.Expression arg1: The first sequence.
+      :param KRPC.Expression arg2: The second sequence.
+      :returns: The first sequence followed by the second sequence.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: order_by(arg, key)
+
+      Order a collection using a key function.
+
+      :param KRPC.Expression arg: The collection to order.
+      :param KRPC.Expression key: A function that takes a value from the collection and generates a key to sort on.
+      :returns: The ordered collection.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: all(arg, predicate)
+
+      Determine whether all items in a collection satisfy a boolean predicate.
+
+      :param KRPC.Expression arg: The collection.
+      :param KRPC.Expression predicate: The predicate function.
+      :returns: Whether all items satisfy the predicate.
+      :rtype: :class:`KRPC.Expression`
+
+   .. staticmethod:: any(arg, predicate)
+
+      Determine whether any item in a collection satisfies a boolean predicate.
+
+      :param KRPC.Expression arg: The collection.
+      :param KRPC.Expression predicate: The predicate function.
+      :returns: Whether any item satisfies the predicate.
+      :rtype: :class:`KRPC.Expression`
+
+
+
+.. class:: Type
+
+   A server side expression.
+
+   .. staticmethod:: double()
+
+      Double type.
+
+      :rtype: :class:`KRPC.Type`
+
+   .. staticmethod:: float()
+
+      Float type.
+
+      :rtype: :class:`KRPC.Type`
+
+   .. staticmethod:: int()
+
+      Int type.
+
+      :rtype: :class:`KRPC.Type`
+
+   .. staticmethod:: bool()
+
+      Bool type.
+
+      :rtype: :class:`KRPC.Type`
+
+   .. staticmethod:: string()
+
+      String type.
+
+      :rtype: :class:`KRPC.Type`

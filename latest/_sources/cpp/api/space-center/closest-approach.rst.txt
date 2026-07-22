@@ -1,0 +1,138 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Closest Approach
+================
+
+
+.. class:: ClosestApproach
+
+   A close approach between an orbit and a target orbit. Obtained by calling
+   :func:`Orbit::next_closest_approach` or :func:`Orbit::closest_approaches`.
+
+   .. note::
+
+      A close approach is a snapshot: the time of closest approach is estimated once
+      when the object is created, and every member describes the state at that time.
+      Relative quantities are the target relative to the orbiting object (target minus
+      self).
+
+   .. function:: double ut()
+
+      The universal time of the closest approach, in seconds.
+
+   
+
+   .. function:: double time_to()
+
+      The time until the closest approach, in seconds.
+
+   
+
+   .. function:: double distance()
+
+      The distance between the objects at the closest approach, in meters.
+
+   
+
+   .. function:: double relative_speed()
+
+      The relative speed of the objects at the closest approach, in meters per
+      second. This is the magnitude of :func:`ClosestApproach::relative_velocity`, and does
+      not depend on the choice of reference frame.
+
+   
+
+   .. function:: Vessel vessel()
+
+      The vessel doing the approaching, or ``NULL`` if it is not a vessel.
+
+   
+
+   .. function:: CelestialBody body()
+
+      The celestial body doing the approaching, or ``NULL`` if it is not a
+      celestial body.
+
+   
+
+   .. function:: Vessel target_vessel()
+
+      The vessel being approached, or ``NULL`` if the target is not a vessel.
+
+   
+
+   .. function:: CelestialBody target_body()
+
+      The celestial body being approached, or ``NULL`` if the target is not a
+      celestial body.
+
+   
+
+   .. function:: std::tuple<double, double, double> position(ReferenceFrame reference_frame = ReferenceFrame())
+
+      The position of the orbiting object at the closest approach.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> target_position(ReferenceFrame reference_frame = ReferenceFrame())
+
+      The position of the target object at the closest approach.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned position vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> velocity(ReferenceFrame reference_frame = ReferenceFrame())
+
+      The velocity of the orbiting object at the closest approach.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The velocity as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> target_velocity(ReferenceFrame reference_frame = ReferenceFrame())
+
+      The velocity of the target object at the closest approach.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame that the returned velocity vector is in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The velocity as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> relative_position(ReferenceFrame reference_frame = ReferenceFrame())
+
+      The position of the target relative to the orbiting object at the closest
+      approach.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The relative position as a vector.
+   
+
+   .. function:: std::tuple<double, double, double> relative_velocity(ReferenceFrame reference_frame = ReferenceFrame())
+
+      The velocity of the target relative to the orbiting object at the closest
+      approach.
+
+      :Parameters:
+
+       * **reference_frame** -- The reference frame whose axes the returned vector is expressed in. Defaults to the orbital reference frame of the object the orbit belongs to.
+
+      :returns: The relative velocity as a vector.

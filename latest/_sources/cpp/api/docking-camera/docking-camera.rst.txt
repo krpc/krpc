@@ -1,0 +1,28 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::DockingCamera
+
+DockingCamera
+=============
+
+
+.. namespace:: krpc::services
+.. class:: DockingCamera : public krpc::Service
+
+   Camera service.
+
+   .. function:: DockingCamera(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Check if the Camera API is available.
+
+   
+
+   .. function:: Camera camera(SpaceCenter::Part part)
+
+      Get a Camera part.
+
+      :Parameters:

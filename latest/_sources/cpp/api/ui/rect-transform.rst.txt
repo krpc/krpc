@@ -1,0 +1,86 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Rect Transform
+==============
+
+
+.. class:: RectTransform
+
+   A Unity engine Rect Transform for a UI object.
+   See the `Unity manual <https://docs.unity3d.com/Manual/class-RectTransform.html>`_ for more details.
+
+   .. function:: std::tuple<double, double> position()
+   .. function:: void set_position(std::tuple<double, double> value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+   
+
+   .. function:: std::tuple<double, double, double> local_position()
+   .. function:: void set_local_position(std::tuple<double, double, double> value)
+
+      Position of the rectangles pivot point relative to the anchors.
+
+   
+
+   .. function:: std::tuple<double, double> size()
+   .. function:: void set_size(std::tuple<double, double> value)
+
+      Width and height of the rectangle.
+
+   
+
+   .. function:: std::tuple<double, double> upper_right()
+   .. function:: void set_upper_right(std::tuple<double, double> value)
+
+      Position of the rectangles upper right corner relative to the anchors.
+
+   
+
+   .. function:: std::tuple<double, double> lower_left()
+   .. function:: void set_lower_left(std::tuple<double, double> value)
+
+      Position of the rectangles lower left corner relative to the anchors.
+
+   
+
+   .. function:: void set_anchor(std::tuple<double, double> value)
+
+      Set the minimum and maximum anchor points as a fraction of the size of the parent rectangle.
+
+   
+
+   .. function:: std::tuple<double, double> anchor_max()
+   .. function:: void set_anchor_max(std::tuple<double, double> value)
+
+      The anchor point for the lower left corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+   
+
+   .. function:: std::tuple<double, double> anchor_min()
+   .. function:: void set_anchor_min(std::tuple<double, double> value)
+
+      The anchor point for the upper right corner of the rectangle defined as a fraction of the size of the parent rectangle.
+
+   
+
+   .. function:: std::tuple<double, double> pivot()
+   .. function:: void set_pivot(std::tuple<double, double> value)
+
+      Location of the pivot point around which the rectangle rotates, defined as a fraction of the size of the rectangle itself.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> rotation()
+   .. function:: void set_rotation(std::tuple<double, double, double, double> value)
+
+      Rotation, as a quaternion, of the object around its pivot point.
+
+   
+
+   .. function:: std::tuple<double, double, double> scale()
+   .. function:: void set_scale(std::tuple<double, double, double> value)
+
+      Scale factor applied to the object in the x, y and z dimensions.

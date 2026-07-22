@@ -1,0 +1,189 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+Camera
+======
+
+
+.. class:: Camera
+
+   Controls the game's camera.
+   Obtained by calling :func:`camera`.
+
+   .. function:: CameraMode mode()
+   .. function:: void set_mode(CameraMode value)
+
+      The current mode of the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: float pitch()
+   .. function:: void set_pitch(float value)
+
+      The pitch of the camera, in degrees.
+      A value between :func:`Camera::min_pitch` and :func:`Camera::max_pitch`
+
+      :Game Scenes: Flight
+
+   .. function:: float heading()
+   .. function:: void set_heading(float value)
+
+      The heading of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: float distance()
+   .. function:: void set_distance(float value)
+
+      The distance from the camera to the subject, in meters.
+      A value between :func:`Camera::min_distance` and :func:`Camera::max_distance`.
+
+      :Game Scenes: Flight
+
+   .. function:: float fo_v()
+   .. function:: void set_fo_v(float value)
+
+      The Field of View of the camera, in degrees.
+      A value between :func:`Camera::min_fo_v` and :func:`Camera::max_fo_v`.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_pitch()
+
+      The minimum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_pitch()
+
+      The maximum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_distance()
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_distance()
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: float min_fo_v()
+
+      The minimum field of view the camera in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: float max_fo_v()
+
+      The maximum field of view the camera in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: float default_distance()
+
+      Default distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: float default_fo_v()
+
+      The default field of view the camera in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: CelestialBody focussed_body()
+   .. function:: void set_focussed_body(CelestialBody value)
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``NULL`` if the camera is not focussed on a celestial body.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. function:: Vessel focussed_vessel()
+   .. function:: void set_focussed_vessel(Vessel value)
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``NULL`` if the camera is not focussed on a vessel.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. function:: Node focussed_node()
+   .. function:: void set_focussed_node(Node value)
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``NULL`` if the camera is not focussed on a maneuver node.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. function:: CrewMember focussed_crew_member()
+   .. function:: void set_focussed_crew_member(CrewMember value)
+
+      When the internal camera is active the kerbal that is in focus
+      Returns an error if the camera is not in IVA mode.
+
+      :Game Scenes: Flight
+
+   .. function:: void next_camera()
+
+      Switch to the next available camera
+
+
+      :Game Scenes: Flight
+
+   .. function:: void previous_camera()
+
+      Switch to the previous available camera
+
+
+      :Game Scenes: Flight
+
+
+
+.. namespace:: krpc::services::SpaceCenter
+.. enum-struct:: CameraMode
+
+   See :func:`Camera::mode`.
+
+
+   .. enumerator:: automatic
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. enumerator:: free
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. enumerator:: chase
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. enumerator:: locked
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. enumerator:: orbital
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. enumerator:: iva
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. enumerator:: map
+
+      The map view is being shown.
