@@ -1,15 +1,12 @@
 ## [0.6.0] - unreleased
-- Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`)
+- Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`) (#848)
 - Fix Logger to write to both `KSP.log` and `Player.log` (#780)
 - Improve RPC and stream update performance (#879)
 - Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (#879)
-- Improve the server window UI
-- Fix incorrect unit shown for "max. time per update" and "receive timeout" - they are microseconds, not nanoseconds
-- Add shared component for releasing client-owned in-game state when a client disconnects,
-  used by the services; connectivity checks are cached so all state shares one socket poll
-  per client per frame
-- Support switching the game scene by setting `KRPC.GameScene`, including opening and closing space center facilities (#897)
-- Fix repeated toolbar icons appearing in some situations
+- Improve the server window UI (#919)
+- Fix incorrect unit shown for "max. time per update" and "receive timeout" (#919)
+- Support switching the game scene by setting `KRPC.GameScene` (#897)
+- Fix repeated toolbar icons appearing in some situations (#939)
 
 ## [0.5.4]
 - Fix memory leaks when switching game scene (#779)

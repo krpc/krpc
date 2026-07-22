@@ -1,26 +1,22 @@
 ## [0.6.0] - unreleased
-- Distribute via vcpkg
-- Drop autotools build; CMake is now the only supported build system
-- Modernize CMake build: require CMake 3.15+, target-based usage requirements (#834)
-- nanopb is now an external dependency (fetched via `FetchContent` or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb
-- Pre-generated protocol buffer code and `krpc.proto` are bundled in the release archive; set `KRPC_REGENERATE_PROTO=ON` to regenerate the code from `krpc.proto` using the nanopb generator
-- Add CMake package config so consumers can use `find_package(krpc_cnano CONFIG REQUIRED)`
-- CMake dependency options (`KRPC_FETCH_PROTOBUF`, `KRPC_FETCH_NANOPB`): when OFF
-  (default) the system install is required; when ON `FetchContent` is used.
-- Add `KRPC_FETCH_DEPS` option to enable `FetchContent` for all dependencies at once
-- Add support for serial port communication on Windows
+- Distribute via vcpkg (#874)
+- **Breaking:** Drop autotools build; CMake is now the only supported build system (#870)
+- **Breaking:** Modernize CMake build: require CMake 3.15+, target-based usage requirements (#834)
+- **Breaking:** nanopb is now an external dependency (fetched via `FetchContent` or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb (#870)
+- **Breaking:** Pre-generated protocol buffer code and `krpc.proto` are bundled in the release archive; set `KRPC_REGENERATE_PROTO=ON` to regenerate the code from `krpc.proto` using the nanopb generator (#872)
+- Add CMake package config so consumers can use `find_package(krpc_cnano CONFIG REQUIRED)` (#870)
+- CMake dependency options (`KRPC_FETCH_DEPS`, `KRPC_FETCH_PROTOBUF`, `KRPC_FETCH_NANOPB`): when OFF
+  (default) the system install is required; when ON `FetchContent` is used. (#870)
+- Add support for serial port communication on Windows (#872)
 - Mark deprecated functions with the `KRPC_DEPRECATED` attribute macro (#904)
 - Generated functions are now defined as static inline, so the generated
-  service headers can be safely included from multiple translation units
+  service headers can be safely included from multiple translation units (#948)
 - **Breaking:** On Arduino, a read now fails with `KRPC_ERROR_EOF` when the serial timeout
-  elapses without a single byte being received, instead of retrying forever and hanging the
-  sketch when the server goes away. The timeout applies to each byte, so a slow but
-  progressing reply is unaffected; use `Serial.setTimeout` to control how long to wait
-- Add the `KRPC_ERROR_MESSAGES` option, which captures the message describing an error returned
-  by the server so that it can be read using `krpc_get_error_message`. Without it every server
-  error is indistinguishable, as they all return `KRPC_ERROR_RPC_FAILED`
+  elapses instead of retrying forever (#1002)
+- Add `KRPC_ERROR_MESSAGES` option, which captures the message describing an error returned
+  by the server so that it can be read using `krpc_get_error_message`. (#1002)
 - Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than
-  were asked for
+  were asked for (#1002)
 
 ## [0.5.2]
 - The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.

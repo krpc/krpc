@@ -1,24 +1,15 @@
 ## [0.6.0] - unreleased
-- Requires Python 3.10+
+- **Breaking:** Requires Python 3.10+ (#837)
+- Update to protobuf v7.35.1 (#850)
 - Allow calling static class methods from a class instance (#832)
-- Update to protobuf v7.35.1
 - Emit a `DeprecationWarning` when calling a deprecated member, and note deprecation in docstrings (#904)
 - Fix static class method calls being sent to the wrong connection when
-  multiple clients are connected
-- An exception raised by a stream or event callback no longer ends the stream update thread,
-  which stopped every stream and event on the connection from updating again. It is reported
-  through the thread excepthook and the remaining callbacks still run (#1008)
-- Fix a deadlock between the stream update thread and a thread waiting for an update while
-  holding a stream or event condition, as waiting for one requires (#1008)
-- An error from a service this client does not know about now raises an `RPCError` describing
-  it, instead of a `RuntimeError` about the exception that could not be built (#1008)
-- Fix decoding of `sint64` values at or above `2**62`, which were returned with the wrong sign;
-  `long.MaxValue` decoded as -1 and `long.MinValue` as 0. Encoding was unaffected (#1008)
-- A closed connection is now reported instead of being mistaken for no data having arrived
-  yet. Both loops reading a message size retried it at full speed indefinitely, so losing the
-  server left the client spinning with streams frozen and no error raised, and on the RPC
-  connection it did so holding the connection lock, blocking every other thread. Denying a
-  connection in the in-game dialog left `krpc.connect` spinning rather than reporting it (#1008)
+  multiple clients are connected (#979)
+- An exception raised by a stream or event callback no longer ends the stream update thread (#1008)
+- Fix a deadlock between the stream update thread and a thread waiting for an update (#1008)
+- An error from a service this client does not know about now raises an `RPCError` describing it (#1008)
+- Fix decoding of `sint64` values at or above `2**62` (#1008)
+- A closed connection is now reported instead of being mistaken for no data having arrived (#1008)
 - Removing a stream, or closing the client, now wakes threads waiting for an update on it,
   which previously waited for an update that could never arrive (#1008)
 - The client can now be closed from a stream or event callback, which raised `RuntimeError` and

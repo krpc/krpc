@@ -1,7 +1,7 @@
 ## [0.6.0] - unreleased
-- Requires Python 3.10+
-- `krpc-servicedefs` now runs the `ServiceDefinitions` tool on the .NET 8 runtime; Mono is
-  no longer required
+- **Breaking:** Requires Python 3.10+
+- **Breaking:** `krpc-servicedefs` now runs the `ServiceDefinitions` tool
+  on the .NET 8 runtime; Mono is no longer required
 - Surface deprecated members in generated documentation and client stubs (#904)
 - Fix generated Java clients failing to compile when a service has enough procedures to
   push the generated type tables past the JVM's method size limit

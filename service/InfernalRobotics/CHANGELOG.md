@@ -8,14 +8,10 @@
   `BuildAid` and `IKActive` (#942)
 - Fix `Servo.MinPosition` and `MaxPosition` to return the position limits set in the
   tweak menu, rather than the fixed range from the part configuration (#942)
-- Support controlling servos on any loaded vessel, not just the active vessel; presets,
-  keys, speed factor and expanded state remain available only for servo groups on the
-  active vessel (#943)
-- Fix `Servo.MoveLeft`, `MoveCenter` and `MoveRight` failing with the latest version of
-  Infernal Robotics Next (#941)
-- Make `InfernalRobotics.Available` report correctly in all game scenes, and fix
-  `InfernalRobotics.Ready` reporting false when queried before Infernal Robotics has
-  finished loading (#941)
+- Support controlling servos on any loaded vessel, not just the active vessel (#943)
+- Fix `Servo.MoveLeft`, `MoveCenter` and `MoveRight` failing with the latest version of IR (#941)
+- Make `InfernalRobotics.Available` report correctly in all game scenes (#941)
+- Fix `InfernalRobotics.Ready` reporting false when queried before IR has finished loading (#941)
 
 ## [0.5.0]
 - Update to work with Infernal Robotics Next v3.1.9

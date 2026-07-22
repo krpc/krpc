@@ -1,6 +1,5 @@
 ## [0.6.0] - unreleased
-- Fix `UI.Message` showing its size tag as literal text when the size is not a whole number
-  and the machine's locale writes decimals with a comma (#993)
+- Fix locale issues with `UI.Message` (#993)
 
 ## [0.3.5]
 - Add `Canvas` class (#281)

@@ -1,16 +1,12 @@
 ## [0.6.0] - unreleased
-- Requires .NET Framework 4.7.2 or later
-- Update to protobuf v3.35.1
+- **Breaking:** Requires .NET Framework 4.7.2 or later (#948)
+- Update to protobuf v3.35.1 (#850)
 - Mark deprecated members with the `[Obsolete]` attribute (#904)
-- Disposing a connection now stops and joins the stream update thread, instead of leaving it
-  to end by itself when its socket was closed underneath it (#1005)
+- Disposing a connection now stops and joins the stream update thread (#1005)
 - An error from a service whose exception types were never registered now raises an
-  `RPCException` describing it, instead of a `KeyNotFoundException` naming the missing type
-  (#1005)
-- An exception thrown by a stream or event callback no longer escapes the stream update
-  thread, which ended the process, and the remaining callbacks still run (#1005)
-- Fix a deadlock between the stream update thread and a thread waiting for an update while
-  holding a stream or event condition, as waiting for one requires (#1005)
+  `RPCException` describing it (#1005)
+- An exception thrown by a stream or event callback no longer escapes the stream update thread (#1005)
+- Fix a deadlock between the stream update thread and a thread waiting for an update (#1005)
 
 ## [0.5.0]
 - Update to protobuf v3.22.0

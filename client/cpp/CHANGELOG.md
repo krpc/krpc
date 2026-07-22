@@ -1,25 +1,22 @@
 ## [0.6.0] - unreleased
-- Distribute via vcpkg
+- Update to protobuf v35.1 (#850)
+- Update to ASIO 1.38.0 (#850)
+- Distribute via vcpkg (#874)
+- **Breaking:** Drop autotools build; CMake is now the only supported build system (#851)
+- **Breaking:** Modernise CMake build: require CMake 3.15+, C++17, target-based usage requirements (#834)
+- Add CMake package config so consumers can use `find_package(krpc CONFIG REQUIRED)` (#851)
+- CMake dependency options (`KRPC_FETCH_DEPS`, `KRPC_FETCH_PROTOBUF`, `KRPC_FETCH_ASIO`, `KRPC_FETCH_ABSL`):
+  when OFF (default) the system install is required; when ON `FetchContent` is used. (#857)
+- Mark deprecated members with the `[[deprecated]]` attribute (#904)
 - An error from a service whose generated header is not included now throws an `RPCError`
-  describing it, instead of running off the end of the exception thrower map (#1007)
+  describing it (#1007)
 - An exception thrown by a stream or event callback no longer escapes the stream update
-  thread, which ended the process, and the remaining callbacks still run. Callbacks are not
-  invoked for an update carrying an error, as there is no value to give them; reading the
-  stream still reports the error (#1007)
+  thread (#1007)
 - Fix a data race on the exception thrower map between constructing a service and handling an
   error (#1007)
-- Update to protobuf v35.1
-- Update to ASIO 1.38.0
-- Drop autotools build; CMake is now the only supported build system
-- Modernise CMake build: require CMake 3.15+, C++17, target-based usage requirements (#834)
-- Add CMake package config so consumers can use `find_package(krpc CONFIG REQUIRED)`
-- CMake dependency options (`KRPC_FETCH_PROTOBUF`, `KRPC_FETCH_ASIO`, `KRPC_FETCH_ABSL`): when OFF
-  (default) the system install is required; when ON `FetchContent` is used.
-- Add `KRPC_FETCH_DEPS` option to enable `FetchContent` for all dependencies at once
-- Mark deprecated members with the `[[deprecated]]` attribute (#904)
 - Fix stream update notifications being lost, which could leave
-  `Client::wait_for_stream_update` sleeping through the update it was waiting for
-- Fix `Client::freeze_streams` blocking forever when no stream is producing updates
+  `Client::wait_for_stream_update` sleeping through the update it was waiting for (#974)
+- Fix `Client::freeze_streams` blocking forever when no stream is producing updates (#974)
 
 ## [0.5.2]
 - Use protobuf-lite

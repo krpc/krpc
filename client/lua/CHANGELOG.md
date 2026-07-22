@@ -1,12 +1,9 @@
 ## [0.6.0] - unreleased
-- Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor`
-- Fix service, method and property names being converted to snake case using the machine's
-  locale, which renamed every member the client exposes under Turkish locales
+- Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)
+- Fix service, method and property names being converted to snake case using the machine's locale (#993)
 - Calling a procedure with an argument that needs coercing no longer leaves a global named
   `ok` behind (#1003)
-- Remove `encoder.client_name`, which raised an error whatever it was passed, as the length it
-  padded names to was never defined. It was a leftover from before the protocol used
-  protocol buffers (#1003)
+- Remove `encoder.client_name`; a leftover from before the protocol used protocol buffers (#1003)
 
 ## [0.5.0]
 - Update to protobuf v3.22.0
