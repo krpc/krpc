@@ -137,11 +137,12 @@ genrule(
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
     # %VERSION%/%SUBPATH% get the channel ('dev' or the release number) and
-    # %GITHUB_REF% the source ref (main or vX.Y.Z). The commit sha is
-    # deliberately not substituted in: it reaches a dev build's footer at
-    # page-load time via build-info.json, keeping the HTML identical from one
-    # commit to the next.
-    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%GITHUB_REF%/" + github_ref + "/g' \"$<\" > \"$@\"",
+    # %GITHUB_REF% the source ref (main or vX.Y.Z). %FULL_VERSION% gets the
+    # untruncated config.bzl version (the client artifacts' version), for
+    # examples that name a built jar. The commit sha is deliberately not
+    # substituted in: it reaches a dev build's footer at page-load time via
+    # build-info.json, keeping the HTML identical from one commit to the next.
+    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%FULL_VERSION%/" + version + "/g' -e 's/%GITHUB_REF%/" + github_ref + "/g' \"$<\" > \"$@\"",
 )
 
 sphinx_build(

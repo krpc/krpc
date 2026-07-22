@@ -7,6 +7,14 @@ release = version
 # Browser-tab title on every page. Set explicitly so the version carries a `v`
 # prefix (Sphinx's default title would show the bare 'kRPC X.Y.Z documentation').
 html_title = f'kRPC v{release} documentation'
+
+# version/release above are the published docs channel: 'dev' for a dev build,
+# the release number otherwise. This is the full config.bzl version (dev suffix
+# included), which is what the client artifacts are named after; exposed to
+# reStructuredText as |jar-version| so download/compile examples can name the
+# exact jar this build produced.
+jar_version = '%FULL_VERSION%'
+rst_epilog = '.. |jar-version| replace:: %s' % jar_version
 # End year is the build year, so the footer stays current without edits.
 copyright = '2015-%d, kRPC Org' % datetime.date.today().year
 author = ''
