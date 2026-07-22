@@ -2,7 +2,7 @@ load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "python_version", "version")
 load("//tools/build:python.bzl", "py_lint_test", "py_sdist", "py_test")
 
-exports_files(["CHANGES.txt"])
+exports_files(["CHANGELOG.md"])
 
 license_text = """This license (GPL v3) applies to all parts of krpc.clientgen except for the following:
 
@@ -44,7 +44,7 @@ py_sdist(
     name = "krpctools",
     out = "krpctools-%s.tar.gz" % version,
     files = [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         "README.txt",
         "pyproject.toml",
         ":license",

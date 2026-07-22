@@ -26,7 +26,7 @@ changeloggen = rule(
     implementation = _impl,
     attrs = {
         "out": attr.output(mandatory = True),
-        # Maps each CHANGES.txt target to the display name shown on the page.
+        # Maps each CHANGELOG.md target to the display name shown on the page.
         # Insertion order is preserved and becomes the per-version component
         # order on the rendered page.
         "components": attr.label_keyed_string_dict(

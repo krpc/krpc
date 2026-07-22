@@ -53,29 +53,29 @@ stage_files(
     },
 )
 
-# Unified changelog page, merged from every component's CHANGES.txt. The dict
+# Unified changelog page, merged from every component's CHANGELOG.md. The dict
 # order below sets the per-version component order on the rendered page.
 changeloggen(
     name = "changelog",
     out = "src/changelog.rst",
     components = {
-        "//server:CHANGES.txt": "Server",
-        "//core:CHANGES.txt": "Core",
-        "//service/SpaceCenter:CHANGES.txt": "SpaceCenter service",
-        "//service/Drawing:CHANGES.txt": "Drawing service",
-        "//service/UI:CHANGES.txt": "UI service",
-        "//service/InfernalRobotics:CHANGES.txt": "InfernalRobotics service",
-        "//service/KerbalAlarmClock:CHANGES.txt": "KerbalAlarmClock service",
-        "//service/RemoteTech:CHANGES.txt": "RemoteTech service",
-        "//service/LiDAR:CHANGES.txt": "LiDAR service",
-        "//service/DockingCamera:CHANGES.txt": "DockingCamera service",
-        "//client/python:CHANGES.txt": "Python client",
-        "//client/csharp:CHANGES.txt": "C# client",
-        "//client/cpp:CHANGES.txt": "C++ client",
-        "//client/cnano:CHANGES.txt": "C-nano client",
-        "//client/java:CHANGES.txt": "Java client",
-        "//client/lua:CHANGES.txt": "Lua client",
-        "//tools/krpctools:CHANGES.txt": "krpctools",
+        "//server:CHANGELOG.md": "Server",
+        "//core:CHANGELOG.md": "Core",
+        "//service/SpaceCenter:CHANGELOG.md": "SpaceCenter service",
+        "//service/Drawing:CHANGELOG.md": "Drawing service",
+        "//service/UI:CHANGELOG.md": "UI service",
+        "//service/InfernalRobotics:CHANGELOG.md": "InfernalRobotics service",
+        "//service/KerbalAlarmClock:CHANGELOG.md": "KerbalAlarmClock service",
+        "//service/RemoteTech:CHANGELOG.md": "RemoteTech service",
+        "//service/LiDAR:CHANGELOG.md": "LiDAR service",
+        "//service/DockingCamera:CHANGELOG.md": "DockingCamera service",
+        "//client/python:CHANGELOG.md": "Python client",
+        "//client/csharp:CHANGELOG.md": "C# client",
+        "//client/cpp:CHANGELOG.md": "C++ client",
+        "//client/cnano:CHANGELOG.md": "C-nano client",
+        "//client/java:CHANGELOG.md": "Java client",
+        "//client/lua:CHANGELOG.md": "Lua client",
+        "//tools/krpctools:CHANGELOG.md": "krpctools",
     },
 )
 

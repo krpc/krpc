@@ -6,7 +6,7 @@ load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:cpp.bzl", "protobuf_cpp")
 load("//tools/krpctools:clientgen.bzl", "clientgen_cpp")
 
-exports_files(["CHANGES.txt"])
+exports_files(["CHANGELOG.md"])
 
 name = "krpc-cpp-%s" % version
 
@@ -19,7 +19,7 @@ pkg_zip(
         "cmake/*.cmake",
         "cmake/*.cmake.in",
     ]) + [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         "INSTALL.txt",
         "LICENSE",
         ":cmake",

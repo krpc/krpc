@@ -121,6 +121,38 @@ def require_clean_tree():
         raise ReleaseError('the working tree has uncommitted changes')
 
 
+def changelogs():
+    """Every release-train component's CHANGELOG.md, in a stable order.
+
+    The same set the release notes are built from: server, core, the services,
+    the clients and krpctools. Components on their own version train (buildenv)
+    and ones not shipped in the release notes (krpctest) are deliberately absent.
+    """
+    return (['server/CHANGELOG.md', 'core/CHANGELOG.md']
+            + sorted(str(path) for path in Path('service').glob('*/CHANGELOG.md'))
+            + sorted(str(path) for path in Path('client').glob('*/CHANGELOG.md'))
+            + ['tools/krpctools/CHANGELOG.md'])
+
+
+def strip_unreleased():
+    """Drop the ' - unreleased' suffix from the current version's header in
+    every component changelog, returning the paths that changed.
+
+    While on main the in-development version's header reads
+    ``## [X.Y.Z] - unreleased``; releasing turns it into ``## [X.Y.Z]``.
+    """
+    header = f'## [{VERSION}] - unreleased'
+    replacement = f'## [{VERSION}]'
+    changed = []
+    for path in changelogs():
+        file = Path(path)
+        text = file.read_text()
+        if header in text:
+            file.write_text(text.replace(header, replacement))
+            changed.append(path)
+    return changed
+
+
 # The single file every publish step takes its credentials from, so there is
 # one place to keep up to date instead of one configuration per tool. Each step
 # passes the value to its tool explicitly, overriding any account the tool is

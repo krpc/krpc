@@ -9,23 +9,23 @@ import re
 import sys
 
 COMPONENTS = [
-    ('Server', 'server/CHANGES.txt'),
-    ('Core', 'core/CHANGES.txt'),
-    ('DockingCamera service', 'service/DockingCamera/CHANGES.txt'),
-    ('Drawing service', 'service/Drawing/CHANGES.txt'),
-    ('InfernalRobotics service', 'service/InfernalRobotics/CHANGES.txt'),
-    ('KerbalAlarmClock service', 'service/KerbalAlarmClock/CHANGES.txt'),
-    ('LiDAR service', 'service/LiDAR/CHANGES.txt'),
-    ('RemoteTech service', 'service/RemoteTech/CHANGES.txt'),
-    ('SpaceCenter service', 'service/SpaceCenter/CHANGES.txt'),
-    ('UI service', 'service/UI/CHANGES.txt'),
-    ('C# client', 'client/csharp/CHANGES.txt'),
-    ('C++ client', 'client/cpp/CHANGES.txt'),
-    ('C-nano client', 'client/cnano/CHANGES.txt'),
-    ('Java client', 'client/java/CHANGES.txt'),
-    ('Lua client', 'client/lua/CHANGES.txt'),
-    ('Python client', 'client/python/CHANGES.txt'),
-    ('krpctools', 'tools/krpctools/CHANGES.txt'),
+    ('Server', 'server/CHANGELOG.md'),
+    ('Core', 'core/CHANGELOG.md'),
+    ('DockingCamera service', 'service/DockingCamera/CHANGELOG.md'),
+    ('Drawing service', 'service/Drawing/CHANGELOG.md'),
+    ('InfernalRobotics service', 'service/InfernalRobotics/CHANGELOG.md'),
+    ('KerbalAlarmClock service', 'service/KerbalAlarmClock/CHANGELOG.md'),
+    ('LiDAR service', 'service/LiDAR/CHANGELOG.md'),
+    ('RemoteTech service', 'service/RemoteTech/CHANGELOG.md'),
+    ('SpaceCenter service', 'service/SpaceCenter/CHANGELOG.md'),
+    ('UI service', 'service/UI/CHANGELOG.md'),
+    ('C# client', 'client/csharp/CHANGELOG.md'),
+    ('C++ client', 'client/cpp/CHANGELOG.md'),
+    ('C-nano client', 'client/cnano/CHANGELOG.md'),
+    ('Java client', 'client/java/CHANGELOG.md'),
+    ('Lua client', 'client/lua/CHANGELOG.md'),
+    ('Python client', 'client/python/CHANGELOG.md'),
+    ('krpctools', 'tools/krpctools/CHANGELOG.md'),
 ]
 
 
@@ -42,32 +42,41 @@ def current_version():
     return version
 
 
+def render_nodes(out, nodes, level, linkify=None):
+    """Append markdown bullets for nodes and their nested sub-items, indenting
+    sub-lists by two spaces per level. linkify, if given, rewrites each line."""
+    for node in nodes:
+        text = linkify(node['text']) if linkify else node['text']
+        out.append('  ' * level + '* ' + text)
+        render_nodes(out, node['children'], level + 1, linkify)
+
+
 def render(site, version):
     """Return the changelog for a version, formatted for the given site."""
     changelist = []
     for name, path in COMPONENTS:
         changes = get_changes(path)
-        if version in changes and \
-                (len(changes[version]) > 1 or changes[version][0] != 'None'):
-            changelist.append((name, changes[version]))
+        nodes = changes.get(version)
+        if nodes and (len(nodes) > 1 or nodes[0]['text'] != 'None'):
+            changelist.append((name, nodes))
 
     out = []
     if site == 'github':
         with open('tools/release/github-changes.tmpl', 'r') as tmpl:
             out.append(''.join(tmpl.readlines()).replace('%VERSION%', version))
         out.append('### Changes\n')
-        for name, items in changelist:
+        for name, nodes in changelist:
             out.append('#### ' + name + '\n')
-            out.extend('* ' + item for item in items)
+            render_nodes(out, nodes, 0)
             out.append('')
     else:  # spacedock or curse; issue references become explicit links
         pattern = re.compile(r'#([0-9]+)')
-        for name, items in changelist:
+        def linkify(text):
+            return pattern.sub(
+                r'[#\1](https://github.com/krpc/krpc/issues/\1)', text)
+        for name, nodes in changelist:
             out.append('#### ' + name + '\n')
-            for item in items:
-                item = pattern.sub(
-                    r'[#\1](https://github.com/krpc/krpc/issues/\1)', item)
-                out.append('* ' + item)
+            render_nodes(out, nodes, 0, linkify)
             out.append('')
     return '\n'.join(out)
 
@@ -81,22 +90,40 @@ def main():
 
 
 def get_changes(path):
+    """Parse a CHANGELOG.md into {version: [node, ...]}, where each node is
+    {'text': str, 'children': [node, ...]}. A '- ' bullet at the margin is a
+    top-level entry; a '  - ' bullet under it is a sub-item; other indented
+    lines continue the current bullet's text."""
     changes = {}
     with open(path, 'r') as f:
         version = None
+        top = None  # current top-level node
         for line in f.readlines():
             line = line.rstrip('\n')
             if line == '':
                 continue
-            m = re.match(r'^v([0-9]+\.[0-9]+\.[0-9]+).*?$', line)
+            # '## [X.Y.Z]' header; any suffix inside the brackets (e.g. a
+            # '.postN') or after them (' - unreleased') is ignored.
+            m = re.match(r'^##\s+\[([0-9]+\.[0-9]+\.[0-9]+)[^\]]*\]', line)
             if m:
                 version = m.group(1)
-            elif line.startswith(' * '):
-                if version not in changes:
-                    changes[version] = []
-                changes[version].append(line[3:])
-            elif line.startswith('   '):
-                changes[version][-1] += line[2:]
+                top = None
+                continue
+            if version is None:
+                continue  # anything before the first version header
+            indent = len(line) - len(line.lstrip(' '))
+            stripped = line.strip()
+            if stripped.startswith('- '):
+                node = {'text': stripped[2:], 'children': []}
+                if indent == 0 or top is None:
+                    top = node
+                    changes.setdefault(version, []).append(node)
+                else:
+                    top['children'].append(node)
+            elif indent > 0 and top is not None:
+                # continuation of the current bullet (sub-item if one is open)
+                target = top['children'][-1] if top['children'] else top
+                target['text'] += ' ' + stripped
             else:
                 print('Invalid line in ' + path + ':', file=sys.stderr)
                 print(line, file=sys.stderr)

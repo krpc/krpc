@@ -4,7 +4,7 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:java.bzl", "java_checkstyle_test")
 load("//tools/krpctools:clientgen.bzl", "clientgen_java")
 
-exports_files(["CHANGES.txt"])
+exports_files(["CHANGELOG.md"])
 
 copts = [
     "-Werror",
@@ -44,7 +44,7 @@ java_library(
     ],
     javacopts = copts,
     resources = [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         "LICENSE",
         "//:COPYING",
         "//:COPYING.LESSER",
