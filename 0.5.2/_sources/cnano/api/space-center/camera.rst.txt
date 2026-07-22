@@ -1,0 +1,140 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Camera
+======
+
+
+.. type:: krpc_SpaceCenter_Camera_t
+
+   Controls the game's camera.
+   Obtained by calling :func:`krpc_SpaceCenter_Camera`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_Mode(krpc_connection_t connection, krpc_SpaceCenter_CameraMode_t * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_Mode(krpc_SpaceCenter_CameraMode_t value)
+
+      The current mode of the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_Pitch(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_Pitch(float value)
+
+      The pitch of the camera, in degrees.
+      A value between :func:`krpc_SpaceCenter_Camera_MinPitch` and :func:`krpc_SpaceCenter_Camera_MaxPitch`
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_Heading(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_Heading(float value)
+
+      The heading of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_Distance(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_Distance(float value)
+
+      The distance from the camera to the subject, in meters.
+      A value between :func:`krpc_SpaceCenter_Camera_MinDistance` and :func:`krpc_SpaceCenter_Camera_MaxDistance`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_MinPitch(krpc_connection_t connection, float * result)
+
+      The minimum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_MaxPitch(krpc_connection_t connection, float * result)
+
+      The maximum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_MinDistance(krpc_connection_t connection, float * result)
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_MaxDistance(krpc_connection_t connection, float * result)
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_DefaultDistance(krpc_connection_t connection, float * result)
+
+      Default distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_FocussedBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_FocussedBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``nullptr`` if the camera is not focussed on a celestial body.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_FocussedVessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_FocussedVessel(krpc_SpaceCenter_Vessel_t value)
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``nullptr`` if the camera is not focussed on a vessel.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Camera_FocussedNode(krpc_connection_t connection, krpc_SpaceCenter_Node_t * result)
+   .. function:: void krpc_SpaceCenter_Camera_set_FocussedNode(krpc_SpaceCenter_Node_t value)
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``nullptr`` if the camera is not focussed on a maneuver node.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: krpc_SpaceCenter_CameraMode_t
+
+   See :func:`krpc_SpaceCenter_Camera_Mode`.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_AUTOMATIC
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_FREE
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_CHASE
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_LOCKED
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_ORBITAL
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_IVA
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. macro:: KRPC_SPACECENTER_CAMERAMODE_MAP
+
+      The map view is being shown.

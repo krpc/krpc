@@ -1,0 +1,110 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :meth:`Drawing.AddText <Drawing.Drawing.AddText>`.
+
+   .. property:: System.Tuple<double,double,double> Position { get; set; }
+
+      Position of the text.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double,double> Rotation { get; set; }
+
+      Rotation of the text as a quaternion.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight
+
+   .. method:: void Remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight
+
+   .. property:: string Content { get; set; }
+
+      The text string
+
+      :Game Scenes: Flight
+
+   .. property:: string Font { get; set; }
+
+      Name of the font
+
+      :Game Scenes: Flight
+
+   .. method:: static System.Collections.Generic.IList<string> AvailableFonts(IConnection connection, )
+
+      A list of all available fonts.
+
+
+      :Game Scenes: Flight
+
+   .. property:: int Size { get; set; }
+
+      Font size.
+
+      :Game Scenes: Flight
+
+   .. property:: float CharacterSize { get; set; }
+
+      Character size.
+
+      :Game Scenes: Flight
+
+   .. property:: UI.FontStyle Style { get; set; }
+
+      Font style.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. property:: string Material { get; set; }
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight
+
+   .. property:: UI.TextAlignment Alignment { get; set; }
+
+      Alignment.
+
+      :Game Scenes: Flight
+
+   .. property:: float LineSpacing { get; set; }
+
+      Line spacing.
+
+      :Game Scenes: Flight
+
+   .. property:: UI.TextAnchor Anchor { get; set; }
+
+      Anchor.
+
+      :Game Scenes: Flight

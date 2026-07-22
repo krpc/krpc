@@ -1,0 +1,601 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KRPC
+
+Expressions
+===========
+
+
+.. class:: Expression
+
+   A server side expression.
+
+   .. method:: static Expression ConstantDouble(IConnection connection, double value)
+
+      A constant value of double precision floating point type.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression ConstantFloat(IConnection connection, float value)
+
+      A constant value of single precision floating point type.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression ConstantInt(IConnection connection, int value)
+
+      A constant value of integer type.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression ConstantBool(IConnection connection, bool value)
+
+      A constant value of boolean type.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression ConstantString(IConnection connection, string value)
+
+      A constant value of string type.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Call(IConnection connection, KRPC.Schema.KRPC.ProcedureCall call)
+
+      An RPC call.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Equal(IConnection connection, Expression arg0, Expression arg1)
+
+      Equality comparison.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression NotEqual(IConnection connection, Expression arg0, Expression arg1)
+
+      Inequality comparison.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression GreaterThan(IConnection connection, Expression arg0, Expression arg1)
+
+      Greater than numerical comparison.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression GreaterThanOrEqual(IConnection connection, Expression arg0, Expression arg1)
+
+      Greater than or equal numerical comparison.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression LessThan(IConnection connection, Expression arg0, Expression arg1)
+
+      Less than numerical comparison.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression LessThanOrEqual(IConnection connection, Expression arg0, Expression arg1)
+
+      Less than or equal numerical comparison.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression And(IConnection connection, Expression arg0, Expression arg1)
+
+      Boolean and operator.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Or(IConnection connection, Expression arg0, Expression arg1)
+
+      Boolean or operator.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression ExclusiveOr(IConnection connection, Expression arg0, Expression arg1)
+
+      Boolean exclusive-or operator.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Not(IConnection connection, Expression arg)
+
+      Boolean negation operator.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Add(IConnection connection, Expression arg0, Expression arg1)
+
+      Numerical addition.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Subtract(IConnection connection, Expression arg0, Expression arg1)
+
+      Numerical subtraction.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Multiply(IConnection connection, Expression arg0, Expression arg1)
+
+      Numerical multiplication.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Divide(IConnection connection, Expression arg0, Expression arg1)
+
+      Numerical division.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Modulo(IConnection connection, Expression arg0, Expression arg1)
+
+      Numerical modulo operator.
+
+      :parameters:
+
+
+
+
+      :returns: The remainder of arg0 divided by arg1
+      :Game Scenes: All
+
+   .. method:: static Expression Power(IConnection connection, Expression arg0, Expression arg1)
+
+      Numerical power operator.
+
+      :parameters:
+
+
+
+
+      :returns: arg0 raised to the power of arg1, with type of arg0
+      :Game Scenes: All
+
+   .. method:: static Expression LeftShift(IConnection connection, Expression arg0, Expression arg1)
+
+      Bitwise left shift.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression RightShift(IConnection connection, Expression arg0, Expression arg1)
+
+      Bitwise right shift.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
+   .. method:: static Expression Cast(IConnection connection, Expression arg, Type type)
+
+      Perform a cast to the given type.
+
+      :parameters:
+
+
+       * **type** -- Type to cast the argument to.
+
+      :Game Scenes: All
+
+   .. method:: static Expression Parameter(IConnection connection, string name, Type type)
+
+      A named parameter of type double.
+
+      :parameters:
+
+       * **name** -- The name of the parameter.
+       * **type** -- The type of the parameter.
+
+      :returns: A named parameter.
+      :Game Scenes: All
+
+   .. method:: static Expression Function(IConnection connection, System.Collections.Generic.IList<Expression> parameters, Expression body)
+
+      A function.
+
+      :parameters:
+
+       * **parameters** -- The parameters of the function.
+       * **body** -- The body of the function.
+
+      :returns: A function.
+      :Game Scenes: All
+
+   .. method:: static Expression Invoke(IConnection connection, Expression function, System.Collections.Generic.IDictionary<string,Expression> args)
+
+      A function call.
+
+      :parameters:
+
+       * **function** -- The function to call.
+       * **args** -- The arguments to call the function with.
+
+      :returns: A function call.
+      :Game Scenes: All
+
+   .. method:: static Expression CreateTuple(IConnection connection, System.Collections.Generic.IList<Expression> elements)
+
+      Construct a tuple.
+
+      :parameters:
+
+       * **elements** -- The elements.
+
+      :returns: The tuple.
+      :Game Scenes: All
+
+   .. method:: static Expression CreateList(IConnection connection, System.Collections.Generic.IList<Expression> values)
+
+      Construct a list.
+
+      :parameters:
+
+       * **values** -- The value. Should all be of the same type.
+
+      :returns: The list.
+      :Game Scenes: All
+
+   .. method:: static Expression CreateSet(IConnection connection, System.Collections.Generic.ISet<Expression> values)
+
+      Construct a set.
+
+      :parameters:
+
+       * **values** -- The values. Should all be of the same type.
+
+      :returns: The set.
+      :Game Scenes: All
+
+   .. method:: static Expression CreateDictionary(IConnection connection, System.Collections.Generic.IList<Expression> keys, System.Collections.Generic.IList<Expression> values)
+
+      Construct a dictionary, from a list of corresponding keys and values.
+
+      :parameters:
+
+       * **keys** -- The keys. Should all be of the same type.
+       * **values** -- The values. Should all be of the same type.
+
+      :returns: The dictionary.
+      :Game Scenes: All
+
+   .. method:: static Expression ToList(IConnection connection, Expression arg)
+
+      Convert a collection to a list.
+
+      :parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a list.
+      :Game Scenes: All
+
+   .. method:: static Expression ToSet(IConnection connection, Expression arg)
+
+      Convert a collection to a set.
+
+      :parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a set.
+      :Game Scenes: All
+
+   .. method:: static Expression Get(IConnection connection, Expression arg, Expression index)
+
+      Access an element in a tuple, list or dictionary.
+
+      :parameters:
+
+       * **arg** -- The tuple, list or dictionary.
+       * **index** -- The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+
+      :returns: The element.
+      :Game Scenes: All
+
+   .. method:: static Expression Count(IConnection connection, Expression arg)
+
+      Number of elements in a collection.
+
+      :parameters:
+
+       * **arg** -- The list, set or dictionary.
+
+      :returns: The number of elements in the collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Sum(IConnection connection, Expression arg)
+
+      Sum all elements of a collection.
+
+      :parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The sum of the elements in the collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Max(IConnection connection, Expression arg)
+
+      Maximum of all elements in a collection.
+
+      :parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The maximum elements in the collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Min(IConnection connection, Expression arg)
+
+      Minimum of all elements in a collection.
+
+      :parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The minimum elements in the collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Average(IConnection connection, Expression arg)
+
+      Minimum of all elements in a collection.
+
+      :parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The minimum elements in the collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Select(IConnection connection, Expression arg, Expression func)
+
+      Run a function on every element in the collection.
+
+      :parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function.
+
+      :returns: The modified collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Where(IConnection connection, Expression arg, Expression func)
+
+      Run a function on every element in the collection.
+
+      :parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function.
+
+      :returns: The modified collection.
+      :Game Scenes: All
+
+   .. method:: static Expression Contains(IConnection connection, Expression arg, Expression value)
+
+      Determine if a collection contains a value.
+
+      :parameters:
+
+       * **arg** -- The collection.
+       * **value** -- The value to look for.
+
+      :returns: Whether the collection contains a value.
+      :Game Scenes: All
+
+   .. method:: static Expression Aggregate(IConnection connection, Expression arg, Expression func)
+
+      Applies an accumulator function over a sequence.
+
+      :parameters:
+
+       * **arg** -- The collection.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+      :Game Scenes: All
+
+   .. method:: static Expression AggregateWithSeed(IConnection connection, Expression arg, Expression seed, Expression func)
+
+      Applies an accumulator function over a sequence, with a given seed.
+
+      :parameters:
+
+       * **arg** -- The collection.
+       * **seed** -- The seed value.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+      :Game Scenes: All
+
+   .. method:: static Expression Concat(IConnection connection, Expression arg1, Expression arg2)
+
+      Concatenate two sequences.
+
+      :parameters:
+
+       * **arg1** -- The first sequence.
+       * **arg2** -- The second sequence.
+
+      :returns: The first sequence followed by the second sequence.
+      :Game Scenes: All
+
+   .. method:: static Expression OrderBy(IConnection connection, Expression arg, Expression key)
+
+      Order a collection using a key function.
+
+      :parameters:
+
+       * **arg** -- The collection to order.
+       * **key** -- A function that takes a value from the collection and generates a key to sort on.
+
+      :returns: The ordered collection.
+      :Game Scenes: All
+
+   .. method:: static Expression All(IConnection connection, Expression arg, Expression predicate)
+
+      Determine whether all items in a collection satisfy a boolean predicate.
+
+      :parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether all items satisfy the predicate.
+      :Game Scenes: All
+
+   .. method:: static Expression Any(IConnection connection, Expression arg, Expression predicate)
+
+      Determine whether any item in a collection satisfies a boolean predicate.
+
+      :parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether any item satisfies the predicate.
+      :Game Scenes: All
+
+
+
+.. class:: Type
+
+   A server side expression.
+
+   .. method:: static Type Double(IConnection connection, )
+
+      Double type.
+
+
+      :Game Scenes: All
+
+   .. method:: static Type Float(IConnection connection, )
+
+      Float type.
+
+
+      :Game Scenes: All
+
+   .. method:: static Type Int(IConnection connection, )
+
+      Int type.
+
+
+      :Game Scenes: All
+
+   .. method:: static Type Bool(IConnection connection, )
+
+      Bool type.
+
+
+      :Game Scenes: All
+
+   .. method:: static Type String(IConnection connection, )
+
+      String type.
+
+
+      :Game Scenes: All

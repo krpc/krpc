@@ -1,0 +1,26 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: LiDAR
+
+Laser
+=====
+
+
+.. class:: Laser
+
+   A LaserDist laser.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      Get the part containing this LiDAR.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: cloud: List
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List

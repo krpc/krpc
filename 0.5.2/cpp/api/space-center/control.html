@@ -1,0 +1,1703 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Control &#8212; kRPC 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cpp/api/space-center/control';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.2/cpp/api/space-center/control.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Communications" href="comms.html" />
+    <link rel="prev" title="Orbit" href="orbit.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">C++ Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../cpp.html" class="nav-link">C++</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Control</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="control">
+<h1>Control<a class="headerlink" href="#control" title="Link to this heading">#</a></h1>
+<dl class="cpp class">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7ControlE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7ControlE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7ControlE"></span><span id="krpc::services::SpaceCenter::Control"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Control</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7ControlE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Used to manipulate the controls of a vessel. This includes adjusting the
+throttle, enabling/disabling systems such as SAS and RCS, or altering the
+direction in which the vessel is pointing.
+Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel7controlEv" title="krpc::services::SpaceCenter::Vessel::control"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::control()</span></code></a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Control inputs (such as pitch, yaw and roll) are zeroed when all clients
+that have set one or more of these inputs are no longer connected.</p>
+</div>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6sourceEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control6sourceEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control6sourceEv"></span><span id="krpc::services::SpaceCenter::Control::source"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter13ControlSourceE" title="krpc::services::SpaceCenter::ControlSource"><span class="n"><span class="pre">ControlSource</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">source</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control6sourceEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The source of the vessels control, for example by a kerbal or a probe core.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control5stateEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control5stateEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control5stateEv"></span><span id="krpc::services::SpaceCenter::Control::state"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter12ControlStateE" title="krpc::services::SpaceCenter::ControlState"><span class="n"><span class="pre">ControlState</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">state</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control5stateEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control state of the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control3sasEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control3sasEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control3sasEv"></span><span id="krpc::services::SpaceCenter::Control::sas"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sas</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control3sasEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7set_sasEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control7set_sasEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7set_sasEb"></span><span id="krpc::services::SpaceCenter::Control::set_sas__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_sas</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7set_sasEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of SAS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot3sasEv" title="krpc::services::SpaceCenter::AutoPilot::sas"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::sas()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8sas_modeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8sas_modeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8sas_modeEv"></span><span id="krpc::services::SpaceCenter::Control::sas_mode"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7SASModeE" title="krpc::services::SpaceCenter::SASMode"><span class="n"><span class="pre">SASMode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">sas_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8sas_modeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control12set_sas_modeE7SASMode">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control12set_sas_modeE7SASMode"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control12set_sas_modeE7SASMode"></span><span id="krpc::services::SpaceCenter::Control::set_sas_mode__SASMode"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_sas_mode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7SASModeE" title="krpc::services::SpaceCenter::SASMode"><span class="n"><span class="pre">SASMode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control12set_sas_modeE7SASMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control8sas_modeEv" title="krpc::services::SpaceCenter::Control::sas_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::sas_mode()</span></code></a>.
+These modes are equivalent to the mode buttons to
+the left of the navball that appear when SAS is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Equivalent to <a class="reference internal" href="auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot8sas_modeEv" title="krpc::services::SpaceCenter::AutoPilot::sas_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::sas_mode()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10speed_modeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10speed_modeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10speed_modeEv"></span><span id="krpc::services::SpaceCenter::Control::speed_mode"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9SpeedModeE" title="krpc::services::SpaceCenter::SpeedMode"><span class="n"><span class="pre">SpeedMode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speed_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10speed_modeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14set_speed_modeE9SpeedMode">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14set_speed_modeE9SpeedMode"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14set_speed_modeE9SpeedMode"></span><span id="krpc::services::SpaceCenter::Control::set_speed_mode__SpeedMode"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_speed_mode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter9SpeedModeE" title="krpc::services::SpaceCenter::SpeedMode"><span class="n"><span class="pre">SpeedMode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14set_speed_modeE9SpeedMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control10speed_modeEv" title="krpc::services::SpaceCenter::Control::speed_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::speed_mode()</span></code></a> of the navball.
+This is the mode displayed next to the speed at the top of the navball.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control3rcsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control3rcsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control3rcsEv"></span><span id="krpc::services::SpaceCenter::Control::rcs"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rcs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control3rcsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7set_rcsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control7set_rcsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7set_rcsEb"></span><span id="krpc::services::SpaceCenter::Control::set_rcs__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_rcs</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7set_rcsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of RCS.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control15reaction_wheelsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control15reaction_wheelsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control15reaction_wheelsEv"></span><span id="krpc::services::SpaceCenter::Control::reaction_wheels"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reaction_wheels</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control15reaction_wheelsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control19set_reaction_wheelsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control19set_reaction_wheelsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control19set_reaction_wheelsEb"></span><span id="krpc::services::SpaceCenter::Control::set_reaction_wheels__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_reaction_wheels</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control19set_reaction_wheelsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all reactive wheels on the vessel are active,
+and sets the active state of all reaction wheels.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter13ReactionWheel6activeEv" title="krpc::services::SpaceCenter::ReactionWheel::active"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReactionWheel::active()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control4gearEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control4gearEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control4gearEv"></span><span id="krpc::services::SpaceCenter::Control::gear"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">gear</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control4gearEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8set_gearEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8set_gearEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8set_gearEb"></span><span id="krpc::services::SpaceCenter::Control::set_gear__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_gear</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8set_gearEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the landing gear/legs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control4legsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control4legsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control4legsEv"></span><span id="krpc::services::SpaceCenter::Control::legs"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">legs</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control4legsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8set_legsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8set_legsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8set_legsEb"></span><span id="krpc::services::SpaceCenter::Control::set_legs__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_legs</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8set_legsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all landing legs on the vessel are deployed,
+and sets the deployment state of all landing legs.
+Does not include wheels (for example landing gear).
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter3Leg8deployedEv" title="krpc::services::SpaceCenter::Leg::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Leg::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6wheelsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control6wheelsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control6wheelsEv"></span><span id="krpc::services::SpaceCenter::Control::wheels"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wheels</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control6wheelsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10set_wheelsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10set_wheelsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10set_wheelsEb"></span><span id="krpc::services::SpaceCenter::Control::set_wheels__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_wheels</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10set_wheelsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all wheels on the vessel are deployed,
+and sets the deployment state of all wheels.
+Does not include landing legs.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter5Wheel8deployedEv" title="krpc::services::SpaceCenter::Wheel::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Wheel::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6lightsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control6lightsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control6lightsEv"></span><span id="krpc::services::SpaceCenter::Control::lights"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">lights</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control6lightsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10set_lightsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10set_lightsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10set_lightsEb"></span><span id="krpc::services::SpaceCenter::Control::set_lights__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_lights</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10set_lightsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the lights.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6brakesEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control6brakesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control6brakesEv"></span><span id="krpc::services::SpaceCenter::Control::brakes"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">brakes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control6brakesEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10set_brakesEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10set_brakesEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10set_brakesEb"></span><span id="krpc::services::SpaceCenter::Control::set_brakes__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_brakes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10set_brakesEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the wheel brakes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8antennasEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8antennasEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8antennasEv"></span><span id="krpc::services::SpaceCenter::Control::antennas"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">antennas</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8antennasEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control12set_antennasEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control12set_antennasEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control12set_antennasEb"></span><span id="krpc::services::SpaceCenter::Control::set_antennas__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_antennas</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control12set_antennasEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all antennas on the vessel are deployed,
+and sets the deployment state of all antennas.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter7Antenna8deployedEv" title="krpc::services::SpaceCenter::Antenna::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Antenna::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10cargo_baysEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10cargo_baysEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10cargo_baysEv"></span><span id="krpc::services::SpaceCenter::Control::cargo_bays"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">cargo_bays</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10cargo_baysEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14set_cargo_baysEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14set_cargo_baysEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14set_cargo_baysEb"></span><span id="krpc::services::SpaceCenter::Control::set_cargo_bays__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_cargo_bays</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14set_cargo_baysEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether any of the cargo bays on the vessel are open,
+and sets the open state of all cargo bays.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter8CargoBay4openEv" title="krpc::services::SpaceCenter::CargoBay::open"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CargoBay::open()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7intakesEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control7intakesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7intakesEv"></span><span id="krpc::services::SpaceCenter::Control::intakes"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">intakes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7intakesEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control11set_intakesEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control11set_intakesEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control11set_intakesEb"></span><span id="krpc::services::SpaceCenter::Control::set_intakes__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_intakes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control11set_intakesEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all of the air intakes on the vessel are open,
+and sets the open state of all air intakes.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter6Intake4openEv" title="krpc::services::SpaceCenter::Intake::open"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Intake::open()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10parachutesEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10parachutesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10parachutesEv"></span><span id="krpc::services::SpaceCenter::Control::parachutes"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">parachutes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10parachutesEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14set_parachutesEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14set_parachutesEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14set_parachutesEb"></span><span id="krpc::services::SpaceCenter::Control::set_parachutes__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_parachutes</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14set_parachutesEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all parachutes on the vessel are deployed,
+and sets the deployment state of all parachutes.
+Cannot be set to <code class="docutils literal notranslate"><span class="pre">false</span></code>.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter9Parachute8deployedEv" title="krpc::services::SpaceCenter::Parachute::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Parachute::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control9radiatorsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control9radiatorsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control9radiatorsEv"></span><span id="krpc::services::SpaceCenter::Control::radiators"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radiators</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control9radiatorsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control13set_radiatorsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control13set_radiatorsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control13set_radiatorsEb"></span><span id="krpc::services::SpaceCenter::Control::set_radiators__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_radiators</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control13set_radiatorsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all radiators on the vessel are deployed,
+and sets the deployment state of all radiators.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter8Radiator8deployedEv" title="krpc::services::SpaceCenter::Radiator::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Radiator::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control19resource_harvestersEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control19resource_harvestersEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control19resource_harvestersEv"></span><span id="krpc::services::SpaceCenter::Control::resource_harvesters"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resource_harvesters</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control19resource_harvestersEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control23set_resource_harvestersEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control23set_resource_harvestersEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control23set_resource_harvestersEb"></span><span id="krpc::services::SpaceCenter::Control::set_resource_harvesters__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_resource_harvesters</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control23set_resource_harvestersEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all of the resource harvesters on the vessel are deployed,
+and sets the deployment state of all resource harvesters.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter17ResourceHarvester8deployedEv" title="krpc::services::SpaceCenter::ResourceHarvester::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ResourceHarvester::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control26resource_harvesters_activeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control26resource_harvesters_activeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control26resource_harvesters_activeEv"></span><span id="krpc::services::SpaceCenter::Control::resource_harvesters_active"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">resource_harvesters_active</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control26resource_harvesters_activeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control30set_resource_harvesters_activeEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control30set_resource_harvesters_activeEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control30set_resource_harvesters_activeEb"></span><span id="krpc::services::SpaceCenter::Control::set_resource_harvesters_active__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_resource_harvesters_active</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control30set_resource_harvesters_activeEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether any of the resource harvesters on the vessel are active,
+and sets the active state of all resource harvesters.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter17ResourceHarvester6activeEv" title="krpc::services::SpaceCenter::ResourceHarvester::active"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ResourceHarvester::active()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control12solar_panelsEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control12solar_panelsEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control12solar_panelsEv"></span><span id="krpc::services::SpaceCenter::Control::solar_panels"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">solar_panels</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control12solar_panelsEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control16set_solar_panelsEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control16set_solar_panelsEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control16set_solar_panelsEb"></span><span id="krpc::services::SpaceCenter::Control::set_solar_panels__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_solar_panels</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control16set_solar_panelsEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns whether all solar panels on the vessel are deployed,
+and sets the deployment state of all solar panels.
+See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter10SolarPanel8deployedEv" title="krpc::services::SpaceCenter::SolarPanel::deployed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">SolarPanel::deployed()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control5abortEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control5abortEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control5abortEv"></span><span id="krpc::services::SpaceCenter::Control::abort"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">abort</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control5abortEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control9set_abortEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control9set_abortEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control9set_abortEb"></span><span id="krpc::services::SpaceCenter::Control::set_abort__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_abort</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control9set_abortEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the abort action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8throttleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8throttleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8throttleEv"></span><span id="krpc::services::SpaceCenter::Control::throttle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">throttle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8throttleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control12set_throttleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control12set_throttleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control12set_throttleEf"></span><span id="krpc::services::SpaceCenter::Control::set_throttle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_throttle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control12set_throttleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the throttle. A value between 0 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10input_modeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10input_modeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10input_modeEv"></span><span id="krpc::services::SpaceCenter::Control::input_mode"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter16ControlInputModeE" title="krpc::services::SpaceCenter::ControlInputMode"><span class="n"><span class="pre">ControlInputMode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">input_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10input_modeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14set_input_modeE16ControlInputMode">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14set_input_modeE16ControlInputMode"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14set_input_modeE16ControlInputMode"></span><span id="krpc::services::SpaceCenter::Control::set_input_mode__ControlInputMode"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_input_mode</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter16ControlInputModeE" title="krpc::services::SpaceCenter::ControlInputMode"><span class="n"><span class="pre">ControlInputMode</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14set_input_modeE16ControlInputMode" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sets the behavior of the pitch, yaw, roll and translation control inputs.
+When set to additive, these inputs are added to the vessels current inputs.
+This mode is the default.
+When set to override, these inputs (if non-zero) override the vessels inputs.
+This mode prevents keyboard control, or SAS, from interfering with the controls when
+they are set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control5pitchEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control5pitchEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control5pitchEv"></span><span id="krpc::services::SpaceCenter::Control::pitch"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pitch</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control5pitchEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control9set_pitchEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control9set_pitchEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control9set_pitchEf"></span><span id="krpc::services::SpaceCenter::Control::set_pitch__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_pitch</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control9set_pitchEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the pitch control.
+A value between -1 and 1.
+Equivalent to the w and s keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control3yawEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control3yawEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control3yawEv"></span><span id="krpc::services::SpaceCenter::Control::yaw"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">yaw</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control3yawEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7set_yawEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control7set_yawEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7set_yawEf"></span><span id="krpc::services::SpaceCenter::Control::set_yaw__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_yaw</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7set_yawEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the yaw control.
+A value between -1 and 1.
+Equivalent to the a and d keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control4rollEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control4rollEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control4rollEv"></span><span id="krpc::services::SpaceCenter::Control::roll"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">roll</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control4rollEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8set_rollEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8set_rollEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8set_rollEf"></span><span id="krpc::services::SpaceCenter::Control::set_roll__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_roll</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8set_rollEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the roll control.
+A value between -1 and 1.
+Equivalent to the q and e keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7forwardEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control7forwardEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7forwardEv"></span><span id="krpc::services::SpaceCenter::Control::forward"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">forward</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7forwardEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control11set_forwardEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control11set_forwardEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control11set_forwardEf"></span><span id="krpc::services::SpaceCenter::Control::set_forward__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_forward</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control11set_forwardEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the forward translational control.
+A value between -1 and 1.
+Equivalent to the h and n keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control2upEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control2upEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control2upEv"></span><span id="krpc::services::SpaceCenter::Control::up"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">up</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control2upEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6set_upEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control6set_upEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control6set_upEf"></span><span id="krpc::services::SpaceCenter::Control::set_up__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_up</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control6set_upEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the up translational control.
+A value between -1 and 1.
+Equivalent to the i and k keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control5rightEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control5rightEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control5rightEv"></span><span id="krpc::services::SpaceCenter::Control::right"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">right</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control5rightEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control9set_rightEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control9set_rightEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control9set_rightEf"></span><span id="krpc::services::SpaceCenter::Control::set_right__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_right</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control9set_rightEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the right translational control.
+A value between -1 and 1.
+Equivalent to the j and l keys.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14wheel_throttleEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14wheel_throttleEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14wheel_throttleEv"></span><span id="krpc::services::SpaceCenter::Control::wheel_throttle"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wheel_throttle</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14wheel_throttleEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control18set_wheel_throttleEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control18set_wheel_throttleEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control18set_wheel_throttleEf"></span><span id="krpc::services::SpaceCenter::Control::set_wheel_throttle__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_wheel_throttle</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control18set_wheel_throttleEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the wheel throttle.
+A value between -1 and 1.
+A value of 1 rotates the wheels forwards, a value of -1 rotates
+the wheels backwards.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14wheel_steeringEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14wheel_steeringEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14wheel_steeringEv"></span><span id="krpc::services::SpaceCenter::Control::wheel_steering"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">wheel_steering</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14wheel_steeringEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control18set_wheel_steeringEf">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control18set_wheel_steeringEf"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control18set_wheel_steeringEf"></span><span id="krpc::services::SpaceCenter::Control::set_wheel_steering__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_wheel_steering</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control18set_wheel_steeringEf" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of the wheel steering.
+A value between -1 and 1.
+A value of 1 steers to the left, and a value of -1 steers to the right.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis01Ev">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control13custom_axis01Ev"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control13custom_axis01Ev"></span><span id="krpc::services::SpaceCenter::Control::custom_axis01"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">custom_axis01</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis01Ev" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis01Ef">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control17set_custom_axis01Ef"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control17set_custom_axis01Ef"></span><span id="krpc::services::SpaceCenter::Control::set_custom_axis01__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_custom_axis01</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis01Ef" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of CustomAxis01.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis02Ev">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control13custom_axis02Ev"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control13custom_axis02Ev"></span><span id="krpc::services::SpaceCenter::Control::custom_axis02"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">custom_axis02</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis02Ev" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis02Ef">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control17set_custom_axis02Ef"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control17set_custom_axis02Ef"></span><span id="krpc::services::SpaceCenter::Control::set_custom_axis02__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_custom_axis02</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis02Ef" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of CustomAxis02.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis03Ev">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control13custom_axis03Ev"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control13custom_axis03Ev"></span><span id="krpc::services::SpaceCenter::Control::custom_axis03"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">custom_axis03</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis03Ev" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis03Ef">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control17set_custom_axis03Ef"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control17set_custom_axis03Ef"></span><span id="krpc::services::SpaceCenter::Control::set_custom_axis03__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_custom_axis03</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis03Ef" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of CustomAxis03.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis04Ev">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control13custom_axis04Ev"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control13custom_axis04Ev"></span><span id="krpc::services::SpaceCenter::Control::custom_axis04"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">custom_axis04</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control13custom_axis04Ev" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis04Ef">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control17set_custom_axis04Ef"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control17set_custom_axis04Ef"></span><span id="krpc::services::SpaceCenter::Control::set_custom_axis04__float"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_custom_axis04</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control17set_custom_axis04Ef" title="Link to this definition">#</a><br /></dt>
+<dd><p>The state of CustomAxis04.
+A value between -1 and 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control13current_stageEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control13current_stageEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control13current_stageEv"></span><span id="krpc::services::SpaceCenter::Control::current_stage"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">current_stage</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control13current_stageEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The current stage of the vessel. Corresponds to the stage number in
+the in-game UI.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control19activate_next_stageEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control19activate_next_stageEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control19activate_next_stageEv"></span><span id="krpc::services::SpaceCenter::Control::activate_next_stage"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">activate_next_stage</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control19activate_next_stageEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Activates the next stage. Equivalent to pressing the space bar in-game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A list of vessel objects that are jettisoned from the active vessel.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When called, the active vessel may change. It is therefore possible that,
+after calling this function, the object(s) returned by previous call(s) to
+<a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter13active_vesselEv" title="krpc::services::SpaceCenter::active_vessel"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">active_vessel()</span></code></a> no longer refer to the active vessel.
+Throws an exception if staging is locked.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control10stage_lockEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control10stage_lockEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control10stage_lockEv"></span><span id="krpc::services::SpaceCenter::Control::stage_lock"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stage_lock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control10stage_lockEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14set_stage_lockEb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14set_stage_lockEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14set_stage_lockEb"></span><span id="krpc::services::SpaceCenter::Control::set_stage_lock__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_stage_lock</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14set_stage_lockEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether staging is locked on the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equivalent to locking the staging using Alt+L</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control16get_action_groupE8uint32_t">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control16get_action_groupE8uint32_t"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control16get_action_groupE8uint32_t"></span><span id="krpc::services::SpaceCenter::Control::get_action_group__uint32_t"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">get_action_group</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control16get_action_groupE8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if the given action group is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control16set_action_groupE8uint32_tb">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control16set_action_groupE8uint32_tb"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control16set_action_groupE8uint32_tb"></span><span id="krpc::services::SpaceCenter::Control::set_action_group__uint32_t.b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_action_group</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">group</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">state</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control16set_action_groupE8uint32_tb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Sets the state of the given action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control19toggle_action_groupE8uint32_t">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control19toggle_action_groupE8uint32_t"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control19toggle_action_groupE8uint32_t"></span><span id="krpc::services::SpaceCenter::Control::toggle_action_group__uint32_t"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">toggle_action_group</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">uint32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">group</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control19toggle_action_groupE8uint32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>Toggles the state of the given action group.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>group</strong> – A number between 0 and 9 inclusive, or between 0 and 250 inclusive when the <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/67235-122dec1016-action-groups-extended-250-action-groups-in-flight-editing-now-kosremotetech/">Extended Action Groups mod</a> is installed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control8add_nodeEdfff">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control8add_nodeEdfff"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control8add_nodeEdfff"></span><span id="krpc::services::SpaceCenter::Control::add_node__double.float.float.float"></span><a class="reference internal" href="node.html#_CPPv4N4krpc8services11SpaceCenter4NodeE" title="krpc::services::SpaceCenter::Node"><span class="n"><span class="pre">Node</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">add_node</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">prograde</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">normal</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">radial</span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="m"><span class="pre">0.0</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control8add_nodeEdfff" title="Link to this definition">#</a><br /></dt>
+<dd><p>Creates a maneuver node at the given universal time, and returns a
+<a class="reference internal" href="node.html#_CPPv4N4krpc8services11SpaceCenter4NodeE" title="krpc::services::SpaceCenter::Node"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Node</span></code></a> object that can be used to modify it.
+Optionally sets the magnitude of the delta-v for the maneuver node
+in the prograde, normal and radial directions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – Universal time of the maneuver node.</p></li>
+<li><p><strong>prograde</strong> – Delta-v in the prograde direction.</p></li>
+<li><p><strong>normal</strong> – Delta-v in the normal direction.</p></li>
+<li><p><strong>radial</strong> – Delta-v in the radial direction.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control5nodesEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control5nodesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control5nodesEv"></span><span id="krpc::services::SpaceCenter::Control::nodes"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="node.html#_CPPv4N4krpc8services11SpaceCenter4NodeE" title="krpc::services::SpaceCenter::Node"><span class="n"><span class="pre">Node</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nodes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control5nodesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns a list of all existing maneuver nodes, ordered by time from first to last.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control12remove_nodesEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control12remove_nodesEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control12remove_nodesEv"></span><span id="krpc::services::SpaceCenter::Control::remove_nodes"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove_nodes</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control12remove_nodesEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Remove all maneuver nodes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12ControlStateE">
+<span id="_CPPv3N4krpc8services11SpaceCenter12ControlStateE"></span><span id="_CPPv2N4krpc8services11SpaceCenter12ControlStateE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ControlState</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12ControlStateE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control state of a vessel.
+See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control5stateEv" title="krpc::services::SpaceCenter::Control::state"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::state()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12ControlState4fullE">
+<span id="_CPPv3N4krpc8services11SpaceCenter12ControlState4fullE"></span><span id="_CPPv2N4krpc8services11SpaceCenter12ControlState4fullE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">full</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12ControlState4fullE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Full controllable.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12ControlState7partialE">
+<span id="_CPPv3N4krpc8services11SpaceCenter12ControlState7partialE"></span><span id="_CPPv2N4krpc8services11SpaceCenter12ControlState7partialE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">partial</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12ControlState7partialE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Partially controllable.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter12ControlState4noneE">
+<span id="_CPPv3N4krpc8services11SpaceCenter12ControlState4noneE"></span><span id="_CPPv2N4krpc8services11SpaceCenter12ControlState4noneE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">none</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter12ControlState4noneE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Not controllable.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13ControlSourceE">
+<span id="_CPPv3N4krpc8services11SpaceCenter13ControlSourceE"></span><span id="_CPPv2N4krpc8services11SpaceCenter13ControlSourceE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ControlSource</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13ControlSourceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The control source of a vessel.
+See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control6sourceEv" title="krpc::services::SpaceCenter::Control::source"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::source()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13ControlSource6kerbalE">
+<span id="_CPPv3N4krpc8services11SpaceCenter13ControlSource6kerbalE"></span><span id="_CPPv2N4krpc8services11SpaceCenter13ControlSource6kerbalE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">kerbal</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13ControlSource6kerbalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Vessel is controlled by a Kerbal.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13ControlSource5probeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter13ControlSource5probeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter13ControlSource5probeE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">probe</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13ControlSource5probeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Vessel is controlled by a probe core.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13ControlSource4noneE">
+<span id="_CPPv3N4krpc8services11SpaceCenter13ControlSource4noneE"></span><span id="_CPPv2N4krpc8services11SpaceCenter13ControlSource4noneE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">none</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13ControlSource4noneE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Vessel is not controlled.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASModeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASModeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASModeE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SASMode</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASModeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The behavior of the SAS auto-pilot. See <a class="reference internal" href="auto-pilot.html#_CPPv4N4krpc8services11SpaceCenter9AutoPilot8sas_modeEv" title="krpc::services::SpaceCenter::AutoPilot::sas_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">AutoPilot::sas_mode()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode16stability_assistE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode16stability_assistE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode16stability_assistE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stability_assist</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode16stability_assistE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Stability assist mode. Dampen out any rotation.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode8maneuverE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode8maneuverE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode8maneuverE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">maneuver</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode8maneuverE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the burn direction of the next maneuver node.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode8progradeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode8progradeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode8progradeE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">prograde</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode8progradeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the prograde direction.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode10retrogradeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode10retrogradeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode10retrogradeE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">retrograde</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode10retrogradeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the retrograde direction.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode6normalE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode6normalE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode6normalE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">normal</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode6normalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the orbit normal direction.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode11anti_normalE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode11anti_normalE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode11anti_normalE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">anti_normal</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode11anti_normalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the orbit anti-normal direction.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode6radialE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode6radialE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode6radialE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">radial</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode6radialE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the orbit radial direction.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode11anti_radialE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode11anti_radialE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode11anti_radialE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">anti_radial</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode11anti_radialE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the orbit anti-radial direction.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode6targetE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode6targetE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode6targetE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode6targetE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point in the direction of the current target.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7SASMode11anti_targetE">
+<span id="_CPPv3N4krpc8services11SpaceCenter7SASMode11anti_targetE"></span><span id="_CPPv2N4krpc8services11SpaceCenter7SASMode11anti_targetE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">anti_target</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7SASMode11anti_targetE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Point away from the current target.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9SpeedModeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9SpeedModeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9SpeedModeE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SpeedMode</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9SpeedModeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The mode of the speed reported in the navball.
+See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control10speed_modeEv" title="krpc::services::SpaceCenter::Control::speed_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::speed_mode()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9SpeedMode5orbitE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9SpeedMode5orbitE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9SpeedMode5orbitE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbit</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9SpeedMode5orbitE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Speed is relative to the vessel’s orbit.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9SpeedMode7surfaceE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9SpeedMode7surfaceE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9SpeedMode7surfaceE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surface</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9SpeedMode7surfaceE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Speed is relative to the surface of the body being orbited.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9SpeedMode6targetE">
+<span id="_CPPv3N4krpc8services11SpaceCenter9SpeedMode6targetE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9SpeedMode6targetE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9SpeedMode6targetE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Speed is relative to the current target.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter16ControlInputModeE">
+<span id="_CPPv3N4krpc8services11SpaceCenter16ControlInputModeE"></span><span id="_CPPv2N4krpc8services11SpaceCenter16ControlInputModeE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ControlInputMode</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter16ControlInputModeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>See <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control10input_modeEv" title="krpc::services::SpaceCenter::Control::input_mode"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::input_mode()</span></code></a>.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter16ControlInputMode8additiveE">
+<span id="_CPPv3N4krpc8services11SpaceCenter16ControlInputMode8additiveE"></span><span id="_CPPv2N4krpc8services11SpaceCenter16ControlInputMode8additiveE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">additive</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter16ControlInputMode8additiveE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Control inputs are added to the vessels current control inputs.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter16ControlInputMode8overrideE">
+<span id="_CPPv3N4krpc8services11SpaceCenter16ControlInputMode8overrideE"></span><span id="_CPPv2N4krpc8services11SpaceCenter16ControlInputMode8overrideE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">override</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter16ControlInputMode8overrideE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Control inputs (when they are non-zero) override the vessels current control inputs.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="orbit.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Orbit</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="comms.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Communications</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/cpp/api/space-center/control.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

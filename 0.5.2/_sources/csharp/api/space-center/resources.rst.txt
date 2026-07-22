@@ -1,0 +1,211 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Resources
+=========
+
+
+.. class:: Resources
+
+   Represents the collection of resources stored in a vessel, stage or part.
+   Created by calling :prop:`Vessel.Resources`,
+   :meth:`Vessel.ResourcesInDecoupleStage` or
+   :prop:`Part.Resources`.
+
+   .. property:: System.Collections.Generic.IList<Resource> All { get; }
+
+      All the individual resources that can be stored.
+
+      :Game Scenes: Flight
+
+   .. method:: System.Collections.Generic.IList<Resource> WithResource(string name)
+
+      All the individual resources with the given name that can be stored.
+
+      :parameters:
+
+
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<string> Names { get; }
+
+      A list of resource names that can be stored.
+
+      :Game Scenes: Flight
+
+   .. method:: bool HasResource(string name)
+
+      Check whether the named resource can be stored.
+
+      :parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. method:: float Amount(string name)
+
+      Returns the amount of a resource that is currently stored.
+
+      :parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. method:: float Max(string name)
+
+      Returns the amount of a resource that can be stored.
+
+      :parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. method:: static float Density(IConnection connection, string name)
+
+      Returns the density of a resource, in :math:`kg/l`.
+
+      :parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. method:: static ResourceFlowMode FlowMode(IConnection connection, string name)
+
+      Returns the flow mode of a resource.
+
+      :parameters:
+
+       * **name** -- The name of the resource.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether use of all the resources are enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is ``true`` if all of the resources are enabled.
+         If any of the resources are not enabled, this is ``false``.
+
+
+
+.. class:: Resource
+
+   An individual resource stored within a part.
+   Created using methods in the :type:`Resources` class.
+
+   .. property:: string Name { get; }
+
+      The name of the resource.
+
+      :Game Scenes: All
+
+   .. property:: Part Part { get; }
+
+      The part containing the resource.
+
+      :Game Scenes: All
+
+   .. property:: float Amount { get; }
+
+      The amount of the resource that is currently stored in the part.
+
+      :Game Scenes: All
+
+   .. property:: float Max { get; }
+
+      The total amount of the resource that can be stored in the part.
+
+      :Game Scenes: All
+
+   .. property:: float Density { get; }
+
+      The density of the resource, in :math:`kg/l`.
+
+      :Game Scenes: All
+
+   .. property:: ResourceFlowMode FlowMode { get; }
+
+      The flow mode of the resource.
+
+      :Game Scenes: All
+
+   .. property:: bool Enabled { get; set; }
+
+      Whether use of this resource is enabled.
+
+      :Game Scenes: All
+
+
+
+.. class:: ResourceTransfer
+
+   Transfer resources between parts.
+
+   .. method:: static ResourceTransfer Start(IConnection connection, Part fromPart, Part toPart, string resource, float maxAmount)
+
+      Start transferring a resource transfer between a pair of parts. The transfer will move
+      at most *maxAmount* units of the resource, depending on how much of
+      the resource is available in the source part and how much storage is available in the
+      destination part.
+      Use :prop:`ResourceTransfer.Complete` to check if the transfer is complete.
+      Use :prop:`ResourceTransfer.Amount` to see how much of the resource has been transferred.
+
+      :parameters:
+
+       * **fromPart** -- The part to transfer to.
+       * **toPart** -- The part to transfer from.
+       * **resource** -- The name of the resource to transfer.
+       * **maxAmount** -- The maximum amount of resource to transfer.
+
+      :Game Scenes: All
+
+   .. property:: float Amount { get; }
+
+      The amount of the resource that has been transferred.
+
+      :Game Scenes: All
+
+   .. property:: bool Complete { get; }
+
+      Whether the transfer has completed.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ResourceFlowMode
+
+   The way in which a resource flows between parts. See :meth:`Resources.FlowMode`.
+
+
+   .. value:: Vessel
+
+      The resource flows to any part in the vessel. For example, electric charge.
+
+
+   .. value:: Stage
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+
+   .. value:: Adjacent
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+
+   .. value:: None
+
+      The resource does not flow. For example, solid fuel.

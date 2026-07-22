@@ -1,0 +1,30 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: LiDAR
+
+LiDAR
+=====
+
+
+.. module:: LiDAR
+
+LaserDist service.
+
+
+.. attribute:: available
+
+   Check if the LaserDist API is available.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: bool
+   
+
+
+
+
+.. staticmethod:: laser(part)
+
+   Get a LaserDist part.
+
+   :param SpaceCenter.Part part:
+   :rtype: :class:`Laser`

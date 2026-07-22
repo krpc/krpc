@@ -1,0 +1,45 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::RemoteTech
+
+RemoteTech
+==========
+
+
+.. namespace:: krpc::services
+.. class:: RemoteTech : public krpc::Service
+
+   This service provides functionality to interact with
+   `RemoteTech <https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/>`_.
+
+   .. function:: RemoteTech(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Whether RemoteTech is installed.
+
+   
+
+   .. function:: std::vector<std::string> ground_stations()
+
+      The names of the ground stations.
+
+   
+
+   .. function:: Antenna antenna(SpaceCenter::Part part)
+
+      Get the antenna object for a particular part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: Comms comms(SpaceCenter::Vessel vessel)
+
+      Get a communications object, representing the communication capability of a particular vessel.
+
+      :Parameters:

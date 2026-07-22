@@ -1,0 +1,150 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: InfernalRobotics
+
+Servo
+=====
+
+
+.. class:: Servo
+
+   Represents a servo. Obtained using
+   :attr:`InfernalRobotics.ServoGroup.servos`,
+   :meth:`InfernalRobotics.ServoGroup.servo_with_name`
+   or :meth:`InfernalRobotics.servo_with_name`.
+
+   .. attribute:: name: string
+
+      The name of the servo.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: part: SpaceCenter.Part
+
+      The part containing the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: highlight: boolean
+
+      Whether the servo should be highlighted in-game.
+
+      :Attribute: Write-only, cannot be read
+      :rtype: boolean
+
+   .. attribute:: position: number
+
+      The position of the servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: min_config_position: number
+
+      The minimum position of the servo, specified by the part configuration.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: max_config_position: number
+
+      The maximum position of the servo, specified by the part configuration.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: min_position: number
+
+      The minimum position of the servo, specified by the in-game tweak menu.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: max_position: number
+
+      The maximum position of the servo, specified by the in-game tweak menu.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: config_speed: number
+
+      The speed multiplier of the servo, specified by the part configuration.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: speed: number
+
+      The speed multiplier of the servo, specified by the in-game tweak menu.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: current_speed: number
+
+      The current speed at which the servo is moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: acceleration: number
+
+      The current speed multiplier set in the UI.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: is_moving: boolean
+
+      Whether the servo is moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: is_free_moving: boolean
+
+      Whether the servo is freely moving.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: is_locked: boolean
+
+      Whether the servo is locked.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. attribute:: is_axis_inverted: boolean
+
+      Whether the servos axis is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. method:: move_right()
+
+      Moves the servo to the right.
+
+   .. method:: move_left()
+
+      Moves the servo to the left.
+
+   .. method:: move_center()
+
+      Moves the servo to the center.
+
+   .. method:: move_to(position, speed)
+
+      Moves the servo to *position* and sets the
+      speed multiplier to *speed*.
+
+      :param number position: The position to move the servo to.
+      :param number speed: Speed multiplier for the movement.
+
+   .. method:: stop()
+
+      Stops the servo.

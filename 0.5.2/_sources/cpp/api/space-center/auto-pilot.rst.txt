@@ -1,0 +1,254 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::SpaceCenter
+
+AutoPilot
+=========
+
+
+.. class:: AutoPilot
+
+   Provides basic auto-piloting utilities for a vessel.
+   Created by calling :func:`Vessel::auto_pilot`.
+
+   .. note::
+
+      If a client engages the auto-pilot and then closes its connection to the server,
+      the auto-pilot will be disengaged and its target reference frame, direction and roll
+      reset to default.
+
+   .. function:: void engage()
+
+      Engage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void disengage()
+
+      Disengage the auto-pilot.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void wait()
+
+      Blocks until the vessel is pointing in the target direction and has
+      the target roll (if set). Throws an exception if the auto-pilot has not been engaged.
+
+
+      :Game Scenes: Flight
+
+   .. function:: float error()
+
+      The error, in degrees, between the direction the ship has been asked
+      to point in and the direction it is pointing in. Throws an exception if the auto-pilot
+      has not been engaged and SAS is not enabled or is in stability assist mode.
+
+      :Game Scenes: Flight
+
+   .. function:: float pitch_error()
+
+      The error, in degrees, between the vessels current and target pitch.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: float heading_error()
+
+      The error, in degrees, between the vessels current and target heading.
+      Throws an exception if the auto-pilot has not been engaged.
+
+      :Game Scenes: Flight
+
+   .. function:: float roll_error()
+
+      The error, in degrees, between the vessels current and target roll.
+      Throws an exception if the auto-pilot has not been engaged or no target roll is set.
+
+      :Game Scenes: Flight
+
+   .. function:: ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(ReferenceFrame value)
+
+      The reference frame for the target direction (:func:`AutoPilot::target_direction`).
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         An error will be thrown if this property is set to a reference frame that rotates with
+         the vessel being controlled, as it is impossible to rotate the vessel in such a
+         reference frame.
+
+   .. function:: float target_pitch()
+   .. function:: void set_target_pitch(float value)
+
+      The target pitch, in degrees, between -90° and +90°.
+
+      :Game Scenes: Flight
+
+   .. function:: float target_heading()
+   .. function:: void set_target_heading(float value)
+
+      The target heading, in degrees, between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: float target_roll()
+   .. function:: void set_target_roll(float value)
+
+      The target roll, in degrees. ``NaN`` if no target roll is set.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> target_direction()
+   .. function:: void set_target_direction(std::tuple<double, double, double> value)
+
+      Direction vector corresponding to the target pitch and heading.
+      This is in the reference frame specified by :func:`AutoPilot::reference_frame`.
+
+      :Game Scenes: Flight
+
+   .. function:: void target_pitch_and_heading(float pitch, float heading)
+
+      Set target pitch and heading angles.
+
+      :Parameters:
+
+       * **pitch** -- Target pitch angle, in degrees between -90° and +90°.
+       * **heading** -- Target heading angle, in degrees between 0° and 360°.
+
+      :Game Scenes: Flight
+
+   .. function:: bool sas()
+   .. function:: void set_sas(bool value)
+
+      The state of SAS.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`Control::sas`
+
+   .. function:: SASMode sas_mode()
+   .. function:: void set_sas_mode(SASMode value)
+
+      The current :func:`AutoPilot::sas_mode`.
+      These modes are equivalent to the mode buttons to the left of the navball that appear
+      when SAS is enabled.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Equivalent to :func:`Control::sas_mode`
+
+   .. function:: double roll_threshold()
+   .. function:: void set_roll_threshold(double value)
+
+      The threshold at which the autopilot will try to match the target roll angle, if any.
+      Defaults to 5 degrees.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> stopping_time()
+   .. function:: void set_stopping_time(std::tuple<double, double, double> value)
+
+      The maximum amount of time that the vessel should need to come to a complete stop.
+      This determines the maximum angular velocity of the vessel.
+      A vector of three stopping times, in seconds, one for each of the pitch, roll
+      and yaw axes. Defaults to 0.5 seconds for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> deceleration_time()
+   .. function:: void set_deceleration_time(std::tuple<double, double, double> value)
+
+      The time the vessel should take to come to a stop pointing in the target direction.
+      This determines the angular acceleration used to decelerate the vessel.
+      A vector of three times, in seconds, one for each of the pitch, roll and yaw axes.
+      Defaults to 5 seconds for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> attenuation_angle()
+   .. function:: void set_attenuation_angle(std::tuple<double, double, double> value)
+
+      The angle at which the autopilot considers the vessel to be pointing
+      close to the target.
+      This determines the midpoint of the target velocity attenuation function.
+      A vector of three angles, in degrees, one for each of the pitch, roll and yaw axes.
+      Defaults to 1° for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: bool auto_tune()
+   .. function:: void set_auto_tune(bool value)
+
+      Whether the rotation rate controllers PID parameters should be automatically tuned
+      using the vessels moment of inertia and available torque. Defaults to ``true``.
+      See :func:`AutoPilot::time_to_peak` and :func:`AutoPilot::overshoot`.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> time_to_peak()
+   .. function:: void set_time_to_peak(std::tuple<double, double, double> value)
+
+      The target time to peak used to autotune the PID controllers.
+      A vector of three times, in seconds, for each of the pitch, roll and yaw axes.
+      Defaults to 3 seconds for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> overshoot()
+   .. function:: void set_overshoot(std::tuple<double, double, double> value)
+
+      The target overshoot percentage used to autotune the PID controllers.
+      A vector of three values, between 0 and 1, for each of the pitch, roll and yaw axes.
+      Defaults to 0.01 for each axis.
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> pitch_pid_gains()
+   .. function:: void set_pitch_pid_gains(std::tuple<double, double, double> value)
+
+      Gains for the pitch PID controller.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :func:`AutoPilot::auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. function:: std::tuple<double, double, double> roll_pid_gains()
+   .. function:: void set_roll_pid_gains(std::tuple<double, double, double> value)
+
+      Gains for the roll PID controller.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :func:`AutoPilot::auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.
+
+   .. function:: std::tuple<double, double, double> yaw_pid_gains()
+   .. function:: void set_yaw_pid_gains(std::tuple<double, double, double> value)
+
+      Gains for the yaw PID controller.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         When :func:`AutoPilot::auto_tune` is true, these values are updated automatically,
+         which will overwrite any manual changes.

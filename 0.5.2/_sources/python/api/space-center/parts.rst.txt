@@ -1,0 +1,4887 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+.. _python-api-parts:
+
+Parts
+=====
+
+The following classes allow interaction with a vessels individual parts.
+
+.. contents::
+   :local:
+
+Parts
+-----
+
+
+.. class:: Parts
+
+   Instances of this class are used to interact with the parts of a vessel.
+   An instance can be obtained by calling :attr:`Vessel.parts`.
+
+   .. attribute:: all
+
+      A list of all of the vessels parts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Part`)
+   
+
+   .. attribute:: root
+
+      The vessels root part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-trees-of-parts`.
+
+   .. attribute:: controlling
+
+      The part from which the vessel is controlled.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Part`
+   
+
+   .. method:: with_name(name)
+
+      A list of parts whose :attr:`Part.name` is *name*.
+
+      :param str name:
+      :rtype: list(:class:`Part`)
+   
+
+   .. method:: with_title(title)
+
+      A list of all parts whose :attr:`Part.title` is *title*.
+
+      :param str title:
+      :rtype: list(:class:`Part`)
+   
+
+   .. method:: with_tag(tag)
+
+      A list of all parts whose :attr:`Part.tag` is *tag*.
+
+      :param str tag:
+      :rtype: list(:class:`Part`)
+   
+
+   .. method:: with_module(module_name)
+
+      A list of all parts that contain a :class:`Module` whose
+      :attr:`Module.name` is *module_name*.
+
+      :param str module_name:
+      :rtype: list(:class:`Part`)
+   
+
+   .. method:: in_stage(stage)
+
+      A list of all parts that are activated in the given *stage*.
+
+      :param int stage:
+      :rtype: list(:class:`Part`)
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-staging`.
+
+   .. method:: in_decouple_stage(stage)
+
+      A list of all parts that are decoupled in the given *stage*.
+
+      :param int stage:
+      :rtype: list(:class:`Part`)
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-staging`.
+
+   .. method:: modules_with_name(module_name)
+
+      A list of modules (combined across all parts in the vessel) whose
+      :attr:`Module.name` is *module_name*.
+
+      :param str module_name:
+      :rtype: list(:class:`Module`)
+   
+
+   .. attribute:: antennas
+
+      A list of all antennas in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Antenna`)
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return an empty list.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. attribute:: cargo_bays
+
+      A list of all cargo bays in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`CargoBay`)
+   
+
+   .. attribute:: control_surfaces
+
+      A list of all control surfaces in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ControlSurface`)
+   
+
+   .. attribute:: decouplers
+
+      A list of all decouplers in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Decoupler`)
+   
+
+   .. attribute:: docking_ports
+
+      A list of all docking ports in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`DockingPort`)
+   
+
+   .. attribute:: engines
+
+      A list of all engines in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Engine`)
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters, jet engines and
+         RCS thrusters.
+
+   .. attribute:: experiments
+
+      A list of all science experiments in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Experiment`)
+   
+
+   .. attribute:: fairings
+
+      A list of all fairings in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Fairing`)
+   
+
+   .. attribute:: intakes
+
+      A list of all intakes in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Intake`)
+   
+
+   .. attribute:: legs
+
+      A list of all landing legs attached to the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Leg`)
+   
+
+   .. attribute:: launch_clamps
+
+      A list of all launch clamps attached to the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`LaunchClamp`)
+   
+
+   .. attribute:: lights
+
+      A list of all lights in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Light`)
+   
+
+   .. attribute:: parachutes
+
+      A list of all parachutes in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Parachute`)
+   
+
+   .. attribute:: radiators
+
+      A list of all radiators in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Radiator`)
+   
+
+   .. attribute:: resource_drains
+
+      A list of all resource drains in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ResourceDrain`)
+   
+
+   .. attribute:: rcs
+
+      A list of all RCS blocks/thrusters in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RCS`)
+   
+
+   .. attribute:: reaction_wheels
+
+      A list of all reaction wheels in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ReactionWheel`)
+   
+
+   .. attribute:: resource_converters
+
+      A list of all resource converters in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ResourceConverter`)
+   
+
+   .. attribute:: resource_harvesters
+
+      A list of all resource harvesters in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ResourceHarvester`)
+   
+
+   .. attribute:: robotic_hinges
+
+      A list of all robotic hinges in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RoboticHinge`)
+   
+
+   .. attribute:: robotic_pistons
+
+      A list of all robotic pistons in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RoboticPiston`)
+   
+
+   .. attribute:: robotic_rotations
+
+      A list of all robotic rotations in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RoboticRotation`)
+   
+
+   .. attribute:: robotic_rotors
+
+      A list of all robotic rotors in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`RoboticRotor`)
+   
+
+   .. attribute:: sensors
+
+      A list of all sensors in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Sensor`)
+   
+
+   .. attribute:: solar_panels
+
+      A list of all solar panels in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`SolarPanel`)
+   
+
+   .. attribute:: wheels
+
+      A list of all wheels in the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Wheel`)
+   
+
+
+
+Part
+----
+
+
+.. class:: Part
+
+   Represents an individual part. Vessels are made up of multiple parts.
+   Instances of this class can be obtained by several methods in :class:`Parts`.
+
+   .. attribute:: name
+
+      Internal name of the part, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      For example "Mark1-2Pod".
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: title
+
+      Title of the part, as shown when the part is right clicked in-game. For example "Mk1-2 Command Pod".
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: tag
+
+      The name tag for the part. Can be set to a custom string using the
+      in-game user interface.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+      .. note::
+
+         This string is shared with
+         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
+         if it is installed.
+
+   .. attribute:: flag_url
+
+      The asset URL for the part's flag.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: highlighted
+
+      Whether the part is highlighted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: highlight_color
+
+      The color used to highlight the part, as an RGB triple.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: cost
+
+      The cost of the part, in units of funds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: vessel
+
+      The vessel that contains this part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vessel`
+   
+
+   .. attribute:: parent
+
+      The parts parent. Returns ``None`` if the part does not have a parent.
+      This, in combination with :attr:`Part.children`, can be used to traverse the vessels
+      parts tree.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-trees-of-parts`.
+
+   .. attribute:: children
+
+      The parts children. Returns an empty list if the part has no children.
+      This, in combination with :attr:`Part.parent`, can be used to traverse the vessels
+      parts tree.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Part`)
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-trees-of-parts`.
+
+   .. attribute:: axially_attached
+
+      Whether the part is axially attached to its parent, i.e. on the top
+      or bottom of its parent. If the part has no parent, returns ``False``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-attachment-modes`.
+
+   .. attribute:: radially_attached
+
+      Whether the part is radially attached to its parent, i.e. on the side of its parent.
+      If the part has no parent, returns ``False``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-attachment-modes`.
+
+   .. attribute:: stage
+
+      The stage in which this part will be activated. Returns -1 if the part is not
+      activated by staging.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-staging`.
+
+   .. attribute:: decouple_stage
+
+      The stage in which this part will be decoupled. Returns -1 if the part is never
+      decoupled from the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-staging`.
+
+   .. attribute:: massless
+
+      Whether the part is
+      `massless <https://wiki.kerbalspaceprogram.com/wiki/Massless_part>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: mass
+
+      The current mass of the part, including resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: dry_mass
+
+      The mass of the part, not including any resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: shielded
+
+      Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: dynamic_pressure
+
+      The dynamic pressure acting on the part, in Pascals.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: impact_tolerance
+
+      The impact tolerance of the part, in meters per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: temperature
+
+      Temperature of the part, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: skin_temperature
+
+      Temperature of the skin of the part, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_temperature
+
+      Maximum temperature that the part can survive, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_skin_temperature
+
+      Maximum temperature that the skin of the part can survive, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_mass
+
+      A measure of how much energy it takes to increase the internal temperature of the part,
+      in Joules per Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_skin_mass
+
+      A measure of how much energy it takes to increase the skin temperature of the part,
+      in Joules per Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_resource_mass
+
+      A measure of how much energy it takes to increase the temperature of the resources
+      contained in the part, in Joules per Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_conduction_flux
+
+      The rate at which heat energy is conducting into or out of the part via contact with
+      other parts. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_convection_flux
+
+      The rate at which heat energy is convecting into or out of the part from the
+      surrounding atmosphere. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_radiation_flux
+
+      The rate at which heat energy is radiating into or out of the part from the surrounding
+      environment. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_internal_flux
+
+      The rate at which heat energy is begin generated by the part.
+      For example, some engines generate heat by combusting fuel.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is losing
+      heat energy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_skin_to_internal_flux
+
+      The rate at which heat energy is transferring between the part's skin and its internals.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part's internals are gaining heat energy,
+      and negative means its skin is gaining heat energy.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: available_seats
+
+      How many open seats the part has.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: resources
+
+      A :attr:`Part.resources` object for the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Resources`
+   
+
+   .. attribute:: crossfeed
+
+      Whether this part is crossfeed capable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: is_fuel_line
+
+      Whether this part is a fuel line.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: fuel_lines_from
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is into this part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Part`)
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-fuel-lines`.
+
+   .. attribute:: fuel_lines_to
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is out of this part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Part`)
+   
+
+      .. note:: See the discussion on :rst:ref:`python-api-parts-fuel-lines`.
+
+   .. attribute:: modules
+
+      The modules for this part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Module`)
+   
+
+   .. attribute:: antenna
+
+      An :attr:`Part.antenna` if the part is an antenna, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Antenna`
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return ``None``.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. attribute:: cargo_bay
+
+      A :attr:`Part.cargo_bay` if the part is a cargo bay, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CargoBay`
+   
+
+   .. attribute:: control_surface
+
+      A :attr:`Part.control_surface` if the part is an aerodynamic control surface,
+      otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ControlSurface`
+   
+
+   .. attribute:: decoupler
+
+      A :attr:`Part.decoupler` if the part is a decoupler, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Decoupler`
+   
+
+   .. attribute:: docking_port
+
+      A :attr:`Part.docking_port` if the part is a docking port, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DockingPort`
+   
+
+   .. attribute:: engine
+
+      An :attr:`Part.engine` if the part is an engine, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Engine`
+   
+
+   .. attribute:: experiment
+
+      An :attr:`Part.experiment` if the part contains a
+      single science experiment, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Experiment`
+   
+
+      .. note::
+
+         Throws an exception if the part contains more than one experiment.
+         In that case, use :attr:`Part.experiments` to get the list of experiments in the part.
+
+   .. attribute:: experiments
+
+      A list of :attr:`Part.experiment` objects that the part contains.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Experiment`)
+   
+
+   .. attribute:: fairing
+
+      A :attr:`Part.fairing` if the part is a fairing, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Fairing`
+   
+
+   .. attribute:: intake
+
+      An :attr:`Part.intake` if the part is an intake, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Intake`
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
+         For RCS thrusters see :attr:`Part.rcs`.
+
+   .. attribute:: leg
+
+      A :attr:`Part.leg` if the part is a landing leg, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Leg`
+   
+
+   .. attribute:: launch_clamp
+
+      A :attr:`Part.launch_clamp` if the part is a launch clamp, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LaunchClamp`
+   
+
+   .. attribute:: light
+
+      A :attr:`Part.light` if the part is a light, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Light`
+   
+
+   .. attribute:: parachute
+
+      A :attr:`Part.parachute` if the part is a parachute, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Parachute`
+   
+
+   .. attribute:: radiator
+
+      A :attr:`Part.radiator` if the part is a radiator, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Radiator`
+   
+
+   .. attribute:: resource_drain
+
+      A :attr:`Part.resource_drain` if the part is a resource drain, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ResourceDrain`
+   
+
+   .. attribute:: rcs
+
+      A :attr:`Part.rcs` if the part is an RCS block/thruster, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RCS`
+   
+
+   .. attribute:: reaction_wheel
+
+      A :attr:`Part.reaction_wheel` if the part is a reaction wheel, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReactionWheel`
+   
+
+   .. attribute:: resource_converter
+
+      A :attr:`Part.resource_converter` if the part is a resource converter,
+      otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ResourceConverter`
+   
+
+   .. attribute:: resource_harvester
+
+      A :attr:`Part.resource_harvester` if the part is a resource harvester,
+      otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ResourceHarvester`
+   
+
+   .. attribute:: robotic_controller
+
+      A :attr:`Part.robotic_controller` if the part is a robotic controller,
+      otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RoboticController`
+   
+
+   .. attribute:: robotic_hinge
+
+      A :attr:`Part.robotic_hinge` if the part is a robotic hinge, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RoboticHinge`
+   
+
+   .. attribute:: robotic_piston
+
+      A :attr:`Part.robotic_piston` if the part is a robotic piston, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RoboticPiston`
+   
+
+   .. attribute:: robotic_rotation
+
+      A :attr:`Part.robotic_rotation` if the part is a robotic rotation servo, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RoboticRotation`
+   
+
+   .. attribute:: robotic_rotor
+
+      A :attr:`Part.robotic_rotor` if the part is a robotic rotor, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RoboticRotor`
+   
+
+   .. attribute:: sensor
+
+      A :attr:`Part.sensor` if the part is a sensor, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Sensor`
+   
+
+   .. attribute:: solar_panel
+
+      A :attr:`Part.solar_panel` if the part is a solar panel, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SolarPanel`
+   
+
+   .. attribute:: wheel
+
+      A :attr:`Part.wheel` if the part is a wheel, otherwise ``None``.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Wheel`
+   
+
+   .. method:: position(reference_frame)
+
+      The position of the part in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+      .. note::
+
+         This is a fixed position in the part, defined by the parts model.
+         It s not necessarily the same as the parts center of mass.
+         Use :meth:`Part.center_of_mass` to get the parts center of mass.
+
+   .. method:: center_of_mass(reference_frame)
+
+      The position of the parts center of mass in the given reference frame.
+      If the part is physicsless, this is equivalent to :meth:`Part.position`.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: bounding_box(reference_frame)
+
+      The axis-aligned bounding box of the part in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vectors are in.
+      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+      .. note::
+
+         This is computed from the collision mesh of the part.
+         If the part is not collidable, the box has zero volume and is centered on
+         the :meth:`Part.position` of the part.
+
+   .. method:: direction(reference_frame)
+
+      The direction the part points in, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: velocity(reference_frame)
+
+      The linear velocity of the part in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned velocity vector is in.
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of the part, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :rtype: tuple(float, float, float, float)
+   
+
+   .. attribute:: moment_of_inertia
+
+      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      in the parts reference frame (:attr:`Part.reference_frame`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: inertia_tensor
+
+      The inertia tensor of the part in the parts reference frame
+      (:attr:`Part.reference_frame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(float)
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame that is fixed relative to this part, and centered on a fixed
+      position within the part, defined by the parts model.
+
+      * The origin is at the position of the part, as returned by
+        :meth:`Part.position`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :attr:`DockingPort.reference_frame`.
+
+      .. figure:: /images/reference-frames/part.png
+         :align: center
+
+         Mk1 Command Pod reference frame origin and axes
+
+   .. attribute:: center_of_mass_reference_frame
+
+      The reference frame that is fixed relative to this part, and centered on its
+      center of mass.
+
+      * The origin is at the center of mass of the part, as returned by
+        :meth:`Part.center_of_mass`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :attr:`DockingPort.reference_frame`.
+
+   .. method:: add_force(force, position, reference_frame)
+
+      Exert a constant force on the part, acting at the given position.
+
+      :param tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :param tuple position: The position at which the force acts, as a vector.
+      :param ReferenceFrame reference_frame: The reference frame that the force and position are in.
+      :returns: An object that can be used to remove or modify the force.
+      :rtype: :class:`Force`
+   
+
+   .. method:: instantaneous_force(force, position, reference_frame)
+
+      Exert an instantaneous force on the part, acting at the given position.
+
+      :param tuple force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :param tuple position: The position at which the force acts, as a vector.
+      :param ReferenceFrame reference_frame: The reference frame that the force and position are in.
+   
+
+      .. note::
+
+         The force is applied instantaneously in a single physics update.
+
+   .. attribute:: glow
+
+      Whether the part is glowing.
+
+      :Attribute: Write-only, cannot be read
+      :rtype: bool
+   
+
+   .. attribute:: auto_strut_mode
+
+      Auto-strut mode.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AutoStrutMode`
+   
+
+
+
+.. class:: AutoStrutMode
+
+   The state of an auto-strut. :attr:`Part.auto_strut_mode`
+
+
+   .. data:: off
+
+      Off
+
+
+   .. data:: root
+
+      Root
+
+
+   .. data:: heaviest
+
+      Heaviest
+
+
+   .. data:: grandparent
+
+      Grandparent
+
+
+   .. data:: force_root
+
+      ForceRoot
+
+
+   .. data:: force_heaviest
+
+      ForceHeaviest
+
+
+   .. data:: force_grandparent
+
+      ForceGrandparent
+
+
+
+.. class:: Force
+
+   Obtained by calling :meth:`Part.add_force`.
+
+   .. attribute:: part
+
+      The part that this force is applied to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: force_vector
+
+      The force vector, in Newtons.
+
+      :Attribute: Can be read or written
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: position
+
+      The position at which the force acts, in reference frame :attr:`Force.reference_frame`.
+
+      :Attribute: Can be read or written
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame of the force vector and position.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. method:: remove()
+
+      Remove the force.
+
+   
+
+
+
+Module
+------
+
+
+.. class:: Module
+
+   This can be used to interact with a specific part module. This includes part modules in
+   stock KSP, and those added by mods.
+
+   In KSP, each part has zero or more
+   `PartModules <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_
+   associated with it. Each one contains some of the functionality of the part.
+   For example, an engine has a "ModuleEngines" part module that contains all the
+   functionality of an engine.
+
+   .. attribute:: name
+
+      Name of the PartModule. For example, "ModuleEngines".
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: part
+
+      The part that contains this module.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: fields
+
+      The modules field names and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, str)
+   
+
+      .. note::
+
+         Throws an exception if there is more than one field with the same name.
+         In that case, use :attr:`Module.fields_by_id` to get the fields by identifier.
+
+   .. attribute:: fields_by_id
+
+      The modules field identifiers and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, str)
+   
+
+   .. method:: has_field(name)
+
+      Returns ``True`` if the module has a field with the given name.
+
+      :param str name: Name of the field.
+      :rtype: bool
+   
+
+   .. method:: has_field_with_id(id)
+
+      Returns ``True`` if the module has a field with the given identifier.
+
+      :param str id: Identifier of the field.
+      :rtype: bool
+   
+
+   .. method:: get_field(name)
+
+      Returns the value of a field with the given name.
+
+      :param str name: Name of the field.
+      :rtype: str
+   
+
+   .. method:: get_field_by_id(id)
+
+      Returns the value of a field with the given identifier.
+
+      :param str id: Identifier of the field.
+      :rtype: str
+   
+
+   .. method:: set_field_int(name, value)
+
+      Set the value of a field to the given integer number.
+
+      :param str name: Name of the field.
+      :param int value: Value to set.
+   
+
+   .. method:: set_field_int_by_id(id, value)
+
+      Set the value of a field to the given integer number.
+
+      :param str id: Identifier of the field.
+      :param int value: Value to set.
+   
+
+   .. method:: set_field_float(name, value)
+
+      Set the value of a field to the given floating point number.
+
+      :param str name: Name of the field.
+      :param float value: Value to set.
+   
+
+   .. method:: set_field_float_by_id(id, value)
+
+      Set the value of a field to the given floating point number.
+
+      :param str id: Identifier of the field.
+      :param float value: Value to set.
+   
+
+   .. method:: set_field_string(name, value)
+
+      Set the value of a field to the given string.
+
+      :param str name: Name of the field.
+      :param str value: Value to set.
+   
+
+   .. method:: set_field_string_by_id(id, value)
+
+      Set the value of a field to the given string.
+
+      :param str id: Identifier of the field.
+      :param str value: Value to set.
+   
+
+   .. method:: set_field_bool(name, value)
+
+      Set the value of a field to true or false.
+
+      :param str name: Name of the field.
+      :param bool value: Value to set.
+   
+
+   .. method:: set_field_bool_by_id(id, value)
+
+      Set the value of a field to true or false.
+
+      :param str id: Identifier of the field.
+      :param bool value: Value to set.
+   
+
+   .. method:: reset_field(name)
+
+      Set the value of a field to its original value.
+
+      :param str name: Name of the field.
+   
+
+   .. method:: reset_field_by_id(id)
+
+      Set the value of a field to its original value.
+
+      :param str id: Identifier of the field.
+   
+
+   .. attribute:: events
+
+      A list of the names of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. attribute:: events_by_id
+
+      A list of the identifiers of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. method:: has_event(name)
+
+      ``True`` if the module has an event with the given name.
+
+      :param str name:
+      :rtype: bool
+   
+
+   .. method:: has_event_with_id(id)
+
+      ``True`` if the module has an event with the given identifier.
+
+      :param str id:
+      :rtype: bool
+   
+
+   .. method:: trigger_event(name)
+
+      Trigger the named event. Equivalent to clicking the button in the right-click menu
+      of the part.
+
+      :param str name:
+   
+
+   .. method:: trigger_event_by_id(id)
+
+      Trigger the event with the given identifier.
+      Equivalent to clicking the button in the right-click menu of the part.
+
+      :param str id:
+   
+
+   .. attribute:: actions
+
+      A list of all the names of the modules actions. These are the parts actions that can
+      be assigned to action groups in the in-game editor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. attribute:: actions_by_id
+
+      A list of all the identifiers of the modules actions. These are the parts actions
+      that can be assigned to action groups in the in-game editor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. method:: has_action(name)
+
+      ``True`` if the part has an action with the given name.
+
+      :param str name:
+      :rtype: bool
+   
+
+   .. method:: has_action_with_id(id)
+
+      ``True`` if the part has an action with the given identifier.
+
+      :param str id:
+      :rtype: bool
+   
+
+   .. method:: set_action(name, [value = True])
+
+      Set the value of an action with the given name.
+
+      :param str name:
+      :param bool value:
+   
+
+   .. method:: set_action_by_id(id, [value = True])
+
+      Set the value of an action with the given identifier.
+
+      :param str id:
+      :param bool value:
+   
+
+
+
+Specific Types of Part
+----------------------
+
+The following classes provide functionality for specific types of part.
+
+.. contents::
+   :local:
+
+Antenna
+^^^^^^^
+
+.. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
+          This class is only for stock KSP antennas.
+
+
+.. class:: Antenna
+
+   An antenna. Obtained by calling :attr:`Part.antenna`.
+
+   .. attribute:: part
+
+      The part object for this antenna.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The current state of the antenna.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`AntennaState`
+   
+
+   .. attribute:: deployable
+
+      Whether the antenna is deployable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: deployed
+
+      Whether the antenna is deployed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         Fixed antennas are always deployed.
+         Returns an error if you try to deploy a fixed antenna.
+
+   .. attribute:: can_transmit
+
+      Whether data can be transmitted by this antenna.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: transmit()
+
+      Transmit data.
+
+   
+
+   .. method:: cancel()
+
+      Cancel current transmission of data.
+
+   
+
+   .. attribute:: allow_partial
+
+      Whether partial data transmission is permitted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: power
+
+      The power of the antenna.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: combinable
+
+      Whether the antenna can be combined with other antennae on the vessel
+      to boost the power.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: combinable_exponent
+
+      Exponent used to calculate the combined power of multiple antennae on a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: packet_interval
+
+      Interval between sending packets in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: packet_size
+
+      Amount of data sent per packet in Mits.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: packet_resource_cost
+
+      Units of electric charge consumed per packet sent.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: AntennaState
+
+   The state of an antenna. See :attr:`Antenna.state`.
+
+
+   .. data:: deployed
+
+      Antenna is fully deployed.
+
+
+   .. data:: retracted
+
+      Antenna is fully retracted.
+
+
+   .. data:: deploying
+
+      Antenna is being deployed.
+
+
+   .. data:: retracting
+
+      Antenna is being retracted.
+
+
+   .. data:: broken
+
+      Antenna is broken.
+
+
+
+Cargo Bay
+^^^^^^^^^
+
+
+.. class:: CargoBay
+
+   A cargo bay. Obtained by calling :attr:`Part.cargo_bay`.
+
+   .. attribute:: part
+
+      The part object for this cargo bay.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The state of the cargo bay.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`CargoBayState`
+   
+
+   .. attribute:: open
+
+      Whether the cargo bay is open.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+
+
+.. class:: CargoBayState
+
+   The state of a cargo bay. See :attr:`CargoBay.state`.
+
+
+   .. data:: open
+
+      Cargo bay is fully open.
+
+
+   .. data:: closed
+
+      Cargo bay closed and locked.
+
+
+   .. data:: opening
+
+      Cargo bay is opening.
+
+
+   .. data:: closing
+
+      Cargo bay is closing.
+
+
+
+Control Surface
+^^^^^^^^^^^^^^^
+
+
+.. class:: ControlSurface
+
+   An aerodynamic control surface. Obtained by calling :attr:`Part.control_surface`.
+
+   .. attribute:: part
+
+      The part object for this control surface.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: pitch_enabled
+
+      Whether the control surface has pitch control enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: yaw_enabled
+
+      Whether the control surface has yaw control enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: roll_enabled
+
+      Whether the control surface has roll control enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: authority_limiter
+
+      The authority limiter for the control surface, which controls how far the
+      control surface will move.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: inverted
+
+      Whether the control surface movement is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: deployed
+
+      Whether the control surface has been fully deployed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: surface_area
+
+      Surface area of the control surface in :math:`m^2`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: available_torque
+
+      The available torque, in Newton meters, that can be produced by this control surface,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+
+
+Decoupler
+^^^^^^^^^
+
+
+.. class:: Decoupler
+
+   A decoupler. Obtained by calling :attr:`Part.decoupler`
+
+   .. attribute:: part
+
+      The part object for this decoupler.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: decouple()
+
+      Fires the decoupler. Returns the new vessel created when the decoupler fires.
+      Throws an exception if the decoupler has already fired.
+
+      :rtype: :class:`Vessel`
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :attr:`active_vessel` no longer refer to the active vessel.
+
+   .. attribute:: decoupled
+
+      Whether the decoupler has fired.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: staged
+
+      Whether the decoupler is enabled in the staging sequence.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: impulse
+
+      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+Docking Port
+^^^^^^^^^^^^
+
+
+.. class:: DockingPort
+
+   A docking port. Obtained by calling :attr:`Part.docking_port`
+
+   .. attribute:: part
+
+      The part object for this docking port.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The current state of the docking port.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`DockingPortState`
+   
+
+   .. attribute:: docked_part
+
+      The part that this docking port is docked to. Returns ``None`` if this
+      docking port is not docked to anything.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: undock()
+
+      Undocks the docking port and returns the new :class:`Vessel` that is created.
+      This method can be called for either docking port in a docked pair.
+      Throws an exception if the docking port is not docked to anything.
+
+      :rtype: :class:`Vessel`
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :attr:`active_vessel` no longer refer to the active vessel.
+
+   .. attribute:: reengage_distance
+
+      The distance a docking port must move away when it undocks before it
+      becomes ready to dock with another port, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: has_shield
+
+      Whether the docking port has a shield.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: shielded
+
+      The state of the docking ports shield, if it has one.
+
+      Returns ``True`` if the docking port has a shield, and the shield is
+      closed. Otherwise returns ``False``. When set to ``True``, the shield is
+      closed, and when set to ``False`` the shield is opened. If the docking
+      port does not have a shield, setting this attribute has no effect.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: can_rotate
+
+      Whether the docking port can be commanded to rotate while docked.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: maximum_rotation
+
+      Maximum rotation angle in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: minimum_rotation
+
+      Minimum rotation angle in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rotation_target
+
+      Rotation target angle in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: rotation_locked
+
+      Lock rotation. When locked, allows auto-strut to work across the joint.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: position(reference_frame)
+
+      The position of the docking port, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: direction(reference_frame)
+
+      The direction that docking port points in, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: rotation(reference_frame)
+
+      The rotation of the docking port, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned rotation is in.
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+      :rtype: tuple(float, float, float, float)
+   
+
+   .. attribute:: reference_frame
+
+      The reference frame that is fixed relative to this docking port, and
+      oriented with the port.
+
+      * The origin is at the position of the docking port.
+      * The axes rotate with the docking port.
+      * The x-axis points out to the right side of the docking port.
+      * The y-axis points in the direction the docking port is facing.
+      * The z-axis points out of the bottom off the docking port.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+   
+
+      .. note::
+
+         This reference frame is not necessarily equivalent to the reference frame
+         for the part, returned by :attr:`Part.reference_frame`.
+
+      .. figure:: /images/reference-frames/docking-port.png
+         :align: center
+
+         Docking port reference frame origin and axes
+
+      .. figure:: /images/reference-frames/docking-port-inline.png
+         :align: center
+
+         Inline docking port reference frame origin and axes
+
+
+
+.. class:: DockingPortState
+
+   The state of a docking port. See :attr:`DockingPort.state`.
+
+
+   .. data:: ready
+
+      The docking port is ready to dock to another docking port.
+
+
+   .. data:: docked
+
+      The docking port is docked to another docking port, or docked to
+      another part (from the VAB/SPH).
+
+
+   .. data:: docking
+
+      The docking port is very close to another docking port,
+      but has not docked. It is using magnetic force to acquire a solid dock.
+
+
+   .. data:: undocking
+
+      The docking port has just been undocked from another docking port,
+      and is disabled until it moves away by a sufficient distance
+      (:attr:`DockingPort.reengage_distance`).
+
+
+   .. data:: shielded
+
+      The docking port has a shield, and the shield is closed.
+
+
+   .. data:: moving
+
+      The docking ports shield is currently opening/closing.
+
+
+
+Engine
+^^^^^^
+
+
+.. class:: Engine
+
+   An engine, including ones of various types.
+   For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
+   Obtained by calling :attr:`Part.engine`.
+
+   .. note::
+
+      For RCS thrusters :attr:`Part.rcs`.
+
+   .. attribute:: part
+
+      The part object for this engine.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the engine is active. Setting this attribute may have no effect,
+      depending on :attr:`Engine.can_shutdown` and :attr:`Engine.can_restart`.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: thrust
+
+      The current amount of thrust being produced by the engine, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: available_thrust
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the engine's current :attr:`Engine.thrust_limit` and atmospheric conditions
+      into account.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: available_thrust_at(pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the given pressure into account.
+
+      :param float pressure: Atmospheric pressure in atmospheres
+      :rtype: float
+   
+
+   .. attribute:: max_thrust
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: max_thrust_at(pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+      Takes the given pressure into account.
+
+      :param float pressure: Atmospheric pressure in atmospheres
+      :rtype: float
+   
+
+   .. attribute:: max_vacuum_thrust
+
+      The maximum amount of thrust that can be produced by the engine in a
+      vacuum, in Newtons. This is the amount of thrust produced by the engine
+      when activated, :attr:`Engine.thrust_limit` is set to 100%, the main
+      vessel's throttle is set to 100% and the engine is in a vacuum.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thrust_limit
+
+      The thrust limiter of the engine. A value between 0 and 1. Setting this
+      attribute may have no effect, for example the thrust limit for a solid
+      rocket booster cannot be changed in flight.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: thrusters
+
+      The components of the engine that generate thrust.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Thruster`)
+   
+
+      .. note::
+
+         For example, this corresponds to the rocket nozzel on a solid rocket booster,
+         or the individual nozzels on a RAPIER engine.
+         The overall thrust produced by the engine, as reported by :attr:`Engine.available_thrust`,
+         :attr:`Engine.max_thrust` and others, is the sum of the thrust generated by each thruster.
+
+   .. attribute:: specific_impulse
+
+      The current specific impulse of the engine, in seconds. Returns zero
+      if the engine is not active.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. method:: specific_impulse_at(pressure)
+
+      The specific impulse of the engine under the given pressure, in seconds. Returns zero
+      if the engine is not active.
+
+      :param float pressure: Atmospheric pressure in atmospheres
+      :rtype: float
+   
+
+   .. attribute:: vacuum_specific_impulse
+
+      The vacuum specific impulse of the engine, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: kerbin_sea_level_specific_impulse
+
+      The specific impulse of the engine at sea level on Kerbin, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: propellant_names
+
+      The names of the propellants that the engine consumes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. attribute:: propellant_ratios
+
+      The ratio of resources that the engine consumes. A dictionary mapping resource names
+      to the ratio at which they are consumed by the engine.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, float)
+   
+
+      .. note::
+
+         For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every
+         0.6 units of LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+
+   .. attribute:: propellants
+
+      The propellants that the engine consumes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Propellant`)
+   
+
+   .. attribute:: has_fuel
+
+      Whether the engine has any fuel available.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: throttle
+
+      The current throttle setting for the engine. A value between 0 and 1.
+      This is not necessarily the same as the vessel's main throttle
+      setting, as some engines take time to adjust their throttle
+      (such as jet engines), or independent throttle may be enabled.
+
+      When the engine's independent throttle is enabled
+      (see :attr:`Engine.independent_throttle`), can be used to set the throttle percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: throttle_locked
+
+      Whether the :attr:`Control.throttle` affects the engine. For example,
+      this is ``True`` for liquid fueled rockets, and ``False`` for solid rocket
+      boosters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: independent_throttle
+
+      Whether the independent throttle is enabled for the engine.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: can_restart
+
+      Whether the engine can be restarted once shutdown. If the engine cannot be shutdown,
+      returns ``False``. For example, this is ``True`` for liquid fueled rockets
+      and ``False`` for solid rocket boosters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: can_shutdown
+
+      Whether the engine can be shutdown once activated. For example, this is
+      ``True`` for liquid fueled rockets and ``False`` for solid rocket boosters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_modes
+
+      Whether the engine has multiple modes of operation.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: mode
+
+      The name of the current engine mode.
+
+      :Attribute: Can be read or written
+      :rtype: str
+   
+
+   .. attribute:: modes
+
+      The available modes for the engine.
+      A dictionary mapping mode names to :class:`Engine` objects.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, :class:`Engine`)
+   
+
+   .. method:: toggle_mode()
+
+      Toggle the current engine mode.
+
+   
+
+   .. attribute:: auto_mode_switch
+
+      Whether the engine will automatically switch modes.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: gimballed
+
+      Whether the engine is gimballed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: gimbal_range
+
+      The range over which the gimbal can move, in degrees.
+      Returns 0 if the engine is not gimballed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: gimbal_locked
+
+      Whether the engines gimbal is locked in place. Setting this attribute has
+      no effect if the engine is not gimballed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: gimbal_limit
+
+      The gimbal limiter of the engine. A value between 0 and 1.
+      Returns 0 if the gimbal is locked.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: available_torque
+
+      The available torque, in Newton meters, that can be produced by this engine,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
+      Returns zero if the engine is inactive, or not gimballed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+
+
+.. class:: Propellant
+
+   A propellant for an engine. Obtains by calling :attr:`Engine.propellants`.
+
+   .. attribute:: name
+
+      The name of the propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: current_amount
+
+      The current amount of propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: current_requirement
+
+      The required amount of propellant.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: total_resource_available
+
+      The total amount of the underlying resource currently reachable given
+      resource flow rules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: total_resource_capacity
+
+      The total vehicle capacity for the underlying propellant resource,
+      restricted by resource flow rules.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: ignore_for_isp
+
+      If this propellant should be ignored when calculating required mass flow
+      given specific impulse.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: ignore_for_thrust_curve
+
+      If this propellant should be ignored for thrust curve calculations.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: draw_stack_gauge
+
+      If this propellant has a stack gauge or not.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: is_deprived
+
+      If this propellant is deprived.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: ratio
+
+      The propellant ratio.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+Experiment
+^^^^^^^^^^
+
+
+.. class:: Experiment
+
+   Obtained by calling :attr:`Part.experiment`.
+
+   .. attribute:: part
+
+      The part object for this experiment.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: name
+
+      Internal name of the experiment, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: title
+
+      Title of the experiment, as shown on the in-game UI.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. method:: run()
+
+      Run the experiment.
+
+   
+
+   .. method:: transmit()
+
+      Transmit all experimental data contained by this part.
+
+   
+
+   .. method:: dump()
+
+      Dump the experimental data contained by the experiment.
+
+   
+
+   .. method:: reset()
+
+      Reset the experiment.
+
+   
+
+   .. attribute:: deployed
+
+      Whether the experiment has been deployed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: rerunnable
+
+      Whether the experiment can be re-run.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: inoperable
+
+      Whether the experiment is inoperable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_data
+
+      Whether the experiment contains data.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: data
+
+      The data contained in this experiment.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`ScienceData`)
+   
+
+   .. attribute:: biome
+
+      The name of the biome the experiment is currently in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: available
+
+      Determines if the experiment is available given the current conditions.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: science_subject
+
+      Containing information on the corresponding specific science result for the current
+      conditions. Returns ``None`` if the experiment is unavailable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ScienceSubject`
+   
+
+
+
+.. class:: ScienceData
+
+   Obtained by calling :attr:`Experiment.data`.
+
+   .. attribute:: data_amount
+
+      Data amount.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: science_value
+
+      Science value.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: transmit_value
+
+      Transmit value.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: ScienceSubject
+
+   Obtained by calling :attr:`Experiment.science_subject`.
+
+   .. attribute:: title
+
+      Title of science subject, displayed in science archives
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: is_complete
+
+      Whether the experiment has been completed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: science
+
+      Amount of science already earned from this subject, not updated until after
+      transmission/recovery.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: science_cap
+
+      Total science allowable for this subject.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: data_scale
+
+      Multiply science value by this to determine data amount in mits.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: subject_value
+
+      Multiplier for specific Celestial Body/Experiment Situation combination.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: scientific_value
+
+      Diminishing value multiplier for decreasing the science value returned from repeated
+      experiments.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+Fairing
+^^^^^^^
+
+
+.. class:: Fairing
+
+   A fairing. Obtained by calling :attr:`Part.fairing`.
+   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. attribute:: part
+
+      The part object for this fairing.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: jettison()
+
+      Jettison the fairing. Has no effect if it has already been jettisoned.
+
+   
+
+   .. attribute:: jettisoned
+
+      Whether the fairing has been jettisoned.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+
+
+Intake
+^^^^^^
+
+
+.. class:: Intake
+
+   An air intake. Obtained by calling :attr:`Part.intake`.
+
+   .. attribute:: part
+
+      The part object for this intake.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: open
+
+      Whether the intake is open.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: speed
+
+      Speed of the flow into the intake, in :math:`m/s`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: flow
+
+      The rate of flow into the intake, in units of resource per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: area
+
+      The area of the intake's opening, in square meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+Leg
+^^^
+
+
+.. class:: Leg
+
+   A landing leg. Obtained by calling :attr:`Part.leg`.
+
+   .. attribute:: part
+
+      The part object for this landing leg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The current state of the landing leg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LegState`
+   
+
+   .. attribute:: deployable
+
+      Whether the leg is deployable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: deployed
+
+      Whether the landing leg is deployed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         Fixed landing legs are always deployed.
+         Returns an error if you try to deploy fixed landing gear.
+
+   .. attribute:: is_grounded
+
+      Returns whether the leg is touching the ground.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+
+
+.. class:: LegState
+
+   The state of a landing leg. See :attr:`Leg.state`.
+
+
+   .. data:: deployed
+
+      Landing leg is fully deployed.
+
+
+   .. data:: retracted
+
+      Landing leg is fully retracted.
+
+
+   .. data:: deploying
+
+      Landing leg is being deployed.
+
+
+   .. data:: retracting
+
+      Landing leg is being retracted.
+
+
+   .. data:: broken
+
+      Landing leg is broken.
+
+
+
+Launch Clamp
+^^^^^^^^^^^^
+
+
+.. class:: LaunchClamp
+
+   A launch clamp. Obtained by calling :attr:`Part.launch_clamp`.
+
+   .. attribute:: part
+
+      The part object for this launch clamp.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: release()
+
+      Releases the docking clamp. Has no effect if the clamp has already been released.
+
+   
+
+
+
+Light
+^^^^^
+
+
+.. class:: Light
+
+   A light. Obtained by calling :attr:`Part.light`.
+
+   .. attribute:: part
+
+      The part object for this light.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the light is switched on.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: color
+
+      The color of the light, as an RGB triple.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: blink
+
+      Whether blinking is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: blink_rate
+
+      The blink rate of the light.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: power_usage
+
+      The current power usage, in units of charge per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+Parachute
+^^^^^^^^^
+
+
+.. class:: Parachute
+
+   A parachute. Obtained by calling :attr:`Part.parachute`.
+
+   .. attribute:: part
+
+      The part object for this parachute.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: deploy()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been deployed.
+
+   
+
+   .. attribute:: deployed
+
+      Whether the parachute has been deployed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: arm()
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been armed or deployed.
+
+   
+
+   .. attribute:: armed
+
+      Whether the parachute has been armed or deployed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: cut()
+
+      Cuts the parachute.
+
+   
+
+   .. attribute:: state
+
+      The current state of the parachute.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ParachuteState`
+   
+
+   .. attribute:: deploy_altitude
+
+      The altitude at which the parachute will full deploy, in meters.
+      Only applicable to stock parachutes.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: deploy_min_pressure
+
+      The minimum pressure at which the parachute will semi-deploy, in atmospheres.
+      Only applicable to stock parachutes.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+
+
+.. class:: ParachuteState
+
+   The state of a parachute. See :attr:`Parachute.state`.
+
+
+   .. data:: stowed
+
+      The parachute is safely tucked away inside its housing.
+
+
+   .. data:: armed
+
+      The parachute is armed for deployment.
+
+
+   .. data:: semi_deployed
+
+      The parachute has been deployed and is providing some drag,
+      but is not fully deployed yet. (Stock parachutes only)
+
+
+   .. data:: deployed
+
+      The parachute is fully deployed.
+
+
+   .. data:: cut
+
+      The parachute has been cut.
+
+
+
+Radiator
+^^^^^^^^
+
+
+.. class:: Radiator
+
+   A radiator. Obtained by calling :attr:`Part.radiator`.
+
+   .. attribute:: part
+
+      The part object for this radiator.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: deployable
+
+      Whether the radiator is deployable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: deployed
+
+      For a deployable radiator, ``True`` if the radiator is extended.
+      If the radiator is not deployable, this is always ``True``.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: state
+
+      The current state of the radiator.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RadiatorState`
+   
+
+      .. note::
+
+         A fixed radiator is always :attr:`RadiatorState.extended`.
+
+
+
+.. class:: RadiatorState
+
+   The state of a radiator. :attr:`Radiator.state`
+
+
+   .. data:: extended
+
+      Radiator is fully extended.
+
+
+   .. data:: retracted
+
+      Radiator is fully retracted.
+
+
+   .. data:: extending
+
+      Radiator is being extended.
+
+
+   .. data:: retracting
+
+      Radiator is being retracted.
+
+
+   .. data:: broken
+
+      Radiator is broken.
+
+
+
+Resource Converter
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: ResourceConverter
+
+   A resource converter. Obtained by calling :attr:`Part.resource_converter`.
+
+   .. attribute:: part
+
+      The part object for this converter.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: count
+
+      The number of converters in the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. method:: name(index)
+
+      The name of the specified converter.
+
+      :param int index: Index of the converter.
+      :rtype: str
+   
+
+   .. method:: active(index)
+
+      True if the specified converter is active.
+
+      :param int index: Index of the converter.
+      :rtype: bool
+   
+
+   .. method:: start(index)
+
+      Start the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: stop(index)
+
+      Stop the specified converter.
+
+      :param int index: Index of the converter.
+   
+
+   .. method:: state(index)
+
+      The state of the specified converter.
+
+      :param int index: Index of the converter.
+      :rtype: :class:`ResourceConverterState`
+   
+
+   .. method:: status_info(index)
+
+      Status information for the specified converter.
+      This is the full status message shown in the in-game UI.
+
+      :param int index: Index of the converter.
+      :rtype: str
+   
+
+   .. method:: inputs(index)
+
+      List of the names of resources consumed by the specified converter.
+
+      :param int index: Index of the converter.
+      :rtype: list(str)
+   
+
+   .. method:: outputs(index)
+
+      List of the names of resources produced by the specified converter.
+
+      :param int index: Index of the converter.
+      :rtype: list(str)
+   
+
+   .. attribute:: optimum_core_temperature
+
+      The core temperature at which the converter will operate with peak efficiency, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: core_temperature
+
+      The core temperature of the converter, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_efficiency
+
+      The thermal efficiency of the converter, as a percentage of its maximum.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: ResourceConverterState
+
+   The state of a resource converter. See :meth:`ResourceConverter.state`.
+
+
+   .. data:: running
+
+      Converter is running.
+
+
+   .. data:: idle
+
+      Converter is idle.
+
+
+   .. data:: missing_resource
+
+      Converter is missing a required resource.
+
+
+   .. data:: storage_full
+
+      No available storage for output resource.
+
+
+   .. data:: capacity
+
+      At preset resource capacity.
+
+
+   .. data:: unknown
+
+      Unknown state. Possible with modified resource converters.
+      In this case, check :meth:`ResourceConverter.status_info` for more information.
+
+
+
+Resource Harvester
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: ResourceHarvester
+
+   A resource harvester (drill). Obtained by calling :attr:`Part.resource_harvester`.
+
+   .. attribute:: part
+
+      The part object for this harvester.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The state of the harvester.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ResourceHarvesterState`
+   
+
+   .. attribute:: deployed
+
+      Whether the harvester is deployed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: active
+
+      Whether the harvester is actively drilling.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: extraction_rate
+
+      The rate at which the drill is extracting ore, in units per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thermal_efficiency
+
+      The thermal efficiency of the drill, as a percentage of its maximum.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: core_temperature
+
+      The core temperature of the drill, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: optimum_core_temperature
+
+      The core temperature at which the drill will operate with peak efficiency, in Kelvin.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: ResourceHarvesterState
+
+   The state of a resource harvester. See :attr:`ResourceHarvester.state`.
+
+
+   .. data:: deploying
+
+      The drill is deploying.
+
+
+   .. data:: deployed
+
+      The drill is deployed and ready.
+
+
+   .. data:: retracting
+
+      The drill is retracting.
+
+
+   .. data:: retracted
+
+      The drill is retracted.
+
+
+   .. data:: active
+
+      The drill is running.
+
+
+
+Reaction Wheel
+^^^^^^^^^^^^^^
+
+
+.. class:: ReactionWheel
+
+   A reaction wheel. Obtained by calling :attr:`Part.reaction_wheel`.
+
+   .. attribute:: part
+
+      The part object for this reaction wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the reaction wheel is active.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: broken
+
+      Whether the reaction wheel is broken.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: available_torque
+
+      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
+      Returns zero if the reaction wheel is inactive or broken.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+   .. attribute:: max_torque
+
+      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
+      These axes correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+
+
+Resource Drain
+^^^^^^^^^^^^^^
+
+
+.. class:: ResourceDrain
+
+   A resource drain. Obtained by calling :attr:`Part.resource_drain`.
+
+   .. attribute:: part
+
+      The part object for this resource drain.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: available_resources
+
+      List of available resources.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Resource`)
+   
+
+   .. method:: set_resource(resource, enabled)
+
+      Whether the given resource should be drained.
+
+      :param Resource resource:
+      :param bool enabled:
+   
+
+   .. method:: check_resource(resource)
+
+      Whether the provided resource is enabled for draining.
+
+      :param Resource resource:
+      :rtype: bool
+   
+
+   .. attribute:: drain_mode
+
+      The drain mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`DrainMode`
+   
+
+   .. attribute:: min_rate
+
+      Minimum possible drain rate
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_rate
+
+      Maximum possible drain rate.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rate
+
+      Current drain rate.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. method:: start()
+
+      Activates resource draining for all enabled parts.
+
+   
+
+   .. method:: stop()
+
+      Turns off resource draining.
+
+   
+
+
+
+.. class:: DrainMode
+
+   Resource drain mode.
+   See :attr:`ResourceDrain.drain_mode`.
+
+
+   .. data:: part
+
+      Drains from the parent part.
+
+
+   .. data:: vessel
+
+      Drains from all available parts.
+
+
+
+Robotic Controller
+^^^^^^^^^^^^^^^^^^
+
+
+.. class:: RoboticController
+
+   A robotic controller. Obtained by calling :attr:`Part.robotic_controller`.
+
+   .. attribute:: part
+
+      The part object for this controller.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: has_part(part)
+
+      Whether the controller has a part.
+
+      :param Part part:
+      :rtype: bool
+   
+
+   .. method:: axes()
+
+      The axes for the controller.
+
+      :rtype: list(list(str))
+   
+
+   .. method:: add_axis(module, field_name)
+
+      Add an axis to the controller.
+
+      :param Module module:
+      :param str field_name:
+      :returns: Returns ``True`` if the axis is added successfully.
+      :rtype: bool
+   
+
+   .. method:: add_key_frame(module, field_name, time, value)
+
+      Add key frame value for controller axis.
+
+      :param Module module:
+      :param str field_name:
+      :param float time:
+      :param float value:
+      :returns: Returns ``True`` if the key frame is added successfully.
+      :rtype: bool
+   
+
+   .. method:: clear_axis(module, field_name)
+
+      Clear axis.
+
+      :param Module module:
+      :param str field_name:
+      :returns: Returns ``True`` if the axis is cleared successfully.
+      :rtype: bool
+   
+
+
+
+Robotic Hinge
+^^^^^^^^^^^^^
+
+
+.. class:: RoboticHinge
+
+   A robotic hinge. Obtained by calling :attr:`Part.robotic_hinge`.
+
+   .. attribute:: part
+
+      The part object for this robotic hinge.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: target_angle
+
+      Target angle.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: current_angle
+
+      Current angle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rate
+
+      Target movement rate in degrees per second.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: damping
+
+      Damping percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: locked
+
+      Lock movement.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: motor_engaged
+
+      Whether the motor is engaged.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: move_home()
+
+      Move hinge to it's built position.
+
+   
+
+
+
+Robotic Piston
+^^^^^^^^^^^^^^
+
+
+.. class:: RoboticPiston
+
+   A robotic piston part. Obtained by calling :attr:`Part.robotic_piston`.
+
+   .. attribute:: part
+
+      The part object for this robotic piston.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: target_extension
+
+      Target extension of the piston.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: current_extension
+
+      Current extension of the piston.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rate
+
+      Target movement rate in degrees per second.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: damping
+
+      Damping percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: locked
+
+      Lock movement.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: motor_engaged
+
+      Whether the motor is engaged.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: move_home()
+
+      Move piston to it's built position.
+
+   
+
+
+
+Robotic Rotation
+^^^^^^^^^^^^^^^^
+
+
+.. class:: RoboticRotation
+
+   A robotic rotation servo. Obtained by calling :attr:`Part.robotic_rotation`.
+
+   .. attribute:: part
+
+      The part object for this robotic rotation servo.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: target_angle
+
+      Target angle.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: current_angle
+
+      Current angle.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: rate
+
+      Target movement rate in degrees per second.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: damping
+
+      Damping percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: locked
+
+      Lock Movement
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: motor_engaged
+
+      Whether the motor is engaged.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: move_home()
+
+      Move rotation servo to it's built position.
+
+   
+
+
+
+Robotic Rotor
+^^^^^^^^^^^^^
+
+
+.. class:: RoboticRotor
+
+   A robotic rotor. Obtained by calling :attr:`Part.robotic_rotor`.
+
+   .. attribute:: part
+
+      The part object for this robotic rotor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: target_rpm
+
+      Target RPM.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: current_rpm
+
+      Current RPM.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: inverted
+
+      Whether the rotor direction is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: torque_limit
+
+      Torque limit percentage.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: locked
+
+      Lock movement.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: motor_engaged
+
+      Whether the motor is engaged.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+
+
+RCS
+^^^
+
+
+.. class:: RCS
+
+   An RCS block or thruster. Obtained by calling :attr:`Part.rcs`.
+
+   .. attribute:: part
+
+      The part object for this RCS.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the RCS thrusters are active.
+      An RCS thruster is inactive if the RCS action group is disabled
+      (:attr:`Control.rcs`), the RCS thruster itself is not enabled
+      (:attr:`RCS.enabled`) or it is covered by a fairing (:attr:`Part.shielded`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: enabled
+
+      Whether the RCS thrusters are enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: pitch_enabled
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: yaw_enabled
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: roll_enabled
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: forward_enabled
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: up_enabled
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: right_enabled
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: available_torque
+
+      The available torque, in Newton meters, that can be produced by this RCS,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
+      Returns zero if RCS is disable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+   .. attribute:: available_force
+
+      The available force, in Newtons, that can be produced by this RCS,
+      in the positive and negative x, y and z axes of the vessel. These axes
+      correspond to the coordinate axes of the :attr:`Vessel.reference_frame`.
+      Returns zero if RCS is disabled.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(tuple(float, float, float), tuple(float, float, float))
+   
+
+   .. attribute:: available_thrust
+
+      The amount of thrust, in Newtons, that would be produced by the thruster when activated.
+      Returns zero if the thruster does not have any fuel.
+      Takes the thrusters current :attr:`RCS.thrust_limit` and atmospheric conditions
+      into account.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_thrust
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active,
+      in Newtons.
+      Takes the thrusters current :attr:`RCS.thrust_limit` and atmospheric conditions
+      into account.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max_vacuum_thrust
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active
+      in a vacuum, in Newtons.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: thrust_limit
+
+      The thrust limiter of the thruster. A value between 0 and 1.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: thrusters
+
+      A list of thrusters, one of each nozzel in the RCS part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Thruster`)
+   
+
+   .. attribute:: specific_impulse
+
+      The current specific impulse of the RCS, in seconds. Returns zero
+      if the RCS is not active.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: vacuum_specific_impulse
+
+      The vacuum specific impulse of the RCS, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: kerbin_sea_level_specific_impulse
+
+      The specific impulse of the RCS at sea level on Kerbin, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: propellants
+
+      The names of resources that the RCS consumes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+   
+
+   .. attribute:: propellant_ratios
+
+      The ratios of resources that the RCS consumes. A dictionary mapping resource names
+      to the ratios at which they are consumed by the RCS.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, float)
+   
+
+   .. attribute:: has_fuel
+
+      Whether the RCS has fuel available.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+
+
+Sensor
+^^^^^^
+
+
+.. class:: Sensor
+
+   A sensor, such as a thermometer. Obtained by calling :attr:`Part.sensor`.
+
+   .. attribute:: part
+
+      The part object for this sensor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: active
+
+      Whether the sensor is active.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: value
+
+      The current value of the sensor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+
+
+Solar Panel
+^^^^^^^^^^^
+
+
+.. class:: SolarPanel
+
+   A solar panel. Obtained by calling :attr:`Part.solar_panel`.
+
+   .. attribute:: part
+
+      The part object for this solar panel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: deployable
+
+      Whether the solar panel is deployable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: deployed
+
+      Whether the solar panel is extended.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: state
+
+      The current state of the solar panel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SolarPanelState`
+   
+
+   .. attribute:: energy_flow
+
+      The current amount of energy being generated by the solar panel, in
+      units of charge per second.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: sun_exposure
+
+      The current amount of sunlight that is incident on the solar panel,
+      as a percentage. A value between 0 and 1.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: SolarPanelState
+
+   The state of a solar panel. See :attr:`SolarPanel.state`.
+
+
+   .. data:: extended
+
+      Solar panel is fully extended.
+
+
+   .. data:: retracted
+
+      Solar panel is fully retracted.
+
+
+   .. data:: extending
+
+      Solar panel is being extended.
+
+
+   .. data:: retracting
+
+      Solar panel is being retracted.
+
+
+   .. data:: broken
+
+      Solar panel is broken.
+
+
+
+Thruster
+^^^^^^^^
+
+
+.. class:: Thruster
+
+   The component of an :class:`Engine` or :class:`RCS` part that generates thrust.
+   Can obtained by calling :attr:`Engine.thrusters` or :attr:`RCS.thrusters`.
+
+   .. note::
+
+      Engines can consist of multiple thrusters.
+      For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
+      four thrusters.
+
+   .. attribute:: part
+
+      The :attr:`Thruster.part` that contains this thruster.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. method:: thrust_position(reference_frame)
+
+      The position at which the thruster generates thrust, in the given reference frame.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: thrust_direction(reference_frame)
+
+      The direction of the force generated by the thruster, in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: thrust_reference_frame
+
+      A reference frame that is fixed relative to the thruster and orientated with
+      its thrust direction (:meth:`Thruster.thrust_direction`).
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      * The origin is at the position of thrust for this thruster
+        (:meth:`Thruster.thrust_position`).
+      * The axes rotate with the thrust direction.
+        This is the direction in which the thruster expels propellant, including any gimballing.
+      * The y-axis points along the thrust direction.
+      * The x-axis and z-axis are perpendicular to the thrust direction.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+   
+
+   .. attribute:: gimballed
+
+      Whether the thruster is gimballed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. method:: gimbal_position(reference_frame)
+
+      Position around which the gimbal pivots.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+   .. attribute:: gimbal_angle
+
+      The current gimbal angle in the pitch, roll and yaw axes, in degrees.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+   
+
+   .. method:: initial_thrust_position(reference_frame)
+
+      The position at which the thruster generates thrust, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+   
+
+      .. note::
+
+         This position can move when the gimbal rotates. This is because the thrust position and
+         gimbal position are not necessarily the same.
+
+   .. method:: initial_thrust_direction(reference_frame)
+
+      The direction of the force generated by the thruster, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned direction is in.
+      :returns: The direction as a unit vector.
+      :rtype: tuple(float, float, float)
+   
+
+
+
+Wheel
+^^^^^
+
+
+.. class:: Wheel
+
+   A wheel. Includes landing gear and rover wheels.
+   Obtained by calling :attr:`Part.wheel`.
+   Can be used to control the motors, steering and deployment of wheels, among other things.
+
+   .. attribute:: part
+
+      The part object for this wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: state
+
+      The current state of the wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`WheelState`
+   
+
+   .. attribute:: radius
+
+      Radius of the wheel, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: grounded
+
+      Whether the wheel is touching the ground.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: has_brakes
+
+      Whether the wheel has brakes.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: brakes
+
+      The braking force, as a percentage of maximum, when the brakes are applied.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: auto_friction_control
+
+      Whether automatic friction control is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: manual_friction_control
+
+      Manual friction control value. Only has an effect if automatic friction control is disabled.
+      A value between 0 and 5 inclusive.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: deployable
+
+      Whether the wheel is deployable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: deployed
+
+      Whether the wheel is deployed.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: powered
+
+      Whether the wheel is powered by a motor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: motor_enabled
+
+      Whether the motor is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: motor_inverted
+
+      Whether the direction of the motor is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: motor_state
+
+      Whether the direction of the motor is inverted.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`MotorState`
+   
+
+   .. attribute:: motor_output
+
+      The output of the motor. This is the torque currently being generated, in Newton meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: traction_control_enabled
+
+      Whether automatic traction control is enabled.
+      A wheel only has traction control if it is powered.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: traction_control
+
+      Setting for the traction control.
+      Only takes effect if the wheel has automatic traction control enabled.
+      A value between 0 and 5 inclusive.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: drive_limiter
+
+      Manual setting for the motor limiter.
+      Only takes effect if the wheel has automatic traction control disabled.
+      A value between 0 and 100 inclusive.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: steerable
+
+      Whether the wheel has steering.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: steering_enabled
+
+      Whether the wheel steering is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: steering_inverted
+
+      Whether the wheel steering is inverted.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: steering_angle_limit
+
+      The steering angle limit.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: steering_response_time
+
+      Steering response time.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: has_suspension
+
+      Whether the wheel has suspension.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: suspension_spring_strength
+
+      Suspension spring strength, as set in the editor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: suspension_damper_strength
+
+      Suspension damper strength, as set in the editor.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: broken
+
+      Whether the wheel is broken.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: repairable
+
+      Whether the wheel is repairable.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: stress
+
+      Current stress on the wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: stress_tolerance
+
+      Stress tolerance of the wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: stress_percentage
+
+      Current stress on the wheel as a percentage of its stress tolerance.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: deflection
+
+      Current deflection of the wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: slip
+
+      Current slip of the wheel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+
+
+.. class:: WheelState
+
+   The state of a wheel. See :attr:`Wheel.state`.
+
+
+   .. data:: deployed
+
+      Wheel is fully deployed.
+
+
+   .. data:: retracted
+
+      Wheel is fully retracted.
+
+
+   .. data:: deploying
+
+      Wheel is being deployed.
+
+
+   .. data:: retracting
+
+      Wheel is being retracted.
+
+
+   .. data:: broken
+
+      Wheel is broken.
+
+
+
+.. class:: MotorState
+
+   The state of the motor on a powered wheel. See :attr:`Wheel.motor_state`.
+
+
+   .. data:: idle
+
+      The motor is idle.
+
+
+   .. data:: running
+
+      The motor is running.
+
+
+   .. data:: disabled
+
+      The motor is disabled.
+
+
+   .. data:: inoperable
+
+      The motor is inoperable.
+
+
+   .. data:: not_enough_resources
+
+      The motor does not have enough resources to run.
+
+
+
+.. _python-api-parts-trees-of-parts:
+
+Trees of Parts
+--------------
+
+Vessels in KSP are comprised of a number of parts, connected to one another in a
+*tree* structure. An example vessel is shown in Figure 1, and the corresponding
+tree of parts in Figure 2. The craft file for this example can also be
+:download:`downloaded here </crafts/PartsTree.craft>`.
+
+.. figure:: /images/api/parts.png
+   :align: left
+   :figwidth: 275
+
+   **Figure 1** -- Example parts making up a vessel.
+
+.. figure:: /images/api/parts-tree.png
+   :align: right
+   :figwidth: 275
+
+   **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from
+   the parent part to the child part.
+
+.. container:: clearer
+
+   ..
+
+Traversing the Tree
+^^^^^^^^^^^^^^^^^^^
+
+The tree of parts can be traversed using the attributes :attr:`Parts.root`,
+:attr:`Part.parent` and :attr:`Part.children`.
+
+The root of the tree is the same as the vessels *root part* (part number 1 in
+the example above) and can be obtained by calling :attr:`Parts.root`.
+A parts children can be obtained by calling :attr:`Part.children`.
+If the part does not have any children, :attr:`Part.children`
+returns an empty list. A parts parent can be obtained by calling
+:attr:`Part.parent`. If the part does not have a parent
+(as is the case for the root part), :attr:`Part.parent`
+returns ``None``.
+
+The following Python example uses these attributes to perform a
+depth-first traversal over all of the parts in a vessel:
+
+.. literalinclude:: /scripts/services/space-center/TreeTraversal.py
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+    Command Pod Mk1
+     TR-18A Stack Decoupler
+      FL-T400 Fuel Tank
+       LV-909 Liquid Fuel Engine
+        TR-18A Stack Decoupler
+         FL-T800 Fuel Tank
+          LV-909 Liquid Fuel Engine
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+       LT-1 Landing Struts
+       LT-1 Landing Struts
+     Mk16 Parachute
+
+.. _python-api-parts-attachment-modes:
+
+Attachment Modes
+^^^^^^^^^^^^^^^^
+
+Parts can be attached to other parts either *radially* (on the side of the
+parent part) or *axially* (on the end of the parent part, to form a stack).
+
+For example, in the vessel pictured above, the parachute (part 2) is *axially*
+connected to its parent (the command pod -- part 1), and the landing leg
+(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
+
+The root part of a vessel (for example the command pod -- part 1) does not have
+a parent part, so does not have an attachment mode. However, the part is
+consider to be *axially* attached to nothing.
+
+The following Python example does a depth-first traversal as before,
+but also prints out the attachment mode used by the part:
+
+.. literalinclude:: /scripts/services/space-center/AttachmentModes.py
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+ Command Pod Mk1 - axial
+  TR-18A Stack Decoupler - axial
+   FL-T400 Fuel Tank - axial
+    LV-909 Liquid Fuel Engine - axial
+     TR-18A Stack Decoupler - axial
+      FL-T800 Fuel Tank - axial
+       LV-909 Liquid Fuel Engine - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+    LT-1 Landing Struts - radial
+    LT-1 Landing Struts - radial
+  Mk16 Parachute - axial
+
+.. _python-api-parts-fuel-lines:
+
+Fuel Lines
+----------
+
+.. figure:: /images/api/parts-fuel-lines.png
+   :align: right
+   :figwidth: 200
+
+   **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the
+   parts highlighted in green, into the part highlighted in blue.
+
+.. figure:: /images/api/parts-fuel-lines-tree.png
+   :align: right
+   :figwidth: 200
+
+   **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+Fuel lines are considered parts, and are included in the parts tree (for
+example, as pictured in Figure 4). However, the parts tree does not contain
+information about which parts fuel lines connect to. The parent part of a fuel
+line is the part from which it will take fuel (as shown in Figure 4) however the
+part that it will send fuel to is not represented in the parts tree.
+
+Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
+line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
+feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
+a child of part 11, but its connection to part 9 is not represented in the tree.
+
+The attributes :attr:`Part.fuel_lines_from` and
+:attr:`Part.fuel_lines_to` can be used to discover these
+connections. In the example in Figure 5, when
+:attr:`Part.fuel_lines_to` is called on fuel tank part
+11, it will return a list of parts containing just fuel tank part 9 (the blue
+part). When :attr:`Part.fuel_lines_from` is called on
+fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
+(the parts colored green).
+
+.. _python-api-parts-staging:
+
+Staging
+-------
+
+.. figure:: /images/api/parts-staging.png
+   :align: right
+   :figwidth: 340
+
+   **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+Each part has two staging numbers associated with it: the stage in which the
+part is *activated* and the stage in which the part is *decoupled*. These values
+can be obtained using :attr:`Part.stage` and
+:attr:`Part.decouple_stage` respectively. For parts that
+are not activated by staging, :attr:`Part.stage` returns
+-1. For parts that are never decoupled,
+:attr:`Part.decouple_stage` returns a value of -1.
+
+Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
+stages in which each part of the vessel will be *activated*. Figure 8 shows the
+stages in which each part of the vessel will be *decoupled*.
+
+.. container:: clearer
+
+   ..
+
+.. figure:: /images/api/parts-staging-activate.png
+   :align: left
+   :figwidth: 250
+
+   **Figure 7** -- The stage in which each part is *activated*.
+
+.. figure:: /images/api/parts-staging-decouple.png
+   :align: right
+   :figwidth: 250
+
+   **Figure 8** -- The stage in which each part is *decoupled*.
+
+.. container:: clearer
+
+   ..

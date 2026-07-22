@@ -1,0 +1,61 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+Polygon
+=======
+
+
+.. class:: Polygon
+
+   A polygon. Created using :func:`add_polygon`.
+
+   .. function:: std::vector<std::tuple<double, double, double>> vertices()
+   .. function:: void set_vertices(std::vector<std::tuple<double, double, double>> value)
+
+      Vertices for the polygon.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: void remove()
+
+      Remove the object.
+
+
+      :Game Scenes: Flight
+
+   .. function:: std::tuple<double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double> value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. function:: std::string material()
+   .. function:: void set_material(std::string value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight
+
+   .. function:: float thickness()
+   .. function:: void set_thickness(float value)
+
+      Set the thickness
+
+      :Game Scenes: Flight

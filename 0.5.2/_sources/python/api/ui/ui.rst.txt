@@ -1,0 +1,95 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: UI
+
+UI
+==
+
+
+.. module:: UI
+
+Provides functionality for drawing and interacting with in-game user interface elements.
+
+.. note::
+
+   For drawing 3D objects in the flight scene, see the Drawing service.
+
+
+
+.. attribute:: stock_canvas
+
+   The stock UI canvas.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`Canvas`
+   
+
+
+
+
+.. staticmethod:: add_canvas()
+
+   Add a new canvas.
+
+   :rtype: :class:`Canvas`
+   
+
+   .. note::
+
+      If you want to add UI elements to KSPs stock UI canvas, use :attr:`stock_canvas`.
+
+
+
+
+.. staticmethod:: message(content, [duration = 1.0], [position = MessagePosition(1)], [color = (1.0, 0.92, 0.016)], [size = 20.0])
+
+   Display a message on the screen.
+
+   :param str content: Message content.
+   :param float duration: Duration before the message disappears, in seconds.
+   :param MessagePosition position: Position to display the message.
+   :param tuple color: The color of the message.
+   :param float size: Size of the message, differs per position.
+   
+
+   .. note::
+
+      The message appears just like a stock message, for example quicksave or quickload messages.
+
+
+
+
+.. staticmethod:: clear([client_only = False])
+
+   Remove all user interface elements.
+
+   :param bool client_only: If true, only remove objects created by the calling client.
+   
+
+
+
+
+
+.. class:: MessagePosition
+
+   Message position.
+
+
+   .. data:: top_left
+
+      Top left.
+
+
+   .. data:: top_center
+
+      Top center.
+
+
+   .. data:: top_right
+
+      Top right.
+
+
+   .. data:: bottom_center
+
+      Bottom center.

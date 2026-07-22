@@ -1,0 +1,155 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: KRPC
+
+KRPC
+====
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. module:: KRPC
+
+Main kRPC service, used by clients to interact with basic server functionality.
+
+
+.. staticmethod:: get_client_id()
+
+   Returns the identifier for the current client.
+
+   :rtype: bytes
+   
+
+
+
+
+.. staticmethod:: get_client_name()
+
+   Returns the name of the current client.
+   This is an empty string if the client has no name.
+
+   :rtype: str
+   
+
+
+
+
+.. attribute:: clients
+
+   A list of RPC clients that are currently connected to the server.
+   Each entry in the list is a clients identifier, name and address.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: list(tuple(bytes, str, str))
+   
+
+
+
+
+.. staticmethod:: get_status()
+
+   Returns some information about the server, such as the version.
+
+   :rtype: :class:`krpc.schema.KRPC.Status`
+   
+
+
+
+
+.. staticmethod:: get_services()
+
+   Returns information on all services, procedures, classes, properties etc. provided by the server.
+   Can be used by client libraries to automatically create functionality such as stubs.
+
+   :rtype: :class:`krpc.schema.KRPC.Services`
+   
+
+
+
+
+.. attribute:: current_game_scene
+
+   Get the current game scene.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`GameScene`
+   
+
+
+
+
+.. attribute:: paused
+
+   Whether the game is paused.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+
+.. class:: GameScene
+
+   The game scene. See :attr:`current_game_scene`.
+
+
+   .. data:: space_center
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. data:: flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. data:: tracking_station
+
+      The tracking station.
+
+
+   .. data:: editor_vab
+
+      The Vehicle Assembly Building.
+
+
+   .. data:: editor_sph
+
+      The Space Plane Hangar.
+
+
+
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+
+
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+
+
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+
+
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.

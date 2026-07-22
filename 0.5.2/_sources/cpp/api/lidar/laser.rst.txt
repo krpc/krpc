@@ -1,0 +1,22 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::LiDAR
+
+Laser
+=====
+
+
+.. class:: Laser
+
+   A LaserDist laser.
+
+   .. function:: SpaceCenter::Part part()
+
+      Get the part containing this LiDAR.
+
+   
+
+   .. function:: std::vector<double> cloud()
+
+      Get the point cloud from the LiDAR.
+      Returns an empty list on failure.

@@ -1,0 +1,64 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: InfernalRobotics
+
+InfernalRobotics
+================
+
+
+.. module:: InfernalRobotics
+
+This service provides functionality to interact with
+`Infernal Robotics <https://forum.kerbalspaceprogram.com/index.php?/topic/184787-infernal-robotics-next/>`_.
+
+
+.. attribute:: available: boolean
+
+   Whether Infernal Robotics is installed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+
+
+
+.. attribute:: ready: boolean
+
+   Whether Infernal Robotics API is ready.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+
+
+
+.. staticmethod:: servo_groups(vessel)
+
+   A list of all the servo groups in the given *vessel*.
+
+   :param SpaceCenter.Vessel vessel:
+   :rtype: List
+
+
+
+
+.. staticmethod:: servo_group_with_name(vessel, name)
+
+   Returns the servo group in the given *vessel* with the given *name*,
+   or ``nil`` if none exists. If multiple servo groups have the same name, only one of them is returned.
+
+   :param SpaceCenter.Vessel vessel: Vessel to check.
+   :param string name: Name of servo group to find.
+   :rtype: :class:`InfernalRobotics.ServoGroup`
+
+
+
+
+.. staticmethod:: servo_with_name(vessel, name)
+
+   Returns the servo in the given *vessel* with the given *name* or
+   ``nil`` if none exists. If multiple servos have the same name, only one of them is returned.
+
+   :param SpaceCenter.Vessel vessel: Vessel to check.
+   :param string name: Name of the servo to find.
+   :rtype: :class:`InfernalRobotics.Servo`

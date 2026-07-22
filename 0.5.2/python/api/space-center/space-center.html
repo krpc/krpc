@@ -1,0 +1,1880 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SpaceCenter &#8212; kRPC 0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=8e576371"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/api/space-center/space-center';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.2/python/api/space-center/space-center.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Vessel" href="vessel.html" />
+    <link rel="prev" title="SpaceCenter API" href="../space-center.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">Python Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../python.html" class="nav-link">Python</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">SpaceCenter</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="module-SpaceCenter">
+<span id="spacecenter"></span><h1>SpaceCenter<a class="headerlink" href="#module-SpaceCenter" title="Link to this heading">#</a></h1>
+<p>Provides functionality to interact with Kerbal Space Program. This includes controlling
+the active vessel, managing its resources, planning maneuver nodes and auto-piloting.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.science">
+<span class="sig-name descname"><span class="pre">science</span></span><a class="headerlink" href="#SpaceCenter.science" title="Link to this definition">#</a></dt>
+<dd><p>The current amount of science.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.funds">
+<span class="sig-name descname"><span class="pre">funds</span></span><a class="headerlink" href="#SpaceCenter.funds" title="Link to this definition">#</a></dt>
+<dd><p>The current amount of funds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.reputation">
+<span class="sig-name descname"><span class="pre">reputation</span></span><a class="headerlink" href="#SpaceCenter.reputation" title="Link to this definition">#</a></dt>
+<dd><p>The current amount of reputation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.active_vessel">
+<span class="sig-name descname"><span class="pre">active_vessel</span></span><a class="headerlink" href="#SpaceCenter.active_vessel" title="Link to this definition">#</a></dt>
+<dd><p>The currently active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vessel</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.vessels">
+<span class="sig-name descname"><span class="pre">vessels</span></span><a class="headerlink" href="#SpaceCenter.vessels" title="Link to this definition">#</a></dt>
+<dd><p>A list of all the vessels in the game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(<a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vessel</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.launch_sites">
+<span class="sig-name descname"><span class="pre">launch_sites</span></span><a class="headerlink" href="#SpaceCenter.launch_sites" title="Link to this definition">#</a></dt>
+<dd><p>A list of available launch sites.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(<a class="reference internal" href="#SpaceCenter.LaunchSite" title="SpaceCenter.LaunchSite"><code class="xref py py-class docutils literal notranslate"><span class="pre">LaunchSite</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.bodies">
+<span class="sig-name descname"><span class="pre">bodies</span></span><a class="headerlink" href="#SpaceCenter.bodies" title="Link to this definition">#</a></dt>
+<dd><p>A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+keyed by the name of the body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>dict(str, <a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref py py-class docutils literal notranslate"><span class="pre">CelestialBody</span></code></a>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.target_body">
+<span class="sig-name descname"><span class="pre">target_body</span></span><a class="headerlink" href="#SpaceCenter.target_body" title="Link to this definition">#</a></dt>
+<dd><p>The currently targeted celestial body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref py py-class docutils literal notranslate"><span class="pre">CelestialBody</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.target_vessel">
+<span class="sig-name descname"><span class="pre">target_vessel</span></span><a class="headerlink" href="#SpaceCenter.target_vessel" title="Link to this definition">#</a></dt>
+<dd><p>The currently targeted vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Vessel</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.target_docking_port">
+<span class="sig-name descname"><span class="pre">target_docking_port</span></span><a class="headerlink" href="#SpaceCenter.target_docking_port" title="Link to this definition">#</a></dt>
+<dd><p>The currently targeted docking port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.DockingPort" title="SpaceCenter.DockingPort"><code class="xref py py-class docutils literal notranslate"><span class="pre">DockingPort</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.clear_target">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">clear_target</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.clear_target" title="Link to this definition">#</a></dt>
+<dd><p>Clears the current target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.launchable_vessels">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">launchable_vessels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">craft_directory</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.launchable_vessels" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of vessels from the given <em>craft_directory</em>
+that can be launched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>craft_directory</strong> (<em>str</em>) – Name of the directory in the current saves “Ships” directory. For example <code class="docutils literal notranslate"><span class="pre">&quot;VAB&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;SPH&quot;</span></code>.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(str)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.launch_vessel">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">launch_vessel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">craft_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">launch_site</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">recover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">crew</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">flag_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.launch_vessel" title="Link to this definition">#</a></dt>
+<dd><p>Launch a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>craft_directory</strong> (<em>str</em>) – Name of the directory in the current saves “Ships” directory, that contains the craft file. For example <code class="docutils literal notranslate"><span class="pre">&quot;VAB&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;SPH&quot;</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the vessel to launch. This is the name of the “.craft” file in the save directory, without the “.craft” file extension.</p></li>
+<li><p><strong>launch_site</strong> (<em>str</em>) – Name of the launch site. For example <code class="docutils literal notranslate"><span class="pre">&quot;LaunchPad&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Runway&quot;</span></code>.</p></li>
+<li><p><strong>recover</strong> (<em>bool</em>) – If true and there is a vessel on the launch site, recover it before launching.</p></li>
+<li><p><strong>crew</strong> (<em>list</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</p></li>
+<li><p><strong>flag_url</strong> (<em>str</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the asset URL of the mission flag to use for the launch.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.launch_vessel_from_vab">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">launch_vessel_from_vab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">recover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.launch_vessel_from_vab" title="Link to this definition">#</a></dt>
+<dd><p>Launch a new vessel from the VAB onto the launchpad.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the vessel to launch.</p></li>
+<li><p><strong>recover</strong> (<em>bool</em>) – If true and there is a vessel on the launch pad, recover it before launching.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equivalent to calling <a class="reference internal" href="#SpaceCenter.launch_vessel" title="SpaceCenter.launch_vessel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">launch_vessel()</span></code></a> with the craft directory
+set to “VAB” and the launch site set to “LaunchPad”.
+Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.launch_vessel_from_sph">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">launch_vessel_from_sph</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">recover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.launch_vessel_from_sph" title="Link to this definition">#</a></dt>
+<dd><p>Launch a new vessel from the SPH onto the runway.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the vessel to launch.</p></li>
+<li><p><strong>recover</strong> (<em>bool</em>) – If true and there is a vessel on the runway, recover it before launching.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equivalent to calling <a class="reference internal" href="#SpaceCenter.launch_vessel" title="SpaceCenter.launch_vessel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">launch_vessel()</span></code></a> with the craft directory
+set to “SPH” and the launch site set to “Runway”.
+Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.save">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.save" title="Link to this definition">#</a></dt>
+<dd><p>Save the game with a given name.
+This will create a save file called <code class="docutils literal notranslate"><span class="pre">name.sfs</span></code> in the folder of the
+current save game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the save.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.load">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.load" title="Link to this definition">#</a></dt>
+<dd><p>Load the game with the given name.
+This will create a load a save file called <code class="docutils literal notranslate"><span class="pre">name.sfs</span></code> from the folder of the
+current save game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>) – Name of the save.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.quicksave">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quicksave</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.quicksave" title="Link to this definition">#</a></dt>
+<dd><p>Save a quicksave.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the same as calling <a class="reference internal" href="#SpaceCenter.save" title="SpaceCenter.save"><code class="xref py py-meth docutils literal notranslate"><span class="pre">save()</span></code></a> with the name “quicksave”.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.quickload">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">quickload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.quickload" title="Link to this definition">#</a></dt>
+<dd><p>Load a quicksave.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the same as calling <a class="reference internal" href="#SpaceCenter.load" title="SpaceCenter.load"><code class="xref py py-meth docutils literal notranslate"><span class="pre">load()</span></code></a> with the name “quicksave”.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.can_revert_to_launch">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_revert_to_launch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.can_revert_to_launch" title="Link to this definition">#</a></dt>
+<dd><p>Whether the current flight can be reverted to launch.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.revert_to_launch">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">revert_to_launch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.revert_to_launch" title="Link to this definition">#</a></dt>
+<dd><p>Revert the current flight to launch.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.transfer_crew">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">transfer_crew</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crew_member</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_part</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.transfer_crew" title="Link to this definition">#</a></dt>
+<dd><p>Transfers a crew member to a different part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crew_member</strong> (<a class="reference internal" href="vessel.html#SpaceCenter.CrewMember" title="SpaceCenter.CrewMember"><em>CrewMember</em></a>) – The crew member to transfer.</p></li>
+<li><p><strong>target_part</strong> (<a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><em>Part</em></a>) – The part to move them to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.ui_visible">
+<span class="sig-name descname"><span class="pre">ui_visible</span></span><a class="headerlink" href="#SpaceCenter.ui_visible" title="Link to this definition">#</a></dt>
+<dd><p>Whether the UI is visible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.navball">
+<span class="sig-name descname"><span class="pre">navball</span></span><a class="headerlink" href="#SpaceCenter.navball" title="Link to this definition">#</a></dt>
+<dd><p>Whether the navball is visible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.ut">
+<span class="sig-name descname"><span class="pre">ut</span></span><a class="headerlink" href="#SpaceCenter.ut" title="Link to this definition">#</a></dt>
+<dd><p>The current universal time in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.g">
+<span class="sig-name descname"><span class="pre">g</span></span><a class="headerlink" href="#SpaceCenter.g" title="Link to this definition">#</a></dt>
+<dd><p>The value of the <a class="reference external" href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a> G in <span class="math notranslate nohighlight">\(N(m/kg)^2\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.warp_rate">
+<span class="sig-name descname"><span class="pre">warp_rate</span></span><a class="headerlink" href="#SpaceCenter.warp_rate" title="Link to this definition">#</a></dt>
+<dd><p>The current warp rate. This is the rate at which time is passing for
+either on-rails or physical time warp. For example, a value of 10 means
+time is passing 10x faster than normal. Returns 1 if time warp is not
+active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.warp_factor">
+<span class="sig-name descname"><span class="pre">warp_factor</span></span><a class="headerlink" href="#SpaceCenter.warp_factor" title="Link to this definition">#</a></dt>
+<dd><p>The current warp factor. This is the index of the rate at which time
+is passing for either regular “on-rails” or physical time warp. Returns 0
+if time warp is not active. When in on-rails time warp, this is equal to
+<a class="reference internal" href="#SpaceCenter.rails_warp_factor" title="SpaceCenter.rails_warp_factor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">rails_warp_factor</span></code></a>, and in physics time warp, this is equal to
+<a class="reference internal" href="#SpaceCenter.physics_warp_factor" title="SpaceCenter.physics_warp_factor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">physics_warp_factor</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.rails_warp_factor">
+<span class="sig-name descname"><span class="pre">rails_warp_factor</span></span><a class="headerlink" href="#SpaceCenter.rails_warp_factor" title="Link to this definition">#</a></dt>
+<dd><p>The time warp rate, using regular “on-rails” time warp. A value between
+0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+is active.</p>
+<p>If requested time warp factor cannot be set, it will be set to the next
+lowest possible value. For example, if the vessel is too close to a
+planet. See <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.physics_warp_factor">
+<span class="sig-name descname"><span class="pre">physics_warp_factor</span></span><a class="headerlink" href="#SpaceCenter.physics_warp_factor" title="Link to this definition">#</a></dt>
+<dd><p>The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+no time warp. Returns 0 if regular “on-rails” time warp is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.can_rails_warp_at">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">can_rails_warp_at</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.can_rails_warp_at" title="Link to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if regular “on-rails” time warp can be used, at the specified warp
+<em>factor</em>. The maximum time warp rate is limited by various things,
+including how close the active vessel is to a planet. See
+<a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>factor</strong> (<em>int</em>) – The warp factor to check.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.maximum_rails_warp_factor">
+<span class="sig-name descname"><span class="pre">maximum_rails_warp_factor</span></span><a class="headerlink" href="#SpaceCenter.maximum_rails_warp_factor" title="Link to this definition">#</a></dt>
+<dd><p>The current maximum regular “on-rails” warp factor that can be set.
+A value between 0 and 7 inclusive. See
+<a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.warp_to">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">warp_to</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ut</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">max_rails_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100000.0</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">max_physics_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.warp_to" title="Link to this definition">#</a></dt>
+<dd><p>Uses time acceleration to warp forward to a time in the future, specified
+by universal time <em>ut</em>. This call blocks until the desired
+time is reached. Uses regular “on-rails” or physical time warp as appropriate.
+For example, physical time warp is used when the active vessel is traveling
+through an atmosphere. When using regular “on-rails” time warp, the warp
+rate is limited by <em>max_rails_rate</em>, and when using physical
+time warp, the warp rate is limited by <em>max_physics_rate</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> (<em>float</em>) – The universal time to warp to, in seconds.</p></li>
+<li><p><strong>max_rails_rate</strong> (<em>float</em>) – The maximum warp rate in regular “on-rails” time warp.</p></li>
+<li><p><strong>max_physics_rate</strong> (<em>float</em>) – The maximum warp rate in physical time warp.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>When the time warp is complete.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.transform_position">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">transform_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.transform_position" title="Link to this definition">#</a></dt>
+<dd><p>Converts a position from one reference frame to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>tuple</em>) – Position, as a vector, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the position is in.</p></li>
+<li><p><strong>to</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame to covert the position to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding position, as a vector, in reference frame <em>to</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.transform_direction">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">transform_direction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.transform_direction" title="Link to this definition">#</a></dt>
+<dd><p>Converts a direction from one reference frame to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> (<em>tuple</em>) – Direction, as a vector, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the direction is in.</p></li>
+<li><p><strong>to</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame to covert the direction to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding direction, as a vector, in reference frame <em>to</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.transform_rotation">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">transform_rotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.transform_rotation" title="Link to this definition">#</a></dt>
+<dd><p>Converts a rotation from one reference frame to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> (<em>tuple</em>) – Rotation, as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the rotation is in.</p></li>
+<li><p><strong>to</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame to covert the rotation to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding rotation, as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>, in reference frame <em>to</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.transform_velocity">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">transform_velocity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocity</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">from</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.transform_velocity" title="Link to this definition">#</a></dt>
+<dd><p>Converts a velocity (acting at the specified position) from one reference frame
+to another. The position is required to take the relative angular velocity of the
+reference frames into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>tuple</em>) – Position, as a vector, in reference frame <em>from</em>.</p></li>
+<li><p><strong>velocity</strong> (<em>tuple</em>) – Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the position and velocity are in.</p></li>
+<li><p><strong>to</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame to covert the velocity to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding velocity, as a vector, in reference frame <em>to</em>.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.raycast_distance">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">raycast_distance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.raycast_distance" title="Link to this definition">#</a></dt>
+<dd><p>Cast a ray from a given position in a given direction, and return the distance to the hit point.
+If no hit occurs, returns infinity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>tuple</em>) – Position, as a vector, of the origin of the ray.</p></li>
+<li><p><strong>direction</strong> (<em>tuple</em>) – Direction of the ray, as a unit vector.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the position and direction are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The distance to the hit, in meters, or infinity if there was no hit.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.raycast_part">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">raycast_part</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">position</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.raycast_part" title="Link to this definition">#</a></dt>
+<dd><p>Cast a ray from a given position in a given direction, and return the part that it hits.
+If no hit occurs, returns <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<em>tuple</em>) – Position, as a vector, of the origin of the ray.</p></li>
+<li><p><strong>direction</strong> (<em>tuple</em>) – Direction of the ray, as a unit vector.</p></li>
+<li><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the position and direction are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The part that was hit or <code class="docutils literal notranslate"><span class="pre">None</span></code> if there was no hit.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code></a></p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.far_available">
+<span class="sig-name descname"><span class="pre">far_available</span></span><a class="headerlink" href="#SpaceCenter.far_available" title="Link to this definition">#</a></dt>
+<dd><p>Whether <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a> is installed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.create_kerbal">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">create_kerbal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">job</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">male</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.create_kerbal" title="Link to this definition">#</a></dt>
+<dd><p>Creates a Kerbal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>)</p></li>
+<li><p><strong>job</strong> (<em>str</em>)</p></li>
+<li><p><strong>male</strong> (<em>bool</em>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.get_kerbal">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">get_kerbal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.get_kerbal" title="Link to this definition">#</a></dt>
+<dd><p>Find a Kerbal by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>name</strong> (<em>str</em>)</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.CrewMember" title="SpaceCenter.CrewMember"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrewMember</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.load_space_center">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">load_space_center</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.load_space_center" title="Link to this definition">#</a></dt>
+<dd><p>Switch to the space center view.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.map_filter">
+<span class="sig-name descname"><span class="pre">map_filter</span></span><a class="headerlink" href="#SpaceCenter.map_filter" title="Link to this definition">#</a></dt>
+<dd><p>The visible objects in map mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.MapFilterType" title="SpaceCenter.MapFilterType"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapFilterType</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.screenshot">
+<span class="property"><span class="k"><span class="pre">static</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">screenshot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file_path</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.screenshot" title="Link to this definition">#</a></dt>
+<dd><p>Saves a screenshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file_path</strong> (<em>str</em>) – The path of the file to save.</p></li>
+<li><p><strong>scale</strong> (<em>int</em>) – Resolution scaling factor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.game_mode">
+<span class="sig-name descname"><span class="pre">game_mode</span></span><a class="headerlink" href="#SpaceCenter.game_mode" title="Link to this definition">#</a></dt>
+<dd><p>The current mode the game is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.GameMode" title="SpaceCenter.GameMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameMode</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.warp_mode">
+<span class="sig-name descname"><span class="pre">warp_mode</span></span><a class="headerlink" href="#SpaceCenter.warp_mode" title="Link to this definition">#</a></dt>
+<dd><p>The current time warp mode. Returns <a class="reference internal" href="#SpaceCenter.WarpMode.none" title="SpaceCenter.WarpMode.none"><code class="xref py py-attr docutils literal notranslate"><span class="pre">WarpMode.none</span></code></a> if time
+warp is not active, <a class="reference internal" href="#SpaceCenter.WarpMode.rails" title="SpaceCenter.WarpMode.rails"><code class="xref py py-attr docutils literal notranslate"><span class="pre">WarpMode.rails</span></code></a> if regular “on-rails” time warp
+is active, or <a class="reference internal" href="#SpaceCenter.WarpMode.physics" title="SpaceCenter.WarpMode.physics"><code class="xref py py-attr docutils literal notranslate"><span class="pre">WarpMode.physics</span></code></a> if physical time warp is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.WarpMode" title="SpaceCenter.WarpMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarpMode</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.camera">
+<span class="sig-name descname"><span class="pre">camera</span></span><a class="headerlink" href="#SpaceCenter.camera" title="Link to this definition">#</a></dt>
+<dd><p>An object that can be used to control the camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="camera.html#SpaceCenter.Camera" title="SpaceCenter.Camera"><code class="xref py py-class docutils literal notranslate"><span class="pre">Camera</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.waypoint_manager">
+<span class="sig-name descname"><span class="pre">waypoint_manager</span></span><a class="headerlink" href="#SpaceCenter.waypoint_manager" title="Link to this definition">#</a></dt>
+<dd><p>The waypoint manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="waypoints.html#SpaceCenter.WaypointManager" title="SpaceCenter.WaypointManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">WaypointManager</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.contract_manager">
+<span class="sig-name descname"><span class="pre">contract_manager</span></span><a class="headerlink" href="#SpaceCenter.contract_manager" title="Link to this definition">#</a></dt>
+<dd><p>The contract manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="contracts.html#SpaceCenter.ContractManager" title="SpaceCenter.ContractManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">ContractManager</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.alarm_manager">
+<span class="sig-name descname"><span class="pre">alarm_manager</span></span><a class="headerlink" href="#SpaceCenter.alarm_manager" title="Link to this definition">#</a></dt>
+<dd><p>The alarm manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="alarms.html#SpaceCenter.AlarmManager" title="SpaceCenter.AlarmManager"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlarmManager</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">GameMode</span></span><a class="headerlink" href="#SpaceCenter.GameMode" title="Link to this definition">#</a></dt>
+<dd><p>The game mode.
+Returned by <a class="reference internal" href="#SpaceCenter.GameMode" title="SpaceCenter.GameMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">GameMode</span></code></a></p>
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.sandbox">
+<span class="sig-name descname"><span class="pre">sandbox</span></span><a class="headerlink" href="#SpaceCenter.GameMode.sandbox" title="Link to this definition">#</a></dt>
+<dd><p>Sandbox mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.career">
+<span class="sig-name descname"><span class="pre">career</span></span><a class="headerlink" href="#SpaceCenter.GameMode.career" title="Link to this definition">#</a></dt>
+<dd><p>Career mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.science">
+<span class="sig-name descname"><span class="pre">science</span></span><a class="headerlink" href="#SpaceCenter.GameMode.science" title="Link to this definition">#</a></dt>
+<dd><p>Science career mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.science_sandbox">
+<span class="sig-name descname"><span class="pre">science_sandbox</span></span><a class="headerlink" href="#SpaceCenter.GameMode.science_sandbox" title="Link to this definition">#</a></dt>
+<dd><p>Science sandbox mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.mission">
+<span class="sig-name descname"><span class="pre">mission</span></span><a class="headerlink" href="#SpaceCenter.GameMode.mission" title="Link to this definition">#</a></dt>
+<dd><p>Mission mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.mission_builder">
+<span class="sig-name descname"><span class="pre">mission_builder</span></span><a class="headerlink" href="#SpaceCenter.GameMode.mission_builder" title="Link to this definition">#</a></dt>
+<dd><p>Mission builder mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.scenario">
+<span class="sig-name descname"><span class="pre">scenario</span></span><a class="headerlink" href="#SpaceCenter.GameMode.scenario" title="Link to this definition">#</a></dt>
+<dd><p>Scenario mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.GameMode.scenario_non_resumable">
+<span class="sig-name descname"><span class="pre">scenario_non_resumable</span></span><a class="headerlink" href="#SpaceCenter.GameMode.scenario_non_resumable" title="Link to this definition">#</a></dt>
+<dd><p>Scenario mode that cannot be resumed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.WarpMode">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">WarpMode</span></span><a class="headerlink" href="#SpaceCenter.WarpMode" title="Link to this definition">#</a></dt>
+<dd><p>The time warp mode.
+Returned by <a class="reference internal" href="#SpaceCenter.WarpMode" title="SpaceCenter.WarpMode"><code class="xref py py-class docutils literal notranslate"><span class="pre">WarpMode</span></code></a></p>
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.WarpMode.rails">
+<span class="sig-name descname"><span class="pre">rails</span></span><a class="headerlink" href="#SpaceCenter.WarpMode.rails" title="Link to this definition">#</a></dt>
+<dd><p>Time warp is active, and in regular “on-rails” mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.WarpMode.physics">
+<span class="sig-name descname"><span class="pre">physics</span></span><a class="headerlink" href="#SpaceCenter.WarpMode.physics" title="Link to this definition">#</a></dt>
+<dd><p>Time warp is active, and in physical time warp mode.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.WarpMode.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.WarpMode.none" title="Link to this definition">#</a></dt>
+<dd><p>Time warp is not active.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MapFilterType</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType" title="Link to this definition">#</a></dt>
+<dd><p>The set of things that are visible in map mode.
+These may be combined with bitwise logic.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.all">
+<span class="sig-name descname"><span class="pre">all</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.all" title="Link to this definition">#</a></dt>
+<dd><p>Everything.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.none" title="Link to this definition">#</a></dt>
+<dd><p>Nothing.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.debris">
+<span class="sig-name descname"><span class="pre">debris</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.debris" title="Link to this definition">#</a></dt>
+<dd><p>Debris.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.unknown">
+<span class="sig-name descname"><span class="pre">unknown</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.unknown" title="Link to this definition">#</a></dt>
+<dd><p>Unknown.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.space_objects">
+<span class="sig-name descname"><span class="pre">space_objects</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.space_objects" title="Link to this definition">#</a></dt>
+<dd><p>SpaceObjects.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.probes">
+<span class="sig-name descname"><span class="pre">probes</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.probes" title="Link to this definition">#</a></dt>
+<dd><p>Probes.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.rovers">
+<span class="sig-name descname"><span class="pre">rovers</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.rovers" title="Link to this definition">#</a></dt>
+<dd><p>Rovers.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.landers">
+<span class="sig-name descname"><span class="pre">landers</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.landers" title="Link to this definition">#</a></dt>
+<dd><p>Landers.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.ships">
+<span class="sig-name descname"><span class="pre">ships</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.ships" title="Link to this definition">#</a></dt>
+<dd><p>Ships.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.stations">
+<span class="sig-name descname"><span class="pre">stations</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.stations" title="Link to this definition">#</a></dt>
+<dd><p>Stations.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.bases">
+<span class="sig-name descname"><span class="pre">bases</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.bases" title="Link to this definition">#</a></dt>
+<dd><p>Bases.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.ev_as">
+<span class="sig-name descname"><span class="pre">ev_as</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.ev_as" title="Link to this definition">#</a></dt>
+<dd><p>EVAs.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.flags" title="Link to this definition">#</a></dt>
+<dd><p>Flags.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.plane">
+<span class="sig-name descname"><span class="pre">plane</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.plane" title="Link to this definition">#</a></dt>
+<dd><p>Planes.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.relay">
+<span class="sig-name descname"><span class="pre">relay</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.relay" title="Link to this definition">#</a></dt>
+<dd><p>Relays.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.site">
+<span class="sig-name descname"><span class="pre">site</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.site" title="Link to this definition">#</a></dt>
+<dd><p>Launch Sites.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.MapFilterType.deployed_science_controller">
+<span class="sig-name descname"><span class="pre">deployed_science_controller</span></span><a class="headerlink" href="#SpaceCenter.MapFilterType.deployed_science_controller" title="Link to this definition">#</a></dt>
+<dd><p>Deployed Science Controllers.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.LaunchSite">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">LaunchSite</span></span><a class="headerlink" href="#SpaceCenter.LaunchSite" title="Link to this definition">#</a></dt>
+<dd><p>A place where craft can be launched from.
+More of these can be added with mods like Kerbal Konstructs.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.LaunchSite.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#SpaceCenter.LaunchSite.name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the launch site.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.LaunchSite.body">
+<span class="sig-name descname"><span class="pre">body</span></span><a class="headerlink" href="#SpaceCenter.LaunchSite.body" title="Link to this definition">#</a></dt>
+<dd><p>The celestial body the launch site is on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref py py-class docutils literal notranslate"><span class="pre">CelestialBody</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.LaunchSite.editor_facility">
+<span class="sig-name descname"><span class="pre">editor_facility</span></span><a class="headerlink" href="#SpaceCenter.LaunchSite.editor_facility" title="Link to this definition">#</a></dt>
+<dd><p>Which editor is normally used for this launch site.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.EditorFacility" title="SpaceCenter.EditorFacility"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorFacility</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.EditorFacility">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EditorFacility</span></span><a class="headerlink" href="#SpaceCenter.EditorFacility" title="Link to this definition">#</a></dt>
+<dd><p>Editor facility.
+See <a class="reference internal" href="#SpaceCenter.LaunchSite.editor_facility" title="SpaceCenter.LaunchSite.editor_facility"><code class="xref py py-attr docutils literal notranslate"><span class="pre">LaunchSite.editor_facility</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.EditorFacility.vab">
+<span class="sig-name descname"><span class="pre">vab</span></span><a class="headerlink" href="#SpaceCenter.EditorFacility.vab" title="Link to this definition">#</a></dt>
+<dd><p>Vehicle Assembly Building.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.EditorFacility.sph">
+<span class="sig-name descname"><span class="pre">sph</span></span><a class="headerlink" href="#SpaceCenter.EditorFacility.sph" title="Link to this definition">#</a></dt>
+<dd><p>Space Plane Hanger.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.EditorFacility.none">
+<span class="sig-name descname"><span class="pre">none</span></span><a class="headerlink" href="#SpaceCenter.EditorFacility.none" title="Link to this definition">#</a></dt>
+<dd><p>None.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../space-center.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SpaceCenter API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="vessel.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Vessel</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/python/api/space-center/space-center.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

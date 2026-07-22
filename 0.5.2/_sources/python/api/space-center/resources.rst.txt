@@ -1,0 +1,221 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Resources
+=========
+
+
+.. class:: Resources
+
+   Represents the collection of resources stored in a vessel, stage or part.
+   Created by calling :attr:`Vessel.resources`,
+   :meth:`Vessel.resources_in_decouple_stage` or
+   :attr:`Part.resources`.
+
+   .. attribute:: all
+
+      All the individual resources that can be stored.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Resource`)
+      :Game Scenes: Flight
+
+   .. method:: with_resource(name)
+
+      All the individual resources with the given name that can be stored.
+
+      :param str name:
+      :rtype: list(:class:`Resource`)
+      :Game Scenes: Flight
+
+   .. attribute:: names
+
+      A list of resource names that can be stored.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+   .. method:: has_resource(name)
+
+      Check whether the named resource can be stored.
+
+      :param str name: The name of the resource.
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: amount(name)
+
+      Returns the amount of a resource that is currently stored.
+
+      :param str name: The name of the resource.
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: max(name)
+
+      Returns the amount of a resource that can be stored.
+
+      :param str name: The name of the resource.
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. staticmethod:: density(name)
+
+      Returns the density of a resource, in :math:`kg/l`.
+
+      :param str name: The name of the resource.
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. staticmethod:: flow_mode(name)
+
+      Returns the flow mode of a resource.
+
+      :param str name: The name of the resource.
+      :rtype: :class:`ResourceFlowMode`
+      :Game Scenes: Flight
+
+   .. attribute:: enabled
+
+      Whether use of all the resources are enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is ``True`` if all of the resources are enabled.
+         If any of the resources are not enabled, this is ``False``.
+
+
+
+.. class:: Resource
+
+   An individual resource stored within a part.
+   Created using methods in the :class:`Resources` class.
+
+   .. attribute:: name
+
+      The name of the resource.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: part
+
+      The part containing the resource.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Part`
+   
+
+   .. attribute:: amount
+
+      The amount of the resource that is currently stored in the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: max
+
+      The total amount of the resource that can be stored in the part.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: density
+
+      The density of the resource, in :math:`kg/l`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: flow_mode
+
+      The flow mode of the resource.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ResourceFlowMode`
+   
+
+   .. attribute:: enabled
+
+      Whether use of this resource is enabled.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+
+
+.. class:: ResourceTransfer
+
+   Transfer resources between parts.
+
+   .. staticmethod:: start(from_part, to_part, resource, max_amount)
+
+      Start transferring a resource transfer between a pair of parts. The transfer will move
+      at most *max_amount* units of the resource, depending on how much of
+      the resource is available in the source part and how much storage is available in the
+      destination part.
+      Use :attr:`ResourceTransfer.complete` to check if the transfer is complete.
+      Use :attr:`ResourceTransfer.amount` to see how much of the resource has been transferred.
+
+      :param Part from_part: The part to transfer to.
+      :param Part to_part: The part to transfer from.
+      :param str resource: The name of the resource to transfer.
+      :param float max_amount: The maximum amount of resource to transfer.
+      :rtype: :class:`ResourceTransfer`
+   
+
+   .. attribute:: amount
+
+      The amount of the resource that has been transferred.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: complete
+
+      Whether the transfer has completed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+
+
+.. class:: ResourceFlowMode
+
+   The way in which a resource flows between parts. See :meth:`Resources.flow_mode`.
+
+
+   .. data:: vessel
+
+      The resource flows to any part in the vessel. For example, electric charge.
+
+
+   .. data:: stage
+
+      The resource flows from parts in the first stage, followed by the second,
+      and so on. For example, mono-propellant.
+
+
+   .. data:: adjacent
+
+      The resource flows between adjacent parts within the vessel. For example,
+      liquid fuel or oxidizer.
+
+
+   .. data:: none
+
+      The resource does not flow. For example, solid fuel.

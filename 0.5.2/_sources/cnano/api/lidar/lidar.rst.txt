@@ -1,0 +1,25 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+LiDAR
+=====
+
+
+LaserDist service.
+
+
+.. function:: krpc_error_t krpc_LiDAR_Available(krpc_connection_t connection, bool * result)
+
+   Check if the LaserDist API is available.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_LiDAR_Laser(krpc_connection_t connection, krpc_LiDAR_Laser_t * result, krpc_SpaceCenter_Part_t part)
+
+   Get a LaserDist part.
+
+   :Parameters:

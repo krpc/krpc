@@ -1,0 +1,60 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+InputField
+==========
+
+
+.. class:: InputField
+
+   An input field. See :meth:`Panel.AddInputField`.
+
+   .. property:: RectTransform RectTransform { get; }
+
+      The rect transform for the input field.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the UI object is visible.
+
+      :Game Scenes: All
+
+   .. property:: string Value { get; set; }
+
+      The value of the input field.
+
+      :Game Scenes: All
+
+   .. property:: Text Text { get; }
+
+      The text component of the input field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Use :prop:`InputField.Value` to get and set the value in the field.
+         This object can be used to alter the style of the input field's text.
+
+   .. property:: bool Changed { get; set; }
+
+      Whether the input field has been changed.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This property is set to true when the user modifies the value of the input field.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. method:: void Remove()
+
+      Remove the UI object.
+
+
+      :Game Scenes: All

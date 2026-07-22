@@ -1,0 +1,157 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Camera
+======
+
+
+.. class:: Camera
+
+   Controls the game's camera.
+   Obtained by calling :attr:`camera`.
+
+   .. attribute:: mode
+
+      The current mode of the camera.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`CameraMode`
+      :Game Scenes: Flight
+
+   .. attribute:: pitch
+
+      The pitch of the camera, in degrees.
+      A value between :attr:`Camera.min_pitch` and :attr:`Camera.max_pitch`
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: heading
+
+      The heading of the camera, in degrees.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: distance
+
+      The distance from the camera to the subject, in meters.
+      A value between :attr:`Camera.min_distance` and :attr:`Camera.max_distance`.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: min_pitch
+
+      The minimum pitch of the camera.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_pitch
+
+      The maximum pitch of the camera.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: min_distance
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: max_distance
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: default_distance
+
+      Default distance from the camera to the subject, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: focussed_body
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``None`` if the camera is not focussed on a celestial body.
+      Returns an error is the camera is not in map mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`CelestialBody`
+      :Game Scenes: Flight
+
+   .. attribute:: focussed_vessel
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``None`` if the camera is not focussed on a vessel.
+      Returns an error is the camera is not in map mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Vessel`
+      :Game Scenes: Flight
+
+   .. attribute:: focussed_node
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``None`` if the camera is not focussed on a maneuver node.
+      Returns an error is the camera is not in map mode.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`Node`
+      :Game Scenes: Flight
+
+
+
+.. class:: CameraMode
+
+   See :attr:`Camera.mode`.
+
+
+   .. data:: automatic
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. data:: free
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. data:: chase
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. data:: locked
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. data:: orbital
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. data:: iva
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. data:: map
+
+      The map view is being shown.

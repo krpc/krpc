@@ -1,0 +1,153 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :prop:`SpaceCenter.AlarmManager <SpaceCenter.SpaceCenter.AlarmManager>`.
+
+   .. property:: System.Collections.Generic.IList<Alarm> Alarms { get; }
+
+      A list of all alarms.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddAlarm(IConnection connection, double time, string title = "Alarm", string description = "")
+
+      Create an alarm.
+
+      :parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddVesselAlarm(IConnection connection, double time, Vessel vessel, string title = "Vessel Alarm", string description = "")
+
+      Create an alarm linked to a vessel.
+
+      :parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **vessel** -- Vessel to link the alarm to.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddApoapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Apoapsis Alarm", string description = "")
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddPeriapsisAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "Periapsis Alarm", string description = "")
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddManeuverNodeAlarm(IConnection connection, Vessel vessel, Node node, double offset = 60.0, bool addBurnTime = true, string title = "Maneuver Node Alarm", string description = "")
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **node** -- The maneuver node.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **addBurnTime** -- Whether the node's burn time should be included in the alarm.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+   .. method:: static Alarm AddSOIAlarm(IConnection connection, Vessel vessel, double offset = 60.0, string title = "SOI Change Alarm", string description = "")
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+      :Game Scenes: All
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :prop:`SpaceCenter.AlarmManager <SpaceCenter.SpaceCenter.AlarmManager>`.
+
+   .. property:: uint ID { get; }
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+      :Game Scenes: All
+
+   .. property:: string Type { get; }
+
+      Type of alarm
+
+      :Game Scenes: All
+
+   .. property:: string Title { get; }
+
+      Title of the alarm
+
+      :Game Scenes: All
+
+   .. property:: string Description { get; }
+
+      Description of the alarm.
+
+      :Game Scenes: All
+
+   .. property:: double Time { get; }
+
+      Time the alarm will trigger.
+
+      :Game Scenes: All
+
+   .. property:: double TimeUntil { get; }
+
+      Time until the alarm triggers.
+
+      :Game Scenes: All
+
+   .. property:: double EventOffset { get; }
+
+      Seconds between the alarm going off and the event it references.
+
+      :Game Scenes: All
+
+   .. property:: Vessel Vessel { get; }
+
+      Vessel the alarm references. ``null`` if it does not reference a vessel.
+
+      :Game Scenes: All

@@ -1,0 +1,65 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: UI
+
+Panel
+=====
+
+
+.. class:: Panel
+
+   A container for user interface elements. See :meth:`Canvas.add_panel`.
+
+   .. attribute:: rect_transform
+
+      The rect transform for the panel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RectTransform`
+   
+
+   .. attribute:: visible
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: add_panel([visible = True])
+
+      Create a panel within this panel.
+
+      :param bool visible: Whether the new panel is visible.
+      :rtype: :class:`Panel`
+   
+
+   .. method:: add_text(content, [visible = True])
+
+      Add text to the panel.
+
+      :param str content: The text.
+      :param bool visible: Whether the text is visible.
+      :rtype: :class:`Text`
+   
+
+   .. method:: add_input_field([visible = True])
+
+      Add an input field to the panel.
+
+      :param bool visible: Whether the input field is visible.
+      :rtype: :class:`InputField`
+   
+
+   .. method:: add_button(content, [visible = True])
+
+      Add a button to the panel.
+
+      :param str content: The label for the button.
+      :param bool visible: Whether the button is visible.
+      :rtype: :class:`Button`
+   
+
+   .. method:: remove()
+
+      Remove the UI object.

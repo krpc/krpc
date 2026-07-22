@@ -1,0 +1,106 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Alarm
+=====
+
+
+.. type:: krpc_KerbalAlarmClock_Alarm_t
+
+   Represents an alarm. Obtained by calling
+   :func:`krpc_KerbalAlarmClock_Alarms`,
+   :func:`krpc_KerbalAlarmClock_AlarmWithName` or
+   :func:`krpc_KerbalAlarmClock_AlarmsWithType`.
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Action(krpc_connection_t connection, krpc_KerbalAlarmClock_AlarmAction_t * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Action(krpc_KerbalAlarmClock_AlarmAction_t value)
+
+      The action that the alarm triggers.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Margin(krpc_connection_t connection, double * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Margin(double value)
+
+      The number of seconds before the event that the alarm will fire.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Time(krpc_connection_t connection, double * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Time(double value)
+
+      The time at which the alarm will fire.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Type(krpc_connection_t connection, krpc_KerbalAlarmClock_AlarmType_t * result)
+
+      The type of the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_ID(krpc_connection_t connection, char * * result)
+
+      The unique identifier for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Name(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Name(const char * value)
+
+      The short name of the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Notes(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Notes(const char * value)
+
+      The long description of the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Remaining(krpc_connection_t connection, double * result)
+
+      The number of seconds until the alarm will fire.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Repeat(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Repeat(bool value)
+
+      Whether the alarm will be repeated after it has fired.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_RepeatPeriod(krpc_connection_t connection, double * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_RepeatPeriod(double value)
+
+      The time delay to automatically create an alarm after it has fired.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_Vessel(krpc_SpaceCenter_Vessel_t value)
+
+      The vessel that the alarm is attached to.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_XferOriginBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_XferOriginBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      The celestial body the vessel is departing from.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_XferTargetBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_KerbalAlarmClock_Alarm_set_XferTargetBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      The celestial body the vessel is arriving at.
+
+   
+
+   .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Remove(krpc_connection_t connection)
+
+      Removes the alarm.
