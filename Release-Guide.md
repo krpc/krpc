@@ -70,9 +70,9 @@ not landed within the wait (inflation can lag by a few hours), re-run the step l
 
 ## 5. Publish the mod and announce
 
-17. `tools/release/70-announcements.py` — prints the changelog formatted for the mod-hosting
-    sites and the checklist of remaining manual steps:
-    * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, with the changelog.
+17. `tools/release/70-announcements.py` — prints the checklist of remaining manual steps:
+    * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, linking the changelog at
+      `https://krpc.github.io/krpc/<version>/changelog.html`.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
     * Update the forum release and development threads, and post an update notice to the release
       thread.

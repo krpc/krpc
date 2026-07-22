@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-# Prints the changelog for a release, formatted for the GitHub release notes
-# or for the mod-hosting sites (SpaceDock/CurseForge). Covers every component
-# on the kRPC release version train.
+# Prints the changelog for a release, formatted as the GitHub release notes.
+# Covers every component on the kRPC release version train.
 
 import argparse
 import re
@@ -42,17 +41,17 @@ def current_version():
     return version
 
 
-def render_nodes(out, nodes, level, linkify=None):
+def render_nodes(out, nodes, level):
     """Append markdown bullets for nodes and their nested sub-items, indenting
-    sub-lists by two spaces per level. linkify, if given, rewrites each line."""
+    sub-lists by two spaces per level."""
     for node in nodes:
-        text = linkify(node['text']) if linkify else node['text']
-        out.append('  ' * level + '* ' + text)
-        render_nodes(out, node['children'], level + 1, linkify)
+        out.append('  ' * level + '* ' + node['text'])
+        render_nodes(out, node['children'], level + 1)
 
 
-def render(site, version):
-    """Return the changelog for a version, formatted for the given site."""
+def render(version):
+    """Return the changelog for a version, formatted as the GitHub release
+    notes."""
     changelist = []
     for name, path in COMPONENTS:
         changes = get_changes(path)
@@ -61,32 +60,21 @@ def render(site, version):
             changelist.append((name, nodes))
 
     out = []
-    if site == 'github':
-        with open('tools/release/github-changes.tmpl', 'r') as tmpl:
-            out.append(''.join(tmpl.readlines()).replace('%VERSION%', version))
-        out.append('### Changes\n')
-        for name, nodes in changelist:
-            out.append('#### ' + name + '\n')
-            render_nodes(out, nodes, 0)
-            out.append('')
-    else:  # spacedock or curse; issue references become explicit links
-        pattern = re.compile(r'#([0-9]+)')
-        def linkify(text):
-            return pattern.sub(
-                r'[#\1](https://github.com/krpc/krpc/issues/\1)', text)
-        for name, nodes in changelist:
-            out.append('#### ' + name + '\n')
-            render_nodes(out, nodes, 0, linkify)
-            out.append('')
+    with open('tools/release/github-changes.tmpl', 'r') as tmpl:
+        out.append(''.join(tmpl.readlines()).replace('%VERSION%', version))
+    out.append('### Changes\n')
+    for name, nodes in changelist:
+        out.append('#### ' + name + '\n')
+        render_nodes(out, nodes, 0)
+        out.append('')
     return '\n'.join(out)
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('site', choices=('github', 'spacedock', 'curse'))
     parser.add_argument('version', nargs='?', default=current_version())
     args = parser.parse_args()
-    print(render(args.site, args.version))
+    print(render(args.version))
 
 
 def get_changes(path):

@@ -32,7 +32,7 @@ def main():
             f'a GitHub release for {lib.TAG} already exists')
 
     lib.banner('Release notes')
-    notes = changes.render('github', lib.VERSION)
+    notes = changes.render(lib.VERSION)
     print(notes)
 
     lib.banner(f'Creating draft release {lib.TAG}')
