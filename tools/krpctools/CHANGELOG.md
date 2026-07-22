@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - **Breaking:** Requires Python 3.10+
 - **Breaking:** `krpc-servicedefs` now runs the `ServiceDefinitions` tool
   on the .NET 8 runtime; Mono is no longer required

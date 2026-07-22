@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Add to `Servo`: `UID`, `Mode` (with a new `ServoMode` enum), `TargetPosition`, `TargetSpeed`,
   `CommandedPosition`, `DefaultPosition`, `ForceLimit`, `MaxForce`, `MaxAcceleration`, `MaxSpeed`,
   `ElectricChargeRequired`, `SpringPower`, `DampingPower`, `RotorAcceleration`, `IsLimited`,

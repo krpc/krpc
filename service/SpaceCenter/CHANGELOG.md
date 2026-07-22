@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 
 - Space center
   - Add `SpaceCenter.Expansions` to report the installed KSP expansions (#985)

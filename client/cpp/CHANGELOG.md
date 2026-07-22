@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Update to protobuf v35.1 (#850)
 - Update to ASIO 1.38.0 (#850)
 - Distribute via vcpkg (#874)

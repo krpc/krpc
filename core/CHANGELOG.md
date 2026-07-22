@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Add `Version` property to `Core`, set by the server plugin on startup (#848)
 - Enable `TCP_NODELAY` on client TCP connections, reducing RPC round-trip latency (#879)
 - Surface deprecated members (annotated with `[Obsolete]`) in the service definition and over the wire (#904)

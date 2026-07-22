@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`) (#848)
 - Fix Logger to write to both `KSP.log` and `Player.log` (#780)
 - Improve RPC and stream update performance (#879)

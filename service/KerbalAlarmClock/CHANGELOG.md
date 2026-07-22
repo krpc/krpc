@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Make available in all game scenes (#944)
 - Add `AlarmType.ScienceLab` (#982)
 - Add `AlarmAction.Custom` and `AlarmAction.Converted` (#982)

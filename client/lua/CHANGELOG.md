@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)
 - Fix service, method and property names being converted to snake case using the machine's locale (#993)
 - Calling a procedure with an argument that needs coercing no longer leaves a global named

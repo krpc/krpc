@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Fix `RemoteTech.Available` incorrectly reporting false in game scenes other than flight (#937)
 
 ## [v0.3.7]

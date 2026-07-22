@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)
 - Update to protobuf v7.35.1 (#850)
 - Allow calling static class methods from a class instance (#832)

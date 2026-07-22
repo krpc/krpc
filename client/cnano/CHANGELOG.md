@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Distribute via vcpkg (#874)
 - **Breaking:** Drop autotools build; CMake is now the only supported build system (#870)
 - **Breaking:** Modernize CMake build: require CMake 3.15+, target-based usage requirements (#834)

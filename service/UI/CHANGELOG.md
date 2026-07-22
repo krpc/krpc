@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Fix locale issues with `UI.Message` (#993)
 
 ## [v0.3.5]

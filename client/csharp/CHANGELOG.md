@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - **Breaking:** Requires .NET Framework 4.7.2 or later (#948)
 - Update to protobuf v3.35.1 (#850)
 - Mark deprecated members with the `[Obsolete]` attribute (#904)
