@@ -4,6 +4,7 @@
 Read-only: performs no builds and publishes nothing.
 """
 
+import os
 import shutil
 from pathlib import Path
 
@@ -101,6 +102,13 @@ def check_tools(report):
             report.ok(tool)
         else:
             report.warn(f'{tool} not found (needed by one of the publish steps)')
+    # vcpkg lives at $VCPKG_ROOT/vcpkg rather than on PATH, so it is checked
+    # separately; only the two vcpkg publish steps need it.
+    root = os.environ.get('VCPKG_ROOT')
+    if root and (Path(root) / 'vcpkg').is_file():
+        report.ok('vcpkg (VCPKG_ROOT)')
+    else:
+        report.warn('vcpkg not found (set VCPKG_ROOT for the vcpkg publish steps)')
 
 
 def check_github(report, token):

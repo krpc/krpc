@@ -9,8 +9,11 @@ Writes, into the same directory:
 
   * switcher.json -- the runtime version list read by pydata-sphinx-theme's
                      version switcher (the `switcher` entry in html_theme_options)
-  * index.html    -- a meta-refresh redirect from the site root to the newest
-                     released version (or dev, if no release is present yet)
+  * index.html    -- a meta-refresh redirect from the site root to the stable
+                     `latest/` alias (or dev, if no release is present yet)
+  * latest/       -- a verbatim copy of the newest release, giving a stable
+                     `/latest/` URL that always resolves to the current stable
+                     docs (see sync_latest)
   * .nojekyll     -- created if missing, so GitHub Pages serves _static/ as-is
 
 Run after unpacking a build into gh-pages/<subpath>/. Every other version's
@@ -21,12 +24,17 @@ import argparse
 import json
 import os
 import re
+import shutil
 
 # Absolute URL the site is served under. pydata-sphinx-theme's version switcher
 # requires full URLs in switcher.json (it also uses them to probe whether the
 # current page exists in the selected version before navigating).
 SITE = "https://krpc.github.io/krpc"
-SKIP_ENTRIES = {".git", ".nojekyll", "switcher.json", "index.html"}
+
+# The stable alias directory holding a copy of the newest release (see
+# sync_latest). Not a version, so it is kept out of switcher discovery.
+LATEST = "latest"
+SKIP_ENTRIES = {".git", ".nojekyll", "switcher.json", "index.html", LATEST}
 
 _NUM = re.compile(r"^\d+$")
 # A published release directory is a plain three-component version (e.g.
@@ -140,6 +148,33 @@ def render_index(url):
     ) % (url, url, url)
 
 
+def sync_latest(root, releases):
+    """Mirror the newest release into `latest/`, giving a stable `/latest/` URL
+    that always resolves to the current stable docs.
+
+    GitHub Pages is static, so `latest/` is a verbatim copy of the newest
+    release's frozen build rather than a server-side redirect. The copied pages
+    keep that release's subpath baked into html_baseurl and the switcher's
+    version_match, so their canonical links point back to the versioned copy
+    (no duplicate-content penalty) and the switcher highlights the real version
+    with no old-version banner.
+
+    Rebuilt from scratch on every run, so it always tracks whichever release is
+    newest on disk: a run that republishes an older patch, or a dev build, leaves
+    `latest/` pointing at the newest release rather than at what was just built.
+    Copying identical content produces no git diff, so this is a no-op commit-wise
+    unless the newest release actually changed. Returns the mirrored version, or
+    None when there is no release to mirror yet.
+    """
+    latest = os.path.join(root, LATEST)
+    shutil.rmtree(latest, ignore_errors=True)
+    if not releases:
+        return None
+    newest = releases[0]
+    shutil.copytree(os.path.join(root, newest), latest)
+    return newest
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -155,7 +190,12 @@ def main():
         json.dump(entries, fp, indent=2)
         fp.write("\n")
 
-    url = preferred_url(entries)
+    latest = sync_latest(args.root, releases)
+
+    # Redirect the root at the stable latest/ alias when a release exists, so
+    # the default landing URL tracks the newest release without changing. With
+    # no release yet, fall back to the dev build (the sole switcher entry).
+    url = "%s/%s/" % (SITE, LATEST) if latest else preferred_url(entries)
     with open(os.path.join(args.root, "index.html"), "w", encoding="utf-8") as fp:
         fp.write(render_index(url))
 
@@ -164,8 +204,13 @@ def main():
         open(nojekyll, "w").close()
 
     print(
-        "switcher.json: %d entries (%s); root redirects to %s"
-        % (len(entries), ", ".join(e["version"] for e in entries), url)
+        "switcher.json: %d entries (%s); root redirects to %s; latest/ -> %s"
+        % (
+            len(entries),
+            ", ".join(e["version"] for e in entries),
+            url,
+            latest or "(none)",
+        )
     )
 
 

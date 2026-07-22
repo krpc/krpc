@@ -1,7 +1,7 @@
 set(VCPKG_LIBRARY_LINKAGE static)
 
 vcpkg_download_distfile(ARCHIVE
-    URLS "https://github.com/djungelorm/krpc/releases/download/v${VERSION}/krpc-cpp-${VERSION}.zip"
+    URLS "https://github.com/krpc/krpc/releases/download/v${VERSION}/krpc-cpp-${VERSION}.zip"
     FILENAME "krpc-cpp-${VERSION}.zip"
     SHA512 0  # update with sha512sum after cutting the release
 )
@@ -25,5 +25,5 @@ vcpkg_copy_pdbs()
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
-file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/krpc")
+file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
 vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/COPYING.LESSER")

@@ -15,6 +15,12 @@ onto the *current* checkout's toolchain and theme:
     checkout, so theme and doc-generator fixes made since the release apply to
     the rebuild automatically.
 
+The unified changelog page is generated from the toolchain's per-component
+CHANGELOG.md files rather than the content ref, so trim_changelogs first prunes
+each to the version being built. Changelog entries are frozen once released, so
+the pruned files are the ones the version shipped with and the page matches the
+release.
+
 Content corrections for a released version (typos, rendering fixes that live in
 the sources) are therefore made as commits on a long-lived v<version>-docs
 branch based off the v<version> tag, leaving the version's API surface and prose
@@ -31,9 +37,9 @@ Usage:
 
 Options:
   --publish DIR     stage the built site into gh-pages checkout DIR: replace
-                    DIR/<version>/, regenerate the switcher and root redirect,
-                    and commit. The commit is left for review; push it yourself
-                    after checking the diff.
+                    DIR/<version>/, regenerate the switcher, root redirect and
+                    the latest/ alias, and commit. The commit is left for review;
+                    push it yourself after checking the diff.
   --output FILE     without --publish, copy the built html.zip here
                     (default: krpc-doc-<version>.zip in the repo root).
   --worktree DIR    build worktree location
@@ -68,6 +74,37 @@ CONTENT_PATHS = (
     'service/LiDAR/src',
     'service/DockingCamera/src',
 )
+
+# The per-component CHANGELOG.md files the unified changelog page is merged from,
+# mirroring the changeloggen components in doc/BUILD.bazel. Unlike the API
+# surfaces these are toolchain, not content: the current checkout's files carry
+# entries for versions released since, so trim_changelogs prunes each to the
+# version being built. Other CHANGELOG.md files in the tree (the top-level one,
+# tools/krpctest, tools/buildenv) do not feed the page and are left alone.
+CHANGELOG_PATHS = (
+    'core/CHANGELOG.md',
+    'server/CHANGELOG.md',
+    'service/SpaceCenter/CHANGELOG.md',
+    'service/Drawing/CHANGELOG.md',
+    'service/UI/CHANGELOG.md',
+    'service/InfernalRobotics/CHANGELOG.md',
+    'service/KerbalAlarmClock/CHANGELOG.md',
+    'service/RemoteTech/CHANGELOG.md',
+    'service/LiDAR/CHANGELOG.md',
+    'service/DockingCamera/CHANGELOG.md',
+    'client/cnano/CHANGELOG.md',
+    'client/csharp/CHANGELOG.md',
+    'client/cpp/CHANGELOG.md',
+    'client/java/CHANGELOG.md',
+    'client/lua/CHANGELOG.md',
+    'client/python/CHANGELOG.md',
+    'tools/krpctools/CHANGELOG.md',
+)
+
+# A CHANGELOG.md version header: '## [X.Y.Z]', with an optional leading 'v'
+# (older frozen-doc sources predate the prefix) and any trailing marker such as
+# ' - unreleased'. Kept in step with changeloggen's own header parsing.
+CHANGELOG_HEADER_RE = re.compile(r'^##\s+\[v?(\d[^\]]*)\]')
 
 # The built-in KRPC service sources. Pinning them to the content ref keeps later
 # changes to the KRPC service API (e.g. the GameScene API, #897) out of the
@@ -320,17 +357,71 @@ def maybe_write_krpc_compat_shim(worktree):
             KRPC_COMPAT_SHIM, encoding='utf-8')
 
 
-def exclude_changelog(worktree):
-    """Drop the unified changelog page from the build; it postdates the early
-    releases and carries newer entries."""
-    build_file = worktree / 'doc/BUILD.bazel'
-    lines = build_file.read_text(encoding='utf-8').splitlines(keepends=True)
-    kept = [line for line in lines if '":changelog",' not in line]
-    if len(kept) == len(lines):
+def ensure_changelog_in_toctree(worktree):
+    """List the generated changelog page in the landing-page toctree when the
+    content ref predates it.
+
+    changeloggen always emits doc/src/changelog.rst, but releases before the
+    unified changelog page was wired into index.rst (0.6.0) carry a toctree that
+    does not reference it. Sphinx builds with -W, so the resulting
+    'document isn't included in any toctree' warning for changelog.rst fails the
+    build. Insert the entry right after `internals`, the position 0.6.0 uses, so
+    the frozen page keeps the changelog in its navigation. A ref that already
+    lists it is left unchanged.
+    """
+    index = worktree / 'doc/src/index.rst'
+    text = index.read_text(encoding='utf-8')
+    if re.search(r'^[ \t]+changelog[ \t]*$', text, flags=re.MULTILINE):
+        return
+    text, count = re.subn(r'^([ \t]+)internals[ \t]*\n',
+                          r'\1internals\n\1changelog\n',
+                          text, count=1, flags=re.MULTILINE)
+    if count != 1:
         raise lib.ReleaseError(
-            "doc/BUILD.bazel has no ':changelog,' staging entry to remove; "
-            'update this script')
-    build_file.write_text(''.join(kept), encoding='utf-8')
+            'could not find the internals toctree entry in doc/src/index.rst '
+            'to insert the changelog entry after')
+    index.write_text(text, encoding='utf-8')
+
+
+def version_key(version):
+    """Semver-ish sort key matching changeloggen: a higher tuple is newer, and a
+    release sorts above its own pre-releases."""
+    core, _, pre = version.partition('-')
+    nums = [int(part) if part.isdigit() else 0 for part in core.split('.')]
+    while len(nums) < 3:
+        nums.append(0)
+    if not pre:
+        return (tuple(nums), 1, ())
+    pre_parts = tuple((0, int(part)) if part.isdigit() else (1, part)
+                      for part in pre.split('.'))
+    return (tuple(nums), 0, pre_parts)
+
+
+def trim_changelogs(worktree, version):
+    """Prune each component CHANGELOG.md to the version being built.
+
+    The unified changelog page is generated from the current toolchain's
+    CHANGELOG.md files, so it would otherwise carry entries for versions released
+    after this one. Drop every '## [X.Y.Z]' section newer than the target,
+    keeping the preamble and every section at or below it. Because changelog
+    entries are frozen once released, what remains is the file this version
+    shipped with, and the page matches the release.
+    """
+    ceiling = version_key(version)
+    for path in CHANGELOG_PATHS:
+        changelog = worktree / path
+        if not changelog.exists():
+            continue
+        kept = []
+        keeping = True  # the preamble before the first header is kept
+        for line in changelog.read_text(encoding='utf-8').splitlines(
+                keepends=True):
+            match = CHANGELOG_HEADER_RE.match(line)
+            if match:
+                keeping = version_key(match.group(1)) <= ceiling
+            if keeping:
+                kept.append(line)
+        changelog.write_text(''.join(kept), encoding='utf-8')
 
 
 def pin_version(worktree, version):
@@ -343,17 +434,21 @@ def pin_version(worktree, version):
     config.write_text(text, encoding='utf-8')
 
 
-def check_no_changelog(zip_path):
+def check_changelog(zip_path):
     with zipfile.ZipFile(zip_path) as archive:
-        if any(Path(name).name == 'changelog.html'
-               for name in archive.namelist()):
+        if not any(Path(name).name == 'changelog.html'
+                   for name in archive.namelist()):
             raise lib.ReleaseError(
-                'changelog.html present in the built site; the exclusion failed')
+                'changelog.html missing from the built site')
 
 
 def publish(zip_path, publish_dir, version):
     """Replace this version's subdirectory in the gh-pages checkout, regenerate
-    the switcher and root redirect, and commit for review."""
+    the switcher, root redirect and latest/ alias, and commit for review.
+
+    gen_docs_index.py mirrors the newest release on disk into latest/, so
+    publishing this version refreshes latest/ only when it is (or becomes) the
+    newest release; republishing an older version leaves latest/ untouched."""
     target = publish_dir / version
     shutil.rmtree(target, ignore_errors=True)
     target.mkdir(parents=True)
@@ -421,7 +516,8 @@ def main():
         graft(worktree, base, ref)
         maybe_write_gamescene_shim(worktree)
         maybe_write_krpc_compat_shim(worktree)
-        exclude_changelog(worktree)
+        trim_changelogs(worktree, version)
+        ensure_changelog_in_toctree(worktree)
         pin_version(worktree, version)
 
         lib.banner('Building the docs (this verifies the graft)')
@@ -429,7 +525,7 @@ def main():
         run_in(worktree, 'bazel', 'test', '//doc:check-documented')
 
         zip_path = worktree / 'bazel-bin' / 'doc' / 'html.zip'
-        check_no_changelog(zip_path)
+        check_changelog(zip_path)
 
         if publish_dir:
             publish(zip_path, publish_dir, version)
