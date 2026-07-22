@@ -10,8 +10,9 @@ echo 'Building library...'
 bazel build //client/cnano @c_nanopb//:srcs
 nanopb=`pwd`/bazel-krpc/external/+http_archive+c_nanopb
 
-# Clone arduino library repository
-arduino=`pwd`/bazel-bin/client/cnano/arduino
+# Clone arduino library repository. Kept out of bazel-bin/client/cnano to avoid
+# colliding with the 'arduino' test binary Bazel builds into that directory.
+arduino=`pwd`/bazel-bin/client/cnano/arduino-library
 if [ ! -d $arduino ]; then
   echo 'Cloning krpc-arduino repository...'
   git clone git@github.com:krpc/krpc-arduino $arduino
