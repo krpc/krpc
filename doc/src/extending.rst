@@ -823,9 +823,8 @@ connect.
 Further Examples
 ----------------
 
-See the `SpaceCenter service implementation
-<https://github.com/krpc/krpc/tree/latest-version/service/SpaceCenter/src/Services>`_ for more
-extensive examples.
+See the :github-tree:`SpaceCenter service implementation <service/SpaceCenter/src/Services>` for
+more extensive examples.
 
 .. _service-api-clientgen:
 

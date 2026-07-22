@@ -26,10 +26,9 @@ exception: pushes to `krpc/krpc` and `krpc-arduino` use your normal git setup.
 
 ## 2. Tag
 
-4. `tools/release/30-tag.py` — makes the annotated `vx.x.x` tag, moves the `latest-version` tag,
-   and pushes the branch and both tags. Pushing the version tag also triggers the docs workflow,
-   which freezes the documentation website under `/<version>/` and adds the release to the version
-   dropdown — no manual docs step is needed.
+4. `tools/release/30-tag.py` — makes the annotated `vx.x.x` tag and pushes the branch and tag.
+   Pushing the version tag also triggers the docs workflow, which freezes the documentation website
+   under `/<version>/` and adds the release to the version dropdown — no manual docs step is needed.
 5. Wait for the CI workflow on `main` to pass (the tag script prints a `gh run watch` command).
 
 ## 3. Release on GitHub

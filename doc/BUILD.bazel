@@ -128,15 +128,20 @@ py_binary(
 # string keeps the docs in step with the version everything else builds with.
 docs_version = "dev" if "-" in version else version
 
+# The git ref this build's source-tree links point at, so each version's docs
+# link to their own source: the vX.Y.Z tag for a release, main for a dev build.
+github_ref = "main" if "-" in version else "v" + version
+
 genrule(
     name = "conf",
     srcs = ["conf.py.tmpl"],
     outs = ["src/conf.py"],
-    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number). The
-    # commit sha is deliberately not substituted in: it reaches a dev build's
-    # footer at page-load time via build-info.json, keeping the HTML identical
-    # from one commit to the next.
-    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' \"$<\" > \"$@\"",
+    # %VERSION%/%SUBPATH% get the channel ('dev' or the release number) and
+    # %GITHUB_REF% the source ref (main or vX.Y.Z). The commit sha is
+    # deliberately not substituted in: it reaches a dev build's footer at
+    # page-load time via build-info.json, keeping the HTML identical from one
+    # commit to the next.
+    cmd = "sed -e 's/%VERSION%/" + docs_version + "/g' -e 's/%SUBPATH%/" + docs_version + "/g' -e 's/%GITHUB_REF%/" + github_ref + "/g' \"$<\" > \"$@\"",
 )
 
 sphinx_build(

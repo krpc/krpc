@@ -111,11 +111,22 @@ javadoc_url_map = {
 
 add_module_names = False
 
+# The git ref this documentation was built from: the vX.Y.Z tag for a release,
+# main for a dev build. Links into the source tree on GitHub use it so each
+# version's docs point at their own source.
+github_ref = '%GITHUB_REF%'
+
 # Clickable (#NNN) issue/PR references on the changelog page. GitHub redirects
 # /issues/N to /pull/N (and vice versa), so `issue` resolves either kind.
+# `github-tree`/`github-blob` link to a directory/file in the source tree at
+# github_ref, e.g. :github-blob:`text <protobuf/krpc.proto>`.
 extlinks = {
     'issue': ('https://github.com/krpc/krpc/issues/%s', '#%s'),
     'pr': ('https://github.com/krpc/krpc/pull/%s', '#%s'),
+    'github-tree': ('https://github.com/krpc/krpc/tree/' + github_ref + '/%s',
+                    None),
+    'github-blob': ('https://github.com/krpc/krpc/blob/' + github_ref + '/%s',
+                    None),
 }
 
 sphinx_tabs_disable_tab_closing = True
