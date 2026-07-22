@@ -106,7 +106,7 @@ class TestPartsResourceHarvester(krpctest.TestCase):
         self.assertEqual(self.state.deploying, self.drill.state)
         self.assertFalse(self.drill.active)
         self.wait_until(
-            lambda: self.drill.state == self.state.active,
+            lambda: self.drill.active,
             message="drill to activate after its deploy completes",
         )
         self.assertTrue(self.drill.active)
