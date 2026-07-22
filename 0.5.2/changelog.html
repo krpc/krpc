@@ -1,0 +1,2878 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Changelog &#8212; kRPC v0.5.2 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="_static/documentation_options.js?v=8e576371"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'changelog';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.2';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="_static/external-links.js?v=e8892020"></script>
+    <script src="_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.2/changelog.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Internals of kRPC" href="internals.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.2" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="#">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"></div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Changelog</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="changelog">
+<h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
+<section id="v0-5-2">
+<h2>v0.5.2<a class="headerlink" href="#v0-5-2" title="Link to this heading">#</a></h2>
+<section id="server">
+<h3>Server<a class="headerlink" href="#server" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.10.1</p></li>
+<li><p>Fix game lagging when first client connects (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/712">#712</a>)</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">KRPCDefaultValueAttribute</span></code> so that it applies to parameters directly (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/677">#677</a>)</p></li>
+</ul>
+</section>
+<section id="spacecenter-service">
+<h3>SpaceCenter service<a class="headerlink" href="#spacecenter-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix null reference exception when <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVesselFromVAB</span></code> is called with no crew (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/599">#599</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.IndependentThrottle</span></code> to check whether it is enabled</p></li>
+<li><p>Allow setting the independent throttle using <code class="docutils literal notranslate"><span class="pre">Engine.Throttle</span></code></p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Engine.HasFuel</span></code> sometimes returning true for flamed-out SRBs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/631">#631</a>)</p></li>
+<li><p>Add functions to manipulate a part modules fields based on identifier</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Module.Fields</span></code> now throws an exception if there are multiple fields with the same name</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Module.FieldsById</span></code> to get a dictionary of field values keyed by their identifier</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Module.SetFieldBool</span></code> and <code class="docutils literal notranslate"><span class="pre">Module.SetFieldBoolById</span></code> to set a field with a boolean value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Module.SetField*</span></code> methods now raise an exception if setting the field to the wrong value type</p></li>
+<li><p>Change default names for alarms created by <code class="docutils literal notranslate"><span class="pre">AlarmManager</span></code></p></li>
+</ul>
+</section>
+<section id="c-nano-client">
+<h3>C-nano client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The arduino compatible version of the library now uses the same “krpc_cnano/…” include directory as the version released on GitHub.</p></li>
+</ul>
+</section>
+<section id="c-client">
+<h3>C++ client<a class="headerlink" href="#c-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Use protobuf-lite</p></li>
+<li><p>Roll back to protobuf v3.21.12 to avoid absl dependency</p></li>
+</ul>
+</section>
+<section id="python-client">
+<h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Requires Python 3.7+</p></li>
+<li><p>Add type hints (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/703">#703</a>)</p></li>
+<li><p>Pre-generated stubs now include implementation of services as well as type hints</p></li>
+<li><p>Fix various type hint bugs in generated stubs</p></li>
+<li><p>Allow importing types from a service using, for example “<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">krpc.services.spacecenter</span> <span class="pre">import</span> <span class="pre">Vessel</span></code>”</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-5-1">
+<h2>v0.5.1<a class="headerlink" href="#v0-5-1" title="Link to this heading">#</a></h2>
+<section id="id1">
+<h3>SpaceCenter service<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix null reference exception in autopilot for vessels without custom axis controls (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/649">#649</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-5-0">
+<h2>v0.5.0<a class="headerlink" href="#v0-5-0" title="Link to this heading">#</a></h2>
+<section id="id2">
+<h3>Server<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.8+</p></li>
+<li><p>Update to protobuf v3.9.1</p></li>
+<li><p>Update to ModuleManager 4.2.2</p></li>
+<li><p>Fix bug with streams where a stream update is not sent initially after a stream is created, if the stream value is null (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/515">#515</a>)</p></li>
+</ul>
+</section>
+<section id="id3">
+<h3>SpaceCenter service<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to work with KSP 1.8+</p></li>
+<li><p>Add to <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code>:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">LaunchSites</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CanRevertToLaunch</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RevertToLaunch</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TransferCrew</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CreateKerbal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GetKerbal</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LoadSpaceCenter</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MapFilter</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Screenshot</span></code></p></li>
+</ul>
+</li>
+<li><p>Add crew and <code class="docutils literal notranslate"><span class="pre">flagUrl</span></code> parameters to <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVessel</span></code></p></li>
+<li><p>Add support for more vessel types</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">LaunchSite</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.IsStar</span></code> and <code class="docutils literal notranslate"><span class="pre">CelestialBody.HasSolidSurface</span></code></p></li>
+<li><p>Add custom axes to <code class="docutils literal notranslate"><span class="pre">Control</span></code> class</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.FlagURL</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.AvailableSeats</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.Glow</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.AutoStrutMode</span></code></p></li>
+<li><p>Add support for resource drain parts</p></li>
+<li><p>Add support for stock robotic parts</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Parachute.Cut</span></code></p></li>
+<li><p>Add support for docking port rotation</p></li>
+<li><p>Add support for <code class="docutils literal notranslate"><span class="pre">Light</span></code> blinking</p></li>
+<li><p>Add support for wheel steering angle limit and response time</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">ParachuteState.Active</span></code> state and clean up real chute vs. stock parachute logic</p></li>
+<li><p>Add support for stock alarms (<code class="docutils literal notranslate"><span class="pre">AlarmManager</span></code> and <code class="docutils literal notranslate"><span class="pre">Alarm</span></code> classes)</p></li>
+<li><p>Use raycast to measure surface height more precisely in <code class="docutils literal notranslate"><span class="pre">CelestialBody.SurfaceHeight</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/524">#524</a>)</p></li>
+<li><p>Fix null reference exception when checking active vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/528">#528</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/530">#530</a>)</p></li>
+<li><p>Fix null reference exception when waiting for active vessel change (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/516">#516</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/529">#529</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">RCS.ThrustLimit</span></code> and <code class="docutils literal notranslate"><span class="pre">RCS.AvailableThrust</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/519">#519</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.StageLock</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/541">#541</a>)</p></li>
+<li><p>Fix launch checks and automatic vessel recovery in <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVessel</span></code></p></li>
+<li><p>Fix setting camera target to an unloaded vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/536">#536</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Control.Legs</span></code> and <code class="docutils literal notranslate"><span class="pre">Control.Wheels</span></code> not deploying/retracting legs/wheels correctly (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/509">#509</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/261">#261</a>)</p></li>
+<li><p>Allow legs/wheels can be individually deployed/retracted using <code class="docutils literal notranslate"><span class="pre">Leg.Deployed</span></code> and <code class="docutils literal notranslate"><span class="pre">Wheel.Deployed</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/509">#509</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/261">#261</a>)</p></li>
+<li><p>Allow lights to be individually turned on and off (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/261">#261</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Engine</span></code> and RCS fuel calculations only being done when they are enabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/514">#514</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/254">#254</a>)</p></li>
+<li><p>Add support for parts that contain multiple experiments (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/533">#533</a>)</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Part.Experiment</span></code> now throws an exception if the part has more than one experiment</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.Experiments</span></code> which returns a list of experiments in the part</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">Parts.Experiments</span></code> to return all experiments contained in the parts</p></li>
+</ul>
+</li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Experiment.Name</span></code> and <code class="docutils literal notranslate"><span class="pre">Experiment.Title</span></code></p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Fairing.Jettison</span></code> and <code class="docutils literal notranslate"><span class="pre">Fairing.Jettisoned</span></code> for parts from the ProceduralFairings mod (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/549">#549</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Engine.SpecificImpulse</span></code> returning 0 for Realism Overhaul engines that are active but not throttled up (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/548">#548</a>)</p></li>
+<li><p>Fix compatibility with DMagic science experiments mod (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/550">#550</a>)</p></li>
+<li><p>Fix available torque calculations for RCS (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/552">#552</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/354">#354</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">RCS.MaxThrust</span></code> returning incorrect values</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">SimulateAerodynamicForceAt</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/587">#587</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">RCS.GetTorqueVectors</span></code> not considering if each direction is enabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/591">#591</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">RCS.AvailableForce</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.AvailableRCSForce</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/597">#597</a>)</p></li>
+</ul>
+</section>
+<section id="drawing-service">
+<h3>Drawing service<a class="headerlink" href="#drawing-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Drawing.AddDirectionFromCoM</span></code></p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">Drawing.AddDirection</span></code> to start the line at the origin of the reference frame (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/518">#518</a>)</p></li>
+</ul>
+</section>
+<section id="infernalrobotics-service">
+<h3>InfernalRobotics service<a class="headerlink" href="#infernalrobotics-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to work with Infernal Robotics Next v3.1.9</p></li>
+<li><p>Drop support for original Infernal Robotics mod</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">Servo.MoveNextPreset</span></code> and <code class="docutils literal notranslate"><span class="pre">Servo.MovePrevPreset</span></code> as they no longer exist in the mod</p></li>
+</ul>
+</section>
+<section id="kerbalalarmclock-service">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#kerbalalarmclock-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update API wrapper to work with KerbalAlarmClock v3.13.0.0</p></li>
+</ul>
+</section>
+<section id="lidar-service">
+<h3>LiDAR service<a class="headerlink" href="#lidar-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="dockingcamera-service">
+<h3>DockingCamera service<a class="headerlink" href="#dockingcamera-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id4">
+<h3>C-nano client<a class="headerlink" href="#id4" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf 22.0</p></li>
+<li><p>Update to nanopb 0.4.7</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">KRPC_COMMS_CUSTOM</span></code> to <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code></p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>C# client<a class="headerlink" href="#id5" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.22.0</p></li>
+<li><p>Drop support for net35</p></li>
+</ul>
+</section>
+<section id="id6">
+<h3>C++ client<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.22.0</p></li>
+<li><p>Update to ASIO 1.24.0</p></li>
+<li><p>Fix include path to ASIO header in CMake build scripts</p></li>
+<li><p>Fix CMake build scripts not building a static library with MSVC on Windows</p></li>
+</ul>
+</section>
+<section id="java-client">
+<h3>Java client<a class="headerlink" href="#java-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.22.0</p></li>
+</ul>
+</section>
+<section id="lua-client">
+<h3>Lua client<a class="headerlink" href="#lua-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.22.0</p></li>
+</ul>
+</section>
+<section id="id7">
+<h3>Python client<a class="headerlink" href="#id7" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix protobuf requirement to be &gt;=3.6 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/506">#506</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/510">#510</a>)</p></li>
+<li><p>Update to protobuf v4.22.0</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-9">
+<h2>v0.4.9<a class="headerlink" href="#v0-4-9" title="Link to this heading">#</a></h2>
+<section id="krpctools">
+<h3>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix issue finding <code class="docutils literal notranslate"><span class="pre">KSP_x64_Data</span></code> directory (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/523">#523</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">TestServer</span></code> archive to bin directory (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/532">#532</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-8">
+<h2>v0.4.8<a class="headerlink" href="#v0-4-8" title="Link to this heading">#</a></h2>
+<section id="id8">
+<h3>Server<a class="headerlink" href="#id8" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.5.1</p></li>
+<li><p>Update to protobuf v3.6.1</p></li>
+<li><p>Add support for specifying more granular game scenes for RPCs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/471">#471</a>)</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>SpaceCenter service<a class="headerlink" href="#id9" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Allows RPCs to be accessed from game scenes other than just flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/471">#471</a>)</p></li>
+<li><p>Merge NameTag (<a class="github reference external" href="http://github.com/krpc/NameTag">krpc/NameTag</a>) into the main kRPC release</p></li>
+<li><p>Fix air-relative velocity calculation for <code class="docutils literal notranslate"><span class="pre">SimulateAeroDynamicForceAt</span></code> with FAR (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/500">#500</a>)</p></li>
+<li><p>Changed <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> API to accept target orbits as <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> objects instead of <code class="docutils literal notranslate"><span class="pre">Vessel</span></code> objects, to allow computing closest approach etc. to planets (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/479">#479</a>)</p></li>
+<li><p>Trying to enable SAS while the autopilot is engaged now throws an exception as this is not permitted (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/492">#492</a>)</p></li>
+<li><p>Add color and size paramters to <code class="docutils literal notranslate"><span class="pre">UI.Message</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/499">#499</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Flight.TerminalVelocity</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/485">#485</a>)</p></li>
+<li><p>Fix null reference exception when deploying fairings after reverting to launch (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/501">#501</a>)</p></li>
+</ul>
+</section>
+<section id="id10">
+<h3>Drawing service<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix reference frames for <code class="docutils literal notranslate"><span class="pre">AddDirection</span></code> so that the line always starts at the active vessel’s CoM (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/486">#486</a>)</p></li>
+</ul>
+</section>
+<section id="id11">
+<h3>InfernalRobotics service<a class="headerlink" href="#id11" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add suport for both original Infernal Robotics and Infernal Robotics Next (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/476">#476</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">InfernalRobotics.Ready</span></code> which indicates if the IR is on the current vessel and ready to receive commands</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">InfernalRobotics.Available</span></code> to return whether the IR mod is installed (not if the IR API is “ready”)</p></li>
+</ul>
+</section>
+<section id="id12">
+<h3>C-nano client<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.6.1</p></li>
+<li><p>Change second parameter of <code class="docutils literal notranslate"><span class="pre">krpc_open</span></code> to be a configuration parameter of type <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code> to allow additional configuration options to be passed, such as baud rate for Arduino serial port (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/487">#487</a>)</p></li>
+<li><p>Fix encoding issue in procedure call messages that was causing compilation on Arduino Due to fail</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>C# client<a class="headerlink" href="#id13" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.6.1</p></li>
+</ul>
+</section>
+<section id="id14">
+<h3>C++ client<a class="headerlink" href="#id14" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.6.1</p></li>
+<li><p>Update to ASIO 1.12.1</p></li>
+<li><p>Add condition variable and callbacks that are called when a stream update message is processed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/473">#473</a>)</p></li>
+<li><p>Fix compilation issue on MacOS</p></li>
+<li><p>Fix cmake configuration detection of protoc binary</p></li>
+</ul>
+</section>
+<section id="id15">
+<h3>Java client<a class="headerlink" href="#id15" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Connection</span></code> class implement <code class="docutils literal notranslate"><span class="pre">AutoClosable</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/491">#491</a>)</p></li>
+<li><p>Update to protobuf v3.6.1</p></li>
+</ul>
+</section>
+<section id="id16">
+<h3>Lua client<a class="headerlink" href="#id16" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.6.1</p></li>
+</ul>
+</section>
+<section id="id17">
+<h3>Python client<a class="headerlink" href="#id17" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.6.1</p></li>
+<li><p>Add condition variable and callbacks that are called when a stream update message is processed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/473">#473</a>)</p></li>
+</ul>
+</section>
+<section id="id18">
+<h3>krpctools<a class="headerlink" href="#id18" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix Python 3 compatibility</p></li>
+<li><p>Fix template loading in <code class="docutils literal notranslate"><span class="pre">docgen</span></code> on Windows</p></li>
+<li><p>Add documentation of game scenes for each RPC</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-7">
+<h2>v0.4.7<a class="headerlink" href="#v0-4-7" title="Link to this heading">#</a></h2>
+<section id="id19">
+<h3>Server<a class="headerlink" href="#id19" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.4.4</p></li>
+<li><p>Fix launch site clear checks (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/483">#483</a>)</p></li>
+</ul>
+</section>
+<section id="id20">
+<h3>SpaceCenter service<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Flight.Lift</span></code> and <code class="docutils literal notranslate"><span class="pre">Flight.Drag</span></code> should return values in Newtons (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/475">#475</a>)</p></li>
+</ul>
+</section>
+<section id="id21">
+<h3>C-nano client<a class="headerlink" href="#id21" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix include paths on Arduino (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/482">#482</a>)</p></li>
+</ul>
+</section>
+<section id="id22">
+<h3>C++ client<a class="headerlink" href="#id22" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Ensure .lib files are generated when building using CMake with MSVC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/474">#474</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-6">
+<h2>v0.4.6<a class="headerlink" href="#v0-4-6" title="Link to this heading">#</a></h2>
+<section id="id23">
+<h3>Server<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.4.3</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">CompatibilityChecker</span></code> as it’s deprecated - instead rely on CKAN and KSP-AVC version checks</p></li>
+<li><p>Update icons to be 64x64 to fix blurring when loading as textures (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/453">#453</a>)</p></li>
+<li><p>Fix equality checking for streams of collections (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/452">#452</a>)</p></li>
+<li><p>Fix RPC errors being reported in <code class="docutils literal notranslate"><span class="pre">Response.error</span></code> instead of individual <code class="docutils literal notranslate"><span class="pre">ProcedureResult.error</span></code> fields (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/467">#467</a>)</p></li>
+</ul>
+</section>
+<section id="id24">
+<h3>SpaceCenter service<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">SpaceCenter.GameMode</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/455">#455</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Science</span></code>, <code class="docutils literal notranslate"><span class="pre">Funds</span></code> and <code class="docutils literal notranslate"><span class="pre">Reputation</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/455">#455</a>)</p></li>
+<li><p>Fix pre-flight checks not happending in <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVessel</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/469">#469</a>)</p></li>
+<li><p>Add ‘recover’ boolean argument to <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVessel</span></code> to recover existing vessels on the launch pad (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/469">#469</a>)</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">CelestialBody.Biomes</span></code> to return an empty list instead of throwing an exception if the body has no biomes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/457">#457</a>)</p></li>
+<li><p>Fixed science transmission not working correctly (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/456">#456</a>)</p></li>
+</ul>
+</section>
+<section id="id25">
+<h3>C-nano client<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Include directory and main header now suffixed with “_cnano” to avoid name clashes with C++ client</p></li>
+</ul>
+</section>
+<section id="id26">
+<h3>C# client<a class="headerlink" href="#id26" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
+</ul>
+</section>
+<section id="id27">
+<h3>C++ client<a class="headerlink" href="#id27" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
+<li><p>Improve Autotools and CMake build scripts to regenerate the protobuf source if protoc is installed</p></li>
+</ul>
+</section>
+<section id="id28">
+<h3>Java client<a class="headerlink" href="#id28" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
+</ul>
+</section>
+<section id="id29">
+<h3>Python client<a class="headerlink" href="#id29" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-5">
+<h2>v0.4.5<a class="headerlink" href="#v0-4-5" title="Link to this heading">#</a></h2>
+<section id="id30">
+<h3>Server<a class="headerlink" href="#id30" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support KSP 1.4.1</p></li>
+<li><p>Update to protobuf v3.5.1</p></li>
+<li><p>Fix server error and client hang when quickly removing and re-adding a stream</p></li>
+</ul>
+</section>
+<section id="id31">
+<h3>SpaceCenter service<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fixed roll input when input mode is override (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/445">#445</a>)</p></li>
+<li><p>Marked <code class="docutils literal notranslate"><span class="pre">CelestialBody.Orbit</span></code> as nullable, as it returns null for the sun</p></li>
+</ul>
+</section>
+<section id="id32">
+<h3>C-nano client<a class="headerlink" href="#id32" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix connection timing out on Arduino when connecting to a server with new client confirmation enabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/446">#446</a>)</p></li>
+</ul>
+</section>
+<section id="id33">
+<h3>C# client<a class="headerlink" href="#id33" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.5.1</p></li>
+</ul>
+</section>
+<section id="id34">
+<h3>C++ client<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.5.1</p></li>
+</ul>
+</section>
+<section id="id35">
+<h3>Java client<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.5.1</p></li>
+</ul>
+</section>
+<section id="id36">
+<h3>Lua client<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.5.1</p></li>
+</ul>
+</section>
+<section id="id37">
+<h3>Python client<a class="headerlink" href="#id37" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.5.1</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-4-post1">
+<h2>v0.4.4.post1<a class="headerlink" href="#v0-4-4-post1" title="Link to this heading">#</a></h2>
+<section id="id38">
+<h3>C++ client<a class="headerlink" href="#id38" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add missing files to build scripts</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-4">
+<h2>v0.4.4<a class="headerlink" href="#v0-4-4" title="Link to this heading">#</a></h2>
+<section id="id39">
+<h3>Server<a class="headerlink" href="#id39" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add support for more complex server side expressions including function definitions and calls, and operations on collections (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/435">#435</a>)</p></li>
+<li><p>Fix service ids to not clash (affected cnano client) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/433">#433</a>)</p></li>
+</ul>
+</section>
+<section id="id40">
+<h3>SpaceCenter service<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ResourceConverter.ThermalEfficiency</span></code>, <code class="docutils literal notranslate"><span class="pre">CoreTemperature</span></code> and <code class="docutils literal notranslate"><span class="pre">OptimumCoreTemperature</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/439">#439</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-3">
+<h2>v0.4.3<a class="headerlink" href="#v0-4-3" title="Link to this heading">#</a></h2>
+<section id="id41">
+<h3>Server<a class="headerlink" href="#id41" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add compatibility for KSP 1.2.2 and 1.3.0</p></li>
+<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
+<li><p>Add ability to call an RPC using an integer identifier for the service and procedure, rather than its full service and procedure name (reduces code size and communication overhead for cnano client)</p></li>
+</ul>
+</section>
+<section id="id42">
+<h3>C-nano client<a class="headerlink" href="#id42" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">KRPC_NO_PRINT_ERRORS</span></code> option (now enabled by default) and replace with <code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code></p></li>
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> by default in Arduino version of library</p></li>
+<li><p>Invoke remote procedures using service and produce identifiers instead of names to reduce code size and communication overhead</p></li>
+</ul>
+</section>
+<section id="id43">
+<h3>C# client<a class="headerlink" href="#id43" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
+</ul>
+</section>
+<section id="id44">
+<h3>C++ client<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
+</ul>
+</section>
+<section id="id45">
+<h3>Java client<a class="headerlink" href="#id45" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
+</ul>
+</section>
+<section id="id46">
+<h3>Python client<a class="headerlink" href="#id46" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-2">
+<h2>v0.4.2<a class="headerlink" href="#v0-4-2" title="Link to this heading">#</a></h2>
+<section id="id47">
+<h3>Server<a class="headerlink" href="#id47" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Include missing <code class="docutils literal notranslate"><span class="pre">KRPC.IO.Ports</span></code> DLL</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-1">
+<h2>v0.4.1<a class="headerlink" href="#v0-4-1" title="Link to this heading">#</a></h2>
+<section id="id48">
+<h3>Server<a class="headerlink" href="#id48" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add SerialIO server</p></li>
+<li><p>Fix connection timeout when client connects with auto-accept connections disabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/425">#425</a>)</p></li>
+<li><p>Add option to pause the server when the game is paused</p></li>
+<li><p>New connections time out after 3 seconds if a connection request message is not received (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/428">#428</a>)</p></li>
+<li><p>Fix issue with partial receipt of connection request messsages</p></li>
+</ul>
+</section>
+<section id="id49">
+<h3>SpaceCenter service<a class="headerlink" href="#id49" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.RaycastDistance</span></code> and <code class="docutils literal notranslate"><span class="pre">RaycastPart</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/423">#423</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.CrewCount</span></code>, <code class="docutils literal notranslate"><span class="pre">CrewCapacity</span></code> and <code class="docutils literal notranslate"><span class="pre">Crew</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/426">#426</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CrewMember</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/426">#426</a>)</p></li>
+</ul>
+</section>
+<section id="id50">
+<h3>C-nano client<a class="headerlink" href="#id50" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-4-0">
+<h2>v0.4.0<a class="headerlink" href="#v0-4-0" title="Link to this heading">#</a></h2>
+<section id="id51">
+<h3>Server<a class="headerlink" href="#id51" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>New server architecture that allows multiple concurrent servers, using different settings and protocols</p></li>
+<li><p>Add websockets server protocol for communication with browsers</p></li>
+<li><p>Improved communication protocol (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/325">#325</a>)</p>
+<ul>
+<li><p>Multiple RPCs can now be grouped into a single network message</p></li>
+<li><p>Remove unnecessary message fields</p></li>
+<li><p>Improved message encoding when establishing a connection</p></li>
+<li><p>Significantly reduced the size of the message returned by GetServices</p></li>
+<li><p>More compact encoding of signed integers</p></li>
+</ul>
+</li>
+<li><p>Added ability for RPCs to throw custom exception types in the calling client</p></li>
+<li><p>Add start flag to <code class="docutils literal notranslate"><span class="pre">KRPC.AddStream</span></code> and add <code class="docutils literal notranslate"><span class="pre">KRPC.StartStream</span></code>. Allows streams to be added but not started until a later time</p></li>
+<li><p>If a stream returns an error, it is removed from the server automatically (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/269">#269</a>)</p></li>
+<li><p>Add support for streaming RPCs that yield execution to a future game update</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC.GetClientID</span></code> and <code class="docutils literal notranslate"><span class="pre">KRPC.GetClientName</span></code></p></li>
+<li><p>Add support for events</p></li>
+<li><p>Server no longer freezes if the game is paused (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/347">#347</a>)</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">KRPC.Paused</span></code> property to get/set whether the game is paused (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/422">#422</a>)</p></li>
+</ul>
+</section>
+<section id="id52">
+<h3>SpaceCenter service<a class="headerlink" href="#id52" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">AutoPilot.Wait</span></code> and <code class="docutils literal notranslate"><span class="pre">Error</span></code> methods now throw an exception if the auto-pilot is not engaged (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/409">#409</a>)</p></li>
+</ul>
+</section>
+<section id="id53">
+<h3>Drawing service<a class="headerlink" href="#id53" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Test.AvailableFonts</span></code> a static method</p></li>
+</ul>
+</section>
+<section id="id54">
+<h3>C# client<a class="headerlink" href="#id54" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Updated protocol in line with server changes</p></li>
+<li><p>Add support for RPCs and streams to throw exceptions</p></li>
+</ul>
+</section>
+<section id="id55">
+<h3>C++ client<a class="headerlink" href="#id55" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Updated protocol in line with server changes</p></li>
+<li><p>Remove connection retries. Client will now fail fast if it fails to connect to the server.</p></li>
+<li><p>Add support for RPCs and streams to throw exceptions</p></li>
+</ul>
+</section>
+<section id="id56">
+<h3>Java client<a class="headerlink" href="#id56" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Updated protocol in line with server changes</p></li>
+<li><p>Add support for RPCs and streams to throw exceptions</p></li>
+<li><p>Clean up error reporting:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ConnectionException</span></code> thrown when connection to a server fails This inherits <code class="docutils literal notranslate"><span class="pre">IOException</span></code></p></li>
+<li><p>Decoding messages now throws an unchecked <code class="docutils literal notranslate"><span class="pre">EncodingException</span></code>, as these errors should not occur as a result of user input.</p></li>
+</ul>
+</li>
+<li><p>Minor code clean up, and source now checked with CheckStyle</p></li>
+</ul>
+</section>
+<section id="id57">
+<h3>Lua client<a class="headerlink" href="#id57" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Updated protocol in line with server changes</p></li>
+</ul>
+</section>
+<section id="id58">
+<h3>Python client<a class="headerlink" href="#id58" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Updated protocol in line with server changes</p></li>
+<li><p>Remove connection retries. Client will now fail fast if it fails to connect to the server</p></li>
+<li><p>Reorder parameters to <code class="docutils literal notranslate"><span class="pre">krpc.connect()</span></code> so that name is first - to be consistent with other client libraries</p></li>
+<li><p>Add support for RPCs and streams to throw exceptions</p></li>
+<li><p>Add stream waiting and update callbacks</p></li>
+<li><p>Add support for events</p></li>
+<li><p>Don’t execute an initial RPC when a stream is created, wait for the first update instead</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-11">
+<h2>v0.3.11<a class="headerlink" href="#v0-3-11" title="Link to this heading">#</a></h2>
+<section id="id59">
+<h3>Server<a class="headerlink" href="#id59" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.3.1</p></li>
+</ul>
+</section>
+<section id="id60">
+<h3>C# client<a class="headerlink" href="#id60" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.1</p></li>
+</ul>
+</section>
+<section id="id61">
+<h3>C++ client<a class="headerlink" href="#id61" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.1</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-10">
+<h2>v0.3.10<a class="headerlink" href="#v0-3-10" title="Link to this heading">#</a></h2>
+<section id="id62">
+<h3>Server<a class="headerlink" href="#id62" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
+<section id="id63">
+<h3>SpaceCenter service<a class="headerlink" href="#id63" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix maneuver node reference frame to point in the direction of the remaining burn, rather than just the initially planned burn (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/404">#404</a>)</p></li>
+<li><p>Add following to <code class="docutils literal notranslate"><span class="pre">CelestialBody</span></code> class: <code class="docutils literal notranslate"><span class="pre">AltitudeAtPosition</span></code>, <code class="docutils literal notranslate"><span class="pre">LatitudeAtPosition</span></code>, <code class="docutils literal notranslate"><span class="pre">LongitudeAtPosition</span></code> and <code class="docutils literal notranslate"><span class="pre">AtmosphericDensityAtPosition</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/413">#413</a>)</p></li>
+<li><p>Add following to <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> class: <code class="docutils literal notranslate"><span class="pre">RadiusAt</span></code>, <code class="docutils literal notranslate"><span class="pre">PositionAt</span></code>, <code class="docutils literal notranslate"><span class="pre">MeanAnomalyAtUT</span></code>, <code class="docutils literal notranslate"><span class="pre">TrueAnomalyAtAN</span></code>, <code class="docutils literal notranslate"><span class="pre">TrueAnomalyAtDN</span></code></p></li>
+<li><p>Add rendezvous method to <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> class: <code class="docutils literal notranslate"><span class="pre">RelativeInclination</span></code>, <code class="docutils literal notranslate"><span class="pre">TimeOfClosestApproach</span></code>, <code class="docutils literal notranslate"><span class="pre">DistanceAtClosestApproach</span></code>, <code class="docutils literal notranslate"><span class="pre">ListClosestApproaches</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/407">#407</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.InputMode</span></code> to configure the way that control inputs are handled (they are either additive or override the vessels control inputs) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/384">#384</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.TemperatureAt</span></code>, <code class="docutils literal notranslate"><span class="pre">DensityAt</span></code> and <code class="docutils literal notranslate"><span class="pre">PressureAt</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/350">#350</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/352">#352</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Flight.SimulateAerodynamicForceAt</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/352">#352</a>)</p></li>
+</ul>
+</section>
+<section id="id64">
+<h3>C# client<a class="headerlink" href="#id64" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add support for .NET 3.5 (allows use of the client from within KSP itself)</p></li>
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
+<section id="id65">
+<h3>C++ client<a class="headerlink" href="#id65" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Set <code class="docutils literal notranslate"><span class="pre">ASIO_STANDLONE</span></code> in build script instead of source code so that configure script can find the header correctly</p></li>
+<li><p>Add support for building using Cygwin</p></li>
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
+<section id="id66">
+<h3>Java client<a class="headerlink" href="#id66" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
+<section id="id67">
+<h3>Lua client<a class="headerlink" href="#id67" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
+<section id="id68">
+<h3>Python client<a class="headerlink" href="#id68" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-9-post1">
+<h2>v0.3.9.post1<a class="headerlink" href="#v0-3-9-post1" title="Link to this heading">#</a></h2>
+<section id="id69">
+<h3>Python client<a class="headerlink" href="#id69" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix compatibility with protobuf v3.4.0</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-9">
+<h2>v0.3.9<a class="headerlink" href="#v0-3-9" title="Link to this heading">#</a></h2>
+<section id="id70">
+<h3>Server<a class="headerlink" href="#id70" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.3.0</p></li>
+<li><p>KSP 1.3 support</p></li>
+<li><p>Fix client activity indicators in UI</p></li>
+</ul>
+</section>
+<section id="id71">
+<h3>SpaceCenter service<a class="headerlink" href="#id71" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">VesselType.Plane</span></code> and <code class="docutils literal notranslate"><span class="pre">VesselType.Relay</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/385">#385</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Control.WheelThrottle</span></code> and <code class="docutils literal notranslate"><span class="pre">WheelSteering</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/388">#388</a>)</p></li>
+<li><p>Fix off by one error in stage numbers for <code class="docutils literal notranslate"><span class="pre">Vessel.ResourcesInDecoupleStage</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/380">#380</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">CelestialBody.InitialRotation</span></code> and <code class="docutils literal notranslate"><span class="pre">RotationAngle</span></code> returning values out of range 0 - 2*PI (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/391">#391</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">WaypointManager.AddWaypointAtAltitude</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/399">#399</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.PositionAtAltitude</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/399">#399</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">SpaceCenter.SetTarget</span></code> not correctly setting target if input locks are enabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/397">#397</a>)</p></li>
+<li><p>Fix possible null reference exception in <code class="docutils literal notranslate"><span class="pre">ResourceConverter.State</span></code></p></li>
+</ul>
+</section>
+<section id="id72">
+<h3>C# client<a class="headerlink" href="#id72" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.3.0</p></li>
+</ul>
+</section>
+<section id="id73">
+<h3>C++ client<a class="headerlink" href="#id73" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.3.0</p></li>
+</ul>
+</section>
+<section id="id74">
+<h3>Java client<a class="headerlink" href="#id74" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.3.0</p></li>
+</ul>
+</section>
+<section id="id75">
+<h3>Lua client<a class="headerlink" href="#id75" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.3.0</p></li>
+</ul>
+</section>
+<section id="id76">
+<h3>Python client<a class="headerlink" href="#id76" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.3.0</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-8-post1">
+<h2>v0.3.8.post1<a class="headerlink" href="#v0-3-8-post1" title="Link to this heading">#</a></h2>
+<section id="id77">
+<h3>Python client<a class="headerlink" href="#id77" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Rename protobuf generated files to <code class="docutils literal notranslate"><span class="pre">*_pb2.py</span></code> to fix issue with protobuf 3.2.0 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/378">#378</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/376">#376</a>)</p></li>
+<li><p>Relax package requirements to protobuf &gt;= 3</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-8">
+<h2>v0.3.8<a class="headerlink" href="#v0-3-8" title="Link to this heading">#</a></h2>
+<section id="id78">
+<h3>Server<a class="headerlink" href="#id78" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.2.0</p></li>
+</ul>
+</section>
+<section id="id79">
+<h3>SpaceCenter service<a class="headerlink" href="#id79" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add support for CommNet</p></li>
+<li><p>Add support for contracts (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/361">#361</a>)</p></li>
+<li><p>Add support for RealChutes, add <code class="docutils literal notranslate"><span class="pre">Parachute.Arm</span></code> and <code class="docutils literal notranslate"><span class="pre">Parachute.Armed</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/382">#382</a>)</p></li>
+<li><p>Add support for Procedural Fairings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/368">#368</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.InitialRotation</span></code> and <code class="docutils literal notranslate"><span class="pre">RotationAngle</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/369">#369</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Navball</span></code> to show/hide the navball (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/355">#355</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.UIVisible</span></code> to show/hide the UI (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/355">#355</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ControlSurface.AuthorityLimiter</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/352">#352</a>)</p></li>
+<li><p>Extended wheels functionality</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">LandingLeg</span></code> to <code class="docutils literal notranslate"><span class="pre">Leg</span></code></p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">LandingGear</span></code> to <code class="docutils literal notranslate"><span class="pre">Wheel</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Antenna.Deployable</span></code>, <code class="docutils literal notranslate"><span class="pre">Leg.Deployable</span></code> and <code class="docutils literal notranslate"><span class="pre">SolarPanel.Deployable</span></code></p></li>
+<li><p>Add properties to <code class="docutils literal notranslate"><span class="pre">Control</span></code> class to set the state of all solar panels, radiators, legs, etc. on a vessel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/383">#383</a>)</p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">DockingPort.Rotation</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/371">#371</a>)</p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">Part.Rotation</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/371">#371</a>)</p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">Part.BoundingBox</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/370">#370</a>)</p></li>
+</ul>
+</section>
+<section id="id80">
+<h3>C# client<a class="headerlink" href="#id80" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.2.0</p></li>
+</ul>
+</section>
+<section id="id81">
+<h3>C++ client<a class="headerlink" href="#id81" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.2.0</p></li>
+<li><p>Update build scripts to check for protobuf &gt;= 3.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/374">#374</a>)</p></li>
+<li><p>Move <code class="docutils literal notranslate"><span class="pre">krpc::connect</span></code> into client constructor to allow use of smart pointers</p></li>
+<li><p>Fix bug in <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code> when client is not set</p></li>
+</ul>
+</section>
+<section id="id82">
+<h3>Java client<a class="headerlink" href="#id82" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.2.0</p></li>
+</ul>
+</section>
+<section id="id83">
+<h3>Lua client<a class="headerlink" href="#id83" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.2.0</p></li>
+</ul>
+</section>
+<section id="id84">
+<h3>Python client<a class="headerlink" href="#id84" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Clean up code to meet PEP 8 guidelines</p></li>
+<li><p>Update to protobuf v3.2.0</p></li>
+<li><p>Change package requirements to protobuf &gt;= 3.2</p></li>
+</ul>
+</section>
+<section id="id85">
+<h3>krpctools<a class="headerlink" href="#id85" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Clean up code to meet PEP 8 guidelines</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-7">
+<h2>v0.3.7<a class="headerlink" href="#v0-3-7" title="Link to this heading">#</a></h2>
+<section id="id86">
+<h3>Server<a class="headerlink" href="#id86" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.2.2</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPCDefaultValue</span></code> attribute. Can be used to set default arguments to non-compile time constants.</p></li>
+<li><p>Update to Protocol Buffers v3.1.0</p></li>
+</ul>
+</section>
+<section id="id87">
+<h3>SpaceCenter service<a class="headerlink" href="#id87" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add custom reference frames (<code class="docutils literal notranslate"><span class="pre">ReferenceFrame.CreateRelative</span></code> and <code class="docutils literal notranslate"><span class="pre">CreateHybrid</span></code>) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/252">#252</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.BoundingBox</span></code> and <code class="docutils literal notranslate"><span class="pre">Part.BoundingBox</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/352">#352</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">LandingGear.IsGrounded</span></code> and <code class="docutils literal notranslate"><span class="pre">LandingLeg.IsGrounded</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/352">#352</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.Highlighted</span></code> and <code class="docutils literal notranslate"><span class="pre">HighlightColor</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/332">#332</a>)</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">CelestialBody.Biomes</span></code> to return a set instead of a list</p></li>
+<li><p>Change available torque methods to return a pair of torque vectors, one in the positive control directions and one in the negative control direction.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.AvailableOtherTorque</span></code> which returns the available torque from other parts (i.e. torque providers other than the stock reaction wheels, RCS thrusters, gimballed engines and control surfaces)</p></li>
+<li><p>Include this ‘other’ torque in <code class="docutils literal notranslate"><span class="pre">Vessel.AvailableTorque</span></code></p></li>
+<li><p>Change required RemoteTech version to 1.8.0</p></li>
+<li><p>Change maneuver node methods and properties to use double precision values (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/357">#357</a>)</p></li>
+<li><p>Add support for Action Groups Extended mod (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/364">#364</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/365">#365</a>)</p></li>
+</ul>
+</section>
+<section id="id88">
+<h3>InfernalRobotics service<a class="headerlink" href="#id88" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">InfernalRobotics.Available</span></code></p></li>
+</ul>
+</section>
+<section id="id89">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id89" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KerbalAlarmClock.Available</span></code></p></li>
+</ul>
+</section>
+<section id="remotetech-service">
+<h3>RemoteTech service<a class="headerlink" href="#remotetech-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">RemoteTech.Available</span></code></p></li>
+<li><p>Change required RemoteTech version to 1.8.0</p></li>
+</ul>
+</section>
+<section id="id90">
+<h3>C# client<a class="headerlink" href="#id90" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.1.0</p></li>
+<li><p>Remove pre-release flag from nuget version</p></li>
+</ul>
+</section>
+<section id="id91">
+<h3>C++ client<a class="headerlink" href="#id91" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add missing header to automake script</p></li>
+<li><p>Add stream freezing (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/357">#357</a>)</p></li>
+<li><p>Make stream objects default and copy constructible (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/358">#358</a>)</p></li>
+</ul>
+</section>
+<section id="id92">
+<h3>Python client<a class="headerlink" href="#id92" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug parsing nested collection types</p></li>
+</ul>
+</section>
+<section id="id93">
+<h3>krpctools<a class="headerlink" href="#id93" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug parsing nested collection types</p></li>
+<li><p>Fix bug generating key type for dictionaries</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-6">
+<h2>v0.3.6<a class="headerlink" href="#v0-3-6" title="Link to this heading">#</a></h2>
+<section id="id94">
+<h3>Server<a class="headerlink" href="#id94" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC.Clients</span></code> that clients can use to get a list of connected clients (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/304">#304</a>)</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">KRPC.Core.Instance</span></code> public so that other mods can subscribe to server events and access other server APIs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/304">#304</a>)</p></li>
+<li><p>Add “Yes (don’t show again)” options to dialogs, add option to skip confirmation when force disconnecting a client</p></li>
+</ul>
+</section>
+<section id="id95">
+<h3>SpaceCenter service<a class="headerlink" href="#id95" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.Tag</span></code> which can be used to get/set the name tag set via the NameTag mod, or kOS (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/297">#297</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Parts.WithTag</span></code> to get a list of all parts with the given tag value</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">DockingPort.Name</span></code> and <code class="docutils literal notranslate"><span class="pre">Parts.DockingPortsWithName</span></code> - part tagging can now be used instead</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Flight.TrueAirSpeed</span></code></p></li>
+<li><p>Add FAR support for <code class="docutils literal notranslate"><span class="pre">Flight.Mach</span></code> and add <code class="docutils literal notranslate"><span class="pre">Flight.ReynoldsNumber</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/313">#313</a>)</p></li>
+<li><p>Fix value returned by <code class="docutils literal notranslate"><span class="pre">Orbit.Inclination</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/301">#301</a>)</p></li>
+<li><p>An error is now thrown when <code class="docutils literal notranslate"><span class="pre">Autopilot.ReferenceFrame</span></code> is set to a reference frame that rotates with the vessel</p></li>
+<li><p>Fix issues with <code class="docutils literal notranslate"><span class="pre">Part.DecoupleStage</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/307">#307</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.AddForce</span></code>, <code class="docutils literal notranslate"><span class="pre">Part.InstantaneousFource</span></code> and <code class="docutils literal notranslate"><span class="pre">Force</span></code> class for exerting arbitrary forces on parts (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/287">#287</a>)</p></li>
+<li><p>Fix units for <code class="docutils literal notranslate"><span class="pre">Flight.DynamicPressure</span></code> when FAR is installed - value returned is now in Pa, not kPa (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/329">#329</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Decoupler.Staged</span></code></p></li>
+<li><p>Fix issue where disabled decouplers are included in stage index calculation (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/323">#323</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.Biomes</span></code> to get all the biomes for a planet/moon (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/296">#296</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.BiomeAt</span></code> to get the biome at a location on a planet/moon (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/296">#296</a>)</p></li>
+<li><p>Add altitude thresholds for science to <code class="docutils literal notranslate"><span class="pre">CelestialBody</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Experiment.Biome</span></code> to get the biome an experiment part is currently in (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/296">#296</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Experiment.IsAvailable</span></code> which indicates if there is science that be gathered by the experiment part</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ScienceSubject</span></code> class for getting information about a type of experiment. Accessed via <code class="docutils literal notranslate"><span class="pre">Experiment.ScienceSubject</span></code>.</p></li>
+<li><p>Fix landing gear state on launch (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/314">#314</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WaypointManager</span></code> and <code class="docutils literal notranslate"><span class="pre">Waypoint</span></code> class for interacting with waypoints (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/335">#335</a>)</p></li>
+<li><p>Change camera distances to use meters (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/339">#339</a>)</p></li>
+<li><p>Fix engine thrust calculation for air breathing engines (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/327">#327</a>)</p></li>
+</ul>
+</section>
+<section id="id96">
+<h3>C++ client<a class="headerlink" href="#id96" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix configure script</p></li>
+</ul>
+</section>
+<section id="id97">
+<h3>Python client<a class="headerlink" href="#id97" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix values not being documented in generated enumeration classes</p></li>
+</ul>
+</section>
+<section id="id98">
+<h3>krpctools<a class="headerlink" href="#id98" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix generating Java client stubs using <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> with Python 3 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/308">#308</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-5">
+<h2>v0.3.5<a class="headerlink" href="#v0-3-5" title="Link to this heading">#</a></h2>
+<section id="id99">
+<h3>Server<a class="headerlink" href="#id99" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.1.3</p></li>
+<li><p>Fix issue with uncaught exceptions when receiving malformed tuples from clients (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/276">#276</a>)</p></li>
+<li><p>Fix issue causing empty stream update messages to be sent to clients</p></li>
+</ul>
+</section>
+<section id="id100">
+<h3>SpaceCenter service<a class="headerlink" href="#id100" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Improved <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> that auto-tunes itself based on the vessels available torque and moment of inertia (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/289">#289</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Resources.Enabled</span></code> to enable/disable all of the resources in a part or stage at once (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/283">#283</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.Recoverable</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.Recover()</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/277">#277</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchableVessels</span></code> to get a list of names of launchable vessels (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/278">#278</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVessel</span></code> so that, for example, rockets built in the VAB can be launched from the runway (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/278">#278</a>)</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">Engine.Propellants</span></code> to <code class="docutils literal notranslate"><span class="pre">Engine.PropellantNames</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Propellant</span></code> class, obtained using <code class="docutils literal notranslate"><span class="pre">Engine.Propellants</span></code> property</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Experiment</span></code> and <code class="docutils literal notranslate"><span class="pre">ScienceData</span></code> classes for interacting with science experiments</p></li>
+<li><p>Fix angular velocity for vessel reference frames</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Engine.AvailableThrust</span></code> so that it returns 0 if the vessel is not active</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">ReferenceFrame</span></code> type, underlying object and its transform accessible via public properties (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/290">#290</a>)</p></li>
+</ul>
+</section>
+<section id="user-interface-service">
+<h3>User Interface service<a class="headerlink" href="#user-interface-service" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Canvas</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/281">#281</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">UI.StockCanvas</span></code> to get the stock KSP UI canvas and <code class="docutils literal notranslate"><span class="pre">UI.AddCanvas</span></code> to create additional canvases</p></li>
+<li><p>Move <code class="docutils literal notranslate"><span class="pre">UI.AddPanel</span></code> and <code class="docutils literal notranslate"><span class="pre">UI.RectTransform</span></code> to <code class="docutils literal notranslate"><span class="pre">Canvas</span></code> class</p></li>
+</ul>
+</section>
+<section id="id101">
+<h3>InfernalRobotics service<a class="headerlink" href="#id101" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add vessel parameter to <code class="docutils literal notranslate"><span class="pre">ServoGroups</span></code>, <code class="docutils literal notranslate"><span class="pre">Servos</span></code> and <code class="docutils literal notranslate"><span class="pre">ServoWithName</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/282">#282</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Servo.Part</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ServoGroup.Parts</span></code></p></li>
+</ul>
+</section>
+<section id="id102">
+<h3>C# client<a class="headerlink" href="#id102" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix race condition where the connection constructor returns before the stream server connection has been established</p></li>
+<li><p>Make <code class="docutils literal notranslate"><span class="pre">Connection</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code> disposable so that they clean up resources correctly</p></li>
+<li><p>Fix issue where network streams are closed prematurely</p></li>
+<li><p>Fix issue with receiving partial protobuf messages</p></li>
+</ul>
+</section>
+<section id="id103">
+<h3>Python client<a class="headerlink" href="#id103" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add check for number of elements in a tuple before invoking an RPC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/276">#276</a>)</p></li>
+<li><p>Fix unicode issue (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/284">#284</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-4">
+<h2>v0.3.4<a class="headerlink" href="#v0-3-4" title="Link to this heading">#</a></h2>
+<section id="id104">
+<h3>Server<a class="headerlink" href="#id104" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update protobuf to v3.0.0-beta-3 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/270">#270</a>)</p></li>
+<li><p>Move <code class="docutils literal notranslate"><span class="pre">settings.cfg</span></code> to PluginData directory to avoid trashing module managers cache</p></li>
+<li><p>Fix stack trace output when verbose errors is enabled</p></li>
+<li><p>Performance improvements and reduced memory allocation pressure in main server loop</p></li>
+<li><p>Renamed <code class="docutils literal notranslate"><span class="pre">Parameter.default_argument</span></code> to <code class="docutils literal notranslate"><span class="pre">default_value</span></code> in protobuf definitions</p></li>
+</ul>
+</section>
+<section id="id105">
+<h3>SpaceCenter service<a class="headerlink" href="#id105" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Move drawing functionality into new <code class="docutils literal notranslate"><span class="pre">Drawing</span></code> service (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/253">#253</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Light.Color</span></code></p></li>
+<li><p>Add RPCs for setting <code class="docutils literal notranslate"><span class="pre">PartModule</span></code> fields: <code class="docutils literal notranslate"><span class="pre">Module.ResetField</span></code>, <code class="docutils literal notranslate"><span class="pre">SetFieldInt</span></code>, <code class="docutils literal notranslate"><span class="pre">SetFieldFloat</span></code> and <code class="docutils literal notranslate"><span class="pre">SetFieldString</span></code></p></li>
+</ul>
+</section>
+<section id="id106">
+<h3>Drawing service<a class="headerlink" href="#id106" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/253">#253</a>)</p></li>
+</ul>
+</section>
+<section id="id107">
+<h3>User Interface service<a class="headerlink" href="#id107" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id108">
+<h3>C# client<a class="headerlink" href="#id108" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.0.0-beta-3</p></li>
+</ul>
+</section>
+<section id="id109">
+<h3>C++ client<a class="headerlink" href="#id109" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.0.0-beta-3</p></li>
+</ul>
+</section>
+<section id="id110">
+<h3>Java client<a class="headerlink" href="#id110" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.0.0-beta-3</p></li>
+</ul>
+</section>
+<section id="id111">
+<h3>Python client<a class="headerlink" href="#id111" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update protobuf to v3.0.0-beta-3</p></li>
+</ul>
+</section>
+<section id="id112">
+<h3>krpctools<a class="headerlink" href="#id112" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update protobuf to v3.0.0-beta-3</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-3">
+<h2>v0.3.3<a class="headerlink" href="#v0-3-3" title="Link to this heading">#</a></h2>
+<section id="id113">
+<h3>Server<a class="headerlink" href="#id113" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix popup dialogs not displaying (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/266">#266</a>)</p></li>
+</ul>
+</section>
+<section id="id114">
+<h3>SpaceCenter service<a class="headerlink" href="#id114" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">AvailableTorque</span></code> properties to vessels, reaction wheels, RCS, engines and control surfaces</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">ReactionWheel.Torque</span></code> to <code class="docutils literal notranslate"><span class="pre">ReactionWheel.MaxTorque</span></code></p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Vessel.MomentOfInertia</span></code> - use custom inertia tensor calculations to avoid issues with KSPs <code class="docutils literal notranslate"><span class="pre">Vessel.MoI</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.findLocalMoI</span></code></p></li>
+<li><p>Move RemoteTech functionality to separate RemoteTech service</p></li>
+</ul>
+</section>
+<section id="id115">
+<h3>InfernalRobotics service<a class="headerlink" href="#id115" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">ControlGroup</span></code> to <code class="docutils literal notranslate"><span class="pre">ServoGroup</span></code></p></li>
+</ul>
+</section>
+<section id="id116">
+<h3>RemoteTech service<a class="headerlink" href="#id116" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Moved from <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> to separate service</p></li>
+<li><p>Support RemoteTech 1.7</p></li>
+<li><p>Add individual <code class="docutils literal notranslate"><span class="pre">Antenna</span></code> objects</p></li>
+<li><p>Add support for getting and setting an antennas target</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-2">
+<h2>v0.3.2<a class="headerlink" href="#v0-3-2" title="Link to this heading">#</a></h2>
+<section id="id117">
+<h3>Server<a class="headerlink" href="#id117" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">KRPC.CurrentGameScene</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/262">#262</a>)</p></li>
+</ul>
+</section>
+<section id="id118">
+<h3>SpaceCenter service<a class="headerlink" href="#id118" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Control.SpeedMode</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/258">#258</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-3-0">
+<h2>v0.3.0<a class="headerlink" href="#v0-3-0" title="Link to this heading">#</a></h2>
+<section id="id119">
+<h3>SpaceCenter service<a class="headerlink" href="#id119" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 1.1</p></li>
+<li><p>Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)</p></li>
+<li><p>Add saving and loading games using <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Save</span></code>, <code class="docutils literal notranslate"><span class="pre">Load</span></code>, <code class="docutils literal notranslate"><span class="pre">Quicksave</span></code> and <code class="docutils literal notranslate"><span class="pre">Quickload</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/247">#247</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">ResourceTransfer</span></code> object</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Resource</span></code> objects, representing an individual resource stored in a part</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.MomentOfInertia</span></code>, Add <code class="docutils literal notranslate"><span class="pre">Vessel.InteriaTensor</span></code> and <code class="docutils literal notranslate"><span class="pre">Part.InertiaTensor</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.Torque</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.ReactionWheelTorque</span></code></p></li>
+<li><p>Merged <code class="docutils literal notranslate"><span class="pre">ReactionWheel.PitchTorque</span></code>, <code class="docutils literal notranslate"><span class="pre">YawTorque</span></code> and <code class="docutils literal notranslate"><span class="pre">RollTorque</span></code> into a single <code class="docutils literal notranslate"><span class="pre">ReactionWheel.Torque</span></code> method</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.CenterOfMass</span></code> and <code class="docutils literal notranslate"><span class="pre">Part.CenterOfMassReferenceFrame</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.Shielded</span></code> and <code class="docutils literal notranslate"><span class="pre">Part.DynamicPressure</span></code></p></li>
+<li><p>Add RCS objects.</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Thruster</span></code> objects, which represent individual rocket nozzels or RCS thrusters.</p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">ControlSurface</span></code> objects.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DockingPort.Undock()</span></code> now returns the newly created vessel, instead of the ‘undocked vessel’</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DockingPort.Undock()</span></code> now throws an exception (instead of returning null) if the port is not docked</p></li>
+<li><p>Return newly created vessels from <code class="docutils literal notranslate"><span class="pre">Decoupler.Decouple()</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/214">#214</a>)</p></li>
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">Vessel.Target</span></code>, as this functionality is provided by <code class="docutils literal notranslate"><span class="pre">SpaceCenter.TargetVessel</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/206">#206</a>)</p></li>
+<li><p>Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/248">#248</a>)</p></li>
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">LandingLegState.Repairing</span></code></p></li>
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">LandingGearState.Broken</span></code></p></li>
+<li><p>Fix bug where <code class="docutils literal notranslate"><span class="pre">Engine.HasFuel</span></code> requires the engine to be throttled up</p></li>
+<li><p>Fix bug with vessel center of mass calculations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/218">#218</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-4">
+<h2>v0.2.4<a class="headerlink" href="#v0-2-4" title="Link to this heading">#</a></h2>
+<section id="id120">
+<h3>Server<a class="headerlink" href="#id120" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Shut down server when switching to main menu (or any other non-game scene)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-3">
+<h2>v0.2.3<a class="headerlink" href="#v0-2-3" title="Link to this heading">#</a></h2>
+<section id="id121">
+<h3>Server<a class="headerlink" href="#id121" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">KRPC.CurrentGameScene</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/237">#237</a>)</p></li>
+</ul>
+</section>
+<section id="id122">
+<h3>SpaceCenter service<a class="headerlink" href="#id122" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add support for engine mode switching (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/219">#219</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Engine.GimbalLimit</span></code> and <code class="docutils literal notranslate"><span class="pre">GimbalLocked</span></code> now return an error if the engine is not gimballed</p></li>
+<li><p>Add cargo bays, fairings and intakes</p></li>
+<li><p>Add support for fixed and ‘advanced’ langing gear to <code class="docutils literal notranslate"><span class="pre">LandingGear</span></code> class</p></li>
+<li><p>Add support for ‘active’ (non-deployable) radiators to <code class="docutils literal notranslate"><span class="pre">Radiator</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/156">#156</a>)</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">Part.ExternalTemperature</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/206">#206</a>,:issue:<cite>174</cite>)</p></li>
+<li><p>Fix units returned by thermal mass and flux methods in <code class="docutils literal notranslate"><span class="pre">Part</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/174">#174</a>)</p></li>
+<li><p>Fix null pointer exception in autopilot when switching scenes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/220">#220</a>)</p></li>
+<li><p>Fix bug with translation inputs in <code class="docutils literal notranslate"><span class="pre">Control</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/223">#223</a>)</p></li>
+</ul>
+</section>
+<section id="id123">
+<h3>C# client<a class="headerlink" href="#id123" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make client thread safe</p></li>
+</ul>
+</section>
+<section id="id124">
+<h3>C++ client<a class="headerlink" href="#id124" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make client thread safe</p></li>
+<li><p>Add checks for <code class="docutils literal notranslate"><span class="pre">asio.hpp</span></code> and protobuf library to cmake script</p></li>
+<li><p>Add Windows with MSVC support to cmake script</p></li>
+<li><p>Fix compiler warnings reported by MSVC</p></li>
+</ul>
+</section>
+<section id="id125">
+<h3>Java client<a class="headerlink" href="#id125" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Make client thread safe</p></li>
+<li><p>Support JDK 1.7+</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-2">
+<h2>v0.2.2<a class="headerlink" href="#v0-2-2" title="Link to this heading">#</a></h2>
+<section id="id126">
+<h3>Server<a class="headerlink" href="#id126" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Stream updates are only sent to clients when the result changes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/170">#170</a>)</p></li>
+<li><p>Removed support for protobuf enumerations and custom protobuf messages as RPC parameter/return values. Note: these features were not used anywhere, and only cause complications for client libraries</p></li>
+<li><p>Fix bug where KSP hangs if the game is quit whilst the server is running</p></li>
+<li><p>Remove support for blizzy’s toolbar, in favour of using the stock applauncher</p></li>
+</ul>
+</section>
+<section id="id127">
+<h3>SpaceCenter service<a class="headerlink" href="#id127" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Part.IsFuelLine</span></code></p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">Part.FuelLinesTo</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/193">#193</a>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Part.FuelLinesTo</span></code> and <code class="docutils literal notranslate"><span class="pre">FuelLinesFrom</span></code> now return an error if called on a fuel line part</p></li>
+<li><p>Fix bugs with equality testing of objects. For example, vessel and part objects now persist correctly when reverting to launch (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/201">#201</a>,:issue:<cite>210</cite>)</p></li>
+<li><p>Fix array index out of range error in <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpTo</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/169">#169</a>)</p></li>
+<li><p>Fix bug with vessel’s surface velocity reference frame (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/194">#194</a>)</p></li>
+</ul>
+</section>
+<section id="id128">
+<h3>C# client<a class="headerlink" href="#id128" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
+</ul>
+</section>
+<section id="id129">
+<h3>C++ client<a class="headerlink" href="#id129" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add support for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/175">#175</a>)</p></li>
+<li><p>Add documentation to service header files</p></li>
+<li><p>Add autotools and cmake build scripts</p></li>
+<li><p>Move header file <code class="docutils literal notranslate"><span class="pre">krpc/krpc.hpp</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">krpc.hpp</span></code></p></li>
+<li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
+<li><p>Add comparison operations for remote objects</p></li>
+</ul>
+</section>
+<section id="id130">
+<h3>Java client<a class="headerlink" href="#id130" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id131">
+<h3>Lua client<a class="headerlink" href="#id131" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
+</ul>
+</section>
+<section id="id132">
+<h3>Python client<a class="headerlink" href="#id132" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix exception when stream thread shuts down (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/197">#197</a>)</p></li>
+<li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
+<li><p>Add comparison methods to remote objects so that they are sortable</p></li>
+</ul>
+</section>
+<section id="id133">
+<h3>krpctools<a class="headerlink" href="#id133" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Refactor into ‘<code class="docutils literal notranslate"><span class="pre">krpctools</span></code>’ package containing ‘<code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code>’, ‘<code class="docutils literal notranslate"><span class="pre">krpc-docgen</span></code>’ and ‘<code class="docutils literal notranslate"><span class="pre">krpc-servicedefs</span></code>’.</p></li>
+<li><p>Fixes caused by removal of support for protobuf enumeration and custom protobuf messages from server and clients</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-1">
+<h2>v0.2.1<a class="headerlink" href="#v0-2-1" title="Link to this heading">#</a></h2>
+<section id="id134">
+<h3>Server<a class="headerlink" href="#id134" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add “Any” option to server address drop down</p></li>
+</ul>
+</section>
+<section id="id135">
+<h3>SpaceCenter service<a class="headerlink" href="#id135" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Orbit.Speed</span></code> always returning 0</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.SurfaceHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">BedrockHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">MSLPosition</span></code>, <code class="docutils literal notranslate"><span class="pre">SurfacePosition</span></code>, <code class="docutils literal notranslate"><span class="pre">BedrockPosition</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/186">#186</a>)</p></li>
+</ul>
+</section>
+<section id="id136">
+<h3>C# client<a class="headerlink" href="#id136" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add documentation to generated service code</p></li>
+<li><p>Add support for streams</p></li>
+</ul>
+</section>
+<section id="id137">
+<h3>C++ client<a class="headerlink" href="#id137" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Remove dependency on boost</p></li>
+<li><p>Use standalone ASIO library for network communication</p></li>
+</ul>
+</section>
+<section id="id138">
+<h3>Lua client<a class="headerlink" href="#id138" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+</section>
+<section id="id139">
+<h3>Python client<a class="headerlink" href="#id139" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> on Windows</p></li>
+<li><p>Add version number to python module</p></li>
+</ul>
+</section>
+<section id="id140">
+<h3>krpctools<a class="headerlink" href="#id140" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-2-0">
+<h2>v0.2.0<a class="headerlink" href="#v0-2-0" title="Link to this heading">#</a></h2>
+<section id="id141">
+<h3>Server<a class="headerlink" href="#id141" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf 3.0.0-beta-2</p></li>
+</ul>
+</section>
+<section id="id142">
+<h3>SpaceCenter service<a class="headerlink" href="#id142" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">SpaceCenter.HorizontalSpeed</span></code> calculation</p></li>
+<li><p>Added support for resource harvesters and converters (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/166">#166</a>,:issue:<cite>182</cite>)</p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">Flight.SideslipAngle</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/189">#189</a>)</p></li>
+</ul>
+</section>
+<section id="id143">
+<h3>C# client<a class="headerlink" href="#id143" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id144">
+<h3>C++ client<a class="headerlink" href="#id144" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf 3.0.0-beta-2</p></li>
+</ul>
+</section>
+<section id="id145">
+<h3>Lua client<a class="headerlink" href="#id145" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf 3.0.0-beta-2</p></li>
+</ul>
+</section>
+<section id="id146">
+<h3>Python client<a class="headerlink" href="#id146" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update protobuf 3.0.0-beta-2</p></li>
+<li><p>Fix bug in keyword arg handling (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/168">#168</a>)</p></li>
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">TestServer.exe</span></code> and associated binaries from release archive</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-12">
+<h2>v0.1.12<a class="headerlink" href="#v0-1-12" title="Link to this heading">#</a></h2>
+<section id="id147">
+<h3>Server<a class="headerlink" href="#id147" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Built for KSP 1.0.5</p></li>
+</ul>
+</section>
+<section id="id148">
+<h3>SpaceCenter service<a class="headerlink" href="#id148" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Built for KSP 1.0.5</p></li>
+</ul>
+</section>
+<section id="id149">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id149" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Renamed <code class="docutils literal notranslate"><span class="pre">Alarm.Delete</span></code> to <code class="docutils literal notranslate"><span class="pre">Alarm.Remove</span></code> (to not clash with C++ keyword)</p></li>
+</ul>
+</section>
+<section id="id150">
+<h3>C++ client<a class="headerlink" href="#id150" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id151">
+<h3>Lua client<a class="headerlink" href="#id151" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>None, bumped version number</p></li>
+</ul>
+</section>
+<section id="id152">
+<h3>Python client<a class="headerlink" href="#id152" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Server connection method now retries 10 times every 0.1 seconds</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-11">
+<h2>v0.1.11<a class="headerlink" href="#v0-1-11" title="Link to this heading">#</a></h2>
+<section id="id153">
+<h3>Server<a class="headerlink" href="#id153" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Documentation returned by calling <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
+<li><p>Fix bug preventing disconnection of clients from the server window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/161">#161</a>)</p></li>
+<li><p>Fix clearing bytes read/written statistics when the server is restarted</p></li>
+<li><p>Add “Clear Statistics” button to server info window</p></li>
+<li><p>Documentation at <a class="reference external" href="http://djungelorm.github.io/krpc/docs/">http://djungelorm.github.io/krpc/docs/</a> generated by calling <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
+</ul>
+</section>
+<section id="id154">
+<h3>SpaceCenter service<a class="headerlink" href="#id154" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">maxRate</span></code> parameter in <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpTo</span></code> to <code class="docutils literal notranslate"><span class="pre">maxRailsRate</span></code></p></li>
+<li><p>Add more thermal properties to <code class="docutils literal notranslate"><span class="pre">Part</span></code> class (for new thermal model in KSP 1.0.3) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/155">#155</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Comms.HasLocalControl</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.SASMode</span></code> (identical to <code class="docutils literal notranslate"><span class="pre">AutoPilot.SASMode</span></code>)</p></li>
+<li><p>Change control behaviour: now shared amongst clients, and cleared when all clients that set a control have disconnected</p></li>
+<li><p>Fix setting the throttle with RemoteTech enabled and no connection</p></li>
+<li><p>Rewrite <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> to use a tunable PID controller (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/75">#75</a>)</p></li>
+<li><p>Add setting of <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ActiveVessel</span></code> to allow switching vessels (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/95">#95</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVesselFromVAB</span></code> and <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVesselFromSPH</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/95">#95</a>)</p></li>
+<li><p>Update aero methods to use FAR 0.15 if available</p></li>
+</ul>
+</section>
+<section id="id155">
+<h3>Lua client<a class="headerlink" href="#id155" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version</p></li>
+</ul>
+</section>
+<section id="id156">
+<h3>Python client<a class="headerlink" href="#id156" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Docstrings generated from documentation returned by <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-10">
+<h2>v0.1.10<a class="headerlink" href="#v0-1-10" title="Link to this heading">#</a></h2>
+<section id="id157">
+<h3>Server<a class="headerlink" href="#id157" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>KSP 1.0.4 support (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/151">#151</a>)</p></li>
+<li><p>Performance improvements (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/129">#129</a>,:issue:<cite>131</cite>,:issue:<cite>139</cite>)</p></li>
+<li><p>Fix UI disappearing bug (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/133">#133</a>)</p></li>
+</ul>
+</section>
+<section id="id158">
+<h3>SpaceCenter service<a class="headerlink" href="#id158" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>KSP 1.0.4 support (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/151">#151</a>)</p></li>
+<li><p>Add more time warp functionality: <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpMode</span></code>, <code class="docutils literal notranslate"><span class="pre">WarpRate</span></code>, <code class="docutils literal notranslate"><span class="pre">WarpFactor</span></code>, <code class="docutils literal notranslate"><span class="pre">RailsWarpFactor</span></code>, <code class="docutils literal notranslate"><span class="pre">PhysicsWarpFactor</span></code>, <code class="docutils literal notranslate"><span class="pre">CanRailsWarpAt</span></code> and <code class="docutils literal notranslate"><span class="pre">MaximumRailsWarpFactor</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/134">#134</a>)</p></li>
+<li><p>Implement physical time warp for <code class="docutils literal notranslate"><span class="pre">SpaceCenter.WarpTo</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/137">#137</a>)</p></li>
+<li><p>Add support for radiator parts (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/154">#154</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Vessel.Thrust</span></code>, <code class="docutils literal notranslate"><span class="pre">Engine.Thrust</span></code> and <code class="docutils literal notranslate"><span class="pre">Engine.AvailableThrust</span></code> when engines have no fuel (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/146">#146</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Resoures.FlowMode</span></code></p></li>
+<li><p>Add ability to control vessels other than the active one, when they are within physics range (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/61">#61</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.DrawLine</span></code> to draw arbitrary lines (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/150">#150</a>)</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ClearDirections</span></code> to <code class="docutils literal notranslate"><span class="pre">SpaceCenter.ClearDrawing</span></code></p></li>
+</ul>
+</section>
+<section id="id159">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id159" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Service now available in all game scenes (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/135">#135</a>)</p></li>
+</ul>
+</section>
+<section id="id160">
+<h3>Python client<a class="headerlink" href="#id160" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Bump version number</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-9">
+<h2>v0.1.9<a class="headerlink" href="#v0-1-9" title="Link to this heading">#</a></h2>
+<section id="id161">
+<h3>Server<a class="headerlink" href="#id161" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+</section>
+<section id="id162">
+<h3>SpaceCenter service<a class="headerlink" href="#id162" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug with combined specific impulse calculations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/117">#117</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.PropellantRatios</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/118">#118</a>)</p></li>
+<li><p>Combined <code class="docutils literal notranslate"><span class="pre">VesselResources</span></code> and <code class="docutils literal notranslate"><span class="pre">PartResources</span></code> classes into a single <code class="docutils literal notranslate"><span class="pre">Resources</span></code> class</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Resources.Density</span></code></p></li>
+</ul>
+</section>
+<section id="id163">
+<h3>InfernalRobotics service<a class="headerlink" href="#id163" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version - API for InfernalRobotics (<a class="reference external" href="http://forum.kerbalspaceprogram.com/threads/116064">http://forum.kerbalspaceprogram.com/threads/116064</a>)</p></li>
+</ul>
+</section>
+<section id="id164">
+<h3>KerbalAlarmClock service<a class="headerlink" href="#id164" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial version - API for Kerbal Alarm Clock (<a class="reference external" href="http://forum.kerbalspaceprogram.com/threads/24786">http://forum.kerbalspaceprogram.com/threads/24786</a>)</p></li>
+</ul>
+</section>
+<section id="id165">
+<h3>Python client<a class="headerlink" href="#id165" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Bump version number</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-8">
+<h2>v0.1.8<a class="headerlink" href="#v0-1-8" title="Link to this heading">#</a></h2>
+<section id="id166">
+<h3>Server<a class="headerlink" href="#id166" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>KSP 1.0.2 support (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/114">#114</a>)</p></li>
+<li><p>Add support for static class methods (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/106">#106</a>)</p></li>
+</ul>
+</section>
+<section id="id167">
+<h3>SpaceCenter service<a class="headerlink" href="#id167" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.MaxVacuumThrust</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.Throttle</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Engine.GimbalLimit</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.MaxVacuumThrust</span></code></p></li>
+<li><p>Clean up float/double types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/113">#113</a>)</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">Vessel.CrossSectionalArea</span></code></p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">CelestialBody.AtmospherePressure</span></code>, <code class="docutils literal notranslate"><span class="pre">AtmosphereDensity</span></code>, <code class="docutils literal notranslate"><span class="pre">AtmosphereScaleHeight</span></code>, <code class="docutils literal notranslate"><span class="pre">AtmosphereMaxAltitude</span></code>, <code class="docutils literal notranslate"><span class="pre">AtmospherePressureAt</span></code>, <code class="docutils literal notranslate"><span class="pre">AtmosphereDensityAt</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.AtmosphereDepth</span></code> and <code class="docutils literal notranslate"><span class="pre">HasAtmosphericOxygen</span></code></p></li>
+</ul>
+</section>
+<section id="id168">
+<h3>Python client<a class="headerlink" href="#id168" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Improved dynamic creation of service methods</p></li>
+<li><p>Support for static class methods (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/106">#106</a>)</p></li>
+<li><p>Improve enums: return an <code class="docutils literal notranslate"><span class="pre">Enum</span></code> object instead of an <code class="docutils literal notranslate"><span class="pre">int</span></code></p></li>
+<li><p>Fix bug with types across multiple connections (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/110">#110</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-7">
+<h2>v0.1.7<a class="headerlink" href="#v0-1-7" title="Link to this heading">#</a></h2>
+<section id="id169">
+<h3>Server<a class="headerlink" href="#id169" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix CKAN install bug on Windows (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/105">#105</a>)</p></li>
+</ul>
+</section>
+<section id="id170">
+<h3>SpaceCenter service<a class="headerlink" href="#id170" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">AutoPilot.SAS</span></code>, <code class="docutils literal notranslate"><span class="pre">SASMode</span></code> and <code class="docutils literal notranslate"><span class="pre">SpeedMode</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/94">#94</a>)</p></li>
+<li><p>Update <code class="docutils literal notranslate"><span class="pre">AutoPilot.Error</span></code> to also return SAS error (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/94">#94</a>)</p></li>
+<li><p>Change return types of <code class="docutils literal notranslate"><span class="pre">Vessel.Mass</span></code>, <code class="docutils literal notranslate"><span class="pre">DryMass</span></code>, <code class="docutils literal notranslate"><span class="pre">CrossSectionalArea</span></code>, <code class="docutils literal notranslate"><span class="pre">SpecificImpulse</span></code> to float</p></li>
+<li><p>Changes to thrust functions <code class="docutils literal notranslate"><span class="pre">Vessel.Thrust</span></code>, <code class="docutils literal notranslate"><span class="pre">AvailableThrust</span></code> and <code class="docutils literal notranslate"><span class="pre">MaxThrust</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/103">#103</a>)</p></li>
+<li><p>Changes to thrust functions <code class="docutils literal notranslate"><span class="pre">Engine.Thrust</span></code>, <code class="docutils literal notranslate"><span class="pre">Engine.AvailableThrust</span></code> and <code class="docutils literal notranslate"><span class="pre">MaxThrust</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/103">#103</a>)</p></li>
+<li><p>Fix orientation of docking port reference frames</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">Engine.Activated</span></code> to <code class="docutils literal notranslate"><span class="pre">Engine.Active</span></code> to match other parts</p></li>
+</ul>
+</section>
+<section id="id171">
+<h3>Python client<a class="headerlink" href="#id171" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for Python 3</p></li>
+<li><p>Upgrade to Protocol Buffers 3.0.0-alpha-1</p></li>
+<li><p>Checking of address and port parameters before connecting</p></li>
+<li><p>Connecting to the stream server is now optional</p></li>
+<li><p>Improve detection of protobuf message and enum types and improve support for 3rd party types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/38">#38</a>)</p></li>
+<li><p>Fix unicode decoding/encoding bugs (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/104">#104</a>)</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-6">
+<h2>v0.1.6<a class="headerlink" href="#v0-1-6" title="Link to this heading">#</a></h2>
+<section id="id172">
+<h3>Server<a class="headerlink" href="#id172" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Nicer errors returned to client (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/97">#97</a>)</p></li>
+<li><p>Include protobuf source and compiled Python, Java and C++ versions in release (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/100">#100</a>)</p></li>
+</ul>
+</section>
+<section id="id173">
+<h3>SpaceCenter service<a class="headerlink" href="#id173" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Parts</span></code></p></li>
+<li><p>Targeting of vessels, bodies and docking ports</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">AutoPilot.Error</span></code> and add <code class="docutils literal notranslate"><span class="pre">AutoPilot.RollError</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/98">#98</a>)</p></li>
+</ul>
+</section>
+<section id="id174">
+<h3>Python client<a class="headerlink" href="#id174" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>None, bumped version to match server version</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-5">
+<h2>v0.1.5<a class="headerlink" href="#v0-1-5" title="Link to this heading">#</a></h2>
+<section id="id175">
+<h3>Server<a class="headerlink" href="#id175" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Server now persists across game scene changes</p></li>
+<li><p>Services specify during which game scenes they are available</p></li>
+<li><p>Use a combo box for the server address</p></li>
+<li><p>Display service errors when KSP loads (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/89">#89</a>)</p></li>
+<li><p>Add KSP compatibility checker</p></li>
+<li><p>Add logging severity levels</p></li>
+<li><p>Fix bug where yielded continuations are run more than once per update</p></li>
+</ul>
+</section>
+<section id="id176">
+<h3>SpaceCenter service<a class="headerlink" href="#id176" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.DrawDirection</span></code> and <code class="docutils literal notranslate"><span class="pre">ClearDirections</span></code> for visual debugging</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.Comms</span></code> to interact with RemoteTech</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.WheelThrottle</span></code> and <code class="docutils literal notranslate"><span class="pre">WheelSteering</span></code></p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">Control.ActivateNextStage</span></code> to return a list of jettisoned vessels</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Flight.Longitude</span></code> and <code class="docutils literal notranslate"><span class="pre">Latitude</span></code></p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">Flight.NormalNeg</span></code> to <code class="docutils literal notranslate"><span class="pre">AntiNormal</span></code> and <code class="docutils literal notranslate"><span class="pre">Flight.RadialNeg</span></code> to <code class="docutils literal notranslate"><span class="pre">AntiRadial</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/90">#90</a>)</p></li>
+<li><p>Add FAR functionality to <code class="docutils literal notranslate"><span class="pre">Vessel.Flight</span></code></p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">Body.AtmospherePressureAt</span></code> and <code class="docutils literal notranslate"><span class="pre">AtmosphereDensityAt</span></code> when there is no atmosphere</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.SurfaceVelocityReferenceFrame</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Node.OrbitalReferenceFrame</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Node.RemainingBurnVector</span></code></p></li>
+<li><p>Fix lots of reference frame bugs</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">Vessel.NonRotatingReferenceFrame</span></code></p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">Body.SurfaceReferenceFrame</span></code></p></li>
+<li><p>Change default reference frame to <code class="docutils literal notranslate"><span class="pre">Vessel.SurfaceReferenceFrame</span></code> for <code class="docutils literal notranslate"><span class="pre">Vessel.Flight</span></code> and <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> methods</p></li>
+<li><p>Add wait parameter to <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> methods</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> and <code class="docutils literal notranslate"><span class="pre">Control</span></code> inputs reset to 0 when the client that requested them disconnects</p></li>
+<li><p>Change <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> to set SAS to false when it’s disengaged</p></li>
+</ul>
+</section>
+<section id="id177">
+<h3>Python client<a class="headerlink" href="#id177" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Client.close()</span></code></p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-4">
+<h2>v0.1.4<a class="headerlink" href="#v0-1-4" title="Link to this heading">#</a></h2>
+<section id="id178">
+<h3>Server<a class="headerlink" href="#id178" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Support for KSP 0.90.0</p></li>
+<li><p>Add support for tuples (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/49">#49</a>,:issue:<cite>50</cite>)</p></li>
+<li><p>Add support for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/24">#24</a>,:issue:<cite>56</cite>)</p></li>
+<li><p>Fix issue with null values passed as a parameter (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/65">#65</a>)</p></li>
+<li><p>Add KSP AppLauncher button</p></li>
+<li><p>No longer bundle Toolbar plugin (kRPC will still use Toolbar plugin if available)</p></li>
+<li><p>Performance improvements (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/68">#68</a>)</p></li>
+</ul>
+</section>
+<section id="id179">
+<h3>SpaceCenter service<a class="headerlink" href="#id179" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Major refactoring of reference frames (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/66">#66</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.Nodes</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/53">#53</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Body.AtmosphereDensity</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/52">#52</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.AtmospherePressureAt</span></code> and <code class="docutils literal notranslate"><span class="pre">AtmosphereDensityAt</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.Mass</span></code> and <code class="docutils literal notranslate"><span class="pre">DryMass</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/51">#51</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.CrossSectionalArea</span></code>, <code class="docutils literal notranslate"><span class="pre">DragCoefficient</span></code> and <code class="docutils literal notranslate"><span class="pre">Drag</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.Thrust</span></code> and <code class="docutils literal notranslate"><span class="pre">SpecificImpulse</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Orbit.Period</span></code>, <code class="docutils literal notranslate"><span class="pre">MeanAnomalyAtEpoch</span></code> and <code class="docutils literal notranslate"><span class="pre">Epoch</span></code></p></li>
+<li><p>Change altitude properties to have sensible names (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/62">#62</a>)</p></li>
+<li><p>Improvements to <code class="docutils literal notranslate"><span class="pre">Control.Node</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/48">#48</a>)</p></li>
+<li><p>Fix argument type in <code class="docutils literal notranslate"><span class="pre">Conrol.AddNode</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/59">#59</a>)</p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">Vessel.HorizontalSpeed</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/67">#67</a>)</p></li>
+</ul>
+</section>
+<section id="id180">
+<h3>Python client<a class="headerlink" href="#id180" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Improved network code to fix bugs and make it more robust</p></li>
+<li><p>Add python version checks</p></li>
+<li><p>Make connections thread safe</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-3">
+<h2>v0.1.3<a class="headerlink" href="#v0-1-3" title="Link to this heading">#</a></h2>
+<section id="id181">
+<h3>Server<a class="headerlink" href="#id181" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add support for collections (lists, dictionaries and sets)</p></li>
+</ul>
+</section>
+<section id="id182">
+<h3>SpaceCenter service<a class="headerlink" href="#id182" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Vessels</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Bodies</span></code></p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">SpaceCenter.Body</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">SpaceCenter.G</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.Satellites</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Orbit.Radius</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Orbit.Speed</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Orbit.TimeToSOIChange</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Orbit.NextOrbit</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Node.Orbit</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Control.CurrentStage</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Resources.Names</span></code> now returns a list of resource names</p></li>
+<li><p>Add support for abort and 0 action groups</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">Flight.Altitude</span></code> to <code class="docutils literal notranslate"><span class="pre">Flight.TrueAltitude</span></code></p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">Flight.TrueAltitude</span></code> to <code class="docutils literal notranslate"><span class="pre">Flight.AbsoluteAltitude</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Flight.SurfaceAltitude</span></code></p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Flight.Elevation</span></code></p></li>
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">Node.Vector</span></code> returning a vector in the wrong vector space</p></li>
+<li><p>Improvements to <code class="docutils literal notranslate"><span class="pre">Resources</span></code> class</p></li>
+</ul>
+</section>
+<section id="id183">
+<h3>Python client<a class="headerlink" href="#id183" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug with encoding/decoding of infinities and NaNs</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-2">
+<h2>v0.1.2<a class="headerlink" href="#v0-1-2" title="Link to this heading">#</a></h2>
+<section id="id184">
+<h3>Server<a class="headerlink" href="#id184" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>None</p></li>
+</ul>
+</section>
+<section id="id185">
+<h3>SpaceCenter service<a class="headerlink" href="#id185" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Include reference frame velocity in orbital direction vectors</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.SurfaceVelocity</span></code> and <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.TargetVelocity</span></code></p></li>
+<li><p>Change default reference frames for <code class="docutils literal notranslate"><span class="pre">Vessel.Flight()</span></code> and <code class="docutils literal notranslate"><span class="pre">AutoPilot</span></code> functions to <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.Orbital</span></code></p></li>
+<li><p>Use Pa instead of kPa for atmospheric pressure</p></li>
+</ul>
+</section>
+<section id="id186">
+<h3>Python client<a class="headerlink" href="#id186" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Convert parameter names to snake_case</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-1">
+<h2>v0.1.1<a class="headerlink" href="#v0-1-1" title="Link to this heading">#</a></h2>
+<section id="id187">
+<h3>Server<a class="headerlink" href="#id187" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Minor server code improvements</p></li>
+</ul>
+</section>
+<section id="id188">
+<h3>SpaceCenter service<a class="headerlink" href="#id188" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add new functionality to <code class="docutils literal notranslate"><span class="pre">SpaceCenter</span></code> service</p></li>
+</ul>
+</section>
+<section id="id189">
+<h3>Python client<a class="headerlink" href="#id189" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update example script</p></li>
+</ul>
+</section>
+</section>
+<section id="v0-1-0">
+<h2>v0.1.0<a class="headerlink" href="#v0-1-0" title="Link to this heading">#</a></h2>
+<section id="id190">
+<h3>Server<a class="headerlink" href="#id190" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial pre-release</p></li>
+</ul>
+</section>
+<section id="id191">
+<h3>SpaceCenter service<a class="headerlink" href="#id191" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial pre-release</p></li>
+</ul>
+</section>
+<section id="id192">
+<h3>Python client<a class="headerlink" href="#id192" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Initial pre-release</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="internals.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Internals of kRPC</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-2">v0.5.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spacecenter-service">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-nano-client">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-client">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-client">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-1">v0.5.1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">SpaceCenter service</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-0">v0.5.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#drawing-service">Drawing service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infernalrobotics-service">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kerbalalarmclock-service">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-service">LiDAR service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dockingcamera-service">DockingCamera service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#java-client">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lua-client">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id7">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-9">v0.4.9</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#krpctools">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-8">v0.4.8</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Drawing service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id13">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id14">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id15">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id16">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-7">v0.4.7</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">C++ client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-6">v0.4.6</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id26">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id27">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-5">v0.4.5</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-4-post1">v0.4.4.post1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">C++ client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-4">v0.4.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">SpaceCenter service</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-3">v0.4.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-2">v0.4.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">Server</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-1">v0.4.1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id50">C-nano client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-0">v0.4.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id51">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id52">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id53">Drawing service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id54">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id55">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id56">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id57">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id58">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-11">v0.3.11</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id59">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id60">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id61">C++ client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-10">v0.3.10</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id62">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id63">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id64">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id65">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id66">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id67">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id68">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-9-post1">v0.3.9.post1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id69">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-9">v0.3.9</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id70">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id71">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id72">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id73">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id74">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id75">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id76">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-8-post1">v0.3.8.post1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id77">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-8">v0.3.8</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id78">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id79">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id80">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id81">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id82">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id83">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id84">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id85">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-7">v0.3.7</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id86">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id87">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id88">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id89">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remotetech-service">RemoteTech service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id90">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id91">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id92">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id93">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-6">v0.3.6</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id94">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id95">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id96">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id97">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id98">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-5">v0.3.5</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id99">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id100">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-interface-service">User Interface service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id101">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id102">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id103">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-4">v0.3.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id104">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id105">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id106">Drawing service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id107">User Interface service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id108">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id109">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id110">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id111">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id112">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-3">v0.3.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id113">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id114">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id115">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id116">RemoteTech service</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-2">v0.3.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id117">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id118">SpaceCenter service</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-0">v0.3.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id119">SpaceCenter service</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-4">v0.2.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id120">Server</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-3">v0.2.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id121">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id122">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id123">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id124">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id125">Java client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-2">v0.2.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id126">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id127">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id128">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id129">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id130">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id131">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id132">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id133">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-1">v0.2.1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id134">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id135">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id136">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id137">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id138">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id139">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id140">krpctools</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0">v0.2.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id141">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id142">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id143">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id144">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id145">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id146">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-12">v0.1.12</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id147">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id148">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id149">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id150">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id151">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id152">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-11">v0.1.11</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id153">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id154">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id155">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id156">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-10">v0.1.10</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id157">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id158">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id159">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id160">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-9">v0.1.9</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id161">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id162">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id163">InfernalRobotics service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id164">KerbalAlarmClock service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id165">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-8">v0.1.8</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id166">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id167">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id168">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-7">v0.1.7</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id169">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id170">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id171">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-6">v0.1.6</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id172">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id173">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id174">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-5">v0.1.5</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id175">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id176">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id177">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-4">v0.1.4</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id178">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id179">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id180">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-3">v0.1.3</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id181">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id182">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id183">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-2">v0.1.2</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id184">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id185">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id186">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-1">v0.1.1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id187">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id188">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id189">Python client</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-0">v0.1.0</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id190">Server</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id191">SpaceCenter service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id192">Python client</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="_sources/changelog.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
