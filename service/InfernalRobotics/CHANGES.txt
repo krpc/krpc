@@ -3,11 +3,11 @@ v0.6.0
    CommandedPosition, DefaultPosition, ForceLimit, MaxForce, MaxAcceleration, MaxSpeed,
    ElectricChargeRequired, SpringPower, DampingPower, RotorAcceleration, IsLimited,
    IsRotational, IsServo, CanHaveLimits, HasSpring, IsRunning, PresetPositions,
-   AddPreset, RemovePresetAt and SortPresets
+   AddPreset, RemovePresetAt and SortPresets (#942)
  * Add to ServoGroup: Vessel, MovingDirection, AdvancedMode, ElectricChargeRequired,
-   BuildAid and IKActive
+   BuildAid and IKActive (#942)
  * Fix Servo.MinPosition and MaxPosition to return the position limits set in the
-   tweak menu, rather than the fixed range from the part configuration
+   tweak menu, rather than the fixed range from the part configuration (#942)
  * Support controlling servos on any loaded vessel, not just the active vessel; presets,
    keys, speed factor and expanded state remain available only for servo groups on the
    active vessel (#943)
