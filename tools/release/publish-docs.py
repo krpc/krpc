@@ -357,6 +357,32 @@ def maybe_write_krpc_compat_shim(worktree):
             KRPC_COMPAT_SHIM, encoding='utf-8')
 
 
+def ensure_changelog_in_toctree(worktree):
+    """List the generated changelog page in the landing-page toctree when the
+    content ref predates it.
+
+    changeloggen always emits doc/src/changelog.rst, but releases before the
+    unified changelog page was wired into index.rst (0.6.0) carry a toctree that
+    does not reference it. Sphinx builds with -W, so the resulting
+    'document isn't included in any toctree' warning for changelog.rst fails the
+    build. Insert the entry right after `internals`, the position 0.6.0 uses, so
+    the frozen page keeps the changelog in its navigation. A ref that already
+    lists it is left unchanged.
+    """
+    index = worktree / 'doc/src/index.rst'
+    text = index.read_text(encoding='utf-8')
+    if re.search(r'^[ \t]+changelog[ \t]*$', text, flags=re.MULTILINE):
+        return
+    text, count = re.subn(r'^([ \t]+)internals[ \t]*\n',
+                          r'\1internals\n\1changelog\n',
+                          text, count=1, flags=re.MULTILINE)
+    if count != 1:
+        raise lib.ReleaseError(
+            'could not find the internals toctree entry in doc/src/index.rst '
+            'to insert the changelog entry after')
+    index.write_text(text, encoding='utf-8')
+
+
 def version_key(version):
     """Semver-ish sort key matching changeloggen: a higher tuple is newer, and a
     release sorts above its own pre-releases."""
@@ -491,6 +517,7 @@ def main():
         maybe_write_gamescene_shim(worktree)
         maybe_write_krpc_compat_shim(worktree)
         trim_changelogs(worktree, version)
+        ensure_changelog_in_toctree(worktree)
         pin_version(worktree, version)
 
         lib.banner('Building the docs (this verifies the graft)')
