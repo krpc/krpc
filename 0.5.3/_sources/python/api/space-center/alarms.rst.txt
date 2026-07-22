@@ -1,0 +1,158 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: SpaceCenter
+
+Alarms
+======
+
+
+.. class:: AlarmManager
+
+   Alarm manager.
+   Obtained by calling :attr:`alarm_manager`.
+
+   .. attribute:: alarms
+
+      A list of all alarms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(:class:`Alarm`)
+   
+
+   .. staticmethod:: add_alarm(time, [title = 'Alarm'], [description = ''])
+
+      Create an alarm.
+
+      :param float time: Number of seconds from now that the alarm should trigger.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_vessel_alarm(time, vessel, [title = 'Vessel Alarm'], [description = ''])
+
+      Create an alarm linked to a vessel.
+
+      :param float time: Number of seconds from now that the alarm should trigger.
+      :param Vessel vessel: Vessel to link the alarm to.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_apoapsis_alarm(vessel, [offset = 60.0], [title = 'Apoapsis Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :param Vessel vessel: The vessel.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_periapsis_alarm(vessel, [offset = 60.0], [title = 'Periapsis Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :param Vessel vessel: The vessel.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = True], [title = 'Maneuver Node Alarm'], [description = ''])
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :param Vessel vessel: The vessel.
+      :param Node node: The maneuver node.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param bool add_burn_time: Whether the node's burn time should be included in the alarm.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+   .. staticmethod:: add_soi_alarm(vessel, [offset = 60.0], [title = 'SOI Change Alarm'], [description = ''])
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :param Vessel vessel: The vessel.
+      :param float offset: Time in seconds to offset the alarm by.
+      :param str title: Title for the alarm.
+      :param str description: Description for the alarm.
+      :rtype: :class:`Alarm`
+   
+
+
+
+.. class:: Alarm
+
+   An alarm. Can be accessed using :attr:`alarm_manager`.
+
+   .. attribute:: id
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+   
+
+   .. attribute:: type
+
+      Type of alarm
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: title
+
+      Title of the alarm
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: description
+
+      Description of the alarm.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: str
+   
+
+   .. attribute:: time
+
+      Time the alarm will trigger.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: time_until
+
+      Time until the alarm triggers.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: event_offset
+
+      Seconds between the alarm going off and the event it references.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
+   .. attribute:: vessel
+
+      Vessel the alarm references. ``None`` if it does not reference a vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Vessel`

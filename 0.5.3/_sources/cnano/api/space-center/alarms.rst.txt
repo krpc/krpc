@@ -1,0 +1,151 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Alarms
+======
+
+
+.. type:: krpc_SpaceCenter_AlarmManager_t
+
+   Alarm manager.
+   Obtained by calling :func:`krpc_SpaceCenter_AlarmManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_Alarms(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all alarms.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, double time, const char * title, const char * description)
+
+      Create an alarm.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddVesselAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, double time, krpc_SpaceCenter_Vessel_t vessel, const char * title, const char * description)
+
+      Create an alarm linked to a vessel.
+
+      :Parameters:
+
+       * **time** -- Number of seconds from now that the alarm should trigger.
+       * **vessel** -- Vessel to link the alarm to.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddApoapsisAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, double offset, const char * title, const char * description)
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddPeriapsisAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, double offset, const char * title, const char * description)
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddManeuverNodeAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, krpc_SpaceCenter_Node_t node, double offset, bool addBurnTime, const char * title, const char * description)
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **node** -- The maneuver node.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **addBurnTime** -- Whether the node's burn time should be included in the alarm.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_AlarmManager_AddSOIAlarm(krpc_connection_t connection, krpc_SpaceCenter_Alarm_t * result, krpc_SpaceCenter_Vessel_t vessel, double offset, const char * title, const char * description)
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :Parameters:
+
+       * **vessel** -- The vessel.
+       * **offset** -- Time in seconds to offset the alarm by.
+       * **title** -- Title for the alarm.
+       * **description** -- Description for the alarm.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_Alarm_t
+
+   An alarm. Can be accessed using :func:`krpc_SpaceCenter_AlarmManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_ID(krpc_connection_t connection, uint32_t * result)
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Type(krpc_connection_t connection, char * * result)
+
+      Type of alarm
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Title(krpc_connection_t connection, char * * result)
+
+      Title of the alarm
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Description(krpc_connection_t connection, char * * result)
+
+      Description of the alarm.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Time(krpc_connection_t connection, double * result)
+
+      Time the alarm will trigger.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_TimeUntil(krpc_connection_t connection, double * result)
+
+      Time until the alarm triggers.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_EventOffset(krpc_connection_t connection, double * result)
+
+      Seconds between the alarm going off and the event it references.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Alarm_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      Vessel the alarm references. ``nullptr`` if it does not reference a vessel.

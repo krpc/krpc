@@ -1,0 +1,1111 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>C-nano Client &#8212; kRPC 0.5.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2a2fe768"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/client';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.3/cnano/client.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="KRPC API" href="api/krpc.html" />
+    <link rel="prev" title="C-nano" href="../cnano.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.3" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">C-nano Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/space-center.html">SpaceCenter API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/space-center/alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../cnano.html" class="nav-link">C-nano</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">C-nano Client</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="c-nano-client">
+<h1>C-nano Client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h1>
+<p>This client provides a C API for interacting with a kRPC server. It is intended for use on embedded
+systems with tight resource constraints, hence the “nano” in its name.</p>
+<section id="installing-the-library">
+<h2>Installing the Library<a class="headerlink" href="#installing-the-library" title="Link to this heading">#</a></h2>
+<section id="manually-include-the-source-in-your-project">
+<h3>Manually include the source in your project<a class="headerlink" href="#manually-include-the-source-in-your-project" title="Link to this heading">#</a></h3>
+<p>The source files can be included in your project manually, by downloading and extracting the
+source archive from the <a class="reference external" href="https://github.com/krpc/krpc/releases">GitHub release page</a>.
+The header files can be found in the <code class="docutils literal notranslate"><span class="pre">include</span></code> directory and the source files are in <code class="docutils literal notranslate"><span class="pre">src</span></code>.</p>
+</section>
+<section id="arduino-library-manager">
+<h3>Arduino Library Manager<a class="headerlink" href="#arduino-library-manager" title="Link to this heading">#</a></h3>
+<p>If you are writing an Arduino sketch, the library can be installed using the Arduino Library Manager
+by searching for and installing “kRPC”.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The source files installed by the Arduino Library Manager are renamed to end with <code class="docutils literal notranslate"><span class="pre">.cpp</span></code> so
+that they are built using the C++ compiler. This allows the library to use the C++ only
+<code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> class for communication.</p>
+</div>
+</section>
+<section id="using-the-configure-script">
+<h3>Using the configure script<a class="headerlink" href="#using-the-configure-script" title="Link to this heading">#</a></h3>
+<p>You can build and install the client library and headers using the configure script provided with
+the source. <cite>Download the source archive &lt;https://github.com/krpc/krpc/releases&gt;_</cite>, extract it
+and then execute the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./configure
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+sudo<span class="w"> </span>ldconfig
+</pre></div>
+</div>
+</section>
+<section id="using-cmake">
+<h3>Using CMake<a class="headerlink" href="#using-cmake" title="Link to this heading">#</a></h3>
+<p>Alternatively, you can install the client library and headers using CMake.
+<cite>Download the source archive &lt;https://github.com/krpc/krpc/releases&gt;_</cite>, extract it and execute the
+following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cmake<span class="w"> </span>.
+make
+sudo<span class="w"> </span>make<span class="w"> </span>install
+sudo<span class="w"> </span>ldconfig
+</pre></div>
+</div>
+</section>
+<section id="compilation-options">
+<h3>Compilation Options<a class="headerlink" href="#compilation-options" title="Link to this heading">#</a></h3>
+<p>The following options control how the library operates. They must be specified at compile time as an
+argument to the compiler.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Error handling</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_RETURN</span></code> (the default) – when a remote procedure call gets an error, it
+returns the error code.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_EXIT</span></code> – terminates the program (by calling <code class="docutils literal notranslate"><span class="pre">exit()</span></code>) when an error
+occurs in a remote procedure call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_ASSERT</span></code> – fails a debug assertion (by calling <code class="docutils literal notranslate"><span class="pre">assert()</span></code>) when an error
+occurs in a remote procedure call.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_CHECK_FN</span></code> – specifies the <code class="docutils literal notranslate"><span class="pre">krpc_error_handler</span></code> function should be called when
+an error occurs in a remote procedure call. This should be set to a pointer to a function that
+takes a single parameter of type <code class="docutils literal notranslate"><span class="pre">krpc_error_t</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code> – enables printing of a descriptive error message to stderr
+when an error occurs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> – disables error messages in the nanopb library, which kRPC uses to
+communicate with the server. Enabled by default on in the Arduino version of the library.</p></li>
+</ul>
+</li>
+<li><p>Communication</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> – Specifies that the library should be built to communicate over
+a serial port using POSIX read/write functions communication mechanisms. This is the default,
+unless the a different platform is detected.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code> – Specifies that the library should be built using Arduino
+serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
+to specify this manually.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> – Allows you to provide your own implementation for the
+communication mechanism.</p></li>
+</ul>
+</li>
+<li><p>Memory allocation</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_ALLOC_BLOCK_SIZE</span></code> – The size of collections (lists, sets, etc.) are not know ahead of
+time, so when they are received from the server they are decoded into dynamically allocated
+memory on the heap. This option controls how many items to increase the capacity of the
+collection by when its space is exhausted. Setting this to 1 will consume the least amount of
+heap memory, but will require one heap allocation call per item. Setting this to a higher value
+will consume more memory, but require fewer allocations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_CUSTOM_MEMORY_ALLOC</span></code> – Disables the default implementation of memory allocation
+functions <code class="docutils literal notranslate"><span class="pre">krpc_malloc</span></code>, <code class="docutils literal notranslate"><span class="pre">krpc_calloc</span></code>, <code class="docutils literal notranslate"><span class="pre">krpc_recalloc</span></code> and krpc_free so that you can
+provide your own implementation.</p></li>
+</ul>
+</li>
+</ul>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>On embedded systems you probably want to define <code class="docutils literal notranslate"><span class="pre">KRPC_NO_PRINT_ERROR</span></code> and <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> to
+minimize the memory footprint of kRPC.</p>
+</div>
+</section>
+</section>
+<section id="configuring-the-server">
+<h2>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h2>
+<p>The C-nano client library communicates with the server over a serial port using <a class="reference external" href="https://github.com/nanopb/nanopb">protobuf messages</a>. The kRPC server, which runs in the game, needs to be
+configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
+done from the in-game server configuration window, which also allows settings such as the port name
+and baud rate to be configured.</p>
+</section>
+<section id="using-the-library-on-a-posix-system">
+<h2>Using the Library on a POSIX System<a class="headerlink" href="#using-the-library-on-a-posix-system" title="Link to this heading">#</a></h2>
+<p>On POSIX systems (such as Linux) the following example program connects to the server, queries it
+for its version and prints it out:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Basic example&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_schema_Status</span><span class="w"> </span><span class="n">status</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_KRPC_GetStatus</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">status</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Connected to kRPC server version %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">status</span><span class="p">.</span><span class="n">version</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>To compile this program using GCC, save the source as <code class="docutils literal notranslate"><span class="pre">main.c</span></code> and run the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gcc<span class="w"> </span>main.c<span class="w"> </span>-lkrpc_cnano
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="#c.krpc_connect" title="krpc_connect"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_connect()</span></code></a> function is used to open a connection to a server. It takes as its first
+argument a connection object into which the connection information is written. This is passed to
+subsequent calls to interact with the server. The second argument is a name for the connection
+(displayed in game) and the third is the name of the serial port to connect over.</p>
+</section>
+<section id="using-the-library-on-an-arduino">
+<h2>Using the Library on an Arduino<a class="headerlink" href="#using-the-library-on-an-arduino" title="Link to this heading">#</a></h2>
+<p>The following example demonstrates how to connect to the server from an Arduino, through its serial
+port interface:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/krpc.h&gt;</span>
+
+<span class="n">HardwareSerial</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">setup</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">pinMode</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">OUTPUT</span><span class="p">);</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">LOW</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">Serial</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// Open the serial port connection</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// Set up communication with the server</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Arduino Example&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Indicate succesful connection by lighting the on-board LED</span>
+<span class="w">  </span><span class="n">digitalWrite</span><span class="p">(</span><span class="n">LED_BUILTIN</span><span class="p">,</span><span class="w"> </span><span class="n">HIGH</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">loop</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="calling-remote-procedures">
+<h2>Calling Remote Procedures<a class="headerlink" href="#calling-remote-procedures" title="Link to this heading">#</a></h2>
+<p>The kRPC server provides <em>procedures</em> that a client can run. These procedures are arranged in groups
+called <em>services</em> to keep things organized. The functionality for the services are defined in the
+header files in <code class="docutils literal notranslate"><span class="pre">krpc/services/...</span></code>. For example, all of the functionality provided by the
+SpaceCenter service is contained in the header file <code class="docutils literal notranslate"><span class="pre">krpc/services/space_center.h</span></code>.</p>
+<p>The following example demonstrates how to invoke remote procedures using the Cnano client. It calls
+<a class="reference internal" href="api/space-center/space-center.html#c.krpc_SpaceCenter_ActiveVessel" title="krpc_SpaceCenter_ActiveVessel"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ActiveVessel()</span></code></a> to get a handle to the active vessel (of type
+<a class="reference internal" href="api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_t</span></code></a>). It sets the name of the vessel and then prints out its altitude:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Remote Procedures example&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_set_Name</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;My Vessel&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="c1">// Get a handle to a Flight object for the vessel</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_t</span><span class="w"> </span><span class="n">flight</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Flight</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">flight</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">,</span><span class="w"> </span><span class="n">KRPC_NULL</span><span class="p">);</span>
+<span class="w">  </span><span class="c1">// Get the altiude</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">altitude</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Flight_MeanAltitude</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">altitude</span><span class="p">,</span><span class="w"> </span><span class="n">flight</span><span class="p">);</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;%.2f</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">altitude</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="streams-and-events">
+<span id="cnano-client-events"></span><span id="cnano-client-streams"></span><h2>Streams and Events<a class="headerlink" href="#streams-and-events" title="Link to this heading">#</a></h2>
+<p>These features are not yet supported by this client.</p>
+</section>
+<section id="client-api-reference">
+<h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_open">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_open</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_connection_config_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">arg</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_open" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create a communication handle over which the client can talk to a server.</p>
+<p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_POSIX</span></code> (which is defined by default)
+calling this function opens a serial port using the port name passed as <em>arg</em>, using a call to
+<code class="docutils literal notranslate"><span class="pre">open(arg,</span> <span class="pre">...)</span></code>. In this case the type of the <em>arg</em> parameter is <code class="docutils literal notranslate"><span class="pre">const</span> <span class="pre">char</span> <span class="pre">*</span></code>. For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>, <em>connection</em> must be a pointer to
+a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> object. <em>arg</em> is optionally used to pass additional configuration options
+used to initialize the connection, including baud rate for the serial port.</p>
+<p>If <em>arg</em> is set to <code class="docutils literal notranslate"><span class="pre">NULL</span></code> the connection is initialized with a baud rate of 9600 and
+defaults <code class="docutils literal notranslate"><span class="pre">SERIAL_8N1</span></code> for data, parity and stop bits. For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="nb">NULL</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>When <em>arg</em> set to a pointer to a structure of type <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code>, the baud rate, and data, parity and stop
+bits in the structure are used to initialize the connection. For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="n">krpc_connection_config_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">115200</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SERIAL_5N1</span><span class="p">;</span>
+<span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">);</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_connect">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_connect</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">name</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_connect" title="Link to this definition">#</a><br /></dt>
+<dd><p>Connect to a kRPC server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection</strong> (<em>krpc_connection_t</em>) – A connection handle, created using a call to
+<a class="reference internal" href="#c.krpc_open" title="krpc_open"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_open()</span></code></a>.</p></li>
+<li><p><strong>name</strong> (<em>const char*</em>) – A descriptive name for the connection. This is passed to the
+server and appears in the in-game server window.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_close">
+<a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_close</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_close" title="Link to this definition">#</a><br /></dt>
+<dd><p>Closes the communication handle.</p>
+</dd></dl>
+
+<dl class="c type">
+<dt class="sig sig-object c" id="c.krpc_error_t">
+<span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_error_t</span></span></span><a class="headerlink" href="#c.krpc_error_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>All kRPC functions return error codes of this type.</p>
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_OK">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_OK</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_OK" title="Link to this definition">#</a><br /></dt>
+<dd><p>The function completed successfully and no error occurred.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_IO">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_IO</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_IO" title="Link to this definition">#</a><br /></dt>
+<dd><p>An input/output error occurred when communicating with the server.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_EOF">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_EOF</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_EOF" title="Link to this definition">#</a><br /></dt>
+<dd><p>End of file was received from the server.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_CONNECTION_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_CONNECTION_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>Failed to establish a connection to the server.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_NO_RESULTS">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_NO_RESULTS</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_NO_RESULTS" title="Link to this definition">#</a><br /></dt>
+<dd><p>The remote procedure call did not return a result.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_RPC_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_RPC_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_RPC_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The remote procedure call threw an exception.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_ENCODING_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_ENCODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_ENCODING_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The encoder failed to construct the remote procedure call.</p>
+</dd></dl>
+
+<dl class="c macro">
+<dt class="sig sig-object c" id="c.krpc_error_t.KRPC_ERROR_DECODING_FAILED">
+<span class="sig-name descname"><span class="n"><span class="pre">KRPC_ERROR_DECODING_FAILED</span></span></span><a class="headerlink" href="#c.krpc_error_t.KRPC_ERROR_DECODING_FAILED" title="Link to this definition">#</a><br /></dt>
+<dd><p>The decoder failed to interpret a result sent by the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_get_error">
+<span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">krpc_get_error</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">error</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_get_error" title="Link to this definition">#</a><br /></dt>
+<dd><p>Returns a descriptive string for the given error code.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../cnano.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">C-nano</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/krpc.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">KRPC API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-the-library">Installing the Library</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manually-include-the-source-in-your-project">Manually include the source in your project</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#arduino-library-manager">Arduino Library Manager</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-configure-script">Using the configure script</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-cmake">Using CMake</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-options">Compilation Options</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-library-on-a-posix-system">Using the Library on a POSIX System</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-the-library-on-an-arduino">Using the Library on an Arduino</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#calling-remote-procedures">Calling Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#client-api-reference">Client API Reference</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/cnano/client.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

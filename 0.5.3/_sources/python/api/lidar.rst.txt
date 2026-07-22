@@ -1,0 +1,14 @@
+.. default-domain:: py
+.. highlight:: py
+
+LiDAR API
+=========
+
+Provides RPCs to interact with the `LaserDist <https://github.com/nullprofile/LaserDist>`_ mod.
+
+.. toctree::
+   :includehidden:
+   :maxdepth: 1
+
+   lidar/lidar
+   lidar/laser

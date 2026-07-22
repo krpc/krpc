@@ -1,0 +1,70 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Panel
+=====
+
+
+.. class:: Panel
+
+   A container for user interface elements. See :func:`Canvas::add_panel`.
+
+   .. function:: RectTransform rect_transform()
+
+      The rect transform for the panel.
+
+   
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: Panel add_panel(bool visible = true)
+
+      Create a panel within this panel.
+
+      :Parameters:
+
+       * **visible** -- Whether the new panel is visible.
+
+   
+
+   .. function:: Text add_text(std::string content, bool visible = true)
+
+      Add text to the panel.
+
+      :Parameters:
+
+       * **content** -- The text.
+       * **visible** -- Whether the text is visible.
+
+   
+
+   .. function:: InputField add_input_field(bool visible = true)
+
+      Add an input field to the panel.
+
+      :Parameters:
+
+       * **visible** -- Whether the input field is visible.
+
+   
+
+   .. function:: Button add_button(std::string content, bool visible = true)
+
+      Add a button to the panel.
+
+      :Parameters:
+
+       * **content** -- The label for the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: void remove()
+
+      Remove the UI object.

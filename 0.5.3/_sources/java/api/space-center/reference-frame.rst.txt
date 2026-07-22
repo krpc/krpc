@@ -1,0 +1,51 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+ReferenceFrame
+==============
+
+
+.. type:: public class ReferenceFrame
+
+   Represents a reference frame for positions, rotations and
+   velocities. Contains:
+
+   * The position of the origin.
+   * The directions of the x, y and z axes.
+   * The linear velocity of the frame.
+   * The angular velocity of the frame.
+
+   .. note::
+
+      This class does not contain any properties or methods. It is only
+      used as a parameter to other functions.
+
+   .. method:: static ReferenceFrame createRelative(Connection connection, ReferenceFrame referenceFrame, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Quartet<Double,Double,Double,Double> rotation, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Triplet<Double,Double,Double> angularVelocity)
+
+      Create a relative reference frame. This is a custom reference frame
+      whose components offset the components of a parent reference frame.
+
+      :param ReferenceFrame referenceFrame: The parent reference frame on which to base this reference frame.
+      :param org.javatuples.Triplet<Double,Double,Double> position: The offset of the position of the origin, as a position vector. Defaults to :math:`(0, 0, 0)`
+      :param org.javatuples.Quartet<Double,Double,Double,Double> rotation: The rotation to apply to the parent frames rotation, as a quaternion of the form :math:`(x, y, z, w)`. Defaults to :math:`(0, 0, 0, 1)` (i.e. no rotation)
+      :param org.javatuples.Triplet<Double,Double,Double> velocity: The linear velocity to offset the parent frame by, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second. Defaults to :math:`(0, 0, 0)`.
+      :param org.javatuples.Triplet<Double,Double,Double> angularVelocity: The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`.
+   
+
+   .. method:: static ReferenceFrame createHybrid(Connection connection, ReferenceFrame position, ReferenceFrame rotation, ReferenceFrame velocity, ReferenceFrame angularVelocity)
+
+      Create a hybrid reference frame. This is a custom reference frame
+      whose components inherited from other reference frames.
+
+      :param ReferenceFrame position: The reference frame providing the position of the origin.
+      :param ReferenceFrame rotation: The reference frame providing the rotation of the frame.
+      :param ReferenceFrame velocity: The reference frame providing the linear velocity of the frame.
+      :param ReferenceFrame angularVelocity: The reference frame providing the angular velocity of the frame.
+   
+
+      .. note::
+
+         The *position* reference frame is required but all other
+         reference frames are optional. If omitted, they are set to the
+         *position* reference frame.

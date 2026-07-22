@@ -1,0 +1,1176 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Interacting with Parts &#8212; kRPC 0.5.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2a2fe768"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/parts';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.3/tutorials/parts.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Docking Guidance" href="docking-guidance.html" />
+    <link rel="prev" title="Pitch, Heading and Roll" href="pitch-heading-roll.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.3" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="suborbital-flight.html">Sub-Orbital Flight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Interacting with Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials and Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Interacting with Parts</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="interacting-with-parts">
+<h1>Interacting with Parts<a class="headerlink" href="#interacting-with-parts" title="Link to this heading">#</a></h1>
+<p>The following examples demonstrate use of the <a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts"><span class="std std-ref">Parts</span></a> functionality to
+achieve various tasks. More details on specific topics can also be found in the
+API documentation:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-0-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-0-0-0" name="0-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-0-0-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-1" name="0-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-0-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-2" name="0-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-0-0-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-3" name="0-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-0-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-4" name="0-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-0-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-0-0-5" name="0-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-0-0" class="sphinx-tabs-panel" id="panel-0-0-0" name="0-0" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../csharp/api/space-center/parts.html#csharp-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-1" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-1" name="0-1" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../cpp/api/space-center/parts.html#cpp-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-2" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-2" name="0-2" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../cnano/api/space-center/parts.html#cnano-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-3" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-3" name="0-3" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../java/api/space-center/parts.html#java-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-4" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-4" name="0-4" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../lua/api/space-center/parts.html#lua-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div><div aria-labelledby="tab-0-0-5" class="sphinx-tabs-panel" hidden="true" id="panel-0-0-5" name="0-5" role="tabpanel" tabindex="0"><ul class="simple">
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-trees-of-parts"><span class="std std-ref">Trees of Parts</span></a></p></li>
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-attachment-modes"><span class="std std-ref">Attachment Modes</span></a></p></li>
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-fuel-lines"><span class="std std-ref">Fuel Lines</span></a></p></li>
+<li><p><a class="reference internal" href="../python/api/space-center/parts.html#python-api-parts-staging"><span class="std std-ref">Staging</span></a></p></li>
+</ul>
+</div></div>
+<section id="deploying-all-parachutes">
+<h2>Deploying all Parachutes<a class="headerlink" href="#deploying-all-parachutes" title="Link to this heading">#</a></h2>
+<p>Sometimes things go horribly wrong. The following script does its best to save
+your Kerbals by deploying all the parachutes:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-1-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-2" name="1-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-1-1-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-3" name="1-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-1-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-4" name="1-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-1-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-5" name="1-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">DeployParachutes</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">            </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">parachute</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Parachutes</span><span class="p">)</span>
+<span class="w">                </span><span class="n">parachute</span><span class="p">.</span><span class="n">Deploy</span><span class="w"> </span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">();</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">parachute</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">parachutes</span><span class="p">())</span>
+<span class="w">    </span><span class="n">parachute</span><span class="p">.</span><span class="n">deploy</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-2" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-2" name="1-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;DeployParachutes&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_t</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Parts</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">parachutes</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_Parachutes</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parachutes</span><span class="p">,</span><span class="w"> </span><span class="n">parts</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">parachutes</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Parachute_t</span><span class="w"> </span><span class="n">parachute</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parachutes</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Parachute_Deploy</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">parachute</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-3" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-3" name="1-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Parachute</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">DeployParachutes</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Parachute</span><span class="w"> </span><span class="n">parachute</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getParts</span><span class="p">().</span><span class="na">getParachutes</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">parachute</span><span class="p">.</span><span class="na">deploy</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-4" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-4" name="1-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">&#39;Example&#39;</span><span class="p">)</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+
+<span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">parachute</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">.</span><span class="py">parachutes</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nv">parachute</span><span class="p">:</span><span class="nf">deploy</span><span class="p">()</span>
+<span class="kr">end</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-5" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-5" name="1-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="k">for</span> <span class="n">parachute</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">parachutes</span><span class="p">:</span>
+    <span class="n">parachute</span><span class="o">.</span><span class="n">deploy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="control-from-here-for-docking-ports">
+<h2>‘Control From Here’ for Docking Ports<a class="headerlink" href="#control-from-here-for-docking-ports" title="Link to this heading">#</a></h2>
+<p>The following example will find a standard sized Clamp-O-Tron docking port, and
+control the vessel from it:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-2-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-2-2-0" name="2-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-2-2-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-1" name="2-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-2-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-2" name="2-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-2-2-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-3" name="2-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-2-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-4" name="2-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-2-2-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-2-2-5" name="2-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-2-2-0" class="sphinx-tabs-panel" id="panel-2-2-0" name="2-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">ControlFromHere</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">WithTitle</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Clamp-O-Tron Docking Port&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">            </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Controlling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-1" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-1" name="2-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">();</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">with_title</span><span class="p">(</span><span class="s">&quot;Clamp-O-Tron Docking Port&quot;</span><span class="p">).</span><span class="n">front</span><span class="p">();</span>
+<span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">set_controlling</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-2" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-2" name="2-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ControlFromHere&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_t</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Parts</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">docking_port_parts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_WithTitle</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">docking_port_parts</span><span class="p">,</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Clamp-O-Tron Docking Port&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_object_t</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">docking_port_parts</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_set_Controlling</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-3" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-3" name="2-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Part</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">ControlFromHere</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Part</span><span class="w"> </span><span class="n">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getParts</span><span class="p">().</span><span class="na">withTitle</span><span class="p">(</span><span class="s">&quot;Clamp-O-Tron Docking Port&quot;</span><span class="p">).</span><span class="na">get</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="na">getParts</span><span class="p">().</span><span class="na">setControlling</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-4" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-4" name="2-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">part</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">:</span><span class="nf">with_title</span><span class="p">(</span><span class="s1">&#39;Clamp-O-Tron Docking Port&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+<span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">.</span><span class="py">controlling</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">part</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-2-5" class="sphinx-tabs-panel" hidden="true" id="panel-2-2-5" name="2-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+<span class="n">part</span> <span class="o">=</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">with_title</span><span class="p">(</span><span class="s1">&#39;Clamp-O-Tron Docking Port&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">controlling</span> <span class="o">=</span> <span class="n">part</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="combined-specific-impulse">
+<h2>Combined Specific Impulse<a class="headerlink" href="#combined-specific-impulse" title="Link to this heading">#</a></h2>
+<p>The following script calculates the combined specific impulse of all currently
+active and fueled engines on a rocket. See here for a description of the maths:
+<a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines">https://wiki.kerbalspaceprogram.com/wiki/Specific_impulse#Multiple_engines</a></p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-3-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-3-3-0" name="3-0" role="tab" tabindex="0">C#</button><button aria-controls="panel-3-3-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-1" name="3-1" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-3-2" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-2" name="3-2" role="tab" tabindex="-1">C</button><button aria-controls="panel-3-3-3" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-3" name="3-3" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-3-4" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-4" name="3-4" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-3-3-5" aria-selected="false" class="sphinx-tabs-tab" id="tab-3-3-5" name="3-5" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-3-3-0" class="sphinx-tabs-panel" id="panel-3-3-0" name="3-0" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="nn">KRPC.Client.Services.SpaceCenter</span><span class="p">;</span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">CombinedIsp</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">Main</span><span class="w"> </span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="k">using</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+
+<span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">activeEngines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Parts</span><span class="p">.</span><span class="n">Engines</span>
+<span class="w">                                </span><span class="p">.</span><span class="n">Where</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">HasFuel</span><span class="p">).</span><span class="n">ToList</span><span class="w"> </span><span class="p">();</span>
+
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Active engines:&quot;</span><span class="p">);</span>
+<span class="w">            </span><span class="k">foreach</span><span class="w"> </span><span class="p">(</span><span class="kt">var</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">activeEngines</span><span class="p">)</span>
+<span class="w">                </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;   &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">Part</span><span class="p">.</span><span class="n">Title</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                                   </span><span class="s">&quot; in stage &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">Part</span><span class="p">.</span><span class="n">Stage</span><span class="p">);</span>
+
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">activeEngines</span><span class="p">.</span><span class="n">Sum</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">fuel_consumption</span><span class="w"> </span><span class="o">=</span>
+<span class="w">                </span><span class="n">activeEngines</span><span class="p">.</span><span class="n">Sum</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">Thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">SpecificImpulse</span><span class="p">);</span>
+<span class="w">            </span><span class="kt">double</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">fuel_consumption</span><span class="p">;</span>
+<span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Combined vacuum Isp = {0:F0} seconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">isp</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-1" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-1" name="3-1" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc.hpp&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc/services/space_center.hpp&gt;</span>
+
+<span class="k">using</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="p">;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">();</span>
+<span class="w">  </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">sc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sc</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">();</span>
+
+<span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">parts</span><span class="p">().</span><span class="n">engines</span><span class="p">();</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">SpaceCenter</span><span class="o">::</span><span class="n">Engine</span><span class="o">&gt;</span><span class="w"> </span><span class="n">active_engines</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">engines</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">engine</span><span class="p">.</span><span class="n">active</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">has_fuel</span><span class="p">())</span>
+<span class="w">      </span><span class="n">active_engines</span><span class="p">.</span><span class="n">push_back</span><span class="p">(</span><span class="n">engine</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Active engines:&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">active_engines</span><span class="p">)</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;   &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">part</span><span class="p">().</span><span class="n">title</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; in stage &quot;</span>
+<span class="w">              </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">part</span><span class="p">().</span><span class="n">stage</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="k">auto</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">active_engines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">thrust</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">thrust</span><span class="p">();</span>
+<span class="w">    </span><span class="n">fuel_consumption</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">thrust</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="n">specific_impulse</span><span class="p">();</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">fuel_consumption</span><span class="p">;</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Combined vacuum Isp = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; seconds&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-2" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-2" name="3-2" role="tabpanel" tabindex="0"><div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;krpc_cnano/services/space_center.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;COM0&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">krpc_connect</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;CombinedISP&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_t</span><span class="w"> </span><span class="n">vessel</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_ActiveVessel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_t</span><span class="w"> </span><span class="n">parts</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Vessel_Parts</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">parts</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_NULL_LIST</span><span class="p">;</span>
+<span class="w">  </span><span class="n">krpc_SpaceCenter_Parts_Engines</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">engines</span><span class="p">,</span><span class="w"> </span><span class="n">parts</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">krpc_list_object_t</span><span class="w"> </span><span class="n">active_engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC_NULL_LIST</span><span class="p">;</span>
+<span class="w">  </span><span class="n">active_engines</span><span class="p">.</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="n">active_engines</span><span class="p">.</span><span class="n">items</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc_calloc</span><span class="p">(</span><span class="n">engines</span><span class="p">.</span><span class="n">size</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">krpc_object_t</span><span class="p">));</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">engines</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_t</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engines</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">active</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">has_fuel</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_Active</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">active</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">);</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_HasFuel</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">has_fuel</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">active</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">has_fuel</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">active_engines</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">active_engines</span><span class="p">.</span><span class="n">size</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">engine</span><span class="p">;</span>
+<span class="w">      </span><span class="n">active_engines</span><span class="p">.</span><span class="n">size</span><span class="o">++</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Active engines:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">active_engines</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_t</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">active_engines</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_t</span><span class="w"> </span><span class="n">part</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_Part</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">part</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">stage</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_Title</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Part_Stage</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">stage</span><span class="p">,</span><span class="w"> </span><span class="n">part</span><span class="p">);</span>
+<span class="w">    </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;   %s in stage %d</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">stage</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
+
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">active_engines</span><span class="p">.</span><span class="n">size</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_t</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">active_engines</span><span class="p">.</span><span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">engine_thrust</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">float</span><span class="w"> </span><span class="n">engine_isp</span><span class="p">;</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_Thrust</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">engine_thrust</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">);</span>
+<span class="w">    </span><span class="n">krpc_SpaceCenter_Engine_SpecificImpulse</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">engine_isp</span><span class="p">,</span><span class="w"> </span><span class="n">engine</span><span class="p">);</span>
+<span class="w">    </span><span class="n">thrust</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">engine_thrust</span><span class="p">;</span>
+<span class="w">    </span><span class="n">fuel_consumption</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">engine_thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">engine_isp</span><span class="p">;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">fuel_consumption</span><span class="p">;</span>
+<span class="w">  </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;Combined vacuum Isp = %.2f seconds</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">isp</span><span class="p">);</span>
+
+<span class="w">  </span><span class="n">KRPC_FREE_LIST</span><span class="p">(</span><span class="n">engines</span><span class="p">);</span>
+<span class="w">  </span><span class="n">KRPC_FREE_LIST</span><span class="p">(</span><span class="n">active_engines</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-3" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-3" name="3-3" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.Connection</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.RPCException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Engine</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">krpc.client.services.SpaceCenter.Vessel</span><span class="p">;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.io.IOException</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.LinkedList</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
+
+<span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">CombinedIsp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">String</span><span class="o">[]</span><span class="w"> </span><span class="n">args</span><span class="p">)</span><span class="w"> </span><span class="kd">throws</span><span class="w"> </span><span class="n">IOException</span><span class="p">,</span><span class="w"> </span><span class="n">RPCException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">();</span>
+<span class="w">        </span><span class="n">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">).</span><span class="na">getActiveVessel</span><span class="p">();</span>
+
+<span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Engine</span><span class="o">&gt;</span><span class="w"> </span><span class="n">engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">getParts</span><span class="p">().</span><span class="na">getEngines</span><span class="p">();</span>
+<span class="w">        </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Engine</span><span class="o">&gt;</span><span class="w"> </span><span class="n">activeEngines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">LinkedList</span><span class="o">&lt;</span><span class="n">Engine</span><span class="o">&gt;</span><span class="p">();</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Engine</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">engines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">engine</span><span class="p">.</span><span class="na">getActive</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="na">getHasFuel</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">activeEngines</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">engine</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Active engines:&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Engine</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">activeEngines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;   &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="na">getPart</span><span class="p">().</span><span class="na">getTitle</span><span class="p">()</span><span class="w"> </span><span class="o">+</span>
+<span class="w">                               </span><span class="s">&quot; in stage &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="na">getPart</span><span class="p">().</span><span class="na">getStage</span><span class="p">());</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">fuelConsumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Engine</span><span class="w"> </span><span class="n">engine</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">activeEngines</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">thrust</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="na">getThrust</span><span class="p">();</span>
+<span class="w">            </span><span class="n">fuelConsumption</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="na">getThrust</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">engine</span><span class="p">.</span><span class="na">getSpecificImpulse</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="kt">double</span><span class="w"> </span><span class="n">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">fuelConsumption</span><span class="p">;</span>
+<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">printf</span><span class="p">(</span><span class="s">&quot;Combined vacuum Isp = %.0f\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">isp</span><span class="p">);</span>
+<span class="w">        </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-4" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-4" name="3-4" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">math</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;math&#39;</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">()</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">active_engines</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">engine</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">parts</span><span class="p">.</span><span class="py">engines</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">active</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">has_fuel</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">       </span><span class="nb">table.insert</span><span class="p">(</span><span class="nv">active_engines</span><span class="p">,</span><span class="w"> </span><span class="nv">engine</span><span class="p">)</span>
+<span class="w">    </span><span class="kr">end</span>
+<span class="kr">end</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Active engines:&#39;</span><span class="p">)</span>
+<span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">engine</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">active_engines</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   &#39;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">part</span><span class="p">.</span><span class="py">title</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s1">&#39; in stage &#39;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">part</span><span class="p">.</span><span class="py">stage</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="nv">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">engine</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">active_engines</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nv">thrust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">thrust</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">thrust</span>
+<span class="w">    </span><span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">fuel_consumption</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">engine</span><span class="p">.</span><span class="py">specific_impulse</span>
+<span class="kr">end</span>
+<span class="nv">isp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">thrust</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">fuel_consumption</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;Combined vacuum Isp = %.1f seconds&#39;</span><span class="p">,</span><span class="w"> </span><span class="nv">isp</span><span class="p">))</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-3-5" class="sphinx-tabs-panel" hidden="true" id="panel-3-3-5" name="3-5" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+
+<span class="n">active_engines</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">vessel</span><span class="o">.</span><span class="n">parts</span><span class="o">.</span><span class="n">engines</span> <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">active</span> <span class="ow">and</span> <span class="n">e</span><span class="o">.</span><span class="n">has_fuel</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Active engines:&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;   </span><span class="si">%s</span><span class="s1"> in stage </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="n">engine</span><span class="o">.</span><span class="n">part</span><span class="o">.</span><span class="n">stage</span><span class="p">))</span>
+
+<span class="n">thrust</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">)</span>
+<span class="n">fuel_consumption</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">engine</span><span class="o">.</span><span class="n">thrust</span> <span class="o">/</span> <span class="n">engine</span><span class="o">.</span><span class="n">specific_impulse</span>
+                       <span class="k">for</span> <span class="n">engine</span> <span class="ow">in</span> <span class="n">active_engines</span><span class="p">)</span>
+<span class="n">isp</span> <span class="o">=</span> <span class="n">thrust</span> <span class="o">/</span> <span class="n">fuel_consumption</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Combined vacuum Isp = </span><span class="si">%d</span><span class="s1"> seconds&#39;</span> <span class="o">%</span> <span class="n">isp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="pitch-heading-roll.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Pitch, Heading and Roll</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="docking-guidance.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Docking Guidance</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#deploying-all-parachutes">Deploying all Parachutes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#control-from-here-for-docking-ports">‘Control From Here’ for Docking Ports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#combined-specific-impulse">Combined Specific Impulse</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/tutorials/parts.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

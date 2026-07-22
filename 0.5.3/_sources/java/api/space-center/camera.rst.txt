@@ -1,0 +1,152 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Camera
+======
+
+
+.. type:: public class Camera
+
+   Controls the game's camera.
+   Obtained by calling :meth:`getCamera()`.
+
+   .. method:: CameraMode getMode()
+
+   .. method:: void setMode(CameraMode value)
+
+      The current mode of the camera.
+
+      :Game Scenes: Flight
+
+   .. method:: float getPitch()
+
+   .. method:: void setPitch(float value)
+
+      The pitch of the camera, in degrees.
+      A value between :meth:`Camera.getMinPitch()` and :meth:`Camera.getMaxPitch()`
+
+      :Game Scenes: Flight
+
+   .. method:: float getHeading()
+
+   .. method:: void setHeading(float value)
+
+      The heading of the camera, in degrees.
+
+      :Game Scenes: Flight
+
+   .. method:: float getDistance()
+
+   .. method:: void setDistance(float value)
+
+      The distance from the camera to the subject, in meters.
+      A value between :meth:`Camera.getMinDistance()` and :meth:`Camera.getMaxDistance()`.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMinPitch()
+
+
+      The minimum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxPitch()
+
+
+      The maximum pitch of the camera.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMinDistance()
+
+
+      Minimum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getMaxDistance()
+
+
+      Maximum distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: float getDefaultDistance()
+
+
+      Default distance from the camera to the subject, in meters.
+
+      :Game Scenes: Flight
+
+   .. method:: CelestialBody getFocussedBody()
+
+   .. method:: void setFocussedBody(CelestialBody value)
+
+      In map mode, the celestial body that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a celestial body.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. method:: Vessel getFocussedVessel()
+
+   .. method:: void setFocussedVessel(Vessel value)
+
+      In map mode, the vessel that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a vessel.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+   .. method:: Node getFocussedNode()
+
+   .. method:: void setFocussedNode(Node value)
+
+      In map mode, the maneuver node that the camera is focussed on.
+      Returns ``null`` if the camera is not focussed on a maneuver node.
+      Returns an error is the camera is not in map mode.
+
+      :Game Scenes: Flight
+
+
+
+.. type:: public enum CameraMode
+
+   See :meth:`Camera.getMode()`.
+
+
+   .. field:: public CameraMode AUTOMATIC
+
+      The camera is showing the active vessel, in "auto" mode.
+
+
+   .. field:: public CameraMode FREE
+
+      The camera is showing the active vessel, in "free" mode.
+
+
+   .. field:: public CameraMode CHASE
+
+      The camera is showing the active vessel, in "chase" mode.
+
+
+   .. field:: public CameraMode LOCKED
+
+      The camera is showing the active vessel, in "locked" mode.
+
+
+   .. field:: public CameraMode ORBITAL
+
+      The camera is showing the active vessel, in "orbital" mode.
+
+
+   .. field:: public CameraMode IVA
+
+      The Intra-Vehicular Activity view is being shown.
+
+
+   .. field:: public CameraMode MAP
+
+      The map view is being shown.

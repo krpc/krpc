@@ -1,0 +1,70 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Panel
+=====
+
+
+.. type:: krpc_UI_Panel_t
+
+   A container for user interface elements. See :func:`krpc_UI_Canvas_AddPanel`.
+
+   .. function:: krpc_error_t krpc_UI_Panel_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+
+      The rect transform for the panel.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Panel_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Panel_set_Visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Panel_AddPanel(krpc_connection_t connection, krpc_UI_Panel_t * result, bool visible)
+
+      Create a panel within this panel.
+
+      :Parameters:
+
+       * **visible** -- Whether the new panel is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Panel_AddText(krpc_connection_t connection, krpc_UI_Text_t * result, const char * content, bool visible)
+
+      Add text to the panel.
+
+      :Parameters:
+
+       * **content** -- The text.
+       * **visible** -- Whether the text is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Panel_AddInputField(krpc_connection_t connection, krpc_UI_InputField_t * result, bool visible)
+
+      Add an input field to the panel.
+
+      :Parameters:
+
+       * **visible** -- Whether the input field is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Panel_AddButton(krpc_connection_t connection, krpc_UI_Button_t * result, const char * content, bool visible)
+
+      Add a button to the panel.
+
+      :Parameters:
+
+       * **content** -- The label for the button.
+       * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Panel_Remove(krpc_connection_t connection)
+
+      Remove the UI object.

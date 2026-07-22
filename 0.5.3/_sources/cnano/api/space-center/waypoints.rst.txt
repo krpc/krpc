@@ -1,0 +1,182 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Waypoints
+=========
+
+
+.. type:: krpc_SpaceCenter_WaypointManager_t
+
+   Waypoints are the location markers you can see on the map view showing you where contracts are targeted for.
+   With this structure, you can obtain coordinate data for the locations of these waypoints.
+   Obtained by calling :func:`krpc_SpaceCenter_WaypointManager`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager_Waypoints(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all existing waypoints.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager_AddWaypoint(krpc_connection_t connection, krpc_SpaceCenter_Waypoint_t * result, double latitude, double longitude, krpc_SpaceCenter_CelestialBody_t body, const char * name)
+
+      Creates a waypoint at the given position at ground level, and returns a
+      :type:`krpc_SpaceCenter_Waypoint_t` object that can be used to modify it.
+
+      :Parameters:
+
+       * **latitude** -- Latitude of the waypoint.
+       * **longitude** -- Longitude of the waypoint.
+       * **body** -- Celestial body the waypoint is attached to.
+       * **name** -- Name of the waypoint.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager_AddWaypointAtAltitude(krpc_connection_t connection, krpc_SpaceCenter_Waypoint_t * result, double latitude, double longitude, double altitude, krpc_SpaceCenter_CelestialBody_t body, const char * name)
+
+      Creates a waypoint at the given position and altitude, and returns a
+      :type:`krpc_SpaceCenter_Waypoint_t` object that can be used to modify it.
+
+      :Parameters:
+
+       * **latitude** -- Latitude of the waypoint.
+       * **longitude** -- Longitude of the waypoint.
+       * **altitude** -- Altitude (above sea level) of the waypoint.
+       * **body** -- Celestial body the waypoint is attached to.
+       * **name** -- Name of the waypoint.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager_Colors(krpc_connection_t connection, krpc_dictionary_string_int32_t * result)
+
+      An example map of known color - seed pairs.
+      Any other integers may be used as seed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_WaypointManager_Icons(krpc_connection_t connection, krpc_list_string_t * result)
+
+      Returns all available icons (from "GameData/Squad/Contracts/Icons/").
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_Waypoint_t
+
+   Represents a waypoint. Can be created using :func:`krpc_SpaceCenter_WaypointManager_AddWaypoint`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_Body(krpc_SpaceCenter_CelestialBody_t value)
+
+      The celestial body the waypoint is attached to.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Name(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_Name(const char * value)
+
+      The name of the waypoint as it appears on the map and the contract.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Color(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_Color(int32_t value)
+
+      The seed of the icon color. See :func:`krpc_SpaceCenter_WaypointManager_Colors` for example colors.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Icon(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_Icon(const char * value)
+
+      The icon of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Latitude(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_Latitude(double value)
+
+      The latitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Longitude(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_Longitude(double value)
+
+      The longitude of the waypoint.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_MeanAltitude(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_MeanAltitude(double value)
+
+      The altitude of the waypoint above sea level, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_SurfaceAltitude(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_SurfaceAltitude(double value)
+
+      The altitude of the waypoint above the surface of the body or sea level,
+      whichever is closer, in meters.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_BedrockAltitude(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Waypoint_set_BedrockAltitude(double value)
+
+      The altitude of the waypoint above the surface of the body, in meters.
+      When over water, this is the altitude above the sea floor.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_NearSurface(krpc_connection_t connection, bool * result)
+
+      ``true`` if the waypoint is near to the surface of a body.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Grounded(krpc_connection_t connection, bool * result)
+
+      ``true`` if the waypoint is attached to the ground.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Index(krpc_connection_t connection, int32_t * result)
+
+      The integer index of this waypoint within its cluster of sibling waypoints.
+      In other words, when you have a cluster of waypoints called "Somewhere Alpha",
+      "Somewhere Beta" and "Somewhere Gamma", the alpha site has index 0, the beta
+      site has index 1 and the gamma site has index 2.
+      When :func:`krpc_SpaceCenter_Waypoint_Clustered` is ``false``, this is zero.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Clustered(krpc_connection_t connection, bool * result)
+
+      ``true`` if this waypoint is part of a set of clustered waypoints with greek letter
+      names appended (Alpha, Beta, Gamma, etc).
+      If ``true``, there is a one-to-one correspondence with the greek letter name and
+      the :func:`krpc_SpaceCenter_Waypoint_Index`.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_HasContract(krpc_connection_t connection, bool * result)
+
+      Whether the waypoint belongs to a contract.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Contract(krpc_connection_t connection, krpc_SpaceCenter_Contract_t * result)
+
+      The associated contract.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Waypoint_Remove(krpc_connection_t connection)
+
+      Removes the waypoint.
+
+
+      :Game Scenes: Flight

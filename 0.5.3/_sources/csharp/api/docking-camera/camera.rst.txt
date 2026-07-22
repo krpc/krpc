@@ -1,0 +1,24 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.DockingCamera
+
+Camera
+======
+
+
+.. class:: Camera
+
+   A Docking Camera.
+
+   .. property:: SpaceCenter.Part Part { get; }
+
+      Get the part containing this camera.
+
+      :Game Scenes: All
+
+   .. property:: byte[] Image { get; }
+
+      Get an image.
+      Returns an empty byte array on failure.
+
+      :Game Scenes: All

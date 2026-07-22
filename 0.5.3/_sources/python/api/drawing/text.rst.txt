@@ -1,0 +1,137 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :meth:`add_text`.
+
+   .. attribute:: position
+
+      Position of the text.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: rotation
+
+      Rotation of the text as a quaternion.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: reference_frame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+   .. attribute:: visible
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+   .. method:: remove()
+
+      Remove the object.
+
+      :Game Scenes: Flight
+
+   .. attribute:: content
+
+      The text string
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: font
+
+      Name of the font
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. staticmethod:: available_fonts()
+
+      A list of all available fonts.
+
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+   .. attribute:: size
+
+      Font size.
+
+      :Attribute: Can be read or written
+      :rtype: int
+      :Game Scenes: Flight
+
+   .. attribute:: character_size
+
+      Character size.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: style
+
+      Font style.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.FontStyle`
+      :Game Scenes: Flight
+
+   .. attribute:: color
+
+      Set the color
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: material
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. attribute:: alignment
+
+      Alignment.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.TextAlignment`
+      :Game Scenes: Flight
+
+   .. attribute:: line_spacing
+
+      Line spacing.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: anchor
+
+      Anchor.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.TextAnchor`
+      :Game Scenes: Flight

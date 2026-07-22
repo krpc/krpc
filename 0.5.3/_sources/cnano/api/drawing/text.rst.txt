@@ -1,0 +1,124 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Text
+====
+
+
+.. type:: krpc_Drawing_Text_t
+
+   Text. Created using :func:`krpc_Drawing_AddText`.
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Text_set_Position(const krpc_tuple_double_double_double_t * value)
+
+      Position of the text.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Text_set_Rotation(const krpc_tuple_double_double_double_double_t * value)
+
+      Rotation of the text as a quaternion.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_Drawing_Text_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      Reference frame for the positions of the object.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_Text_set_Visible(bool value)
+
+      Whether the object is visible.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Remove(krpc_connection_t connection)
+
+      Remove the object.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Content(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_Text_set_Content(const char * value)
+
+      The text string
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Font(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_Text_set_Font(const char * value)
+
+      Name of the font
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_AvailableFonts(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of all available fonts.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Size(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_Drawing_Text_set_Size(int32_t value)
+
+      Font size.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_CharacterSize(krpc_connection_t connection, float * result)
+   .. function:: void krpc_Drawing_Text_set_CharacterSize(float value)
+
+      Character size.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Style(krpc_connection_t connection, krpc_UI_FontStyle_t * result)
+   .. function:: void krpc_Drawing_Text_set_Style(krpc_UI_FontStyle_t value)
+
+      Font style.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_Text_set_Color(const krpc_tuple_double_double_double_t * value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Material(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_Text_set_Material(const char * value)
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Alignment(krpc_connection_t connection, krpc_UI_TextAlignment_t * result)
+   .. function:: void krpc_Drawing_Text_set_Alignment(krpc_UI_TextAlignment_t value)
+
+      Alignment.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_LineSpacing(krpc_connection_t connection, float * result)
+   .. function:: void krpc_Drawing_Text_set_LineSpacing(float value)
+
+      Line spacing.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_Text_Anchor(krpc_connection_t connection, krpc_UI_TextAnchor_t * result)
+   .. function:: void krpc_Drawing_Text_set_Anchor(krpc_UI_TextAnchor_t value)
+
+      Anchor.
+
+      :Game Scenes: Flight

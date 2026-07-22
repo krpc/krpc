@@ -1,0 +1,160 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Node
+====
+
+
+.. type:: krpc_SpaceCenter_Node_t
+
+   Represents a maneuver node. Can be created using :func:`krpc_SpaceCenter_Control_AddNode`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Prograde(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Node_set_Prograde(double value)
+
+      The magnitude of the maneuver nodes delta-v in the prograde direction,
+      in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Normal(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Node_set_Normal(double value)
+
+      The magnitude of the maneuver nodes delta-v in the normal direction,
+      in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Radial(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Node_set_Radial(double value)
+
+      The magnitude of the maneuver nodes delta-v in the radial direction,
+      in meters per second.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_DeltaV(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Node_set_DeltaV(double value)
+
+      The delta-v of the maneuver node, in meters per second.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Does not change when executing the maneuver node. See :func:`krpc_SpaceCenter_Node_RemainingDeltaV`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingDeltaV(krpc_connection_t connection, double * result)
+
+      Gets the remaining delta-v of the maneuver node, in meters per second. Changes as the
+      node is executed. This is equivalent to the delta-v reported in-game.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_BurnVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Returns the burn vector for the maneuver node.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned vector is in. Defaults to :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`.
+
+      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Does not change when executing the maneuver node. See :func:`krpc_SpaceCenter_Node_RemainingBurnVector`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_RemainingBurnVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Returns the remaining burn vector for the maneuver node.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned vector is in. Defaults to :func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`.
+
+      :returns: A vector whose direction is the direction of the maneuver node burn, and magnitude is the delta-v of the burn in meters per second.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Changes as the maneuver node is executed. See :func:`krpc_SpaceCenter_Node_BurnVector`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_UT(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Node_set_UT(double value)
+
+      The universal time at which the maneuver will occur, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_TimeTo(krpc_connection_t connection, double * result)
+
+      The time until the maneuver node will be encountered, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Orbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result)
+
+      The orbit that results from executing the maneuver node.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Remove(krpc_connection_t connection)
+
+      Removes the maneuver node.
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+
+      The reference frame that is fixed relative to the maneuver node's burn.
+
+      * The origin is at the position of the maneuver node.
+      * The y-axis points in the direction of the burn.
+      * The x-axis and z-axis point in arbitrary but fixed directions.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_OrbitalReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+
+      The reference frame that is fixed relative to the maneuver node, and
+      orientated with the orbital prograde/normal/radial directions of the
+      original orbit at the maneuver node's position.
+
+      * The origin is at the position of the maneuver node.
+      * The x-axis points in the orbital anti-radial direction of the original
+        orbit, at the position of the maneuver node.
+      * The y-axis points in the orbital prograde direction of the original
+        orbit, at the position of the maneuver node.
+      * The z-axis points in the orbital normal direction of the original orbit,
+        at the position of the maneuver node.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position vector of the maneuver node in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Node_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction of the maneuver nodes burn.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: Flight

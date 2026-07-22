@@ -1,0 +1,1696 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>SpaceCenter &#8212; kRPC 0.5.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=2a2fe768"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/space-center/space-center';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.3/java/api/space-center/space-center.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Vessel" href="vessel.html" />
+    <link rel="prev" title="SpaceCenter API" href="../space-center.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.3" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">Java Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../java.html" class="nav-link">Java</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">SpaceCenter</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="spacecenter">
+<span id="package-krpc.client.services.SpaceCenter"></span><h1>SpaceCenter<a class="headerlink" href="#spacecenter" title="Link to this heading">#</a></h1>
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">SpaceCenter</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter" title="Link to this definition">#</a></dt>
+<dd><p>Provides functionality to interact with Kerbal Space Program. This includes controlling
+the active vessel, managing its resources, planning maneuver nodes and auto-piloting.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getScience()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getScience</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getScience()" title="Link to this definition">#</a></dt>
+<dd><p>The current amount of science.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getFunds()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getFunds</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getFunds()" title="Link to this definition">#</a></dt>
+<dd><p>The current amount of funds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getReputation()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getReputation</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getReputation()" title="Link to this definition">#</a></dt>
+<dd><p>The current amount of reputation.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()">
+ <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getActiveVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getActiveVessel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setActiveVessel(Vessel)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setActiveVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setActiveVessel(Vessel)" title="Link to this definition">#</a></dt>
+<dd><p>The currently active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getVessels()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getVessels</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getVessels()" title="Link to this definition">#</a></dt>
+<dd><p>A list of all the vessels in the game.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getLaunchSites()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.LaunchSite" title="krpc.client.services.SpaceCenter.LaunchSite"><span class="pre">LaunchSite</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getLaunchSites</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getLaunchSites()" title="Link to this definition">#</a></dt>
+<dd><p>A list of available launch sites.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getBodies()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/Map.html" title="java.util.Map"><span class="pre">Map</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">,</span> <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getBodies</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getBodies()" title="Link to this definition">#</a></dt>
+<dd><p>A dictionary of all celestial bodies (planets, moons, etc.) in the game,
+keyed by the name of the body.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getTargetBody()">
+ <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getTargetBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getTargetBody()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setTargetBody(CelestialBody)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetBody</span></span><span class="sig-paren">(</span><a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setTargetBody(CelestialBody)" title="Link to this definition">#</a></dt>
+<dd><p>The currently targeted celestial body.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getTargetVessel()">
+ <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">getTargetVessel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getTargetVessel()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setTargetVessel(Vessel)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetVessel</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel" title="krpc.client.services.SpaceCenter.Vessel"><span class="pre">Vessel</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setTargetVessel(Vessel)" title="Link to this definition">#</a></dt>
+<dd><p>The currently targeted vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getTargetDockingPort()">
+ <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.DockingPort" title="krpc.client.services.SpaceCenter.DockingPort"><span class="pre">DockingPort</span></a> <span class="sig-name descname"><span class="pre">getTargetDockingPort</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getTargetDockingPort()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setTargetDockingPort(DockingPort)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTargetDockingPort</span></span><span class="sig-paren">(</span><a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.DockingPort" title="krpc.client.services.SpaceCenter.DockingPort"><span class="pre">DockingPort</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setTargetDockingPort(DockingPort)" title="Link to this definition">#</a></dt>
+<dd><p>The currently targeted docking port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.clearTarget()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">clearTarget</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.clearTarget()" title="Link to this definition">#</a></dt>
+<dd><p>Clears the current target.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.launchableVessels(String)">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">launchableVessels</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">craftDirectory</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.launchableVessels(String)" title="Link to this definition">#</a></dt>
+<dd><p>Returns a list of vessels from the given <em>craftDirectory</em>
+that can be launched.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>craftDirectory</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the directory in the current saves “Ships” directory. For example <code class="docutils literal notranslate"><span class="pre">&quot;VAB&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;SPH&quot;</span></code>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.launchVessel(String, String, String, boolean, java.util.List, String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">launchVessel</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">craftDirectory</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">launchSite</span></em>, <span class="pre">boolean</span><em> <span class="pre">recover</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><span class="pre">&gt;</span><em> <span class="pre">crew</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">flagUrl</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.launchVessel(String, String, String, boolean, java.util.List, String)" title="Link to this definition">#</a></dt>
+<dd><p>Launch a vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>craftDirectory</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the directory in the current saves “Ships” directory, that contains the craft file. For example <code class="docutils literal notranslate"><span class="pre">&quot;VAB&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;SPH&quot;</span></code>.</p></li>
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the vessel to launch. This is the name of the “.craft” file in the save directory, without the “.craft” file extension.</p></li>
+<li><p><strong>launchSite</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the launch site. For example <code class="docutils literal notranslate"><span class="pre">&quot;LaunchPad&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Runway&quot;</span></code>.</p></li>
+<li><p><strong>recover</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – If true and there is a vessel on the launch site, recover it before launching.</p></li>
+<li><p><strong>crew</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">java.util.List</span></code></a></span>) – If not <code class="docutils literal notranslate"><span class="pre">null</span></code>, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</p></li>
+<li><p><strong>flagUrl</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – If not <code class="docutils literal notranslate"><span class="pre">null</span></code>, the asset URL of the mission flag to use for the launch.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.launchVesselFromVAB(String, boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">launchVesselFromVAB</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">boolean</span><em> <span class="pre">recover</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.launchVesselFromVAB(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Launch a new vessel from the VAB onto the launchpad.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the vessel to launch.</p></li>
+<li><p><strong>recover</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – If true and there is a vessel on the launch pad, recover it before launching.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equivalent to calling <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpaceCenter.launchVessel(String, String, String, boolean, java.util.List, String)" title="krpc.client.services.SpaceCenter.SpaceCenter.launchVessel(String, String, String, boolean, java.util.List, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">launchVessel(String,</span> <span class="pre">String,</span> <span class="pre">String,</span> <span class="pre">boolean,</span> <span class="pre">java.util.List&lt;String&gt;,</span> <span class="pre">String)</span></code></a> with the craft directory
+set to “VAB” and the launch site set to “LaunchPad”.
+Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.launchVesselFromSPH(String, boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">launchVesselFromSPH</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">boolean</span><em> <span class="pre">recover</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.launchVesselFromSPH(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Launch a new vessel from the SPH onto the runway.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the vessel to launch.</p></li>
+<li><p><strong>recover</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – If true and there is a vessel on the runway, recover it before launching.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is equivalent to calling <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpaceCenter.launchVessel(String, String, String, boolean, java.util.List, String)" title="krpc.client.services.SpaceCenter.SpaceCenter.launchVessel(String, String, String, boolean, java.util.List, String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">launchVessel(String,</span> <span class="pre">String,</span> <span class="pre">String,</span> <span class="pre">boolean,</span> <span class="pre">java.util.List&lt;String&gt;,</span> <span class="pre">String)</span></code></a> with the craft directory
+set to “SPH” and the launch site set to “Runway”.
+Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.save(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.save(String)" title="Link to this definition">#</a></dt>
+<dd><p>Save the game with a given name.
+This will create a save file called <code class="docutils literal notranslate"><span class="pre">name.sfs</span></code> in the folder of the
+current save game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the save.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.load(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.load(String)" title="Link to this definition">#</a></dt>
+<dd><p>Load the game with the given name.
+This will create a load a save file called <code class="docutils literal notranslate"><span class="pre">name.sfs</span></code> from the folder of the
+current save game.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – Name of the save.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.quicksave()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">quicksave</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.quicksave()" title="Link to this definition">#</a></dt>
+<dd><p>Save a quicksave.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the same as calling <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpaceCenter.save(String)" title="krpc.client.services.SpaceCenter.SpaceCenter.save(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">save(String)</span></code></a> with the name “quicksave”.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.quickload()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">quickload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.quickload()" title="Link to this definition">#</a></dt>
+<dd><p>Load a quicksave.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the same as calling <a class="reference internal" href="#krpc.client.services.SpaceCenter.SpaceCenter.load(String)" title="krpc.client.services.SpaceCenter.SpaceCenter.load(String)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">load(String)</span></code></a> with the name “quicksave”.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.canRevertToLaunch()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">canRevertToLaunch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.canRevertToLaunch()" title="Link to this definition">#</a></dt>
+<dd><p>Whether the current flight can be reverted to launch.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.revertToLaunch()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">revertToLaunch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.revertToLaunch()" title="Link to this definition">#</a></dt>
+<dd><p>Revert the current flight to launch.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.transferCrew(CrewMember, Part)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">transferCrew</span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a><em> <span class="pre">crewMember</span></em>, <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a><em> <span class="pre">targetPart</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.transferCrew(CrewMember, Part)" title="Link to this definition">#</a></dt>
+<dd><p>Transfers a crew member to a different part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>crewMember</strong> (<span><a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><code class="xref java java-type docutils literal notranslate"><span class="pre">CrewMember</span></code></a></span>) – The crew member to transfer.</p></li>
+<li><p><strong>targetPart</strong> (<span><a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><code class="xref java java-type docutils literal notranslate"><span class="pre">Part</span></code></a></span>) – The part to move them to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getUIVisible()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getUIVisible</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getUIVisible()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setUIVisible(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setUIVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setUIVisible(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the UI is visible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getNavball()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getNavball</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getNavball()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setNavball(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setNavball</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setNavball(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the navball is visible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getUT()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getUT</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getUT()" title="Link to this definition">#</a></dt>
+<dd><p>The current universal time in seconds.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getG()">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">getG</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getG()" title="Link to this definition">#</a></dt>
+<dd><p>The value of the <a class="reference external" href="https://en.wikipedia.org/wiki/Gravitational_constant">gravitational constant</a> G in <span class="math notranslate nohighlight">\(N(m/kg)^2\)</span>.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getWarpRate()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWarpRate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getWarpRate()" title="Link to this definition">#</a></dt>
+<dd><p>The current warp rate. This is the rate at which time is passing for
+either on-rails or physical time warp. For example, a value of 10 means
+time is passing 10x faster than normal. Returns 1 if time warp is not
+active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getWarpFactor()">
+ <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getWarpFactor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getWarpFactor()" title="Link to this definition">#</a></dt>
+<dd><p>The current warp factor. This is the index of the rate at which time
+is passing for either regular “on-rails” or physical time warp. Returns 0
+if time warp is not active. When in on-rails time warp, this is equal to
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.SpaceCenter.getRailsWarpFactor()" title="krpc.client.services.SpaceCenter.SpaceCenter.getRailsWarpFactor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getRailsWarpFactor()</span></code></a>, and in physics time warp, this is equal to
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.SpaceCenter.getPhysicsWarpFactor()" title="krpc.client.services.SpaceCenter.SpaceCenter.getPhysicsWarpFactor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getPhysicsWarpFactor()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getRailsWarpFactor()">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getRailsWarpFactor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getRailsWarpFactor()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setRailsWarpFactor(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setRailsWarpFactor</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setRailsWarpFactor(int)" title="Link to this definition">#</a></dt>
+<dd><p>The time warp rate, using regular “on-rails” time warp. A value between
+0 and 7 inclusive. 0 means no time warp. Returns 0 if physical time warp
+is active.</p>
+<p>If requested time warp factor cannot be set, it will be set to the next
+lowest possible value. For example, if the vessel is too close to a
+planet. See <a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a> for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getPhysicsWarpFactor()">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getPhysicsWarpFactor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getPhysicsWarpFactor()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setPhysicsWarpFactor(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setPhysicsWarpFactor</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setPhysicsWarpFactor(int)" title="Link to this definition">#</a></dt>
+<dd><p>The physical time warp rate. A value between 0 and 3 inclusive. 0 means
+no time warp. Returns 0 if regular “on-rails” time warp is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.canRailsWarpAt(int)">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">canRailsWarpAt</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">factor</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.canRailsWarpAt(int)" title="Link to this definition">#</a></dt>
+<dd><p>Returns <code class="docutils literal notranslate"><span class="pre">true</span></code> if regular “on-rails” time warp can be used, at the specified warp
+<em>factor</em>. The maximum time warp rate is limited by various things,
+including how close the active vessel is to a planet. See
+<a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The warp factor to check.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getMaximumRailsWarpFactor()">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getMaximumRailsWarpFactor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getMaximumRailsWarpFactor()" title="Link to this definition">#</a></dt>
+<dd><p>The current maximum regular “on-rails” warp factor that can be set.
+A value between 0 and 7 inclusive. See
+<a class="reference external" href="https://wiki.kerbalspaceprogram.com/wiki/Time_warp">the KSP wiki</a>
+for details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.warpTo(double, float, float)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">warpTo</span></span><span class="sig-paren">(</span><span class="pre">double</span><em> <span class="pre">ut</span></em>, <span class="pre">float</span><em> <span class="pre">maxRailsRate</span></em>, <span class="pre">float</span><em> <span class="pre">maxPhysicsRate</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.warpTo(double, float, float)" title="Link to this definition">#</a></dt>
+<dd><p>Uses time acceleration to warp forward to a time in the future, specified
+by universal time <em>ut</em>. This call blocks until the desired
+time is reached. Uses regular “on-rails” or physical time warp as appropriate.
+For example, physical time warp is used when the active vessel is traveling
+through an atmosphere. When using regular “on-rails” time warp, the warp
+rate is limited by <em>maxRailsRate</em>, and when using physical
+time warp, the warp rate is limited by <em>maxPhysicsRate</em>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">double</span></code></span>) – The universal time to warp to, in seconds.</p></li>
+<li><p><strong>maxRailsRate</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The maximum warp rate in regular “on-rails” time warp.</p></li>
+<li><p><strong>maxPhysicsRate</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">float</span></code></span>) – The maximum warp rate in physical time warp.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>When the time warp is complete.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.transformPosition(org.javatuples.Triplet, ReferenceFrame, ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">transformPosition</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">from</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.transformPosition(org.javatuples.Triplet, ReferenceFrame, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Converts a position from one reference frame to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Position, as a vector, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the position is in.</p></li>
+<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame to covert the position to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding position, as a vector, in reference frame <em>to</em>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.transformDirection(org.javatuples.Triplet, ReferenceFrame, ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">transformDirection</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">direction</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">from</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.transformDirection(org.javatuples.Triplet, ReferenceFrame, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Converts a direction from one reference frame to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Direction, as a vector, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the direction is in.</p></li>
+<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame to covert the direction to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding direction, as a vector, in reference frame <em>to</em>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.transformRotation(org.javatuples.Quartet, ReferenceFrame, ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">transformRotation</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">rotation</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">from</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.transformRotation(org.javatuples.Quartet, ReferenceFrame, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Converts a rotation from one reference frame to another.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rotation</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Quartet</span></code></span>) – Rotation, as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the rotation is in.</p></li>
+<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame to covert the rotation to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding rotation, as a quaternion of the form <span class="math notranslate nohighlight">\((x, y, z, w)\)</span>, in reference frame <em>to</em>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.transformVelocity(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame, ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">transformVelocity</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">velocity</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">from</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">to</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.transformVelocity(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Converts a velocity (acting at the specified position) from one reference frame
+to another. The position is required to take the relative angular velocity of the
+reference frames into account.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Position, as a vector, in reference frame <em>from</em>.</p></li>
+<li><p><strong>velocity</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Velocity, as a vector that points in the direction of travel and whose magnitude is the speed in meters per second, in reference frame <em>from</em>.</p></li>
+<li><p><strong>from</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the position and velocity are in.</p></li>
+<li><p><strong>to</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame to covert the velocity to.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The corresponding velocity, as a vector, in reference frame <em>to</em>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">
+ <span class="pre">double</span> <span class="sig-name descname"><span class="pre">raycastDistance</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">direction</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.raycastDistance(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Cast a ray from a given position in a given direction, and return the distance to the hit point.
+If no hit occurs, returns infinity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Position, as a vector, of the origin of the ray.</p></li>
+<li><p><strong>direction</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Direction of the ray, as a unit vector.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the position and direction are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The distance to the hit, in meters, or infinity if there was no hit.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.raycastPart(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)">
+ <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">raycastPart</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">position</span></em>, <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">direction</span></em>, <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.raycastPart(org.javatuples.Triplet, org.javatuples.Triplet, ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>Cast a ray from a given position in a given direction, and return the part that it hits.
+If no hit occurs, returns <code class="docutils literal notranslate"><span class="pre">null</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>position</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Position, as a vector, of the origin of the ray.</p></li>
+<li><p><strong>direction</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">org.javatuples.Triplet</span></code></span>) – Direction of the ray, as a unit vector.</p></li>
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the position and direction are in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The part that was hit or <code class="docutils literal notranslate"><span class="pre">null</span></code> if there was no hit.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getFARAvailable()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getFARAvailable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getFARAvailable()" title="Link to this definition">#</a></dt>
+<dd><p>Whether <a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a> is installed.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.createKerbal(String, String, boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">createKerbal</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">job</span></em>, <span class="pre">boolean</span><em> <span class="pre">male</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.createKerbal(String, String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Creates a Kerbal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>job</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+<li><p><strong>male</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getKerbal(String)">
+ <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.CrewMember" title="krpc.client.services.SpaceCenter.CrewMember"><span class="pre">CrewMember</span></a> <span class="sig-name descname"><span class="pre">getKerbal</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getKerbal(String)" title="Link to this definition">#</a></dt>
+<dd><p>Find a Kerbal by name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.loadSpaceCenter()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">loadSpaceCenter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.loadSpaceCenter()" title="Link to this definition">#</a></dt>
+<dd><p>Switch to the space center view.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getMapFilter()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">getMapFilter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getMapFilter()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.setMapFilter(MapFilterType)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setMapFilter</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.setMapFilter(MapFilterType)" title="Link to this definition">#</a></dt>
+<dd><p>The visible objects in map mode.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.screenshot(String, int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">screenshot</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">filePath</span></em>, <span class="pre">int</span><em> <span class="pre">scale</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.screenshot(String, int)" title="Link to this definition">#</a></dt>
+<dd><p>Saves a screenshot.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filePath</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The path of the file to save.</p></li>
+<li><p><strong>scale</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – Resolution scaling factor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getGameMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">getGameMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getGameMode()" title="Link to this definition">#</a></dt>
+<dd><p>The current mode the game is in.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getWarpMode()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode" title="krpc.client.services.SpaceCenter.WarpMode"><span class="pre">WarpMode</span></a> <span class="sig-name descname"><span class="pre">getWarpMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getWarpMode()" title="Link to this definition">#</a></dt>
+<dd><p>The current time warp mode. Returns <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode.NONE" title="krpc.client.services.SpaceCenter.WarpMode.NONE"><code class="xref java java-meth docutils literal notranslate"><span class="pre">WarpMode.NONE</span></code></a> if time
+warp is not active, <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode.RAILS" title="krpc.client.services.SpaceCenter.WarpMode.RAILS"><code class="xref java java-meth docutils literal notranslate"><span class="pre">WarpMode.RAILS</span></code></a> if regular “on-rails” time warp
+is active, or <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode.PHYSICS" title="krpc.client.services.SpaceCenter.WarpMode.PHYSICS"><code class="xref java java-meth docutils literal notranslate"><span class="pre">WarpMode.PHYSICS</span></code></a> if physical time warp is active.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getCamera()">
+ <a class="reference internal" href="camera.html#krpc.client.services.SpaceCenter.Camera" title="krpc.client.services.SpaceCenter.Camera"><span class="pre">Camera</span></a> <span class="sig-name descname"><span class="pre">getCamera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getCamera()" title="Link to this definition">#</a></dt>
+<dd><p>An object that can be used to control the camera.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getWaypointManager()">
+ <a class="reference internal" href="waypoints.html#krpc.client.services.SpaceCenter.WaypointManager" title="krpc.client.services.SpaceCenter.WaypointManager"><span class="pre">WaypointManager</span></a> <span class="sig-name descname"><span class="pre">getWaypointManager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getWaypointManager()" title="Link to this definition">#</a></dt>
+<dd><p>The waypoint manager.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()">
+ <a class="reference internal" href="contracts.html#krpc.client.services.SpaceCenter.ContractManager" title="krpc.client.services.SpaceCenter.ContractManager"><span class="pre">ContractManager</span></a> <span class="sig-name descname"><span class="pre">getContractManager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getContractManager()" title="Link to this definition">#</a></dt>
+<dd><p>The contract manager.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()">
+ <a class="reference internal" href="alarms.html#krpc.client.services.SpaceCenter.AlarmManager" title="krpc.client.services.SpaceCenter.AlarmManager"><span class="pre">AlarmManager</span></a> <span class="sig-name descname"><span class="pre">getAlarmManager</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()" title="Link to this definition">#</a></dt>
+<dd><p>The alarm manager.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">GameMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode" title="Link to this definition">#</a></dt>
+<dd><p>The game mode.
+Returned by <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><code class="xref java java-type docutils literal notranslate"><span class="pre">GameMode</span></code></a></p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.SANDBOX">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">SANDBOX</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.SANDBOX" title="Link to this definition">#</a></dt>
+<dd><p>Sandbox mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.CAREER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">CAREER</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.CAREER" title="Link to this definition">#</a></dt>
+<dd><p>Career mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.SCIENCE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">SCIENCE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.SCIENCE" title="Link to this definition">#</a></dt>
+<dd><p>Science career mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.SCIENCE_SANDBOX">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">SCIENCE_SANDBOX</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.SCIENCE_SANDBOX" title="Link to this definition">#</a></dt>
+<dd><p>Science sandbox mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.MISSION">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">MISSION</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.MISSION" title="Link to this definition">#</a></dt>
+<dd><p>Mission mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.MISSION_BUILDER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">MISSION_BUILDER</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.MISSION_BUILDER" title="Link to this definition">#</a></dt>
+<dd><p>Mission builder mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.SCENARIO">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">SCENARIO</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.SCENARIO" title="Link to this definition">#</a></dt>
+<dd><p>Scenario mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.GameMode.SCENARIO_NON_RESUMABLE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.GameMode" title="krpc.client.services.SpaceCenter.GameMode"><span class="pre">GameMode</span></a> <span class="sig-name descname"><span class="pre">SCENARIO_NON_RESUMABLE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.GameMode.SCENARIO_NON_RESUMABLE" title="Link to this definition">#</a></dt>
+<dd><p>Scenario mode that cannot be resumed.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WarpMode">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">WarpMode</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WarpMode" title="Link to this definition">#</a></dt>
+<dd><p>The time warp mode.
+Returned by <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode" title="krpc.client.services.SpaceCenter.WarpMode"><code class="xref java java-type docutils literal notranslate"><span class="pre">WarpMode</span></code></a></p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WarpMode.RAILS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode" title="krpc.client.services.SpaceCenter.WarpMode"><span class="pre">WarpMode</span></a> <span class="sig-name descname"><span class="pre">RAILS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WarpMode.RAILS" title="Link to this definition">#</a></dt>
+<dd><p>Time warp is active, and in regular “on-rails” mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WarpMode.PHYSICS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode" title="krpc.client.services.SpaceCenter.WarpMode"><span class="pre">WarpMode</span></a> <span class="sig-name descname"><span class="pre">PHYSICS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WarpMode.PHYSICS" title="Link to this definition">#</a></dt>
+<dd><p>Time warp is active, and in physical time warp mode.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.WarpMode.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.WarpMode" title="krpc.client.services.SpaceCenter.WarpMode"><span class="pre">WarpMode</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.WarpMode.NONE" title="Link to this definition">#</a></dt>
+<dd><p>Time warp is not active.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">MapFilterType</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType" title="Link to this definition">#</a></dt>
+<dd><p>The set of things that are visible in map mode.
+These may be combined with bitwise logic.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.ALL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">ALL</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.ALL" title="Link to this definition">#</a></dt>
+<dd><p>Everything.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.NONE" title="Link to this definition">#</a></dt>
+<dd><p>Nothing.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.DEBRIS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">DEBRIS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.DEBRIS" title="Link to this definition">#</a></dt>
+<dd><p>Debris.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.UNKNOWN">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">UNKNOWN</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.UNKNOWN" title="Link to this definition">#</a></dt>
+<dd><p>Unknown.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.SPACE_OBJECTS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">SPACE_OBJECTS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.SPACE_OBJECTS" title="Link to this definition">#</a></dt>
+<dd><p>SpaceObjects.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.PROBES">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">PROBES</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.PROBES" title="Link to this definition">#</a></dt>
+<dd><p>Probes.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.ROVERS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">ROVERS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.ROVERS" title="Link to this definition">#</a></dt>
+<dd><p>Rovers.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.LANDERS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">LANDERS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.LANDERS" title="Link to this definition">#</a></dt>
+<dd><p>Landers.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.SHIPS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">SHIPS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.SHIPS" title="Link to this definition">#</a></dt>
+<dd><p>Ships.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.STATIONS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">STATIONS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.STATIONS" title="Link to this definition">#</a></dt>
+<dd><p>Stations.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.BASES">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">BASES</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.BASES" title="Link to this definition">#</a></dt>
+<dd><p>Bases.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.EV_AS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">EV_AS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.EV_AS" title="Link to this definition">#</a></dt>
+<dd><p>EVAs.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.FLAGS">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">FLAGS</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.FLAGS" title="Link to this definition">#</a></dt>
+<dd><p>Flags.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.PLANE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">PLANE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.PLANE" title="Link to this definition">#</a></dt>
+<dd><p>Planes.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.RELAY">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">RELAY</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.RELAY" title="Link to this definition">#</a></dt>
+<dd><p>Relays.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.SITE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">SITE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.SITE" title="Link to this definition">#</a></dt>
+<dd><p>Launch Sites.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.MapFilterType.DEPLOYED_SCIENCE_CONTROLLER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.MapFilterType" title="krpc.client.services.SpaceCenter.MapFilterType"><span class="pre">MapFilterType</span></a> <span class="sig-name descname"><span class="pre">DEPLOYED_SCIENCE_CONTROLLER</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.MapFilterType.DEPLOYED_SCIENCE_CONTROLLER" title="Link to this definition">#</a></dt>
+<dd><p>Deployed Science Controllers.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite">
+<span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">LaunchSite</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite" title="Link to this definition">#</a></dt>
+<dd><p>A place where craft can be launched from.
+More of these can be added with mods like Kerbal Konstructs.</p>
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getName()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getName()" title="Link to this definition">#</a></dt>
+<dd><p>The name of the launch site.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getBody()">
+ <a class="reference internal" href="celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody" title="krpc.client.services.SpaceCenter.CelestialBody"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">getBody</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getBody()" title="Link to this definition">#</a></dt>
+<dd><p>The celestial body the launch site is on.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.LaunchSite.getEditorFacility()">
+ <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <span class="sig-name descname"><span class="pre">getEditorFacility</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.LaunchSite.getEditorFacility()" title="Link to this definition">#</a></dt>
+<dd><p>Which editor is normally used for this launch site.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorFacility">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">EditorFacility</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorFacility" title="Link to this definition">#</a></dt>
+<dd><p>Editor facility.
+See <a class="reference internal" href="#krpc.client.services.SpaceCenter.LaunchSite.getEditorFacility()" title="krpc.client.services.SpaceCenter.LaunchSite.getEditorFacility()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">LaunchSite.getEditorFacility()</span></code></a>.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorFacility.VAB">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <span class="sig-name descname"><span class="pre">VAB</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorFacility.VAB" title="Link to this definition">#</a></dt>
+<dd><p>Vehicle Assembly Building.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorFacility.SPH">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <span class="sig-name descname"><span class="pre">SPH</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorFacility.SPH" title="Link to this definition">#</a></dt>
+<dd><p>Space Plane Hanger.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorFacility.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.SpaceCenter.EditorFacility" title="krpc.client.services.SpaceCenter.EditorFacility"><span class="pre">EditorFacility</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorFacility.NONE" title="Link to this definition">#</a></dt>
+<dd><p>None.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../space-center.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SpaceCenter API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="vessel.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Vessel</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/java/api/space-center/space-center.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

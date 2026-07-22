@@ -1,0 +1,4404 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+.. _cnano-api-parts:
+
+Parts
+=====
+
+The following classes allow interaction with a vessels individual parts.
+
+.. contents::
+   :local:
+
+Parts
+-----
+
+
+.. type:: krpc_SpaceCenter_Parts_t
+
+   Instances of this class are used to interact with the parts of a vessel.
+   An instance can be obtained by calling :func:`krpc_SpaceCenter_Vessel_Parts`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_All(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all of the vessels parts.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Root(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The vessels root part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-trees-of-parts`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Controlling(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+   .. function:: void krpc_SpaceCenter_Parts_set_Controlling(krpc_SpaceCenter_Part_t value)
+
+      The part from which the vessel is controlled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_WithName(krpc_connection_t connection, krpc_list_object_t * result, const char * name)
+
+      A list of parts whose :func:`krpc_SpaceCenter_Part_Name` is *name*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_WithTitle(krpc_connection_t connection, krpc_list_object_t * result, const char * title)
+
+      A list of all parts whose :func:`krpc_SpaceCenter_Part_Title` is *title*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_WithTag(krpc_connection_t connection, krpc_list_object_t * result, const char * tag)
+
+      A list of all parts whose :func:`krpc_SpaceCenter_Part_Tag` is *tag*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_WithModule(krpc_connection_t connection, krpc_list_object_t * result, const char * moduleName)
+
+      A list of all parts that contain a :type:`krpc_SpaceCenter_Module_t` whose
+      :func:`krpc_SpaceCenter_Module_Name` is *moduleName*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_InStage(krpc_connection_t connection, krpc_list_object_t * result, int32_t stage)
+
+      A list of all parts that are activated in the given *stage*.
+
+      :Parameters:
+
+
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-staging`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_InDecoupleStage(krpc_connection_t connection, krpc_list_object_t * result, int32_t stage)
+
+      A list of all parts that are decoupled in the given *stage*.
+
+      :Parameters:
+
+
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-staging`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_ModulesWithName(krpc_connection_t connection, krpc_list_object_t * result, const char * moduleName)
+
+      A list of modules (combined across all parts in the vessel) whose
+      :func:`krpc_SpaceCenter_Module_Name` is *moduleName*.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Antennas(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all antennas in the vessel.
+
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return an empty list.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_CargoBays(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all cargo bays in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_ControlSurfaces(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all control surfaces in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Decouplers(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all decouplers in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_DockingPorts(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all docking ports in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Engines(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all engines in the vessel.
+
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters, jet engines and
+         RCS thrusters.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Experiments(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all science experiments in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Fairings(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all fairings in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Intakes(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all intakes in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Legs(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all landing legs attached to the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_LaunchClamps(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all launch clamps attached to the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Lights(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all lights in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Parachutes(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all parachutes in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Radiators(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all radiators in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_ResourceDrains(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all resource drains in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_RCS(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all RCS blocks/thrusters in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_ReactionWheels(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all reaction wheels in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_ResourceConverters(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all resource converters in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_ResourceHarvesters(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all resource harvesters in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_RoboticHinges(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all robotic hinges in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_RoboticPistons(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all robotic pistons in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_RoboticRotations(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all robotic rotations in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_RoboticRotors(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all robotic rotors in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Sensors(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all sensors in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_SolarPanels(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all solar panels in the vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parts_Wheels(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of all wheels in the vessel.
+
+   
+
+
+
+Part
+----
+
+
+.. type:: krpc_SpaceCenter_Part_t
+
+   Represents an individual part. Vessels are made up of multiple parts.
+   Instances of this class can be obtained by several methods in :type:`krpc_SpaceCenter_Parts_t`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Name(krpc_connection_t connection, char * * result)
+
+      Internal name of the part, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+      For example "Mark1-2Pod".
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Title(krpc_connection_t connection, char * * result)
+
+      Title of the part, as shown when the part is right clicked in-game. For example "Mk1-2 Command Pod".
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Tag(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Part_set_Tag(const char * value)
+
+      The name tag for the part. Can be set to a custom string using the
+      in-game user interface.
+
+   
+
+      .. note::
+
+         This string is shared with
+         `kOS <https://forum.kerbalspaceprogram.com/index.php?/topic/61827-/>`_
+         if it is installed.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_FlagURL(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Part_set_FlagURL(const char * value)
+
+      The asset URL for the part's flag.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Highlighted(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Part_set_Highlighted(bool value)
+
+      Whether the part is highlighted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_HighlightColor(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_Part_set_HighlightColor(const krpc_tuple_double_double_double_t * value)
+
+      The color used to highlight the part, as an RGB triple.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Cost(krpc_connection_t connection, double * result)
+
+      The cost of the part, in units of funds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      The vessel that contains this part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Parent(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The parts parent. Returns ``nullptr`` if the part does not have a parent.
+      This, in combination with :func:`krpc_SpaceCenter_Part_Children`, can be used to traverse the vessels
+      parts tree.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-trees-of-parts`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Children(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The parts children. Returns an empty list if the part has no children.
+      This, in combination with :func:`krpc_SpaceCenter_Part_Parent`, can be used to traverse the vessels
+      parts tree.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-trees-of-parts`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_AxiallyAttached(krpc_connection_t connection, bool * result)
+
+      Whether the part is axially attached to its parent, i.e. on the top
+      or bottom of its parent. If the part has no parent, returns ``false``.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-attachment-modes`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RadiallyAttached(krpc_connection_t connection, bool * result)
+
+      Whether the part is radially attached to its parent, i.e. on the side of its parent.
+      If the part has no parent, returns ``false``.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-attachment-modes`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Stage(krpc_connection_t connection, int32_t * result)
+
+      The stage in which this part will be activated. Returns -1 if the part is not
+      activated by staging.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-staging`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_DecoupleStage(krpc_connection_t connection, int32_t * result)
+
+      The stage in which this part will be decoupled. Returns -1 if the part is never
+      decoupled from the vessel.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-staging`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Massless(krpc_connection_t connection, bool * result)
+
+      Whether the part is
+      `massless <https://wiki.kerbalspaceprogram.com/wiki/Massless_part>`_.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Mass(krpc_connection_t connection, double * result)
+
+      The current mass of the part, including resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_DryMass(krpc_connection_t connection, double * result)
+
+      The mass of the part, not including any resources it contains, in kilograms.
+      Returns zero if the part is massless.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Shielded(krpc_connection_t connection, bool * result)
+
+      Whether the part is shielded from the exterior of the vessel, for example by a fairing.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_DynamicPressure(krpc_connection_t connection, float * result)
+
+      The dynamic pressure acting on the part, in Pascals.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ImpactTolerance(krpc_connection_t connection, double * result)
+
+      The impact tolerance of the part, in meters per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Temperature(krpc_connection_t connection, double * result)
+
+      Temperature of the part, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_SkinTemperature(krpc_connection_t connection, double * result)
+
+      Temperature of the skin of the part, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_MaxTemperature(krpc_connection_t connection, double * result)
+
+      Maximum temperature that the part can survive, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_MaxSkinTemperature(krpc_connection_t connection, double * result)
+
+      Maximum temperature that the skin of the part can survive, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalMass(krpc_connection_t connection, float * result)
+
+      A measure of how much energy it takes to increase the internal temperature of the part,
+      in Joules per Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalSkinMass(krpc_connection_t connection, float * result)
+
+      A measure of how much energy it takes to increase the skin temperature of the part,
+      in Joules per Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalResourceMass(krpc_connection_t connection, float * result)
+
+      A measure of how much energy it takes to increase the temperature of the resources
+      contained in the part, in Joules per Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalConductionFlux(krpc_connection_t connection, float * result)
+
+      The rate at which heat energy is conducting into or out of the part via contact with
+      other parts. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalConvectionFlux(krpc_connection_t connection, float * result)
+
+      The rate at which heat energy is convecting into or out of the part from the
+      surrounding atmosphere. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalRadiationFlux(krpc_connection_t connection, float * result)
+
+      The rate at which heat energy is radiating into or out of the part from the surrounding
+      environment. Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is
+      losing heat energy.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalInternalFlux(krpc_connection_t connection, float * result)
+
+      The rate at which heat energy is begin generated by the part.
+      For example, some engines generate heat by combusting fuel.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part is gaining heat energy, and negative means it is losing
+      heat energy.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalSkinToInternalFlux(krpc_connection_t connection, float * result)
+
+      The rate at which heat energy is transferring between the part's skin and its internals.
+      Measured in energy per unit time, or power, in Watts.
+      A positive value means the part's internals are gaining heat energy,
+      and negative means its skin is gaining heat energy.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_AvailableSeats(krpc_connection_t connection, uint32_t * result)
+
+      How many open seats the part has.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Resources` object for the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Crossfeed(krpc_connection_t connection, bool * result)
+
+      Whether this part is crossfeed capable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_IsFuelLine(krpc_connection_t connection, bool * result)
+
+      Whether this part is a fuel line.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_FuelLinesFrom(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is into this part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-fuel-lines`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_FuelLinesTo(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The parts that are connected to this part via fuel lines, where the direction of the
+      fuel line is out of this part.
+
+   
+
+      .. note:: See the discussion on :rst:ref:`cnano-api-parts-fuel-lines`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Modules(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The modules for this part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Antenna(krpc_connection_t connection, krpc_SpaceCenter_Antenna_t * result)
+
+      An :func:`krpc_SpaceCenter_Part_Antenna` if the part is an antenna, otherwise ``nullptr``.
+
+   
+
+      .. note::
+
+         If RemoteTech is installed, this will always return ``nullptr``.
+         To interact with RemoteTech antennas, use the RemoteTech service APIs.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_CargoBay(krpc_connection_t connection, krpc_SpaceCenter_CargoBay_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_CargoBay` if the part is a cargo bay, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ControlSurface(krpc_connection_t connection, krpc_SpaceCenter_ControlSurface_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_ControlSurface` if the part is an aerodynamic control surface,
+      otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Decoupler(krpc_connection_t connection, krpc_SpaceCenter_Decoupler_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Decoupler` if the part is a decoupler, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_DockingPort(krpc_connection_t connection, krpc_SpaceCenter_DockingPort_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_DockingPort` if the part is a docking port, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Engine(krpc_connection_t connection, krpc_SpaceCenter_Engine_t * result)
+
+      An :func:`krpc_SpaceCenter_Part_Engine` if the part is an engine, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Experiment(krpc_connection_t connection, krpc_SpaceCenter_Experiment_t * result)
+
+      An :func:`krpc_SpaceCenter_Part_Experiment` if the part contains a
+      single science experiment, otherwise ``nullptr``.
+
+   
+
+      .. note::
+
+         Throws an exception if the part contains more than one experiment.
+         In that case, use :func:`krpc_SpaceCenter_Part_Experiments` to get the list of experiments in the part.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Experiments(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of :func:`krpc_SpaceCenter_Part_Experiment` objects that the part contains.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Fairing(krpc_connection_t connection, krpc_SpaceCenter_Fairing_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Fairing` if the part is a fairing, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Intake(krpc_connection_t connection, krpc_SpaceCenter_Intake_t * result)
+
+      An :func:`krpc_SpaceCenter_Part_Intake` if the part is an intake, otherwise ``nullptr``.
+
+   
+
+      .. note::
+
+         This includes any part that generates thrust. This covers many different types
+         of engine, including liquid fuel rockets, solid rocket boosters and jet engines.
+         For RCS thrusters see :func:`krpc_SpaceCenter_Part_RCS`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Leg(krpc_connection_t connection, krpc_SpaceCenter_Leg_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Leg` if the part is a landing leg, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_LaunchClamp(krpc_connection_t connection, krpc_SpaceCenter_LaunchClamp_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_LaunchClamp` if the part is a launch clamp, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Light(krpc_connection_t connection, krpc_SpaceCenter_Light_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Light` if the part is a light, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Parachute(krpc_connection_t connection, krpc_SpaceCenter_Parachute_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Parachute` if the part is a parachute, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Radiator(krpc_connection_t connection, krpc_SpaceCenter_Radiator_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Radiator` if the part is a radiator, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ResourceDrain(krpc_connection_t connection, krpc_SpaceCenter_ResourceDrain_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_ResourceDrain` if the part is a resource drain, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RCS(krpc_connection_t connection, krpc_SpaceCenter_RCS_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_RCS` if the part is an RCS block/thruster, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ReactionWheel(krpc_connection_t connection, krpc_SpaceCenter_ReactionWheel_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_ReactionWheel` if the part is a reaction wheel, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ResourceConverter(krpc_connection_t connection, krpc_SpaceCenter_ResourceConverter_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_ResourceConverter` if the part is a resource converter,
+      otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ResourceHarvester(krpc_connection_t connection, krpc_SpaceCenter_ResourceHarvester_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_ResourceHarvester` if the part is a resource harvester,
+      otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RoboticController(krpc_connection_t connection, krpc_SpaceCenter_RoboticController_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_RoboticController` if the part is a robotic controller,
+      otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RoboticHinge(krpc_connection_t connection, krpc_SpaceCenter_RoboticHinge_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_RoboticHinge` if the part is a robotic hinge, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RoboticPiston(krpc_connection_t connection, krpc_SpaceCenter_RoboticPiston_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_RoboticPiston` if the part is a robotic piston, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RoboticRotation(krpc_connection_t connection, krpc_SpaceCenter_RoboticRotation_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_RoboticRotation` if the part is a robotic rotation servo, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_RoboticRotor(krpc_connection_t connection, krpc_SpaceCenter_RoboticRotor_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_RoboticRotor` if the part is a robotic rotor, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Sensor(krpc_connection_t connection, krpc_SpaceCenter_Sensor_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Sensor` if the part is a sensor, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_SolarPanel(krpc_connection_t connection, krpc_SpaceCenter_SolarPanel_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_SolarPanel` if the part is a solar panel, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Wheel(krpc_connection_t connection, krpc_SpaceCenter_Wheel_t * result)
+
+      A :func:`krpc_SpaceCenter_Part_Wheel` if the part is a wheel, otherwise ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the part in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+      .. note::
+
+         This is a fixed position in the part, defined by the parts model.
+         It s not necessarily the same as the parts center of mass.
+         Use :func:`krpc_SpaceCenter_Part_CenterOfMass` to get the parts center of mass.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the parts center of mass in the given reference frame.
+      If the part is physicsless, this is equivalent to :func:`krpc_SpaceCenter_Part_Position`.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_BoundingBox(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The axis-aligned bounding box of the part in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vectors are in.
+
+      :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
+   
+
+      .. note::
+
+         This is computed from the collision mesh of the part.
+         If the part is not collidable, the box has zero volume and is centered on
+         the :func:`krpc_SpaceCenter_Part_Position` of the part.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction the part points in, in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The linear velocity of the part in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The rotation of the part, in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The moment of inertia of the part in :math:`kg.m^2` around its center of mass
+      in the parts reference frame (:func:`krpc_SpaceCenter_Part_ReferenceFrame`).
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * result)
+
+      The inertia tensor of the part in the parts reference frame
+      (:func:`krpc_SpaceCenter_Part_ReferenceFrame`).
+      Returns the 3x3 matrix as a list of elements, in row-major order.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+
+      The reference frame that is fixed relative to this part, and centered on a fixed
+      position within the part, defined by the parts model.
+
+      * The origin is at the position of the part, as returned by
+        :func:`krpc_SpaceCenter_Part_Position`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :func:`krpc_SpaceCenter_DockingPort_ReferenceFrame`.
+
+      .. figure:: /images/reference-frames/part.png
+         :align: center
+
+         Mk1 Command Pod reference frame origin and axes
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_CenterOfMassReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+
+      The reference frame that is fixed relative to this part, and centered on its
+      center of mass.
+
+      * The origin is at the center of mass of the part, as returned by
+        :func:`krpc_SpaceCenter_Part_CenterOfMass`.
+      * The axes rotate with the part.
+      * The x, y and z axis directions depend on the design of the part.
+
+   
+
+      .. note::
+
+         For docking port parts, this reference frame is not necessarily equivalent to the
+         reference frame for the docking port, returned by
+         :func:`krpc_SpaceCenter_DockingPort_ReferenceFrame`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_AddForce(krpc_connection_t connection, krpc_SpaceCenter_Force_t * result, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Exert a constant force on the part, acting at the given position.
+
+      :Parameters:
+
+       * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+       * **position** -- The position at which the force acts, as a vector.
+       * **referenceFrame** -- The reference frame that the force and position are in.
+
+      :returns: An object that can be used to remove or modify the force.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_InstantaneousForce(krpc_connection_t connection, const krpc_tuple_double_double_double_t * force, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Exert an instantaneous force on the part, acting at the given position.
+
+      :Parameters:
+
+       * **force** -- A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+       * **position** -- The position at which the force acts, as a vector.
+       * **referenceFrame** -- The reference frame that the force and position are in.
+
+   
+
+      .. note::
+
+         The force is applied instantaneously in a single physics update.
+
+   .. function:: void krpc_SpaceCenter_Part_set_Glow(bool value)
+
+      Whether the part is glowing.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Part_AutoStrutMode(krpc_connection_t connection, krpc_SpaceCenter_AutoStrutMode_t * result)
+
+      Auto-strut mode.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_AutoStrutMode_t
+
+   The state of an auto-strut. :func:`krpc_SpaceCenter_Part_AutoStrutMode`
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_OFF
+
+      Off
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_ROOT
+
+      Root
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_HEAVIEST
+
+      Heaviest
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_GRANDPARENT
+
+      Grandparent
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_FORCEROOT
+
+      ForceRoot
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_FORCEHEAVIEST
+
+      ForceHeaviest
+
+
+   .. macro:: KRPC_SPACECENTER_AUTOSTRUTMODE_FORCEGRANDPARENT
+
+      ForceGrandparent
+
+
+
+.. type:: krpc_SpaceCenter_Force_t
+
+   Obtained by calling :func:`krpc_SpaceCenter_Part_AddForce`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Force_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part that this force is applied to.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Force_ForceVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_Force_set_ForceVector(const krpc_tuple_double_double_double_t * value)
+
+      The force vector, in Newtons.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Force_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_SpaceCenter_Force_set_Position(const krpc_tuple_double_double_double_t * value)
+
+      The position at which the force acts, in reference frame :func:`krpc_SpaceCenter_Force_ReferenceFrame`.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Force_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_SpaceCenter_Force_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      The reference frame of the force vector and position.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Force_Remove(krpc_connection_t connection)
+
+      Remove the force.
+
+
+   
+
+
+
+Module
+------
+
+
+.. type:: krpc_SpaceCenter_Module_t
+
+   This can be used to interact with a specific part module. This includes part modules in
+   stock KSP, and those added by mods.
+
+   In KSP, each part has zero or more
+   `PartModules <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation#MODULES>`_
+   associated with it. Each one contains some of the functionality of the part.
+   For example, an engine has a "ModuleEngines" part module that contains all the
+   functionality of an engine.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_Name(krpc_connection_t connection, char * * result)
+
+      Name of the PartModule. For example, "ModuleEngines".
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part that contains this module.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_Fields(krpc_connection_t connection, krpc_dictionary_string_string_t * result)
+
+      The modules field names and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+   
+
+      .. note::
+
+         Throws an exception if there is more than one field with the same name.
+         In that case, use :func:`krpc_SpaceCenter_Module_FieldsById` to get the fields by identifier.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_FieldsById(krpc_connection_t connection, krpc_dictionary_string_string_t * result)
+
+      The modules field identifiers and their associated values, as a dictionary.
+      These are the values visible in the right-click menu of the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_HasField(krpc_connection_t connection, bool * result, const char * name)
+
+      Returns ``true`` if the module has a field with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_HasFieldWithId(krpc_connection_t connection, bool * result, const char * id)
+
+      Returns ``true`` if the module has a field with the given identifier.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_GetField(krpc_connection_t connection, char * * result, const char * name)
+
+      Returns the value of a field with the given name.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_GetFieldById(krpc_connection_t connection, char * * result, const char * id)
+
+      Returns the value of a field with the given identifier.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldInt(krpc_connection_t connection, const char * name, int32_t value)
+
+      Set the value of a field to the given integer number.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldIntById(krpc_connection_t connection, const char * id, int32_t value)
+
+      Set the value of a field to the given integer number.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldFloat(krpc_connection_t connection, const char * name, float value)
+
+      Set the value of a field to the given floating point number.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldFloatById(krpc_connection_t connection, const char * id, float value)
+
+      Set the value of a field to the given floating point number.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldString(krpc_connection_t connection, const char * name, const char * value)
+
+      Set the value of a field to the given string.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldStringById(krpc_connection_t connection, const char * id, const char * value)
+
+      Set the value of a field to the given string.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldBool(krpc_connection_t connection, const char * name, bool value)
+
+      Set the value of a field to true or false.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetFieldBoolById(krpc_connection_t connection, const char * id, bool value)
+
+      Set the value of a field to true or false.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+       * **value** -- Value to set.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_ResetField(krpc_connection_t connection, const char * name)
+
+      Set the value of a field to its original value.
+
+      :Parameters:
+
+       * **name** -- Name of the field.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_ResetFieldById(krpc_connection_t connection, const char * id)
+
+      Set the value of a field to its original value.
+
+      :Parameters:
+
+       * **id** -- Identifier of the field.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_Events(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of the names of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_EventsById(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of the identifiers of all of the modules events. Events are the clickable buttons
+      visible in the right-click menu of the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_HasEvent(krpc_connection_t connection, bool * result, const char * name)
+
+      ``true`` if the module has an event with the given name.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_HasEventWithId(krpc_connection_t connection, bool * result, const char * id)
+
+      ``true`` if the module has an event with the given identifier.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_TriggerEvent(krpc_connection_t connection, const char * name)
+
+      Trigger the named event. Equivalent to clicking the button in the right-click menu
+      of the part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_TriggerEventById(krpc_connection_t connection, const char * id)
+
+      Trigger the event with the given identifier.
+      Equivalent to clicking the button in the right-click menu of the part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_Actions(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of all the names of the modules actions. These are the parts actions that can
+      be assigned to action groups in the in-game editor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_ActionsById(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of all the identifiers of the modules actions. These are the parts actions
+      that can be assigned to action groups in the in-game editor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_HasAction(krpc_connection_t connection, bool * result, const char * name)
+
+      ``true`` if the part has an action with the given name.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_HasActionWithId(krpc_connection_t connection, bool * result, const char * id)
+
+      ``true`` if the part has an action with the given identifier.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetAction(krpc_connection_t connection, const char * name, bool value)
+
+      Set the value of an action with the given name.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Module_SetActionById(krpc_connection_t connection, const char * id, bool value)
+
+      Set the value of an action with the given identifier.
+
+      :Parameters:
+
+
+
+
+   
+
+
+
+Specific Types of Part
+----------------------
+
+The following classes provide functionality for specific types of part.
+
+.. contents::
+   :local:
+
+Antenna
+^^^^^^^
+
+.. note:: If RemoteTech is installed, use the RemoteTech service APIs to interact with antennas.
+          This class is only for stock KSP antennas.
+
+
+.. type:: krpc_SpaceCenter_Antenna_t
+
+   An antenna. Obtained by calling :func:`krpc_SpaceCenter_Part_Antenna`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this antenna.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_State(krpc_connection_t connection, krpc_SpaceCenter_AntennaState_t * result)
+
+      The current state of the antenna.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Deployable(krpc_connection_t connection, bool * result)
+
+      Whether the antenna is deployable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Antenna_set_Deployed(bool value)
+
+      Whether the antenna is deployed.
+
+   
+
+      .. note::
+
+         Fixed antennas are always deployed.
+         Returns an error if you try to deploy a fixed antenna.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CanTransmit(krpc_connection_t connection, bool * result)
+
+      Whether data can be transmitted by this antenna.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Transmit(krpc_connection_t connection)
+
+      Transmit data.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Cancel(krpc_connection_t connection)
+
+      Cancel current transmission of data.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_AllowPartial(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Antenna_set_AllowPartial(bool value)
+
+      Whether partial data transmission is permitted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Power(krpc_connection_t connection, double * result)
+
+      The power of the antenna.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Combinable(krpc_connection_t connection, bool * result)
+
+      Whether the antenna can be combined with other antennae on the vessel
+      to boost the power.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CombinableExponent(krpc_connection_t connection, double * result)
+
+      Exponent used to calculate the combined power of multiple antennae on a vessel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketInterval(krpc_connection_t connection, float * result)
+
+      Interval between sending packets in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketSize(krpc_connection_t connection, float * result)
+
+      Amount of data sent per packet in Mits.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketResourceCost(krpc_connection_t connection, double * result)
+
+      Units of electric charge consumed per packet sent.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_AntennaState_t
+
+   The state of an antenna. See :func:`krpc_SpaceCenter_Antenna_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_DEPLOYED
+
+      Antenna is fully deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_RETRACTED
+
+      Antenna is fully retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_DEPLOYING
+
+      Antenna is being deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_RETRACTING
+
+      Antenna is being retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_ANTENNASTATE_BROKEN
+
+      Antenna is broken.
+
+
+
+Cargo Bay
+^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_CargoBay_t
+
+   A cargo bay. Obtained by calling :func:`krpc_SpaceCenter_Part_CargoBay`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this cargo bay.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_State(krpc_connection_t connection, krpc_SpaceCenter_CargoBayState_t * result)
+
+      The state of the cargo bay.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_Open(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_CargoBay_set_Open(bool value)
+
+      Whether the cargo bay is open.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_CargoBayState_t
+
+   The state of a cargo bay. See :func:`krpc_SpaceCenter_CargoBay_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_OPEN
+
+      Cargo bay is fully open.
+
+
+   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_CLOSED
+
+      Cargo bay closed and locked.
+
+
+   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_OPENING
+
+      Cargo bay is opening.
+
+
+   .. macro:: KRPC_SPACECENTER_CARGOBAYSTATE_CLOSING
+
+      Cargo bay is closing.
+
+
+
+Control Surface
+^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_ControlSurface_t
+
+   An aerodynamic control surface. Obtained by calling :func:`krpc_SpaceCenter_Part_ControlSurface`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this control surface.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_PitchEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_PitchEnabled(bool value)
+
+      Whether the control surface has pitch control enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_YawEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_YawEnabled(bool value)
+
+      Whether the control surface has yaw control enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_RollEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_RollEnabled(bool value)
+
+      Whether the control surface has roll control enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_AuthorityLimiter(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_AuthorityLimiter(float value)
+
+      The authority limiter for the control surface, which controls how far the
+      control surface will move.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Inverted(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_Inverted(bool value)
+
+      Whether the control surface movement is inverted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ControlSurface_set_Deployed(bool value)
+
+      Whether the control surface has been fully deployed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_SurfaceArea(krpc_connection_t connection, float * result)
+
+      Surface area of the control surface in :math:`m^2`.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+
+      The available torque, in Newton meters, that can be produced by this control surface,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
+
+   
+
+
+
+Decoupler
+^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Decoupler_t
+
+   A decoupler. Obtained by calling :func:`krpc_SpaceCenter_Part_Decoupler`
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this decoupler.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Decouple(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      Fires the decoupler. Returns the new vessel created when the decoupler fires.
+      Throws an exception if the decoupler has already fired.
+
+
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :func:`krpc_SpaceCenter_ActiveVessel` no longer refer to the active vessel.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Decoupled(krpc_connection_t connection, bool * result)
+
+      Whether the decoupler has fired.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Staged(krpc_connection_t connection, bool * result)
+
+      Whether the decoupler is enabled in the staging sequence.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Impulse(krpc_connection_t connection, float * result)
+
+      The impulse that the decoupler imparts when it is fired, in Newton seconds.
+
+   
+
+
+
+Docking Port
+^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_DockingPort_t
+
+   A docking port. Obtained by calling :func:`krpc_SpaceCenter_Part_DockingPort`
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this docking port.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_State(krpc_connection_t connection, krpc_SpaceCenter_DockingPortState_t * result)
+
+      The current state of the docking port.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_DockedPart(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part that this docking port is docked to. Returns ``nullptr`` if this
+      docking port is not docked to anything.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Undock(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      Undocks the docking port and returns the new :type:`krpc_SpaceCenter_Vessel_t` that is created.
+      This method can be called for either docking port in a docked pair.
+      Throws an exception if the docking port is not docked to anything.
+
+
+   
+
+      .. note::
+
+         When called, the active vessel may change. It is therefore possible that,
+         after calling this function, the object(s) returned by previous call(s) to
+         :func:`krpc_SpaceCenter_ActiveVessel` no longer refer to the active vessel.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_ReengageDistance(krpc_connection_t connection, float * result)
+
+      The distance a docking port must move away when it undocks before it
+      becomes ready to dock with another port, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_HasShield(krpc_connection_t connection, bool * result)
+
+      Whether the docking port has a shield.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Shielded(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_DockingPort_set_Shielded(bool value)
+
+      The state of the docking ports shield, if it has one.
+
+      Returns ``true`` if the docking port has a shield, and the shield is
+      closed. Otherwise returns ``false``. When set to ``true``, the shield is
+      closed, and when set to ``false`` the shield is opened. If the docking
+      port does not have a shield, setting this attribute has no effect.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_CanRotate(krpc_connection_t connection, bool * result)
+
+      Whether the docking port can be commanded to rotate while docked.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_MaximumRotation(krpc_connection_t connection, float * result)
+
+      Maximum rotation angle in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_MinimumRotation(krpc_connection_t connection, float * result)
+
+      Minimum rotation angle in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_RotationTarget(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_DockingPort_set_RotationTarget(float value)
+
+      Rotation target angle in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_RotationLocked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_DockingPort_set_RotationLocked(bool value)
+
+      Lock rotation. When locked, allows auto-strut to work across the joint.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the docking port, in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction that docking port points in, in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The rotation of the docking port, in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned rotation is in.
+
+      :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+
+      The reference frame that is fixed relative to this docking port, and
+      oriented with the port.
+
+      * The origin is at the position of the docking port.
+      * The axes rotate with the docking port.
+      * The x-axis points out to the right side of the docking port.
+      * The y-axis points in the direction the docking port is facing.
+      * The z-axis points out of the bottom off the docking port.
+
+   
+
+      .. note::
+
+         This reference frame is not necessarily equivalent to the reference frame
+         for the part, returned by :func:`krpc_SpaceCenter_Part_ReferenceFrame`.
+
+      .. figure:: /images/reference-frames/docking-port.png
+         :align: center
+
+         Docking port reference frame origin and axes
+
+      .. figure:: /images/reference-frames/docking-port-inline.png
+         :align: center
+
+         Inline docking port reference frame origin and axes
+
+
+
+.. type:: krpc_SpaceCenter_DockingPortState_t
+
+   The state of a docking port. See :func:`krpc_SpaceCenter_DockingPort_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_READY
+
+      The docking port is ready to dock to another docking port.
+
+
+   .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_DOCKED
+
+      The docking port is docked to another docking port, or docked to
+      another part (from the VAB/SPH).
+
+
+   .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_DOCKING
+
+      The docking port is very close to another docking port,
+      but has not docked. It is using magnetic force to acquire a solid dock.
+
+
+   .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_UNDOCKING
+
+      The docking port has just been undocked from another docking port,
+      and is disabled until it moves away by a sufficient distance
+      (:func:`krpc_SpaceCenter_DockingPort_ReengageDistance`).
+
+
+   .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_SHIELDED
+
+      The docking port has a shield, and the shield is closed.
+
+
+   .. macro:: KRPC_SPACECENTER_DOCKINGPORTSTATE_MOVING
+
+      The docking ports shield is currently opening/closing.
+
+
+
+Engine
+^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Engine_t
+
+   An engine, including ones of various types.
+   For example liquid fuelled gimballed engines, solid rocket boosters and jet engines.
+   Obtained by calling :func:`krpc_SpaceCenter_Part_Engine`.
+
+   .. note::
+
+      For RCS thrusters :func:`krpc_SpaceCenter_Part_RCS`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this engine.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Active(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_Active(bool value)
+
+      Whether the engine is active. Setting this attribute may have no effect,
+      depending on :func:`krpc_SpaceCenter_Engine_CanShutdown` and :func:`krpc_SpaceCenter_Engine_CanRestart`.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Thrust(krpc_connection_t connection, float * result)
+
+      The current amount of thrust being produced by the engine, in Newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_AvailableThrust(krpc_connection_t connection, float * result)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the engine's current :func:`krpc_SpaceCenter_Engine_ThrustLimit` and atmospheric conditions
+      into account.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_AvailableThrustAt(krpc_connection_t connection, float * result, double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and with its throttle set to 100%.
+      Returns zero if the engine does not have any fuel.
+      Takes the given pressure into account.
+
+      :Parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_MaxThrust(krpc_connection_t connection, float * result)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_MaxThrustAt(krpc_connection_t connection, float * result, double pressure)
+
+      The amount of thrust, in Newtons, that would be produced by the engine
+      when activated and fueled, with its throttle and throttle limiter set to 100%.
+      Takes the given pressure into account.
+
+      :Parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_MaxVacuumThrust(krpc_connection_t connection, float * result)
+
+      The maximum amount of thrust that can be produced by the engine in a
+      vacuum, in Newtons. This is the amount of thrust produced by the engine
+      when activated, :func:`krpc_SpaceCenter_Engine_ThrustLimit` is set to 100%, the main
+      vessel's throttle is set to 100% and the engine is in a vacuum.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_ThrustLimit(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_ThrustLimit(float value)
+
+      The thrust limiter of the engine. A value between 0 and 1. Setting this
+      attribute may have no effect, for example the thrust limit for a solid
+      rocket booster cannot be changed in flight.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Thrusters(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The components of the engine that generate thrust.
+
+   
+
+      .. note::
+
+         For example, this corresponds to the rocket nozzel on a solid rocket booster,
+         or the individual nozzels on a RAPIER engine.
+         The overall thrust produced by the engine, as reported by :func:`krpc_SpaceCenter_Engine_AvailableThrust`,
+         :func:`krpc_SpaceCenter_Engine_MaxThrust` and others, is the sum of the thrust generated by each thruster.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_SpecificImpulse(krpc_connection_t connection, float * result)
+
+      The current specific impulse of the engine, in seconds. Returns zero
+      if the engine is not active.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_SpecificImpulseAt(krpc_connection_t connection, float * result, double pressure)
+
+      The specific impulse of the engine under the given pressure, in seconds. Returns zero
+      if the engine is not active.
+
+      :Parameters:
+
+       * **pressure** -- Atmospheric pressure in atmospheres
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_VacuumSpecificImpulse(krpc_connection_t connection, float * result)
+
+      The vacuum specific impulse of the engine, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_KerbinSeaLevelSpecificImpulse(krpc_connection_t connection, float * result)
+
+      The specific impulse of the engine at sea level on Kerbin, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_PropellantNames(krpc_connection_t connection, krpc_list_string_t * result)
+
+      The names of the propellants that the engine consumes.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_PropellantRatios(krpc_connection_t connection, krpc_dictionary_string_float_t * result)
+
+      The ratio of resources that the engine consumes. A dictionary mapping resource names
+      to the ratio at which they are consumed by the engine.
+
+   
+
+      .. note::
+
+         For example, if the ratios are 0.6 for LiquidFuel and 0.4 for Oxidizer, then for every
+         0.6 units of LiquidFuel that the engine burns, it will burn 0.4 units of Oxidizer.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Propellants(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The propellants that the engine consumes.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasFuel(krpc_connection_t connection, bool * result)
+
+      Whether the engine has any fuel available.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Throttle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_Throttle(float value)
+
+      The current throttle setting for the engine. A value between 0 and 1.
+      This is not necessarily the same as the vessel's main throttle
+      setting, as some engines take time to adjust their throttle
+      (such as jet engines), or independent throttle may be enabled.
+
+      When the engine's independent throttle is enabled
+      (see :func:`krpc_SpaceCenter_Engine_IndependentThrottle`), can be used to set the throttle percentage.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_ThrottleLocked(krpc_connection_t connection, bool * result)
+
+      Whether the :func:`krpc_SpaceCenter_Control_Throttle` affects the engine. For example,
+      this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
+      boosters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_IndependentThrottle(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_IndependentThrottle(bool value)
+
+      Whether the independent throttle is enabled for the engine.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_CanRestart(krpc_connection_t connection, bool * result)
+
+      Whether the engine can be restarted once shutdown. If the engine cannot be shutdown,
+      returns ``false``. For example, this is ``true`` for liquid fueled rockets
+      and ``false`` for solid rocket boosters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_CanShutdown(krpc_connection_t connection, bool * result)
+
+      Whether the engine can be shutdown once activated. For example, this is
+      ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasModes(krpc_connection_t connection, bool * result)
+
+      Whether the engine has multiple modes of operation.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Mode(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_Mode(const char * value)
+
+      The name of the current engine mode.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Modes(krpc_connection_t connection, krpc_dictionary_string_object_t * result)
+
+      The available modes for the engine.
+      A dictionary mapping mode names to :type:`krpc_SpaceCenter_Engine_t` objects.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_ToggleMode(krpc_connection_t connection)
+
+      Toggle the current engine mode.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_AutoModeSwitch(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_AutoModeSwitch(bool value)
+
+      Whether the engine will automatically switch modes.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_Gimballed(krpc_connection_t connection, bool * result)
+
+      Whether the engine is gimballed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalRange(krpc_connection_t connection, float * result)
+
+      The range over which the gimbal can move, in degrees.
+      Returns 0 if the engine is not gimballed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalLocked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_GimbalLocked(bool value)
+
+      Whether the engines gimbal is locked in place. Setting this attribute has
+      no effect if the engine is not gimballed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalLimit(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Engine_set_GimbalLimit(float value)
+
+      The gimbal limiter of the engine. A value between 0 and 1.
+      Returns 0 if the gimbal is locked.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Engine_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+
+      The available torque, in Newton meters, that can be produced by this engine,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
+      Returns zero if the engine is inactive, or not gimballed.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_Propellant_t
+
+   A propellant for an engine. Obtains by calling :func:`krpc_SpaceCenter_Engine_Propellants`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_Name(krpc_connection_t connection, char * * result)
+
+      The name of the propellant.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_CurrentAmount(krpc_connection_t connection, double * result)
+
+      The current amount of propellant.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_CurrentRequirement(krpc_connection_t connection, double * result)
+
+      The required amount of propellant.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_TotalResourceAvailable(krpc_connection_t connection, double * result)
+
+      The total amount of the underlying resource currently reachable given
+      resource flow rules.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_TotalResourceCapacity(krpc_connection_t connection, double * result)
+
+      The total vehicle capacity for the underlying propellant resource,
+      restricted by resource flow rules.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_IgnoreForIsp(krpc_connection_t connection, bool * result)
+
+      If this propellant should be ignored when calculating required mass flow
+      given specific impulse.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_IgnoreForThrustCurve(krpc_connection_t connection, bool * result)
+
+      If this propellant should be ignored for thrust curve calculations.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_DrawStackGauge(krpc_connection_t connection, bool * result)
+
+      If this propellant has a stack gauge or not.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_IsDeprived(krpc_connection_t connection, bool * result)
+
+      If this propellant is deprived.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Propellant_Ratio(krpc_connection_t connection, float * result)
+
+      The propellant ratio.
+
+   
+
+
+
+Experiment
+^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Experiment_t
+
+   Obtained by calling :func:`krpc_SpaceCenter_Part_Experiment`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this experiment.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Name(krpc_connection_t connection, char * * result)
+
+      Internal name of the experiment, as used in
+      `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Title(krpc_connection_t connection, char * * result)
+
+      Title of the experiment, as shown on the in-game UI.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Run(krpc_connection_t connection)
+
+      Run the experiment.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Transmit(krpc_connection_t connection)
+
+      Transmit all experimental data contained by this part.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Dump(krpc_connection_t connection)
+
+      Dump the experimental data contained by the experiment.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Reset(krpc_connection_t connection)
+
+      Reset the experiment.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Deployed(krpc_connection_t connection, bool * result)
+
+      Whether the experiment has been deployed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Rerunnable(krpc_connection_t connection, bool * result)
+
+      Whether the experiment can be re-run.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Inoperable(krpc_connection_t connection, bool * result)
+
+      Whether the experiment is inoperable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_HasData(krpc_connection_t connection, bool * result)
+
+      Whether the experiment contains data.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Data(krpc_connection_t connection, krpc_list_object_t * result)
+
+      The data contained in this experiment.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Biome(krpc_connection_t connection, char * * result)
+
+      The name of the biome the experiment is currently in.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Available(krpc_connection_t connection, bool * result)
+
+      Determines if the experiment is available given the current conditions.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Experiment_ScienceSubject(krpc_connection_t connection, krpc_SpaceCenter_ScienceSubject_t * result)
+
+      Containing information on the corresponding specific science result for the current
+      conditions. Returns ``nullptr`` if the experiment is unavailable.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ScienceData_t
+
+   Obtained by calling :func:`krpc_SpaceCenter_Experiment_Data`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceData_DataAmount(krpc_connection_t connection, float * result)
+
+      Data amount.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceData_ScienceValue(krpc_connection_t connection, float * result)
+
+      Science value.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceData_TransmitValue(krpc_connection_t connection, float * result)
+
+      Transmit value.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ScienceSubject_t
+
+   Obtained by calling :func:`krpc_SpaceCenter_Experiment_ScienceSubject`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_Title(krpc_connection_t connection, char * * result)
+
+      Title of science subject, displayed in science archives
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_IsComplete(krpc_connection_t connection, bool * result)
+
+      Whether the experiment has been completed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_Science(krpc_connection_t connection, float * result)
+
+      Amount of science already earned from this subject, not updated until after
+      transmission/recovery.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_ScienceCap(krpc_connection_t connection, float * result)
+
+      Total science allowable for this subject.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_DataScale(krpc_connection_t connection, float * result)
+
+      Multiply science value by this to determine data amount in mits.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_SubjectValue(krpc_connection_t connection, float * result)
+
+      Multiplier for specific Celestial Body/Experiment Situation combination.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_ScientificValue(krpc_connection_t connection, float * result)
+
+      Diminishing value multiplier for decreasing the science value returned from repeated
+      experiments.
+
+   
+
+
+
+Fairing
+^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Fairing_t
+
+   A fairing. Obtained by calling :func:`krpc_SpaceCenter_Part_Fairing`.
+   Supports both stock fairings, and those from the ProceduralFairings mod.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this fairing.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Jettison(krpc_connection_t connection)
+
+      Jettison the fairing. Has no effect if it has already been jettisoned.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Jettisoned(krpc_connection_t connection, bool * result)
+
+      Whether the fairing has been jettisoned.
+
+   
+
+
+
+Intake
+^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Intake_t
+
+   An air intake. Obtained by calling :func:`krpc_SpaceCenter_Part_Intake`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Intake_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this intake.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Intake_Open(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Intake_set_Open(bool value)
+
+      Whether the intake is open.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Intake_Speed(krpc_connection_t connection, float * result)
+
+      Speed of the flow into the intake, in :math:`m/s`.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Intake_Flow(krpc_connection_t connection, float * result)
+
+      The rate of flow into the intake, in units of resource per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Intake_Area(krpc_connection_t connection, float * result)
+
+      The area of the intake's opening, in square meters.
+
+   
+
+
+
+Leg
+^^^
+
+
+.. type:: krpc_SpaceCenter_Leg_t
+
+   A landing leg. Obtained by calling :func:`krpc_SpaceCenter_Part_Leg`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this landing leg.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_State(krpc_connection_t connection, krpc_SpaceCenter_LegState_t * result)
+
+      The current state of the landing leg.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_Deployable(krpc_connection_t connection, bool * result)
+
+      Whether the leg is deployable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Leg_set_Deployed(bool value)
+
+      Whether the landing leg is deployed.
+
+   
+
+      .. note::
+
+         Fixed landing legs are always deployed.
+         Returns an error if you try to deploy fixed landing gear.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Leg_IsGrounded(krpc_connection_t connection, bool * result)
+
+      Returns whether the leg is touching the ground.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_LegState_t
+
+   The state of a landing leg. See :func:`krpc_SpaceCenter_Leg_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_LEGSTATE_DEPLOYED
+
+      Landing leg is fully deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_LEGSTATE_RETRACTED
+
+      Landing leg is fully retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_LEGSTATE_DEPLOYING
+
+      Landing leg is being deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_LEGSTATE_RETRACTING
+
+      Landing leg is being retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_LEGSTATE_BROKEN
+
+      Landing leg is broken.
+
+
+
+Launch Clamp
+^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_LaunchClamp_t
+
+   A launch clamp. Obtained by calling :func:`krpc_SpaceCenter_Part_LaunchClamp`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchClamp_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this launch clamp.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_LaunchClamp_Release(krpc_connection_t connection)
+
+      Releases the docking clamp. Has no effect if the clamp has already been released.
+
+
+   
+
+
+
+Light
+^^^^^
+
+
+.. type:: krpc_SpaceCenter_Light_t
+
+   A light. Obtained by calling :func:`krpc_SpaceCenter_Part_Light`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Light_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this light.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Light_Active(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Light_set_Active(bool value)
+
+      Whether the light is switched on.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Light_Color(krpc_connection_t connection, krpc_tuple_float_float_float_t * result)
+   .. function:: void krpc_SpaceCenter_Light_set_Color(const krpc_tuple_float_float_float_t * value)
+
+      The color of the light, as an RGB triple.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Light_Blink(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Light_set_Blink(bool value)
+
+      Whether blinking is enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Light_BlinkRate(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Light_set_BlinkRate(float value)
+
+      The blink rate of the light.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Light_PowerUsage(krpc_connection_t connection, float * result)
+
+      The current power usage, in units of charge per second.
+
+   
+
+
+
+Parachute
+^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Parachute_t
+
+   A parachute. Obtained by calling :func:`krpc_SpaceCenter_Part_Parachute`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this parachute.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Deploy(krpc_connection_t connection)
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been deployed.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Deployed(krpc_connection_t connection, bool * result)
+
+      Whether the parachute has been deployed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Arm(krpc_connection_t connection)
+
+      Deploys the parachute. This has no effect if the parachute has already
+      been armed or deployed.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Armed(krpc_connection_t connection, bool * result)
+
+      Whether the parachute has been armed or deployed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Cut(krpc_connection_t connection)
+
+      Cuts the parachute.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_State(krpc_connection_t connection, krpc_SpaceCenter_ParachuteState_t * result)
+
+      The current state of the parachute.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_DeployAltitude(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Parachute_set_DeployAltitude(float value)
+
+      The altitude at which the parachute will full deploy, in meters.
+      Only applicable to stock parachutes.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Parachute_DeployMinPressure(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Parachute_set_DeployMinPressure(float value)
+
+      The minimum pressure at which the parachute will semi-deploy, in atmospheres.
+      Only applicable to stock parachutes.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ParachuteState_t
+
+   The state of a parachute. See :func:`krpc_SpaceCenter_Parachute_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_STOWED
+
+      The parachute is safely tucked away inside its housing.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_ARMED
+
+      The parachute is armed for deployment.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_SEMIDEPLOYED
+
+      The parachute has been deployed and is providing some drag,
+      but is not fully deployed yet. (Stock parachutes only)
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_DEPLOYED
+
+      The parachute is fully deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_PARACHUTESTATE_CUT
+
+      The parachute has been cut.
+
+
+
+Radiator
+^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Radiator_t
+
+   A radiator. Obtained by calling :func:`krpc_SpaceCenter_Part_Radiator`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Radiator_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this radiator.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Radiator_Deployable(krpc_connection_t connection, bool * result)
+
+      Whether the radiator is deployable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Radiator_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Radiator_set_Deployed(bool value)
+
+      For a deployable radiator, ``true`` if the radiator is extended.
+      If the radiator is not deployable, this is always ``true``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Radiator_State(krpc_connection_t connection, krpc_SpaceCenter_RadiatorState_t * result)
+
+      The current state of the radiator.
+
+   
+
+      .. note::
+
+         A fixed radiator is always :macro:`KRPC_SPACECENTER_RADIATORSTATE_EXTENDED`.
+
+
+
+.. type:: krpc_SpaceCenter_RadiatorState_t
+
+   The state of a radiator. :func:`krpc_SpaceCenter_Radiator_State`
+
+
+   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_EXTENDED
+
+      Radiator is fully extended.
+
+
+   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_RETRACTED
+
+      Radiator is fully retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_EXTENDING
+
+      Radiator is being extended.
+
+
+   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_RETRACTING
+
+      Radiator is being retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_RADIATORSTATE_BROKEN
+
+      Radiator is broken.
+
+
+
+Resource Converter
+^^^^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_ResourceConverter_t
+
+   A resource converter. Obtained by calling :func:`krpc_SpaceCenter_Part_ResourceConverter`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Count(krpc_connection_t connection, int32_t * result)
+
+      The number of converters in the part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Name(krpc_connection_t connection, char * * result, int32_t index)
+
+      The name of the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Active(krpc_connection_t connection, bool * result, int32_t index)
+
+      True if the specified converter is active.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Start(krpc_connection_t connection, int32_t index)
+
+      Start the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Stop(krpc_connection_t connection, int32_t index)
+
+      Stop the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_State(krpc_connection_t connection, krpc_SpaceCenter_ResourceConverterState_t * result, int32_t index)
+
+      The state of the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_StatusInfo(krpc_connection_t connection, char * * result, int32_t index)
+
+      Status information for the specified converter.
+      This is the full status message shown in the in-game UI.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Inputs(krpc_connection_t connection, krpc_list_string_t * result, int32_t index)
+
+      List of the names of resources consumed by the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Outputs(krpc_connection_t connection, krpc_list_string_t * result, int32_t index)
+
+      List of the names of resources produced by the specified converter.
+
+      :Parameters:
+
+       * **index** -- Index of the converter.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_OptimumCoreTemperature(krpc_connection_t connection, float * result)
+
+      The core temperature at which the converter will operate with peak efficiency, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_CoreTemperature(krpc_connection_t connection, float * result)
+
+      The core temperature of the converter, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_ThermalEfficiency(krpc_connection_t connection, float * result)
+
+      The thermal efficiency of the converter, as a percentage of its maximum.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ResourceConverterState_t
+
+   The state of a resource converter. See :func:`krpc_SpaceCenter_ResourceConverter_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_RUNNING
+
+      Converter is running.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_IDLE
+
+      Converter is idle.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_MISSINGRESOURCE
+
+      Converter is missing a required resource.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_STORAGEFULL
+
+      No available storage for output resource.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_CAPACITY
+
+      At preset resource capacity.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCECONVERTERSTATE_UNKNOWN
+
+      Unknown state. Possible with modified resource converters.
+      In this case, check :func:`krpc_SpaceCenter_ResourceConverter_StatusInfo` for more information.
+
+
+
+Resource Harvester
+^^^^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_ResourceHarvester_t
+
+   A resource harvester (drill). Obtained by calling :func:`krpc_SpaceCenter_Part_ResourceHarvester`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this harvester.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_State(krpc_connection_t connection, krpc_SpaceCenter_ResourceHarvesterState_t * result)
+
+      The state of the harvester.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ResourceHarvester_set_Deployed(bool value)
+
+      Whether the harvester is deployed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_Active(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ResourceHarvester_set_Active(bool value)
+
+      Whether the harvester is actively drilling.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_ExtractionRate(krpc_connection_t connection, float * result)
+
+      The rate at which the drill is extracting ore, in units per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_ThermalEfficiency(krpc_connection_t connection, float * result)
+
+      The thermal efficiency of the drill, as a percentage of its maximum.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_CoreTemperature(krpc_connection_t connection, float * result)
+
+      The core temperature of the drill, in Kelvin.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_OptimumCoreTemperature(krpc_connection_t connection, float * result)
+
+      The core temperature at which the drill will operate with peak efficiency, in Kelvin.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_ResourceHarvesterState_t
+
+   The state of a resource harvester. See :func:`krpc_SpaceCenter_ResourceHarvester_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_DEPLOYING
+
+      The drill is deploying.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_DEPLOYED
+
+      The drill is deployed and ready.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_RETRACTING
+
+      The drill is retracting.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_RETRACTED
+
+      The drill is retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_RESOURCEHARVESTERSTATE_ACTIVE
+
+      The drill is running.
+
+
+
+Reaction Wheel
+^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_ReactionWheel_t
+
+   A reaction wheel. Obtained by calling :func:`krpc_SpaceCenter_Part_ReactionWheel`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this reaction wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_Active(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_ReactionWheel_set_Active(bool value)
+
+      Whether the reaction wheel is active.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_Broken(krpc_connection_t connection, bool * result)
+
+      Whether the reaction wheel is broken.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+
+      The available torque, in Newton meters, that can be produced by this reaction wheel,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
+      Returns zero if the reaction wheel is inactive or broken.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_MaxTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+
+      The maximum torque, in Newton meters, that can be produced by this reaction wheel,
+      when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
+      These axes correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
+
+   
+
+
+
+Resource Drain
+^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_ResourceDrain_t
+
+   A resource drain. Obtained by calling :func:`krpc_SpaceCenter_Part_ResourceDrain`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this resource drain.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_AvailableResources(krpc_connection_t connection, krpc_list_object_t * result)
+
+      List of available resources.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_SetResource(krpc_connection_t connection, krpc_SpaceCenter_Resource_t resource, bool enabled)
+
+      Whether the given resource should be drained.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_CheckResource(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Resource_t resource)
+
+      Whether the provided resource is enabled for draining.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_DrainMode(krpc_connection_t connection, krpc_SpaceCenter_DrainMode_t * result)
+   .. function:: void krpc_SpaceCenter_ResourceDrain_set_DrainMode(krpc_SpaceCenter_DrainMode_t value)
+
+      The drain mode.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_MinRate(krpc_connection_t connection, float * result)
+
+      Minimum possible drain rate
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_MaxRate(krpc_connection_t connection, float * result)
+
+      Maximum possible drain rate.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Rate(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_ResourceDrain_set_Rate(float value)
+
+      Current drain rate.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Start(krpc_connection_t connection)
+
+      Activates resource draining for all enabled parts.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Stop(krpc_connection_t connection)
+
+      Turns off resource draining.
+
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_DrainMode_t
+
+   Resource drain mode.
+   See :func:`krpc_SpaceCenter_ResourceDrain_DrainMode`.
+
+
+   .. macro:: KRPC_SPACECENTER_DRAINMODE_PART
+
+      Drains from the parent part.
+
+
+   .. macro:: KRPC_SPACECENTER_DRAINMODE_VESSEL
+
+      Drains from all available parts.
+
+
+
+Robotic Controller
+^^^^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_RoboticController_t
+
+   A robotic controller. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticController`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this controller.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_HasPart(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Part_t part)
+
+      Whether the controller has a part.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Axes(krpc_connection_t connection, krpc_list_list_string_t * result)
+
+      The axes for the controller.
+
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_AddAxis(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Module_t module, const char * fieldName)
+
+      Add an axis to the controller.
+
+      :Parameters:
+
+
+
+
+      :returns: Returns ``true`` if the axis is added successfully.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_AddKeyFrame(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Module_t module, const char * fieldName, float time, float value)
+
+      Add key frame value for controller axis.
+
+      :Parameters:
+
+
+
+
+
+
+      :returns: Returns ``true`` if the key frame is added successfully.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_ClearAxis(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Module_t module, const char * fieldName)
+
+      Clear axis.
+
+      :Parameters:
+
+
+
+
+      :returns: Returns ``true`` if the axis is cleared successfully.
+   
+
+
+
+Robotic Hinge
+^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_RoboticHinge_t
+
+   A robotic hinge. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticHinge`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this robotic hinge.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_TargetAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_TargetAngle(float value)
+
+      Target angle.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_CurrentAngle(krpc_connection_t connection, float * result)
+
+      Current angle.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Rate(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_Rate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Damping(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_Damping(float value)
+
+      Damping percentage.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Locked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_Locked(bool value)
+
+      Lock movement.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MotorEngaged(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticHinge_set_MotorEngaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MoveHome(krpc_connection_t connection)
+
+      Move hinge to it's built position.
+
+
+   
+
+
+
+Robotic Piston
+^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_RoboticPiston_t
+
+   A robotic piston part. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticPiston`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this robotic piston.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_TargetExtension(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_TargetExtension(float value)
+
+      Target extension of the piston.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_CurrentExtension(krpc_connection_t connection, float * result)
+
+      Current extension of the piston.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Rate(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_Rate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Damping(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_Damping(float value)
+
+      Damping percentage.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Locked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_Locked(bool value)
+
+      Lock movement.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MotorEngaged(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticPiston_set_MotorEngaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MoveHome(krpc_connection_t connection)
+
+      Move piston to it's built position.
+
+
+   
+
+
+
+Robotic Rotation
+^^^^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_RoboticRotation_t
+
+   A robotic rotation servo. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticRotation`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this robotic rotation servo.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_TargetAngle(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_TargetAngle(float value)
+
+      Target angle.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_CurrentAngle(krpc_connection_t connection, float * result)
+
+      Current angle.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Rate(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_Rate(float value)
+
+      Target movement rate in degrees per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Damping(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_Damping(float value)
+
+      Damping percentage.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Locked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_Locked(bool value)
+
+      Lock Movement
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MotorEngaged(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotation_set_MotorEngaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MoveHome(krpc_connection_t connection)
+
+      Move rotation servo to it's built position.
+
+
+   
+
+
+
+Robotic Rotor
+^^^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_RoboticRotor_t
+
+   A robotic rotor. Obtained by calling :func:`krpc_SpaceCenter_Part_RoboticRotor`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this robotic rotor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_TargetRPM(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_TargetRPM(float value)
+
+      Target RPM.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_CurrentRPM(krpc_connection_t connection, float * result)
+
+      Current RPM.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Inverted(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_Inverted(bool value)
+
+      Whether the rotor direction is inverted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_TorqueLimit(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_TorqueLimit(float value)
+
+      Torque limit percentage.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Locked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_Locked(bool value)
+
+      Lock movement.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_MotorEngaged(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RoboticRotor_set_MotorEngaged(bool value)
+
+      Whether the motor is engaged.
+
+   
+
+
+
+RCS
+^^^
+
+
+.. type:: krpc_SpaceCenter_RCS_t
+
+   An RCS block or thruster. Obtained by calling :func:`krpc_SpaceCenter_Part_RCS`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this RCS.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Active(krpc_connection_t connection, bool * result)
+
+      Whether the RCS thrusters are active.
+      An RCS thruster is inactive if the RCS action group is disabled
+      (:func:`krpc_SpaceCenter_Control_RCS`), the RCS thruster itself is not enabled
+      (:func:`krpc_SpaceCenter_RCS_Enabled`) or it is covered by a fairing (:func:`krpc_SpaceCenter_Part_Shielded`).
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Enabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_Enabled(bool value)
+
+      Whether the RCS thrusters are enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_PitchEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_PitchEnabled(bool value)
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_YawEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_YawEnabled(bool value)
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_RollEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_RollEnabled(bool value)
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_ForwardEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_ForwardEnabled(bool value)
+
+      Whether the RCS thruster will fire when pitch control input is given.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_UpEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_UpEnabled(bool value)
+
+      Whether the RCS thruster will fire when yaw control input is given.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_RightEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_RightEnabled(bool value)
+
+      Whether the RCS thruster will fire when roll control input is given.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+
+      The available torque, in Newton meters, that can be produced by this RCS,
+      in the positive and negative pitch, roll and yaw axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
+      Returns zero if RCS is disable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableForce(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
+
+      The available force, in Newtons, that can be produced by this RCS,
+      in the positive and negative x, y and z axes of the vessel. These axes
+      correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
+      Returns zero if RCS is disabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableThrust(krpc_connection_t connection, float * result)
+
+      The amount of thrust, in Newtons, that would be produced by the thruster when activated.
+      Returns zero if the thruster does not have any fuel.
+      Takes the thrusters current :func:`krpc_SpaceCenter_RCS_ThrustLimit` and atmospheric conditions
+      into account.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_MaxThrust(krpc_connection_t connection, float * result)
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active,
+      in Newtons.
+      Takes the thrusters current :func:`krpc_SpaceCenter_RCS_ThrustLimit` and atmospheric conditions
+      into account.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_MaxVacuumThrust(krpc_connection_t connection, float * result)
+
+      The maximum amount of thrust that can be produced by the RCS thrusters when active
+      in a vacuum, in Newtons.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_ThrustLimit(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_RCS_set_ThrustLimit(float value)
+
+      The thrust limiter of the thruster. A value between 0 and 1.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Thrusters(krpc_connection_t connection, krpc_list_object_t * result)
+
+      A list of thrusters, one of each nozzel in the RCS part.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_SpecificImpulse(krpc_connection_t connection, float * result)
+
+      The current specific impulse of the RCS, in seconds. Returns zero
+      if the RCS is not active.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_VacuumSpecificImpulse(krpc_connection_t connection, float * result)
+
+      The vacuum specific impulse of the RCS, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_KerbinSeaLevelSpecificImpulse(krpc_connection_t connection, float * result)
+
+      The specific impulse of the RCS at sea level on Kerbin, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_Propellants(krpc_connection_t connection, krpc_list_string_t * result)
+
+      The names of resources that the RCS consumes.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_PropellantRatios(krpc_connection_t connection, krpc_dictionary_string_float_t * result)
+
+      The ratios of resources that the RCS consumes. A dictionary mapping resource names
+      to the ratios at which they are consumed by the RCS.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_RCS_HasFuel(krpc_connection_t connection, bool * result)
+
+      Whether the RCS has fuel available.
+
+   
+
+
+
+Sensor
+^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Sensor_t
+
+   A sensor, such as a thermometer. Obtained by calling :func:`krpc_SpaceCenter_Part_Sensor`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Sensor_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this sensor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Sensor_Active(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Sensor_set_Active(bool value)
+
+      Whether the sensor is active.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Sensor_Value(krpc_connection_t connection, char * * result)
+
+      The current value of the sensor.
+
+   
+
+
+
+Solar Panel
+^^^^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_SolarPanel_t
+
+   A solar panel. Obtained by calling :func:`krpc_SpaceCenter_Part_SolarPanel`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this solar panel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Deployable(krpc_connection_t connection, bool * result)
+
+      Whether the solar panel is deployable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_SolarPanel_set_Deployed(bool value)
+
+      Whether the solar panel is extended.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_State(krpc_connection_t connection, krpc_SpaceCenter_SolarPanelState_t * result)
+
+      The current state of the solar panel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_EnergyFlow(krpc_connection_t connection, float * result)
+
+      The current amount of energy being generated by the solar panel, in
+      units of charge per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_SunExposure(krpc_connection_t connection, float * result)
+
+      The current amount of sunlight that is incident on the solar panel,
+      as a percentage. A value between 0 and 1.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_SolarPanelState_t
+
+   The state of a solar panel. See :func:`krpc_SpaceCenter_SolarPanel_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_EXTENDED
+
+      Solar panel is fully extended.
+
+
+   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_RETRACTED
+
+      Solar panel is fully retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_EXTENDING
+
+      Solar panel is being extended.
+
+
+   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_RETRACTING
+
+      Solar panel is being retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_SOLARPANELSTATE_BROKEN
+
+      Solar panel is broken.
+
+
+
+Thruster
+^^^^^^^^
+
+
+.. type:: krpc_SpaceCenter_Thruster_t
+
+   The component of an :type:`krpc_SpaceCenter_Engine_t` or :type:`krpc_SpaceCenter_RCS_t` part that generates thrust.
+   Can obtained by calling :func:`krpc_SpaceCenter_Engine_Thrusters` or :func:`krpc_SpaceCenter_RCS_Thrusters`.
+
+   .. note::
+
+      Engines can consist of multiple thrusters.
+      For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
+      four thrusters.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The :func:`krpc_SpaceCenter_Thruster_Part` that contains this thruster.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_ThrustPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position at which the thruster generates thrust, in the given reference frame.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_ThrustDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction of the force generated by the thruster, in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_ThrustReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+
+      A reference frame that is fixed relative to the thruster and orientated with
+      its thrust direction (:func:`krpc_SpaceCenter_Thruster_ThrustDirection`).
+      For gimballed engines, this takes into account the current rotation of the gimbal.
+
+      * The origin is at the position of thrust for this thruster
+        (:func:`krpc_SpaceCenter_Thruster_ThrustPosition`).
+      * The axes rotate with the thrust direction.
+        This is the direction in which the thruster expels propellant, including any gimballing.
+      * The y-axis points along the thrust direction.
+      * The x-axis and z-axis are perpendicular to the thrust direction.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_Gimballed(krpc_connection_t connection, bool * result)
+
+      Whether the thruster is gimballed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_GimbalPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      Position around which the gimbal pivots.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_GimbalAngle(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The current gimbal angle in the pitch, roll and yaw axes, in degrees.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_InitialThrustPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position at which the thruster generates thrust, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+      .. note::
+
+         This position can move when the gimbal rotates. This is because the thrust position and
+         gimbal position are not necessarily the same.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Thruster_InitialThrustDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction of the force generated by the thruster, when the engine is in its
+      initial position (no gimballing), in the given reference frame.
+      This is opposite to the direction in which the thruster expels propellant.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+
+
+Wheel
+^^^^^
+
+
+.. type:: krpc_SpaceCenter_Wheel_t
+
+   A wheel. Includes landing gear and rover wheels.
+   Obtained by calling :func:`krpc_SpaceCenter_Part_Wheel`.
+   Can be used to control the motors, steering and deployment of wheels, among other things.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Part(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part object for this wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_State(krpc_connection_t connection, krpc_SpaceCenter_WheelState_t * result)
+
+      The current state of the wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Radius(krpc_connection_t connection, float * result)
+
+      Radius of the wheel, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Grounded(krpc_connection_t connection, bool * result)
+
+      Whether the wheel is touching the ground.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_HasBrakes(krpc_connection_t connection, bool * result)
+
+      Whether the wheel has brakes.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Brakes(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_Brakes(float value)
+
+      The braking force, as a percentage of maximum, when the brakes are applied.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_AutoFrictionControl(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_AutoFrictionControl(bool value)
+
+      Whether automatic friction control is enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_ManualFrictionControl(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_ManualFrictionControl(float value)
+
+      Manual friction control value. Only has an effect if automatic friction control is disabled.
+      A value between 0 and 5 inclusive.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Deployable(krpc_connection_t connection, bool * result)
+
+      Whether the wheel is deployable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Deployed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_Deployed(bool value)
+
+      Whether the wheel is deployed.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Powered(krpc_connection_t connection, bool * result)
+
+      Whether the wheel is powered by a motor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_MotorEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_MotorEnabled(bool value)
+
+      Whether the motor is enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_MotorInverted(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_MotorInverted(bool value)
+
+      Whether the direction of the motor is inverted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_MotorState(krpc_connection_t connection, krpc_SpaceCenter_MotorState_t * result)
+
+      Whether the direction of the motor is inverted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_MotorOutput(krpc_connection_t connection, float * result)
+
+      The output of the motor. This is the torque currently being generated, in Newton meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_TractionControlEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_TractionControlEnabled(bool value)
+
+      Whether automatic traction control is enabled.
+      A wheel only has traction control if it is powered.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_TractionControl(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_TractionControl(float value)
+
+      Setting for the traction control.
+      Only takes effect if the wheel has automatic traction control enabled.
+      A value between 0 and 5 inclusive.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_DriveLimiter(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_DriveLimiter(float value)
+
+      Manual setting for the motor limiter.
+      Only takes effect if the wheel has automatic traction control disabled.
+      A value between 0 and 100 inclusive.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Steerable(krpc_connection_t connection, bool * result)
+
+      Whether the wheel has steering.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SteeringEnabled(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_SteeringEnabled(bool value)
+
+      Whether the wheel steering is enabled.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SteeringInverted(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_SteeringInverted(bool value)
+
+      Whether the wheel steering is inverted.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SteeringAngleLimit(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_SteeringAngleLimit(float value)
+
+      The steering angle limit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SteeringResponseTime(krpc_connection_t connection, float * result)
+   .. function:: void krpc_SpaceCenter_Wheel_set_SteeringResponseTime(float value)
+
+      Steering response time.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_HasSuspension(krpc_connection_t connection, bool * result)
+
+      Whether the wheel has suspension.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SuspensionSpringStrength(krpc_connection_t connection, float * result)
+
+      Suspension spring strength, as set in the editor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_SuspensionDamperStrength(krpc_connection_t connection, float * result)
+
+      Suspension damper strength, as set in the editor.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Broken(krpc_connection_t connection, bool * result)
+
+      Whether the wheel is broken.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Repairable(krpc_connection_t connection, bool * result)
+
+      Whether the wheel is repairable.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Stress(krpc_connection_t connection, float * result)
+
+      Current stress on the wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_StressTolerance(krpc_connection_t connection, float * result)
+
+      Stress tolerance of the wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_StressPercentage(krpc_connection_t connection, float * result)
+
+      Current stress on the wheel as a percentage of its stress tolerance.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Deflection(krpc_connection_t connection, float * result)
+
+      Current deflection of the wheel.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Wheel_Slip(krpc_connection_t connection, float * result)
+
+      Current slip of the wheel.
+
+   
+
+
+
+.. type:: krpc_SpaceCenter_WheelState_t
+
+   The state of a wheel. See :func:`krpc_SpaceCenter_Wheel_State`.
+
+
+   .. macro:: KRPC_SPACECENTER_WHEELSTATE_DEPLOYED
+
+      Wheel is fully deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_WHEELSTATE_RETRACTED
+
+      Wheel is fully retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_WHEELSTATE_DEPLOYING
+
+      Wheel is being deployed.
+
+
+   .. macro:: KRPC_SPACECENTER_WHEELSTATE_RETRACTING
+
+      Wheel is being retracted.
+
+
+   .. macro:: KRPC_SPACECENTER_WHEELSTATE_BROKEN
+
+      Wheel is broken.
+
+
+
+.. type:: krpc_SpaceCenter_MotorState_t
+
+   The state of the motor on a powered wheel. See :func:`krpc_SpaceCenter_Wheel_MotorState`.
+
+
+   .. macro:: KRPC_SPACECENTER_MOTORSTATE_IDLE
+
+      The motor is idle.
+
+
+   .. macro:: KRPC_SPACECENTER_MOTORSTATE_RUNNING
+
+      The motor is running.
+
+
+   .. macro:: KRPC_SPACECENTER_MOTORSTATE_DISABLED
+
+      The motor is disabled.
+
+
+   .. macro:: KRPC_SPACECENTER_MOTORSTATE_INOPERABLE
+
+      The motor is inoperable.
+
+
+   .. macro:: KRPC_SPACECENTER_MOTORSTATE_NOTENOUGHRESOURCES
+
+      The motor does not have enough resources to run.
+
+
+
+.. _cnano-api-parts-trees-of-parts:
+
+Trees of Parts
+--------------
+
+Vessels in KSP are comprised of a number of parts, connected to one another in a
+*tree* structure. An example vessel is shown in Figure 1, and the corresponding
+tree of parts in Figure 2. The craft file for this example can also be
+:download:`downloaded here </crafts/PartsTree.craft>`.
+
+.. figure:: /images/api/parts.png
+   :align: left
+   :figwidth: 275
+
+   **Figure 1** -- Example parts making up a vessel.
+
+.. figure:: /images/api/parts-tree.png
+   :align: right
+   :figwidth: 275
+
+   **Figure 2** -- Tree of parts for the vessel in Figure 1. Arrows point from
+   the parent part to the child part.
+
+.. container:: clearer
+
+   ..
+
+Traversing the Tree
+^^^^^^^^^^^^^^^^^^^
+
+The tree of parts can be traversed using the attributes :func:`krpc_SpaceCenter_Parts_Root`,
+:func:`krpc_SpaceCenter_Part_Parent` and :func:`krpc_SpaceCenter_Part_Children`.
+
+The root of the tree is the same as the vessels *root part* (part number 1 in
+the example above) and can be obtained by calling :func:`krpc_SpaceCenter_Parts_Root`.
+A parts children can be obtained by calling :func:`krpc_SpaceCenter_Part_Children`.
+If the part does not have any children, :func:`krpc_SpaceCenter_Part_Children`
+returns an empty list. A parts parent can be obtained by calling
+:func:`krpc_SpaceCenter_Part_Parent`. If the part does not have a parent
+(as is the case for the root part), :func:`krpc_SpaceCenter_Part_Parent`
+returns ``nullptr``.
+
+The following Cnano example uses these attributes to perform a
+depth-first traversal over all of the parts in a vessel:
+
+.. literalinclude:: /scripts/services/space-center/TreeTraversal.c
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+    Command Pod Mk1
+     TR-18A Stack Decoupler
+      FL-T400 Fuel Tank
+       LV-909 Liquid Fuel Engine
+        TR-18A Stack Decoupler
+         FL-T800 Fuel Tank
+          LV-909 Liquid Fuel Engine
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+          TT-70 Radial Decoupler
+           FL-T400 Fuel Tank
+            TT18-A Launch Stability Enhancer
+            FTX-2 External Fuel Duct
+            LV-909 Liquid Fuel Engine
+            Aerodynamic Nose Cone
+       LT-1 Landing Struts
+       LT-1 Landing Struts
+     Mk16 Parachute
+
+.. _cnano-api-parts-attachment-modes:
+
+Attachment Modes
+^^^^^^^^^^^^^^^^
+
+Parts can be attached to other parts either *radially* (on the side of the
+parent part) or *axially* (on the end of the parent part, to form a stack).
+
+For example, in the vessel pictured above, the parachute (part 2) is *axially*
+connected to its parent (the command pod -- part 1), and the landing leg
+(part 5) is *radially* connected to its parent (the fuel tank -- part 4).
+
+The root part of a vessel (for example the command pod -- part 1) does not have
+a parent part, so does not have an attachment mode. However, the part is
+consider to be *axially* attached to nothing.
+
+The following Cnano example does a depth-first traversal as before,
+but also prints out the attachment mode used by the part:
+
+.. literalinclude:: /scripts/services/space-center/AttachmentModes.c
+
+When this code is execute using the craft file for the example vessel pictured
+above, the following is printed out::
+
+ Command Pod Mk1 - axial
+  TR-18A Stack Decoupler - axial
+   FL-T400 Fuel Tank - axial
+    LV-909 Liquid Fuel Engine - axial
+     TR-18A Stack Decoupler - axial
+      FL-T800 Fuel Tank - axial
+       LV-909 Liquid Fuel Engine - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+       TT-70 Radial Decoupler - radial
+        FL-T400 Fuel Tank - radial
+         TT18-A Launch Stability Enhancer - radial
+         FTX-2 External Fuel Duct - radial
+         LV-909 Liquid Fuel Engine - axial
+         Aerodynamic Nose Cone - axial
+    LT-1 Landing Struts - radial
+    LT-1 Landing Struts - radial
+  Mk16 Parachute - axial
+
+.. _cnano-api-parts-fuel-lines:
+
+Fuel Lines
+----------
+
+.. figure:: /images/api/parts-fuel-lines.png
+   :align: right
+   :figwidth: 200
+
+   **Figure 5** -- Fuel lines from the example in Figure 1. Fuel flows from the
+   parts highlighted in green, into the part highlighted in blue.
+
+.. figure:: /images/api/parts-fuel-lines-tree.png
+   :align: right
+   :figwidth: 200
+
+   **Figure 4** -- A subset of the parts tree from Figure 2 above.
+
+Fuel lines are considered parts, and are included in the parts tree (for
+example, as pictured in Figure 4). However, the parts tree does not contain
+information about which parts fuel lines connect to. The parent part of a fuel
+line is the part from which it will take fuel (as shown in Figure 4) however the
+part that it will send fuel to is not represented in the parts tree.
+
+Figure 5 shows the fuel lines from the example vessel pictured earlier. Fuel
+line part 15 (in red) takes fuel from a fuel tank (part 11 -- in green) and
+feeds it into another fuel tank (part 9 -- in blue). The fuel line is therefore
+a child of part 11, but its connection to part 9 is not represented in the tree.
+
+The attributes :func:`krpc_SpaceCenter_Part_FuelLinesFrom` and
+:func:`krpc_SpaceCenter_Part_FuelLinesTo` can be used to discover these
+connections. In the example in Figure 5, when
+:func:`krpc_SpaceCenter_Part_FuelLinesTo` is called on fuel tank part
+11, it will return a list of parts containing just fuel tank part 9 (the blue
+part). When :func:`krpc_SpaceCenter_Part_FuelLinesFrom` is called on
+fuel tank part 9, it will return a list containing fuel tank parts 11 and 17
+(the parts colored green).
+
+.. _cnano-api-parts-staging:
+
+Staging
+-------
+
+.. figure:: /images/api/parts-staging.png
+   :align: right
+   :figwidth: 340
+
+   **Figure 6** -- Example vessel from Figure 1 with a staging sequence.
+
+Each part has two staging numbers associated with it: the stage in which the
+part is *activated* and the stage in which the part is *decoupled*. These values
+can be obtained using :func:`krpc_SpaceCenter_Part_Stage` and
+:func:`krpc_SpaceCenter_Part_DecoupleStage` respectively. For parts that
+are not activated by staging, :func:`krpc_SpaceCenter_Part_Stage` returns
+-1. For parts that are never decoupled,
+:func:`krpc_SpaceCenter_Part_DecoupleStage` returns a value of -1.
+
+Figure 6 shows an example staging sequence for a vessel. Figure 7 shows the
+stages in which each part of the vessel will be *activated*. Figure 8 shows the
+stages in which each part of the vessel will be *decoupled*.
+
+.. container:: clearer
+
+   ..
+
+.. figure:: /images/api/parts-staging-activate.png
+   :align: left
+   :figwidth: 250
+
+   **Figure 7** -- The stage in which each part is *activated*.
+
+.. figure:: /images/api/parts-staging-decouple.png
+   :align: right
+   :figwidth: 250
+
+   **Figure 8** -- The stage in which each part is *decoupled*.
+
+.. container:: clearer
+
+   ..

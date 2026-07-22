@@ -1,0 +1,28 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::LiDAR
+
+LiDAR
+=====
+
+
+.. namespace:: krpc::services
+.. class:: LiDAR : public krpc::Service
+
+   LaserDist service.
+
+   .. function:: LiDAR(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: bool available()
+
+      Check if the LaserDist API is available.
+
+   
+
+   .. function:: Laser laser(SpaceCenter::Part part)
+
+      Get a LaserDist part.
+
+      :Parameters:

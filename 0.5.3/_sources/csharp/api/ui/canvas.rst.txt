@@ -1,0 +1,72 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Canvas
+======
+
+
+.. class:: Canvas
+
+   A canvas for user interface elements. See :prop:`UI.StockCanvas <UI.UI.StockCanvas>` and :meth:`UI.AddCanvas <UI.UI.AddCanvas>`.
+
+   .. property:: RectTransform RectTransform { get; }
+
+      The rect transform for the canvas.
+
+      :Game Scenes: All
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the UI object is visible.
+
+      :Game Scenes: All
+
+   .. method:: Panel AddPanel(bool visible = true)
+
+      Create a new container for user interface elements.
+
+      :parameters:
+
+       * **visible** -- Whether the panel is visible.
+
+      :Game Scenes: All
+
+   .. method:: Text AddText(string content, bool visible = true)
+
+      Add text to the canvas.
+
+      :parameters:
+
+       * **content** -- The text.
+       * **visible** -- Whether the text is visible.
+
+      :Game Scenes: All
+
+   .. method:: InputField AddInputField(bool visible = true)
+
+      Add an input field to the canvas.
+
+      :parameters:
+
+       * **visible** -- Whether the input field is visible.
+
+      :Game Scenes: All
+
+   .. method:: Button AddButton(string content, bool visible = true)
+
+      Add a button to the canvas.
+
+      :parameters:
+
+       * **content** -- The label for the button.
+       * **visible** -- Whether the button is visible.
+
+      :Game Scenes: All
+
+   .. method:: void Remove()
+
+      Remove the UI object.
+
+
+      :Game Scenes: All

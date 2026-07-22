@@ -1,0 +1,26 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: DockingCamera
+
+Camera
+======
+
+
+.. class:: Camera
+
+   A Docking Camera.
+
+   .. attribute:: part: SpaceCenter.Part
+
+      Get the part containing this camera.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Part`
+
+   .. attribute:: image: string
+
+      Get an image.
+      Returns an empty byte array on failure.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: string

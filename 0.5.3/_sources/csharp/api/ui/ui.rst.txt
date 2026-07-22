@@ -1,0 +1,88 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+UI
+==
+
+
+.. class:: UI
+
+   Provides functionality for drawing and interacting with in-game user interface elements.
+
+   .. note::
+
+      For drawing 3D objects in the flight scene, see the Drawing service.
+
+   .. property:: Canvas StockCanvas { get; }
+
+      The stock UI canvas.
+
+      :Game Scenes: All
+
+   .. method:: Canvas AddCanvas()
+
+      Add a new canvas.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         If you want to add UI elements to KSPs stock UI canvas, use :prop:`UI.StockCanvas <UI.UI.StockCanvas>`.
+
+   .. method:: void Message(string content, float duration = 1.0f, MessagePosition position = 1, System.Tuple<double,double,double> color = { 1.0, 0.92, 0.016 }, float size = 20.0f)
+
+      Display a message on the screen.
+
+      :parameters:
+
+       * **content** -- Message content.
+       * **duration** -- Duration before the message disappears, in seconds.
+       * **position** -- Position to display the message.
+       * **color** -- The color of the message.
+       * **size** -- Size of the message, differs per position.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The message appears just like a stock message, for example quicksave or quickload messages.
+
+   .. method:: void Clear(bool clientOnly = false)
+
+      Remove all user interface elements.
+
+      :parameters:
+
+       * **clientOnly** -- If true, only remove objects created by the calling client.
+
+      :Game Scenes: All
+
+
+
+.. enum:: MessagePosition
+
+   Message position.
+
+
+   .. value:: TopLeft
+
+      Top left.
+
+
+   .. value:: TopCenter
+
+      Top center.
+
+
+   .. value:: TopRight
+
+      Top right.
+
+
+   .. value:: BottomCenter
+
+      Bottom center.

@@ -6,6 +6,11 @@
     "preferred": true
   },
   {
+    "name": "0.5.3",
+    "version": "0.5.3",
+    "url": "https://krpc.github.io/krpc/0.5.3/"
+  },
+  {
     "name": "0.5.2",
     "version": "0.5.2",
     "url": "https://krpc.github.io/krpc/0.5.2/"

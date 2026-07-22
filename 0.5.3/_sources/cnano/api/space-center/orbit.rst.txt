@@ -1,0 +1,373 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Orbit
+=====
+
+
+.. type:: krpc_SpaceCenter_Orbit_t
+
+   Describes an orbit. For example, the orbit of a vessel, obtained by calling
+   :func:`krpc_SpaceCenter_Vessel_Orbit`, or a celestial body, obtained by calling
+   :func:`krpc_SpaceCenter_CelestialBody_Orbit`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+
+      The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Apoapsis(krpc_connection_t connection, double * result)
+
+      Gets the apoapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the apoapsis altitude reported on the in-game map view,
+         use :func:`krpc_SpaceCenter_Orbit_ApoapsisAltitude`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Periapsis(krpc_connection_t connection, double * result)
+
+      The periapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+   
+
+      .. note::
+
+         For the periapsis altitude reported on the in-game map view,
+         use :func:`krpc_SpaceCenter_Orbit_PeriapsisAltitude`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ApoapsisAltitude(krpc_connection_t connection, double * result)
+
+      The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :func:`krpc_SpaceCenter_Orbit_Apoapsis` minus the equatorial radius of the body.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_PeriapsisAltitude(krpc_connection_t connection, double * result)
+
+      The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+   
+
+      .. note::
+
+         This is equal to :func:`krpc_SpaceCenter_Orbit_Periapsis` minus the equatorial radius of the body.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SemiMajorAxis(krpc_connection_t connection, double * result)
+
+      The semi-major axis of the orbit, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_SemiMinorAxis(krpc_connection_t connection, double * result)
+
+      The semi-minor axis of the orbit, in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Radius(krpc_connection_t connection, double * result)
+
+      The current radius of the orbit, in meters. This is the distance between the center
+      of mass of the object in orbit, and the center of mass of the body around which it
+      is orbiting.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_RadiusAt(krpc_connection_t connection, double * result, double ut)
+
+      The orbital radius at the given time, in meters.
+
+      :Parameters:
+
+       * **ut** -- The universal time to measure the radius at.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_PositionAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double ut, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position at a given time, in the specified reference frame.
+
+      :Parameters:
+
+       * **ut** -- The universal time to measure the position at.
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Speed(krpc_connection_t connection, double * result)
+
+      The current orbital speed of the object in meters per second.
+
+   
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Period(krpc_connection_t connection, double * result)
+
+      The orbital period, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TimeToApoapsis(krpc_connection_t connection, double * result)
+
+      The time until the object reaches apoapsis, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TimeToPeriapsis(krpc_connection_t connection, double * result)
+
+      The time until the object reaches periapsis, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Eccentricity(krpc_connection_t connection, double * result)
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Inclination(krpc_connection_t connection, double * result)
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit,
+      in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_LongitudeOfAscendingNode(krpc_connection_t connection, double * result)
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ArgumentOfPeriapsis(krpc_connection_t connection, double * result)
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_MeanAnomalyAtEpoch(krpc_connection_t connection, double * result)
+
+      The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Epoch(krpc_connection_t connection, double * result)
+
+      The time since the epoch (the point at which the
+      `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+      was measured, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_MeanAnomaly(krpc_connection_t connection, double * result)
+
+      The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_MeanAnomalyAtUT(krpc_connection_t connection, double * result, double ut)
+
+      The mean anomaly at the given time.
+
+      :Parameters:
+
+       * **ut** -- The universal time in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_EccentricAnomaly(krpc_connection_t connection, double * result)
+
+      The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_EccentricAnomalyAtUT(krpc_connection_t connection, double * result, double ut)
+
+      The eccentric anomaly at the given universal time.
+
+      :Parameters:
+
+       * **ut** -- The universal time, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TrueAnomaly(krpc_connection_t connection, double * result)
+
+      The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TrueAnomalyAtUT(krpc_connection_t connection, double * result, double ut)
+
+      The true anomaly at the given time.
+
+      :Parameters:
+
+       * **ut** -- The universal time in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TrueAnomalyAtRadius(krpc_connection_t connection, double * result, double radius)
+
+      The true anomaly at the given orbital radius.
+
+      :Parameters:
+
+       * **radius** -- The orbital radius in meters.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_UTAtTrueAnomaly(krpc_connection_t connection, double * result, double trueAnomaly)
+
+      The universal time, in seconds, corresponding to the given true anomaly.
+
+      :Parameters:
+
+       * **trueAnomaly** -- True anomaly.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_RadiusAtTrueAnomaly(krpc_connection_t connection, double * result, double trueAnomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :Parameters:
+
+       * **trueAnomaly** -- The true anomaly.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TrueAnomalyAtAN(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
+
+      The true anomaly of the ascending node with the given target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TrueAnomalyAtDN(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
+
+      The true anomaly of the descending node with the given target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalSpeed(krpc_connection_t connection, double * result)
+
+      The current orbital speed in meters per second.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_OrbitalSpeedAt(krpc_connection_t connection, double * result, double time)
+
+      The orbital speed at the given time, in meters per second.
+
+      :Parameters:
+
+       * **time** -- Time from now, in seconds.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ReferencePlaneNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction that is normal to the orbits reference plane,
+      in the given reference frame.
+      The reference plane is the plane from which the orbits inclination is measured.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ReferencePlaneDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The direction from which the orbits longitude of ascending node is measured,
+      in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_RelativeInclination(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
+
+      Relative inclination of this orbit and the target orbit, in radians.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TimeToSOIChange(krpc_connection_t connection, double * result)
+
+      The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+      if the object is not going to change sphere of influence.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_NextOrbit(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result)
+
+      If the object is going to change sphere of influence in the future, returns the new
+      orbit after the change. Otherwise returns ``nullptr``.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_TimeOfClosestApproach(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
+
+      Estimates and returns the time at closest approach to a target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+      :returns: The universal time at closest approach, in seconds.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_DistanceAtClosestApproach(krpc_connection_t connection, double * result, krpc_SpaceCenter_Orbit_t target)
+
+      Estimates and returns the distance at closest approach to a target orbit, in meters.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_ListClosestApproaches(krpc_connection_t connection, krpc_list_list_double_t * result, krpc_SpaceCenter_Orbit_t target, int32_t orbits)
+
+      Returns the times at closest approach and corresponding distances, to a target orbit.
+
+      :Parameters:
+
+       * **target** -- Target orbit.
+       * **orbits** -- The number of future orbits to search.
+
+      :returns: A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.

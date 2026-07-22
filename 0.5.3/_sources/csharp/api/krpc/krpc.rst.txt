@@ -1,0 +1,128 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.KRPC
+
+KRPC
+====
+
+
+
+
+
+
+
+
+
+
+
+
+
+.. class:: KRPC
+
+   Main kRPC service, used by clients to interact with basic server functionality.
+
+   .. method:: byte[] GetClientID()
+
+      Returns the identifier for the current client.
+
+
+      :Game Scenes: All
+
+   .. method:: string GetClientName()
+
+      Returns the name of the current client.
+      This is an empty string if the client has no name.
+
+
+      :Game Scenes: All
+
+   .. property:: System.Collections.Generic.IList<System.Tuple<byte[],string,string>> Clients { get; }
+
+      A list of RPC clients that are currently connected to the server.
+      Each entry in the list is a clients identifier, name and address.
+
+      :Game Scenes: All
+
+   .. method:: KRPC.Schema.KRPC.Status GetStatus()
+
+      Returns some information about the server, such as the version.
+
+
+      :Game Scenes: All
+
+   .. method:: KRPC.Schema.KRPC.Services GetServices()
+
+      Returns information on all services, procedures, classes, properties etc. provided by the server.
+      Can be used by client libraries to automatically create functionality such as stubs.
+
+
+      :Game Scenes: All
+
+   .. property:: GameScene CurrentGameScene { get; }
+
+      Get the current game scene.
+
+      :Game Scenes: All
+
+   .. property:: bool Paused { get; set; }
+
+      Whether the game is paused.
+
+      :Game Scenes: All
+
+
+
+.. enum:: GameScene
+
+   The game scene. See :prop:`KRPC.CurrentGameScene <KRPC.KRPC.CurrentGameScene>`.
+
+
+   .. value:: SpaceCenter
+
+      The game scene showing the Kerbal Space Center buildings.
+
+
+   .. value:: Flight
+
+      The game scene showing a vessel in flight (or on the launchpad/runway).
+
+
+   .. value:: TrackingStation
+
+      The tracking station.
+
+
+   .. value:: EditorVAB
+
+      The Vehicle Assembly Building.
+
+
+   .. value:: EditorSPH
+
+      The Space Plane Hangar.
+
+
+
+.. class:: InvalidOperationException
+
+   A method call was made to a method that is invalid
+   given the current state of the object.
+
+
+
+.. class:: ArgumentException
+
+   A method was invoked where at least one of the passed arguments does not
+   meet the parameter specification of the method.
+
+
+
+.. class:: ArgumentNullException
+
+   A null reference was passed to a method that does not accept it as a valid argument.
+
+
+
+.. class:: ArgumentOutOfRangeException
+
+   The value of an argument is outside the allowable range of values as defined by the invoked method.

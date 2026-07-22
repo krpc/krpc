@@ -1,0 +1,25 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+DockingCamera
+=============
+
+
+Camera service.
+
+
+.. function:: krpc_error_t krpc_DockingCamera_Available(krpc_connection_t connection, bool * result)
+
+   Check if the Camera API is available.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_DockingCamera_Camera(krpc_connection_t connection, krpc_DockingCamera_Camera_t * result, krpc_SpaceCenter_Part_t part)
+
+   Get a Camera part.
+
+   :Parameters:

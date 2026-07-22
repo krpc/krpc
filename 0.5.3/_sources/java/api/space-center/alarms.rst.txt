@@ -1,0 +1,142 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.SpaceCenter
+
+Alarms
+======
+
+
+.. type:: public class AlarmManager
+
+   Alarm manager.
+   Obtained by calling :meth:`getAlarmManager()`.
+
+   .. method:: java.util.List<Alarm> getAlarms()
+
+
+      A list of all alarms.
+
+   
+
+   .. method:: static Alarm addAlarm(Connection connection, double time, String title, String description)
+
+      Create an alarm.
+
+      :param double time: Number of seconds from now that the alarm should trigger.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addVesselAlarm(Connection connection, double time, Vessel vessel, String title, String description)
+
+      Create an alarm linked to a vessel.
+
+      :param double time: Number of seconds from now that the alarm should trigger.
+      :param Vessel vessel: Vessel to link the alarm to.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addApoapsisAlarm(Connection connection, Vessel vessel, double offset, String title, String description)
+
+      Create an alarm for the given vessel's next apoapsis.
+
+      :param Vessel vessel: The vessel.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addPeriapsisAlarm(Connection connection, Vessel vessel, double offset, String title, String description)
+
+      Create an alarm for the given vessel's next periapsis.
+
+      :param Vessel vessel: The vessel.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addManeuverNodeAlarm(Connection connection, Vessel vessel, Node node, double offset, boolean addBurnTime, String title, String description)
+
+      Create an alarm for the given vessel and maneuver node.
+
+      :param Vessel vessel: The vessel.
+      :param Node node: The maneuver node.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param boolean addBurnTime: Whether the node's burn time should be included in the alarm.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+   .. method:: static Alarm addSOIAlarm(Connection connection, Vessel vessel, double offset, String title, String description)
+
+      Create an alarm for the given vessel's next sphere of influence change.
+
+      :param Vessel vessel: The vessel.
+      :param double offset: Time in seconds to offset the alarm by.
+      :param String title: Title for the alarm.
+      :param String description: Description for the alarm.
+   
+
+
+
+.. type:: public class Alarm
+
+   An alarm. Can be accessed using :meth:`getAlarmManager()`.
+
+   .. method:: int getID()
+
+
+      Unique identifier of the alarm.
+      KSP destroys and recreates an alarm when it is edited.
+      This id will remain constant between the old and new alarms.
+
+   
+
+   .. method:: String getType()
+
+
+      Type of alarm
+
+   
+
+   .. method:: String getTitle()
+
+
+      Title of the alarm
+
+   
+
+   .. method:: String getDescription()
+
+
+      Description of the alarm.
+
+   
+
+   .. method:: double getTime()
+
+
+      Time the alarm will trigger.
+
+   
+
+   .. method:: double getTimeUntil()
+
+
+      Time until the alarm triggers.
+
+   
+
+   .. method:: double getEventOffset()
+
+
+      Seconds between the alarm going off and the event it references.
+
+   
+
+   .. method:: Vessel getVessel()
+
+
+      Vessel the alarm references. ``null`` if it does not reference a vessel.

@@ -1,0 +1,107 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+AlarmType
+=========
+
+
+.. type:: krpc_KerbalAlarmClock_AlarmType_t
+
+   The type of an alarm.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_RAW
+
+      An alarm for a specific date/time or a specific period in the future.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_MANEUVER
+
+      An alarm based on the next maneuver node on the current ships flight path.
+      This node will be stored and can be restored when you come back to the ship.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_MANEUVERAUTO
+
+      See :macro:`KRPC_KERBALALARMCLOCK_ALARMTYPE_MANEUVER`.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_APOAPSIS
+
+      An alarm for furthest part of the orbit from the planet.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_PERIAPSIS
+
+      An alarm for nearest part of the orbit from the planet.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_ASCENDINGNODE
+
+      Ascending node for the targeted object, or equatorial ascending node.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_DESCENDINGNODE
+
+      Descending node for the targeted object, or equatorial descending node.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_CLOSEST
+
+      An alarm based on the closest approach of this vessel to the targeted
+      vessel, some number of orbits into the future.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_CONTRACT
+
+      An alarm based on the expiry or deadline of contracts in career modes.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_CONTRACTAUTO
+
+      See :macro:`KRPC_KERBALALARMCLOCK_ALARMTYPE_CONTRACT`.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_CREW
+
+      An alarm that is attached to a crew member.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_DISTANCE
+
+      An alarm that is triggered when a selected target comes within a chosen distance.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_EARTHTIME
+
+      An alarm based on the time in the "Earth" alternative Universe (aka the Real World).
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_LAUNCHRENDEVOUS
+
+      An alarm that fires as your landed craft passes under the orbit of your target.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_SOICHANGE
+
+      An alarm manually based on when the next SOI point is on the flight path
+      or set to continually monitor the active flight path and add alarms as it
+      detects SOI changes.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_SOICHANGEAUTO
+
+      See :macro:`KRPC_KERBALALARMCLOCK_ALARMTYPE_SOICHANGE`.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_TRANSFER
+
+      An alarm based on Interplanetary Transfer Phase Angles, i.e. when should
+      I launch to planet X? Based on Kosmo Not's post and used in Olex's
+      Calculator.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMTYPE_TRANSFERMODELLED
+
+      See :macro:`KRPC_KERBALALARMCLOCK_ALARMTYPE_TRANSFER`.

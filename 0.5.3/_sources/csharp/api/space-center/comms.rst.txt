@@ -1,0 +1,136 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Communications
+==============
+
+
+.. class:: Comms
+
+   Used to interact with CommNet for a given vessel.
+   Obtained by calling :prop:`Vessel.Comms`.
+
+   .. property:: bool CanCommunicate { get; }
+
+      Whether the vessel can communicate with KSC.
+
+      :Game Scenes: Flight
+
+   .. property:: bool CanTransmitScience { get; }
+
+      Whether the vessel can transmit science data to KSC.
+
+      :Game Scenes: Flight
+
+   .. property:: double SignalStrength { get; }
+
+      Signal strength to KSC.
+
+      :Game Scenes: Flight
+
+   .. property:: double SignalDelay { get; }
+
+      Signal delay to KSC in seconds.
+
+      :Game Scenes: Flight
+
+   .. property:: double Power { get; }
+
+      The combined power of all active antennae on the vessel.
+
+      :Game Scenes: Flight
+
+   .. property:: System.Collections.Generic.IList<CommLink> ControlPath { get; }
+
+      The communication path used to control the vessel.
+
+      :Game Scenes: Flight
+
+
+
+.. class:: CommLink
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. property:: CommLinkType Type { get; }
+
+      The type of link.
+
+      :Game Scenes: All
+
+   .. property:: double SignalStrength { get; }
+
+      Signal strength of the link.
+
+      :Game Scenes: All
+
+   .. property:: CommNode Start { get; }
+
+      Start point of the link.
+
+      :Game Scenes: All
+
+   .. property:: CommNode End { get; }
+
+      Start point of the link.
+
+      :Game Scenes: All
+
+
+
+.. enum:: CommLinkType
+
+   The type of a communication link.
+   See :prop:`CommLink.Type`.
+
+
+   .. value:: Home
+
+      Link is to a base station on Kerbin.
+
+
+   .. value:: Control
+
+      Link is to a control source, for example a manned spacecraft.
+
+
+   .. value:: Relay
+
+      Link is to a relay satellite.
+
+
+
+.. class:: CommNode
+
+   Represents a communication node in the network. For example, a vessel or the KSC.
+
+   .. property:: string Name { get; }
+
+      Name of the communication node.
+
+      :Game Scenes: All
+
+   .. property:: bool IsHome { get; }
+
+      Whether the communication node is on Kerbin.
+
+      :Game Scenes: All
+
+   .. property:: bool IsControlPoint { get; }
+
+      Whether the communication node is a control point, for example a manned vessel.
+
+      :Game Scenes: All
+
+   .. property:: bool IsVessel { get; }
+
+      Whether the communication node is a vessel.
+
+      :Game Scenes: All
+
+   .. property:: Vessel Vessel { get; }
+
+      The vessel for this communication node.
+
+      :Game Scenes: All

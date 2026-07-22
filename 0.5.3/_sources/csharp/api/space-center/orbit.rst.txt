@@ -1,0 +1,380 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+Orbit
+=====
+
+
+.. class:: Orbit
+
+   Describes an orbit. For example, the orbit of a vessel, obtained by calling
+   :prop:`Vessel.Orbit`, or a celestial body, obtained by calling
+   :prop:`CelestialBody.Orbit`.
+
+   .. property:: CelestialBody Body { get; }
+
+      The celestial body (e.g. planet or moon) around which the object is orbiting.
+
+      :Game Scenes: All
+
+   .. property:: double Apoapsis { get; }
+
+      Gets the apoapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For the apoapsis altitude reported on the in-game map view,
+         use :prop:`Orbit.ApoapsisAltitude`.
+
+   .. property:: double Periapsis { get; }
+
+      The periapsis of the orbit, in meters, from the center of mass
+      of the body being orbited.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For the periapsis altitude reported on the in-game map view,
+         use :prop:`Orbit.PeriapsisAltitude`.
+
+   .. property:: double ApoapsisAltitude { get; }
+
+      The apoapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is equal to :prop:`Orbit.Apoapsis` minus the equatorial radius of the body.
+
+   .. property:: double PeriapsisAltitude { get; }
+
+      The periapsis of the orbit, in meters, above the sea level of the body being orbited.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is equal to :prop:`Orbit.Periapsis` minus the equatorial radius of the body.
+
+   .. property:: double SemiMajorAxis { get; }
+
+      The semi-major axis of the orbit, in meters.
+
+      :Game Scenes: All
+
+   .. property:: double SemiMinorAxis { get; }
+
+      The semi-minor axis of the orbit, in meters.
+
+      :Game Scenes: All
+
+   .. property:: double Radius { get; }
+
+      The current radius of the orbit, in meters. This is the distance between the center
+      of mass of the object in orbit, and the center of mass of the body around which it
+      is orbiting.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. method:: double RadiusAt(double ut)
+
+      The orbital radius at the given time, in meters.
+
+      :parameters:
+
+       * **ut** -- The universal time to measure the radius at.
+
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> PositionAt(double ut, ReferenceFrame referenceFrame)
+
+      The position at a given time, in the specified reference frame.
+
+      :parameters:
+
+       * **ut** -- The universal time to measure the position at.
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: All
+
+   .. property:: double Speed { get; }
+
+      The current orbital speed of the object in meters per second.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This value will change over time if the orbit is elliptical.
+
+   .. property:: double Period { get; }
+
+      The orbital period, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double TimeToApoapsis { get; }
+
+      The time until the object reaches apoapsis, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double TimeToPeriapsis { get; }
+
+      The time until the object reaches periapsis, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double Eccentricity { get; }
+
+      The `eccentricity <https://en.wikipedia.org/wiki/Orbital_eccentricity>`_
+      of the orbit.
+
+      :Game Scenes: All
+
+   .. property:: double Inclination { get; }
+
+      The `inclination <https://en.wikipedia.org/wiki/Orbital_inclination>`_
+      of the orbit,
+      in radians.
+
+      :Game Scenes: All
+
+   .. property:: double LongitudeOfAscendingNode { get; }
+
+      The `longitude of the ascending node <https://en.wikipedia.org/wiki/Longitude_of_the_ascending_node>`_, in radians.
+
+      :Game Scenes: All
+
+   .. property:: double ArgumentOfPeriapsis { get; }
+
+      The `argument of periapsis <https://en.wikipedia.org/wiki/Argument_of_periapsis>`_, in radians.
+
+      :Game Scenes: All
+
+   .. property:: double MeanAnomalyAtEpoch { get; }
+
+      The `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+      :Game Scenes: All
+
+   .. property:: double Epoch { get; }
+
+      The time since the epoch (the point at which the
+      `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
+      was measured, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double MeanAnomaly { get; }
+
+      The `mean anomaly <https://en.wikipedia.org/wiki/Mean_anomaly>`_.
+
+      :Game Scenes: All
+
+   .. method:: double MeanAnomalyAtUT(double ut)
+
+      The mean anomaly at the given time.
+
+      :parameters:
+
+       * **ut** -- The universal time in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double EccentricAnomaly { get; }
+
+      The `eccentric anomaly <https://en.wikipedia.org/wiki/Eccentric_anomaly>`_.
+
+      :Game Scenes: All
+
+   .. method:: double EccentricAnomalyAtUT(double ut)
+
+      The eccentric anomaly at the given universal time.
+
+      :parameters:
+
+       * **ut** -- The universal time, in seconds.
+
+      :Game Scenes: All
+
+   .. property:: double TrueAnomaly { get; }
+
+      The `true anomaly <https://en.wikipedia.org/wiki/True_anomaly>`_.
+
+      :Game Scenes: All
+
+   .. method:: double TrueAnomalyAtUT(double ut)
+
+      The true anomaly at the given time.
+
+      :parameters:
+
+       * **ut** -- The universal time in seconds.
+
+      :Game Scenes: All
+
+   .. method:: double TrueAnomalyAtRadius(double radius)
+
+      The true anomaly at the given orbital radius.
+
+      :parameters:
+
+       * **radius** -- The orbital radius in meters.
+
+      :Game Scenes: All
+
+   .. method:: double UTAtTrueAnomaly(double trueAnomaly)
+
+      The universal time, in seconds, corresponding to the given true anomaly.
+
+      :parameters:
+
+       * **trueAnomaly** -- True anomaly.
+
+      :Game Scenes: All
+
+   .. method:: double RadiusAtTrueAnomaly(double trueAnomaly)
+
+      The orbital radius at the point in the orbit given by the true anomaly.
+
+      :parameters:
+
+       * **trueAnomaly** -- The true anomaly.
+
+      :Game Scenes: All
+
+   .. method:: double TrueAnomalyAtAN(Orbit target)
+
+      The true anomaly of the ascending node with the given target orbit.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+
+      :Game Scenes: All
+
+   .. method:: double TrueAnomalyAtDN(Orbit target)
+
+      The true anomaly of the descending node with the given target orbit.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+
+      :Game Scenes: All
+
+   .. property:: double OrbitalSpeed { get; }
+
+      The current orbital speed in meters per second.
+
+      :Game Scenes: All
+
+   .. method:: double OrbitalSpeedAt(double time)
+
+      The orbital speed at the given time, in meters per second.
+
+      :parameters:
+
+       * **time** -- Time from now, in seconds.
+
+      :Game Scenes: All
+
+   .. method:: static System.Tuple<double,double,double> ReferencePlaneNormal(IConnection connection, ReferenceFrame referenceFrame)
+
+      The direction that is normal to the orbits reference plane,
+      in the given reference frame.
+      The reference plane is the plane from which the orbits inclination is measured.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+   .. method:: static System.Tuple<double,double,double> ReferencePlaneDirection(IConnection connection, ReferenceFrame referenceFrame)
+
+      The direction from which the orbits longitude of ascending node is measured,
+      in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned direction is in.
+
+      :returns: The direction as a unit vector.
+      :Game Scenes: All
+
+   .. method:: double RelativeInclination(Orbit target)
+
+      Relative inclination of this orbit and the target orbit, in radians.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+
+      :Game Scenes: All
+
+   .. property:: double TimeToSOIChange { get; }
+
+      The time until the object changes sphere of influence, in seconds. Returns ``NaN``
+      if the object is not going to change sphere of influence.
+
+      :Game Scenes: All
+
+   .. property:: Orbit NextOrbit { get; }
+
+      If the object is going to change sphere of influence in the future, returns the new
+      orbit after the change. Otherwise returns ``null``.
+
+      :Game Scenes: All
+
+   .. method:: double TimeOfClosestApproach(Orbit target)
+
+      Estimates and returns the time at closest approach to a target orbit.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+
+      :returns: The universal time at closest approach, in seconds.
+      :Game Scenes: All
+
+   .. method:: double DistanceAtClosestApproach(Orbit target)
+
+      Estimates and returns the distance at closest approach to a target orbit, in meters.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<System.Collections.Generic.IList<double>> ListClosestApproaches(Orbit target, int orbits)
+
+      Returns the times at closest approach and corresponding distances, to a target orbit.
+
+      :parameters:
+
+       * **target** -- Target orbit.
+       * **orbits** -- The number of future orbits to search.
+
+      :returns: A list of two lists. The first is a list of times at closest approach, as universal times in seconds. The second is a list of corresponding distances at closest approach, in meters.
+      :Game Scenes: All

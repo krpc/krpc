@@ -1,0 +1,80 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+UI
+==
+
+
+.. type:: public class UI
+
+   Provides functionality for drawing and interacting with in-game user interface elements.
+
+   .. note::
+
+      For drawing 3D objects in the flight scene, see the Drawing service.
+
+   .. method:: Canvas getStockCanvas()
+
+
+      The stock UI canvas.
+
+   
+
+   .. method:: Canvas addCanvas()
+
+      Add a new canvas.
+
+   
+
+      .. note::
+
+         If you want to add UI elements to KSPs stock UI canvas, use :meth:`getStockCanvas()`.
+
+   .. method:: void message(String content, float duration, MessagePosition position, org.javatuples.Triplet<Double,Double,Double> color, float size)
+
+      Display a message on the screen.
+
+      :param String content: Message content.
+      :param float duration: Duration before the message disappears, in seconds.
+      :param MessagePosition position: Position to display the message.
+      :param org.javatuples.Triplet<Double,Double,Double> color: The color of the message.
+      :param float size: Size of the message, differs per position.
+   
+
+      .. note::
+
+         The message appears just like a stock message, for example quicksave or quickload messages.
+
+   .. method:: void clear(boolean clientOnly)
+
+      Remove all user interface elements.
+
+      :param boolean clientOnly: If true, only remove objects created by the calling client.
+   
+
+
+
+.. type:: public enum MessagePosition
+
+   Message position.
+
+
+   .. field:: public MessagePosition TOP_LEFT
+
+      Top left.
+
+
+   .. field:: public MessagePosition TOP_CENTER
+
+      Top center.
+
+
+   .. field:: public MessagePosition TOP_RIGHT
+
+      Top right.
+
+
+   .. field:: public MessagePosition BOTTOM_CENTER
+
+      Bottom center.

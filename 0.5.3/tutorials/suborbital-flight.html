@@ -1,0 +1,1195 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Sub-Orbital Flight &#8212; kRPC 0.5.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../_static/tabs.css?v=a5c4661c" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../_static/documentation_options.js?v=2a2fe768"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/tabs.js?v=3030b3cb"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/suborbital-flight';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = '0.5.3';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/0.5.3/tutorials/suborbital-flight.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Reference Frames" href="reference-frames.html" />
+    <link rel="prev" title="Tutorials and Examples" href="../tutorials.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.5.3" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Sub-Orbital Flight</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference-frames.html">Reference Frames</a></li>
+<li class="toctree-l1"><a class="reference internal" href="launch-into-orbit.html">Launch into Orbit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pitch-heading-roll.html">Pitch, Heading and Roll</a></li>
+<li class="toctree-l1"><a class="reference internal" href="parts.html">Interacting with Parts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docking-guidance.html">Docking Guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user-interface.html">User Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autopilot.html">AutoPilot</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../tutorials.html" class="nav-link">Tutorials and Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Sub-Orbital Flight</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="sub-orbital-flight">
+<h1>Sub-Orbital Flight<a class="headerlink" href="#sub-orbital-flight" title="Link to this heading">#</a></h1>
+<p>This introductory tutorial uses kRPC to send some Kerbals on a sub-orbital flight, and (hopefully)
+returns them safely back to Kerbin. It covers the following topics:</p>
+<ul class="simple">
+<li><p>Controlling a rocket (activating stages, setting the throttle)</p></li>
+<li><p>Using the auto pilot to point the vessel in a specific direction</p></li>
+<li><p>Using events to wait for things to happen in game</p></li>
+<li><p>Tracking the amount of resources in the vessel</p></li>
+<li><p>Tracking flight and orbital data (such as altitude and apoapsis altitude)</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For details on how to write scripts and connect to kRPC, see the <a class="reference internal" href="../getting-started.html#getting-started"><span class="std std-ref">Getting Started</span></a>
+guide.</p>
+</div>
+<p>This tutorial uses the two stage rocket pictured below. The craft file for this rocket can be
+<a class="reference download internal" download="" href="../_downloads/29effd20a640d65345d9d475486c359f/SubOrbitalFlight.craft"><code class="xref download docutils literal notranslate"><span class="pre">downloaded</span> <span class="pre">here</span></code></a>.</p>
+<p>This tutorial includes source code examples for the main client languages that kRPC supports. The
+entire program, for your chosen language can be downloaded from here:</p>
+<p><a class="reference download internal" download="" href="../_downloads/9381c817e83af1923ec5f0d660a814a2/SubOrbitalFlight.cs"><code class="xref download docutils literal notranslate"><span class="pre">C#</span></code></a>,
+<a class="reference download internal" download="" href="../_downloads/f97442fe8b6731a28591ca812fc3fdb5/SubOrbitalFlight.cpp"><code class="xref download docutils literal notranslate"><span class="pre">C++</span></code></a>,
+<a class="reference download internal" download="" href="../_downloads/7b549bb0e4c6e8d1024b1564bf9ed9a9/SubOrbitalFlight.java"><code class="xref download docutils literal notranslate"><span class="pre">Java</span></code></a>,
+<a class="reference download internal" download="" href="../_downloads/892f6b73ab021a4c5037a6e8c3cab3b6/SubOrbitalFlight.lua"><code class="xref download docutils literal notranslate"><span class="pre">Lua</span></code></a>,
+<a class="reference download internal" download="" href="../_downloads/d44d6c497fe03fc6a17da5e1ce8e8463/SubOrbitalFlight.py"><code class="xref download docutils literal notranslate"><span class="pre">Python</span></code></a></p>
+<img alt="../_images/SubOrbitalFlight.png" class="align-center" src="../_images/SubOrbitalFlight.png" />
+<section id="part-one-preparing-for-launch">
+<h2>Part One: Preparing for Launch<a class="headerlink" href="#part-one-preparing-for-launch" title="Link to this heading">#</a></h2>
+<p>The first thing we need to do is open a connection to the server. We can also pass a descriptive
+name for our script that will appear in the server window in game:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-0-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-0-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-0-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-0-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-0-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-0-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-0-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-0-QyM=" class="sphinx-tabs-panel group-tab" id="panel-0-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">10</span><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Connection</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Sub-orbital flight&quot;</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 9</span><span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">Client</span><span class="w"> </span><span class="n">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="o">::</span><span class="n">connect</span><span class="p">(</span><span class="s">&quot;Sub-orbital flight&quot;</span><span class="p">);</span>
+<span class="linenos">10</span><span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">KRPC</span><span class="w"> </span><span class="nf">krpc</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+<span class="linenos">11</span><span class="w">  </span><span class="n">krpc</span><span class="o">::</span><span class="n">services</span><span class="o">::</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="nf">space_center</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">20</span><span class="w">    </span><span class="n">Connection</span><span class="w"> </span><span class="n">connection</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="s">&quot;Sub-orbital flight&quot;</span><span class="p">);</span>
+<span class="linenos">21</span><span class="w">    </span><span class="n">KRPC</span><span class="w"> </span><span class="n">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KRPC</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+<span class="linenos">22</span><span class="w">    </span><span class="n">SpaceCenter</span><span class="w"> </span><span class="n">spaceCenter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">newInstance</span><span class="p">(</span><span class="n">connection</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kd">local</span><span class="w"> </span><span class="nv">krpc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc&#39;</span>
+<span class="linenos">2</span><span class="kd">local</span><span class="w"> </span><span class="nv">platform</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="w"> </span><span class="s1">&#39;krpc.platform&#39;</span>
+<span class="linenos">3</span><span class="kd">local</span><span class="w"> </span><span class="nv">conn</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">krpc</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="s1">&#39;Sub-orbital flight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-0-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-0-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">3</span><span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Sub-orbital flight&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>Next we need to get an object representing the active vessel. It’s via this object that we will send
+instructions to the rocket:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-1-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-1-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-1-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-1-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-1-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-1-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-1-QyM=" class="sphinx-tabs-panel group-tab" id="panel-1-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">12</span><span class="w">        </span><span class="kt">var</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">SpaceCenter</span><span class="w"> </span><span class="p">().</span><span class="n">ActiveVessel</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">13</span><span class="w">  </span><span class="k">auto</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">space_center</span><span class="p">.</span><span class="n">active_vessel</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">24</span><span class="w">    </span><span class="n">SpaceCenter</span><span class="p">.</span><span class="na">Vessel</span><span class="w"> </span><span class="n">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">spaceCenter</span><span class="p">.</span><span class="na">getActiveVessel</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">5</span><span class="kd">local</span><span class="w"> </span><span class="nv">vessel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">conn</span><span class="p">.</span><span class="py">space_center</span><span class="p">.</span><span class="py">active_vessel</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-1-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">5</span><span class="n">vessel</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">active_vessel</span>
+</pre></div>
+</div>
+</div></div>
+<p>We then need to prepare the rocket for launch. The following code sets the throttle to maximum and
+instructs the auto-pilot to hold a pitch and heading of 90° (vertically upwards). It then waits for
+1 second for these settings to take effect.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-2-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-2-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-2-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-2-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-2-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-2-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-2-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-2-QyM=" class="sphinx-tabs-panel group-tab" id="panel-2-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">14</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="linenos">15</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">Engage</span><span class="w"> </span><span class="p">();</span>
+<span class="linenos">16</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">Throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="linenos">17</span><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">15</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="linenos">16</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">engage</span><span class="p">();</span>
+<span class="linenos">17</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">set_throttle</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">18</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">26</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+<span class="linenos">27</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">engage</span><span class="p">();</span>
+<span class="linenos">28</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">setThrottle</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="linenos">29</span><span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 7</span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">:</span><span class="nf">engage</span><span class="p">()</span>
+<span class="linenos"> 9</span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">.</span><span class="py">throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="linenos">10</span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-2-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-2-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 7</span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+<span class="linenos"> 8</span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">engage</span><span class="p">()</span>
+<span class="linenos"> 9</span><span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="linenos">10</span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+</section>
+<section id="part-two-lift-off">
+<h2>Part Two: Lift-off!<a class="headerlink" href="#part-two-lift-off" title="Link to this heading">#</a></h2>
+<p>We’re now ready to launch by activating the first stage (equivalent to pressing the space bar):</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-3-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-3-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-3-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-3-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-3-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-3-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-3-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-3-QyM=" class="sphinx-tabs-panel group-tab" id="panel-3-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">19</span><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Launch!&quot;</span><span class="p">);</span>
+<span class="linenos">20</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">ActivateNextStage</span><span class="w"> </span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">20</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Launch!&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">21</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">31</span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Launch!&quot;</span><span class="p">);</span>
+<span class="linenos">32</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">activateNextStage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">12</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Launch!&#39;</span><span class="p">)</span>
+<span class="linenos">13</span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-3-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-3-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">12</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Launch!&#39;</span><span class="p">)</span>
+<span class="linenos">13</span><span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+<p>The rocket has a solid fuel stage that will quickly run out, and will need to be jettisoned. We can
+monitor the amount of solid fuel in the rocket using an event that is triggered when there is very
+little solid fuel left in the rocket. When the event is triggered, we can activate the next stage to
+jettison the boosters:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-4-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-4-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-4-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-4-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-4-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-4-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-4-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-4-QyM=" class="sphinx-tabs-panel group-tab" id="panel-4-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">23</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">solidFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Resources</span><span class="p">.</span><span class="n">Amount</span><span class="p">(</span><span class="s">&quot;SolidFuel&quot;</span><span class="p">));</span>
+<span class="linenos">24</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">LessThan</span><span class="p">(</span>
+<span class="linenos">25</span><span class="w">                </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">solidFuel</span><span class="p">),</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantFloat</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1f</span><span class="p">));</span>
+<span class="linenos">26</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">KRPC</span><span class="p">().</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">27</span><span class="w">            </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">28</span><span class="w">                </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="linenos">29</span><span class="w">            </span><span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">26</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">solid_fuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">resources</span><span class="p">().</span><span class="n">amount_call</span><span class="p">(</span><span class="s">&quot;SolidFuel&quot;</span><span class="p">);</span>
+<span class="linenos">27</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">less_than</span><span class="p">(</span>
+<span class="linenos">28</span><span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">solid_fuel</span><span class="p">),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_float</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1</span><span class="p">));</span>
+<span class="linenos">29</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">30</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
+<span class="linenos">31</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="linenos">32</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">34</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">35</span><span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">solidFuel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getResources</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;amount&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;SolidFuel&quot;</span><span class="p">);</span>
+<span class="linenos">36</span><span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">lessThan</span><span class="p">(</span>
+<span class="linenos">37</span><span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="linenos">38</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">solidFuel</span><span class="p">),</span>
+<span class="linenos">39</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantFloat</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mf">0.1f</span><span class="p">));</span>
+<span class="linenos">40</span><span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">41</span><span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">42</span><span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="linenos">43</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">44</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">45</span>
+<span class="linenos">46</span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Booster separation&quot;</span><span class="p">);</span>
+<span class="linenos">47</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">activateNextStage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">15</span><span class="kr">while</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">resources</span><span class="p">:</span><span class="nf">amount</span><span class="p">(</span><span class="s1">&#39;SolidFuel&#39;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.1</span><span class="w"> </span><span class="kr">do</span>
+<span class="linenos">16</span><span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">17</span><span class="kr">end</span>
+<span class="linenos">18</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Booster separation&#39;</span><span class="p">)</span>
+<span class="linenos">19</span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-4-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-4-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">15</span><span class="n">fuel_amount</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">amount</span><span class="p">,</span> <span class="s1">&#39;SolidFuel&#39;</span><span class="p">)</span>
+<span class="linenos">16</span><span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">less_than</span><span class="p">(</span>
+<span class="linenos">17</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">fuel_amount</span><span class="p">),</span>
+<span class="linenos">18</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_float</span><span class="p">(</span><span class="mf">0.1</span><span class="p">))</span>
+<span class="linenos">19</span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<span class="linenos">20</span><span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+<span class="linenos">21</span>    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="linenos">22</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Booster separation&#39;</span><span class="p">)</span>
+<span class="linenos">23</span><span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+<p>In this bit of code, <code class="docutils literal notranslate"><span class="pre">vessel.resources</span></code> returns a <a class="reference internal" href="../python/api/space-center/resources.html#SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resources</span></code></a> object that is used to get
+information about the resources in the rocket. The code creates the expression
+<code class="docutils literal notranslate"><span class="pre">vessel.resources.amount('SolidFuel')</span> <span class="pre">&lt;</span> <span class="pre">0.1</span></code> on the server, using the expression API. This
+expression is then used to drive an event, which is triggered when the expression returns true.</p>
+</section>
+<section id="part-three-reaching-apoapsis">
+<h2>Part Three: Reaching Apoapsis<a class="headerlink" href="#part-three-reaching-apoapsis" title="Link to this heading">#</a></h2>
+<p>Next we will execute a gravity turn when the rocket reaches a sufficiently high altitude. The
+following uses an event to wait until the altitude of the rocket reaches 10km:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-5-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-5-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-5-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-5-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-5-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-5-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-5-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-5-QyM=" class="sphinx-tabs-panel group-tab" id="panel-5-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">36</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">(</span><span class="k">null</span><span class="p">).</span><span class="n">MeanAltitude</span><span class="p">);</span>
+<span class="linenos">37</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">GreaterThan</span><span class="p">(</span>
+<span class="linenos">38</span><span class="w">                </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">));</span>
+<span class="linenos">39</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">KRPC</span><span class="p">().</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">40</span><span class="w">            </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">41</span><span class="w">                </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="linenos">42</span><span class="w">            </span><span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">39</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">mean_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">().</span><span class="n">mean_altitude_call</span><span class="p">();</span>
+<span class="linenos">40</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">greater_than</span><span class="p">(</span>
+<span class="linenos">41</span><span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">mean_altitude</span><span class="p">),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">));</span>
+<span class="linenos">42</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">43</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
+<span class="linenos">44</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="linenos">45</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">50</span><span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">meanAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;getMeanAltitude&quot;</span><span class="p">);</span>
+<span class="linenos">51</span><span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
+<span class="linenos">52</span><span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="linenos">53</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">meanAltitude</span><span class="p">),</span>
+<span class="linenos">54</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">10000</span><span class="p">));</span>
+<span class="linenos">55</span><span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">56</span><span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">57</span><span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="linenos">58</span><span class="w">      </span><span class="p">}</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">21</span><span class="kr">while</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">().</span><span class="nv">mean_altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">10000</span><span class="w"> </span><span class="kr">do</span>
+<span class="linenos">22</span><span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">23</span><span class="kr">end</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-5-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-5-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">25</span><span class="n">mean_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(),</span> <span class="s1">&#39;mean_altitude&#39;</span><span class="p">)</span>
+<span class="linenos">26</span><span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span>
+<span class="linenos">27</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">mean_altitude</span><span class="p">),</span>
+<span class="linenos">28</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">10000</span><span class="p">))</span>
+<span class="linenos">29</span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<span class="linenos">30</span><span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+<span class="linenos">31</span>    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+<p>In this bit of code, calling <code class="docutils literal notranslate"><span class="pre">vessel.flight()</span></code> returns a <a class="reference internal" href="../python/api/space-center/flight.html#SpaceCenter.Flight" title="SpaceCenter.Flight"><code class="xref py py-class docutils literal notranslate"><span class="pre">Flight</span></code></a> object that is used to
+get all sorts of information about the rocket, such as the direction it is pointing in and its
+velocity.</p>
+<p>Now we need to angle the rocket over to a pitch of 60° and maintain a heading of 90° (west). To do
+this, we simply reconfigure the auto-pilot:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-6-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-6-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-6-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-6-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-6-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-6-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-6-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-6-QyM=" class="sphinx-tabs-panel group-tab" id="panel-6-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">45</span><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Gravity turn&quot;</span><span class="p">);</span>
+<span class="linenos">46</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">TargetPitchAndHeading</span><span class="w"> </span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">48</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Gravity turn&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">49</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">61</span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Gravity turn&quot;</span><span class="p">);</span>
+<span class="linenos">62</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">targetPitchAndHeading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">);</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">25</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gravity turn&#39;</span><span class="p">)</span>
+<span class="linenos">26</span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">:</span><span class="nf">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span><span class="w"> </span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-6-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-6-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">33</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Gravity turn&#39;</span><span class="p">)</span>
+<span class="linenos">34</span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">target_pitch_and_heading</span><span class="p">(</span><span class="mi">60</span><span class="p">,</span> <span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>Now we wait until the apoapsis reaches 100km (again, using an event), then reduce the throttle to
+zero, jettison the launch stage and turn off the auto-pilot:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-7-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-7-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-7-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-7-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-7-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-7-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-7-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-7-QyM=" class="sphinx-tabs-panel group-tab" id="panel-7-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">32</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">33</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">apoapsisAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">ApoapsisAltitude</span><span class="p">);</span>
+<span class="linenos">34</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">GreaterThan</span><span class="p">(</span>
+<span class="linenos">35</span><span class="w">                </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">apoapsisAltitude</span><span class="p">),</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">));</span>
+<span class="linenos">36</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">KRPC</span><span class="p">().</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">37</span><span class="w">            </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">38</span><span class="w">                </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="linenos">39</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos">40</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">41</span>
+<span class="linenos">42</span><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Launch stage separation&quot;</span><span class="p">);</span>
+<span class="linenos">43</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">Throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="linenos">44</span><span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="linenos">45</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">ActivateNextStage</span><span class="w"> </span><span class="p">();</span>
+<span class="linenos">46</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">AutoPilot</span><span class="p">.</span><span class="n">Disengage</span><span class="w"> </span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">51</span><span class="w">  </span><span class="p">{</span>
+<span class="linenos">52</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">apoapsis_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">apoapsis_altitude_call</span><span class="p">();</span>
+<span class="linenos">53</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">greater_than</span><span class="p">(</span>
+<span class="linenos">54</span><span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">apoapsis_altitude</span><span class="p">),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">));</span>
+<span class="linenos">55</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">56</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
+<span class="linenos">57</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="linenos">58</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+<span class="linenos">59</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">60</span>
+<span class="linenos">61</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Launch stage separation&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">62</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">set_throttle</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">63</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="linenos">64</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
+<span class="linenos">65</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">auto_pilot</span><span class="p">().</span><span class="n">disengage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">64</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">65</span><span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">apoapsisAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span>
+<span class="linenos">66</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;getApoapsisAltitude&quot;</span><span class="p">);</span>
+<span class="linenos">67</span><span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">greaterThan</span><span class="p">(</span>
+<span class="linenos">68</span><span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="linenos">69</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">apoapsisAltitude</span><span class="p">),</span>
+<span class="linenos">70</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">100000</span><span class="p">));</span>
+<span class="linenos">71</span><span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">72</span><span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">73</span><span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="linenos">74</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">75</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">76</span>
+<span class="linenos">77</span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Launch stage separation&quot;</span><span class="p">);</span>
+<span class="linenos">78</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">setThrottle</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="linenos">79</span><span class="w">    </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="linenos">80</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">activateNextStage</span><span class="p">();</span>
+<span class="linenos">81</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getAutoPilot</span><span class="p">().</span><span class="na">disengage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">28</span><span class="kr">while</span><span class="w"> </span><span class="nv">vessel</span><span class="p">.</span><span class="py">orbit</span><span class="p">.</span><span class="py">apoapsis_altitude</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">100000</span><span class="w"> </span><span class="kr">do</span>
+<span class="linenos">29</span><span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">30</span><span class="kr">end</span>
+<span class="linenos">31</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Launch stage separation&#39;</span><span class="p">)</span>
+<span class="linenos">32</span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">.</span><span class="py">throttle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="linenos">33</span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">34</span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
+<span class="linenos">35</span><span class="nv">vessel</span><span class="p">.</span><span class="py">auto_pilot</span><span class="p">:</span><span class="nf">disengage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-7-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-7-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">36</span><span class="n">apoapsis_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="p">,</span> <span class="s1">&#39;apoapsis_altitude&#39;</span><span class="p">)</span>
+<span class="linenos">37</span><span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">greater_than</span><span class="p">(</span>
+<span class="linenos">38</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">apoapsis_altitude</span><span class="p">),</span>
+<span class="linenos">39</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">100000</span><span class="p">))</span>
+<span class="linenos">40</span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<span class="linenos">41</span><span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+<span class="linenos">42</span>    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="linenos">43</span>
+<span class="linenos">44</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Launch stage separation&#39;</span><span class="p">)</span>
+<span class="linenos">45</span><span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">throttle</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="linenos">46</span><span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">47</span><span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+<span class="linenos">48</span><span class="n">vessel</span><span class="o">.</span><span class="n">auto_pilot</span><span class="o">.</span><span class="n">disengage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+<p>In this bit of code, <code class="docutils literal notranslate"><span class="pre">vessel.orbit</span></code> returns an <a class="reference internal" href="../python/api/space-center/orbit.html#SpaceCenter.Orbit" title="SpaceCenter.Orbit"><code class="xref py py-class docutils literal notranslate"><span class="pre">Orbit</span></code></a> object that contains all the
+information about the orbit of the rocket.</p>
+</section>
+<section id="part-four-returning-safely-to-kerbin">
+<h2>Part Four: Returning Safely to Kerbin<a class="headerlink" href="#part-four-returning-safely-to-kerbin" title="Link to this heading">#</a></h2>
+<p>Our Kerbals are now heading on a sub-orbital trajectory and are on a collision course with the
+surface. All that remains to do is wait until they fall to 1km altitude above the surface, and then
+deploy the parachutes. If you like, you can use time acceleration to skip ahead to just before this
+happens - the script will continue to work.</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-8-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-8-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-8-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-8-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-8-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-8-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-8-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-8-QyM=" class="sphinx-tabs-panel group-tab" id="panel-8-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">64</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos">65</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">srfAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Connection</span><span class="p">.</span><span class="n">GetCall</span><span class="p">(()</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="p">(</span><span class="k">null</span><span class="p">).</span><span class="n">SurfaceAltitude</span><span class="p">);</span>
+<span class="linenos">66</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">LessThan</span><span class="p">(</span>
+<span class="linenos">67</span><span class="w">                </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">Call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">srfAltitude</span><span class="p">),</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="n">ConstantDouble</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="linenos">68</span><span class="w">            </span><span class="kt">var</span><span class="w"> </span><span class="n">evnt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">conn</span><span class="p">.</span><span class="n">KRPC</span><span class="p">().</span><span class="n">AddEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">69</span><span class="w">            </span><span class="k">lock</span><span class="w"> </span><span class="p">(</span><span class="n">evnt</span><span class="p">.</span><span class="n">Condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">70</span><span class="w">                </span><span class="n">evnt</span><span class="p">.</span><span class="n">Wait</span><span class="p">();</span>
+<span class="linenos">71</span><span class="w">            </span><span class="p">}</span>
+<span class="linenos">72</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">73</span>
+<span class="linenos">74</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="n">Control</span><span class="p">.</span><span class="n">ActivateNextStage</span><span class="w"> </span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">67</span><span class="w">  </span><span class="p">{</span>
+<span class="linenos">68</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">srf_altitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">().</span><span class="n">surface_altitude_call</span><span class="p">();</span>
+<span class="linenos">69</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">less_than</span><span class="p">(</span>
+<span class="linenos">70</span><span class="w">      </span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">call</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="n">srf_altitude</span><span class="p">),</span><span class="w"> </span><span class="n">Expr</span><span class="o">::</span><span class="n">constant_double</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="linenos">71</span><span class="w">    </span><span class="k">auto</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">72</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">acquire</span><span class="p">();</span>
+<span class="linenos">73</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+<span class="linenos">74</span><span class="w">    </span><span class="n">event</span><span class="p">.</span><span class="n">release</span><span class="p">();</span>
+<span class="linenos">75</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">76</span>
+<span class="linenos">77</span><span class="w">  </span><span class="n">vessel</span><span class="p">.</span><span class="n">control</span><span class="p">().</span><span class="n">activate_next_stage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos">83</span><span class="w">    </span><span class="p">{</span>
+<span class="linenos">84</span><span class="w">      </span><span class="n">ProcedureCall</span><span class="w"> </span><span class="n">srfAltitude</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">connection</span><span class="p">.</span><span class="na">getCall</span><span class="p">(</span>
+<span class="linenos">85</span><span class="w">        </span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;getSurfaceAltitude&quot;</span><span class="p">);</span>
+<span class="linenos">86</span><span class="w">      </span><span class="n">Expression</span><span class="w"> </span><span class="n">expr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Expression</span><span class="p">.</span><span class="na">lessThan</span><span class="p">(</span>
+<span class="linenos">87</span><span class="w">        </span><span class="n">connection</span><span class="p">,</span>
+<span class="linenos">88</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">call</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="n">srfAltitude</span><span class="p">),</span>
+<span class="linenos">89</span><span class="w">        </span><span class="n">Expression</span><span class="p">.</span><span class="na">constantDouble</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">));</span>
+<span class="linenos">90</span><span class="w">      </span><span class="n">Event</span><span class="w"> </span><span class="n">event</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">krpc</span><span class="p">.</span><span class="na">addEvent</span><span class="p">(</span><span class="n">expr</span><span class="p">);</span>
+<span class="linenos">91</span><span class="w">      </span><span class="kd">synchronized</span><span class="w"> </span><span class="p">(</span><span class="n">event</span><span class="p">.</span><span class="na">getCondition</span><span class="p">())</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">92</span><span class="w">        </span><span class="n">event</span><span class="p">.</span><span class="na">waitFor</span><span class="p">();</span>
+<span class="linenos">93</span><span class="w">      </span><span class="p">}</span>
+<span class="linenos">94</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">95</span>
+<span class="linenos">96</span><span class="w">    </span><span class="n">vessel</span><span class="p">.</span><span class="na">getControl</span><span class="p">().</span><span class="na">activateNextStage</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">37</span><span class="kr">while</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">().</span><span class="nv">surface_altitude</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="kr">do</span>
+<span class="linenos">38</span><span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">39</span><span class="kr">end</span>
+<span class="linenos">40</span><span class="nv">vessel</span><span class="p">.</span><span class="py">control</span><span class="p">:</span><span class="nf">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-8-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-8-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">50</span><span class="n">srf_altitude</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_call</span><span class="p">(</span><span class="nb">getattr</span><span class="p">,</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(),</span> <span class="s1">&#39;surface_altitude&#39;</span><span class="p">)</span>
+<span class="linenos">51</span><span class="n">expr</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">less_than</span><span class="p">(</span>
+<span class="linenos">52</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">srf_altitude</span><span class="p">),</span>
+<span class="linenos">53</span>    <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">Expression</span><span class="o">.</span><span class="n">constant_double</span><span class="p">(</span><span class="mi">1000</span><span class="p">))</span>
+<span class="linenos">54</span><span class="n">event</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">krpc</span><span class="o">.</span><span class="n">add_event</span><span class="p">(</span><span class="n">expr</span><span class="p">)</span>
+<span class="linenos">55</span><span class="k">with</span> <span class="n">event</span><span class="o">.</span><span class="n">condition</span><span class="p">:</span>
+<span class="linenos">56</span>    <span class="n">event</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+<span class="linenos">57</span>
+<span class="linenos">58</span><span class="n">vessel</span><span class="o">.</span><span class="n">control</span><span class="o">.</span><span class="n">activate_next_stage</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></div>
+<p>The parachutes should have now been deployed. The next bit of code will repeatedly print out the
+altitude of the capsule until its speed reaches zero – which will happen when it lands:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-9-QyM=" aria-selected="true" class="sphinx-tabs-tab group-tab" id="tab-9-QyM=" name="QyM=" role="tab" tabindex="0">C#</button><button aria-controls="panel-9-Qysr" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-Qysr" name="Qysr" role="tab" tabindex="-1">C++</button><button aria-controls="panel-9-SmF2YQ==" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-SmF2YQ==" name="SmF2YQ==" role="tab" tabindex="-1">Java</button><button aria-controls="panel-9-THVh" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-THVh" name="THVh" role="tab" tabindex="-1">Lua</button><button aria-controls="panel-9-UHl0aG9u" aria-selected="false" class="sphinx-tabs-tab group-tab" id="tab-9-UHl0aG9u" name="UHl0aG9u" role="tab" tabindex="-1">Python</button></div><div aria-labelledby="tab-9-QyM=" class="sphinx-tabs-panel group-tab" id="panel-9-QyM=" name="QyM=" role="tabpanel" tabindex="0"><div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="linenos">76</span><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">Orbit</span><span class="p">.</span><span class="n">Body</span><span class="p">.</span><span class="n">ReferenceFrame</span><span class="p">).</span><span class="n">VerticalSpeed</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">77</span><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Altitude = {0:F1} meters&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">Flight</span><span class="w"> </span><span class="p">().</span><span class="n">SurfaceAltitude</span><span class="p">);</span>
+<span class="linenos">78</span><span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="n">Threading</span><span class="p">.</span><span class="n">Thread</span><span class="p">.</span><span class="n">Sleep</span><span class="w"> </span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="linenos">79</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos">80</span><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="w"> </span><span class="p">(</span><span class="s">&quot;Landed!&quot;</span><span class="p">);</span>
+<span class="linenos">81</span><span class="w">        </span><span class="n">conn</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-Qysr" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-Qysr" name="Qysr" role="tabpanel" tabindex="0"><div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="linenos">79</span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="n">orbit</span><span class="p">().</span><span class="n">body</span><span class="p">().</span><span class="n">reference_frame</span><span class="p">()).</span><span class="n">vertical_speed</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">-0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">80</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Altitude = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="n">flight</span><span class="p">().</span><span class="n">surface_altitude</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot; meters&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+<span class="linenos">81</span><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">this_thread</span><span class="o">::</span><span class="n">sleep_for</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">chrono</span><span class="o">::</span><span class="n">seconds</span><span class="p">(</span><span class="mi">1</span><span class="p">));</span>
+<span class="linenos">82</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">83</span><span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Landed!&quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-SmF2YQ==" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-SmF2YQ==" name="SmF2YQ==" role="tabpanel" tabindex="0"><div class="highlight-java notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 98</span><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="n">vessel</span><span class="p">.</span><span class="na">getOrbit</span><span class="p">().</span><span class="na">getBody</span><span class="p">().</span><span class="na">getReferenceFrame</span><span class="p">()).</span><span class="na">getVerticalSpeed</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="mf">0.1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 99</span><span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">printf</span><span class="p">(</span><span class="s">&quot;Altitude = %.1f meters\n&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">vessel</span><span class="p">.</span><span class="na">flight</span><span class="p">(</span><span class="kc">null</span><span class="p">).</span><span class="na">getSurfaceAltitude</span><span class="p">());</span>
+<span class="linenos">100</span><span class="w">      </span><span class="n">Thread</span><span class="p">.</span><span class="na">sleep</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span>
+<span class="linenos">101</span><span class="w">    </span><span class="p">}</span>
+<span class="linenos">102</span><span class="w">    </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Landed!&quot;</span><span class="p">);</span>
+<span class="linenos">103</span><span class="w">    </span><span class="n">connection</span><span class="p">.</span><span class="na">close</span><span class="p">();</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-THVh" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-THVh" name="THVh" role="tabpanel" tabindex="0"><div class="highlight-lua notranslate"><div class="highlight"><pre><span></span><span class="linenos">42</span><span class="kr">while</span><span class="w"> </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">(</span><span class="nv">vessel</span><span class="p">.</span><span class="py">orbit</span><span class="p">.</span><span class="py">body</span><span class="p">.</span><span class="py">reference_frame</span><span class="p">).</span><span class="nv">vertical_speed</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">-</span><span class="mf">0.1</span><span class="w"> </span><span class="kr">do</span>
+<span class="linenos">43</span><span class="w">    </span><span class="nb">print</span><span class="p">(</span><span class="nb">string.format</span><span class="p">(</span><span class="s1">&#39;Altitude = %.1f meters&#39;</span><span class="p">,</span>
+<span class="linenos">44</span><span class="w">                        </span><span class="nv">vessel</span><span class="p">:</span><span class="nf">flight</span><span class="p">().</span><span class="nv">surface_altitude</span><span class="p">))</span>
+<span class="linenos">45</span><span class="w">    </span><span class="nv">platform</span><span class="p">.</span><span class="nf">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">46</span><span class="kr">end</span>
+<span class="linenos">47</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Landed!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-9-UHl0aG9u" class="sphinx-tabs-panel group-tab" hidden="true" id="panel-9-UHl0aG9u" name="UHl0aG9u" role="tabpanel" tabindex="0"><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">60</span><span class="k">while</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">(</span><span class="n">vessel</span><span class="o">.</span><span class="n">orbit</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">reference_frame</span><span class="p">)</span><span class="o">.</span><span class="n">vertical_speed</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">:</span>
+<span class="linenos">61</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Altitude = </span><span class="si">%.1f</span><span class="s1"> meters&#39;</span> <span class="o">%</span> <span class="n">vessel</span><span class="o">.</span><span class="n">flight</span><span class="p">()</span><span class="o">.</span><span class="n">surface_altitude</span><span class="p">)</span>
+<span class="linenos">62</span>    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="linenos">63</span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Landed!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></div>
+<p>This bit of code uses the <code class="docutils literal notranslate"><span class="pre">vessel.flight()</span></code> function, as before, but this time it is passed a
+<a class="reference internal" href="../python/api/space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a> parameter. We want to get the vertical speed of the capsule relative to the
+surface of Kerbin, so the values returned by the flight object need to be relative to the surface of
+Kerbin. We therefore pass <code class="docutils literal notranslate"><span class="pre">vessel.orbit.body.reference_frame</span></code> to <code class="docutils literal notranslate"><span class="pre">vessel.flight()</span></code> as this
+reference frame has its origin at the center of Kerbin and it rotates with the planet. For more
+information, check out the tutorial on <a class="reference internal" href="reference-frames.html#tutorial-reference-frames"><span class="std std-ref">Reference Frames</span></a>.</p>
+<p>Your Kerbals should now have safely landed back on the surface.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../tutorials.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials and Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="reference-frames.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reference Frames</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-one-preparing-for-launch">Part One: Preparing for Launch</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-two-lift-off">Part Two: Lift-off!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-three-reaching-apoapsis">Part Three: Reaching Apoapsis</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#part-four-returning-safely-to-kerbin">Part Four: Returning Safely to Kerbin</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/tutorials/suborbital-flight.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

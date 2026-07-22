@@ -1,0 +1,120 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: Drawing
+
+Text
+====
+
+
+.. class:: Text
+
+   Text. Created using :meth:`Drawing.add_text`.
+
+   .. attribute:: position: Tuple
+
+      Position of the text.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: rotation: Tuple
+
+      Rotation of the text as a quaternion.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: reference_frame: SpaceCenter.ReferenceFrame
+
+      Reference frame for the positions of the object.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+
+   .. attribute:: visible: boolean
+
+      Whether the object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+   .. method:: remove()
+
+      Remove the object.
+
+   .. attribute:: content: string
+
+      The text string
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: font: string
+
+      Name of the font
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. staticmethod:: available_fonts()
+
+      A list of all available fonts.
+
+      :rtype: List
+
+   .. attribute:: size: number
+
+      Font size.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: character_size: number
+
+      Character size.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: style: UI.FontStyle
+
+      Font style.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.FontStyle`
+
+   .. attribute:: color: Tuple
+
+      Set the color
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. attribute:: material: string
+
+      Material used to render the object.
+      Creates the material from a shader with the given name.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: alignment: UI.TextAlignment
+
+      Alignment.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.TextAlignment`
+
+   .. attribute:: line_spacing: number
+
+      Line spacing.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: anchor: UI.TextAnchor
+
+      Anchor.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.TextAnchor`

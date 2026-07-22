@@ -1,0 +1,24 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.DockingCamera
+
+DockingCamera
+=============
+
+
+.. type:: public class DockingCamera
+
+   Camera service.
+
+   .. method:: boolean getAvailable()
+
+
+      Check if the Camera API is available.
+
+   
+
+   .. method:: Camera camera(SpaceCenter.Part part)
+
+      Get a Camera part.
+
+      :param SpaceCenter.Part part:

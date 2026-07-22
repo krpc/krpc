@@ -1,0 +1,41 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+AlarmAction
+===========
+
+
+.. type:: krpc_KerbalAlarmClock_AlarmAction_t
+
+   The action performed by an alarm when it fires.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_DONOTHING
+
+      Don't do anything at all...
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_DONOTHINGDELETEWHENPASSED
+
+      Don't do anything, and delete the alarm.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_KILLWARP
+
+      Drop out of time warp.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_KILLWARPONLY
+
+      Drop out of time warp.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_MESSAGEONLY
+
+      Display a message.
+
+
+   .. macro:: KRPC_KERBALALARMCLOCK_ALARMACTION_PAUSEGAME
+
+      Pause the game.

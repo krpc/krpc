@@ -1,0 +1,598 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::KRPC
+
+Expressions
+===========
+
+
+.. class:: Expression
+
+   A server side expression.
+
+   .. function:: static Expression constant_double(Client& connection, double value)
+
+      A constant value of double precision floating point type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression constant_float(Client& connection, float value)
+
+      A constant value of single precision floating point type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression constant_int(Client& connection, int32_t value)
+
+      A constant value of integer type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression constant_bool(Client& connection, bool value)
+
+      A constant value of boolean type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression constant_string(Client& connection, std::string value)
+
+      A constant value of string type.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression call(Client& connection, krpc::schema::ProcedureCall call)
+
+      An RPC call.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression equal(Client& connection, Expression arg0, Expression arg1)
+
+      Equality comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression not_equal(Client& connection, Expression arg0, Expression arg1)
+
+      Inequality comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression greater_than(Client& connection, Expression arg0, Expression arg1)
+
+      Greater than numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression greater_than_or_equal(Client& connection, Expression arg0, Expression arg1)
+
+      Greater than or equal numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression less_than(Client& connection, Expression arg0, Expression arg1)
+
+      Less than numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression less_than_or_equal(Client& connection, Expression arg0, Expression arg1)
+
+      Less than or equal numerical comparison.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression and__(Client& connection, Expression arg0, Expression arg1)
+
+      Boolean and operator.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression or__(Client& connection, Expression arg0, Expression arg1)
+
+      Boolean or operator.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression exclusive_or(Client& connection, Expression arg0, Expression arg1)
+
+      Boolean exclusive-or operator.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression not__(Client& connection, Expression arg)
+
+      Boolean negation operator.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: static Expression add(Client& connection, Expression arg0, Expression arg1)
+
+      Numerical addition.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression subtract(Client& connection, Expression arg0, Expression arg1)
+
+      Numerical subtraction.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression multiply(Client& connection, Expression arg0, Expression arg1)
+
+      Numerical multiplication.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression divide(Client& connection, Expression arg0, Expression arg1)
+
+      Numerical division.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression modulo(Client& connection, Expression arg0, Expression arg1)
+
+      Numerical modulo operator.
+
+      :Parameters:
+
+
+
+
+      :returns: The remainder of arg0 divided by arg1
+   
+
+   .. function:: static Expression power(Client& connection, Expression arg0, Expression arg1)
+
+      Numerical power operator.
+
+      :Parameters:
+
+
+
+
+      :returns: arg0 raised to the power of arg1, with type of arg0
+   
+
+   .. function:: static Expression left_shift(Client& connection, Expression arg0, Expression arg1)
+
+      Bitwise left shift.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression right_shift(Client& connection, Expression arg0, Expression arg1)
+
+      Bitwise right shift.
+
+      :Parameters:
+
+
+
+
+   
+
+   .. function:: static Expression cast(Client& connection, Expression arg, Type type)
+
+      Perform a cast to the given type.
+
+      :Parameters:
+
+
+       * **type** -- Type to cast the argument to.
+
+   
+
+   .. function:: static Expression parameter(Client& connection, std::string name, Type type)
+
+      A named parameter of type double.
+
+      :Parameters:
+
+       * **name** -- The name of the parameter.
+       * **type** -- The type of the parameter.
+
+      :returns: A named parameter.
+   
+
+   .. function:: static Expression function(Client& connection, std::vector<Expression> parameters, Expression body)
+
+      A function.
+
+      :Parameters:
+
+       * **parameters** -- The parameters of the function.
+       * **body** -- The body of the function.
+
+      :returns: A function.
+   
+
+   .. function:: static Expression invoke(Client& connection, Expression function, std::map<std::string, Expression> args)
+
+      A function call.
+
+      :Parameters:
+
+       * **function** -- The function to call.
+       * **args** -- The arguments to call the function with.
+
+      :returns: A function call.
+   
+
+   .. function:: static Expression create_tuple(Client& connection, std::vector<Expression> elements)
+
+      Construct a tuple.
+
+      :Parameters:
+
+       * **elements** -- The elements.
+
+      :returns: The tuple.
+   
+
+   .. function:: static Expression create_list(Client& connection, std::vector<Expression> values)
+
+      Construct a list.
+
+      :Parameters:
+
+       * **values** -- The value. Should all be of the same type.
+
+      :returns: The list.
+   
+
+   .. function:: static Expression create_set(Client& connection, std::set<Expression> values)
+
+      Construct a set.
+
+      :Parameters:
+
+       * **values** -- The values. Should all be of the same type.
+
+      :returns: The set.
+   
+
+   .. function:: static Expression create_dictionary(Client& connection, std::vector<Expression> keys, std::vector<Expression> values)
+
+      Construct a dictionary, from a list of corresponding keys and values.
+
+      :Parameters:
+
+       * **keys** -- The keys. Should all be of the same type.
+       * **values** -- The values. Should all be of the same type.
+
+      :returns: The dictionary.
+   
+
+   .. function:: static Expression to_list(Client& connection, Expression arg)
+
+      Convert a collection to a list.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a list.
+   
+
+   .. function:: static Expression to_set(Client& connection, Expression arg)
+
+      Convert a collection to a set.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+
+      :returns: The collection as a set.
+   
+
+   .. function:: static Expression get(Client& connection, Expression arg, Expression index)
+
+      Access an element in a tuple, list or dictionary.
+
+      :Parameters:
+
+       * **arg** -- The tuple, list or dictionary.
+       * **index** -- The index of the element to access. A zero indexed integer for a tuple or list, or a key for a dictionary.
+
+      :returns: The element.
+   
+
+   .. function:: static Expression count(Client& connection, Expression arg)
+
+      Number of elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list, set or dictionary.
+
+      :returns: The number of elements in the collection.
+   
+
+   .. function:: static Expression sum(Client& connection, Expression arg)
+
+      Sum all elements of a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The sum of the elements in the collection.
+   
+
+   .. function:: static Expression max(Client& connection, Expression arg)
+
+      Maximum of all elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The maximum elements in the collection.
+   
+
+   .. function:: static Expression min(Client& connection, Expression arg)
+
+      Minimum of all elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The minimum elements in the collection.
+   
+
+   .. function:: static Expression average(Client& connection, Expression arg)
+
+      Minimum of all elements in a collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+
+      :returns: The minimum elements in the collection.
+   
+
+   .. function:: static Expression select(Client& connection, Expression arg, Expression func)
+
+      Run a function on every element in the collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function.
+
+      :returns: The modified collection.
+   
+
+   .. function:: static Expression where(Client& connection, Expression arg, Expression func)
+
+      Run a function on every element in the collection.
+
+      :Parameters:
+
+       * **arg** -- The list or set.
+       * **func** -- The function.
+
+      :returns: The modified collection.
+   
+
+   .. function:: static Expression contains(Client& connection, Expression arg, Expression value)
+
+      Determine if a collection contains a value.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **value** -- The value to look for.
+
+      :returns: Whether the collection contains a value.
+   
+
+   .. function:: static Expression aggregate(Client& connection, Expression arg, Expression func)
+
+      Applies an accumulator function over a sequence.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+   
+
+   .. function:: static Expression aggregate_with_seed(Client& connection, Expression arg, Expression seed, Expression func)
+
+      Applies an accumulator function over a sequence, with a given seed.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **seed** -- The seed value.
+       * **func** -- The accumulator function.
+
+      :returns: The accumulated value.
+   
+
+   .. function:: static Expression concat(Client& connection, Expression arg1, Expression arg2)
+
+      Concatenate two sequences.
+
+      :Parameters:
+
+       * **arg1** -- The first sequence.
+       * **arg2** -- The second sequence.
+
+      :returns: The first sequence followed by the second sequence.
+   
+
+   .. function:: static Expression order_by(Client& connection, Expression arg, Expression key)
+
+      Order a collection using a key function.
+
+      :Parameters:
+
+       * **arg** -- The collection to order.
+       * **key** -- A function that takes a value from the collection and generates a key to sort on.
+
+      :returns: The ordered collection.
+   
+
+   .. function:: static Expression all(Client& connection, Expression arg, Expression predicate)
+
+      Determine whether all items in a collection satisfy a boolean predicate.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether all items satisfy the predicate.
+   
+
+   .. function:: static Expression any(Client& connection, Expression arg, Expression predicate)
+
+      Determine whether any item in a collection satisfies a boolean predicate.
+
+      :Parameters:
+
+       * **arg** -- The collection.
+       * **predicate** -- The predicate function.
+
+      :returns: Whether any item satisfies the predicate.
+   
+
+
+
+.. class:: Type
+
+   A server side expression.
+
+   .. function:: static Type double__(Client& connection)
+
+      Double type.
+
+
+   
+
+   .. function:: static Type float__(Client& connection)
+
+      Float type.
+
+
+   
+
+   .. function:: static Type int__(Client& connection)
+
+      Int type.
+
+
+   
+
+   .. function:: static Type bool__(Client& connection)
+
+      Bool type.
+
+
+   
+
+   .. function:: static Type string(Client& connection)
+
+      String type.
