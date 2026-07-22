@@ -48,7 +48,9 @@ _ROLES = "\n".join(
     ".. role:: %s\n   :class: changelog-marker %s\n" % (kind, kind) for kind in _LABELS
 )
 
-_VERSION_RE = re.compile(r"^##\s+\[(\d[^\]]*)\]")
+# Version header: the bracketed version, then any trailing text (e.g. the
+# ' - unreleased' marker on the in-development version).
+_VERSION_RE = re.compile(r"^##\s+\[(\d[^\]]*)\]\s*(.*)$")
 _RST_SPECIAL_RE = re.compile(r"([\\*`|_])")
 _ISSUE_RE = re.compile(r"#(\d+)")
 _NUM_RE = re.compile(r"^\d+$")
@@ -109,12 +111,15 @@ def _make_item(fragments):
 
 
 def parse_changes(text):
-    """Parse a ``CHANGELOG.md`` into ``{version: [Item, ...]}``.
+    """Parse a ``CHANGELOG.md`` into ``(versions, unreleased)``.
 
-    A ``- `` bullet at the margin is a top-level entry; a ``  - `` bullet
-    indented under it is a sub-item; other indented lines continue the current
-    bullet's text. One level of nesting is supported."""
+    ``versions`` maps each version to its ``[Item, ...]``; ``unreleased`` is the
+    set of versions whose header carried the `` - unreleased`` marker. A ``- ``
+    bullet at the margin is a top-level entry; a ``  - `` bullet indented under
+    it is a sub-item; other indented lines continue the current bullet's text.
+    One level of nesting is supported."""
     versions = {}
+    unreleased = set()
     current = None
     top = None  # open top-level Item (holds accumulating children)
     top_fragments = None  # its raw text fragments
@@ -145,6 +150,8 @@ def parse_changes(text):
         if match:
             flush_top()
             current = match.group(1)
+            if "unreleased" in match.group(2).lower():
+                unreleased.add(current)
             versions[current] = []
             continue
         if current is None:
@@ -164,7 +171,7 @@ def parse_changes(text):
         elif top_fragments is not None:
             top_fragments.append(stripped)
     flush_top()
-    return versions
+    return versions, unreleased
 
 
 def heading(text, char):
@@ -188,9 +195,10 @@ def render_item(item, level=0):
     return "\n".join(parts)
 
 
-def render(components):
+def render(components, unreleased=()):
     """Render the merged changelog. ``components`` is an ordered list of
-    ``(display_name, {version: [Item, ...]})``."""
+    ``(display_name, {version: [Item, ...]})``; ``unreleased`` is the set of
+    versions to mark as not yet released in their heading."""
     all_versions = set()
     for _, versions in components:
         all_versions.update(versions)
@@ -199,7 +207,8 @@ def render(components):
     out = [_ROLES, heading("Changelog", "=")]
 
     for version in ordered:
-        out.append("\n" + heading(version, "-"))
+        title = "%s - unreleased" % version if version in unreleased else version
+        out.append("\n" + heading(title, "-"))
 
         for name, versions in components:
             items = versions.get(version, [])
@@ -229,11 +238,14 @@ def main():
     args = parser.parse_args()
 
     components = []
+    unreleased = set()
     for name, path in args.entry:
         with open(path, "r", encoding="utf-8") as fp:
-            components.append((name, parse_changes(fp.read())))
+            versions, marked = parse_changes(fp.read())
+        components.append((name, versions))
+        unreleased |= marked
 
-    content = render(components)
+    content = render(components, unreleased)
     with open(args.output, "w", encoding="utf-8") as fp:
         fp.write(content)
 
