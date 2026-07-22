@@ -6,7 +6,8 @@ The frozen docs are built by grafting the version's documentation *content*
 onto the *current* checkout's toolchain and theme:
 
   * content   -- the handwritten sources and the service API surfaces (doc/src,
-    doc/api, doc/order.txt, the service/*/src trees and core/src/Service/KRPC),
+    doc/api, doc/order.txt, the service/*/src trees and the built-in KRPC
+    service, which releases before 0.5.4 keep under server/ rather than core/),
     taken from the v<version>-docs branch if it exists, otherwise from the
     v<version> tag.
   * toolchain -- everything else (the Bazel setup, krpctools, the sphinx theme
@@ -19,6 +20,11 @@ the sources) are therefore made as commits on a long-lived v<version>-docs
 branch based off the v<version> tag, leaving the version's API surface and prose
 otherwise frozen. This is an explicit, opt-in maintenance action; the docs
 workflow never rebuilds a released version.
+
+The graft reaches back to 0.5.2. Earlier releases fail to build: their KRPC
+service was implemented against core infrastructure since removed (the
+KRPC.Utils.Tuple and the Continuation-based event API), which cannot be supplied
+by an additive shim the way the Paused/CurrentGameScene symbols are.
 
 Usage:
   tools/release/publish-docs.py [options] VERSION
@@ -45,15 +51,14 @@ from pathlib import Path
 
 import lib
 
-# The documentation content inputs, restored from the content ref onto the
-# current toolchain. Pinning core/src/Service/KRPC to the release keeps later
-# changes to the KRPC service API (e.g. the GameScene API, #897) out of the
-# frozen build.
+# The documentation content inputs restored, unchanged in location, from the
+# content ref onto the current toolchain. The KRPC service sources are pinned
+# too, but handled separately by graft_krpc_service since their location moved
+# between releases.
 CONTENT_PATHS = (
     'doc/src',
     'doc/api',
     'doc/order.txt',
-    'core/src/Service/KRPC',
     'service/SpaceCenter/src',
     'service/Drawing/src',
     'service/UI/src',
@@ -63,6 +68,14 @@ CONTENT_PATHS = (
     'service/LiDAR/src',
     'service/DockingCamera/src',
 )
+
+# The built-in KRPC service sources. Pinning them to the content ref keeps later
+# changes to the KRPC service API (e.g. the GameScene API, #897) out of the
+# frozen build. The sources moved from server/ to core/ in 0.5.4; for an earlier
+# content ref they are grafted from their old server/ location into the current
+# core/ location, where the toolchain's core/src/**/*.cs glob compiles them.
+KRPC_SERVICE_DEST = 'core/src/Service/KRPC'
+KRPC_SERVICE_REFS = ('core/src/Service/KRPC', 'server/src/Service/KRPC')
 
 # Grafting an old service API onto newer core/server can drop a type the current
 # toolchain still references. The only such case to date is the namespace-level
@@ -103,6 +116,87 @@ GAMESCENE_SHIM = '''namespace KRPC.Service.KRPC
         ResearchAndDevelopment,
         /// <summary>The administration facility.</summary>
         Administration,
+    }
+}
+'''
+
+# Before 0.5.4 the KRPC service lived in server/ and its Paused and
+# CurrentGameScene properties were implemented against server and KSP symbols --
+# the server Addon and the KSP PauseMenu, EditorDriver and EditorFacility -- that
+# the KSP-free core/ assembly, where the service is now grafted, cannot see.
+# These compile-only shims, placed in the KRPC service's own namespace so the
+# grafted code resolves them unqualified and carrying no [KRPC*] attribute so the
+# scanner ignores them, let those properties build; their bodies never run during
+# doc generation. The service's namespace (not KRPC) keeps the shim Addon from
+# colliding with the server's own KRPC.Addon, which core is imported into. The
+# shim is written only when the grafted service still references these symbols,
+# so 0.5.4 onwards (which moved the properties out of the service) needs it not at
+# all.
+KRPC_COMPAT_SHIM_PATH = 'core/src/Service/KRPC/DocsCompat.cs'
+KRPC_COMPAT_SHIM = '''namespace KRPC.Service.KRPC
+{
+    /// <summary>
+    /// Compatibility shim for the frozen documentation build, written by
+    /// publish-docs.py. Stands in for the server Addon the pre-0.5.4 KRPC
+    /// service's Paused property reads. Doc comments are required because the
+    /// build compiles with warnings-as-errors.
+    /// </summary>
+    public sealed class Addon
+    {
+        /// <summary>The addon instance.</summary>
+        public static Addon Instance { get; private set; }
+
+        /// <summary>Whether the game is paused.</summary>
+        public bool IsPaused { get; set; }
+    }
+
+    /// <summary>
+    /// Compatibility shim for the frozen documentation build, written by
+    /// publish-docs.py. Stands in for the KSP PauseMenu the pre-0.5.4 KRPC
+    /// service's Paused property drives.
+    /// </summary>
+    public static class PauseMenu
+    {
+        /// <summary>Open the pause menu.</summary>
+        public static void Display()
+        {
+        }
+
+        /// <summary>Close the pause menu.</summary>
+        public static void Close()
+        {
+        }
+    }
+
+    /// <summary>
+    /// Compatibility shim for the frozen documentation build, written by
+    /// publish-docs.py. Stands in for the KSP editor facility enum the pre-0.5.4
+    /// KRPC service's CurrentGameScene property compares against.
+    /// </summary>
+    public enum EditorFacility
+    {
+        /// <summary>No editor.</summary>
+        None,
+
+        /// <summary>The Vehicle Assembly Building.</summary>
+        VAB,
+
+        /// <summary>The Space Plane Hangar.</summary>
+        SPH,
+    }
+
+    /// <summary>
+    /// Compatibility shim for the frozen documentation build, written by
+    /// publish-docs.py. Stands in for the KSP EditorDriver the pre-0.5.4 KRPC
+    /// service's CurrentGameScene property reads.
+    /// </summary>
+    public static class EditorDriver
+    {
+        /// <summary>The facility currently being edited.</summary>
+        public static EditorFacility editorFacility
+        {
+            get { return EditorFacility.None; }
+        }
     }
 }
 '''
@@ -157,12 +251,44 @@ def graft(worktree, base, ref):
     """
     lib.run('git', '-C', worktree, 'rm', '-rq', *CONTENT_PATHS)
     lib.run('git', '-C', worktree, 'checkout', ref, '--', *CONTENT_PATHS)
+    graft_krpc_service(worktree, ref)
     lib.run('git', '-C', worktree, 'rm', '-rqf', '--ignore-unmatch',
             'doc/src/_static', 'doc/src/_templates')
     lib.run('git', '-C', worktree, 'checkout', base, '--', 'doc/src/_static')
     if lib.succeeds('git', 'cat-file', '-e', f'{base}:doc/src/_templates'):
         lib.run('git', '-C', worktree, 'checkout', base, '--',
                 'doc/src/_templates')
+
+
+def graft_krpc_service(worktree, ref):
+    """Graft the content ref's KRPC service sources into the current core/
+    location.
+
+    The sources moved from server/src/Service/KRPC to core/src/Service/KRPC in
+    0.5.4. Whichever location the ref used, they are placed at the current core/
+    location, where the toolchain's core/src/**/*.cs glob compiles them as the
+    frozen KRPC service.
+    """
+    source = next((path for path in KRPC_SERVICE_REFS
+                   if lib.succeeds('git', 'cat-file', '-e', f'{ref}:{path}')),
+                  None)
+    if source is None:
+        raise lib.ReleaseError(
+            f'{ref} has no KRPC service sources at '
+            f'{" or ".join(KRPC_SERVICE_REFS)}')
+    lib.run('git', '-C', worktree, 'rm', '-rqf', '--ignore-unmatch',
+            KRPC_SERVICE_DEST)
+    if source == KRPC_SERVICE_DEST:
+        lib.run('git', '-C', worktree, 'checkout', ref, '--', KRPC_SERVICE_DEST)
+        return
+    # Relocate: materialize the ref's tree at its old path, then move it into the
+    # current core/ location. The stale index entry the checkout leaves at the
+    # old path is harmless -- the build reads the worktree, and the move leaves
+    # the sources there only at the core/ location.
+    lib.run('git', '-C', worktree, 'checkout', ref, '--', source)
+    dest = worktree / KRPC_SERVICE_DEST
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    shutil.move(str(worktree / source), str(dest))
 
 
 def maybe_write_gamescene_shim(worktree):
@@ -177,6 +303,21 @@ def maybe_write_gamescene_shim(worktree):
         for path in (worktree / directory).rglob('*.cs'))
     if referenced:
         shim.write_text(GAMESCENE_SHIM, encoding='utf-8')
+
+
+def maybe_write_krpc_compat_shim(worktree):
+    """Write the server/KSP compatibility shim if the grafted KRPC service still
+    implements the pre-0.5.4 Paused and CurrentGameScene properties against
+    symbols the core/ assembly cannot see."""
+    service = worktree / KRPC_SERVICE_DEST
+    markers = ('Addon.Instance', 'PauseMenu.', 'EditorDriver', 'EditorFacility')
+    references = any(
+        any(marker in text for marker in markers)
+        for path in service.rglob('*.cs')
+        for text in (path.read_text(encoding='utf-8'),))
+    if references:
+        (worktree / KRPC_COMPAT_SHIM_PATH).write_text(
+            KRPC_COMPAT_SHIM, encoding='utf-8')
 
 
 def exclude_changelog(worktree):
@@ -279,6 +420,7 @@ def main():
     try:
         graft(worktree, base, ref)
         maybe_write_gamescene_shim(worktree)
+        maybe_write_krpc_compat_shim(worktree)
         exclude_changelog(worktree)
         pin_version(worktree, version)
 

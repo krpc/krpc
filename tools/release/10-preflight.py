@@ -76,8 +76,8 @@ def check_repository(report):
 def check_changelogs(report):
     lib.banner(f'Changelogs (a component with no user-facing changes has no '
                f'{lib.TAG} section and is omitted from the release notes)')
-    # Matches '## [X.Y.Z]' with or without the ' - unreleased' suffix.
-    header = f'## [{lib.VERSION}]'
+    # Matches '## [vX.Y.Z]' with or without the ' - unreleased' suffix.
+    header = f'## [v{lib.VERSION}]'
     for changelog in lib.changelogs():
         if any(line.startswith(header)
                for line in Path(changelog).read_text().splitlines()):

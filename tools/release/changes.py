@@ -102,9 +102,10 @@ def get_changes(path):
             line = line.rstrip('\n')
             if line == '':
                 continue
-            # '## [X.Y.Z]' header; any suffix inside the brackets (e.g. a
-            # '.postN') or after them (' - unreleased') is ignored.
-            m = re.match(r'^##\s+\[([0-9]+\.[0-9]+\.[0-9]+)[^\]]*\]', line)
+            # '## [vX.Y.Z]' header; an optional 'v' prefix is dropped so the
+            # captured version is bare, and any suffix inside the brackets (e.g.
+            # a '.postN') or after them (' - unreleased') is ignored.
+            m = re.match(r'^##\s+\[v?([0-9]+\.[0-9]+\.[0-9]+)[^\]]*\]', line)
             if m:
                 version = m.group(1)
                 top = None

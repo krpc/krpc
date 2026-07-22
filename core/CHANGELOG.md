@@ -1,4 +1,4 @@
-## [0.6.0] - unreleased
+## [v0.6.0] - unreleased
 - Add `Version` property to `Core`, set by the server plugin on startup (#848)
 - Enable `TCP_NODELAY` on client TCP connections, reducing RPC round-trip latency (#879)
 - Surface deprecated members (annotated with `[Obsolete]`) in the service definition and over the wire (#904)
@@ -12,5 +12,5 @@
 - Fix websocket connection URL query parameter parsing (#973)
 - Fix locale issues with type codes in the service description, and HTTP and websocket protocol tokens (#993)
 
-## [0.5.4]
+## [v0.5.4]
 - Initial version, split off from `KRPC.dll`

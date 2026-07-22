@@ -1,4 +1,4 @@
-## [0.6.0] - unreleased
+## [v0.6.0] - unreleased
 - Distribute via vcpkg (#874)
 - **Breaking:** Drop autotools build; CMake is now the only supported build system (#870)
 - **Breaking:** Modernize CMake build: require CMake 3.15+, target-based usage requirements (#834)
@@ -18,32 +18,32 @@
 - Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than
   were asked for (#1002)
 
-## [0.5.2]
+## [v0.5.2]
 - The arduino compatible version of the library now uses the same "krpc_cnano/..." include directory as the version released on GitHub.
 
-## [0.5.0]
+## [v0.5.0]
 - Update to protobuf 22.0
 - Update to nanopb 0.4.7
 - Rename `KRPC_COMMS_CUSTOM` to `KRPC_COMMUNICATION_CUSTOM`
 
-## [0.4.8]
+## [v0.4.8]
 - Update to protobuf v3.6.1
 - Change second parameter of `krpc_open` to be a configuration parameter of type `krpc_connection_config_t` to allow additional configuration options to be passed, such as baud rate for Arduino serial port (#487)
 - Fix encoding issue in procedure call messages that was causing compilation on Arduino Due to fail
 
-## [0.4.7]
+## [v0.4.7]
 - Fix include paths on Arduino (#482)
 
-## [0.4.6]
+## [v0.4.6]
 - Include directory and main header now suffixed with "_cnano" to avoid name clashes with C++ client
 
-## [0.4.5]
+## [v0.4.5]
 - Fix connection timing out on Arduino when connecting to a server with new client confirmation enabled (#446)
 
-## [0.4.3]
+## [v0.4.3]
 - Remove `KRPC_NO_PRINT_ERRORS` option (now enabled by default) and replace with `KRPC_PRINT_ERRORS_TO_STDERR`
 - Enable `PB_NO_ERRMSG` by default in Arduino version of library
 - Invoke remote procedures using service and produce identifiers instead of names to reduce code size and communication overhead
 
-## [0.4.1]
+## [v0.4.1]
 - Initial version

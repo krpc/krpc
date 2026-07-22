@@ -139,10 +139,10 @@ def strip_unreleased():
     every component changelog, returning the paths that changed.
 
     While on main the in-development version's header reads
-    ``## [X.Y.Z] - unreleased``; releasing turns it into ``## [X.Y.Z]``.
+    ``## [vX.Y.Z] - unreleased``; releasing turns it into ``## [vX.Y.Z]``.
     """
-    header = f'## [{VERSION}] - unreleased'
-    replacement = f'## [{VERSION}]'
+    header = f'## [v{VERSION}] - unreleased'
+    replacement = f'## [v{VERSION}]'
     changed = []
     for path in changelogs():
         file = Path(path)

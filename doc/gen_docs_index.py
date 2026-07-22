@@ -2,8 +2,10 @@
 """Regenerate switcher.json and the root index.html for the versioned docs site.
 
 Scans a gh-pages working tree for per-version subdirectories, semver-sorts them
-newest-first, marks the newest full release as preferred, and appends a `dev`
-entry if a dev/ build is present. Writes, into the same directory:
+newest-first, marks the newest full release as preferred, and — if a dev/ build
+is present — puts a dev entry at the top of the list (labelled with the version
+it is working towards, e.g. `v0.6.0 (dev)`, without making it the default).
+Writes, into the same directory:
 
   * switcher.json -- the runtime version list read by pydata-sphinx-theme's
                      version switcher (the `switcher` entry in html_theme_options)
@@ -49,6 +51,22 @@ def version_key(version):
     return (tuple(nums), 0, pre_parts)
 
 
+def planned_version():
+    """The version the /dev/ build is working towards, read from config.bzl and
+    stripped of any build-stamp suffix (e.g. `0.6.0-3-abcdef` -> `0.6.0`). It is
+    known ahead of the release, so the dev entry can name it rather than showing
+    a bare `dev`."""
+    config = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), os.pardir, "config.bzl"
+    )
+    with open(config, encoding="utf-8") as fp:
+        for line in fp:
+            match = re.match(r'^version\s*=\s*"([^"]+)"', line)
+            if match:
+                return match.group(1).partition("-")[0]
+    raise RuntimeError("no version found in %s" % config)
+
+
 def discover_versions(root):
     releases = []
     has_dev = False
@@ -65,26 +83,36 @@ def discover_versions(root):
     return releases, has_dev
 
 
-def build_entries(releases, has_dev):
+def build_entries(releases, dev_version):
     """Entries in pydata-sphinx-theme's switcher.json format: `version` is
     matched against the theme's version_match (the subpath a build was
     published under), `name` is the dropdown label, and `preferred` marks the
-    newest release (used by the old-version warning banner)."""
+    newest release (used by the old-version warning banner). The `name` label
+    carries a `v` prefix for display; `version` and `url` stay bare because they
+    are matched against the subpath each build was published under.
+
+    `dev_version` is the version the /dev/ build is working towards, or None if
+    there is no dev build. The dev entry leads the list as the newest line, but
+    is not marked preferred, so the newest release stays the default."""
     entries = []
+    if dev_version is not None:
+        entries.append(
+            {
+                "name": "v%s (dev)" % dev_version,
+                "version": "dev",
+                "url": "%s/dev/" % SITE,
+            }
+        )
     for i, version in enumerate(releases):
         entry = {
-            "name": version,
+            "name": "v%s" % version,
             "version": version,
             "url": "%s/%s/" % (SITE, version),
         }
         if i == 0:
-            entry["name"] = "%s (stable)" % version
+            entry["name"] = "v%s (stable)" % version
             entry["preferred"] = True
         entries.append(entry)
-    if has_dev:
-        entries.append(
-            {"name": "dev", "version": "dev", "url": "%s/dev/" % SITE}
-        )
     return entries
 
 
@@ -120,7 +148,7 @@ def main():
     args = parser.parse_args()
 
     releases, has_dev = discover_versions(args.root)
-    entries = build_entries(releases, has_dev)
+    entries = build_entries(releases, planned_version() if has_dev else None)
 
     switcher_path = os.path.join(args.root, "switcher.json")
     with open(switcher_path, "w", encoding="utf-8") as fp:
