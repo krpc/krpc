@@ -21,11 +21,11 @@ The following example program connects to the server, queries it for its version
 .. literalinclude:: /scripts/client/java/Basic.java
 
 To compile this program using javac on the command line, save the source as ``Example.java`` and run
-the following (replace ``<VERSION>`` with the kRPC version you are using):
+the following:
 
-.. code-block:: bash
+.. parsed-literal::
 
-   javac -cp krpc-java-<VERSION>.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java
+   javac -cp krpc-java-|jar-version|.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java
 
 Note that you may need to change the paths to the JAR files.
 

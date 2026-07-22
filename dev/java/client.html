@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Java Client &#8212; kRPC dev documentation</title>
+    <title>Java Client &#8212; kRPC vdev documentation</title>
   
   
   
@@ -700,10 +700,8 @@ It requires Java 9 or later.</p>
 </pre></div>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
-the following (replace <code class="docutils literal notranslate"><span class="pre">&lt;VERSION&gt;</span></code> with the kRPC version you are using):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>javac<span class="w"> </span>-cp<span class="w"> </span>krpc-java-&lt;VERSION&gt;.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar<span class="w"> </span>Example.java
-</pre></div>
-</div>
+the following:</p>
+<pre class="literal-block">javac -cp krpc-java-0.6.0-1014-2595c4d.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
