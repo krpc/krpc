@@ -598,19 +598,6 @@
 <h1>Changelog<a class="headerlink" href="#changelog" title="Link to this heading">#</a></h1>
 <section id="v0-6-0">
 <h2>v0.6.0<a class="headerlink" href="#v0-6-0" title="Link to this heading">#</a></h2>
-<section id="server">
-<h3>Server<a class="headerlink" href="#server" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Fix server version reported to clients (read from <code class="docutils literal notranslate"><span class="pre">KRPC.dll</span></code> not <code class="docutils literal notranslate"><span class="pre">KRPC.Core.dll</span></code>) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/848">#848</a>)</p></li>
-<li><p>Fix Logger to write to both <code class="docutils literal notranslate"><span class="pre">KSP.log</span></code> and <code class="docutils literal notranslate"><span class="pre">Player.log</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/780">#780</a>)</p></li>
-<li><p>Improve RPC and stream update performance (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/879">#879</a>)</p></li>
-<li><p>Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/879">#879</a>)</p></li>
-<li><p>Improve the server window UI (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/919">#919</a>)</p></li>
-<li><p>Fix incorrect unit shown for “max. time per update” and “receive timeout” (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/919">#919</a>)</p></li>
-<li><p>Support switching the game scene by setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
-<li><p>Fix repeated toolbar icons appearing in some situations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/939">#939</a>)</p></li>
-</ul>
-</section>
 <section id="core">
 <h3>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -625,6 +612,19 @@
 <li><p>Fix the websocket servers rejecting connection requests that are split across multiple reads (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/973">#973</a>)</p></li>
 <li><p>Fix websocket connection URL query parameter parsing (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/973">#973</a>)</p></li>
 <li><p>Fix locale issues with type codes in the service description, and HTTP and websocket protocol tokens (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/993">#993</a>)</p></li>
+</ul>
+</section>
+<section id="server">
+<h3>Server<a class="headerlink" href="#server" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix server version reported to clients (read from <code class="docutils literal notranslate"><span class="pre">KRPC.dll</span></code> not <code class="docutils literal notranslate"><span class="pre">KRPC.Core.dll</span></code>) (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/848">#848</a>)</p></li>
+<li><p>Fix Logger to write to both <code class="docutils literal notranslate"><span class="pre">KSP.log</span></code> and <code class="docutils literal notranslate"><span class="pre">Player.log</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/780">#780</a>)</p></li>
+<li><p>Improve RPC and stream update performance (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/879">#879</a>)</p></li>
+<li><p>Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/879">#879</a>)</p></li>
+<li><p>Improve the server window UI (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/919">#919</a>)</p></li>
+<li><p>Fix incorrect unit shown for “max. time per update” and “receive timeout” (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/919">#919</a>)</p></li>
+<li><p>Support switching the game scene by setting <code class="docutils literal notranslate"><span class="pre">KRPC.GameScene</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/897">#897</a>)</p></li>
+<li><p>Fix repeated toolbar icons appearing in some situations (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/939">#939</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
@@ -847,8 +847,8 @@
 </li>
 </ul>
 </section>
-<section id="ui-service">
-<h3>UI service<a class="headerlink" href="#ui-service" title="Link to this heading">#</a></h3>
+<section id="user-interface-service">
+<h3>User Interface service<a class="headerlink" href="#user-interface-service" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix locale issues with <code class="docutils literal notranslate"><span class="pre">UI.Message</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/993">#993</a>)</p></li>
 </ul>
@@ -895,22 +895,22 @@
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">DockingCamera.Available</span></code> incorrectly reporting false in game scenes other than flight (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/937">#937</a>)</p></li>
 </ul>
 </section>
-<section id="python-client">
-<h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
+<section id="c-nano-client">
+<h3>C-nano client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p><span class="changelog-marker breaking">Breaking</span> Requires Python 3.10+ (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/837">#837</a>)</p></li>
-<li><p>Update to protobuf v7.35.1 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/850">#850</a>)</p></li>
-<li><p>Allow calling static class methods from a class instance (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/832">#832</a>)</p></li>
-<li><p>Emit a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> when calling a deprecated member, and note deprecation in docstrings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
-<li><p>Fix static class method calls being sent to the wrong connection when multiple clients are connected (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/979">#979</a>)</p></li>
-<li><p>An exception raised by a stream or event callback no longer ends the stream update thread (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>Fix a deadlock between the stream update thread and a thread waiting for an update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>An error from a service this client does not know about now raises an <code class="docutils literal notranslate"><span class="pre">RPCError</span></code> describing it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>Fix decoding of <code class="docutils literal notranslate"><span class="pre">sint64</span></code> values at or above <code class="docutils literal notranslate"><span class="pre">2**62</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>A closed connection is now reported instead of being mistaken for no data having arrived (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>Removing a stream, or closing the client, now wakes threads waiting for an update on it, which previously waited for an update that could never arrive (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>The client can now be closed from a stream or event callback, which raised <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> and left the client half closed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
-<li><p>Fix a stream returning <code class="docutils literal notranslate"><span class="pre">None</span></code> rather than its value, or the error saying it has none, when read as its first update was being stored (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>Distribute via vcpkg (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/874">#874</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Drop autotools build; CMake is now the only supported build system (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Modernize CMake build: require CMake 3.15+, target-based usage requirements (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/834">#834</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> nanopb is now an external dependency (fetched via <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> Pre-generated protocol buffer code and <code class="docutils literal notranslate"><span class="pre">krpc.proto</span></code> are bundled in the release archive; set <code class="docutils literal notranslate"><span class="pre">KRPC_REGENERATE_PROTO=ON</span></code> to regenerate the code from <code class="docutils literal notranslate"><span class="pre">krpc.proto</span></code> using the nanopb generator (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/872">#872</a>)</p></li>
+<li><p>Add CMake package config so consumers can use <code class="docutils literal notranslate"><span class="pre">find_package(krpc_cnano</span> <span class="pre">CONFIG</span> <span class="pre">REQUIRED)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
+<li><p>CMake dependency options (<code class="docutils literal notranslate"><span class="pre">KRPC_FETCH_DEPS</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_FETCH_PROTOBUF</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_FETCH_NANOPB</span></code>): when OFF (default) the system install is required; when ON <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> is used. (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
+<li><p>Add support for serial port communication on Windows (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/872">#872</a>)</p></li>
+<li><p>Mark deprecated functions with the <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> attribute macro (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
+<li><p>Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/948">#948</a>)</p></li>
+<li><p><span class="changelog-marker breaking">Breaking</span> On Arduino, a read now fails with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> when the serial timeout elapses instead of retrying forever (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1002">#1002</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> option, which captures the message describing an error returned by the server so that it can be read using <code class="docutils literal notranslate"><span class="pre">krpc_get_error_message</span></code>. (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1002">#1002</a>)</p></li>
+<li><p>Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than were asked for (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1002">#1002</a>)</p></li>
 </ul>
 </section>
 <section id="c-client">
@@ -943,24 +943,6 @@
 <li><p>Fix <code class="docutils literal notranslate"><span class="pre">Client::freeze_streams</span></code> blocking forever when no stream is producing updates (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/974">#974</a>)</p></li>
 </ul>
 </section>
-<section id="c-nano-client">
-<h3>C-nano client<a class="headerlink" href="#c-nano-client" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Distribute via vcpkg (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/874">#874</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> Drop autotools build; CMake is now the only supported build system (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> Modernize CMake build: require CMake 3.15+, target-based usage requirements (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/834">#834</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> nanopb is now an external dependency (fetched via <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> Pre-generated protocol buffer code and <code class="docutils literal notranslate"><span class="pre">krpc.proto</span></code> are bundled in the release archive; set <code class="docutils literal notranslate"><span class="pre">KRPC_REGENERATE_PROTO=ON</span></code> to regenerate the code from <code class="docutils literal notranslate"><span class="pre">krpc.proto</span></code> using the nanopb generator (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/872">#872</a>)</p></li>
-<li><p>Add CMake package config so consumers can use <code class="docutils literal notranslate"><span class="pre">find_package(krpc_cnano</span> <span class="pre">CONFIG</span> <span class="pre">REQUIRED)</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
-<li><p>CMake dependency options (<code class="docutils literal notranslate"><span class="pre">KRPC_FETCH_DEPS</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_FETCH_PROTOBUF</span></code>, <code class="docutils literal notranslate"><span class="pre">KRPC_FETCH_NANOPB</span></code>): when OFF (default) the system install is required; when ON <code class="docutils literal notranslate"><span class="pre">FetchContent</span></code> is used. (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/870">#870</a>)</p></li>
-<li><p>Add support for serial port communication on Windows (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/872">#872</a>)</p></li>
-<li><p>Mark deprecated functions with the <code class="docutils literal notranslate"><span class="pre">KRPC_DEPRECATED</span></code> attribute macro (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
-<li><p>Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/948">#948</a>)</p></li>
-<li><p><span class="changelog-marker breaking">Breaking</span> On Arduino, a read now fails with <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_EOF</span></code> when the serial timeout elapses instead of retrying forever (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1002">#1002</a>)</p></li>
-<li><p>Add <code class="docutils literal notranslate"><span class="pre">KRPC_ERROR_MESSAGES</span></code> option, which captures the message describing an error returned by the server so that it can be read using <code class="docutils literal notranslate"><span class="pre">krpc_get_error_message</span></code>. (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1002">#1002</a>)</p></li>
-<li><p>Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than were asked for (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1002">#1002</a>)</p></li>
-</ul>
-</section>
 <section id="java-client">
 <h3>Java client<a class="headerlink" href="#java-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -983,6 +965,24 @@
 <li><p>Remove <code class="docutils literal notranslate"><span class="pre">encoder.client_name</span></code>; a leftover from before the protocol used protocol buffers (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1003">#1003</a>)</p></li>
 </ul>
 </section>
+<section id="python-client">
+<h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> Requires Python 3.10+ (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/837">#837</a>)</p></li>
+<li><p>Update to protobuf v7.35.1 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/850">#850</a>)</p></li>
+<li><p>Allow calling static class methods from a class instance (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/832">#832</a>)</p></li>
+<li><p>Emit a <code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code> when calling a deprecated member, and note deprecation in docstrings (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/904">#904</a>)</p></li>
+<li><p>Fix static class method calls being sent to the wrong connection when multiple clients are connected (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/979">#979</a>)</p></li>
+<li><p>An exception raised by a stream or event callback no longer ends the stream update thread (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>Fix a deadlock between the stream update thread and a thread waiting for an update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>An error from a service this client does not know about now raises an <code class="docutils literal notranslate"><span class="pre">RPCError</span></code> describing it (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>Fix decoding of <code class="docutils literal notranslate"><span class="pre">sint64</span></code> values at or above <code class="docutils literal notranslate"><span class="pre">2**62</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>A closed connection is now reported instead of being mistaken for no data having arrived (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>Removing a stream, or closing the client, now wakes threads waiting for an update on it, which previously waited for an update that could never arrive (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>The client can now be closed from a stream or event callback, which raised <code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> and left the client half closed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+<li><p>Fix a stream returning <code class="docutils literal notranslate"><span class="pre">None</span></code> rather than its value, or the error saying it has none, when read as its first update was being stored (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1008">#1008</a>)</p></li>
+</ul>
+</section>
 <section id="krpctools">
 <h3>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h3>
 <ul class="simple">
@@ -1003,15 +1003,15 @@
 <section id="v0-5-4">
 <h2>v0.5.4<a class="headerlink" href="#v0-5-4" title="Link to this heading">#</a></h2>
 <section id="id2">
-<h3>Server<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<h3>Core<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix memory leaks when switching game scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/779">#779</a>)</p></li>
+<li><p>Initial version, split off from <code class="docutils literal notranslate"><span class="pre">KRPC.dll</span></code></p></li>
 </ul>
 </section>
 <section id="id3">
-<h3>Core<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
+<h3>Server<a class="headerlink" href="#id3" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Initial version, split off from <code class="docutils literal notranslate"><span class="pre">KRPC.dll</span></code></p></li>
+<li><p>Fix memory leaks when switching game scene (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/779">#779</a>)</p></li>
 </ul>
 </section>
 <section id="id4">
@@ -1079,13 +1079,9 @@
 </ul>
 </section>
 <section id="id10">
-<h3>Python client<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id10" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Requires Python 3.7+</p></li>
-<li><p>Add type hints (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/703">#703</a>)</p></li>
-<li><p>Pre-generated stubs now include implementation of services as well as type hints</p></li>
-<li><p>Fix various type hint bugs in generated stubs</p></li>
-<li><p>Allow importing types from a service using, for example “<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">krpc.services.spacecenter</span> <span class="pre">import</span> <span class="pre">Vessel</span></code>”</p></li>
+<li><p>The arduino compatible version of the library now uses the same “krpc_cnano/…” include directory as the version released on GitHub.</p></li>
 </ul>
 </section>
 <section id="id11">
@@ -1096,9 +1092,13 @@
 </ul>
 </section>
 <section id="id12">
-<h3>C-nano client<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id12" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>The arduino compatible version of the library now uses the same “krpc_cnano/…” include directory as the version released on GitHub.</p></li>
+<li><p>Requires Python 3.7+</p></li>
+<li><p>Add type hints (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/703">#703</a>)</p></li>
+<li><p>Pre-generated stubs now include implementation of services as well as type hints</p></li>
+<li><p>Fix various type hint bugs in generated stubs</p></li>
+<li><p>Allow importing types from a service using, for example “<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">krpc.services.spacecenter</span> <span class="pre">import</span> <span class="pre">Vessel</span></code>”</p></li>
 </ul>
 </section>
 </section>
@@ -1219,10 +1219,11 @@
 </ul>
 </section>
 <section id="id20">
-<h3>Python client<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id20" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix protobuf requirement to be &gt;=3.6 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/506">#506</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/510">#510</a>)</p></li>
-<li><p>Update to protobuf v4.22.0</p></li>
+<li><p>Update to protobuf 22.0</p></li>
+<li><p>Update to nanopb 0.4.7</p></li>
+<li><p>Rename <code class="docutils literal notranslate"><span class="pre">KRPC_COMMS_CUSTOM</span></code> to <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code></p></li>
 </ul>
 </section>
 <section id="id21">
@@ -1242,23 +1243,22 @@
 </ul>
 </section>
 <section id="id23">
-<h3>C-nano client<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id23" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Update to protobuf 22.0</p></li>
-<li><p>Update to nanopb 0.4.7</p></li>
-<li><p>Rename <code class="docutils literal notranslate"><span class="pre">KRPC_COMMS_CUSTOM</span></code> to <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code></p></li>
+<li><p>Update to protobuf v3.22.0</p></li>
 </ul>
 </section>
 <section id="id24">
-<h3>Java client<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id24" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.22.0</p></li>
 </ul>
 </section>
 <section id="id25">
-<h3>Lua client<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id25" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Update to protobuf v3.22.0</p></li>
+<li><p>Fix protobuf requirement to be &gt;=3.6 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/506">#506</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/510">#510</a>)</p></li>
+<li><p>Update to protobuf v4.22.0</p></li>
 </ul>
 </section>
 </section>
@@ -1310,10 +1310,11 @@
 </ul>
 </section>
 <section id="id31">
-<h3>Python client<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id31" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.6.1</p></li>
-<li><p>Add condition variable and callbacks that are called when a stream update message is processed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/473">#473</a>)</p></li>
+<li><p>Change second parameter of <code class="docutils literal notranslate"><span class="pre">krpc_open</span></code> to be a configuration parameter of type <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code> to allow additional configuration options to be passed, such as baud rate for Arduino serial port (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/487">#487</a>)</p></li>
+<li><p>Fix encoding issue in procedure call messages that was causing compilation on Arduino Due to fail</p></li>
 </ul>
 </section>
 <section id="id32">
@@ -1333,24 +1334,23 @@
 </ul>
 </section>
 <section id="id34">
-<h3>C-nano client<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Update to protobuf v3.6.1</p></li>
-<li><p>Change second parameter of <code class="docutils literal notranslate"><span class="pre">krpc_open</span></code> to be a configuration parameter of type <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code> to allow additional configuration options to be passed, such as baud rate for Arduino serial port (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/487">#487</a>)</p></li>
-<li><p>Fix encoding issue in procedure call messages that was causing compilation on Arduino Due to fail</p></li>
-</ul>
-</section>
-<section id="id35">
-<h3>Java client<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id34" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Make <code class="docutils literal notranslate"><span class="pre">Connection</span></code> class implement <code class="docutils literal notranslate"><span class="pre">AutoClosable</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/491">#491</a>)</p></li>
 <li><p>Update to protobuf v3.6.1</p></li>
 </ul>
 </section>
-<section id="id36">
-<h3>Lua client<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
+<section id="id35">
+<h3>Lua client<a class="headerlink" href="#id35" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.6.1</p></li>
+</ul>
+</section>
+<section id="id36">
+<h3>Python client<a class="headerlink" href="#id36" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.6.1</p></li>
+<li><p>Add condition variable and callbacks that are called when a stream update message is processed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/473">#473</a>)</p></li>
 </ul>
 </section>
 <section id="id37">
@@ -1378,15 +1378,15 @@
 </ul>
 </section>
 <section id="id40">
-<h3>C++ client<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id40" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Ensure .lib files are generated when building using CMake with MSVC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/474">#474</a>)</p></li>
+<li><p>Fix include paths on Arduino (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/482">#482</a>)</p></li>
 </ul>
 </section>
 <section id="id41">
-<h3>C-nano client<a class="headerlink" href="#id41" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id41" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix include paths on Arduino (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/482">#482</a>)</p></li>
+<li><p>Ensure .lib files are generated when building using CMake with MSVC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/474">#474</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -1414,9 +1414,9 @@
 </ul>
 </section>
 <section id="id44">
-<h3>Python client<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id44" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
+<li><p>Include directory and main header now suffixed with “_cnano” to avoid name clashes with C++ client</p></li>
 </ul>
 </section>
 <section id="id45">
@@ -1433,13 +1433,13 @@
 </ul>
 </section>
 <section id="id47">
-<h3>C-nano client<a class="headerlink" href="#id47" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id47" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Include directory and main header now suffixed with “_cnano” to avoid name clashes with C++ client</p></li>
+<li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
 </ul>
 </section>
 <section id="id48">
-<h3>Java client<a class="headerlink" href="#id48" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id48" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add methods to remove callbacks from streams and events (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/451">#451</a>)</p></li>
 </ul>
@@ -1463,9 +1463,9 @@
 </ul>
 </section>
 <section id="id51">
-<h3>Python client<a class="headerlink" href="#id51" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id51" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Update to protobuf v3.5.1</p></li>
+<li><p>Fix connection timing out on Arduino when connecting to a server with new client confirmation enabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/446">#446</a>)</p></li>
 </ul>
 </section>
 <section id="id52">
@@ -1481,19 +1481,19 @@
 </ul>
 </section>
 <section id="id54">
-<h3>C-nano client<a class="headerlink" href="#id54" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id54" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix connection timing out on Arduino when connecting to a server with new client confirmation enabled (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/446">#446</a>)</p></li>
+<li><p>Update to protobuf v3.5.1</p></li>
 </ul>
 </section>
 <section id="id55">
-<h3>Java client<a class="headerlink" href="#id55" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id55" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.5.1</p></li>
 </ul>
 </section>
 <section id="id56">
-<h3>Lua client<a class="headerlink" href="#id56" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id56" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.5.1</p></li>
 </ul>
@@ -1535,9 +1535,11 @@
 </ul>
 </section>
 <section id="id61">
-<h3>Python client<a class="headerlink" href="#id61" title="Link to this heading">#</a></h3>
+<h3>C-nano client<a class="headerlink" href="#id61" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
+<li><p>Remove <code class="docutils literal notranslate"><span class="pre">KRPC_NO_PRINT_ERRORS</span></code> option (now enabled by default) and replace with <code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code></p></li>
+<li><p>Enable <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> by default in Arduino version of library</p></li>
+<li><p>Invoke remote procedures using service and produce identifiers instead of names to reduce code size and communication overhead</p></li>
 </ul>
 </section>
 <section id="id62">
@@ -1553,15 +1555,13 @@
 </ul>
 </section>
 <section id="id64">
-<h3>C-nano client<a class="headerlink" href="#id64" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id64" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Remove <code class="docutils literal notranslate"><span class="pre">KRPC_NO_PRINT_ERRORS</span></code> option (now enabled by default) and replace with <code class="docutils literal notranslate"><span class="pre">KRPC_PRINT_ERRORS_TO_STDERR</span></code></p></li>
-<li><p>Enable <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG</span></code> by default in Arduino version of library</p></li>
-<li><p>Invoke remote procedures using service and produce identifiers instead of names to reduce code size and communication overhead</p></li>
+<li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
 </ul>
 </section>
 <section id="id65">
-<h3>Java client<a class="headerlink" href="#id65" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id65" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add rate control for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/116">#116</a>, <a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/141">#141</a>)</p></li>
 </ul>
@@ -1642,34 +1642,22 @@
 </ul>
 </section>
 <section id="id73">
-<h3>Python client<a class="headerlink" href="#id73" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id73" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Updated protocol in line with server changes</p></li>
-<li><p>Remove connection retries. Client will now fail fast if it fails to connect to the server</p></li>
-<li><p>Reorder parameters to <code class="docutils literal notranslate"><span class="pre">krpc.connect()</span></code> so that name is first - to be consistent with other client libraries</p></li>
 <li><p>Add support for RPCs and streams to throw exceptions</p></li>
-<li><p>Add stream waiting and update callbacks</p></li>
-<li><p>Add support for events</p></li>
-<li><p>Don’t execute an initial RPC when a stream is created, wait for the first update instead</p></li>
 </ul>
 </section>
 <section id="id74">
-<h3>C# client<a class="headerlink" href="#id74" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Updated protocol in line with server changes</p></li>
-<li><p>Add support for RPCs and streams to throw exceptions</p></li>
-</ul>
-</section>
-<section id="id75">
-<h3>C++ client<a class="headerlink" href="#id75" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id74" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Updated protocol in line with server changes</p></li>
 <li><p>Remove connection retries. Client will now fail fast if it fails to connect to the server.</p></li>
 <li><p>Add support for RPCs and streams to throw exceptions</p></li>
 </ul>
 </section>
-<section id="id76">
-<h3>Java client<a class="headerlink" href="#id76" title="Link to this heading">#</a></h3>
+<section id="id75">
+<h3>Java client<a class="headerlink" href="#id75" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Updated protocol in line with server changes</p></li>
 <li><p>Add support for RPCs and streams to throw exceptions</p></li>
@@ -1682,10 +1670,22 @@
 <li><p>Minor code clean up, and source now checked with CheckStyle</p></li>
 </ul>
 </section>
-<section id="id77">
-<h3>Lua client<a class="headerlink" href="#id77" title="Link to this heading">#</a></h3>
+<section id="id76">
+<h3>Lua client<a class="headerlink" href="#id76" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Updated protocol in line with server changes</p></li>
+</ul>
+</section>
+<section id="id77">
+<h3>Python client<a class="headerlink" href="#id77" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Updated protocol in line with server changes</p></li>
+<li><p>Remove connection retries. Client will now fail fast if it fails to connect to the server</p></li>
+<li><p>Reorder parameters to <code class="docutils literal notranslate"><span class="pre">krpc.connect()</span></code> so that name is first - to be consistent with other client libraries</p></li>
+<li><p>Add support for RPCs and streams to throw exceptions</p></li>
+<li><p>Add stream waiting and update callbacks</p></li>
+<li><p>Add support for events</p></li>
+<li><p>Don’t execute an initial RPC when a stream is created, wait for the first update instead</p></li>
 </ul>
 </section>
 </section>
@@ -1731,34 +1731,34 @@
 </ul>
 </section>
 <section id="id83">
-<h3>Python client<a class="headerlink" href="#id83" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Update to protobuf v3.4.0</p></li>
-</ul>
-</section>
-<section id="id84">
-<h3>C# client<a class="headerlink" href="#id84" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id83" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add support for .NET 3.5 (allows use of the client from within KSP itself)</p></li>
 <li><p>Update to protobuf v3.4.0</p></li>
 </ul>
 </section>
-<section id="id85">
-<h3>C++ client<a class="headerlink" href="#id85" title="Link to this heading">#</a></h3>
+<section id="id84">
+<h3>C++ client<a class="headerlink" href="#id84" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Set <code class="docutils literal notranslate"><span class="pre">ASIO_STANDLONE</span></code> in build script instead of source code so that configure script can find the header correctly</p></li>
 <li><p>Add support for building using Cygwin</p></li>
 <li><p>Update to protobuf v3.4.0</p></li>
 </ul>
 </section>
+<section id="id85">
+<h3>Java client<a class="headerlink" href="#id85" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.4.0</p></li>
+</ul>
+</section>
 <section id="id86">
-<h3>Java client<a class="headerlink" href="#id86" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id86" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.4.0</p></li>
 </ul>
 </section>
 <section id="id87">
-<h3>Lua client<a class="headerlink" href="#id87" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id87" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.4.0</p></li>
 </ul>
@@ -1797,31 +1797,31 @@
 </ul>
 </section>
 <section id="id91">
-<h3>Python client<a class="headerlink" href="#id91" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id91" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.3.0</p></li>
 </ul>
 </section>
 <section id="id92">
-<h3>C# client<a class="headerlink" href="#id92" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id92" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.3.0</p></li>
 </ul>
 </section>
 <section id="id93">
-<h3>C++ client<a class="headerlink" href="#id93" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id93" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.3.0</p></li>
 </ul>
 </section>
 <section id="id94">
-<h3>Java client<a class="headerlink" href="#id94" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id94" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.3.0</p></li>
 </ul>
 </section>
 <section id="id95">
-<h3>Lua client<a class="headerlink" href="#id95" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id95" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.3.0</p></li>
 </ul>
@@ -1867,21 +1867,13 @@
 </ul>
 </section>
 <section id="id99">
-<h3>Python client<a class="headerlink" href="#id99" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id99" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Clean up code to meet PEP 8 guidelines</p></li>
 <li><p>Update to protobuf v3.2.0</p></li>
-<li><p>Change package requirements to protobuf &gt;= 3.2</p></li>
 </ul>
 </section>
 <section id="id100">
-<h3>C# client<a class="headerlink" href="#id100" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Update to protobuf v3.2.0</p></li>
-</ul>
-</section>
-<section id="id101">
-<h3>C++ client<a class="headerlink" href="#id101" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id100" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.2.0</p></li>
 <li><p>Update build scripts to check for protobuf &gt;= 3.2 (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/374">#374</a>)</p></li>
@@ -1889,16 +1881,24 @@
 <li><p>Fix bug in <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code> when client is not set</p></li>
 </ul>
 </section>
+<section id="id101">
+<h3>Java client<a class="headerlink" href="#id101" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf v3.2.0</p></li>
+</ul>
+</section>
 <section id="id102">
-<h3>Java client<a class="headerlink" href="#id102" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id102" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.2.0</p></li>
 </ul>
 </section>
 <section id="id103">
-<h3>Lua client<a class="headerlink" href="#id103" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id103" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Clean up code to meet PEP 8 guidelines</p></li>
 <li><p>Update to protobuf v3.2.0</p></li>
+<li><p>Change package requirements to protobuf &gt;= 3.2</p></li>
 </ul>
 </section>
 <section id="id104">
@@ -1954,24 +1954,24 @@
 </ul>
 </section>
 <section id="id110">
-<h3>Python client<a class="headerlink" href="#id110" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Fix bug parsing nested collection types</p></li>
-</ul>
-</section>
-<section id="id111">
-<h3>C# client<a class="headerlink" href="#id111" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id110" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.1.0</p></li>
 <li><p>Remove pre-release flag from nuget version</p></li>
 </ul>
 </section>
-<section id="id112">
-<h3>C++ client<a class="headerlink" href="#id112" title="Link to this heading">#</a></h3>
+<section id="id111">
+<h3>C++ client<a class="headerlink" href="#id111" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add missing header to automake script</p></li>
 <li><p>Add stream freezing (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/357">#357</a>)</p></li>
 <li><p>Make stream objects default and copy constructible (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/358">#358</a>)</p></li>
+</ul>
+</section>
+<section id="id112">
+<h3>Python client<a class="headerlink" href="#id112" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug parsing nested collection types</p></li>
 </ul>
 </section>
 <section id="id113">
@@ -2020,15 +2020,15 @@
 </ul>
 </section>
 <section id="id116">
-<h3>Python client<a class="headerlink" href="#id116" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id116" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix values not being documented in generated enumeration classes</p></li>
+<li><p>Fix configure script</p></li>
 </ul>
 </section>
 <section id="id117">
-<h3>C++ client<a class="headerlink" href="#id117" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id117" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix configure script</p></li>
+<li><p>Fix values not being documented in generated enumeration classes</p></li>
 </ul>
 </section>
 <section id="id118">
@@ -2065,7 +2065,7 @@
 </ul>
 </section>
 <section id="id121">
-<h3>UI service<a class="headerlink" href="#id121" title="Link to this heading">#</a></h3>
+<h3>User Interface service<a class="headerlink" href="#id121" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">Canvas</span></code> class (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/281">#281</a>)</p></li>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">UI.StockCanvas</span></code> to get the stock KSP UI canvas and <code class="docutils literal notranslate"><span class="pre">UI.AddCanvas</span></code> to create additional canvases</p></li>
@@ -2081,19 +2081,19 @@
 </ul>
 </section>
 <section id="id123">
-<h3>Python client<a class="headerlink" href="#id123" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Add check for number of elements in a tuple before invoking an RPC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/276">#276</a>)</p></li>
-<li><p>Fix unicode issue (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/284">#284</a>)</p></li>
-</ul>
-</section>
-<section id="id124">
-<h3>C# client<a class="headerlink" href="#id124" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id123" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Fix race condition where the connection constructor returns before the stream server connection has been established</p></li>
 <li><p>Make <code class="docutils literal notranslate"><span class="pre">Connection</span></code> and <code class="docutils literal notranslate"><span class="pre">StreamManager</span></code> disposable so that they clean up resources correctly</p></li>
 <li><p>Fix issue where network streams are closed prematurely</p></li>
 <li><p>Fix issue with receiving partial protobuf messages</p></li>
+</ul>
+</section>
+<section id="id124">
+<h3>Python client<a class="headerlink" href="#id124" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Add check for number of elements in a tuple before invoking an RPC (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/276">#276</a>)</p></li>
+<li><p>Fix unicode issue (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/284">#284</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -2124,33 +2124,33 @@
 </ul>
 </section>
 <section id="id128">
-<h3>UI service<a class="headerlink" href="#id128" title="Link to this heading">#</a></h3>
+<h3>User Interface service<a class="headerlink" href="#id128" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
 <section id="id129">
-<h3>Python client<a class="headerlink" href="#id129" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id129" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Update protobuf to v3.0.0-beta-3</p></li>
+<li><p>Update to protobuf v3.0.0-beta-3</p></li>
 </ul>
 </section>
 <section id="id130">
-<h3>C# client<a class="headerlink" href="#id130" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id130" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.0.0-beta-3</p></li>
 </ul>
 </section>
 <section id="id131">
-<h3>C++ client<a class="headerlink" href="#id131" title="Link to this heading">#</a></h3>
+<h3>Java client<a class="headerlink" href="#id131" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf v3.0.0-beta-3</p></li>
 </ul>
 </section>
 <section id="id132">
-<h3>Java client<a class="headerlink" href="#id132" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id132" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Update to protobuf v3.0.0-beta-3</p></li>
+<li><p>Update protobuf to v3.0.0-beta-3</p></li>
 </ul>
 </section>
 <section id="id133">
@@ -2315,21 +2315,13 @@
 </ul>
 </section>
 <section id="id149">
-<h3>Python client<a class="headerlink" href="#id149" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id149" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Fix exception when stream thread shuts down (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/197">#197</a>)</p></li>
 <li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
-<li><p>Add comparison methods to remote objects so that they are sortable</p></li>
 </ul>
 </section>
 <section id="id150">
-<h3>C# client<a class="headerlink" href="#id150" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
-</ul>
-</section>
-<section id="id151">
-<h3>C++ client<a class="headerlink" href="#id151" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id150" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add support for streams (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/175">#175</a>)</p></li>
 <li><p>Add documentation to service header files</p></li>
@@ -2339,16 +2331,24 @@
 <li><p>Add comparison operations for remote objects</p></li>
 </ul>
 </section>
-<section id="id152">
-<h3>Java client<a class="headerlink" href="#id152" title="Link to this heading">#</a></h3>
+<section id="id151">
+<h3>Java client<a class="headerlink" href="#id151" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
-<section id="id153">
-<h3>Lua client<a class="headerlink" href="#id153" title="Link to this heading">#</a></h3>
+<section id="id152">
+<h3>Lua client<a class="headerlink" href="#id152" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
+</ul>
+</section>
+<section id="id153">
+<h3>Python client<a class="headerlink" href="#id153" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix exception when stream thread shuts down (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/197">#197</a>)</p></li>
+<li><p>Remove support for protobuf enumeration and custom protobuf messages</p></li>
+<li><p>Add comparison methods to remote objects so that they are sortable</p></li>
 </ul>
 </section>
 <section id="id154">
@@ -2375,30 +2375,30 @@
 </ul>
 </section>
 <section id="id157">
-<h3>Python client<a class="headerlink" href="#id157" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> on Windows</p></li>
-<li><p>Add version number to python module</p></li>
-</ul>
-</section>
-<section id="id158">
-<h3>C# client<a class="headerlink" href="#id158" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id157" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Add documentation to generated service code</p></li>
 <li><p>Add support for streams</p></li>
 </ul>
 </section>
-<section id="id159">
-<h3>C++ client<a class="headerlink" href="#id159" title="Link to this heading">#</a></h3>
+<section id="id158">
+<h3>C++ client<a class="headerlink" href="#id158" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Remove dependency on boost</p></li>
 <li><p>Use standalone ASIO library for network communication</p></li>
 </ul>
 </section>
-<section id="id160">
-<h3>Lua client<a class="headerlink" href="#id160" title="Link to this heading">#</a></h3>
+<section id="id159">
+<h3>Lua client<a class="headerlink" href="#id159" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None</p></li>
+</ul>
+</section>
+<section id="id160">
+<h3>Python client<a class="headerlink" href="#id160" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fix bug with <code class="docutils literal notranslate"><span class="pre">setup.py</span></code> on Windows</p></li>
+<li><p>Add version number to python module</p></li>
 </ul>
 </section>
 <section id="id161">
@@ -2425,29 +2425,29 @@
 </ul>
 </section>
 <section id="id164">
-<h3>Python client<a class="headerlink" href="#id164" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Update protobuf 3.0.0-beta-2</p></li>
-<li><p>Fix bug in keyword arg handling (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/168">#168</a>)</p></li>
-<li><p>Removed <code class="docutils literal notranslate"><span class="pre">TestServer.exe</span></code> and associated binaries from release archive</p></li>
-</ul>
-</section>
-<section id="id165">
-<h3>C# client<a class="headerlink" href="#id165" title="Link to this heading">#</a></h3>
+<h3>C# client<a class="headerlink" href="#id164" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
+<section id="id165">
+<h3>C++ client<a class="headerlink" href="#id165" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Update to protobuf 3.0.0-beta-2</p></li>
+</ul>
+</section>
 <section id="id166">
-<h3>C++ client<a class="headerlink" href="#id166" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id166" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Update to protobuf 3.0.0-beta-2</p></li>
 </ul>
 </section>
 <section id="id167">
-<h3>Lua client<a class="headerlink" href="#id167" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id167" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Update to protobuf 3.0.0-beta-2</p></li>
+<li><p>Update protobuf 3.0.0-beta-2</p></li>
+<li><p>Fix bug in keyword arg handling (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/168">#168</a>)</p></li>
+<li><p>Removed <code class="docutils literal notranslate"><span class="pre">TestServer.exe</span></code> and associated binaries from release archive</p></li>
 </ul>
 </section>
 </section>
@@ -2472,21 +2472,21 @@
 </ul>
 </section>
 <section id="id171">
-<h3>Python client<a class="headerlink" href="#id171" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Server connection method now retries 10 times every 0.1 seconds</p></li>
-</ul>
-</section>
-<section id="id172">
-<h3>C++ client<a class="headerlink" href="#id172" title="Link to this heading">#</a></h3>
+<h3>C++ client<a class="headerlink" href="#id171" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>Initial version</p></li>
 </ul>
 </section>
-<section id="id173">
-<h3>Lua client<a class="headerlink" href="#id173" title="Link to this heading">#</a></h3>
+<section id="id172">
+<h3>Lua client<a class="headerlink" href="#id172" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p>None, bumped version number</p></li>
+</ul>
+</section>
+<section id="id173">
+<h3>Python client<a class="headerlink" href="#id173" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Server connection method now retries 10 times every 0.1 seconds</p></li>
 </ul>
 </section>
 </section>
@@ -2518,15 +2518,15 @@
 </ul>
 </section>
 <section id="id176">
-<h3>Python client<a class="headerlink" href="#id176" title="Link to this heading">#</a></h3>
+<h3>Lua client<a class="headerlink" href="#id176" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Docstrings generated from documentation returned by <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
+<li><p>Initial version</p></li>
 </ul>
 </section>
 <section id="id177">
-<h3>Lua client<a class="headerlink" href="#id177" title="Link to this heading">#</a></h3>
+<h3>Python client<a class="headerlink" href="#id177" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Initial version</p></li>
+<li><p>Docstrings generated from documentation returned by <code class="docutils literal notranslate"><span class="pre">KRPC.GetServices</span></code> (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/31">#31</a>)</p></li>
 </ul>
 </section>
 </section>
@@ -2922,27 +2922,27 @@
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-6-0">v0.6.0</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core">Core</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#server">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spacecenter-service">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ui-service">UI service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-interface-service">User Interface service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#infernalrobotics-service">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kerbalalarmclock-service">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remotetech-service">RemoteTech service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lidar-service">LiDAR service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dockingcamera-service">DockingCamera service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-client">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-nano-client">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-client">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#c-nano-client">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#java-client">Java client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#lua-client">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python-client">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#krpctools">krpctools</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-4">v0.5.4</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Core</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Core</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id3">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id4">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id5">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id6">krpctools</a></li>
@@ -2955,9 +2955,9 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-2">v0.5.2</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id8">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id9">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id10">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id11">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id12">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-5-1">v0.5.1</a><ul class="nav section-nav flex-column">
@@ -2972,12 +2972,12 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id17">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id18">LiDAR service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id19">DockingCamera service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id20">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id21">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id22">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">C-nano client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id23">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id24">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id25">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-9">v0.4.9</a><ul class="nav section-nav flex-column">
@@ -2989,41 +2989,41 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id28">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id29">Drawing service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id30">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id31">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id32">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id33">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">C-nano client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id34">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id35">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id36">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id37">krpctools</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-7">v0.4.7</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id38">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id39">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id40">C-nano client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id41">C++ client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-6">v0.4.6</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id42">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id43">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id44">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id45">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id46">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">C-nano client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id47">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id48">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-5">v0.4.5</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id49">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id50">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id51">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id51">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id52">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id53">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id54">C-nano client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id55">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id56">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id54">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id55">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id56">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-4-post1">v0.4.4.post1</a><ul class="nav section-nav flex-column">
@@ -3037,11 +3037,11 @@
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-3">v0.4.3</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id60">Server</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id61">Python client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id61">C-nano client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id62">C# client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id63">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id64">C-nano client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id65">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id64">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id65">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-4-2">v0.4.2</a><ul class="nav section-nav flex-column">
@@ -3058,11 +3058,11 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id70">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id71">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id72">Drawing service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id73">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id74">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id75">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id76">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id77">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id73">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id74">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id75">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id76">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id77">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-11">v0.3.11</a><ul class="nav section-nav flex-column">
@@ -3074,11 +3074,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-10">v0.3.10</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id81">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id82">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id83">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id84">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id85">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id86">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id87">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id83">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id84">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id85">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id86">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id87">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-9-post1">v0.3.9.post1</a><ul class="nav section-nav flex-column">
@@ -3088,11 +3088,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-9">v0.3.9</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id89">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id90">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id91">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id92">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id93">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id94">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id95">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id91">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id92">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id93">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id94">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id95">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-8-post1">v0.3.8.post1</a><ul class="nav section-nav flex-column">
@@ -3102,11 +3102,11 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-8">v0.3.8</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id97">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id98">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id99">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id100">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id101">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id102">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id103">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id99">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id100">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id101">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id102">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id103">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id104">krpctools</a></li>
 </ul>
 </li>
@@ -3116,38 +3116,38 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id107">InfernalRobotics service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id108">KerbalAlarmClock service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id109">RemoteTech service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id110">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id111">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id112">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id110">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id111">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id112">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id113">krpctools</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-6">v0.3.6</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id114">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id115">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id116">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id117">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id116">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id117">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id118">krpctools</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-5">v0.3.5</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id119">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id120">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id121">UI service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id121">User Interface service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id122">InfernalRobotics service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id123">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id124">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id123">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id124">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-3-4">v0.3.4</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id125">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id126">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id127">Drawing service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id128">UI service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id129">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id130">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id131">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id132">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id128">User Interface service</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id129">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id130">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id131">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id132">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id133">krpctools</a></li>
 </ul>
 </li>
@@ -3182,47 +3182,47 @@
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-2">v0.2.2</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id147">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id148">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id149">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id150">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id151">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id152">Java client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id153">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id149">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id150">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id151">Java client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id152">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id153">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id154">krpctools</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-1">v0.2.1</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id155">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id156">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id157">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id158">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id159">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id160">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id157">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id158">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id159">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id160">Python client</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id161">krpctools</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-2-0">v0.2.0</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id162">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id163">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id164">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id165">C# client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id166">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id167">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id164">C# client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id165">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id166">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id167">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-12">v0.1.12</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id168">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id169">SpaceCenter service</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id170">KerbalAlarmClock service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id171">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id172">C++ client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id173">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id171">C++ client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id172">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id173">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-11">v0.1.11</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id174">Server</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id175">SpaceCenter service</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id176">Python client</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id177">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id176">Lua client</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id177">Python client</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#v0-1-10">v0.1.10</a><ul class="nav section-nav flex-column">
