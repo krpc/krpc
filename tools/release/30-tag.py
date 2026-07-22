@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Tags HEAD as vx.x.x and pushes the branch and tags to GitHub.
+"""Tags HEAD as vx.x.x and pushes the branch and tag to GitHub.
 
-Moves the latest-version tag to the same commit. Pushing the version tag
-triggers the docs workflow, which freezes the release documentation under
-/<version>/ and regenerates the version dropdown.
+Pushing the version tag triggers the docs workflow, which freezes the release
+documentation under /<version>/ and regenerates the version dropdown.
 """
 
 import lib
@@ -39,14 +38,10 @@ def main():
         lib.banner(f'Tagging HEAD as {lib.TAG}')
         lib.run('git', 'tag', '-a', lib.TAG, '-m', f'kRPC {lib.TAG}')
 
-    lib.banner('Moving the latest-version tag to HEAD')
-    lib.run('git', 'tag', '-f', 'latest-version')
-
     lib.banner('Pushing to GitHub')
-    lib.confirm(f'Push main, {lib.TAG} and latest-version to origin?')
+    lib.confirm(f'Push main and {lib.TAG} to origin?')
     lib.run('git', 'push', 'origin', 'main')
     lib.run('git', 'push', 'origin', lib.TAG)
-    lib.run('git', 'push', '-f', 'origin', 'latest-version')
 
     lib.banner('Done')
     print('Wait for the CI workflow to pass before continuing:')
