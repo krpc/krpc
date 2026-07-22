@@ -17,7 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       var link = document.createElement("a");
       link.href = "https://github.com/krpc/krpc/commit/" + info.commit;
-      link.textContent = info.commit;
+      // Link to the full sha so it is unambiguous, but display a short sha.
+      link.textContent = info.commit.substring(0, 7);
       // external-links.js has already run by the time the fetch resolves, so
       // this link opts into the new tab itself.
       link.target = "_blank";
