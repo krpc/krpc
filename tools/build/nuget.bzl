@@ -30,8 +30,11 @@ def _nuget_package_impl(ctx):
     ]
     if ctx.attr.project_url:
         nuspec_contents.append("  <projectUrl>%s</projectUrl>" % ctx.attr.project_url)
-    if ctx.attr.project_url:
+    if ctx.attr.license:
+        # nuget.org requires licenseUrl to point at the canonical URL for the
+        # SPDX expression so that older clients still resolve the license.
         nuspec_contents.append('  <license type="expression">%s</license>' % ctx.attr.license)
+        nuspec_contents.append("  <licenseUrl>https://licenses.nuget.org/%s</licenseUrl>" % ctx.attr.license)
     nuspec_contents.extend([
         "  <frameworkAssemblies>",
     ])
