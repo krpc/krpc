@@ -8,330 +8,386 @@ Changelog
 =========
 
 
-0.6.0
------
+0.6.0 - unreleased
+------------------
 
 
 Server
 ^^^^^^
 
-* Fix server version reported to clients (read from KRPC.dll not KRPC.Core.dll)
-* Fix Logger to write to both KSP.log and Player.log (:issue:`780`)
+* Fix server version reported to clients (read from ``KRPC.dll`` not ``KRPC.Core.dll``) (:issue:`848`)
+* Fix Logger to write to both ``KSP.log`` and ``Player.log`` (:issue:`780`)
 * Improve RPC and stream update performance (:issue:`879`)
 * Fix Stream RPCs Executed and Stream RPC Rate always showing 0 in the info window (:issue:`879`)
-* Improve the server window UI
-* Fix incorrect unit shown for "max. time per update" and "receive timeout" - they are microseconds, not nanoseconds
-* Add shared component for releasing client-owned in-game state when a client disconnects, used by the services; connectivity checks are cached so all state shares one socket poll per client per frame
-* Support switching the game scene by setting KRPC.GameScene, including opening and closing space center facilities (:issue:`897`)
-* Fix repeated toolbar icons appearing in some situations
+* Improve the server window UI (:issue:`919`)
+* Fix incorrect unit shown for "max. time per update" and "receive timeout" (:issue:`919`)
+* Support switching the game scene by setting ``KRPC.GameScene`` (:issue:`897`)
+* Fix repeated toolbar icons appearing in some situations (:issue:`939`)
 
 
 Core
 ^^^^
 
-* Add Version property to Core, set by the server plugin on startup
-* Enable TCP\_NODELAY on client TCP connections, reducing RPC round-trip latency
-* Make logger configurable in where it writes to (:issue:`780`)
-* Surface deprecated members (annotated with [Obsolete]) in the service definition and over the wire (:issue:`904`)
-* Rename KRPC.CurrentGameScene to KRPC.GameScene and make it settable to switch the current game scene (:issue:`897`)
-* Add AstronautComplex, MissionControl, ResearchAndDevelopment, Administration and MissionBuilder game scenes (:issue:`897`)
-* :deprecated:`Deprecated` KRPC.CurrentGameScene, kept as a read-only alias of KRPC.GameScene (:issue:`897`)
-* Fix the game scenes a procedure is available in never being sent by GetServices; the game\_scenes field of every procedure was empty, which the protocol defines as meaning the procedure is available in all game scenes
-* Reduce copying and allocation when receiving messages: protobuf messages are now parsed directly from the receive buffer, without allocating intermediate buffers or streams
-* Fix the websocket servers rejecting connection requests that arrive split across multiple reads; requests are now buffered until complete
-* Fix websocket connection URL query parameter parsing: parameters are now found in any position and are percent-decoded
-* Fix type codes in the service description, and HTTP and websocket protocol tokens, being case converted using the machine's locale; under Turkish locales this produced values that clients could not match
+* Add ``Version`` property to ``Core``, set by the server plugin on startup (:issue:`848`)
+* Enable ``TCP_NODELAY`` on client TCP connections, reducing RPC round-trip latency (:issue:`879`)
+* Surface deprecated members (annotated with ``[Obsolete]``) in the service definition and over the wire (:issue:`904`)
+* Add ``KRPC.GameScene`` and make it settable to switch the current game scene (:issue:`897`)
+* :deprecated:`Deprecated` ``KRPC.CurrentGameScene``, kept as a read-only alias of ``KRPC.GameScene`` (:issue:`897`)
+* Add ``AstronautComplex``, ``MissionControl``, ``ResearchAndDevelopment``, ``Administration`` and ``MissionBuilder`` game scenes (:issue:`897`)
+* Fix the game scenes a procedure is available in never being sent by ``GetServices``; the ``game_scenes`` field of every procedure was always empty (:issue:`991`)
+* Reduce copying and allocation overhead receiving protobuf messages (:issue:`972`)
+* Fix the websocket servers rejecting connection requests that are split across multiple reads (:issue:`973`)
+* Fix websocket connection URL query parameter parsing (:issue:`973`)
+* Fix locale issues with type codes in the service description, and HTTP and websocket protocol tokens (:issue:`993`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* :breaking:`Breaking` Replace the RadiatorState, SolarPanelState, AntennaState, LegState, WheelState and CargoBayState enumerations with a single DeployableState enumeration, whose members are Deployed, Retracted, Deploying, Retracting and Broken. Radiator.State and SolarPanel.State now report Deployed and Deploying in place of Extended and Extending, and CargoBay.State reports Deployed, Retracted, Deploying and Retracting in place of Open, Closed, Opening and Closing. The underlying values are unchanged, so only the enumeration and member names need updating
-* :breaking:`Breaking` ResourceHarvester.State is now a DeployableState and no longer reports Active; use ResourceHarvester.Active to check whether the harvester is drilling. The ResourceHarvesterState enumeration is removed and its values renumbered, so clients using it must be regenerated
-* :breaking:`Breaking` Control.SAS now throws an exception when set to true while the autopilot is engaged, matching AutoPilot.SAS. Previously the write was accepted and the autopilot silently switched SAS back off on the next physics tick (:issue:`492`)
-* :breaking:`Breaking` RoboticController.AddAxis, AddKeyFrame and ClearAxis now identify an axis by the name of its field, for example targetAngle, instead of by the label shown in the part's menu, for example "Target Angle". The names now match those returned by RoboticController.Axes, which previously could not be passed back in, and no longer change with the language the game is running in
-* :breaking:`Breaking` Make LaunchVessel crew parameter non-optional to work around protocol issue (:issue:`824`)
-* :breaking:`Breaking` Add a rotation parameter to Flight.SimulateAerodynamicForceAt to set the vessel attitude (angle of attack and sideslip) independently of velocity. Pass the current rotation for the previous behavior (:issue:`915`)
-* :breaking:`Breaking` Alarm.Type now returns an AlarmType enumeration value instead of a string (:issue:`853`)
-* Add SpaceCenter.Expansions to report the installed KSP expansions
-* Add SpaceCenter.AltimeterMode and an AltimeterMode enumeration to get and set the mode of the in-game altimeter
-* SpaceCenter.ActiveVessel now returns null when there is no active vessel, instead of raising an error
-* :deprecated:`Deprecated` SpaceCenter.LoadSpaceCenter, superseded by setting KRPC.GameScene (:issue:`897`)
-* Add Vessel.Loaded and Vessel.Packed to report a vessel's loading and on-rails state
-* Add Vessel.PhysicsRange to set how far from the active vessel a vessel keeps running its physics simulation, so that it stays controllable beyond the game's default range. The range applies to that vessel only, and persists until it is set back to zero or the game is exited
-* Add staging API giving per-stage delta-v and resource information (:issue:`920`)
-* :deprecated:`Deprecated` Parts.InStage, Parts.InDecoupleStage and Vessel.ResourcesInDecoupleStage, superseded by the staging API (:issue:`920`)
-* Add RPCs for getting acceleration to Flight and Vessel classes (:issue:`581`)
-* Fix Vessel.AvailableTorque due to sign inconsistency in KSP's ITorqueProvider implementations (:issue:`525`)
-* Fix Part.DecoupledAt not considering if a decoupler is enabled (:issue:`818`)
-* Fix Part.DecoupledAt returning the wrong stage when the part is decoupled by a decoupler on its parent part (:issue:`800`)
-* Fix Decoupler.AttachedPart raising an error when no part is attached to the decoupler's node; it now returns null
-* Rework the AutoPilot for smoother, more accurate pointing across a wide range of craft, from small probes to large flexible launchers, with no per-craft tuning (:issue:`882`, :issue:`571`, :issue:`394`, :issue:`220`, :issue:`248`, :issue:`542`)
-* The AutoPilot now controls pitch and yaw together, so the nose tracks a straight path to the target and holding a roll no longer curves that path
-* The AutoPilot now detects and damps structural oscillations on long or flexible craft automatically; rigid craft are unaffected
-* Replace AutoPilot.Engage and Disengage with the AutoPilot.Engaged property
-* Add AutoPilot.TargetRotation to command a full target orientation (direction and roll)
-* Add AutoPilot.SetDirectionAndUp to aim the nose along a direction while keeping the roof aligned to an up vector, so an orientation can be held through a maneuver without the singularity the old roll control hit at the vertical
-* Add AutoPilot.UpReference, a persistent reference that AutoPilot.TargetRoll is measured against, and make TargetRoll well-defined through the vertical
-* Add AutoPilot.AttitudeError for a singularity-free (pitch, yaw, roll) attitude error; PitchError and HeadingError now use the same well-defined decomposition
-* Fix AutoPilot.RollError returning spurious large values near vertical (:issue:`564`)
-* Document Flight.Pitch, Heading and Roll and the scalar target pitch/heading/roll as ill-defined near vertical, pointing to the rotation and error readouts instead
-* Add AutoPilot.TargetSmoothingTime to slew the target smoothly when it changes, with matching Current\* readouts of the smoothed target actually being tracked
-* Add AutoPilot.SoftStartTime to fade in control output on engagement
-* Add AutoPilot.Reset to disengage and restore all settings to their defaults
-* Add AutoPilot.ShowInfoUI to show an in-game autopilot info window
-* Replace AutoPilot.RollThreshold with RollStartAngle and RollEngageAngle
-* Replace AutoPilot.StoppingTime and DecelerationTime with AutoPilot.MaxAngularVelocity
-* Replace AutoPilot.AttenuationAngle with PitchYawAttenuationAngle and RollAttenuationAngle
-* Add controls to tune and observe the AutoPilot's oscillation mitigation (rate filter, bandwidth floor, feedforward-cut and output-filter modes, and manual structural-frequency settings)
-* Add AutoPilot.StoppingAngleThreshold and StoppingVelocityThreshold to control when AutoPilot.Wait() returns
-* Add an optional timeout to AutoPilot.Wait(), throwing TimeoutException if it expires
-* Add AutoPilot.DiagnosticLogging and DiagnosticLog for per-tick controller diagnostics
-* On client disconnect the AutoPilot is now disengaged but its settings and target are kept
-* Fix AutoPilot.Error to return the absolute value of the normalized angle (:issue:`893`)
-* Fix the auto-pilot no longer controlling the vessel after a Revert to Launch when a client keeps its auto-pilot object across the reload (it appeared engaged but stopped driving the vessel until the game was restarted)
-* Fix AutoPilot.ReferenceFrame raising an error when set to a docking port reference frame
-* Fix Maneuver and ManeuverOrbital reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT)
-* Fix angular velocity for VesselSurface, VesselSurfaceVelocity, CelestialBodyOrbital, Maneuver, ManeuverOrbital, Part, PartCenterOfMass, DockingPort and Thrust reference frames (previously returned zero)
-* Fix VesselOrbital reference frame angular velocity (missing Coriolis correction) (:issue:`823`)
-* Fix reference frame velocity being incorrect at non-equatorial latitudes (:issue:`454`)
-* Fix Vessel/Part/Hybrid reference frame rotation precision
-* Fix ReferenceFrame.CreateHybrid using velocity frame's angular velocity instead of the angularVelocity frame
-* Fix VesselSurfaceVelocity reference frame producing NaN when surface velocity is near zero; now throws InvalidOperationException
-* Fix PartCenterOfMass reference frame throwing InvalidOperationException on velocity transforms
-* Fix Maneuver reference frame forward-vector fallback using unnormalized burn vector in collinearity check
-* Fix LookRotation2 producing NaN for rotations near 180° by using Shepperd's method
-* Fix maneuver node reference frame positions being computed relative to the active vessel, giving wrong positions for maneuver nodes on other vessels
-* Improve performance of CommNode.IsVessel, CommNode.Vessel, Vessel.AngularVelocity and reference frame angular velocities
-* Add Orbit.OrbitalEnergy (:issue:`303`)
-* Add Orbit.NextClosestApproach and Orbit.ClosestApproaches, and a ClosestApproach class exposing the time, distance, positions, velocities, relative position/velocity and relative speed at a close approach with a target orbit, plus the vessels or bodies involved (:issue:`334`)
-* :deprecated:`Deprecated` Orbit.TimeOfClosestApproach, Orbit.DistanceAtClosestApproach and Orbit.ListClosestApproaches, superseded by Orbit.NextClosestApproach and Orbit.ClosestApproaches (:issue:`334`)
-* Add Node.Rotation
-* Fix Node objects whose maneuver node was removed by Control.RemoveNodes, another Node object or the in-game UI: all members now raise an error, instead of silently reading and writing the detached node
-* Fix CelestialBody.Rotation returning incorrect values before a flight scene loads (:issue:`890`)
-* Add Flight.SurfacePrograde and Flight.SurfaceRetrograde direction vectors (surface-relative velocity direction, matching navball surface mode) (:issue:`582`)
-* Fix Flight.AngleOfAttack and Flight.SideslipAngle treating dot product as radians instead of using asin
-* Add Flight.AerodynamicTorque, the live counterpart to Flight.AerodynamicForce, giving the net aerodynamic torque acting on the vessel about its center of mass on the current physics frame; not available with FAR (:issue:`914`)
-* Add Flight.SimulateAerodynamicTorqueAt to simulate the aerodynamic torque about the vessel's center of mass, for a hypothetical attitude and angular velocity, with both stock aerodynamics and FAR, in newton-meters. The torque includes both damping mechanisms the game applies: the change in each part's local airflow due to rotation, and the per-part rigidbody angular drag (:issue:`825`, :issue:`914`, :issue:`429`)
-* Add Flight.SimulateAerodynamicWrenchAt to evaluate stock aerodynamic force and torque together at a hypothetical center-of-mass state, attitude, body rate and atmospheric ephemeris time (:issue:`914`)
-* Add Part.Drag and Part.Lift returning the aerodynamic drag and lift forces acting on an individual part (:issue:`459`)
-* Fix Flight.SimulateAerodynamicForceAt ignoring the current deflection of aerodynamic control surfaces, including deployed airbrakes (:issue:`622`)
-* Fix Flight.SimulateAerodynamicForceAt overestimating drag at low altitude and subsonic speed by applying KSP's pseudo-Reynolds drag multiplier to cube drag (:issue:`912`)
-* Fix Flight.SimulateAerodynamicForceAt returning force in kilonewtons instead of newtons when FAR is installed (:issue:`915`)
-* Fix Flight.SimulateAerodynamicForceAt computing incorrect lift for command pods and other parts with a perpendicular-only lifting-surface module: cube body lift was applied even where the game disables it (a pod with a heatshield occupying its bottom node has none), and lifting-surface modules were evaluated against stale internal airflow state, so results depended on the game context the call was made from (landed, in vacuum, or in atmospheric flight) (:issue:`914`)
-* Fix Part.Lift, Flight.Lift and Flight.AerodynamicForce including stale body lift for parts whose body lift the game suppresses, e.g. a pod with a heatshield attached (:issue:`971`)
-* Fix Control.SASMode being dropped when set in the same physics tick as enabling SAS (:issue:`236`)
-* Add Control.PitchTrim, Control.YawTrim and Control.RollTrim to get/set the persistent pitch, yaw and roll trim of the active vessel (:issue:`863`)
-* Add Control.AeroSurfaces to enable/disable pitch, yaw and roll on all control surfaces (:issue:`827`)
-* Add Control.EngineGimbals to enable/disable gimbal on all gimballed engines (:issue:`827`)
-* Add Control.ThrustReversers to engage/disengage thrust reversers on all engines (:issue:`865`)
-* Add Control.GetActionGroupActions to list the part actions assigned to an action group (:issue:`864`)
-* Add direct control of engine gimbals, RCS and control surfaces (:issue:`917`)
-* Fix Control.CustomAxis01-04 being applied to the active vessel instead of the target vessel, and the getters not reading back the value that was set
-* Fix throttle being applied to a vessel with no RemoteTech control connection
-* Add Engine.Flameout (:issue:`311`)
-* Add Engine.CanReverseThrust, Engine.ThrustReversed and Engine.ToggleThrustReversal to control thrust reversal on stock and recognized mod engines (:issue:`865`)
-* Fix Engine.Propellants failing for non-active mode on multi-mode engines with different propellants (:issue:`833`)
-* Fix Engine.AvailableThrust and MaxThrust for air-breathing engines at supersonic speeds (:issue:`924`)
-* Add ReactionWheel.AuthorityLimiter (:issue:`909`)
-* Fix ReactionWheel.AvailableTorque not considering authority limiter setting (:issue:`909`)
-* Fix RCS force and torque vector calculations using max thrust rather than available thrust (:issue:`909`)
-* Fix RCS.MaxTorque documentation error - it considers thrust limit set to 100% (:issue:`909`)
-* Fix RCS.Active reporting a shielded thruster as inactive when it is able to thrust while shielded
-* Fix ControlSurface.AvailableTorque returning inconsistent signs (ModuleControlSurface negates the roll axis); now normalized to positive/negative torque like other parts
-* Fix Parachute.Deploy being a silent no-op for RealChute parachutes (:issue:`382`)
-* Add Parachute.SafeState reporting whether it is currently safe to deploy the parachute (safe, risky, unsafe, or not applicable)
-* Add Wheel.SteeringAngleAuto to get/set automatic speed-based steering angle limiting
-* Fix CargoBay.State reporting Deployed for a closed cargo ramp, and reporting a resting state while the bay was still moving
-* Add Parts.RoboticControllers
-* Add to RoboticController: Enabled, Playing, Position, Length, PlaySpeed, Play and Stop
-* Add to RoboticHinge: MinAngle, MaxAngle and IsMoving
-* Add to RoboticPiston: MinExtension, MaxExtension and IsMoving
-* Add to RoboticRotation: MinAngle, MaxAngle, AllowFullRotation and IsMoving
-* Add to RoboticRotor: MaxTorque, BrakePercentage and IsMoving
-* Fix RoboticRotation.CurrentAngle and RoboticRotor.CurrentRPM returning stale values in flight (the KSP fields they read are only refreshed while the part action window is open)
-* Fix ResourceHarvester.Active being silently ignored when set while the harvester is deploying; the requested state is now applied when the deploy completes
-* Fix ResourceHarvester.ExtractionRate returning 0 when part action window is not open (:issue:`889`)
-* Fix ResourceConverter.State and ResourceHarvester.ThermalEfficiency misreading the KSP status string (:issue:`892`)
-* Fix Sensor.Value returning zero when the part action window is not open (:issue:`883`)
-* Add PartField, PartEvent and PartAction API (:issue:`859`)
-* :deprecated:`Deprecated` the string-dictionary Module field, event and action members (:issue:`859`)
-* Allow Module.HasFieldWithId, GetFieldById, SetFieldIntById, SetFieldFloatById, SetFieldStringById, SetFieldBoolById and ResetFieldById to also access fields not visible in the UI (:issue:`858`)
-* Add Part.Config, Module.Config and ConfigNode for accessing part and module static configuration (:issue:`831`)
-* Fix Experiment.Reset not clearing the science data stored by DMagic experiments, which caused the next call to Run to fail with "Experiment already contains data" (:issue:`550`)
-* Add Contract.DateAccepted, DateDeadline, DateExpire and DateFinished
-* Guard ContractManager against null ContractSystem in non-career game modes (:issue:`819`)
-* Fix Waypoint.MeanAltitude returning the altitude relative to the terrain below the waypoint instead of relative to sea level (:issue:`801`)
-* Fix Waypoint.MeanAltitude, SurfaceAltitude and BedrockAltitude not round-tripping: the setters did not account for KSP storing waypoint altitudes relative to the bedrock height, so the altitude read back differed from the value set (:issue:`891`)
-* Add to Alarm: Node, OriginBody, DestinationBody, WarpAction, MessageAction, PlaySound, DeleteOnDismiss, Triggered and Actioned (:issue:`853`)
-* Add AlarmType, AlarmWarpAction and AlarmMessageAction enumerations (:issue:`853`)
-* Add Alarm.Remove to delete an alarm (:issue:`853`)
-* Add AlarmManager.AlarmWithName, AlarmManager.AlarmsWithType and AlarmManager.AddTransferWindowAlarm (:issue:`853`)
-* Fix NullReferenceException raised every frame after creating or removing an alarm (:issue:`853`)
-* Add Camera.FoV to get and set the camera field of view, and read-only Camera.MinFoV, Camera.MaxFoV and Camera.DefaultFoV
-* Add Camera.NextCamera, Camera.PreviousCamera and Camera.FocussedCrewMember to cycle and select IVA cameras
-* Fix Camera Distance, Pitch, Heading and FoV setters being lost when set during a camera mode switch (:issue:`318`)
-* Remove forces added by Part.AddForce when the client that added them disconnects
-* Cancel in-progress resource transfers when the client that started them disconnects; a canceled transfer is marked as complete
-* Fix part highlighting leaking a client-disconnect event handler each time the flight scene is loaded
-* Fix DockingPort.Undock doing nothing when the game is not running in English
-* Fix Fairing.Jettison doing nothing, and Fairing.Jettisoned always reporting true, when the game is not running in English
-* Fix CargoBay.Open neither opening nor closing the bay when the game is not running in English
-* Fix ResourceConverter.State only ever reporting Running when the game is not running in English, leaving MissingResource, StorageFull and Capacity unreachable
-* Fix DockingPort.State reporting Shielded instead of Moving while a shield is opening or closing, when the game is not running in English
-* Fix part module field values being formatted using the machine's locale, so that Module.Fields, Module.GetField and PartField.Value returned numbers that clients running under a locale that writes decimals with a comma could not parse
-* Add CrewMember.Part and per-part CrewCapacity and Crew properties
+* Space center
+
+  * Add ``SpaceCenter.Expansions`` to report the installed KSP expansions (:issue:`985`)
+  * Add ``SpaceCenter.AltimeterMode`` and an ``AltimeterMode`` enumeration to get and set the mode of the in-game altimeter (:issue:`808`)
+  * ``SpaceCenter.ActiveVessel`` now returns null when there is no active vessel, instead of raising an error (:issue:`821`)
+  * :breaking:`Breaking` Make ``LaunchVessel`` crew parameter non-optional to work around protocol issue (:issue:`824`)
+  * :deprecated:`Deprecated` ``SpaceCenter.LoadSpaceCenter``, superseded by setting ``KRPC.GameScene`` (:issue:`897`)
+
+* Vessels and crew
+
+  * Add ``Vessel.Loaded`` and ``Vessel.Packed`` to report a vessel's loading and on-rails state (:issue:`967`)
+  * Add ``Vessel.PhysicsRange`` to set how far from the active vessel a vessel keeps running its physics simulation, so that it stays controllable beyond the game's default range. The range applies to that vessel only, and persists until it is set back to zero or the game is exited (:issue:`987`)
+  * Add RPCs for getting acceleration to ``Flight`` and ``Vessel`` classes (:issue:`581`)
+  * Fix ``Vessel.AvailableTorque`` due to sign inconsistency in KSP's ``ITorqueProvider`` implementations (:issue:`525`)
+  * Add ``CrewMember.Part`` and per-part ``CrewCapacity`` and ``Crew`` properties (:issue:`1001`)
+
+* Staging
+
+  * Add staging API giving per-stage delta-v and resource information (:issue:`920`)
+  * :deprecated:`Deprecated` ``Parts.InStage``, ``Parts.InDecoupleStage`` and ``Vessel.ResourcesInDecoupleStage``, superseded by the staging API (:issue:`920`)
+  * Fix ``Part.DecoupledAt`` not considering if a decoupler is enabled (:issue:`818`)
+  * Fix ``Part.DecoupledAt`` returning the wrong stage when the part is decoupled by a decoupler on its parent part (:issue:`800`)
+  * Fix ``Decoupler.AttachedPart`` raising an error when no part is attached to the decoupler's node; it now returns null (:issue:`822`)
+
+* Autopilot
+
+  * Rework the ``AutoPilot`` for smoother, more accurate pointing across a wide range of craft, from small probes to large flexible launchers, with no per-craft tuning (:issue:`882`, :issue:`571`, :issue:`394`, :issue:`220`, :issue:`248`, :issue:`542`)
+  * The ``AutoPilot`` now controls pitch and yaw together, so the nose tracks a straight path to the target and holding a roll no longer curves that path (:issue:`882`)
+  * The ``AutoPilot`` now detects and damps structural oscillations on long or flexible craft automatically; rigid craft are unaffected (:issue:`882`)
+  * Replace ``AutoPilot.Engage`` and ``Disengage`` with the ``AutoPilot.Engaged`` property (:issue:`882`)
+  * Add ``AutoPilot.TargetRotation`` to command a full target orientation (direction and roll) (:issue:`882`)
+  * Add ``AutoPilot.SetDirectionAndUp`` to aim the nose along a direction while keeping the roof aligned to an up vector, so an orientation can be held through a maneuver without the singularity the old roll control hit at the vertical (:issue:`882`)
+  * Add ``AutoPilot.UpReference``, a persistent reference that ``AutoPilot.TargetRoll`` is measured against, and make ``TargetRoll`` well-defined through the vertical (:issue:`882`)
+  * Add ``AutoPilot.AttitudeError`` for a singularity-free (pitch, yaw, roll) attitude error; ``PitchError`` and ``HeadingError`` now use the same well-defined decomposition (:issue:`882`)
+  * Fix ``AutoPilot.RollError`` returning spurious large values near vertical (:issue:`564`)
+  * Document ``Flight.Pitch``, ``Heading`` and ``Roll`` and the scalar target pitch/heading/roll as ill-defined near vertical, pointing to the rotation and error readouts instead (:issue:`882`)
+  * Add ``AutoPilot.TargetSmoothingTime`` to slew the target smoothly when it changes, with matching ``Current*`` readouts of the smoothed target actually being tracked (:issue:`882`)
+  * Add ``AutoPilot.SoftStartTime`` to fade in control output on engagement (:issue:`882`)
+  * Add ``AutoPilot.Reset`` to disengage and restore all settings to their defaults (:issue:`882`)
+  * Add ``AutoPilot.ShowInfoUI`` to show an in-game autopilot info window (:issue:`882`)
+  * Replace ``AutoPilot.RollThreshold`` with ``RollStartAngle`` and ``RollEngageAngle`` (:issue:`882`)
+  * Replace ``AutoPilot.StoppingTime`` and ``DecelerationTime`` with ``AutoPilot.MaxAngularVelocity`` (:issue:`882`)
+  * Replace ``AutoPilot.AttenuationAngle`` with ``PitchYawAttenuationAngle`` and ``RollAttenuationAngle`` (:issue:`882`)
+  * Add controls to tune and observe the ``AutoPilot``'s oscillation mitigation (rate filter, bandwidth floor, feedforward-cut and output-filter modes, and manual structural-frequency settings) (:issue:`882`)
+  * Add ``AutoPilot.StoppingAngleThreshold`` and ``StoppingVelocityThreshold`` to control when ``AutoPilot.Wait()`` returns (:issue:`882`)
+  * Add an optional timeout to ``AutoPilot.Wait()``, throwing ``TimeoutException`` if it expires (:issue:`882`)
+  * Add ``AutoPilot.DiagnosticLogging`` and ``DiagnosticLog`` for per-tick controller diagnostics (:issue:`882`)
+  * On client disconnect the ``AutoPilot`` is now disengaged but its settings and target are kept (:issue:`882`)
+  * Fix ``AutoPilot.Error`` to return the absolute value of the normalized angle (:issue:`893`)
+  * Fix the auto-pilot no longer controlling the vessel after a Revert to Launch when a client keeps its auto-pilot object across the reload (it appeared engaged but stopped driving the vessel until the game was restarted) (:issue:`958`)
+  * Fix ``AutoPilot.ReferenceFrame`` raising an error when set to a docking port reference frame (:issue:`882`)
+
+* Reference frames
+
+  * Fix ``Maneuver`` and ``ManeuverOrbital`` reference frame velocity (previously returned zero; now returns the orbital velocity at the node UT) (:issue:`880`)
+  * Fix angular velocity for ``VesselSurface``, ``VesselSurfaceVelocity``, ``CelestialBodyOrbital``, ``Maneuver``, ``ManeuverOrbital``, ``Part``, ``PartCenterOfMass``, ``DockingPort`` and ``Thrust`` reference frames (previously returned zero) (:issue:`880`)
+  * Fix ``VesselOrbital`` reference frame angular velocity (missing Coriolis correction) (:issue:`823`)
+  * Fix reference frame velocity being incorrect at non-equatorial latitudes (:issue:`454`)
+  * Fix ``Vessel``/``Part``/``Hybrid`` reference frame rotation precision (:issue:`880`)
+  * Fix ``ReferenceFrame.CreateHybrid`` using velocity frame's angular velocity instead of the ``angularVelocity`` frame (:issue:`880`)
+  * Fix ``VesselSurfaceVelocity`` reference frame producing NaN when surface velocity is near zero; now throws ``InvalidOperationException`` (:issue:`880`)
+  * Fix ``PartCenterOfMass`` reference frame throwing ``InvalidOperationException`` on velocity transforms (:issue:`880`)
+  * Fix ``Maneuver`` reference frame forward-vector fallback using unnormalized burn vector in collinearity check (:issue:`880`)
+  * Fix ``LookRotation2`` producing NaN for rotations near 180° by using Shepperd's method (:issue:`880`)
+  * Fix maneuver node reference frame positions being computed relative to the active vessel, giving wrong positions for maneuver nodes on other vessels (:issue:`880`)
+  * Improve performance of ``CommNode.IsVessel``, ``CommNode.Vessel``, ``Vessel.AngularVelocity`` and reference frame angular velocities (:issue:`975`)
+
+* Orbits, nodes and bodies
+
+  * Add ``Orbit.OrbitalEnergy`` (:issue:`303`)
+  * Add ``Orbit.NextClosestApproach`` and ``Orbit.ClosestApproaches``, and a ``ClosestApproach`` class exposing the time, distance, positions, velocities, relative position/velocity and relative speed at a close approach with a target orbit, plus the vessels or bodies involved (:issue:`334`)
+  * :deprecated:`Deprecated` ``Orbit.TimeOfClosestApproach``, ``Orbit.DistanceAtClosestApproach`` and ``Orbit.ListClosestApproaches``, superseded by ``Orbit.NextClosestApproach`` and ``Orbit.ClosestApproaches`` (:issue:`334`)
+  * Add ``Node.Rotation`` (:issue:`880`)
+  * Fix ``Node`` objects whose maneuver node was removed by ``Control.RemoveNodes``, another ``Node`` object or the in-game UI: all members now raise an error, instead of silently reading and writing the detached node (:issue:`975`)
+  * Fix ``CelestialBody.Rotation`` returning incorrect values before a flight scene loads (:issue:`890`)
+
+* Flight and aerodynamics
+
+  * :breaking:`Breaking` Add a rotation parameter to ``Flight.SimulateAerodynamicForceAt`` to set the vessel attitude (angle of attack and sideslip) independently of velocity. Pass the current rotation for the previous behavior (:issue:`915`)
+  * Add ``Flight.SurfacePrograde`` and ``Flight.SurfaceRetrograde`` direction vectors (surface-relative velocity direction, matching navball surface mode) (:issue:`582`)
+  * Fix ``Flight.AngleOfAttack`` and ``Flight.SideslipAngle`` treating dot product as radians instead of using ``asin`` (:issue:`880`)
+  * Add ``Flight.AerodynamicTorque``, the live counterpart to ``Flight.AerodynamicForce``, giving the net aerodynamic torque acting on the vessel about its center of mass on the current physics frame; not available with FAR (:issue:`914`)
+  * Add ``Flight.SimulateAerodynamicTorqueAt`` to simulate the aerodynamic torque about the vessel's center of mass, for a hypothetical attitude and angular velocity, with both stock aerodynamics and FAR, in newton-meters. The torque includes both damping mechanisms the game applies: the change in each part's local airflow due to rotation, and the per-part rigidbody angular drag (:issue:`825`, :issue:`914`, :issue:`429`)
+  * Add ``Flight.SimulateAerodynamicWrenchAt`` to evaluate stock aerodynamic force and torque together at a hypothetical center-of-mass state, attitude, body rate and atmospheric ephemeris time (:issue:`914`)
+  * Add ``Part.Drag`` and ``Part.Lift`` returning the aerodynamic drag and lift forces acting on an individual part (:issue:`459`)
+  * Fix ``Flight.SimulateAerodynamicForceAt`` ignoring the current deflection of aerodynamic control surfaces, including deployed airbrakes (:issue:`622`)
+  * Fix ``Flight.SimulateAerodynamicForceAt`` overestimating drag at low altitude and subsonic speed by applying KSP's pseudo-Reynolds drag multiplier to cube drag (:issue:`912`)
+  * Fix ``Flight.SimulateAerodynamicForceAt`` returning force in kilonewtons instead of newtons when FAR is installed (:issue:`915`)
+  * Fix ``Flight.SimulateAerodynamicForceAt`` computing incorrect lift for command pods and other parts with a perpendicular-only lifting-surface module: cube body lift was applied even where the game disables it (a pod with a heatshield occupying its bottom node has none), and lifting-surface modules were evaluated against stale internal airflow state, so results depended on the game context the call was made from (landed, in vacuum, or in atmospheric flight) (:issue:`914`)
+  * Fix ``Part.Lift``, ``Flight.Lift`` and ``Flight.AerodynamicForce`` including stale body lift for parts whose body lift the game suppresses, e.g. a pod with a heatshield attached (:issue:`971`)
+
+* Control
+
+  * :breaking:`Breaking` ``Control.SAS`` now throws an exception when set to true while the autopilot is engaged, matching ``AutoPilot.SAS``. Previously the write was accepted and the autopilot silently switched SAS back off on the next physics tick (:issue:`492`)
+  * Fix ``Control.SASMode`` being dropped when set in the same physics tick as enabling SAS (:issue:`236`)
+  * Add ``Control.PitchTrim``, ``Control.YawTrim`` and ``Control.RollTrim`` to get/set the persistent pitch, yaw and roll trim of the active vessel (:issue:`863`)
+  * Add ``Control.AeroSurfaces`` to enable/disable pitch, yaw and roll on all control surfaces (:issue:`827`)
+  * Add ``Control.EngineGimbals`` to enable/disable gimbal on all gimballed engines (:issue:`827`)
+  * Add ``Control.ThrustReversers`` to engage/disengage thrust reversers on all engines (:issue:`865`)
+  * Add ``Control.GetActionGroupActions`` to list the part actions assigned to an action group (:issue:`864`)
+  * Add direct control of engine gimbals, RCS and control surfaces (:issue:`917`)
+  * Fix ``Control.CustomAxis01-04`` being applied to the active vessel instead of the target vessel, and the getters not reading back the value that was set (:issue:`938`)
+  * Fix throttle being applied to a vessel with no RemoteTech control connection (:issue:`938`)
+
+* Engines
+
+  * Add ``Engine.Flameout`` (:issue:`311`)
+  * Add ``Engine.CanReverseThrust``, ``Engine.ThrustReversed`` and ``Engine.ToggleThrustReversal`` to control thrust reversal on stock and recognized mod engines (:issue:`865`)
+  * Fix ``Engine.Propellants`` failing for non-active mode on multi-mode engines with different propellants (:issue:`833`)
+  * Fix ``Engine.AvailableThrust`` and ``MaxThrust`` for air-breathing engines at supersonic speeds (:issue:`924`)
+
+* Reaction wheels, RCS and control surfaces
+
+  * Add ``ReactionWheel.AuthorityLimiter`` (:issue:`909`)
+  * Fix ``ReactionWheel.AvailableTorque`` not considering authority limiter setting (:issue:`909`)
+  * Fix RCS force and torque vector calculations using max thrust rather than available thrust (:issue:`909`)
+  * Fix ``RCS.MaxTorque`` documentation error - it considers thrust limit set to 100% (:issue:`909`)
+  * Fix ``RCS.Active`` reporting a shielded thruster as inactive when it is able to thrust while shielded (:issue:`975`)
+  * Fix ``ControlSurface.AvailableTorque`` returning inconsistent signs (``ModuleControlSurface`` negates the roll axis); now normalized to positive/negative torque like other parts (:issue:`881`)
+
+* Parachutes and wheels
+
+  * Fix ``Parachute.Deploy`` being a silent no-op for RealChute parachutes (:issue:`382`)
+  * Add ``Parachute.SafeState`` reporting whether it is currently safe to deploy the parachute (safe, risky, unsafe, or not applicable) (:issue:`977`)
+  * Add ``Wheel.SteeringAngleAuto`` to get/set automatic speed-based steering angle limiting (:issue:`975`)
+
+* Deployable parts
+
+  * :breaking:`Breaking` Replace the ``RadiatorState``, ``SolarPanelState``, ``AntennaState``, ``LegState``, ``WheelState`` and ``CargoBayState`` enumerations with a single ``DeployableState`` enumeration, whose members are ``Deployed``, ``Retracted``, ``Deploying``, ``Retracting`` and ``Broken``. ``Radiator.State`` and ``SolarPanel.State`` now report ``Deployed`` and ``Deploying`` in place of ``Extended`` and ``Extending``, and ``CargoBay.State`` reports ``Deployed``, ``Retracted``, ``Deploying`` and ``Retracting`` in place of ``Open``, ``Closed``, ``Opening`` and ``Closing``. The underlying values are unchanged, so only the enumeration and member names need updating (:issue:`986`)
+  * :breaking:`Breaking` ``ResourceHarvester.State`` is now a ``DeployableState`` and no longer reports ``Active``; use ``ResourceHarvester.Active`` to check whether the harvester is drilling. The ``ResourceHarvesterState`` enumeration is removed and its values renumbered, so clients using it must be regenerated (:issue:`986`)
+  * Fix ``CargoBay.State`` reporting ``Deployed`` for a closed cargo ramp, and reporting a resting state while the bay was still moving (:issue:`986`)
+
+* Robotic parts
+
+  * :breaking:`Breaking` ``RoboticController.AddAxis``, ``AddKeyFrame`` and ``ClearAxis`` now identify an axis by the name of its field, for example ``targetAngle``, instead of by the label shown in the part's menu, for example "Target Angle". The names now match those returned by ``RoboticController.Axes``, which previously could not be passed back in, and no longer change with the language the game is running in (:issue:`993`)
+  * Add ``Parts.RoboticControllers`` (:issue:`985`)
+  * Add to ``RoboticController``: ``Enabled``, ``Playing``, ``Position``, ``Length``, ``PlaySpeed``, ``Play`` and ``Stop`` (:issue:`985`)
+  * Add to ``RoboticHinge``: ``MinAngle``, ``MaxAngle`` and ``IsMoving`` (:issue:`985`)
+  * Add to ``RoboticPiston``: ``MinExtension``, ``MaxExtension`` and ``IsMoving`` (:issue:`985`)
+  * Add to ``RoboticRotation``: ``MinAngle``, ``MaxAngle``, ``AllowFullRotation`` and ``IsMoving`` (:issue:`985`)
+  * Add to ``RoboticRotor``: ``MaxTorque``, ``BrakePercentage`` and ``IsMoving`` (:issue:`985`)
+  * Fix ``RoboticRotation.CurrentAngle`` and ``RoboticRotor.CurrentRPM`` returning stale values in flight (the KSP fields they read are only refreshed while the part action window is open) (:issue:`985`)
+
+* Resource harvesters and converters
+
+  * Fix ``ResourceHarvester.Active`` being silently ignored when set while the harvester is deploying; the requested state is now applied when the deploy completes (:issue:`983`)
+  * Fix ``ResourceHarvester.ExtractionRate`` returning 0 when part action window is not open (:issue:`889`)
+  * Fix ``ResourceConverter.State`` and ``ResourceHarvester.ThermalEfficiency`` misreading the KSP status string (:issue:`892`)
+  * Fix ``Sensor.Value`` returning zero when the part action window is not open (:issue:`883`)
+
+* Part modules, fields and configuration
+
+  * Add ``PartField``, ``PartEvent`` and ``PartAction`` API (:issue:`859`)
+  * :deprecated:`Deprecated` the string-dictionary ``Module`` field, event and action members (:issue:`859`)
+  * Allow ``Module.HasFieldWithId``, ``GetFieldById``, ``SetFieldIntById``, ``SetFieldFloatById``, ``SetFieldStringById``, ``SetFieldBoolById`` and ``ResetFieldById`` to also access fields not visible in the UI (:issue:`858`)
+  * Add ``Part.Config``, ``Module.Config`` and ``ConfigNode`` for accessing part and module static configuration (:issue:`831`)
+
+* Science, contracts and waypoints
+
+  * Fix ``Experiment.Reset`` not clearing the science data stored by DMagic experiments, which caused the next call to ``Run`` to fail with "Experiment already contains data" (:issue:`550`)
+  * Add ``Contract.DateAccepted``, ``DateDeadline``, ``DateExpire`` and ``DateFinished`` (:issue:`977`)
+  * Guard ``ContractManager`` against null ``ContractSystem`` in non-career game modes (:issue:`819`)
+  * Fix ``Waypoint.MeanAltitude`` returning the altitude relative to the terrain below the waypoint instead of relative to sea level (:issue:`801`)
+  * Fix ``Waypoint.MeanAltitude``, ``SurfaceAltitude`` and ``BedrockAltitude`` not round-tripping: the setters did not account for KSP storing waypoint altitudes relative to the bedrock height, so the altitude read back differed from the value set (:issue:`891`)
+
+* Alarms
+
+  * :breaking:`Breaking` ``Alarm.Type`` now returns an ``AlarmType`` enumeration value instead of a string (:issue:`853`)
+  * Add to ``Alarm``: ``Node``, ``OriginBody``, ``DestinationBody``, ``WarpAction``, ``MessageAction``, ``PlaySound``, ``DeleteOnDismiss``, ``Triggered`` and ``Actioned`` (:issue:`853`)
+  * Add ``AlarmType``, ``AlarmWarpAction`` and ``AlarmMessageAction`` enumerations (:issue:`853`)
+  * Add ``Alarm.Remove`` to delete an alarm (:issue:`853`)
+  * Add ``AlarmManager.AlarmWithName``, ``AlarmManager.AlarmsWithType`` and ``AlarmManager.AddTransferWindowAlarm`` (:issue:`853`)
+  * Fix ``NullReferenceException`` raised every frame after creating or removing an alarm (:issue:`853`)
+
+* Camera
+
+  * Add ``Camera.FoV`` to get and set the camera field of view, and read-only ``Camera.MinFoV``, ``Camera.MaxFoV`` and ``Camera.DefaultFoV`` (:issue:`804`)
+  * Add ``Camera.NextCamera``, ``Camera.PreviousCamera`` and ``Camera.FocussedCrewMember`` to cycle and select IVA cameras (:issue:`804`)
+  * Fix ``Camera`` ``Distance``, ``Pitch``, ``Heading`` and ``FoV`` setters being lost when set during a camera mode switch (:issue:`318`)
+
+* Client disconnect cleanup
+
+  * Remove forces added by ``Part.AddForce`` when the client that added them disconnects (:issue:`934`)
+  * Cancel in-progress resource transfers when the client that started them disconnects; a canceled transfer is marked as complete (:issue:`934`)
+  * Fix part highlighting leaking a client-disconnect event handler each time the flight scene is loaded (:issue:`934`)
+
+* Localization
+
+  * Fix ``DockingPort.Undock`` doing nothing when the game is not running in English (:issue:`993`)
+  * Fix ``Fairing.Jettison`` doing nothing, and ``Fairing.Jettisoned`` always reporting true, when the game is not running in English (:issue:`993`)
+  * Fix ``CargoBay.Open`` neither opening nor closing the bay when the game is not running in English (:issue:`993`)
+  * Fix ``ResourceConverter.State`` only ever reporting ``Running`` when the game is not running in English, leaving ``MissingResource``, ``StorageFull`` and ``Capacity`` unreachable (:issue:`993`)
+  * Fix ``DockingPort.State`` reporting ``Shielded`` instead of ``Moving`` while a shield is opening or closing, when the game is not running in English (:issue:`993`)
+  * Fix part module field values being formatted using the machine's locale, so that ``Module.Fields``, ``Module.GetField`` and ``PartField.Value`` returned numbers that clients running under a locale that writes decimals with a comma could not parse (:issue:`993`)
+
 
 
 UI service
 ^^^^^^^^^^
 
-* Fix UI.Message showing its size tag as literal text when the size is not a whole number and the machine's locale writes decimals with a comma
+* Fix locale issues with ``UI.Message`` (:issue:`993`)
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Add to Servo: UID, Mode (with a new ServoMode enum), TargetPosition, TargetSpeed, CommandedPosition, DefaultPosition, ForceLimit, MaxForce, MaxAcceleration, MaxSpeed, ElectricChargeRequired, SpringPower, DampingPower, RotorAcceleration, IsLimited, IsRotational, IsServo, CanHaveLimits, HasSpring, IsRunning, PresetPositions, AddPreset, RemovePresetAt and SortPresets
-* Add to ServoGroup: Vessel, MovingDirection, AdvancedMode, ElectricChargeRequired, BuildAid and IKActive
-* Fix Servo.MinPosition and MaxPosition to return the position limits set in the tweak menu, rather than the fixed range from the part configuration
-* Support controlling servos on any loaded vessel, not just the active vessel; presets, keys, speed factor and expanded state remain available only for servo groups on the active vessel (:issue:`943`)
-* Fix Servo.MoveLeft, MoveCenter and MoveRight failing with the latest version of Infernal Robotics Next (:issue:`941`)
-* Make InfernalRobotics.Available report correctly in all game scenes, and fix InfernalRobotics.Ready reporting false when queried before Infernal Robotics has finished loading (:issue:`941`)
+* Add to ``Servo``: ``UID``, ``Mode`` (with a new ``ServoMode`` enum), ``TargetPosition``, ``TargetSpeed``, ``CommandedPosition``, ``DefaultPosition``, ``ForceLimit``, ``MaxForce``, ``MaxAcceleration``, ``MaxSpeed``, ``ElectricChargeRequired``, ``SpringPower``, ``DampingPower``, ``RotorAcceleration``, ``IsLimited``, ``IsRotational``, ``IsServo``, ``CanHaveLimits``, ``HasSpring``, ``IsRunning``, ``PresetPositions``, ``AddPreset``, ``RemovePresetAt`` and ``SortPresets`` (:issue:`942`)
+* Add to ``ServoGroup``: ``Vessel``, ``MovingDirection``, ``AdvancedMode``, ``ElectricChargeRequired``, ``BuildAid`` and ``IKActive`` (:issue:`942`)
+* Fix ``Servo.MinPosition`` and ``MaxPosition`` to return the position limits set in the tweak menu, rather than the fixed range from the part configuration (:issue:`942`)
+* Support controlling servos on any loaded vessel, not just the active vessel (:issue:`943`)
+* Fix ``Servo.MoveLeft``, ``MoveCenter`` and ``MoveRight`` failing with the latest version of IR (:issue:`941`)
+* Make ``InfernalRobotics.Available`` report correctly in all game scenes (:issue:`941`)
+* Fix ``InfernalRobotics.Ready`` reporting false when queried before IR has finished loading (:issue:`941`)
 
 
 KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Make available in all game scenes
-* Add AlarmType.ScienceLab; Alarm.Type no longer fails for science lab alarms
-* Add AlarmAction.Custom and AlarmAction.Converted; Alarm.Action no longer fails for alarms whose action does not match one of the presets
-* Add Alarm.Enabled, Alarm.PlaySound, Alarm.Triggered, Alarm.SupportsRepeat and Alarm.SupportsRepeatPeriod
-* Fix Alarm.Remaining always failing with an invalid cast error
-* Fix alarm equality, so the same alarm obtained twice compares equal
-* Fix accessing an alarm after it has been removed, which read stale data; it now fails with an "Alarm does not exist" error
+* Make available in all game scenes (:issue:`944`)
+* Add ``AlarmType.ScienceLab`` (:issue:`982`)
+* Add ``AlarmAction.Custom`` and ``AlarmAction.Converted`` (:issue:`982`)
+* Add ``Alarm.Enabled``, ``Alarm.PlaySound``, ``Alarm.Triggered``, ``Alarm.SupportsRepeat`` and ``Alarm.SupportsRepeatPeriod`` (:issue:`982`)
+* Fix ``Alarm.Remaining`` always failing with an invalid cast error (:issue:`982`)
+* Fix alarm equality, so the same alarm obtained twice compares equal (:issue:`982`)
+* Fix accessing an alarm after it has been removed; it now fails with an "Alarm does not exist" error (:issue:`982`)
 
 
 RemoteTech service
 ^^^^^^^^^^^^^^^^^^
 
-* Fix RemoteTech.Available incorrectly reporting false in game scenes other than flight
+* Fix ``RemoteTech.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
 
 
 LiDAR service
 ^^^^^^^^^^^^^
 
-* Fix LiDAR.Available incorrectly reporting false in game scenes other than flight
+* Fix ``LiDAR.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
 
 
 DockingCamera service
 ^^^^^^^^^^^^^^^^^^^^^
 
-* Fix DockingCamera.Available incorrectly reporting false in game scenes other than flight
+* Fix ``DockingCamera.Available`` incorrectly reporting false in game scenes other than flight (:issue:`937`)
 
 
 Python client
 ^^^^^^^^^^^^^
 
-* Requires Python 3.10+
+* :breaking:`Breaking` Requires Python 3.10+ (:issue:`837`)
+* Update to protobuf v7.35.1 (:issue:`850`)
 * Allow calling static class methods from a class instance (:issue:`832`)
-* Update to protobuf v7.35.1
-* Emit a DeprecationWarning when calling a deprecated member, and note deprecation in docstrings (:issue:`904`)
-* Fix static class method calls being sent to the wrong connection when multiple clients are connected
-* An exception raised by a stream or event callback no longer ends the stream update thread, which stopped every stream and event on the connection from updating again. It is reported through the thread excepthook and the remaining callbacks still run (:issue:`1008`)
-* Fix a deadlock between the stream update thread and a thread waiting for an update while holding a stream or event condition, as waiting for one requires (:issue:`1008`)
-* An error from a service this client does not know about now raises an RPCError describing it, instead of a RuntimeError about the exception that could not be built (:issue:`1008`)
-* Fix decoding of sint64 values at or above 2\*\*62, which were returned with the wrong sign; long.MaxValue decoded as -1 and long.MinValue as 0. Encoding was unaffected (:issue:`1008`)
-* A closed connection is now reported instead of being mistaken for no data having arrived yet. Both loops reading a message size retried it at full speed indefinitely, so losing the server left the client spinning with streams frozen and no error raised, and on the RPC connection it did so holding the connection lock, blocking every other thread. Denying a connection in the in-game dialog left krpc.connect spinning rather than reporting it (:issue:`1008`)
+* Emit a ``DeprecationWarning`` when calling a deprecated member, and note deprecation in docstrings (:issue:`904`)
+* Fix static class method calls being sent to the wrong connection when multiple clients are connected (:issue:`979`)
+* An exception raised by a stream or event callback no longer ends the stream update thread (:issue:`1008`)
+* Fix a deadlock between the stream update thread and a thread waiting for an update (:issue:`1008`)
+* An error from a service this client does not know about now raises an ``RPCError`` describing it (:issue:`1008`)
+* Fix decoding of ``sint64`` values at or above ``2**62`` (:issue:`1008`)
+* A closed connection is now reported instead of being mistaken for no data having arrived (:issue:`1008`)
 * Removing a stream, or closing the client, now wakes threads waiting for an update on it, which previously waited for an update that could never arrive (:issue:`1008`)
-* The client can now be closed from a stream or event callback, which raised RuntimeError and left the client half closed (:issue:`1008`)
-* Fix a stream returning None rather than its value, or the error saying it has none, when read as its first update was being stored (:issue:`1008`)
+* The client can now be closed from a stream or event callback, which raised ``RuntimeError`` and left the client half closed (:issue:`1008`)
+* Fix a stream returning ``None`` rather than its value, or the error saying it has none, when read as its first update was being stored (:issue:`1008`)
 
 
 C# client
 ^^^^^^^^^
 
-* Requires .NET Framework 4.7.2 or later
-* Update to protobuf v3.35.1
-* Mark deprecated members with the [Obsolete] attribute (:issue:`904`)
-* Disposing a connection now stops and joins the stream update thread, instead of leaving it to end by itself when its socket was closed underneath it (:issue:`1005`)
-* An error from a service whose exception types were never registered now raises an RPCException describing it, instead of a KeyNotFoundException naming the missing type (:issue:`1005`)
-* An exception thrown by a stream or event callback no longer escapes the stream update thread, which ended the process, and the remaining callbacks still run (:issue:`1005`)
-* Fix a deadlock between the stream update thread and a thread waiting for an update while holding a stream or event condition, as waiting for one requires (:issue:`1005`)
+* :breaking:`Breaking` Requires .NET Framework 4.7.2 or later (:issue:`948`)
+* Update to protobuf v3.35.1 (:issue:`850`)
+* Mark deprecated members with the ``[Obsolete]`` attribute (:issue:`904`)
+* Disposing a connection now stops and joins the stream update thread (:issue:`1005`)
+* An error from a service whose exception types were never registered now raises an ``RPCException`` describing it (:issue:`1005`)
+* An exception thrown by a stream or event callback no longer escapes the stream update thread (:issue:`1005`)
+* Fix a deadlock between the stream update thread and a thread waiting for an update (:issue:`1005`)
 
 
 C++ client
 ^^^^^^^^^^
 
-* Distribute via vcpkg
-* An error from a service whose generated header is not included now throws an RPCError describing it, instead of running off the end of the exception thrower map (:issue:`1007`)
-* An exception thrown by a stream or event callback no longer escapes the stream update thread, which ended the process, and the remaining callbacks still run. Callbacks are not invoked for an update carrying an error, as there is no value to give them; reading the stream still reports the error (:issue:`1007`)
+* Update to protobuf v35.1 (:issue:`850`)
+* Update to ASIO 1.38.0 (:issue:`850`)
+* Distribute via vcpkg (:issue:`874`)
+* :breaking:`Breaking` Drop autotools build; CMake is now the only supported build system (:issue:`851`)
+* :breaking:`Breaking` Modernise CMake build: require CMake 3.15+, C++17, target-based usage requirements (:issue:`834`)
+* Add CMake package config so consumers can use ``find_package(krpc CONFIG REQUIRED)`` (:issue:`851`)
+* CMake dependency options (``KRPC_FETCH_DEPS``, ``KRPC_FETCH_PROTOBUF``, ``KRPC_FETCH_ASIO``, ``KRPC_FETCH_ABSL``): when OFF (default) the system install is required; when ON ``FetchContent`` is used. (:issue:`857`)
+* Mark deprecated members with the ``[[deprecated]]`` attribute (:issue:`904`)
+* An error from a service whose generated header is not included now throws an ``RPCError`` describing it (:issue:`1007`)
+* An exception thrown by a stream or event callback no longer escapes the stream update thread (:issue:`1007`)
 * Fix a data race on the exception thrower map between constructing a service and handling an error (:issue:`1007`)
-* Update to protobuf v35.1
-* Update to ASIO 1.38.0
-* Drop autotools build; CMake is now the only supported build system
-* Modernise CMake build: require CMake 3.15+, C++17, target-based usage requirements (:issue:`834`)
-* Add CMake package config so consumers can use find\_package(krpc CONFIG REQUIRED)
-* CMake dependency options (KRPC\_FETCH\_PROTOBUF, KRPC\_FETCH\_ASIO, KRPC\_FETCH\_ABSL): when OFF (default) the system install is required; when ON FetchContent is used.
-* Add KRPC\_FETCH\_DEPS option to enable FetchContent for all dependencies at once
-* Mark deprecated members with the [[deprecated]] attribute (:issue:`904`)
-* Fix stream update notifications being lost, which could leave Client::wait\_for\_stream\_update sleeping through the update it was waiting for
-* Fix Client::freeze\_streams blocking forever when no stream is producing updates
+* Fix stream update notifications being lost, which could leave ``Client::wait_for_stream_update`` sleeping through the update it was waiting for (:issue:`974`)
+* Fix ``Client::freeze_streams`` blocking forever when no stream is producing updates (:issue:`974`)
 
 
 C-nano client
 ^^^^^^^^^^^^^
 
-* Distribute via vcpkg
-* Drop autotools build; CMake is now the only supported build system
-* Modernize CMake build: require CMake 3.15+, target-based usage requirements (:issue:`834`)
-* nanopb is now an external dependency (fetched via FetchContent or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb
-* Pre-generated protocol buffer code and krpc.proto are bundled in the release archive; set KRPC\_REGENERATE\_PROTO=ON to regenerate the code from krpc.proto using the nanopb generator
-* Add CMake package config so consumers can use find\_package(krpc\_cnano CONFIG REQUIRED)
-* CMake dependency options (KRPC\_FETCH\_PROTOBUF, KRPC\_FETCH\_NANOPB): when OFF (default) the system install is required; when ON FetchContent is used.
-* Add KRPC\_FETCH\_DEPS option to enable FetchContent for all dependencies at once
-* Add support for serial port communication on Windows
-* Mark deprecated functions with the KRPC\_DEPRECATED attribute macro (:issue:`904`)
-* Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units
-* :breaking:`Breaking` On Arduino, a read now fails with KRPC\_ERROR\_EOF when the serial timeout elapses without a single byte being received, instead of retrying forever and hanging the sketch when the server goes away. The timeout applies to each byte, so a slow but progressing reply is unaffected; use Serial.setTimeout to control how long to wait
-* Add the KRPC\_ERROR\_MESSAGES option, which captures the message describing an error returned by the server so that it can be read using krpc\_get\_error\_message. Without it every server error is indistinguishable, as they all return KRPC\_ERROR\_RPC\_FAILED
-* Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than were asked for
+* Distribute via vcpkg (:issue:`874`)
+* :breaking:`Breaking` Drop autotools build; CMake is now the only supported build system (:issue:`870`)
+* :breaking:`Breaking` Modernize CMake build: require CMake 3.15+, target-based usage requirements (:issue:`834`)
+* :breaking:`Breaking` nanopb is now an external dependency (fetched via ``FetchContent`` or found on the system) rather than being bundled in the release archive; the Arduino package still bundles nanopb (:issue:`870`)
+* :breaking:`Breaking` Pre-generated protocol buffer code and ``krpc.proto`` are bundled in the release archive; set ``KRPC_REGENERATE_PROTO=ON`` to regenerate the code from ``krpc.proto`` using the nanopb generator (:issue:`872`)
+* Add CMake package config so consumers can use ``find_package(krpc_cnano CONFIG REQUIRED)`` (:issue:`870`)
+* CMake dependency options (``KRPC_FETCH_DEPS``, ``KRPC_FETCH_PROTOBUF``, ``KRPC_FETCH_NANOPB``): when OFF (default) the system install is required; when ON ``FetchContent`` is used. (:issue:`870`)
+* Add support for serial port communication on Windows (:issue:`872`)
+* Mark deprecated functions with the ``KRPC_DEPRECATED`` attribute macro (:issue:`904`)
+* Generated functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units (:issue:`948`)
+* :breaking:`Breaking` On Arduino, a read now fails with ``KRPC_ERROR_EOF`` when the serial timeout elapses instead of retrying forever (:issue:`1002`)
+* Add ``KRPC_ERROR_MESSAGES`` option, which captures the message describing an error returned by the server so that it can be read using ``krpc_get_error_message``. (:issue:`1002`)
+* Fix corruption of received data on POSIX systems when a serial read returns fewer bytes than were asked for (:issue:`1002`)
 
 
 Java client
 ^^^^^^^^^^^
 
-* Update to protobuf v4.35.1
-* Update dependencies: guava 33.4.8-jre, antlr4-runtime 4.13.2
-* Mark deprecated members with the @Deprecated annotation and an @deprecated javadoc tag (:issue:`904`)
-* Reduce copying when encoding values
-* Fix Stream.getRate always returning zero, whatever the rate had been set to (:issue:`1004`)
-* Fix looking up the method to stream or call: a method name built at runtime is now matched the same as a literal one, and the arguments are checked against the parameters of each candidate, so a mismatch is reported instead of resolving to any method taking the same number of arguments and failing later while encoding (:issue:`1004`)
-* An exception thrown by a stream or event callback no longer ends the stream update thread, which stopped every stream and event on the connection from updating again. It is passed to the thread's uncaught exception handler and the remaining callbacks still run (:issue:`1004`)
-* Fix a deadlock between the stream update thread and a thread waiting for an update while holding a stream or event condition, as waiting for one requires (:issue:`1004`)
-* An error from a service with no generated stubs loaded now raises an RPCException describing it, instead of a NullPointerException raised while building the exception for it (:issue:`1004`)
+* Update to protobuf v4.35.1, guava 33.4.8-jre, antlr4-runtime 4.13.2 (:issue:`850`)
+* Mark deprecated members with the ``@Deprecated`` annotation and an ``@deprecated`` javadoc tag (:issue:`904`)
+* Reduce copying when encoding values (:issue:`979`)
+* Fix ``Stream.getRate`` always returning zero, whatever the rate had been set to (:issue:`1004`)
+* Fix looking up the method to stream or call (:issue:`1004`)
+* An exception thrown by a stream or event callback no longer ends the stream update thread (:issue:`1004`)
+* Fix a deadlock between the stream update thread and a thread waiting for an update (:issue:`1004`)
+* An error from a service with no generated stubs loaded now raises an ``RPCException`` describing it (:issue:`1004`)
 
 
 Lua client
 ^^^^^^^^^^
 
-* Fix attributes module to always return boolean for is\_a\_class\_member and is\_a\_class\_property\_accessor
-* Fix service, method and property names being converted to snake case using the machine's locale, which renamed every member the client exposes under Turkish locales
-* Calling a procedure with an argument that needs coercing no longer leaves a global named ok behind (:issue:`1003`)
-* Remove encoder.client\_name, which raised an error whatever it was passed, as the length it padded names to was never defined. It was a leftover from before the protocol used protocol buffers (:issue:`1003`)
+* Fix ``attributes`` module to always return boolean for ``is_a_class_member`` and ``is_a_class_property_accessor`` (:issue:`850`)
+* Fix service, method and property names being converted to snake case using the machine's locale (:issue:`993`)
+* Calling a procedure with an argument that needs coercing no longer leaves a global named ``ok`` behind (:issue:`1003`)
+* Remove ``encoder.client_name``; a leftover from before the protocol used protocol buffers (:issue:`1003`)
 
 
 krpctools
 ^^^^^^^^^
 
-* Requires Python 3.10+
-* krpc-servicedefs now runs the ServiceDefinitions tool on the .NET 8 runtime; Mono is no longer required
+* :breaking:`Breaking` Requires Python 3.10+
+* :breaking:`Breaking` ``krpc-servicedefs`` now runs the ``ServiceDefinitions`` tool on the .NET 8 runtime; Mono is no longer required
 * Surface deprecated members in generated documentation and client stubs (:issue:`904`)
 * Fix generated Java clients failing to compile when a service has enough procedures to push the generated type tables past the JVM's method size limit
 * Generated C-nano functions are now defined as static inline, so the generated service headers can be safely included from multiple translation units
 * Fix C-nano client generation emitting zero-sized argument arrays for procedures with no parameters
 * Fix C-nano documentation rendering an entire service's API as an indented block quote
-* Fix docgen dropping remarks in service-level documentation
+* Fix ``docgen`` dropping remarks in service-level documentation
 * Fix cross-service member references not resolving in generated C# and Lua documentation (:issue:`897`)
 * Fix member references in generated Python documentation using lowerCamelCase instead of snake\_case
 * Fix generating client stubs and documentation from a KSP install failing when the machine's locale is not UTF-8 and a service's documentation contains non-ASCII characters
@@ -350,7 +406,7 @@ Server
 Core
 ^^^^
 
-* Initial version, split off from KRPC.dll
+* Initial version, split off from ``KRPC.dll``
 
 
 SpaceCenter service
@@ -360,10 +416,10 @@ SpaceCenter service
 * Allow vessel switch from any scene (:issue:`781`)
 * Fix memory leaks on each scene switch (:issue:`779`)
 * Force throttle to zero when timewarping (:issue:`792`)
-* Add SpaceCenter.Decoupler.AttachedPart (:issue:`789`, :issue:`791`)
-* Add SpaceCenter.Decoupler.IsOmniDecoupler (:issue:`789`)
+* Add ``SpaceCenter.Decoupler.AttachedPart`` (:issue:`789`, :issue:`791`)
+* Add ``SpaceCenter.Decoupler.IsOmniDecoupler`` (:issue:`789`)
 * Fix decoupler crashes with stack separators (:issue:`790`)
-* Make CelestialBody parameters doulbe precision (:issue:`786`)
+* Make ``CelestialBody`` parameters doulbe precision (:issue:`786`)
 * Fix scaled camera distance clamp (:issue:`785`)
 
 
@@ -379,7 +435,7 @@ krpctools
 * Fix incorrect protobuf DLL (:issue:`755`)
 * Fix required KSP assemblies not being copied (:issue:`755`)
 * Fix tmp directory not being deleted (:issue:`755`)
-* Fix clientgen generating invalid python code for undocumented enumeration values (:issue:`757`)
+* Fix ``clientgen`` generating invalid python code for undocumented enumeration values (:issue:`757`)
 
 
 0.5.3
@@ -401,22 +457,22 @@ Server
 
 * Update to protobuf v3.10.1
 * Fix game lagging when first client connects (:issue:`712`)
-* Change KRPCDefaultValueAttribute so that it applies to parameters directly (:issue:`677`)
+* Change ``KRPCDefaultValueAttribute`` so that it applies to parameters directly (:issue:`677`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Fix null reference exception when SpaceCenter.LaunchVesselFromVAB is called with no crew (:issue:`599`)
-* Add Engine.IndependentThrottle to check whether it is enabled
-* Allow setting the independent throttle using Engine.Throttle
-* Fix Engine.HasFuel sometimes returning true for flamed-out SRBs (:issue:`631`)
+* Fix null reference exception when ``SpaceCenter.LaunchVesselFromVAB`` is called with no crew (:issue:`599`)
+* Add ``Engine.IndependentThrottle`` to check whether it is enabled
+* Allow setting the independent throttle using ``Engine.Throttle``
+* Fix ``Engine.HasFuel`` sometimes returning true for flamed-out SRBs (:issue:`631`)
 * Add functions to manipulate a part modules fields based on identifier
-* Module.Fields now throws an exception if there are multiple fields with the same name
-* Add Module.FieldsById to get a dictionary of field values keyed by their identifier
-* Add Module.SetFieldBool and Module.SetFieldBoolById to set a field with a boolean value
-* Module.SetField\* methods now raise an exception if setting the field to the wrong value type
-* Change default names for alarms created by AlarmManager
+* ``Module.Fields`` now throws an exception if there are multiple fields with the same name
+* Add ``Module.FieldsById`` to get a dictionary of field values keyed by their identifier
+* Add ``Module.SetFieldBool`` and ``Module.SetFieldBoolById`` to set a field with a boolean value
+* ``Module.SetField*`` methods now raise an exception if setting the field to the wrong value type
+* Change default names for alarms created by ``AlarmManager``
 
 
 Python client
@@ -426,7 +482,7 @@ Python client
 * Add type hints (:issue:`703`)
 * Pre-generated stubs now include implementation of services as well as type hints
 * Fix various type hint bugs in generated stubs
-* Allow importing types from a service using, for example "from krpc.services.spacecenter import Vessel"
+* Allow importing types from a service using, for example "``from krpc.services.spacecenter import Vessel``"
 
 
 C++ client
@@ -469,64 +525,68 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Update to work with KSP 1.8+
-* Add to SpaceCenter:
-* LaunchSites
-* CanRevertToLaunch
-* RevertToLaunch
-* TransferCrew
-* CreateKerbal
-* GetKerbal
-* LoadSpaceCenter
-* MapFilter
-* Screenshot
-* Add crew and flagUrl parameters to SpaceCenter.LaunchVessel
+* Add to ``SpaceCenter``:
+
+  * ``LaunchSites``
+  * ``CanRevertToLaunch``
+  * ``RevertToLaunch``
+  * ``TransferCrew``
+  * ``CreateKerbal``
+  * ``GetKerbal``
+  * ``LoadSpaceCenter``
+  * ``MapFilter``
+  * ``Screenshot``
+
+* Add crew and ``flagUrl`` parameters to ``SpaceCenter.LaunchVessel``
 * Add support for more vessel types
-* Add LaunchSite
-* Add CelestialBody.IsStar and CelestialBody.HasSolidSurface
-* Add custom axes to Control class
-* Add Part.FlagURL
-* Add Part.AvailableSeats
-* Add Part.Glow
-* Add Part.AutoStrutMode
+* Add ``LaunchSite``
+* Add ``CelestialBody.IsStar`` and ``CelestialBody.HasSolidSurface``
+* Add custom axes to ``Control`` class
+* Add ``Part.FlagURL``
+* Add ``Part.AvailableSeats``
+* Add ``Part.Glow``
+* Add ``Part.AutoStrutMode``
 * Add support for resource drain parts
 * Add support for stock robotic parts
-* Add Parachute.Cut
+* Add ``Parachute.Cut``
 * Add support for docking port rotation
-* Add support for Light blinking
+* Add support for ``Light`` blinking
 * Add support for wheel steering angle limit and response time
-* Fix ParachuteState.Active state and clean up real chute vs. stock parachute logic
-* Add support for stock alarms (AlarmManager and Alarm classes)
-* Use raycast to measure surface height more precisely in CelestialBody.SurfaceHeight (:issue:`524`)
+* Fix ``ParachuteState.Active`` state and clean up real chute vs. stock parachute logic
+* Add support for stock alarms (``AlarmManager`` and ``Alarm`` classes)
+* Use raycast to measure surface height more precisely in ``CelestialBody.SurfaceHeight`` (:issue:`524`)
 * Fix null reference exception when checking active vessel (:issue:`528`, :issue:`530`)
 * Fix null reference exception when waiting for active vessel change (:issue:`516`, :issue:`529`)
-* Add RCS.ThrustLimit and RCS.AvailableThrust (:issue:`519`)
-* Add Control.StageLock (:issue:`541`)
-* Fix launch checks and automatic vessel recovery in SpaceCenter.LaunchVessel
+* Add ``RCS.ThrustLimit`` and ``RCS.AvailableThrust`` (:issue:`519`)
+* Add ``Control.StageLock`` (:issue:`541`)
+* Fix launch checks and automatic vessel recovery in ``SpaceCenter.LaunchVessel``
 * Fix setting camera target to an unloaded vessel (:issue:`536`)
-* Fix Control.Legs and Control.Wheels not deploying/retracting legs/wheels correctly (:issue:`509`, :issue:`261`)
-* Allow legs/wheels can be individually deployed/retracted using Leg.Deployed and Wheel.Deployed (:issue:`509`, :issue:`261`)
+* Fix ``Control.Legs`` and ``Control.Wheels`` not deploying/retracting legs/wheels correctly (:issue:`509`, :issue:`261`)
+* Allow legs/wheels can be individually deployed/retracted using ``Leg.Deployed`` and ``Wheel.Deployed`` (:issue:`509`, :issue:`261`)
 * Allow lights to be individually turned on and off (:issue:`261`)
-* Fix Engine and RCS fuel calculations only being done when they are enabled (:issue:`514`, :issue:`254`)
+* Fix ``Engine`` and RCS fuel calculations only being done when they are enabled (:issue:`514`, :issue:`254`)
 * Add support for parts that contain multiple experiments (:issue:`533`)
-* Part.Experiment now throws an exception if the part has more than one experiment
-* Add Part.Experiments which returns a list of experiments in the part
-* Update Parts.Experiments to return all experiments contained in the parts
-* Add Experiment.Name and Experiment.Title
-* Fix Fairing.Jettison and Fairing.Jettisoned for parts from the ProceduralFairings mod (:issue:`549`)
-* Fix Engine.SpecificImpulse returning 0 for Realism Overhaul engines that are active but not throttled up (:issue:`548`)
+
+  * ``Part.Experiment`` now throws an exception if the part has more than one experiment
+  * Add ``Part.Experiments`` which returns a list of experiments in the part
+  * Update ``Parts.Experiments`` to return all experiments contained in the parts
+
+* Add ``Experiment.Name`` and ``Experiment.Title``
+* Fix ``Fairing.Jettison`` and ``Fairing.Jettisoned`` for parts from the ProceduralFairings mod (:issue:`549`)
+* Fix ``Engine.SpecificImpulse`` returning 0 for Realism Overhaul engines that are active but not throttled up (:issue:`548`)
 * Fix compatibility with DMagic science experiments mod (:issue:`550`)
 * Fix available torque calculations for RCS (:issue:`552`, :issue:`354`)
-* Fix RCS.MaxThrust returning incorrect values
-* Fix SimulateAerodynamicForceAt (:issue:`587`)
-* Fix RCS.GetTorqueVectors not considering if each direction is enabled (:issue:`591`)
-* Add RCS.AvailableForce and Vessel.AvailableRCSForce (:issue:`597`)
+* Fix ``RCS.MaxThrust`` returning incorrect values
+* Fix ``SimulateAerodynamicForceAt`` (:issue:`587`)
+* Fix ``RCS.GetTorqueVectors`` not considering if each direction is enabled (:issue:`591`)
+* Add ``RCS.AvailableForce`` and ``Vessel.AvailableRCSForce`` (:issue:`597`)
 
 
 Drawing service
 ^^^^^^^^^^^^^^^
 
-* Add Drawing.AddDirectionFromCoM
-* Change Drawing.AddDirection to start the line at the origin of the reference frame (:issue:`518`)
+* Add ``Drawing.AddDirectionFromCoM``
+* Change ``Drawing.AddDirection`` to start the line at the origin of the reference frame (:issue:`518`)
 
 
 InfernalRobotics service
@@ -534,7 +594,7 @@ InfernalRobotics service
 
 * Update to work with Infernal Robotics Next v3.1.9
 * Drop support for original Infernal Robotics mod
-* Remove Servo.MoveNextPreset and Servo.MovePrevPreset as they no longer exist in the mod
+* Remove ``Servo.MoveNextPreset`` and ``Servo.MovePrevPreset`` as they no longer exist in the mod
 
 
 KerbalAlarmClock service
@@ -583,7 +643,7 @@ C-nano client
 
 * Update to protobuf 22.0
 * Update to nanopb 0.4.7
-* Rename KRPC\_COMMS\_CUSTOM to KRPC\_COMMUNICATION\_CUSTOM
+* Rename ``KRPC_COMMS_CUSTOM`` to ``KRPC_COMMUNICATION_CUSTOM``
 
 
 Java client
@@ -605,8 +665,8 @@ Lua client
 krpctools
 ^^^^^^^^^
 
-* Fix issue finding KSP\_x64\_Data directory (:issue:`523`)
-* Add TestServer archive to bin directory (:issue:`532`)
+* Fix issue finding ``KSP_x64_Data`` directory (:issue:`523`)
+* Add ``TestServer`` archive to bin directory (:issue:`532`)
 
 
 0.4.8
@@ -626,26 +686,26 @@ SpaceCenter service
 
 * Allows RPCs to be accessed from game scenes other than just flight (:issue:`471`)
 * Merge NameTag (http://github.com/krpc/NameTag) into the main kRPC release
-* Fix air-relative velocity calculation for SimulateAeroDynamicForceAt with FAR (:issue:`500`)
-* Changed Orbit API to accept target orbits as Orbit objects instead of Vessel objects, to allow computing closest approach etc. to planets (:issue:`479`)
+* Fix air-relative velocity calculation for ``SimulateAeroDynamicForceAt`` with FAR (:issue:`500`)
+* Changed ``Orbit`` API to accept target orbits as ``Orbit`` objects instead of ``Vessel`` objects, to allow computing closest approach etc. to planets (:issue:`479`)
 * Trying to enable SAS while the autopilot is engaged now throws an exception as this is not permitted (:issue:`492`)
-* Add color and size paramters to UI.Message (:issue:`499`)
-* Fix Flight.TerminalVelocity (:issue:`485`)
+* Add color and size paramters to ``UI.Message`` (:issue:`499`)
+* Fix ``Flight.TerminalVelocity`` (:issue:`485`)
 * Fix null reference exception when deploying fairings after reverting to launch (:issue:`501`)
 
 
 Drawing service
 ^^^^^^^^^^^^^^^
 
-* Fix reference frames for AddDirection so that the line always starts at the active vessel's CoM (:issue:`486`)
+* Fix reference frames for ``AddDirection`` so that the line always starts at the active vessel's CoM (:issue:`486`)
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Add suport for both original Infernal Robotics and Infernal Robotics Next (:issue:`476`)
-* Add InfernalRobotics.Ready which indicates if the IR is on the current vessel and ready to receive commands
-* Change InfernalRobotics.Available to return whether the IR mod is installed (not if the IR API is "ready")
+* Add ``InfernalRobotics.Ready`` which indicates if the IR is on the current vessel and ready to receive commands
+* Change ``InfernalRobotics.Available`` to return whether the IR mod is installed (not if the IR API is "ready")
 
 
 Python client
@@ -675,14 +735,14 @@ C-nano client
 ^^^^^^^^^^^^^
 
 * Update to protobuf v3.6.1
-* Change second parameter of krpc\_open to be a configuration parameter of type krpc\_connection\_config\_t to allow additional configuration options to be passed, such as baud rate for Arduino serial port (:issue:`487`)
+* Change second parameter of ``krpc_open`` to be a configuration parameter of type ``krpc_connection_config_t`` to allow additional configuration options to be passed, such as baud rate for Arduino serial port (:issue:`487`)
 * Fix encoding issue in procedure call messages that was causing compilation on Arduino Due to fail
 
 
 Java client
 ^^^^^^^^^^^
 
-* Make Connection class implement AutoClosable (:issue:`491`)
+* Make ``Connection`` class implement ``AutoClosable`` (:issue:`491`)
 * Update to protobuf v3.6.1
 
 
@@ -696,7 +756,7 @@ krpctools
 ^^^^^^^^^
 
 * Fix Python 3 compatibility
-* Fix template loading in docgen on Windows
+* Fix template loading in ``docgen`` on Windows
 * Add documentation of game scenes for each RPC
 
 
@@ -714,7 +774,7 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Fix Flight.Lift and Flight.Drag should return values in Newtons (:issue:`475`)
+* Fix ``Flight.Lift`` and ``Flight.Drag`` should return values in Newtons (:issue:`475`)
 
 
 C++ client
@@ -737,20 +797,20 @@ Server
 ^^^^^^
 
 * Support for KSP 1.4.3
-* Remove CompatibilityChecker as it's deprecated - instead rely on CKAN and KSP-AVC version checks
+* Remove ``CompatibilityChecker`` as it's deprecated - instead rely on CKAN and KSP-AVC version checks
 * Update icons to be 64x64 to fix blurring when loading as textures (:issue:`453`)
 * Fix equality checking for streams of collections (:issue:`452`)
-* Fix RPC errors being reported in Response.error instead of individual ProcedureResult.error fields (:issue:`467`)
+* Fix RPC errors being reported in ``Response.error`` instead of individual ``ProcedureResult.error`` fields (:issue:`467`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Added SpaceCenter.GameMode (:issue:`455`)
-* Added SpaceCenter.Science, Funds and Reputation (:issue:`455`)
-* Fix pre-flight checks not happending in SpaceCenter.LaunchVessel (:issue:`469`)
-* Add 'recover' boolean argument to SpaceCenter.LaunchVessel to recover existing vessels on the launch pad (:issue:`469`)
-* Change CelestialBody.Biomes to return an empty list instead of throwing an exception if the body has no biomes (:issue:`457`)
+* Added ``SpaceCenter.GameMode`` (:issue:`455`)
+* Added ``SpaceCenter.Science``, ``Funds`` and ``Reputation`` (:issue:`455`)
+* Fix pre-flight checks not happending in ``SpaceCenter.LaunchVessel`` (:issue:`469`)
+* Add 'recover' boolean argument to ``SpaceCenter.LaunchVessel`` to recover existing vessels on the launch pad (:issue:`469`)
+* Change ``CelestialBody.Biomes`` to return an empty list instead of throwing an exception if the body has no biomes (:issue:`457`)
 * Fixed science transmission not working correctly (:issue:`456`)
 
 
@@ -801,7 +861,7 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Fixed roll input when input mode is override (:issue:`445`)
-* Marked CelestialBody.Orbit as nullable, as it returns null for the sun
+* Marked ``CelestialBody.Orbit`` as nullable, as it returns null for the sun
 
 
 Python client
@@ -864,7 +924,7 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add ResourceConverter.ThermalEfficiency, CoreTemperature and OptimumCoreTemperature (:issue:`439`)
+* Add ``ResourceConverter.ThermalEfficiency``, ``CoreTemperature`` and ``OptimumCoreTemperature`` (:issue:`439`)
 
 
 0.4.3
@@ -900,8 +960,8 @@ C++ client
 C-nano client
 ^^^^^^^^^^^^^
 
-* Remove KRPC\_NO\_PRINT\_ERRORS option (now enabled by default) and replace with KRPC\_PRINT\_ERRORS\_TO\_STDERR
-* Enable PB\_NO\_ERRMSG by default in Arduino version of library
+* Remove ``KRPC_NO_PRINT_ERRORS`` option (now enabled by default) and replace with ``KRPC_PRINT_ERRORS_TO_STDERR``
+* Enable ``PB_NO_ERRMSG`` by default in Arduino version of library
 * Invoke remote procedures using service and produce identifiers instead of names to reduce code size and communication overhead
 
 
@@ -918,7 +978,7 @@ Java client
 Server
 ^^^^^^
 
-* Include missing KRPC.IO.Ports DLL
+* Include missing ``KRPC.IO.Ports`` DLL
 
 
 0.4.1
@@ -938,9 +998,9 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add SpaceCenter.RaycastDistance and RaycastPart (:issue:`423`)
-* Add Vessel.CrewCount, CrewCapacity and Crew (:issue:`426`)
-* Add CrewMember class (:issue:`426`)
+* Add ``SpaceCenter.RaycastDistance`` and ``RaycastPart`` (:issue:`423`)
+* Add ``Vessel.CrewCount``, ``CrewCapacity`` and ``Crew`` (:issue:`426`)
+* Add ``CrewMember`` class (:issue:`426`)
 
 
 C-nano client
@@ -959,31 +1019,33 @@ Server
 * New server architecture that allows multiple concurrent servers, using different settings and protocols
 * Add websockets server protocol for communication with browsers
 * Improved communication protocol (:issue:`325`)
-* Multiple RPCs can now be grouped into a single network message
-* Remove unnecessary message fields
-* Improved message encoding when establishing a connection
-* Significantly reduced the size of the message returned by GetServices
-* More compact encoding of signed integers
+
+  * Multiple RPCs can now be grouped into a single network message
+  * Remove unnecessary message fields
+  * Improved message encoding when establishing a connection
+  * Significantly reduced the size of the message returned by GetServices
+  * More compact encoding of signed integers
+
 * Added ability for RPCs to throw custom exception types in the calling client
-* Add start flag to KRPC.AddStream and add KRPC.StartStream. Allows streams to be added but not started until a later time
+* Add start flag to ``KRPC.AddStream`` and add ``KRPC.StartStream``. Allows streams to be added but not started until a later time
 * If a stream returns an error, it is removed from the server automatically (:issue:`269`)
 * Add support for streaming RPCs that yield execution to a future game update
-* Add KRPC.GetClientID and KRPC.GetClientName
+* Add ``KRPC.GetClientID`` and ``KRPC.GetClientName``
 * Add support for events
 * Server no longer freezes if the game is paused (:issue:`347`)
-* Added KRPC.Paused property to get/set whether the game is paused (:issue:`422`)
+* Added ``KRPC.Paused`` property to get/set whether the game is paused (:issue:`422`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* AutoPilot.Wait and Error methods now throw an exception if the auto-pilot is not engaged (:issue:`409`)
+* ``AutoPilot.Wait`` and ``Error`` methods now throw an exception if the auto-pilot is not engaged (:issue:`409`)
 
 
 Drawing service
 ^^^^^^^^^^^^^^^
 
-* Make Test.AvailableFonts a static method
+* Make ``Test.AvailableFonts`` a static method
 
 
 Python client
@@ -991,7 +1053,7 @@ Python client
 
 * Updated protocol in line with server changes
 * Remove connection retries. Client will now fail fast if it fails to connect to the server
-* Reorder parameters to krpc.connect() so that name is first - to be consistent with other client libraries
+* Reorder parameters to ``krpc.connect()`` so that name is first - to be consistent with other client libraries
 * Add support for RPCs and streams to throw exceptions
 * Add stream waiting and update callbacks
 * Add support for events
@@ -1019,8 +1081,10 @@ Java client
 * Updated protocol in line with server changes
 * Add support for RPCs and streams to throw exceptions
 * Clean up error reporting:
-* ConnectionException thrown when connection to a server fails This inherits IOException
-* Decoding messages now throws an unchecked EncodingException, as these errors should not occur as a result of user input.
+
+  * ``ConnectionException`` thrown when connection to a server fails This inherits ``IOException``
+  * Decoding messages now throws an unchecked ``EncodingException``, as these errors should not occur as a result of user input.
+
 * Minor code clean up, and source now checked with CheckStyle
 
 
@@ -1066,12 +1130,12 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Fix maneuver node reference frame to point in the direction of the remaining burn, rather than just the initially planned burn (:issue:`404`)
-* Add following to CelestialBody class: AltitudeAtPosition, LatitudeAtPosition, LongitudeAtPosition and AtmosphericDensityAtPosition (:issue:`413`)
-* Add following to Orbit class: RadiusAt, PositionAt, MeanAnomalyAtUT, TrueAnomalyAtAN, TrueAnomalyAtDN
-* Add rendezvous method to Orbit class: RelativeInclination, TimeOfClosestApproach, DistanceAtClosestApproach, ListClosestApproaches (:issue:`407`)
-* Add Control.InputMode to configure the way that control inputs are handled (they are either additive or override the vessels control inputs) (:issue:`384`)
-* Add CelestialBody.TemperatureAt, DensityAt and PressureAt (:issue:`350`, :issue:`352`)
-* Add Flight.SimulateAerodynamicForceAt (:issue:`352`)
+* Add following to ``CelestialBody`` class: ``AltitudeAtPosition``, ``LatitudeAtPosition``, ``LongitudeAtPosition`` and ``AtmosphericDensityAtPosition`` (:issue:`413`)
+* Add following to ``Orbit`` class: ``RadiusAt``, ``PositionAt``, ``MeanAnomalyAtUT``, ``TrueAnomalyAtAN``, ``TrueAnomalyAtDN``
+* Add rendezvous method to ``Orbit`` class: ``RelativeInclination``, ``TimeOfClosestApproach``, ``DistanceAtClosestApproach``, ``ListClosestApproaches`` (:issue:`407`)
+* Add ``Control.InputMode`` to configure the way that control inputs are handled (they are either additive or override the vessels control inputs) (:issue:`384`)
+* Add ``CelestialBody.TemperatureAt``, ``DensityAt`` and ``PressureAt`` (:issue:`350`, :issue:`352`)
+* Add ``Flight.SimulateAerodynamicForceAt`` (:issue:`352`)
 
 
 Python client
@@ -1090,7 +1154,7 @@ C# client
 C++ client
 ^^^^^^^^^^
 
-* Set ASIO\_STANDLONE in build script instead of source code so that configure script can find the header correctly
+* Set ``ASIO_STANDLONE`` in build script instead of source code so that configure script can find the header correctly
 * Add support for building using Cygwin
 * Update to protobuf v3.4.0
 
@@ -1132,14 +1196,14 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add VesselType.Plane and VesselType.Relay (:issue:`385`)
-* Fix Control.WheelThrottle and WheelSteering (:issue:`388`)
-* Fix off by one error in stage numbers for Vessel.ResourcesInDecoupleStage (:issue:`380`)
-* Fix CelestialBody.InitialRotation and RotationAngle returning values out of range 0 - 2\*PI (:issue:`391`)
-* Add WaypointManager.AddWaypointAtAltitude (:issue:`399`)
-* Add CelestialBody.PositionAtAltitude (:issue:`399`)
-* Fix SpaceCenter.SetTarget not correctly setting target if input locks are enabled (:issue:`397`)
-* Fix possible null reference exception in ResourceConverter.State
+* Add ``VesselType.Plane`` and ``VesselType.Relay`` (:issue:`385`)
+* Fix ``Control.WheelThrottle`` and ``WheelSteering`` (:issue:`388`)
+* Fix off by one error in stage numbers for ``Vessel.ResourcesInDecoupleStage`` (:issue:`380`)
+* Fix ``CelestialBody.InitialRotation`` and ``RotationAngle`` returning values out of range 0 - 2\*PI (:issue:`391`)
+* Add ``WaypointManager.AddWaypointAtAltitude`` (:issue:`399`)
+* Add ``CelestialBody.PositionAtAltitude`` (:issue:`399`)
+* Fix ``SpaceCenter.SetTarget`` not correctly setting target if input locks are enabled (:issue:`397`)
+* Fix possible null reference exception in ``ResourceConverter.State``
 
 
 Python client
@@ -1179,7 +1243,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
-* Rename protobuf generated files to \*\_pb2.py to fix issue with protobuf 3.2.0 (:issue:`378`, :issue:`376`)
+* Rename protobuf generated files to ``*_pb2.py`` to fix issue with protobuf 3.2.0 (:issue:`378`, :issue:`376`)
 * Relax package requirements to protobuf >= 3
 
 
@@ -1198,20 +1262,20 @@ SpaceCenter service
 
 * Add support for CommNet
 * Add support for contracts (:issue:`361`)
-* Add support for RealChutes, add Parachute.Arm and Parachute.Armed (:issue:`382`)
+* Add support for RealChutes, add ``Parachute.Arm`` and ``Parachute.Armed`` (:issue:`382`)
 * Add support for Procedural Fairings (:issue:`368`)
-* Add CelestialBody.InitialRotation and RotationAngle (:issue:`369`)
-* Add SpaceCenter.Navball to show/hide the navball (:issue:`355`)
-* Add SpaceCenter.UIVisible to show/hide the UI (:issue:`355`)
-* Add ControlSurface.AuthorityLimiter (:issue:`352`)
+* Add ``CelestialBody.InitialRotation`` and ``RotationAngle`` (:issue:`369`)
+* Add ``SpaceCenter.Navball`` to show/hide the navball (:issue:`355`)
+* Add ``SpaceCenter.UIVisible`` to show/hide the UI (:issue:`355`)
+* Add ``ControlSurface.AuthorityLimiter`` (:issue:`352`)
 * Extended wheels functionality
-* Rename LandingLeg to Leg
-* Rename LandingGear to Wheel
-* Add Antenna.Deployable, Leg.Deployable and SolarPanel.Deployable
-* Add properties to Control class to set the state of all solar panels, radiators, legs, etc. on a vessel (:issue:`383`)
-* Fix bug with DockingPort.Rotation (:issue:`371`)
-* Fix bug with Part.Rotation (:issue:`371`)
-* Fix bug with Part.BoundingBox (:issue:`370`)
+* Rename ``LandingLeg`` to ``Leg``
+* Rename ``LandingGear`` to ``Wheel``
+* Add ``Antenna.Deployable``, ``Leg.Deployable`` and ``SolarPanel.Deployable``
+* Add properties to ``Control`` class to set the state of all solar panels, radiators, legs, etc. on a vessel (:issue:`383`)
+* Fix bug with ``DockingPort.Rotation`` (:issue:`371`)
+* Fix bug with ``Part.Rotation`` (:issue:`371`)
+* Fix bug with ``Part.BoundingBox`` (:issue:`370`)
 
 
 Python client
@@ -1233,8 +1297,8 @@ C++ client
 
 * Update to protobuf v3.2.0
 * Update build scripts to check for protobuf >= 3.2 (:issue:`374`)
-* Move krpc::connect into client constructor to allow use of smart pointers
-* Fix bug in StreamManager when client is not set
+* Move ``krpc::connect`` into client constructor to allow use of smart pointers
+* Fix bug in ``StreamManager`` when client is not set
 
 
 Java client
@@ -1263,21 +1327,21 @@ Server
 ^^^^^^
 
 * Support for KSP 1.2.2
-* Add KRPCDefaultValue attribute. Can be used to set default arguments to non-compile time constants.
+* Add ``KRPCDefaultValue`` attribute. Can be used to set default arguments to non-compile time constants.
 * Update to Protocol Buffers v3.1.0
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add custom reference frames (ReferenceFrame.CreateRelative and CreateHybrid) (:issue:`252`)
-* Add Vessel.BoundingBox and Part.BoundingBox (:issue:`352`)
-* Add LandingGear.IsGrounded and LandingLeg.IsGrounded (:issue:`352`)
-* Add Part.Highlighted and HighlightColor (:issue:`332`)
-* Change CelestialBody.Biomes to return a set instead of a list
+* Add custom reference frames (``ReferenceFrame.CreateRelative`` and ``CreateHybrid``) (:issue:`252`)
+* Add ``Vessel.BoundingBox`` and ``Part.BoundingBox`` (:issue:`352`)
+* Add ``LandingGear.IsGrounded`` and ``LandingLeg.IsGrounded`` (:issue:`352`)
+* Add ``Part.Highlighted`` and ``HighlightColor`` (:issue:`332`)
+* Change ``CelestialBody.Biomes`` to return a set instead of a list
 * Change available torque methods to return a pair of torque vectors, one in the positive control directions and one in the negative control direction.
-* Add Vessel.AvailableOtherTorque which returns the available torque from other parts (i.e. torque providers other than the stock reaction wheels, RCS thrusters, gimballed engines and control surfaces)
-* Include this 'other' torque in Vessel.AvailableTorque
+* Add ``Vessel.AvailableOtherTorque`` which returns the available torque from other parts (i.e. torque providers other than the stock reaction wheels, RCS thrusters, gimballed engines and control surfaces)
+* Include this 'other' torque in ``Vessel.AvailableTorque``
 * Change required RemoteTech version to 1.8.0
 * Change maneuver node methods and properties to use double precision values (:issue:`357`)
 * Add support for Action Groups Extended mod (:issue:`364`, :issue:`365`)
@@ -1286,19 +1350,19 @@ SpaceCenter service
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Add InfernalRobotics.Available
+* Add ``InfernalRobotics.Available``
 
 
 KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Add KerbalAlarmClock.Available
+* Add ``KerbalAlarmClock.Available``
 
 
 RemoteTech service
 ^^^^^^^^^^^^^^^^^^
 
-* Add RemoteTech.Available
+* Add ``RemoteTech.Available``
 * Change required RemoteTech version to 1.8.0
 
 
@@ -1337,34 +1401,34 @@ krpctools
 Server
 ^^^^^^
 
-* Add KRPC.Clients that clients can use to get a list of connected clients (:issue:`304`)
-* Make KRPC.Core.Instance public so that other mods can subscribe to server events and access other server APIs (:issue:`304`)
+* Add ``KRPC.Clients`` that clients can use to get a list of connected clients (:issue:`304`)
+* Make ``KRPC.Core.Instance`` public so that other mods can subscribe to server events and access other server APIs (:issue:`304`)
 * Add "Yes (don't show again)" options to dialogs, add option to skip confirmation when force disconnecting a client
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add Part.Tag which can be used to get/set the name tag set via the NameTag mod, or kOS (:issue:`297`)
-* Add Parts.WithTag to get a list of all parts with the given tag value
-* Remove DockingPort.Name and Parts.DockingPortsWithName - part tagging can now be used instead
-* Add Flight.TrueAirSpeed
-* Add FAR support for Flight.Mach and add Flight.ReynoldsNumber (:issue:`313`)
-* Fix value returned by Orbit.Inclination (:issue:`301`)
-* An error is now thrown when Autopilot.ReferenceFrame is set to a reference frame that rotates with the vessel
-* Fix issues with Part.DecoupleStage (:issue:`307`)
-* Add Part.AddForce, Part.InstantaneousFource and Force class for exerting arbitrary forces on parts (:issue:`287`)
-* Fix units for Flight.DynamicPressure when FAR is installed - value returned is now in Pa, not kPa (:issue:`329`)
-* Add Decoupler.Staged
+* Add ``Part.Tag`` which can be used to get/set the name tag set via the NameTag mod, or kOS (:issue:`297`)
+* Add ``Parts.WithTag`` to get a list of all parts with the given tag value
+* Remove ``DockingPort.Name`` and ``Parts.DockingPortsWithName`` - part tagging can now be used instead
+* Add ``Flight.TrueAirSpeed``
+* Add FAR support for ``Flight.Mach`` and add ``Flight.ReynoldsNumber`` (:issue:`313`)
+* Fix value returned by ``Orbit.Inclination`` (:issue:`301`)
+* An error is now thrown when ``Autopilot.ReferenceFrame`` is set to a reference frame that rotates with the vessel
+* Fix issues with ``Part.DecoupleStage`` (:issue:`307`)
+* Add ``Part.AddForce``, ``Part.InstantaneousFource`` and ``Force`` class for exerting arbitrary forces on parts (:issue:`287`)
+* Fix units for ``Flight.DynamicPressure`` when FAR is installed - value returned is now in Pa, not kPa (:issue:`329`)
+* Add ``Decoupler.Staged``
 * Fix issue where disabled decouplers are included in stage index calculation (:issue:`323`)
-* Add CelestialBody.Biomes to get all the biomes for a planet/moon (:issue:`296`)
-* Add CelestialBody.BiomeAt to get the biome at a location on a planet/moon (:issue:`296`)
-* Add altitude thresholds for science to CelestialBody
-* Add Experiment.Biome to get the biome an experiment part is currently in (:issue:`296`)
-* Add Experiment.IsAvailable which indicates if there is science that be gathered by the experiment part
-* Add ScienceSubject class for getting information about a type of experiment. Accessed via Experiment.ScienceSubject.
+* Add ``CelestialBody.Biomes`` to get all the biomes for a planet/moon (:issue:`296`)
+* Add ``CelestialBody.BiomeAt`` to get the biome at a location on a planet/moon (:issue:`296`)
+* Add altitude thresholds for science to ``CelestialBody``
+* Add ``Experiment.Biome`` to get the biome an experiment part is currently in (:issue:`296`)
+* Add ``Experiment.IsAvailable`` which indicates if there is science that be gathered by the experiment part
+* Add ``ScienceSubject`` class for getting information about a type of experiment. Accessed via ``Experiment.ScienceSubject``.
 * Fix landing gear state on launch (:issue:`314`)
-* Add SpaceCenter.WaypointManager and Waypoint class for interacting with waypoints (:issue:`335`)
+* Add ``SpaceCenter.WaypointManager`` and ``Waypoint`` class for interacting with waypoints (:issue:`335`)
 * Change camera distances to use meters (:issue:`339`)
 * Fix engine thrust calculation for air breathing engines (:issue:`327`)
 
@@ -1384,7 +1448,7 @@ C++ client
 krpctools
 ^^^^^^^^^
 
-* Fix generating Java client stubs using krpc-clientgen with Python 3 (:issue:`308`)
+* Fix generating Java client stubs using ``krpc-clientgen`` with Python 3 (:issue:`308`)
 
 
 0.3.5
@@ -1402,33 +1466,33 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Improved AutoPilot that auto-tunes itself based on the vessels available torque and moment of inertia (:issue:`289`)
-* Add Resources.Enabled to enable/disable all of the resources in a part or stage at once (:issue:`283`)
-* Add Vessel.Recoverable and Vessel.Recover() (:issue:`277`)
-* Add SpaceCenter.LaunchableVessels to get a list of names of launchable vessels (:issue:`278`)
-* Add SpaceCenter.LaunchVessel so that, for example, rockets built in the VAB can be launched from the runway (:issue:`278`)
-* Rename Engine.Propellants to Engine.PropellantNames
-* Add Propellant class, obtained using Engine.Propellants property
-* Add Experiment and ScienceData classes for interacting with science experiments
+* Improved ``AutoPilot`` that auto-tunes itself based on the vessels available torque and moment of inertia (:issue:`289`)
+* Add ``Resources.Enabled`` to enable/disable all of the resources in a part or stage at once (:issue:`283`)
+* Add ``Vessel.Recoverable`` and ``Vessel.Recover()`` (:issue:`277`)
+* Add ``SpaceCenter.LaunchableVessels`` to get a list of names of launchable vessels (:issue:`278`)
+* Add ``SpaceCenter.LaunchVessel`` so that, for example, rockets built in the VAB can be launched from the runway (:issue:`278`)
+* Rename ``Engine.Propellants`` to ``Engine.PropellantNames``
+* Add ``Propellant`` class, obtained using ``Engine.Propellants`` property
+* Add ``Experiment`` and ``ScienceData`` classes for interacting with science experiments
 * Fix angular velocity for vessel reference frames
-* Fix Engine.AvailableThrust so that it returns 0 if the vessel is not active
-* Make ReferenceFrame type, underlying object and its transform accessible via public properties (:issue:`290`)
+* Fix ``Engine.AvailableThrust`` so that it returns 0 if the vessel is not active
+* Make ``ReferenceFrame`` type, underlying object and its transform accessible via public properties (:issue:`290`)
 
 
 UI service
 ^^^^^^^^^^
 
-* Add Canvas class (:issue:`281`)
-* Add UI.StockCanvas to get the stock KSP UI canvas and UI.AddCanvas to create additional canvases
-* Move UI.AddPanel and UI.RectTransform to Canvas class
+* Add ``Canvas`` class (:issue:`281`)
+* Add ``UI.StockCanvas`` to get the stock KSP UI canvas and ``UI.AddCanvas`` to create additional canvases
+* Move ``UI.AddPanel`` and ``UI.RectTransform`` to ``Canvas`` class
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Add vessel parameter to ServoGroups, Servos and ServoWithName (:issue:`282`)
-* Add Servo.Part
-* Add ServoGroup.Parts
+* Add vessel parameter to ``ServoGroups``, ``Servos`` and ``ServoWithName`` (:issue:`282`)
+* Add ``Servo.Part``
+* Add ``ServoGroup.Parts``
 
 
 Python client
@@ -1442,7 +1506,7 @@ C# client
 ^^^^^^^^^
 
 * Fix race condition where the connection constructor returns before the stream server connection has been established
-* Make Connection and StreamManager disposable so that they clean up resources correctly
+* Make ``Connection`` and ``StreamManager`` disposable so that they clean up resources correctly
 * Fix issue where network streams are closed prematurely
 * Fix issue with receiving partial protobuf messages
 
@@ -1455,18 +1519,18 @@ Server
 ^^^^^^
 
 * Update protobuf to v3.0.0-beta-3 (:issue:`270`)
-* Move settings.cfg to PluginData directory to avoid trashing module managers cache
+* Move ``settings.cfg`` to PluginData directory to avoid trashing module managers cache
 * Fix stack trace output when verbose errors is enabled
 * Performance improvements and reduced memory allocation pressure in main server loop
-* Renamed Parameter.default\_argument to default\_value in protobuf definitions
+* Renamed ``Parameter.default_argument`` to ``default_value`` in protobuf definitions
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Move drawing functionality into new Drawing service (:issue:`253`)
-* Add Light.Color
-* Add RPCs for setting PartModule fields: Module.ResetField, SetFieldInt, SetFieldFloat and SetFieldString
+* Move drawing functionality into new ``Drawing`` service (:issue:`253`)
+* Add ``Light.Color``
+* Add RPCs for setting ``PartModule`` fields: ``Module.ResetField``, ``SetFieldInt``, ``SetFieldFloat`` and ``SetFieldString``
 
 
 Drawing service
@@ -1524,24 +1588,24 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add AvailableTorque properties to vessels, reaction wheels, RCS, engines and control surfaces
-* Rename ReactionWheel.Torque to ReactionWheel.MaxTorque
-* Fix Vessel.MomentOfInertia - use custom inertia tensor calculations to avoid issues with KSPs Vessel.MoI and Vessel.findLocalMoI
+* Add ``AvailableTorque`` properties to vessels, reaction wheels, RCS, engines and control surfaces
+* Rename ``ReactionWheel.Torque`` to ``ReactionWheel.MaxTorque``
+* Fix ``Vessel.MomentOfInertia`` - use custom inertia tensor calculations to avoid issues with KSPs ``Vessel.MoI`` and ``Vessel.findLocalMoI``
 * Move RemoteTech functionality to separate RemoteTech service
 
 
 InfernalRobotics service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Rename ControlGroup to ServoGroup
+* Rename ``ControlGroup`` to ``ServoGroup``
 
 
 RemoteTech service
 ^^^^^^^^^^^^^^^^^^
 
-* Moved from SpaceCenter to separate service
+* Moved from ``SpaceCenter`` to separate service
 * Support RemoteTech 1.7
-* Add individual Antenna objects
+* Add individual ``Antenna`` objects
 * Add support for getting and setting an antennas target
 
 
@@ -1552,13 +1616,13 @@ RemoteTech service
 Server
 ^^^^^^
 
-* Fix KRPC.CurrentGameScene (:issue:`262`)
+* Fix ``KRPC.CurrentGameScene`` (:issue:`262`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Fix Control.SpeedMode (:issue:`258`)
+* Fix ``Control.SpeedMode`` (:issue:`258`)
 
 
 0.3.0
@@ -1570,25 +1634,25 @@ SpaceCenter service
 
 * Support for KSP 1.1
 * Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
-* Add saving and loading games using SpaceCenter.Save, Load, Quicksave and Quickload (:issue:`247`)
-* Add ResourceTransfer object
-* Add Resource objects, representing an individual resource stored in a part
-* Add Vessel.MomentOfInertia, Add Vessel.InteriaTensor and Part.InertiaTensor
-* Add Vessel.Torque and Vessel.ReactionWheelTorque
-* Merged ReactionWheel.PitchTorque, YawTorque and RollTorque into a single ReactionWheel.Torque method
-* Add Part.CenterOfMass and Part.CenterOfMassReferenceFrame
-* Add Part.Shielded and Part.DynamicPressure
+* Add saving and loading games using ``SpaceCenter.Save``, ``Load``, ``Quicksave`` and ``Quickload`` (:issue:`247`)
+* Add ``ResourceTransfer`` object
+* Add ``Resource`` objects, representing an individual resource stored in a part
+* Add ``Vessel.MomentOfInertia``, Add ``Vessel.InteriaTensor`` and ``Part.InertiaTensor``
+* Add ``Vessel.Torque`` and ``Vessel.ReactionWheelTorque``
+* Merged ``ReactionWheel.PitchTorque``, ``YawTorque`` and ``RollTorque`` into a single ``ReactionWheel.Torque`` method
+* Add ``Part.CenterOfMass`` and ``Part.CenterOfMassReferenceFrame``
+* Add ``Part.Shielded`` and ``Part.DynamicPressure``
 * Add RCS objects.
-* Add Thruster objects, which represent individual rocket nozzels or RCS thrusters.
-* Added ControlSurface objects.
-* DockingPort.Undock() now returns the newly created vessel, instead of the 'undocked vessel'
-* DockingPort.Undock() now throws an exception (instead of returning null) if the port is not docked
-* Return newly created vessels from Decoupler.Decouple() (:issue:`214`)
-* Removed Vessel.Target, as this functionality is provided by SpaceCenter.TargetVessel (:issue:`206`)
+* Add ``Thruster`` objects, which represent individual rocket nozzels or RCS thrusters.
+* Added ``ControlSurface`` objects.
+* ``DockingPort.Undock()`` now returns the newly created vessel, instead of the 'undocked vessel'
+* ``DockingPort.Undock()`` now throws an exception (instead of returning null) if the port is not docked
+* Return newly created vessels from ``Decoupler.Decouple()`` (:issue:`214`)
+* Removed ``Vessel.Target``, as this functionality is provided by ``SpaceCenter.TargetVessel`` (:issue:`206`)
 * Change autopilot so that the target reference frame, direction and roll are cleared when the client disconnects and the autopilot is engaged (:issue:`248`)
-* Removed LandingLegState.Repairing
-* Added LandingGearState.Broken
-* Fix bug where Engine.HasFuel requires the engine to be throttled up
+* Removed ``LandingLegState.Repairing``
+* Added ``LandingGearState.Broken``
+* Fix bug where ``Engine.HasFuel`` requires the engine to be throttled up
 * Fix bug with vessel center of mass calculations (:issue:`218`)
 
 
@@ -1609,21 +1673,21 @@ Server
 Server
 ^^^^^^
 
-* Added KRPC.CurrentGameScene (:issue:`237`)
+* Added ``KRPC.CurrentGameScene`` (:issue:`237`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Add support for engine mode switching (:issue:`219`)
-* Engine.GimbalLimit and GimbalLocked now return an error if the engine is not gimballed
+* ``Engine.GimbalLimit`` and ``GimbalLocked`` now return an error if the engine is not gimballed
 * Add cargo bays, fairings and intakes
-* Add support for fixed and 'advanced' langing gear to LandingGear class
-* Add support for 'active' (non-deployable) radiators to Radiator class (:issue:`156`)
-* Remove Part.ExternalTemperature (:issue:`206`,:issue:`174`)
-* Fix units returned by thermal mass and flux methods in Part class (:issue:`174`)
+* Add support for fixed and 'advanced' langing gear to ``LandingGear`` class
+* Add support for 'active' (non-deployable) radiators to ``Radiator`` class (:issue:`156`)
+* Remove ``Part.ExternalTemperature`` (:issue:`206`,:issue:`174`)
+* Fix units returned by thermal mass and flux methods in ``Part`` class (:issue:`174`)
 * Fix null pointer exception in autopilot when switching scenes (:issue:`220`)
-* Fix bug with translation inputs in Control class (:issue:`223`)
+* Fix bug with translation inputs in ``Control`` class (:issue:`223`)
 
 
 C# client
@@ -1636,7 +1700,7 @@ C++ client
 ^^^^^^^^^^
 
 * Make client thread safe
-* Add checks for asio.hpp and protobuf library to cmake script
+* Add checks for ``asio.hpp`` and protobuf library to cmake script
 * Add Windows with MSVC support to cmake script
 * Fix compiler warnings reported by MSVC
 
@@ -1664,11 +1728,11 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add Part.IsFuelLine
-* Fix bug with Part.FuelLinesTo (:issue:`193`)
-* Part.FuelLinesTo and FuelLinesFrom now return an error if called on a fuel line part
+* Add ``Part.IsFuelLine``
+* Fix bug with ``Part.FuelLinesTo`` (:issue:`193`)
+* ``Part.FuelLinesTo`` and ``FuelLinesFrom`` now return an error if called on a fuel line part
 * Fix bugs with equality testing of objects. For example, vessel and part objects now persist correctly when reverting to launch (:issue:`201`,:issue:`210`)
-* Fix array index out of range error in SpaceCenter.WarpTo (:issue:`169`)
+* Fix array index out of range error in ``SpaceCenter.WarpTo`` (:issue:`169`)
 * Fix bug with vessel's surface velocity reference frame (:issue:`194`)
 
 
@@ -1692,7 +1756,7 @@ C++ client
 * Add support for streams (:issue:`175`)
 * Add documentation to service header files
 * Add autotools and cmake build scripts
-* Move header file krpc/krpc.hpp -> krpc.hpp
+* Move header file ``krpc/krpc.hpp`` -> ``krpc.hpp``
 * Remove support for protobuf enumeration and custom protobuf messages
 * Add comparison operations for remote objects
 
@@ -1712,7 +1776,7 @@ Lua client
 krpctools
 ^^^^^^^^^
 
-* Refactor into 'krpctools' package containing 'krpc-clientgen', 'krpc-docgen' and 'krpc-servicedefs'.
+* Refactor into '``krpctools``' package containing '``krpc-clientgen``', '``krpc-docgen``' and '``krpc-servicedefs``'.
 * Fixes caused by removal of support for protobuf enumeration and custom protobuf messages from server and clients
 
 
@@ -1729,14 +1793,14 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Fix Orbit.Speed always returning 0
-* Add CelestialBody.SurfaceHeight, BedrockHeight, MSLPosition, SurfacePosition, BedrockPosition (:issue:`186`)
+* Fix ``Orbit.Speed`` always returning 0
+* Add ``CelestialBody.SurfaceHeight``, ``BedrockHeight``, ``MSLPosition``, ``SurfacePosition``, ``BedrockPosition`` (:issue:`186`)
 
 
 Python client
 ^^^^^^^^^^^^^
 
-* Fix bug with setup.py on Windows
+* Fix bug with ``setup.py`` on Windows
 * Add version number to python module
 
 
@@ -1779,9 +1843,9 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Fix SpaceCenter.HorizontalSpeed calculation
+* Fix ``SpaceCenter.HorizontalSpeed`` calculation
 * Added support for resource harvesters and converters (:issue:`166`,:issue:`182`)
-* Fix bug with Flight.SideslipAngle (:issue:`189`)
+* Fix bug with ``Flight.SideslipAngle`` (:issue:`189`)
 
 
 Python client
@@ -1789,7 +1853,7 @@ Python client
 
 * Update protobuf 3.0.0-beta-2
 * Fix bug in keyword arg handling (:issue:`168`)
-* Removed TestServer.exe and associated binaries from release archive
+* Removed ``TestServer.exe`` and associated binaries from release archive
 
 
 C# client
@@ -1829,7 +1893,7 @@ SpaceCenter service
 KerbalAlarmClock service
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Renamed Alarm.Delete to Alarm.Remove (to not clash with C++ keyword)
+* Renamed ``Alarm.Delete`` to ``Alarm.Remove`` (to not clash with C++ keyword)
 
 
 Python client
@@ -1857,32 +1921,32 @@ Lua client
 Server
 ^^^^^^
 
-* Documentation returned by calling KRPC.GetServices (:issue:`31`)
+* Documentation returned by calling ``KRPC.GetServices`` (:issue:`31`)
 * Fix bug preventing disconnection of clients from the server window (:issue:`161`)
 * Fix clearing bytes read/written statistics when the server is restarted
 * Add "Clear Statistics" button to server info window
-* Documentation at http://djungelorm.github.io/krpc/docs/ generated by calling KRPC.GetServices (:issue:`31`)
+* Documentation at http://djungelorm.github.io/krpc/docs/ generated by calling ``KRPC.GetServices`` (:issue:`31`)
 
 
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Rename maxRate parameter in SpaceCenter.WarpTo to maxRailsRate
-* Add more thermal properties to Part class (for new thermal model in KSP 1.0.3) (:issue:`155`)
-* Add Comms.HasLocalControl
-* Add Control.SASMode (identical to AutoPilot.SASMode)
+* Rename ``maxRate`` parameter in ``SpaceCenter.WarpTo`` to ``maxRailsRate``
+* Add more thermal properties to ``Part`` class (for new thermal model in KSP 1.0.3) (:issue:`155`)
+* Add ``Comms.HasLocalControl``
+* Add ``Control.SASMode`` (identical to ``AutoPilot.SASMode``)
 * Change control behaviour: now shared amongst clients, and cleared when all clients that set a control have disconnected
 * Fix setting the throttle with RemoteTech enabled and no connection
-* Rewrite AutoPilot to use a tunable PID controller (:issue:`75`)
-* Add setting of SpaceCenter.ActiveVessel to allow switching vessels (:issue:`95`)
-* Add SpaceCenter.LaunchVesselFromVAB and SpaceCenter.LaunchVesselFromSPH (:issue:`95`)
+* Rewrite ``AutoPilot`` to use a tunable PID controller (:issue:`75`)
+* Add setting of ``SpaceCenter.ActiveVessel`` to allow switching vessels (:issue:`95`)
+* Add ``SpaceCenter.LaunchVesselFromVAB`` and ``SpaceCenter.LaunchVesselFromSPH`` (:issue:`95`)
 * Update aero methods to use FAR 0.15 if available
 
 
 Python client
 ^^^^^^^^^^^^^
 
-* Docstrings generated from documentation returned by KRPC.GetServices (:issue:`31`)
+* Docstrings generated from documentation returned by ``KRPC.GetServices`` (:issue:`31`)
 
 
 Lua client
@@ -1907,14 +1971,14 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * KSP 1.0.4 support (:issue:`151`)
-* Add more time warp functionality: SpaceCenter.WarpMode, WarpRate, WarpFactor, RailsWarpFactor, PhysicsWarpFactor, CanRailsWarpAt and MaximumRailsWarpFactor (:issue:`134`)
-* Implement physical time warp for SpaceCenter.WarpTo (:issue:`137`)
+* Add more time warp functionality: ``SpaceCenter.WarpMode``, ``WarpRate``, ``WarpFactor``, ``RailsWarpFactor``, ``PhysicsWarpFactor``, ``CanRailsWarpAt`` and ``MaximumRailsWarpFactor`` (:issue:`134`)
+* Implement physical time warp for ``SpaceCenter.WarpTo`` (:issue:`137`)
 * Add support for radiator parts (:issue:`154`)
-* Fix Vessel.Thrust, Engine.Thrust and Engine.AvailableThrust when engines have no fuel (:issue:`146`)
-* Add Resoures.FlowMode
+* Fix ``Vessel.Thrust``, ``Engine.Thrust`` and ``Engine.AvailableThrust`` when engines have no fuel (:issue:`146`)
+* Add ``Resoures.FlowMode``
 * Add ability to control vessels other than the active one, when they are within physics range (:issue:`61`)
-* Add SpaceCenter.DrawLine to draw arbitrary lines (:issue:`150`)
-* Rename SpaceCenter.ClearDirections to SpaceCenter.ClearDrawing
+* Add ``SpaceCenter.DrawLine`` to draw arbitrary lines (:issue:`150`)
+* Rename ``SpaceCenter.ClearDirections`` to ``SpaceCenter.ClearDrawing``
 
 
 KerbalAlarmClock service
@@ -1943,9 +2007,9 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Fix bug with combined specific impulse calculations (:issue:`117`)
-* Add Engine.PropellantRatios (:issue:`118`)
-* Combined VesselResources and PartResources classes into a single Resources class
-* Add Resources.Density
+* Add ``Engine.PropellantRatios`` (:issue:`118`)
+* Combined ``VesselResources`` and ``PartResources`` classes into a single ``Resources`` class
+* Add ``Resources.Density``
 
 
 InfernalRobotics service
@@ -1980,14 +2044,14 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add Engine.MaxVacuumThrust
-* Add Engine.Throttle
-* Add Engine.GimbalLimit
-* Add Vessel.MaxVacuumThrust
+* Add ``Engine.MaxVacuumThrust``
+* Add ``Engine.Throttle``
+* Add ``Engine.GimbalLimit``
+* Add ``Vessel.MaxVacuumThrust``
 * Clean up float/double types (:issue:`113`)
-* Remove Vessel.CrossSectionalArea
-* Remove CelestialBody.AtmospherePressure, AtmosphereDensity, AtmosphereScaleHeight, AtmosphereMaxAltitude, AtmospherePressureAt, AtmosphereDensityAt
-* Add CelestialBody.AtmosphereDepth and HasAtmosphericOxygen
+* Remove ``Vessel.CrossSectionalArea``
+* Remove ``CelestialBody.AtmospherePressure``, ``AtmosphereDensity``, ``AtmosphereScaleHeight``, ``AtmosphereMaxAltitude``, ``AtmospherePressureAt``, ``AtmosphereDensityAt``
+* Add ``CelestialBody.AtmosphereDepth`` and ``HasAtmosphericOxygen``
 
 
 Python client
@@ -1995,7 +2059,7 @@ Python client
 
 * Improved dynamic creation of service methods
 * Support for static class methods (:issue:`106`)
-* Improve enums: return an Enum object instead of an int
+* Improve enums: return an ``Enum`` object instead of an ``int``
 * Fix bug with types across multiple connections (:issue:`110`)
 
 
@@ -2012,13 +2076,13 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add AutoPilot.SAS, SASMode and SpeedMode (:issue:`94`)
-* Update AutoPilot.Error to also return SAS error (:issue:`94`)
-* Change return types of Vessel.Mass, DryMass, CrossSectionalArea, SpecificImpulse to float
-* Changes to thrust functions Vessel.Thrust, AvailableThrust and MaxThrust (:issue:`103`)
-* Changes to thrust functions Engine.Thrust, Engine.AvailableThrust and MaxThrust (:issue:`103`)
+* Add ``AutoPilot.SAS``, ``SASMode`` and ``SpeedMode`` (:issue:`94`)
+* Update ``AutoPilot.Error`` to also return SAS error (:issue:`94`)
+* Change return types of ``Vessel.Mass``, ``DryMass``, ``CrossSectionalArea``, ``SpecificImpulse`` to float
+* Changes to thrust functions ``Vessel.Thrust``, ``AvailableThrust`` and ``MaxThrust`` (:issue:`103`)
+* Changes to thrust functions ``Engine.Thrust``, ``Engine.AvailableThrust`` and ``MaxThrust`` (:issue:`103`)
 * Fix orientation of docking port reference frames
-* Rename Engine.Activated to Engine.Active to match other parts
+* Rename ``Engine.Activated`` to ``Engine.Active`` to match other parts
 
 
 Python client
@@ -2046,10 +2110,10 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Parts
+* ``Parts``
 * Targeting of vessels, bodies and docking ports
-* Remove Orbit.ReferenceFrame
-* Fix AutoPilot.Error and add AutoPilot.RollError (:issue:`98`)
+* Remove ``Orbit.ReferenceFrame``
+* Fix ``AutoPilot.Error`` and add ``AutoPilot.RollError`` (:issue:`98`)
 
 
 Python client
@@ -2077,30 +2141,30 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add SpaceCenter.DrawDirection and ClearDirections for visual debugging
-* Add Vessel.Comms to interact with RemoteTech
-* Add Control.WheelThrottle and WheelSteering
-* Change Control.ActivateNextStage to return a list of jettisoned vessels
-* Add Flight.Longitude and Latitude
-* Rename Flight.NormalNeg to AntiNormal and Flight.RadialNeg to AntiRadial (:issue:`90`)
-* Add FAR functionality to Vessel.Flight
-* Fix Body.AtmospherePressureAt and AtmosphereDensityAt when there is no atmosphere
-* Add Vessel.SurfaceVelocityReferenceFrame
-* Add Node.OrbitalReferenceFrame
-* Add Node.RemainingBurnVector
+* Add ``SpaceCenter.DrawDirection`` and ``ClearDirections`` for visual debugging
+* Add ``Vessel.Comms`` to interact with RemoteTech
+* Add ``Control.WheelThrottle`` and ``WheelSteering``
+* Change ``Control.ActivateNextStage`` to return a list of jettisoned vessels
+* Add ``Flight.Longitude`` and ``Latitude``
+* Rename ``Flight.NormalNeg`` to ``AntiNormal`` and ``Flight.RadialNeg`` to ``AntiRadial`` (:issue:`90`)
+* Add FAR functionality to ``Vessel.Flight``
+* Fix ``Body.AtmospherePressureAt`` and ``AtmosphereDensityAt`` when there is no atmosphere
+* Add ``Vessel.SurfaceVelocityReferenceFrame``
+* Add ``Node.OrbitalReferenceFrame``
+* Add ``Node.RemainingBurnVector``
 * Fix lots of reference frame bugs
-* Remove Vessel.NonRotatingReferenceFrame
-* Remove Body.SurfaceReferenceFrame
-* Change default reference frame to Vessel.SurfaceReferenceFrame for Vessel.Flight and AutoPilot methods
-* Add wait parameter to AutoPilot methods
-* AutoPilot and Control inputs reset to 0 when the client that requested them disconnects
-* Change AutoPilot to set SAS to false when it's disengaged
+* Remove ``Vessel.NonRotatingReferenceFrame``
+* Remove ``Body.SurfaceReferenceFrame``
+* Change default reference frame to ``Vessel.SurfaceReferenceFrame`` for ``Vessel.Flight`` and ``AutoPilot`` methods
+* Add wait parameter to ``AutoPilot`` methods
+* ``AutoPilot`` and ``Control`` inputs reset to 0 when the client that requested them disconnects
+* Change ``AutoPilot`` to set SAS to false when it's disengaged
 
 
 Python client
 ^^^^^^^^^^^^^
 
-* Add Client.close()
+* Add ``Client.close()``
 
 
 0.1.4
@@ -2123,17 +2187,17 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Major refactoring of reference frames (:issue:`66`)
-* Add Control.Nodes (:issue:`53`)
-* Add Body.AtmosphereDensity (:issue:`52`)
-* Add CelestialBody.AtmospherePressureAt and AtmosphereDensityAt
-* Add Vessel.Mass and DryMass (:issue:`51`)
-* Add Vessel.CrossSectionalArea, DragCoefficient and Drag
-* Add Vessel.Thrust and SpecificImpulse
-* Add Orbit.Period, MeanAnomalyAtEpoch and Epoch
+* Add ``Control.Nodes`` (:issue:`53`)
+* Add ``Body.AtmosphereDensity`` (:issue:`52`)
+* Add ``CelestialBody.AtmospherePressureAt`` and ``AtmosphereDensityAt``
+* Add ``Vessel.Mass`` and ``DryMass`` (:issue:`51`)
+* Add ``Vessel.CrossSectionalArea``, ``DragCoefficient`` and ``Drag``
+* Add ``Vessel.Thrust`` and ``SpecificImpulse``
+* Add ``Orbit.Period``, ``MeanAnomalyAtEpoch`` and ``Epoch``
 * Change altitude properties to have sensible names (:issue:`62`)
-* Improvements to Control.Node class (:issue:`48`)
-* Fix argument type in Conrol.AddNode (:issue:`59`)
-* Fix bug with Vessel.HorizontalSpeed (:issue:`67`)
+* Improvements to ``Control.Node`` class (:issue:`48`)
+* Fix argument type in ``Conrol.AddNode`` (:issue:`59`)
+* Fix bug with ``Vessel.HorizontalSpeed`` (:issue:`67`)
 
 
 Python client
@@ -2157,25 +2221,25 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add SpaceCenter.Vessels
-* Add SpaceCenter.Bodies
-* Remove SpaceCenter.Body
-* Add SpaceCenter.G
-* Add CelestialBody.Satellites
-* Add Orbit.Radius
-* Add Orbit.Speed
-* Add Orbit.TimeToSOIChange
-* Add Orbit.NextOrbit
-* Add Node.Orbit
-* Add Control.CurrentStage
-* Resources.Names now returns a list of resource names
+* Add ``SpaceCenter.Vessels``
+* Add ``SpaceCenter.Bodies``
+* Remove ``SpaceCenter.Body``
+* Add ``SpaceCenter.G``
+* Add ``CelestialBody.Satellites``
+* Add ``Orbit.Radius``
+* Add ``Orbit.Speed``
+* Add ``Orbit.TimeToSOIChange``
+* Add ``Orbit.NextOrbit``
+* Add ``Node.Orbit``
+* Add ``Control.CurrentStage``
+* ``Resources.Names`` now returns a list of resource names
 * Add support for abort and 0 action groups
-* Rename Flight.Altitude to Flight.TrueAltitude
-* Rename Flight.TrueAltitude to Flight.AbsoluteAltitude
-* Add Flight.SurfaceAltitude
-* Add Flight.Elevation
-* Fix bug with Node.Vector returning a vector in the wrong vector space
-* Improvements to Resources class
+* Rename ``Flight.Altitude`` to ``Flight.TrueAltitude``
+* Rename ``Flight.TrueAltitude`` to ``Flight.AbsoluteAltitude``
+* Add ``Flight.SurfaceAltitude``
+* Add ``Flight.Elevation``
+* Fix bug with ``Node.Vector`` returning a vector in the wrong vector space
+* Improvements to ``Resources`` class
 
 
 Python client
@@ -2198,8 +2262,8 @@ SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Include reference frame velocity in orbital direction vectors
-* Remove ReferenceFrame.SurfaceVelocity and ReferenceFrame.TargetVelocity
-* Change default reference frames for Vessel.Flight() and AutoPilot functions to ReferenceFrame.Orbital
+* Remove ``ReferenceFrame.SurfaceVelocity`` and ``ReferenceFrame.TargetVelocity``
+* Change default reference frames for ``Vessel.Flight()`` and ``AutoPilot`` functions to ``ReferenceFrame.Orbital``
 * Use Pa instead of kPa for atmospheric pressure
 
 
@@ -2222,7 +2286,7 @@ Server
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
-* Add new functionality to SpaceCenter service
+* Add new functionality to ``SpaceCenter`` service
 
 
 Python client
