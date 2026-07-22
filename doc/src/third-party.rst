@@ -16,6 +16,7 @@ Clients
 * `Rust client <https://github.com/Cahu/krpc-mars>`_
 * `Another Rust client <https://github.com/kladd/krpc-client>`_ -- "dynamic", so doesn't require
   generated service stubs.
+* `Stayputnik <https://github.com/swgillespie/stayputnik>`_ -- an asynchronous Rust client.
 * `Go client <https://github.com/nathan-boulestin/krpc/tree/main/client/go>`_
 * `Using the plugin in F# <http://fssnip.net/7Pi>`_
 
