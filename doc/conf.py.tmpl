@@ -48,6 +48,10 @@ html_context = {'build_info': '%SUBPATH%' == 'dev'}
 html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
 
 html_theme_options = {
+    # Brand text in the header. The theme otherwise shows the full docstitle
+    # ("kRPC X.Y.Z documentation"); the version switcher already exposes the
+    # version, so keep it out of the header.
+    'logo': {'text': 'kRPC Documentation'},
     # Runtime version switcher. Each version's HTML is built once and frozen, so
     # the version list is not baked into the pages: every page fetches
     # switcher.json from a stable absolute URL at page-load time, and
