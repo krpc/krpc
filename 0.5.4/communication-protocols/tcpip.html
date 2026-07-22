@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -53,6 +53,7 @@
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
     <link rel="canonical" href="https://krpc.github.io/krpc/0.5.4/communication-protocols/tcpip.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -128,7 +129,7 @@
   
   
   
-    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+    <p class="title logo__title">kRPC Documentation</p>
   
 </a></div>
     
@@ -604,30 +605,25 @@ protocol.</p>
 protobuf binary format. When sending messages to and from the server, they are prefixed with their
 size, in bytes, encoded as a Protocol Buffers varint.</p>
 <p>To send a message to the server:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Encode the message using the Protocol Buffers format.</p></li>
 <li><p>Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
 varint.</p></li>
 <li><p>Send the encoded length followed by the encoded message data.</p></li>
 </ol>
-</div></blockquote>
 <p>To receive a message from the server, do the reverse:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Receive the size of the message as a Protocol Buffers encoded varint.</p></li>
 <li><p>Decode the message size.</p></li>
 <li><p>Receive message size bytes of message data.</p></li>
 <li><p>Decode the message data.</p></li>
 </ol>
-</div></blockquote>
 </section>
 <section id="connecting-to-the-rpc-server">
 <h2>Connecting to the RPC Server<a class="headerlink" href="#connecting-to-the-rpc-server" title="Link to this heading">#</a></h2>
 <p>A client invokes remote procedures by communicating with the <em>RPC server</em>. To establish a
 connection, a client must do the following:</p>
-<blockquote>
-<div><ol class="arabic">
+<ol class="arabic">
 <li><p>Open a TCP socket to the server on its RPC port (which defaults to 50000).</p></li>
 <li><p>Send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message to the server. This message is defined as:</p>
 <div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionRequest</span><span class="w"> </span><span class="p">{</span>
@@ -666,7 +662,6 @@ identifier for the client. This is required when connecting to the stream server
 below).</p>
 </li>
 </ol>
-</div></blockquote>
 </section>
 <section id="connecting-to-the-stream-server">
 <h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
@@ -699,8 +694,7 @@ name “Jeb”. Next, it connects to the stream server on port 50001. Finally it
 <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> procedure, and receives, decodes and prints the result.</p>
 <p>To send and receive messages to the server, they need to be encoded and decoded from their binary
 format:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>The <code class="docutils literal notranslate"><span class="pre">encode_varint</span></code> and <code class="docutils literal notranslate"><span class="pre">decode_varint</span></code> functions convert between Python integers and
 Protocol Buffer varint encoded integers.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">send_message</span></code> encodes a message, sends the length of the message to the server as a Protocol
@@ -708,7 +702,6 @@ Buffer varint encoded integer, and then sends the message data.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">recv_message</span></code> receives the size of the message, decodes it, receives the message data, and
 decodes it.</p></li>
 </ul>
-</div></blockquote>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
@@ -1021,7 +1014,7 @@ decodes it.</p></li>
 
   <p class="copyright">
     
-      © Copyright 2015-2023, kRPC Org.
+      © Copyright 2015-2026, kRPC Org.
       <br/>
     
   </p>

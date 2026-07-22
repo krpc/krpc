@@ -32,7 +32,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=0da409bd" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e540dda1" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
@@ -53,6 +53,7 @@
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
+    <script src="../_static/build-info.js?v=19ceb065"></script>
     <link rel="canonical" href="https://krpc.github.io/krpc/0.5.4/communication-protocols/websockets.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -128,7 +129,7 @@
   
   
   
-    <p class="title logo__title">kRPC 0.5.4 documentation</p>
+    <p class="title logo__title">kRPC Documentation</p>
   
 </a></div>
     
@@ -623,20 +624,16 @@ there is no need to connect.</p>
 <p>Communication with the server is performed via Protocol Buffer messages, encoded according to the
 protobuf binary format.</p>
 <p>To send a message to the server:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Encode the message using the Protocol Buffers format.</p></li>
 <li><p>Send a binary websockets message to the server, with payload containing the encoded message
 data.</p></li>
 </ol>
-</div></blockquote>
 <p>To receive a message from the server, do the reverse:</p>
-<blockquote>
-<div><ol class="arabic simple">
+<ol class="arabic simple">
 <li><p>Receive a binary websockets message from the server.</p></li>
 <li><p>Decode the messages payload using the Protocol Buffers format.</p></li>
 </ol>
-</div></blockquote>
 </section>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
@@ -815,7 +812,7 @@ from the response.</p>
 
   <p class="copyright">
     
-      © Copyright 2015-2023, kRPC Org.
+      © Copyright 2015-2026, kRPC Org.
       <br/>
     
   </p>

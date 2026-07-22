@@ -6,35 +6,43 @@ RemoteTech
 ==========
 
 
-Service RemoteTech
+This service provides functionality to interact with
+`RemoteTech <https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/>`_.
 
-   This service provides functionality to interact with
-   `RemoteTech <https://forum.kerbalspaceprogram.com/index.php?/topic/139167-13-remotetech-v188-2017-09-03/>`_.
 
-   .. function:: krpc_error_t krpc_RemoteTech_Available(krpc_connection_t connection, bool * result)
+.. function:: krpc_error_t krpc_RemoteTech_Available(krpc_connection_t connection, bool * result)
 
-      Whether RemoteTech is installed.
-
-   
-
-   .. function:: krpc_error_t krpc_RemoteTech_GroundStations(krpc_connection_t connection, krpc_list_string_t * result)
-
-      The names of the ground stations.
+   Whether RemoteTech is installed.
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Antenna(krpc_connection_t connection, krpc_RemoteTech_Antenna_t * result, krpc_SpaceCenter_Part_t part)
 
-      Get the antenna object for a particular part.
 
-      :Parameters:
+
+.. function:: krpc_error_t krpc_RemoteTech_GroundStations(krpc_connection_t connection, krpc_list_string_t * result)
+
+   The names of the ground stations.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_RemoteTech_Antenna(krpc_connection_t connection, krpc_RemoteTech_Antenna_t * result, krpc_SpaceCenter_Part_t part)
+
+   Get the antenna object for a particular part.
+
+   :Parameters:
 
 
 
    
 
-   .. function:: krpc_error_t krpc_RemoteTech_Comms(krpc_connection_t connection, krpc_RemoteTech_Comms_t * result, krpc_SpaceCenter_Vessel_t vessel)
 
-      Get a communications object, representing the communication capability of a particular vessel.
 
-      :Parameters:
+
+.. function:: krpc_error_t krpc_RemoteTech_Comms(krpc_connection_t connection, krpc_RemoteTech_Comms_t * result, krpc_SpaceCenter_Vessel_t vessel)
+
+   Get a communications object, representing the communication capability of a particular vessel.
+
+   :Parameters:

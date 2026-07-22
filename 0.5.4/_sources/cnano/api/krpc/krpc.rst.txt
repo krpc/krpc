@@ -17,59 +17,78 @@ KRPC
 
 
 
-Service KRPC
-
-   Main kRPC service, used by clients to interact with basic server functionality.
-
-   .. function:: krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * result)
-
-      Returns the identifier for the current client.
+Main kRPC service, used by clients to interact with basic server functionality.
 
 
-   
+.. function:: krpc_error_t krpc_KRPC_GetClientID(krpc_connection_t connection, krpc_bytes_t * result)
 
-   .. function:: krpc_error_t krpc_KRPC_GetClientName(krpc_connection_t connection, char * * result)
-
-      Returns the name of the current client.
-      This is an empty string if the client has no name.
+   Returns the identifier for the current client.
 
 
    
 
-   .. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_tuple_bytes_string_string_t * result)
 
-      A list of RPC clients that are currently connected to the server.
-      Each entry in the list is a clients identifier, name and address.
 
-   
 
-   .. function:: krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * result)
+.. function:: krpc_error_t krpc_KRPC_GetClientName(krpc_connection_t connection, char * * result)
 
-      Returns some information about the server, such as the version.
+   Returns the name of the current client.
+   This is an empty string if the client has no name.
 
 
    
 
-   .. function:: krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, krpc_schema_Services * result)
 
-      Returns information on all services, procedures, classes, properties etc. provided by the server.
-      Can be used by client libraries to automatically create functionality such as stubs.
+
+
+.. function:: krpc_error_t krpc_KRPC_Clients(krpc_connection_t connection, krpc_list_tuple_bytes_string_string_t * result)
+
+   A list of RPC clients that are currently connected to the server.
+   Each entry in the list is a clients identifier, name and address.
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_GetStatus(krpc_connection_t connection, krpc_schema_Status * result)
+
+   Returns some information about the server, such as the version.
 
 
    
 
-   .. function:: krpc_error_t krpc_KRPC_CurrentGameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t * result)
 
-      Get the current game scene.
+
+
+.. function:: krpc_error_t krpc_KRPC_GetServices(krpc_connection_t connection, krpc_schema_Services * result)
+
+   Returns information on all services, procedures, classes, properties etc. provided by the server.
+   Can be used by client libraries to automatically create functionality such as stubs.
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_KRPC_CurrentGameScene(krpc_connection_t connection, krpc_KRPC_GameScene_t * result)
+
+   Get the current game scene.
 
    
 
-   .. function:: krpc_error_t krpc_KRPC_Paused(krpc_connection_t connection, bool * result)
-   .. function:: void krpc_KRPC_set_Paused(bool value)
 
-      Whether the game is paused.
+
+
+.. function:: krpc_error_t krpc_KRPC_Paused(krpc_connection_t connection, bool * result)
+.. function:: void krpc_KRPC_set_Paused(bool value)
+
+   Whether the game is paused.
 
    
+
+
 
 
 
@@ -106,24 +125,24 @@ Service KRPC
 
 Exception class InvalidOperationException
 
-   A method call was made to a method that is invalid
-   given the current state of the object.
+A method call was made to a method that is invalid
+given the current state of the object.
 
 
 
 Exception class ArgumentException
 
-   A method was invoked where at least one of the passed arguments does not
-   meet the parameter specification of the method.
+A method was invoked where at least one of the passed arguments does not
+meet the parameter specification of the method.
 
 
 
 Exception class ArgumentNullException
 
-   A null reference was passed to a method that does not accept it as a valid argument.
+A null reference was passed to a method that does not accept it as a valid argument.
 
 
 
 Exception class ArgumentOutOfRangeException
 
-   The value of an argument is outside the allowable range of values as defined by the invoked method.
+The value of an argument is outside the allowable range of values as defined by the invoked method.

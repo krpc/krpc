@@ -197,29 +197,29 @@ Client API Reference
       :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
                               match the stream port number of the server you want to connect to.
 
-  .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
+   .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
 
-     Create a stream for a static method call to the given class.
+      Create a stream for a static method call to the given class.
 
-  .. method:: Stream<T> addStream(RemoteObject instance, String method, Object... args)
+   .. method:: Stream<T> addStream(RemoteObject instance, String method, Object... args)
 
-     Create a stream for a method call to the given remote object.
+      Create a stream for a method call to the given remote object.
 
-  .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
+   .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 
-     Returns a procedure call message for the given static method call. This allows descriptions of
-     procedure calls to be passed to the server, for example when constructing custom events. See
-     :rst:ref:`java-client-events`.
+      Returns a procedure call message for the given static method call. This allows descriptions of
+      procedure calls to be passed to the server, for example when constructing custom events. See
+      :rst:ref:`java-client-events`.
 
-  .. method:: krpc.schema.KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
+   .. method:: krpc.schema.KRPC.ProcedureCall getCall(RemoteObject instance, String method, Object... args)
 
-     Returns a procedure call message for the given method call. This allows descriptions of
-     procedure calls to be passed to the server, for example when constructing custom events. See
-     :rst:ref:`java-client-events`.
+      Returns a procedure call message for the given method call. This allows descriptions of
+      procedure calls to be passed to the server, for example when constructing custom events. See
+      :rst:ref:`java-client-events`.
 
-  .. method:: void close()
+   .. method:: void close()
 
-     Close the connection.
+      Close the connection.
 
 .. type:: class Stream<T>
 
