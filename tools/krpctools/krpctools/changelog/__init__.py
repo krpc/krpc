@@ -5,8 +5,10 @@ The ``CHANGELOG.md`` files are markdown, but the page is built by parsing them
 rather than passing them through. Each file is a sequence of ``## [X.Y.Z[-pre]]``
 version headers (the in-development version carries an `` - unreleased`` suffix,
 which is ignored) followed by ``- `` bullet items; wrapped continuation lines are
-indented and carry no bullet. Issue/PR references appear inline as ``(#NNN)``, and
-code identifiers as markdown inline ``code`` spans.
+indented and carry no bullet. A ``  - `` bullet indented under an entry is a
+sub-item, used to group a long version's entries under topic headings. Issue/PR
+references appear inline as ``(#NNN)``, and code identifiers as markdown inline
+``code`` spans.
 
 Items may start with an inline ``**Breaking:**`` or ``**Deprecated:**`` marker.
 Such items stay in their component's list, where the marker is rendered as a small
@@ -15,15 +17,19 @@ highlighted label in front of the entry text.
 
 import argparse
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
 class Item:
-    """A single changelog entry, already RST-escaped and issue-linked."""
+    """A single changelog entry, already RST-escaped and issue-linked.
+
+    An entry may carry nested sub-items (from ``  - `` sub-bullets), used to
+    group a long version's entries under topic headings."""
 
     text: str
     kind: str  # "", "breaking" or "deprecated"
+    children: list = field(default_factory=list)
 
 
 # Inline markers, longest-first so matching is unambiguous.
@@ -95,18 +101,40 @@ def split_marker(raw):
     return "", raw
 
 
+def _make_item(fragments):
+    """Build an Item from a bullet's raw fragments (its text plus any wrapped
+    continuation lines), stripping and rendering the marker and inline markup."""
+    kind, body = split_marker(" ".join(fragments))
+    return Item(linkify(escape_rst(body)), kind)
+
+
 def parse_changes(text):
-    """Parse a ``CHANGELOG.md`` into ``{version: [Item, ...]}``."""
+    """Parse a ``CHANGELOG.md`` into ``{version: [Item, ...]}``.
+
+    A ``- `` bullet at the margin is a top-level entry; a ``  - `` bullet
+    indented under it is a sub-item; other indented lines continue the current
+    bullet's text. One level of nesting is supported."""
     versions = {}
     current = None
-    fragments = None  # raw fragments of the item currently being read
+    top = None  # open top-level Item (holds accumulating children)
+    top_fragments = None  # its raw text fragments
+    sub_fragments = None  # open sub-item's raw fragments, or None
 
-    def flush():
-        # Join wrapped continuation lines into a single item.
-        if current is not None and fragments:
-            raw = " ".join(fragments)
-            kind, body = split_marker(raw)
-            versions[current].append(Item(linkify(escape_rst(body)), kind))
+    def flush_sub():
+        nonlocal sub_fragments
+        if sub_fragments is not None:
+            top.children.append(_make_item(sub_fragments))
+            sub_fragments = None
+
+    def flush_top():
+        nonlocal top, top_fragments
+        flush_sub()
+        if top is not None:
+            item = _make_item(top_fragments)
+            item.children = top.children
+            versions[current].append(item)
+            top = None
+            top_fragments = None
 
     for raw_line in text.splitlines():
         line = raw_line.rstrip()
@@ -115,19 +143,27 @@ def parse_changes(text):
             continue
         match = _VERSION_RE.match(line)
         if match:
-            flush()
-            fragments = None
+            flush_top()
             current = match.group(1)
             versions[current] = []
             continue
         if current is None:
             continue
+        indent = len(line) - len(line.lstrip(" "))
         if stripped.startswith("- "):
-            flush()
-            fragments = [stripped[2:].strip()]
-        elif fragments is not None:
-            fragments.append(stripped)
-    flush()
+            body = stripped[2:].strip()
+            if indent == 0 or top is None:
+                flush_top()
+                top = Item("", "")  # placeholder; real text set at flush
+                top_fragments = [body]
+            else:
+                flush_sub()
+                sub_fragments = [body]
+        elif sub_fragments is not None:
+            sub_fragments.append(stripped)
+        elif top_fragments is not None:
+            top_fragments.append(stripped)
+    flush_top()
     return versions
 
 
@@ -135,11 +171,21 @@ def heading(text, char):
     return "%s\n%s\n" % (text, char * len(text))
 
 
-def render_item(item):
-    """Render one bullet, prefixing marked items with their label role."""
+def render_item(item, level=0):
+    """Render one bullet (and any nested sub-list), prefixing marked items with
+    their label role. A nested list is set off by blank lines and indented so
+    its markers align within the parent bullet, as RST requires."""
+    indent = "  " * level
     if item.kind:
-        return "* :%s:`%s` %s" % (item.kind, _LABELS[item.kind], item.text)
-    return "* %s" % item.text
+        line = "%s* :%s:`%s` %s" % (indent, item.kind, _LABELS[item.kind], item.text)
+    else:
+        line = "%s* %s" % (indent, item.text)
+    if not item.children:
+        return line
+    parts = [line, ""]
+    parts.extend(render_item(child, level + 1) for child in item.children)
+    parts.append("")
+    return "\n".join(parts)
 
 
 def render(components):

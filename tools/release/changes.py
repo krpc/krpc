@@ -42,32 +42,41 @@ def current_version():
     return version
 
 
+def render_nodes(out, nodes, level, linkify=None):
+    """Append markdown bullets for nodes and their nested sub-items, indenting
+    sub-lists by two spaces per level. linkify, if given, rewrites each line."""
+    for node in nodes:
+        text = linkify(node['text']) if linkify else node['text']
+        out.append('  ' * level + '* ' + text)
+        render_nodes(out, node['children'], level + 1, linkify)
+
+
 def render(site, version):
     """Return the changelog for a version, formatted for the given site."""
     changelist = []
     for name, path in COMPONENTS:
         changes = get_changes(path)
-        if version in changes and \
-                (len(changes[version]) > 1 or changes[version][0] != 'None'):
-            changelist.append((name, changes[version]))
+        nodes = changes.get(version)
+        if nodes and (len(nodes) > 1 or nodes[0]['text'] != 'None'):
+            changelist.append((name, nodes))
 
     out = []
     if site == 'github':
         with open('tools/release/github-changes.tmpl', 'r') as tmpl:
             out.append(''.join(tmpl.readlines()).replace('%VERSION%', version))
         out.append('### Changes\n')
-        for name, items in changelist:
+        for name, nodes in changelist:
             out.append('#### ' + name + '\n')
-            out.extend('* ' + item for item in items)
+            render_nodes(out, nodes, 0)
             out.append('')
     else:  # spacedock or curse; issue references become explicit links
         pattern = re.compile(r'#([0-9]+)')
-        for name, items in changelist:
+        def linkify(text):
+            return pattern.sub(
+                r'[#\1](https://github.com/krpc/krpc/issues/\1)', text)
+        for name, nodes in changelist:
             out.append('#### ' + name + '\n')
-            for item in items:
-                item = pattern.sub(
-                    r'[#\1](https://github.com/krpc/krpc/issues/\1)', item)
-                out.append('* ' + item)
+            render_nodes(out, nodes, 0, linkify)
             out.append('')
     return '\n'.join(out)
 
@@ -81,9 +90,14 @@ def main():
 
 
 def get_changes(path):
+    """Parse a CHANGELOG.md into {version: [node, ...]}, where each node is
+    {'text': str, 'children': [node, ...]}. A '- ' bullet at the margin is a
+    top-level entry; a '  - ' bullet under it is a sub-item; other indented
+    lines continue the current bullet's text."""
     changes = {}
     with open(path, 'r') as f:
         version = None
+        top = None  # current top-level node
         for line in f.readlines():
             line = line.rstrip('\n')
             if line == '':
@@ -93,12 +107,23 @@ def get_changes(path):
             m = re.match(r'^##\s+\[([0-9]+\.[0-9]+\.[0-9]+)[^\]]*\]', line)
             if m:
                 version = m.group(1)
-            elif version is None:
+                top = None
+                continue
+            if version is None:
                 continue  # anything before the first version header
-            elif line.startswith('- '):
-                changes.setdefault(version, []).append(line[2:])
-            elif line.startswith('  '):
-                changes[version][-1] += ' ' + line.strip()
+            indent = len(line) - len(line.lstrip(' '))
+            stripped = line.strip()
+            if stripped.startswith('- '):
+                node = {'text': stripped[2:], 'children': []}
+                if indent == 0 or top is None:
+                    top = node
+                    changes.setdefault(version, []).append(node)
+                else:
+                    top['children'].append(node)
+            elif indent > 0 and top is not None:
+                # continuation of the current bullet (sub-item if one is open)
+                target = top['children'][-1] if top['children'] else top
+                target['text'] += ' ' + stripped
             else:
                 print('Invalid line in ' + path + ':', file=sys.stderr)
                 print(line, file=sys.stderr)
