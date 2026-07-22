@@ -56,14 +56,21 @@ the component first, and prompts before uploading.
 13. `tools/release/65-release-docker.py` — TestServer image to ghcr.io.
 14. `tools/release/66-release-vcpkg-cpp.py` — C++ client port to `microsoft/vcpkg`.
 15. `tools/release/67-release-vcpkg-cnano.py` — C-nano client port to `microsoft/vcpkg`.
+16. `tools/release/68-release-ckan.py` — confirms the mod reached CKAN.
 
 The two vcpkg steps hash the archive attached to the published GitHub release and open a pull
 request to `microsoft/vcpkg` from your fork, so run them after step 7's release has been published,
 not just drafted.
 
+CKAN indexes kRPC automatically from the published GitHub release, so unlike the others this step
+publishes nothing: it waits for the NetKAN bot's generated metadata to appear in
+`KSP-CKAN/CKAN-meta` and reports it, so the CKAN channel is a definite done rather than something to
+check back on later. It too needs step 7's release published, not just drafted. If the metadata has
+not landed within the wait (inflation can lag by a few hours), re-run the step later to re-check.
+
 ## 5. Publish the mod and announce
 
-16. `tools/release/70-announcements.py` — prints the changelog formatted for the mod-hosting
+17. `tools/release/70-announcements.py` — prints the changelog formatted for the mod-hosting
     sites and the checklist of remaining manual steps:
     * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, with the changelog.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).
