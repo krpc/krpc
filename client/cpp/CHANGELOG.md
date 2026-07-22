@@ -1,0 +1,112 @@
+## [0.6.0] - unreleased
+- Distribute via vcpkg
+- An error from a service whose generated header is not included now throws an `RPCError`
+  describing it, instead of running off the end of the exception thrower map (#1007)
+- An exception thrown by a stream or event callback no longer escapes the stream update
+  thread, which ended the process, and the remaining callbacks still run. Callbacks are not
+  invoked for an update carrying an error, as there is no value to give them; reading the
+  stream still reports the error (#1007)
+- Fix a data race on the exception thrower map between constructing a service and handling an
+  error (#1007)
+- Update to protobuf v35.1
+- Update to ASIO 1.38.0
+- Drop autotools build; CMake is now the only supported build system
+- Modernise CMake build: require CMake 3.15+, C++17, target-based usage requirements (#834)
+- Add CMake package config so consumers can use `find_package(krpc CONFIG REQUIRED)`
+- CMake dependency options (`KRPC_FETCH_PROTOBUF`, `KRPC_FETCH_ASIO`, `KRPC_FETCH_ABSL`): when OFF
+  (default) the system install is required; when ON `FetchContent` is used.
+- Add `KRPC_FETCH_DEPS` option to enable `FetchContent` for all dependencies at once
+- Mark deprecated members with the `[[deprecated]]` attribute (#904)
+- Fix stream update notifications being lost, which could leave
+  `Client::wait_for_stream_update` sleeping through the update it was waiting for
+- Fix `Client::freeze_streams` blocking forever when no stream is producing updates
+
+## [0.5.2]
+- Use protobuf-lite
+- Roll back to protobuf v3.21.12 to avoid absl dependency
+
+## [0.5.0]
+- Update to protobuf v3.22.0
+- Update to ASIO 1.24.0
+- Fix include path to ASIO header in CMake build scripts
+- Fix CMake build scripts not building a static library with MSVC on Windows
+
+## [0.4.8]
+- Update to protobuf v3.6.1
+- Update to ASIO 1.12.1
+- Add condition variable and callbacks that are called when a stream update message is processed (#473)
+- Fix compilation issue on MacOS
+- Fix cmake configuration detection of protoc binary
+
+## [0.4.7]
+- Ensure .lib files are generated when building using CMake with MSVC (#474)
+
+## [0.4.6]
+- Add methods to remove callbacks from streams and events (#451)
+- Improve Autotools and CMake build scripts to regenerate the protobuf source if protoc is installed
+
+## [0.4.5]
+- Update to protobuf v3.5.1
+
+## [0.4.4.post1]
+- Add missing files to build scripts
+
+## [0.4.3]
+- Add rate control for streams (#116, #141)
+
+## [0.4.0]
+- Updated protocol in line with server changes
+- Remove connection retries. Client will now fail fast if it fails to connect to the server.
+- Add support for RPCs and streams to throw exceptions
+
+## [0.3.11]
+- Update to protobuf v3.4.1
+
+## [0.3.10]
+- Set `ASIO_STANDLONE` in build script instead of source code so that configure script can find the header correctly
+- Add support for building using Cygwin
+- Update to protobuf v3.4.0
+
+## [0.3.9]
+- Update to protobuf v3.3.0
+
+## [0.3.8]
+- Update to protobuf v3.2.0
+- Update build scripts to check for protobuf >= 3.2 (#374)
+- Move `krpc::connect` into client constructor to allow use of smart pointers
+- Fix bug in `StreamManager` when client is not set
+
+## [0.3.7]
+- Add missing header to automake script
+- Add stream freezing (#357)
+- Make stream objects default and copy constructible (#358)
+
+## [0.3.6]
+- Fix configure script
+
+## [0.3.4]
+- Update to protobuf v3.0.0-beta-3
+
+## [0.2.3]
+- Make client thread safe
+- Add checks for `asio.hpp` and protobuf library to cmake script
+- Add Windows with MSVC support to cmake script
+- Fix compiler warnings reported by MSVC
+
+## [0.2.2]
+- Add support for streams (#175)
+- Add documentation to service header files
+- Add autotools and cmake build scripts
+- Move header file `krpc/krpc.hpp` -> `krpc.hpp`
+- Remove support for protobuf enumeration and custom protobuf messages
+- Add comparison operations for remote objects
+
+## [0.2.1]
+- Remove dependency on boost
+- Use standalone ASIO library for network communication
+
+## [0.2.0]
+- Update to protobuf 3.0.0-beta-2
+
+## [0.1.12]
+- Initial version

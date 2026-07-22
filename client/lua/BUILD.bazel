@@ -3,7 +3,7 @@ load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:lua.bzl", "lua_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
-exports_files(["CHANGES.txt"])
+exports_files(["CHANGELOG.md"])
 
 pkg_zip(
     name = "lua",
@@ -30,7 +30,7 @@ pkg_zip(
     name = "src",
     out = "krpc-%s.zip" % version,
     files = glob(["krpc/**/*.lua"]) + [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         "LICENSE",
         "//:COPYING",
         "//:COPYING.LESSER",
@@ -43,7 +43,7 @@ pkg_zip(
         "COPYING.LESSER": "krpc-%s/COPYING.LESSER" % version,
         "README.txt": "krpc-%s/README.txt" % version,
         "VERSION.txt": "krpc-%s/VERSION.txt" % version,
-        "client/lua/CHANGES.txt": "krpc-%s/CHANGES.txt" % version,
+        "client/lua/CHANGELOG.md": "krpc-%s/CHANGELOG.md" % version,
         "client/lua/LICENSE": "krpc-%s/LICENSE" % version,
         "client/": "krpc-%s/" % version,
         "protobuf/KRPC.lua": "krpc-%s/lua/krpc/schema/KRPC.lua" % version,

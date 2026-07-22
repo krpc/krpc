@@ -130,9 +130,9 @@ Some general guidelines on using git and the structure of the repository:
    followed. This helps make the code readable and more maintainable. The automated tests include
    some automated style checking. Where coding style is not enforced, you should follow the
    precedent set by existing code.
- * Each component has an associated CHANGES.txt file containing a list of changes and in which
+ * Each component has an associated CHANGELOG.md file containing a list of changes and in which
    version they were made. When adding a feature/fixing a bug, you should add entries to the
-   relevant CHANGES.txt file(s) indicating what was changed. This change log is intended for end
+   relevant CHANGELOG.md file(s) indicating what was changed. This change log is intended for end
    users of the mod. If your changes are not relevant to an end user (for example, fixing a build
    script, or fixing some code style), you do not need to put an entry in the change log.
  * Document any new features/changes.

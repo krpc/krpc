@@ -9,23 +9,23 @@ import re
 import sys
 
 COMPONENTS = [
-    ('Server', 'server/CHANGES.txt'),
-    ('Core', 'core/CHANGES.txt'),
-    ('DockingCamera service', 'service/DockingCamera/CHANGES.txt'),
-    ('Drawing service', 'service/Drawing/CHANGES.txt'),
-    ('InfernalRobotics service', 'service/InfernalRobotics/CHANGES.txt'),
-    ('KerbalAlarmClock service', 'service/KerbalAlarmClock/CHANGES.txt'),
-    ('LiDAR service', 'service/LiDAR/CHANGES.txt'),
-    ('RemoteTech service', 'service/RemoteTech/CHANGES.txt'),
-    ('SpaceCenter service', 'service/SpaceCenter/CHANGES.txt'),
-    ('UI service', 'service/UI/CHANGES.txt'),
-    ('C# client', 'client/csharp/CHANGES.txt'),
-    ('C++ client', 'client/cpp/CHANGES.txt'),
-    ('C-nano client', 'client/cnano/CHANGES.txt'),
-    ('Java client', 'client/java/CHANGES.txt'),
-    ('Lua client', 'client/lua/CHANGES.txt'),
-    ('Python client', 'client/python/CHANGES.txt'),
-    ('krpctools', 'tools/krpctools/CHANGES.txt'),
+    ('Server', 'server/CHANGELOG.md'),
+    ('Core', 'core/CHANGELOG.md'),
+    ('DockingCamera service', 'service/DockingCamera/CHANGELOG.md'),
+    ('Drawing service', 'service/Drawing/CHANGELOG.md'),
+    ('InfernalRobotics service', 'service/InfernalRobotics/CHANGELOG.md'),
+    ('KerbalAlarmClock service', 'service/KerbalAlarmClock/CHANGELOG.md'),
+    ('LiDAR service', 'service/LiDAR/CHANGELOG.md'),
+    ('RemoteTech service', 'service/RemoteTech/CHANGELOG.md'),
+    ('SpaceCenter service', 'service/SpaceCenter/CHANGELOG.md'),
+    ('UI service', 'service/UI/CHANGELOG.md'),
+    ('C# client', 'client/csharp/CHANGELOG.md'),
+    ('C++ client', 'client/cpp/CHANGELOG.md'),
+    ('C-nano client', 'client/cnano/CHANGELOG.md'),
+    ('Java client', 'client/java/CHANGELOG.md'),
+    ('Lua client', 'client/lua/CHANGELOG.md'),
+    ('Python client', 'client/python/CHANGELOG.md'),
+    ('krpctools', 'tools/krpctools/CHANGELOG.md'),
 ]
 
 
@@ -88,15 +88,17 @@ def get_changes(path):
             line = line.rstrip('\n')
             if line == '':
                 continue
-            m = re.match(r'^v([0-9]+\.[0-9]+\.[0-9]+).*?$', line)
+            # '## [X.Y.Z]' header; any suffix inside the brackets (e.g. a
+            # '.postN') or after them (' - unreleased') is ignored.
+            m = re.match(r'^##\s+\[([0-9]+\.[0-9]+\.[0-9]+)[^\]]*\]', line)
             if m:
                 version = m.group(1)
-            elif line.startswith(' * '):
-                if version not in changes:
-                    changes[version] = []
-                changes[version].append(line[3:])
-            elif line.startswith('   '):
-                changes[version][-1] += line[2:]
+            elif version is None:
+                continue  # anything before the first version header
+            elif line.startswith('- '):
+                changes.setdefault(version, []).append(line[2:])
+            elif line.startswith('  '):
+                changes[version][-1] += ' ' + line.strip()
             else:
                 print('Invalid line in ' + path + ':', file=sys.stderr)
                 print(line, file=sys.stderr)

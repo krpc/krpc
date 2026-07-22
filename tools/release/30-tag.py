@@ -9,8 +9,23 @@ triggers the docs workflow, which freezes the release documentation under
 import lib
 
 
+def finalize_changelogs():
+    """Turn the current version's '## [X.Y.Z] - unreleased' headers into plain
+    '## [X.Y.Z]' and commit, so the tagged tree records it as released.
+
+    Idempotent: on a re-run the suffix is already gone and nothing is committed,
+    leaving the tree clean for the tag.
+    """
+    changed = lib.strip_unreleased()
+    if changed:
+        lib.banner(f'Finalizing changelogs for {lib.TAG}')
+        lib.run('git', 'commit', '-m', f'Finalize changelog for {lib.TAG}',
+                *changed)
+
+
 def main():
     lib.require('git')
+    finalize_changelogs()
     lib.require_clean_tree()
 
     if lib.succeeds('git', 'rev-parse', '-q', '--verify',

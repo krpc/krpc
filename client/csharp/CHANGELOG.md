@@ -1,0 +1,72 @@
+## [0.6.0] - unreleased
+- Requires .NET Framework 4.7.2 or later
+- Update to protobuf v3.35.1
+- Mark deprecated members with the `[Obsolete]` attribute (#904)
+- Disposing a connection now stops and joins the stream update thread, instead of leaving it
+  to end by itself when its socket was closed underneath it (#1005)
+- An error from a service whose exception types were never registered now raises an
+  `RPCException` describing it, instead of a `KeyNotFoundException` naming the missing type
+  (#1005)
+- An exception thrown by a stream or event callback no longer escapes the stream update
+  thread, which ended the process, and the remaining callbacks still run (#1005)
+- Fix a deadlock between the stream update thread and a thread waiting for an update while
+  holding a stream or event condition, as waiting for one requires (#1005)
+
+## [0.5.0]
+- Update to protobuf v3.22.0
+- Drop support for net35
+
+## [0.4.8]
+- Update to protobuf v3.6.1
+
+## [0.4.6]
+- Add methods to remove callbacks from streams and events (#451)
+
+## [0.4.5]
+- Update to protobuf v3.5.1
+
+## [0.4.3]
+- Add rate control for streams (#116, #141)
+
+## [0.4.0]
+- Updated protocol in line with server changes
+- Add support for RPCs and streams to throw exceptions
+
+## [0.3.11]
+- Update to protobuf v3.4.1
+
+## [0.3.10]
+- Add support for .NET 3.5 (allows use of the client from within KSP itself)
+- Update to protobuf v3.4.0
+
+## [0.3.9]
+- Update to protobuf v3.3.0
+
+## [0.3.8]
+- Update to protobuf v3.2.0
+
+## [0.3.7]
+- Update to protobuf v3.1.0
+- Remove pre-release flag from nuget version
+
+## [0.3.5]
+- Fix race condition where the connection constructor returns before the stream server connection has been established
+- Make `Connection` and `StreamManager` disposable so that they clean up resources correctly
+- Fix issue where network streams are closed prematurely
+- Fix issue with receiving partial protobuf messages
+
+## [0.3.4]
+- Update to protobuf v3.0.0-beta-3
+
+## [0.2.3]
+- Make client thread safe
+
+## [0.2.2]
+- Remove support for protobuf enumeration and custom protobuf messages
+
+## [0.2.1]
+- Add documentation to generated service code
+- Add support for streams
+
+## [0.2.0]
+- Initial version

@@ -4,12 +4,12 @@ load("//service:build.bzl", "service_deps")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
 
-exports_files(["CHANGES.txt"])
+exports_files(["CHANGELOG.md"])
 
 filegroup(
     name = "LiDAR",
     srcs = [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         ":KRPC.LiDAR",
         ":ServiceDefinitions",
     ],

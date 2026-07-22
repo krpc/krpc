@@ -1,14 +1,16 @@
 """Generate a single, unified changelog page (reStructuredText) for the docs
-site from the per-component ``CHANGES.txt`` files.
+site from the per-component ``CHANGELOG.md`` files.
 
-The ``CHANGES.txt`` files are not rendered markdown, so they are parsed rather
-than passed through. Each file is a sequence of ``vX.Y.Z[-pre]`` version headers
-followed by ``  * `` bullet items; wrapped continuation lines are indented and
-carry no bullet. Issue/PR references appear inline as ``(#NNN)``.
+The ``CHANGELOG.md`` files are markdown, but the page is built by parsing them
+rather than passing them through. Each file is a sequence of ``## [X.Y.Z[-pre]]``
+version headers (the in-development version carries an `` - unreleased`` suffix,
+which is ignored) followed by ``- `` bullet items; wrapped continuation lines are
+indented and carry no bullet. Issue/PR references appear inline as ``(#NNN)``, and
+code identifiers as markdown inline ``code`` spans.
 
-Items may start with an inline ``**Breaking:**`` or ``**Deprecated:**`` marker
-(used from v0.5.4 onward). Such items stay in their component's list, where the
-marker is rendered as a small highlighted label in front of the entry text.
+Items may start with an inline ``**Breaking:**`` or ``**Deprecated:**`` marker.
+Such items stay in their component's list, where the marker is rendered as a small
+highlighted label in front of the entry text.
 """
 
 import argparse
@@ -40,10 +42,12 @@ _ROLES = "\n".join(
     ".. role:: %s\n   :class: changelog-marker %s\n" % (kind, kind) for kind in _LABELS
 )
 
-_VERSION_RE = re.compile(r"^v(\d[^\s]*)\s*$")
+_VERSION_RE = re.compile(r"^##\s+\[(\d[^\]]*)\]")
 _RST_SPECIAL_RE = re.compile(r"([\\*`|_])")
 _ISSUE_RE = re.compile(r"#(\d+)")
 _NUM_RE = re.compile(r"^\d+$")
+# Markdown inline code span: `code`.
+_CODE_RE = re.compile(r"`([^`]+)`")
 
 
 def version_key(version):
@@ -63,8 +67,19 @@ def version_key(version):
 
 def escape_rst(text):
     """Escape reStructuredText inline-markup characters so free-form changelog
-    text can never emit a warning under the strict ``-W`` docs build."""
-    return _RST_SPECIAL_RE.sub(r"\\\1", text)
+    text can never emit a warning under the strict ``-W`` docs build.
+
+    Markdown inline ``code`` spans become RST inline literals (``` ``code`` ```),
+    whose contents are left verbatim; RST specials are escaped only in the prose
+    between them."""
+    parts = []
+    pos = 0
+    for match in _CODE_RE.finditer(text):
+        parts.append(_RST_SPECIAL_RE.sub(r"\\\1", text[pos : match.start()]))
+        parts.append("``%s``" % match.group(1))
+        pos = match.end()
+    parts.append(_RST_SPECIAL_RE.sub(r"\\\1", text[pos:]))
+    return "".join(parts)
 
 
 def linkify(text):
@@ -81,7 +96,7 @@ def split_marker(raw):
 
 
 def parse_changes(text):
-    """Parse a ``CHANGES.txt`` into ``{version: [Item, ...]}``."""
+    """Parse a ``CHANGELOG.md`` into ``{version: [Item, ...]}``."""
     versions = {}
     current = None
     fragments = None  # raw fragments of the item currently being read
@@ -99,7 +114,7 @@ def parse_changes(text):
         if not stripped:
             continue
         match = _VERSION_RE.match(line)
-        if match and not line[0].isspace():
+        if match:
             flush()
             fragments = None
             current = match.group(1)
@@ -107,9 +122,9 @@ def parse_changes(text):
             continue
         if current is None:
             continue
-        if stripped.startswith("*"):
+        if stripped.startswith("- "):
             flush()
-            fragments = [stripped[1:].strip()]
+            fragments = [stripped[2:].strip()]
         elif fragments is not None:
             fragments.append(stripped)
     flush()
@@ -163,7 +178,7 @@ def main():
         nargs=2,
         metavar=("NAME", "PATH"),
         default=[],
-        help="A component display name and the path to its CHANGES.txt",
+        help="A component display name and the path to its CHANGELOG.md",
     )
     args = parser.parse_args()
 

@@ -52,7 +52,7 @@ py_sdist(
     name = "krpctest",
     out = "krpctest-%s.tar.gz" % version,
     files = [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         "LICENSE",
         "README.md",
         "krpctest/krpctest.sfs",

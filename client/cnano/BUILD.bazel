@@ -16,7 +16,7 @@ pkg_zip(
         "src/*.c",
         "cmake/*.cmake.in",
     ]) + [
-        "CHANGES.txt",
+        "CHANGELOG.md",
         "INSTALL.txt",
         "LICENSE",
         "src/krpc.options",
@@ -260,6 +260,6 @@ protobuf_nanopb(
 )
 
 exports_files([
-    "CHANGES.txt",
+    "CHANGELOG.md",
     "src/krpc.options",
 ])

@@ -40,7 +40,7 @@ pattern = '__version__ = "(?P<version>[^"]+)"'
 include = [
     "krpctest/",
     "README.md",
-    "CHANGES.txt",
+    "CHANGELOG.md",
     "LICENSE",
     "COPYING",
     "VERSION.txt",

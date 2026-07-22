@@ -4,7 +4,6 @@
 Read-only: performs no builds and publishes nothing.
 """
 
-import glob
 import shutil
 from pathlib import Path
 
@@ -74,18 +73,13 @@ def check_repository(report):
         report.ok(f'tag {lib.TAG} not created yet (30-tag.py will create it)')
 
 
-def changelogs():
-    return (['server/CHANGES.txt', 'core/CHANGES.txt']
-            + sorted(glob.glob('service/*/CHANGES.txt'))
-            + sorted(glob.glob('client/*/CHANGES.txt'))
-            + ['tools/krpctools/CHANGES.txt'])
-
-
 def check_changelogs(report):
     lib.banner(f'Changelogs (a component with no user-facing changes has no '
                f'{lib.TAG} section and is omitted from the release notes)')
-    for changelog in changelogs():
-        if any(line.startswith(lib.TAG)
+    # Matches '## [X.Y.Z]' with or without the ' - unreleased' suffix.
+    header = f'## [{lib.VERSION}]'
+    for changelog in lib.changelogs():
+        if any(line.startswith(header)
                for line in Path(changelog).read_text().splitlines()):
             report.ok(changelog)
         else:

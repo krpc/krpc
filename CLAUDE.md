@@ -130,8 +130,12 @@ bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.
 
 ## Changelogs
 
-Per-component `CHANGES.txt`. Entries go under the current version header (`tools/krpc-version.sh`), created if
-needed, only for components actually modified. `doc/src/changelog.rst` is generated from them.
+Per-component `CHANGELOG.md`, markdown in the style of [keepachangelog.com](https://keepachangelog.com)
+but with entries grouped logically rather than by add/change/fix type. Entries are `- ` bullets under a
+`## [X.Y.Z]` version header, newest version first; wrapped lines indent 2 spaces. The current version
+(`tools/krpc-version.sh`) is headed `## [X.Y.Z] - unreleased`; releasing drops the suffix (`30-tag.py`).
+Add entries under that header, creating it if needed, only for components actually modified.
+`doc/src/changelog.rst` is generated from these files.
 
  * **Never update on regular commits** — use a dedicated final commit (single-commit PRs excepted);
    every PR touches these files.
@@ -139,8 +143,9 @@ needed, only for components actually modified. `doc/src/changelog.rst` is genera
    current unreleased dev cycle gets **no entry**.
  * User-facing changes only. No changes since the last release → no version section at all; never add
    an empty or padding section.
+ * Code identifiers (RPCs, types, settings, file names) go in backticks for monospace, e.g. `` `SpaceCenter.Camera` ``.
  * At most one marker: `**Breaking:**` (users must react) or `**Deprecated:**` (exists, avoid). Both →
-   `**Breaking:**`, mention the deprecation in the text.
+   `**Breaking:**`, mention the deprecation in the text. A marker opens the entry, before the text.
  * Suffix `(#NNN)`. Issues and PRs share one number sequence, so predict the PR's number before
    writing the entry — one more than the highest existing number:
 
