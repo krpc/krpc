@@ -10,7 +10,11 @@ All the credentials live in one git-ignored TOML file at the root of the reposit
 `tools/release/release-credentials.toml.template` to `release-credentials.toml`, fill in every value, and `chmod 600` it; the template says what each one is and where to get it. The scripts pass these to `gh`, `twine`,
 `dotnet`, `luarocks`, `aws` and `docker` explicitly, so none of those tools needs to be configured
 or logged in beforehand, and whatever account they are already set up with is ignored. Git is the
-exception: pushes to `krpc/krpc` and `krpc-arduino` use your normal git setup.
+exception: pushes to `krpc/krpc`, `krpc-arduino` and your vcpkg fork use your normal git setup.
+
+The two vcpkg steps also need a git checkout of vcpkg pointed to by `VCPKG_ROOT` (the same one the
+client vcpkg test scripts use) and a fork of `microsoft/vcpkg` on the release account; `gh` creates
+the fork the first time if it does not exist.
 
 ## 1. Prepare
 
@@ -50,10 +54,16 @@ the component first, and prompts before uploading.
 11. `tools/release/63-release-arduino.py` — updates and tags the `krpc-arduino` repository.
 12. `tools/release/64-release-lua.py` — Lua client archive to S3 and the rockspec to luarocks.org.
 13. `tools/release/65-release-docker.py` — TestServer image to ghcr.io.
+14. `tools/release/66-release-vcpkg-cpp.py` — C++ client port to `microsoft/vcpkg`.
+15. `tools/release/67-release-vcpkg-cnano.py` — C-nano client port to `microsoft/vcpkg`.
+
+The two vcpkg steps hash the archive attached to the published GitHub release and open a pull
+request to `microsoft/vcpkg` from your fork, so run them after step 7's release has been published,
+not just drafted.
 
 ## 5. Publish the mod and announce
 
-14. `tools/release/70-announcements.py` — prints the changelog formatted for the mod-hosting
+16. `tools/release/70-announcements.py` — prints the changelog formatted for the mod-hosting
     sites and the checklist of remaining manual steps:
     * Upload `assets/krpc-x.x.x.zip` to CurseForge and SpaceDock, with the changelog.
     * Bump the version number on [KSP-AVC online](https://ksp-avc.cybutek.net/).

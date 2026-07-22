@@ -77,7 +77,7 @@ def confirm(question):
         raise ReleaseError('aborted')
 
 
-def run(*command, env=None, stdin=None):
+def run(*command, env=None, stdin=None, cwd=None):
     """Run a command, failing the step if it does.
 
     The command is echoed first, so that a release log shows what was actually
@@ -85,16 +85,18 @@ def run(*command, env=None, stdin=None):
     """
     command = [str(argument) for argument in command]
     print(f'{DIM}$ {" ".join(command)}{RESET}')
-    status = subprocess.run(command, env=env, input=stdin, text=stdin is not None)
+    status = subprocess.run(command, env=env, input=stdin,
+                            text=stdin is not None, cwd=cwd)
     if status.returncode != 0:
         raise ReleaseError(
             f'{command[0]} failed with exit status {status.returncode}')
 
 
-def capture(*command, env=None):
+def capture(*command, env=None, cwd=None):
     """Run a command and return its standard output, stripped."""
     command = [str(argument) for argument in command]
-    status = subprocess.run(command, capture_output=True, text=True, env=env)
+    status = subprocess.run(command, capture_output=True, text=True, env=env,
+                            cwd=cwd)
     if status.returncode != 0:
         raise ReleaseError(
             f'{command[0]} failed with exit status {status.returncode}: '
