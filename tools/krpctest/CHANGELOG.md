@@ -1,4 +1,4 @@
-## [0.6.0] - unreleased
+## [v0.6.0] - unreleased
 - Add the `TestCase.expansions` attribute, to declare KSP expansions a test class
   requires; the class is skipped when a required expansion is not installed
 - Run the integration tests with `pytest`, replacing the custom test runner
@@ -15,11 +15,11 @@
 - Fix a crash when waiting for a vessel and there is no active vessel yet
 - Migrate packaging to `pyproject.toml` (`hatchling`) and require Python 3.10+
 
-## [0.3.9]
+## [v0.3.9]
 - Update test saves for KSP 1.3
 
-## [0.3.8]
+## [v0.3.8]
 - Clean up code to meet PEP 8 guidelines
 
-## [0.3.3]
+## [v0.3.3]
 - Initial version

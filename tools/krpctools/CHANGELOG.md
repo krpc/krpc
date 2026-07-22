@@ -1,4 +1,4 @@
-## [0.6.0] - unreleased
+## [v0.6.0] - unreleased
 - **Breaking:** Requires Python 3.10+
 - **Breaking:** `krpc-servicedefs` now runs the `ServiceDefinitions` tool
   on the .NET 8 runtime; Mono is no longer required
@@ -17,37 +17,37 @@
 - Fix generating client stubs and documentation from a KSP install failing when the machine's
   locale is not UTF-8 and a service's documentation contains non-ASCII characters
 
-## [0.5.4]
+## [v0.5.4]
 - Fix incorrect protobuf DLL (#755)
 - Fix required KSP assemblies not being copied (#755)
 - Fix tmp directory not being deleted (#755)
 - Fix `clientgen` generating invalid python code for undocumented enumeration values (#757)
 
-## [0.4.9]
+## [v0.4.9]
 - Fix issue finding `KSP_x64_Data` directory (#523)
 - Add `TestServer` archive to bin directory (#532)
 
-## [0.4.8]
+## [v0.4.8]
 - Fix Python 3 compatibility
 - Fix template loading in `docgen` on Windows
 - Add documentation of game scenes for each RPC
 
-## [0.3.8]
+## [v0.3.8]
 - Clean up code to meet PEP 8 guidelines
 
-## [0.3.7]
+## [v0.3.7]
 - Fix bug parsing nested collection types
 - Fix bug generating key type for dictionaries
 
-## [0.3.6]
+## [v0.3.6]
 - Fix generating Java client stubs using `krpc-clientgen` with Python 3 (#308)
 
-## [0.3.4]
+## [v0.3.4]
 - Update protobuf to v3.0.0-beta-3
 
-## [0.2.2]
+## [v0.2.2]
 - Refactor into '`krpctools`' package containing '`krpc-clientgen`', '`krpc-docgen`' and '`krpc-servicedefs`'.
 - Fixes caused by removal of support for protobuf enumeration and custom protobuf messages from server and clients
 
-## [0.2.1]
+## [v0.2.1]
 - Initial version

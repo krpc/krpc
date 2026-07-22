@@ -49,8 +49,11 @@ _ROLES = "\n".join(
 )
 
 # Version header: the bracketed version, then any trailing text (e.g. the
-# ' - unreleased' marker on the in-development version).
-_VERSION_RE = re.compile(r"^##\s+\[(\d[^\]]*)\]\s*(.*)$")
+# ' - unreleased' marker on the in-development version). An optional `v` prefix
+# on the bracketed version is accepted and dropped, so the captured version is
+# bare (older frozen-doc sources predate the prefix); the `v` is re-added when
+# the heading is rendered.
+_VERSION_RE = re.compile(r"^##\s+\[v?(\d[^\]]*)\]\s*(.*)$")
 _RST_SPECIAL_RE = re.compile(r"([\\*`|_])")
 _ISSUE_RE = re.compile(r"#(\d+)")
 _NUM_RE = re.compile(r"^\d+$")
@@ -207,7 +210,9 @@ def render(components, unreleased=()):
     out = [_ROLES, heading("Changelog", "=")]
 
     for version in ordered:
-        title = "%s - unreleased" % version if version in unreleased else version
+        title = (
+            "v%s - unreleased" % version if version in unreleased else "v%s" % version
+        )
         out.append("\n" + heading(title, "-"))
 
         for name, versions in components:

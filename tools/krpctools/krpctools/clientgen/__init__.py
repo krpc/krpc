@@ -32,7 +32,7 @@ def main():
         "-v",
         "--version",
         action="version",
-        version="%s version %s" % (prog, __version__),
+        version="%s version v%s" % (prog, __version__),
     )
     parser.add_argument(
         "language", help="Language to generate (%s) or path to generator" % languages

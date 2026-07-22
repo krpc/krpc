@@ -69,16 +69,18 @@ def build_entries(releases, has_dev):
     """Entries in pydata-sphinx-theme's switcher.json format: `version` is
     matched against the theme's version_match (the subpath a build was
     published under), `name` is the dropdown label, and `preferred` marks the
-    newest release (used by the old-version warning banner)."""
+    newest release (used by the old-version warning banner). The `name` label
+    carries a `v` prefix for display; `version` and `url` stay bare because they
+    are matched against the subpath each build was published under."""
     entries = []
     for i, version in enumerate(releases):
         entry = {
-            "name": version,
+            "name": "v%s" % version,
             "version": version,
             "url": "%s/%s/" % (SITE, version),
         }
         if i == 0:
-            entry["name"] = "%s (stable)" % version
+            entry["name"] = "v%s (stable)" % version
             entry["preferred"] = True
         entries.append(entry)
     if has_dev:

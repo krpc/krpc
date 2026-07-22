@@ -1,4 +1,4 @@
-## [0.6.0] - unreleased
+## [v0.6.0] - unreleased
 
 - Space center
   - Add `SpaceCenter.Expansions` to report the installed KSP expansions (#985)
@@ -265,7 +265,7 @@
   - Fix part module field values being formatted using the machine's locale, so that
     `Module.Fields`, `Module.GetField` and `PartField.Value` returned numbers that clients running
     under a locale that writes decimals with a comma could not parse (#993)
-## [0.5.4]
+## [v0.5.4]
 - Fix vessel recovery (#782)
 - Allow vessel switch from any scene (#781)
 - Fix memory leaks on each scene switch (#779)
@@ -276,7 +276,7 @@
 - Make `CelestialBody` parameters doulbe precision (#786)
 - Fix scaled camera distance clamp (#785)
 
-## [0.5.2]
+## [v0.5.2]
 - Fix null reference exception when `SpaceCenter.LaunchVesselFromVAB` is called with no crew (#599)
 - Add `Engine.IndependentThrottle` to check whether it is enabled
 - Allow setting the independent throttle using `Engine.Throttle`
@@ -288,10 +288,10 @@
 - `Module.SetField*` methods now raise an exception if setting the field to the wrong value type
 - Change default names for alarms created by `AlarmManager`
 
-## [0.5.1]
+## [v0.5.1]
 - Fix null reference exception in autopilot for vessels without custom axis controls (#649)
 
-## [0.5.0]
+## [v0.5.0]
 - Update to work with KSP 1.8+
 - Add to `SpaceCenter`:
   - `LaunchSites`
@@ -345,7 +345,7 @@
 - Fix `RCS.GetTorqueVectors` not considering if each direction is enabled (#591)
 - Add `RCS.AvailableForce` and `Vessel.AvailableRCSForce` (#597)
 
-## [0.4.8]
+## [v0.4.8]
 - Allows RPCs to be accessed from game scenes other than just flight (#471)
 - Merge NameTag (http://github.com/krpc/NameTag) into the main kRPC release
 - Fix air-relative velocity calculation for `SimulateAeroDynamicForceAt` with FAR (#500)
@@ -355,10 +355,10 @@
 - Fix `Flight.TerminalVelocity` (#485)
 - Fix null reference exception when deploying fairings after reverting to launch (#501)
 
-## [0.4.7]
+## [v0.4.7]
 - Fix `Flight.Lift` and `Flight.Drag` should return values in Newtons (#475)
 
-## [0.4.6]
+## [v0.4.6]
 - Added `SpaceCenter.GameMode` (#455)
 - Added `SpaceCenter.Science`, `Funds` and `Reputation` (#455)
 - Fix pre-flight checks not happending in `SpaceCenter.LaunchVessel` (#469)
@@ -366,22 +366,22 @@
 - Change `CelestialBody.Biomes` to return an empty list instead of throwing an exception if the body has no biomes (#457)
 - Fixed science transmission not working correctly (#456)
 
-## [0.4.5]
+## [v0.4.5]
 - Fixed roll input when input mode is override (#445)
 - Marked `CelestialBody.Orbit` as nullable, as it returns null for the sun
 
-## [0.4.4]
+## [v0.4.4]
 - Add `ResourceConverter.ThermalEfficiency`, `CoreTemperature` and `OptimumCoreTemperature` (#439)
 
-## [0.4.1]
+## [v0.4.1]
 - Add `SpaceCenter.RaycastDistance` and `RaycastPart` (#423)
 - Add `Vessel.CrewCount`, `CrewCapacity` and `Crew` (#426)
 - Add `CrewMember` class (#426)
 
-## [0.4.0]
+## [v0.4.0]
 - `AutoPilot.Wait` and `Error` methods now throw an exception if the auto-pilot is not engaged (#409)
 
-## [0.3.10]
+## [v0.3.10]
 - Fix maneuver node reference frame to point in the direction of the remaining burn, rather than just the initially planned burn (#404)
 - Add following to `CelestialBody` class: `AltitudeAtPosition`, `LatitudeAtPosition`, `LongitudeAtPosition` and `AtmosphericDensityAtPosition` (#413)
 - Add following to `Orbit` class: `RadiusAt`, `PositionAt`, `MeanAnomalyAtUT`, `TrueAnomalyAtAN`, `TrueAnomalyAtDN`
@@ -390,7 +390,7 @@
 - Add `CelestialBody.TemperatureAt`, `DensityAt` and `PressureAt` (#350, #352)
 - Add `Flight.SimulateAerodynamicForceAt` (#352)
 
-## [0.3.9]
+## [v0.3.9]
 - Add `VesselType.Plane` and `VesselType.Relay` (#385)
 - Fix `Control.WheelThrottle` and `WheelSteering` (#388)
 - Fix off by one error in stage numbers for `Vessel.ResourcesInDecoupleStage` (#380)
@@ -400,7 +400,7 @@
 - Fix `SpaceCenter.SetTarget` not correctly setting target if input locks are enabled (#397)
 - Fix possible null reference exception in `ResourceConverter.State`
 
-## [0.3.8]
+## [v0.3.8]
 - Add support for CommNet
 - Add support for contracts (#361)
 - Add support for RealChutes, add `Parachute.Arm` and `Parachute.Armed` (#382)
@@ -418,7 +418,7 @@
 - Fix bug with `Part.Rotation` (#371)
 - Fix bug with `Part.BoundingBox` (#370)
 
-## [0.3.7]
+## [v0.3.7]
 - Add custom reference frames (`ReferenceFrame.CreateRelative` and `CreateHybrid`) (#252)
 - Add `Vessel.BoundingBox` and `Part.BoundingBox` (#352)
 - Add `LandingGear.IsGrounded` and `LandingLeg.IsGrounded` (#352)
@@ -433,7 +433,7 @@
 - Change maneuver node methods and properties to use double precision values (#357)
 - Add support for Action Groups Extended mod (#364, #365)
 
-## [0.3.6]
+## [v0.3.6]
 - Add `Part.Tag` which can be used to get/set the name tag set via the NameTag mod, or kOS (#297)
 - Add `Parts.WithTag` to get a list of all parts with the given tag value
 - Remove `DockingPort.Name` and `Parts.DockingPortsWithName` - part tagging can now be used instead
@@ -457,7 +457,7 @@
 - Change camera distances to use meters (#339)
 - Fix engine thrust calculation for air breathing engines (#327)
 
-## [0.3.5]
+## [v0.3.5]
 - Improved `AutoPilot` that auto-tunes itself based on the vessels available torque and moment of inertia (#289)
 - Add `Resources.Enabled` to enable/disable all of the resources in a part or stage at once (#283)
 - Add `Vessel.Recoverable` and `Vessel.Recover()` (#277)
@@ -470,21 +470,21 @@
 - Fix `Engine.AvailableThrust` so that it returns 0 if the vessel is not active
 - Make `ReferenceFrame` type, underlying object and its transform accessible via public properties (#290)
 
-## [0.3.4]
+## [v0.3.4]
 - Move drawing functionality into new `Drawing` service (#253)
 - Add `Light.Color`
 - Add RPCs for setting `PartModule` fields: `Module.ResetField`, `SetFieldInt`, `SetFieldFloat` and `SetFieldString`
 
-## [0.3.3]
+## [v0.3.3]
 - Add `AvailableTorque` properties to vessels, reaction wheels, RCS, engines and control surfaces
 - Rename `ReactionWheel.Torque` to `ReactionWheel.MaxTorque`
 - Fix `Vessel.MomentOfInertia` - use custom inertia tensor calculations to avoid issues with KSPs `Vessel.MoI` and `Vessel.findLocalMoI`
 - Move RemoteTech functionality to separate RemoteTech service
 
-## [0.3.2]
+## [v0.3.2]
 - Fix `Control.SpeedMode` (#258)
 
-## [0.3.0]
+## [v0.3.0]
 - Support for KSP 1.1
 - Add camera controls (note: rotation and zooming of the IVA camera is not yet supported)
 - Add saving and loading games using `SpaceCenter.Save`, `Load`, `Quicksave` and `Quickload` (#247)
@@ -508,7 +508,7 @@
 - Fix bug where `Engine.HasFuel` requires the engine to be throttled up
 - Fix bug with vessel center of mass calculations (#218)
 
-## [0.2.3]
+## [v0.2.3]
 - Add support for engine mode switching (#219)
 - `Engine.GimbalLimit` and `GimbalLocked` now return an error if the engine is not gimballed
 - Add cargo bays, fairings and intakes
@@ -519,7 +519,7 @@
 - Fix null pointer exception in autopilot when switching scenes (#220)
 - Fix bug with translation inputs in `Control` class (#223)
 
-## [0.2.2]
+## [v0.2.2]
 - Add `Part.IsFuelLine`
 - Fix bug with `Part.FuelLinesTo` (#193)
 - `Part.FuelLinesTo` and `FuelLinesFrom` now return an error if called on a fuel line part
@@ -527,19 +527,19 @@
 - Fix array index out of range error in `SpaceCenter.WarpTo` (#169)
 - Fix bug with vessel's surface velocity reference frame (#194)
 
-## [0.2.1]
+## [v0.2.1]
 - Fix `Orbit.Speed` always returning 0
 - Add `CelestialBody.SurfaceHeight`, `BedrockHeight`, `MSLPosition`, `SurfacePosition`, `BedrockPosition` (#186)
 
-## [0.2.0]
+## [v0.2.0]
 - Fix `SpaceCenter.HorizontalSpeed` calculation
 - Added support for resource harvesters and converters (#166,#182)
 - Fix bug with `Flight.SideslipAngle` (#189)
 
-## [0.1.12]
+## [v0.1.12]
 - Built for KSP 1.0.5
 
-## [0.1.11]
+## [v0.1.11]
 - Rename `maxRate` parameter in `SpaceCenter.WarpTo` to `maxRailsRate`
 - Add more thermal properties to `Part` class (for new thermal model in KSP 1.0.3) (#155)
 - Add `Comms.HasLocalControl`
@@ -552,7 +552,7 @@
 - Add `SpaceCenter.LaunchVesselFromVAB` and `SpaceCenter.LaunchVesselFromSPH` (#95)
 - Update aero methods to use FAR 0.15 if available
 
-## [0.1.10]
+## [v0.1.10]
 - KSP 1.0.4 support (#151)
 - Add more time warp functionality: `SpaceCenter.WarpMode`, `WarpRate`, `WarpFactor`,
   `RailsWarpFactor`, `PhysicsWarpFactor`, `CanRailsWarpAt` and `MaximumRailsWarpFactor` (#134)
@@ -564,13 +564,13 @@
 - Add `SpaceCenter.DrawLine` to draw arbitrary lines (#150)
 - Rename `SpaceCenter.ClearDirections` to `SpaceCenter.ClearDrawing`
 
-## [0.1.9]
+## [v0.1.9]
 - Fix bug with combined specific impulse calculations (#117)
 - Add `Engine.PropellantRatios` (#118)
 - Combined `VesselResources` and `PartResources` classes into a single `Resources` class
 - Add `Resources.Density`
 
-## [0.1.8]
+## [v0.1.8]
 - Add `Engine.MaxVacuumThrust`
 - Add `Engine.Throttle`
 - Add `Engine.GimbalLimit`
@@ -581,7 +581,7 @@
   `AtmosphereScaleHeight`, `AtmosphereMaxAltitude`, `AtmospherePressureAt`, `AtmosphereDensityAt`
 - Add `CelestialBody.AtmosphereDepth` and `HasAtmosphericOxygen`
 
-## [0.1.7]
+## [v0.1.7]
 - Add `AutoPilot.SAS`, `SASMode` and `SpeedMode` (#94)
 - Update `AutoPilot.Error` to also return SAS error (#94)
 - Change return types of `Vessel.Mass`, `DryMass`, `CrossSectionalArea`, `SpecificImpulse` to float
@@ -590,13 +590,13 @@
 - Fix orientation of docking port reference frames
 - Rename `Engine.Activated` to `Engine.Active` to match other parts
 
-## [0.1.6]
+## [v0.1.6]
 - `Parts`
 - Targeting of vessels, bodies and docking ports
 - Remove `Orbit.ReferenceFrame`
 - Fix `AutoPilot.Error` and add `AutoPilot.RollError` (#98)
 
-## [0.1.5]
+## [v0.1.5]
 - Add `SpaceCenter.DrawDirection` and `ClearDirections` for visual debugging
 - Add `Vessel.Comms` to interact with RemoteTech
 - Add `Control.WheelThrottle` and `WheelSteering`
@@ -617,7 +617,7 @@
 - `AutoPilot` and `Control` inputs reset to 0 when the client that requested them disconnects
 - Change `AutoPilot` to set SAS to false when it's disengaged
 
-## [0.1.4]
+## [v0.1.4]
 - Major refactoring of reference frames (#66)
 - Add `Control.Nodes` (#53)
 - Add `Body.AtmosphereDensity` (#52)
@@ -631,7 +631,7 @@
 - Fix argument type in `Conrol.AddNode` (#59)
 - Fix bug with `Vessel.HorizontalSpeed` (#67)
 
-## [0.1.3]
+## [v0.1.3]
 - Add `SpaceCenter.Vessels`
 - Add `SpaceCenter.Bodies`
 - Remove `SpaceCenter.Body`
@@ -652,15 +652,15 @@
 - Fix bug with `Node.Vector` returning a vector in the wrong vector space
 - Improvements to `Resources` class
 
-## [0.1.2]
+## [v0.1.2]
 - Include reference frame velocity in orbital direction vectors
 - Remove `ReferenceFrame.SurfaceVelocity` and `ReferenceFrame.TargetVelocity`
 - Change default reference frames for `Vessel.Flight()` and `AutoPilot` functions
   to `ReferenceFrame.Orbital`
 - Use Pa instead of kPa for atmospheric pressure
 
-## [0.1.1]
+## [v0.1.1]
 - Add new functionality to `SpaceCenter` service
 
-## [0.1.0]
+## [v0.1.0]
 - Initial pre-release

@@ -4,6 +4,9 @@ import os
 project = 'kRPC'
 version = '%VERSION%'
 release = version
+# Browser-tab title on every page. Set explicitly so the version carries a `v`
+# prefix (Sphinx's default title would show the bare 'kRPC X.Y.Z documentation').
+html_title = f'kRPC v{release} documentation'
 # End year is the build year, so the footer stays current without edits.
 copyright = '2015-%d, kRPC Org' % datetime.date.today().year
 author = ''
@@ -49,7 +52,7 @@ html_baseurl = 'https://krpc.github.io/krpc/%SUBPATH%/'
 
 html_theme_options = {
     # Brand text in the header. The theme otherwise shows the full docstitle
-    # ("kRPC X.Y.Z documentation"); the version switcher already exposes the
+    # ("kRPC vX.Y.Z documentation"); the version switcher already exposes the
     # version, so keep it out of the header.
     'logo': {'text': 'kRPC Documentation'},
     # Runtime version switcher. Each version's HTML is built once and frozen, so

@@ -18,7 +18,7 @@ def main():
         "-v",
         "--version",
         action="version",
-        version="%s version %s" % (prog, __version__),
+        version="%s version v%s" % (prog, __version__),
     )
     parser.add_argument("ksp", help="Path to Kerbal Space Program directory")
     parser.add_argument("service", help="Name of service")

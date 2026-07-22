@@ -1,10 +1,10 @@
-## [0.6.0] - unreleased
+## [v0.6.0] - unreleased
 - Fix locale issues with `UI.Message` (#993)
 
-## [0.3.5]
+## [v0.3.5]
 - Add `Canvas` class (#281)
 - Add `UI.StockCanvas` to get the stock KSP UI canvas and `UI.AddCanvas` to create additional canvases
 - Move `UI.AddPanel` and `UI.RectTransform` to `Canvas` class
 
-## [0.3.4]
+## [v0.3.4]
 - Initial version
