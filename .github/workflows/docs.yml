@@ -5,6 +5,10 @@ name: docs
 # only its own subdirectory, so every other version is left untouched:
 #   * a push to `main`   refreshes  gh-pages/dev/       (overwritten each time)
 #   * a push of a `v*` tag freezes  gh-pages/<version>/ (write-once)
+# gen_docs_index.py additionally mirrors the newest release into gh-pages/latest/
+# so `/latest/` always resolves to the current stable docs; it recomputes the
+# newest release from what is on disk, so releasing an older patch does not move
+# `/latest/` off the actual newest version.
 
 on:
   push:

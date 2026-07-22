@@ -31,9 +31,9 @@ Usage:
 
 Options:
   --publish DIR     stage the built site into gh-pages checkout DIR: replace
-                    DIR/<version>/, regenerate the switcher and root redirect,
-                    and commit. The commit is left for review; push it yourself
-                    after checking the diff.
+                    DIR/<version>/, regenerate the switcher, root redirect and
+                    the latest/ alias, and commit. The commit is left for review;
+                    push it yourself after checking the diff.
   --output FILE     without --publish, copy the built html.zip here
                     (default: krpc-doc-<version>.zip in the repo root).
   --worktree DIR    build worktree location
@@ -353,7 +353,11 @@ def check_no_changelog(zip_path):
 
 def publish(zip_path, publish_dir, version):
     """Replace this version's subdirectory in the gh-pages checkout, regenerate
-    the switcher and root redirect, and commit for review."""
+    the switcher, root redirect and latest/ alias, and commit for review.
+
+    gen_docs_index.py mirrors the newest release on disk into latest/, so
+    publishing this version refreshes latest/ only when it is (or becomes) the
+    newest release; republishing an older version leaves latest/ untouched."""
     target = publish_dir / version
     shutil.rmtree(target, ignore_errors=True)
     target.mkdir(parents=True)
