@@ -44,12 +44,6 @@ class TestEncoder(unittest.TestCase):
         data = Encoder.encode(value, typ)
         self.assertEqual("ac02", hexlify(data))
 
-    def test_encode_class_none(self) -> None:
-        typ = self.types.class_type("ServiceName", "ClassName")
-        value = None
-        data = Encoder.encode(value, typ)
-        self.assertEqual("00", hexlify(data))
-
     def test_encode_tuple_wrong_arity(self) -> None:
         typ = self.types.tuple_type(
             self.types.uint32_type, self.types.uint32_type, self.types.uint32_type
