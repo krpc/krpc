@@ -74,8 +74,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 ThrustPosition (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (WorldTransform.position).ToTuple ();
         }
 
@@ -90,8 +88,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 ThrustDirection (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (WorldThrustDirection).ToTuple ();
         }
 
@@ -109,8 +105,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 InitialThrustPosition (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             StashGimbalRotation ();
             var position = WorldTransform.position;
             RestoreGimbalRotation ();
@@ -128,8 +122,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 InitialThrustDirection (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             StashGimbalRotation ();
             var direction = WorldThrustDirection;
             RestoreGimbalRotation ();
@@ -181,8 +173,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 GimbalPosition (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             CheckGimballed ();
             return referenceFrame.PositionFromWorldSpace (gimbal.gimbalTransforms [transformIndex].position).ToTuple ();
         }

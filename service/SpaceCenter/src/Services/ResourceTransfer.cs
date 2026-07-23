@@ -48,10 +48,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static ResourceTransfer Start (Parts.Part fromPart, Parts.Part toPart, string resource, float maxAmount)
         {
-            if (ReferenceEquals (fromPart, null))
-                throw new ArgumentNullException (nameof (fromPart));
-            if (ReferenceEquals (toPart, null))
-                throw new ArgumentNullException (nameof (toPart));
             // Get the internal part objects
             var internalFromPart = fromPart.InternalPart;
             var internalToPart = toPart.InternalPart;

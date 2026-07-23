@@ -122,8 +122,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool HasPart(Part part)
         {
-            if (ReferenceEquals (part, null))
-                throw new ArgumentNullException (nameof (part));
             return controller.HasPart(part.InternalPart);
         }
 
@@ -151,8 +149,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool AddAxis(Module module, string fieldName)
         {
-            if (module == null)
-                throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
             var axisField = internalModule.Fields[fieldName] as BaseAxisField;
@@ -174,8 +170,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool AddKeyFrame(Module module, string fieldName, float time, float value)
         {
-            if (module == null)
-                throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 
@@ -206,8 +200,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool ClearAxis(Module module, string fieldName)
         {
-            if (module == null)
-                throw new ArgumentNullException (nameof (module));
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 

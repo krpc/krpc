@@ -70,8 +70,6 @@ namespace KRPC.SpaceCenter.Services.Parts
                 return new Part (vessel.GetReferenceTransformPart () ?? vessel.rootPart);
             }
             set {
-                if (ReferenceEquals (value, null))
-                    throw new ArgumentNullException ("Controlling");
                 var part = value.InternalPart;
                 if (part.HasModule <ModuleCommand> ()) {
                     part.Module<ModuleCommand> ().MakeReference ();

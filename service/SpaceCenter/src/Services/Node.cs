@@ -181,7 +181,7 @@ namespace KRPC.SpaceCenter.Services
         /// Does not change when executing the maneuver node. See <see cref="RemainingBurnVector"/>.
         /// </remarks>
         [KRPCMethod]
-        public Tuple3 BurnVector ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 BurnVector (ReferenceFrame referenceFrame = null)
         {
             if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
@@ -200,7 +200,7 @@ namespace KRPC.SpaceCenter.Services
         /// Changes as the maneuver node is executed. See <see cref="BurnVector"/>.
         /// </remarks>
         [KRPCMethod]
-        public Tuple3 RemainingBurnVector ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 RemainingBurnVector (ReferenceFrame referenceFrame = null)
         {
             if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
@@ -295,8 +295,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (SafeNode.patch.getPositionAtUT (SafeNode.UT)).ToTuple ();
         }
 
@@ -309,8 +307,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (this.ReferenceFrame.Rotation).ToTuple ();
         }
 
@@ -323,8 +319,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (WorldBurnVector.normalized).ToTuple ();
         }
     }

@@ -62,8 +62,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Waypoint AddWaypoint (double latitude, double longitude, CelestialBody body, string name)
         {
-            if (body == null)
-                throw new ArgumentNullException (nameof (body));
             return new Waypoint (latitude, longitude, body.SurfaceHeight (latitude, longitude), body, name);
         }
 
@@ -80,8 +78,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Waypoint AddWaypointAtAltitude (double latitude, double longitude, double altitude, CelestialBody body, string name)
         {
-            if (body == null)
-                throw new ArgumentNullException (nameof (body));
             return new Waypoint (latitude, longitude, altitude, body, name);
         }
 
