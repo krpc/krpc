@@ -474,15 +474,10 @@ jobs:
       - name: setup
         uses: ./.github/actions/build-setup
       - name: build
-        run: bazel build //client/csharp:csharp //client/csharp:nuget
+        run: bazel build //client/csharp
       - name: test
         run: bazel test //client/csharp:test
-      - name: upload-artifact-zip
-        uses: ./.github/actions/upload-artifact
-        with:
-          name: client-csharp-zip
-          path: bazel-bin/client/csharp/krpc-csharp-*.zip
-      - name: upload-artifact-nupkg
+      - name: upload-artifact
         uses: ./.github/actions/upload-artifact
         with:
           name: client-csharp-nupkg
