@@ -90,6 +90,10 @@ def _gamedata_check_enabled():
     return os.environ.get("KRPC_SKIP_GAMEDATA_CHECK", "0") != "1"
 
 
+def _skip_mod_install_enabled():
+    return os.environ.get("KRPC_SKIP_MOD_INSTALL", "0") == "1"
+
+
 def copy_blank_save(name, ksp_dir=None):
     """Copy the bundled blank save into the KSP install's saves/<name>/persistent.sfs."""
     blank_save = str(files("krpctest").joinpath(name + ".sfs"))
@@ -153,7 +157,11 @@ def _install_mods(required):
         "building and installing kRPC (mods: %s)",
         ", ".join(sorted(required)) or "none",
     )
-    install(mods=sorted(required), validate_gamedata=_gamedata_check_enabled())
+    install(
+        mods=sorted(required),
+        validate_gamedata=_gamedata_check_enabled(),
+        skip_mod_install=_skip_mod_install_enabled(),
+    )
 
 
 def _launch_ksp(required):
