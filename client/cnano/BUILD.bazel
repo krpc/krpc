@@ -1,6 +1,7 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
+load("//tools/build:cog.bzl", "cog_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/build/protobuf:nanopb.bzl", "protobuf_nanopb")
@@ -153,7 +154,21 @@ test_suite(
     tests = [
         ":arduino",
         ":client",
+        ":cog",
         ":lint",
+    ],
+)
+
+# The encoder and decoder sources contain cog generator blocks whose expansion is
+# committed to the tree; this checks it was regenerated after any edit to them.
+cog_test(
+    name = "cog",
+    size = "small",
+    srcs = [
+        "include/krpc_cnano/decoder.h",
+        "include/krpc_cnano/encoder.h",
+        "src/decoder.c",
+        "src/encoder.c",
     ],
 )
 

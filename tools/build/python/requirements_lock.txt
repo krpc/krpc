@@ -240,6 +240,10 @@ click==8.4.2 \
     # via
     #   black
     #   uvicorn
+cogapp==3.6.0 \
+    --hash=sha256:6ea11c63221f92978d37d8d76208eadeae2a6e4641d323f165738a5464a19d32 \
+    --hash=sha256:ec2a9170bfa644bf0d91996fdb5576c13d7e5e848bb2378a6f92727b48f92604
+    # via -r tools/build/python/requirements.in
 colorama==0.4.6 \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
