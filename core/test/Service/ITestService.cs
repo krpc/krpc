@@ -23,6 +23,8 @@ namespace KRPC.Test.Service
 
         string PropertyWithSet { set; }
 
+        string NullableProperty { get; set; }
+
         TestService.TestClass CreateTestObject (string value);
 
         void DeleteTestObject (TestService.TestClass obj);
@@ -30,6 +32,14 @@ namespace KRPC.Test.Service
         TestService.TestClass EchoTestObject (TestService.TestClass obj);
 
         TestService.TestClass ReturnNullWhenNotAllowed ();
+
+        string EchoNullableString (string x);
+
+        int? EchoNullableInt (int? x);
+
+        TestService.TestEnum? EchoNullableEnum (TestService.TestEnum? x);
+
+        IList<string> EchoNullableList (IList<string> l);
 
         void ProcedureSingleOptionalArgNoReturn (string x);
 

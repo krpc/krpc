@@ -31,7 +31,7 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (53, service.Procedures.Count);
+            Assert.AreEqual (61, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
@@ -146,6 +146,17 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "get_NullableProperty") {
+                    MessageAssert.HasNoParameters (proc);
+                    MessageAssert.HasReturnType (proc, typeof(string), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "set_NullableProperty") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(string), "value");
+                    MessageAssert.HasNoReturnType (proc);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "CreateTestObject") {
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameter (proc, 0, typeof(string), "value");
@@ -160,8 +171,32 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "EchoTestObject") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "obj");
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(TestService.TestClass), "obj");
                     MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNullableString") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(string), "x");
+                    MessageAssert.HasReturnType (proc, typeof(string), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNullableInt") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(int), "x");
+                    MessageAssert.HasReturnType (proc, typeof(int), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNullableEnum") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(TestService.TestEnum), "x");
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestEnum), true);
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNullableList") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(IList<string>), "l");
+                    MessageAssert.HasReturnType (proc, typeof(IList<string>), true);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ReturnNullWhenNotAllowed") {
@@ -181,6 +216,13 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
                     MessageAssert.HasParameter (proc, 1, typeof(TestService.TestClass), "other");
                     MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_EchoNullableObject") {
+                    MessageAssert.HasParameters (proc, 2);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
+                    MessageAssert.HasNullableParameter (proc, 1, typeof(TestService.TestClass), "other");
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestClass), true);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestClass_IntToString") {
@@ -212,7 +254,7 @@ namespace KRPC.Test.Service
                 } else if (proc.Name == "TestClass_set_ObjectProperty") {
                     MessageAssert.HasParameters (proc, 2);
                     MessageAssert.HasParameter (proc, 0, typeof(TestService.TestClass), "this");
-                    MessageAssert.HasParameter (proc, 1, typeof(TestService.TestClass), "value");
+                    MessageAssert.HasNullableParameter (proc, 1, typeof(TestService.TestClass), "value");
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
                     MessageAssert.HasNoDocumentation (proc);
@@ -220,6 +262,12 @@ namespace KRPC.Test.Service
                     MessageAssert.HasParameters (proc, 1);
                     MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(string), "a", string.Empty);
                     MessageAssert.HasReturnType (proc, typeof(string));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "TestClass_static_StaticNullableMethod") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasNullableParameter (proc, 0, typeof(string), "x");
+                    MessageAssert.HasReturnType (proc, typeof(string), true);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight | global::KRPC.Service.GameScene.SpaceCenter);
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "TestClass_MethodAvailableInInheritedGameScene") {
@@ -282,7 +330,7 @@ namespace KRPC.Test.Service
                     MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ProcedureOptionalNullArg") {
                     MessageAssert.HasParameters (proc, 1);
-                    MessageAssert.HasParameterWithDefaultValue (proc, 0, typeof(TestService.TestClass), "x", null);
+                    MessageAssert.HasNullableParameterWithDefaultValue (proc, 0, typeof(TestService.TestClass), "x", null);
                     MessageAssert.HasNoReturnType (proc);
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
@@ -396,8 +444,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (53, foundProcedures);
-            Assert.AreEqual (53, service.Procedures.Count);
+            Assert.AreEqual (61, foundProcedures);
+            Assert.AreEqual (61, service.Procedures.Count);
         }
 
         [Test]

@@ -138,15 +138,21 @@ namespace KRPC.Service.Scanner
             TypeUtils.ValidateKRPCProperty (property);
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
+            var nullable = TypeUtils.GetNullable (property);
             if (getter != null)
-                AddPropertyProcedure (property, getter);
+                AddPropertyProcedure (property, getter, nullable, false);
             if (setter != null)
-                AddPropertyProcedure (property, setter);
+                AddPropertyProcedure (property, setter, nullable, true);
         }
 
-        void AddPropertyProcedure (PropertyInfo property, MethodInfo method)
+        void AddPropertyProcedure (PropertyInfo property, MethodInfo method, bool nullable, bool isSetter)
         {
-            var handler = new ProcedureHandler (method, TypeUtils.GetNullable (property));
+            // For a getter the nullable flag makes the return value nullable; for a setter it makes
+            // the synthesized value parameter nullable, since that parameter cannot itself carry
+            // the [KRPCNullable] attribute.
+            var handler = new ProcedureHandler (method, isSetter ? false : nullable);
+            if (isSetter && nullable)
+                handler.SetValueParameterNullable ();
             string deprecatedReason;
             var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);
             AddProcedure (new ProcedureSignature (
@@ -249,15 +255,21 @@ namespace KRPC.Service.Scanner
                 throw new ArgumentException ("Class " + cls + " does not exist");
             var getter = property.GetGetMethod ();
             var setter = property.GetSetMethod ();
+            var nullable = TypeUtils.GetNullable (property);
             if (getter != null)
-                AddClassPropertyMethod (cls, classType, property, getter, TypeUtils.GetNullable (property));
+                AddClassPropertyMethod (cls, classType, property, getter, nullable, false);
             if (setter != null)
-                AddClassPropertyMethod (cls, classType, property, setter, false);
+                AddClassPropertyMethod (cls, classType, property, setter, nullable, true);
         }
 
-        void AddClassPropertyMethod (string cls, Type classType, PropertyInfo property, MethodInfo method, bool nullable)
+        void AddClassPropertyMethod (string cls, Type classType, PropertyInfo property, MethodInfo method, bool nullable, bool isSetter)
         {
-            var handler = new ClassMethodHandler (classType, method, nullable);
+            // For a getter the nullable flag makes the return value nullable; for a setter it makes
+            // the synthesized value parameter nullable, since that parameter cannot itself carry
+            // the [KRPCNullable] attribute.
+            var handler = new ClassMethodHandler (classType, method, isSetter ? false : nullable);
+            if (isSetter && nullable)
+                handler.SetValueParameterNullable ();
             var classGameScene = TypeUtils.GetClassGameScene(classType, gameScene);
             string deprecatedReason;
             var deprecated = TypeUtils.GetPropertyDeprecated (property, method, out deprecatedReason);

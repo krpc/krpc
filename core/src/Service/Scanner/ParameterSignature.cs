@@ -59,8 +59,12 @@ namespace KRPC.Service.Scanner
         {
             info.AddValue ("name", Name);
             info.AddValue ("type", TypeUtils.SerializeType (Type));
-            if (HasDefaultValue)
-                info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
+            if (HasDefaultValue) {
+                if (DefaultValue == null)
+                    info.AddValue ("default_value", (object)null);
+                else
+                    info.AddValue ("default_value", Server.ProtocolBuffers.Encoder.Encode (DefaultValue).ToByteArray ());
+            }
             if (Nullable) {
                 info.AddValue ("nullable", Nullable);
             }

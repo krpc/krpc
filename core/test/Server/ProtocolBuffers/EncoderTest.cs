@@ -51,10 +51,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
-        public void EncodeClassNone ()
+        public void EncodeNull ()
         {
-            var data = Encoder.Encode (null);
-            Assert.AreEqual ("00", data.ToHexString ());
+            Assert.Throws<ArgumentNullException> (() => Encoder.Encode (null));
         }
 
         [Test]

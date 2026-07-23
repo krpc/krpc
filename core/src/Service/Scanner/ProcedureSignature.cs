@@ -118,11 +118,18 @@ namespace KRPC.Service.Scanner
             var returnType = handler.ReturnType;
             HasReturnType = (returnType != typeof(void));
             if (HasReturnType) {
+                ReturnIsNullable = handler.ReturnIsNullable;
+                // A Nullable<T> value-type return is represented by its underlying type T, and is
+                // implicitly nullable.
+                var underlyingType = System.Nullable.GetUnderlyingType (returnType);
+                if (underlyingType != null) {
+                    returnType = underlyingType;
+                    ReturnIsNullable = true;
+                }
                 ReturnType = returnType;
                 // Check it's a valid return type
                 if (!TypeUtils.IsAValidType (returnType))
                     throw new ServiceException (returnType + " is not a valid Procedure return type, " + "in " + FullyQualifiedName);
-                ReturnIsNullable = handler.ReturnIsNullable;
             }
 
             var parts = procedureName.Split (new char[]{'_'});

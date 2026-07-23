@@ -74,6 +74,12 @@ namespace KRPC.Test.Service
             set { Service.PropertyWithSet = value; }
         }
 
+        [KRPCProperty (Nullable = true)]
+        public static string NullableProperty {
+            get { return Service.NullableProperty; }
+            set { Service.NullableProperty = value; }
+        }
+
         [KRPCProcedure]
         public static TestClass CreateTestObject (string value)
         {
@@ -87,7 +93,7 @@ namespace KRPC.Test.Service
         }
 
         [KRPCProcedure (Nullable = true)]
-        public static TestClass EchoTestObject (TestClass obj)
+        public static TestClass EchoTestObject ([KRPCNullable] TestClass obj)
         {
             return Service.EchoTestObject (obj);
         }
@@ -96,6 +102,30 @@ namespace KRPC.Test.Service
         public static TestClass ReturnNullWhenNotAllowed ()
         {
             return Service.ReturnNullWhenNotAllowed ();
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static string EchoNullableString ([KRPCNullable] string x)
+        {
+            return Service.EchoNullableString (x);
+        }
+
+        [KRPCProcedure]
+        public static int? EchoNullableInt (int? x)
+        {
+            return Service.EchoNullableInt (x);
+        }
+
+        [KRPCProcedure]
+        public static TestEnum? EchoNullableEnum (TestEnum? x)
+        {
+            return Service.EchoNullableEnum (x);
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static IList<string> EchoNullableList ([KRPCNullable] IList<string> l)
+        {
+            return Service.EchoNullableList (l);
         }
 
         [KRPCClass (GameScene = GameScene.Flight | GameScene.SpaceCenter)]
@@ -120,6 +150,12 @@ namespace KRPC.Test.Service
                 return Value + other.Value;
             }
 
+            [KRPCMethod (Nullable = true)]
+            public TestClass EchoNullableObject ([KRPCNullable] TestClass other)
+            {
+                return other;
+            }
+
             [KRPCMethod]
             public string IntToString (int x = 42)
             {
@@ -136,6 +172,12 @@ namespace KRPC.Test.Service
             public static string StaticMethod (string a = "")
             {
                 return "jeb" + a;
+            }
+
+            [KRPCMethod (Nullable = true)]
+            public static string StaticNullableMethod ([KRPCNullable] string x)
+            {
+                return x;
             }
 
             [KRPCMethod]
