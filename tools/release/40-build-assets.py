@@ -22,7 +22,7 @@ def assets():
         'bazel-bin/krpc-{version}.zip',
         'bazel-bin/client/cnano/krpc-cnano-{version}.zip',
         'bazel-bin/client/cpp/krpc-cpp-{version}.zip',
-        'bazel-bin/client/csharp/krpc-csharp-{version}.zip',
+        'bazel-bin/client/csharp/KRPC.Client.{version}.nupkg',
         'bazel-bin/client/java/krpc-java-{version}.jar',
         'bazel-bin/client/lua/krpc-lua-{version}.zip',
         'bazel-bin/client/python/krpc-python-{version}.tar.gz',

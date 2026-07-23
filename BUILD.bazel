@@ -263,7 +263,7 @@ filegroup(
     name = "csproj",
     testonly = True,
     srcs = [
-        "//client/csharp",
+        "//client/csharp:KRPC.Client",
         "//client/csharp:test-KRPC.Client",
         "//core",
         "//core:test-KRPC.Core",
