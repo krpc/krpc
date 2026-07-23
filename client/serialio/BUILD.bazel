@@ -6,7 +6,6 @@ py_sdist(
     name = "krpcserialio",
     out = "krpcserialio-%s.tar.gz" % version,
     files = [
-        "README.txt",
         "pyproject.toml",
         "//:python_version",
         "//:version",
