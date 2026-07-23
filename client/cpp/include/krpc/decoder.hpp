@@ -45,17 +45,8 @@ void decode(google::protobuf::MessageLite& message, const std::string& data,
 template <typename T>
 void decode(Object<T>& object, const std::string& data, Client* client = nullptr);
 
-template <typename T0>
-void decode(std::tuple<T0>& tuple, const std::string& data, Client* client = nullptr);
-template <typename T0, typename T1>
-void decode(std::tuple<T0, T1>& tuple, const std::string& data, Client* client = nullptr);
-template <typename T0, typename T1, typename T2>
-void decode(std::tuple<T0, T1, T2>& tuple, const std::string& data, Client* client = nullptr);
-template <typename T0, typename T1, typename T2, typename T3>
-void decode(std::tuple<T0, T1, T2, T3>& tuple, const std::string& data, Client* client = nullptr);
-template <typename T0, typename T1, typename T2, typename T3, typename T4>
-void decode(std::tuple<T0, T1, T2, T3, T4>& tuple, const std::string& data,
-            Client* client = nullptr);
+template <typename... Ts>
+void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* client = nullptr);
 
 template <typename T>
 void decode(std::vector<T>& list, const std::string& data, Client* client = nullptr);
@@ -74,49 +65,12 @@ inline void decode(Object<T>& object, const std::string& data, Client* client) {
   object._id = id;
 }
 
-template <typename T0>
-inline void decode(std::tuple<T0>& tuple, const std::string& data, Client* client) {
+template <typename... Ts>
+inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* client) {
   krpc::schema::Tuple tupleMessage;
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  decode(std::get<0>(tuple), tupleMessage.items(0), client);
-}
-
-template <typename T0, typename T1>
-inline void decode(std::tuple<T0, T1>& tuple, const std::string& data, Client* client) {
-  krpc::schema::Tuple tupleMessage;
-  if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  decode(std::get<0>(tuple), tupleMessage.items(0), client);
-  decode(std::get<1>(tuple), tupleMessage.items(1), client);
-}
-
-template <typename T0, typename T1, typename T2>
-inline void decode(std::tuple<T0, T1, T2>& tuple, const std::string& data, Client* client) {
-  krpc::schema::Tuple tupleMessage;
-  if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  decode(std::get<0>(tuple), tupleMessage.items(0), client);
-  decode(std::get<1>(tuple), tupleMessage.items(1), client);
-  decode(std::get<2>(tuple), tupleMessage.items(2), client);
-}
-
-template <typename T0, typename T1, typename T2, typename T3>
-inline void decode(std::tuple<T0, T1, T2, T3>& tuple, const std::string& data, Client* client) {
-  krpc::schema::Tuple tupleMessage;
-  if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  decode(std::get<0>(tuple), tupleMessage.items(0), client);
-  decode(std::get<1>(tuple), tupleMessage.items(1), client);
-  decode(std::get<2>(tuple), tupleMessage.items(2), client);
-  decode(std::get<3>(tuple), tupleMessage.items(3), client);
-}
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4>
-inline void decode(std::tuple<T0, T1, T2, T3, T4>& tuple, const std::string& data, Client* client) {
-  krpc::schema::Tuple tupleMessage;
-  if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
-  decode(std::get<0>(tuple), tupleMessage.items(0), client);
-  decode(std::get<1>(tuple), tupleMessage.items(1), client);
-  decode(std::get<2>(tuple), tupleMessage.items(2), client);
-  decode(std::get<3>(tuple), tupleMessage.items(3), client);
-  decode(std::get<4>(tuple), tupleMessage.items(4), client);
+  int index = 0;
+  std::apply([&](Ts&... args) { (decode(args, tupleMessage.items(index++), client), ...); }, tuple);
 }
 
 template <typename T>
