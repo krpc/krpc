@@ -140,12 +140,52 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_nullable_int(value)
+
+
+
+   :param number value:
+   :rtype: number
+
+
+
+
+.. staticmethod:: echo_nullable_list(l)
+
+
+
+   :param List l:
+   :rtype: List
+
+
+
+
+.. staticmethod:: echo_nullable_string(value)
+
+
+
+   :param string value:
+   :rtype: string
+
+
+
+
 .. staticmethod:: echo_test_object(value)
 
 
 
    :param TestService.TestClass value:
    :rtype: :class:`TestService.TestClass`
+
+
+
+
+.. staticmethod:: empty_list_default([x = []])
+
+
+
+   :param List x:
+   :rtype: List
 
 
 
@@ -269,6 +309,26 @@ Service documentation string.
 
 
 
+.. staticmethod:: not_nullable_object(value)
+
+
+
+   :param TestService.TestClass value:
+   :rtype: :class:`TestService.TestClass`
+
+
+
+
+.. attribute:: nullable_object: TestService.TestClass
+
+
+
+   :Attribute: Can be read or written
+   :rtype: :class:`TestService.TestClass`
+
+
+
+
 .. attribute:: object_property: TestService.TestClass
 
 
@@ -300,7 +360,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
+.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
 
 
 
@@ -468,6 +528,13 @@ Service documentation string.
 
    Class documentation string.
 
+   .. method:: echo_nullable_object(value)
+
+
+
+      :param TestService.TestClass value:
+      :rtype: :class:`TestService.TestClass`
+
    .. method:: float_to_string(x)
 
 
@@ -502,7 +569,7 @@ Service documentation string.
       :param TestService.TestClass other:
       :rtype: string
 
-   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
+   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
 
 
 
@@ -519,6 +586,13 @@ Service documentation string.
       :param string a:
       :param string b:
       :rtype: string
+
+   .. staticmethod:: static_nullable_object(value)
+
+
+
+      :param TestService.TestClass value:
+      :rtype: :class:`TestService.TestClass`
 
    .. attribute:: string_property_private_get: string
 

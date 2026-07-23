@@ -108,7 +108,15 @@ class TestService : public Service {
 
   std::string double_to_string(double value);
 
+  int32_t echo_nullable_int(int32_t value);
+
+  std::vector<int32_t> echo_nullable_list(std::vector<int32_t> l);
+
+  std::string echo_nullable_string(std::string value);
+
   TestService::TestClass echo_test_object(TestService::TestClass value);
+
+  std::vector<std::string> empty_list_default(std::vector<std::string> x);
 
   TestService::TestEnum enum_default_arg(TestService::TestEnum x);
 
@@ -136,6 +144,8 @@ class TestService : public Service {
   std::string int64_to_string(int64_t value);
 
   std::vector<int32_t> list_default(std::vector<int32_t> x);
+
+  TestService::TestClass not_nullable_object(TestService::TestClass value);
 
   ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats);
 
@@ -185,6 +195,10 @@ class TestService : public Service {
   [[deprecated("Use string_property instead.")]]
   void set_deprecated_property(std::string value);
 
+  TestService::TestClass nullable_object();
+
+  void set_nullable_object(TestService::TestClass value);
+
   TestService::TestClass object_property();
 
   void set_object_property(TestService::TestClass value);
@@ -225,7 +239,15 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> double_to_string_stream(double value);
 
+  ::krpc::Stream<int32_t> echo_nullable_int_stream(int32_t value);
+
+  ::krpc::Stream<std::vector<int32_t>> echo_nullable_list_stream(std::vector<int32_t> l);
+
+  ::krpc::Stream<std::string> echo_nullable_string_stream(std::string value);
+
   ::krpc::Stream<TestService::TestClass> echo_test_object_stream(TestService::TestClass value);
+
+  ::krpc::Stream<std::vector<std::string>> empty_list_default_stream(std::vector<std::string> x);
 
   ::krpc::Stream<TestService::TestEnum> enum_default_arg_stream(TestService::TestEnum x);
 
@@ -250,6 +272,8 @@ class TestService : public Service {
   ::krpc::Stream<std::string> int64_to_string_stream(int64_t value);
 
   ::krpc::Stream<std::vector<int32_t>> list_default_stream(std::vector<int32_t> x);
+
+  ::krpc::Stream<TestService::TestClass> not_nullable_object_stream(TestService::TestClass value);
 
   ::krpc::Stream<::krpc::Event> on_timer_stream(uint32_t milliseconds, uint32_t repeats);
 
@@ -281,6 +305,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::string> deprecated_property_stream();
 
+  ::krpc::Stream<TestService::TestClass> nullable_object_stream();
+
   ::krpc::Stream<TestService::TestClass> object_property_stream();
 
   ::krpc::Stream<std::string> string_property_stream();
@@ -309,7 +335,15 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall double_to_string_call(double value);
 
+  ::krpc::schema::ProcedureCall echo_nullable_int_call(int32_t value);
+
+  ::krpc::schema::ProcedureCall echo_nullable_list_call(std::vector<int32_t> l);
+
+  ::krpc::schema::ProcedureCall echo_nullable_string_call(std::string value);
+
   ::krpc::schema::ProcedureCall echo_test_object_call(TestService::TestClass value);
+
+  ::krpc::schema::ProcedureCall empty_list_default_call(std::vector<std::string> x);
 
   ::krpc::schema::ProcedureCall enum_default_arg_call(TestService::TestEnum x);
 
@@ -334,6 +368,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall int64_to_string_call(int64_t value);
 
   ::krpc::schema::ProcedureCall list_default_call(std::vector<int32_t> x);
+
+  ::krpc::schema::ProcedureCall not_nullable_object_call(TestService::TestClass value);
 
   ::krpc::schema::ProcedureCall on_timer_call(uint32_t milliseconds, uint32_t repeats);
 
@@ -370,6 +406,10 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall deprecated_property_call();
 
   ::krpc::schema::ProcedureCall set_deprecated_property_call(std::string value);
+
+  ::krpc::schema::ProcedureCall nullable_object_call();
+
+  ::krpc::schema::ProcedureCall set_nullable_object_call(TestService::TestClass value);
 
   ::krpc::schema::ProcedureCall object_property_call();
 
@@ -412,6 +452,8 @@ class TestService : public Service {
    public:
     explicit TestClass(Client* client = nullptr, uint64_t id = 0);
 
+    TestService::TestClass echo_nullable_object(TestService::TestClass value);
+
     std::string float_to_string(float x);
 
     /**
@@ -424,6 +466,8 @@ class TestService : public Service {
     std::string optional_arguments(std::string x, std::string y, std::string z, TestService::TestClass obj);
 
     static std::string static_method(Client& client, std::string a, std::string b);
+
+    static TestService::TestClass static_nullable_object(Client& client, TestService::TestClass value);
 
     /**
      * Property documentation string.
@@ -443,6 +487,8 @@ class TestService : public Service {
 
     std::string string_property_private_set();
 
+    ::krpc::Stream<TestService::TestClass> echo_nullable_object_stream(TestService::TestClass value);
+
     ::krpc::Stream<std::string> float_to_string_stream(float x);
 
     ::krpc::Stream<std::string> get_value_stream();
@@ -453,11 +499,15 @@ class TestService : public Service {
 
     static ::krpc::Stream<std::string> static_method_stream(Client& client, std::string a, std::string b);
 
+    static ::krpc::Stream<TestService::TestClass> static_nullable_object_stream(Client& client, TestService::TestClass value);
+
     ::krpc::Stream<int32_t> int_property_stream();
 
     ::krpc::Stream<TestService::TestClass> object_property_stream();
 
     ::krpc::Stream<std::string> string_property_private_set_stream();
+
+    ::krpc::schema::ProcedureCall echo_nullable_object_call(TestService::TestClass value);
 
     ::krpc::schema::ProcedureCall float_to_string_call(float x);
 
@@ -468,6 +518,8 @@ class TestService : public Service {
     ::krpc::schema::ProcedureCall optional_arguments_call(std::string x, std::string y, std::string z, TestService::TestClass obj);
 
     static ::krpc::schema::ProcedureCall static_method_call(Client& client, std::string a, std::string b);
+
+    static ::krpc::schema::ProcedureCall static_nullable_object_call(Client& client, TestService::TestClass value);
 
     ::krpc::schema::ProcedureCall int_property_call();
 
@@ -650,11 +702,47 @@ inline std::string TestService::double_to_string(double value) {
   return _result;
 }
 
+inline int32_t TestService::echo_nullable_int(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "EchoNullableInt", _args);
+  int32_t _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::vector<int32_t> TestService::echo_nullable_list(std::vector<int32_t> l) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  std::string _data = this->_client->invoke("TestService", "EchoNullableList", _args);
+  std::vector<int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::string TestService::echo_nullable_string(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "EchoNullableString", _args);
+  std::string _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
 inline TestService::TestClass TestService::echo_test_object(TestService::TestClass value) {
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(value));
   std::string _data = this->_client->invoke("TestService", "EchoTestObject", _args);
   TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline std::vector<std::string> TestService::empty_list_default(std::vector<std::string> x = std::vector<std::string>{}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  std::string _data = this->_client->invoke("TestService", "EmptyListDefault", _args);
+  std::vector<std::string> _result;
   decoder::decode(_result, _data, this->_client);
   return _result;
 }
@@ -761,6 +849,15 @@ inline std::vector<int32_t> TestService::list_default(std::vector<int32_t> x = s
   _args.push_back(encoder::encode(x));
   std::string _data = this->_client->invoke("TestService", "ListDefault", _args);
   std::vector<int32_t> _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline TestService::TestClass TestService::not_nullable_object(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "NotNullableObject", _args);
+  TestService::TestClass _result;
   decoder::decode(_result, _data, this->_client);
   return _result;
 }
@@ -904,6 +1001,19 @@ inline void TestService::set_deprecated_property(std::string value) {
   this->_client->invoke("TestService", "set_DeprecatedProperty", _args);
 }
 
+inline TestService::TestClass TestService::nullable_object() {
+  std::string _data = this->_client->invoke("TestService", "get_NullableObject");
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
+
+inline void TestService::set_nullable_object(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  this->_client->invoke("TestService", "set_NullableObject", _args);
+}
+
 inline TestService::TestClass TestService::object_property() {
   std::string _data = this->_client->invoke("TestService", "get_ObjectProperty");
   TestService::TestClass _result;
@@ -1014,10 +1124,34 @@ inline ::krpc::Stream<std::string> TestService::double_to_string_stream(double v
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "DoubleToString", _args));
 }
 
+inline ::krpc::Stream<int32_t> TestService::echo_nullable_int_stream(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "EchoNullableInt", _args));
+}
+
+inline ::krpc::Stream<std::vector<int32_t>> TestService::echo_nullable_list_stream(std::vector<int32_t> l) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "EchoNullableList", _args));
+}
+
+inline ::krpc::Stream<std::string> TestService::echo_nullable_string_stream(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "EchoNullableString", _args));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::echo_test_object_stream(TestService::TestClass value) {
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(value));
   return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "EchoTestObject", _args));
+}
+
+inline ::krpc::Stream<std::vector<std::string>> TestService::empty_list_default_stream(std::vector<std::string> x = std::vector<std::string>{}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::vector<std::string>>(this->_client, this->_client->build_call("TestService", "EmptyListDefault", _args));
 }
 
 inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
@@ -1088,6 +1222,12 @@ inline ::krpc::Stream<std::vector<int32_t>> TestService::list_default_stream(std
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(x));
   return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "ListDefault", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::not_nullable_object_stream(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "NotNullableObject", _args));
 }
 
 inline ::krpc::Stream<::krpc::Event> TestService::on_timer_stream(uint32_t milliseconds, uint32_t repeats = 1) {
@@ -1168,6 +1308,10 @@ inline ::krpc::Stream<std::tuple<int32_t, bool>> TestService::tuple_default_stre
 
 inline ::krpc::Stream<std::string> TestService::deprecated_property_stream() {
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "get_DeprecatedProperty"));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::nullable_object_stream() {
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "get_NullableObject"));
 }
 
 inline ::krpc::Stream<TestService::TestClass> TestService::object_property_stream() {
@@ -1253,10 +1397,34 @@ inline ::krpc::schema::ProcedureCall TestService::double_to_string_call(double v
   return this->_client->build_call("TestService", "DoubleToString", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_int_call(int32_t value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "EchoNullableInt", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_list_call(std::vector<int32_t> l) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(l));
+  return this->_client->build_call("TestService", "EchoNullableList", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::echo_nullable_string_call(std::string value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "EchoNullableString", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::echo_test_object_call(TestService::TestClass value) {
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(value));
   return this->_client->build_call("TestService", "EchoTestObject", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::empty_list_default_call(std::vector<std::string> x = std::vector<std::string>{}) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "EmptyListDefault", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
@@ -1327,6 +1495,12 @@ inline ::krpc::schema::ProcedureCall TestService::list_default_call(std::vector<
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(x));
   return this->_client->build_call("TestService", "ListDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::not_nullable_object_call(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "NotNullableObject", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::on_timer_call(uint32_t milliseconds, uint32_t repeats = 1) {
@@ -1423,6 +1597,16 @@ inline ::krpc::schema::ProcedureCall TestService::set_deprecated_property_call(s
   return this->_client->build_call("TestService", "set_DeprecatedProperty", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::nullable_object_call() {
+  return this->_client->build_call("TestService", "get_NullableObject");
+}
+
+inline ::krpc::schema::ProcedureCall TestService::set_nullable_object_call(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "set_NullableObject", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::object_property_call() {
   return this->_client->build_call("TestService", "get_ObjectProperty");
 }
@@ -1479,6 +1663,16 @@ inline ::krpc::schema::ProcedureCall TestService::DeprecatedClass::deprecated_me
 
 inline TestService::TestClass::TestClass(Client* client, uint64_t id):
   Object(client, "TestService::TestClass", id) {}
+
+inline TestService::TestClass TestService::TestClass::echo_nullable_object(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  std::string _data = this->_client->invoke("TestService", "TestClass_EchoNullableObject", _args);
+  TestService::TestClass _result;
+  decoder::decode(_result, _data, this->_client);
+  return _result;
+}
 
 inline std::string TestService::TestClass::float_to_string(float x) {
   std::vector<std::string> _args;
@@ -1580,6 +1774,22 @@ inline std::string TestService::TestClass::static_method(Client& _client, std::s
   return _result;
 }
 
+inline TestService::TestClass TestService::TestClass::static_nullable_object(Client& _client, TestService::TestClass value) {
+    std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  std::string _data = _client.invoke("TestService", "TestClass_static_StaticNullableObject", _args);
+    TestService::TestClass _result;
+  decoder::decode(_result, _data, &_client);
+  return _result;
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::TestClass::echo_nullable_object_stream(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<TestService::TestClass>(this->_client, this->_client->build_call("TestService", "TestClass_EchoNullableObject", _args));
+}
+
 inline ::krpc::Stream<std::string> TestService::TestClass::float_to_string_stream(float x) {
   std::vector<std::string> _args;
   _args.push_back(encoder::encode(*this));
@@ -1633,6 +1843,19 @@ inline ::krpc::Stream<std::string> TestService::TestClass::static_method_stream(
   _args.push_back(encoder::encode(a));
   _args.push_back(encoder::encode(b));
   return ::krpc::Stream<std::string>(&_client, _client.build_call("TestService", "TestClass_static_StaticMethod", _args));
+}
+
+inline ::krpc::Stream<TestService::TestClass> TestService::TestClass::static_nullable_object_stream(Client& _client, TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return ::krpc::Stream<TestService::TestClass>(&_client, _client.build_call("TestService", "TestClass_static_StaticNullableObject", _args));
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::echo_nullable_object_call(TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(*this));
+  _args.push_back(encoder::encode(value));
+  return this->_client->build_call("TestService", "TestClass_EchoNullableObject", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::TestClass::float_to_string_call(float x) {
@@ -1709,6 +1932,12 @@ inline ::krpc::schema::ProcedureCall TestService::TestClass::static_method_call(
   _args.push_back(encoder::encode(a));
   _args.push_back(encoder::encode(b));
   return _client.build_call("TestService", "TestClass_static_StaticMethod", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::TestClass::static_nullable_object_call(Client& _client, TestService::TestClass value) {
+  std::vector<std::string> _args;
+  _args.push_back(encoder::encode(value));
+  return _client.build_call("TestService", "TestClass_static_StaticNullableObject", _args);
 }
 }  // namespace services
 

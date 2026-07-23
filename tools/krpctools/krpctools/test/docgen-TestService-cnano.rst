@@ -171,7 +171,59 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * result, int32_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * result, const krpc_list_int32_t * l)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * result, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_EmptyListDefault(krpc_connection_t connection, krpc_list_string_t * result, const krpc_list_string_t * x)
 
 
 
@@ -329,6 +381,29 @@ Service documentation string.
 
 
    :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_NotNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_NullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result)
+.. function:: void krpc_TestService_set_NullableObject(krpc_TestService_TestClass_t value)
 
 
 
@@ -568,6 +643,16 @@ Service documentation string.
 
    Class documentation string.
 
+   .. function:: krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: krpc_error_t krpc_TestService_TestClass_FloatToString(krpc_connection_t connection, char * * result, float x)
 
 
@@ -628,6 +713,16 @@ Service documentation string.
 
       :Parameters:
 
+
+
+
+   
+
+   .. function:: krpc_error_t krpc_TestService_TestClass_StaticNullableObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, krpc_TestService_TestClass_t value)
+
+
+
+      :Parameters:
 
 
 
