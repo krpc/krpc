@@ -17,6 +17,7 @@ highlighted label in front of the entry text.
 
 import argparse
 import re
+import sys
 from dataclasses import dataclass, field
 
 
@@ -256,4 +257,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
