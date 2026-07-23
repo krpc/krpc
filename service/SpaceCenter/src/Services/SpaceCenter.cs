@@ -599,10 +599,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure(GameScene = GameScene.Flight)]
         public static void TransferCrew(CrewMember crewMember, Parts.Part targetPart)
         {
-            if (crewMember == null)
-                throw new ArgumentNullException (nameof (crewMember));
-            if (targetPart == null)
-                throw new ArgumentNullException (nameof (targetPart));
             var internalCrewMember = crewMember.InternalCrewMember;
             var transfer = CrewTransfer.Create(internalCrewMember.seat.part, internalCrewMember, delegate {});
             transfer.crew = internalCrewMember;
@@ -1018,8 +1014,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static double RaycastDistance (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
             var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
             RaycastHit hitInfo;
@@ -1038,8 +1032,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure (Nullable = true, GameScene = GameScene.Flight)]
         public static Parts.Part RaycastPart (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
             var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
             RaycastHit hitInfo;

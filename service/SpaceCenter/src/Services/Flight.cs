@@ -682,8 +682,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 SimulateAerodynamicForceAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation)
         {
-            if (ReferenceEquals (body, null))
-                throw new ArgumentNullException (nameof (body));
             var vessel = InternalVessel;
             var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
             var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());
@@ -748,8 +746,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public TupleT3 SimulateAerodynamicWrenchAt(CelestialBody body, Tuple3 position, Tuple3 velocity, Tuple4 rotation, Tuple3 angularVelocity, double ut)
         {
-            if (ReferenceEquals (body, null))
-                throw new ArgumentNullException (nameof (body));
             var vessel = InternalVessel;
             var worldVelocity = referenceFrame.VelocityToWorldSpace(position.ToVector(), velocity.ToVector());
             var worldPosition = referenceFrame.PositionToWorldSpace(position.ToVector());

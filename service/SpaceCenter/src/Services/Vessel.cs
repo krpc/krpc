@@ -209,7 +209,7 @@ namespace KRPC.SpaceCenter.Services
         /// (<see cref="SurfaceReferenceFrame"/>).
         /// </param>
         [KRPCMethod (GameScene = GameScene.Flight)]
-        public Flight Flight ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Flight Flight (ReferenceFrame referenceFrame = null)
         {
             var vessel = InternalVessel;
             if (ReferenceEquals (referenceFrame, null))
@@ -1038,8 +1038,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalVessel.CoM).ToTuple ();
         }
 
@@ -1053,8 +1051,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var parts = InternalVessel.parts;
             var bounds = parts [0].GetBounds (referenceFrame);
             for (int i = 1; i < parts.Count; i++)
@@ -1072,8 +1068,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var vessel = InternalVessel;
             var worldCoM = vessel.CoM;
             var worldVelocity = vessel.GetOrbit ().GetVel ();
@@ -1089,8 +1083,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (InternalVessel.ReferenceTransform.rotation).ToTuple ();
         }
 
@@ -1103,8 +1095,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (InternalVessel.ReferenceTransform.up).ToTuple ();
         }
 
@@ -1119,8 +1109,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.AngularVelocityFromWorldSpace (InternalVessel.WorldAngularVelocity ()).ToTuple ();
         }
     }

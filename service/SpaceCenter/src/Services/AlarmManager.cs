@@ -113,8 +113,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Alarm AddVesselAlarm(double time, Vessel vessel, string title="Vessel Alarm", string description="")
         {
-            if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException (nameof (vessel));
             var alarm = AddRawAlarm(time, title, description);
             alarm.vesselId = vessel.InternalVessel.persistentId;
             AlarmClockScenario.AddAlarm(alarm);
@@ -132,8 +130,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Alarm AddApoapsisAlarm(Vessel vessel, double offset = 60, string title="Apoapsis Alarm", string description="")
         {
-            if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException (nameof (vessel));
             AlarmTypeApoapsis alarm = new AlarmTypeApoapsis
             {
                 title = title,
@@ -160,8 +156,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Alarm AddPeriapsisAlarm(Vessel vessel, double offset = 60, string title="Periapsis Alarm", string description = "")
         {
-            if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException (nameof (vessel));
             AlarmTypePeriapsis alarm = new AlarmTypePeriapsis
             {
                 title = title,
@@ -190,10 +184,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Alarm AddManeuverNodeAlarm(Vessel vessel, Node node, double offset = 60, bool addBurnTime = true, string title="Maneuver Node Alarm", string description="" )
         {
-            if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException (nameof (vessel));
-            if (ReferenceEquals (node, null))
-                throw new ArgumentNullException (nameof (node));
             AlarmTypeManeuver alarm = new AlarmTypeManeuver
             {
                 title = title,
@@ -223,8 +213,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Alarm AddSOIAlarm(Vessel vessel, double offset = 60, string title="SOI Change Alarm", string description="" )
         {
-            if (ReferenceEquals (vessel, null))
-                throw new ArgumentNullException (nameof (vessel));
             AlarmTypeSOI alarm = new AlarmTypeSOI
             {
                 title = title,
@@ -258,10 +246,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Alarm AddTransferWindowAlarm(Vessel vessel, CelestialBody target, string title="Transfer Window Alarm", string description="")
         {
-            if (ReferenceEquals(vessel, null))
-                throw new ArgumentNullException(nameof(vessel));
-            if (ReferenceEquals(target, null))
-                throw new ArgumentNullException(nameof(target));
             AlarmTypeTransferWindow alarm = new AlarmTypeTransferWindow
             {
                 title = title,

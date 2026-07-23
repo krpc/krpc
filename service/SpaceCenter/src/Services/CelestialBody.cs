@@ -251,8 +251,6 @@ namespace KRPC.SpaceCenter.Services
 
         Tuple3 PositionAt (double latitude, double longitude, double altitude, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var position = InternalBody.GetWorldSurfacePosition (latitude, longitude, altitude);
             return referenceFrame.PositionFromWorldSpace (position).ToTuple ();
         }
@@ -265,8 +263,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double LatitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals(referenceFrame, null))
-                throw new ArgumentNullException(nameof(referenceFrame));
             return InternalBody.GetLatitude(referenceFrame.PositionToWorldSpace(position.ToVector()));
         }
 
@@ -278,8 +274,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double LongitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals(referenceFrame, null))
-                throw new ArgumentNullException(nameof(referenceFrame));
             return InternalBody.GetLongitude(referenceFrame.PositionToWorldSpace(position.ToVector()));
         }
 
@@ -291,8 +285,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double AltitudeAtPosition (Tuple3 position, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals(referenceFrame, null))
-                throw new ArgumentNullException(nameof(referenceFrame));
             return InternalBody.GetAltitude(referenceFrame.PositionToWorldSpace(position.ToVector()));
         }
 
@@ -349,8 +341,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double AtmosphericDensityAtPosition(Tuple3 position, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals(referenceFrame, null))
-                throw new ArgumentNullException(nameof(referenceFrame));
             return StockAerodynamics.GetAtmosphericState(
                 referenceFrame.PositionToWorldSpace(position.ToVector()),
                 InternalBody, Planetarium.GetUniversalTime()).Density;
@@ -374,8 +364,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TemperatureAt (Tuple3 position, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return StockAerodynamics.GetTemperature(referenceFrame.PositionToWorldSpace(position.ToVector()), InternalBody);
         }
 
@@ -523,8 +511,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace (InternalBody.position).ToTuple ();
         }
 
@@ -538,8 +524,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.VelocityFromWorldSpace (InternalBody.position, InternalBody.GetWorldVelocity ()).ToTuple ();
         }
 
@@ -552,8 +536,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.RotationFromWorldSpace (ReferenceFrame.Object (InternalBody).Rotation).ToTuple ();
         }
 
@@ -567,8 +549,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (InternalBody.transform.up).ToTuple ();
         }
 
@@ -584,8 +564,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 AngularVelocity (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.AngularVelocityFromWorldSpace (InternalBody.angularVelocity).ToTuple ();
         }
     }

@@ -149,7 +149,7 @@ namespace KRPC.SpaceCenter.Services
         /// vector is in. Defaults to the orbital reference frame of the object the orbit
         /// belongs to.</param>
         [KRPCMethod]
-        public Tuple3 Position ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 Position (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
             return referenceFrame.PositionFromWorldSpace (WorldPosition (orbit)).ToTuple ();
@@ -163,7 +163,7 @@ namespace KRPC.SpaceCenter.Services
         /// vector is in. Defaults to the orbital reference frame of the object the orbit
         /// belongs to.</param>
         [KRPCMethod]
-        public Tuple3 TargetPosition ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 TargetPosition (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
             return referenceFrame.PositionFromWorldSpace (WorldPosition (target)).ToTuple ();
@@ -177,7 +177,7 @@ namespace KRPC.SpaceCenter.Services
         /// vector is in. Defaults to the orbital reference frame of the object the orbit
         /// belongs to.</param>
         [KRPCMethod]
-        public Tuple3 Velocity ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 Velocity (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
             return referenceFrame.VelocityFromWorldSpace (WorldPosition (orbit), WorldVelocity (orbit)).ToTuple ();
@@ -191,7 +191,7 @@ namespace KRPC.SpaceCenter.Services
         /// vector is in. Defaults to the orbital reference frame of the object the orbit
         /// belongs to.</param>
         [KRPCMethod]
-        public Tuple3 TargetVelocity ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 TargetVelocity (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
             return referenceFrame.VelocityFromWorldSpace (WorldPosition (target), WorldVelocity (target)).ToTuple ();
@@ -206,7 +206,7 @@ namespace KRPC.SpaceCenter.Services
         /// vector is expressed in. Defaults to the orbital reference frame of the object
         /// the orbit belongs to.</param>
         [KRPCMethod]
-        public Tuple3 RelativePosition ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 RelativePosition (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
             return referenceFrame.DirectionFromWorldSpace (WorldPosition (target) - WorldPosition (orbit)).ToTuple ();
@@ -221,7 +221,7 @@ namespace KRPC.SpaceCenter.Services
         /// vector is expressed in. Defaults to the orbital reference frame of the object
         /// the orbit belongs to.</param>
         [KRPCMethod]
-        public Tuple3 RelativeVelocity ([KRPCNullable] ReferenceFrame referenceFrame = null)
+        public Tuple3 RelativeVelocity (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
             return referenceFrame.DirectionFromWorldSpace (WorldVelocity (target) - WorldVelocity (orbit)).ToTuple ();
