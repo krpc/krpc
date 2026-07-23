@@ -150,7 +150,8 @@ to add functionality to the kRPC server.
    * Parameters can have default arguments.
 
    If the procedure might return a null value, the ``Nullable`` parameter of the attribute must be
-   set to true.
+   set to true. A parameter that may be ``null`` must likewise be made nullable. See
+   :ref:`service-api-null-values`.
 
    **Example**
 
@@ -263,7 +264,8 @@ to add functionality to the kRPC server.
    * Parameters can have default arguments.
 
    If the method might return a null value, the ``Nullable`` parameter of the attribute must be set
-   to true.
+   to true. A parameter that may be ``null`` must likewise be made nullable. See
+   :ref:`service-api-null-values`.
 
    **Example**
 
@@ -284,7 +286,8 @@ to add functionality to the kRPC server.
 
    :parameters:
 
-    * **Nullable** -- Whether the return value of the procedure can be null. Defaults to false.
+    * **Nullable** -- Whether the property can be null. This makes both the getter's return value
+      and the setter's argument nullable. Defaults to false.
 
     * **GameScene** -- The game scenes in which the property is available. Defaults to inherit this
       setting from the class the property is defined in.
@@ -311,8 +314,9 @@ to add functionality to the kRPC server.
 
       * Must be declared inside a :csharp:attr:`KRPCClass`.
 
-   If the property getter might return a null value, the ``Nullable`` parameter of the attribute
-   must be set to true.
+   If the property getter might return a null value, or the setter should accept ``null``, the
+   ``Nullable`` parameter of the attribute must be set to true. A ``null`` write to a property that
+   is not nullable fails with an error. See :ref:`service-api-null-values`.
 
    **Examples**
 
@@ -475,14 +479,14 @@ to add functionality to the kRPC server.
 
 .. csharp:attribute:: KRPCNullable
 
-   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ can be applied to a
-   kRPC procedure/class method parameter that has a class type. It indicates that the parameter
-   is permitted to be ``null``. Without this attribute, a client can assume that the parameter
-   should never be null.
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
+   kRPC procedure or class method parameter to indicate that the parameter is permitted to be
+   ``null``. It can be applied to a parameter of any serializable type, not only class types.
 
-   Note: the server does not check if a value passed to an RPC is ``null``. This needs to be
-   explicitly checked in the RPC's code (if desired) and an appropriate exception thrown.
-   This attribute is only used as a hint to the client that the parameter is nullable.
+   The server enforces this: without the attribute a parameter is not nullable, and a call that
+   passes ``null`` for it fails with an error -- unless the parameter is nullable for another
+   reason, such as a ``null`` default value or a ``Nullable<T>`` type. See
+   :ref:`service-api-null-values`.
 
    **Example**
 
@@ -493,7 +497,7 @@ to add functionality to the kRPC server.
           [KRPCProcedure]
           public static void DestroyVessel ([KRPCNullable] Vessel vessel)
           {
-              // don't do anything if vessel is null
+              // vessel may be null
               ...
           }
       }
@@ -535,6 +539,54 @@ following types are serializable:
 * Return types can be ``void``
 
 * Protocol buffer message types from namespace ``KRPC.Service.Messages``
+
+.. _service-api-null-values:
+
+Null Values
+^^^^^^^^^^^
+
+A parameter or return value may be ``null`` only when it is declared *nullable*. This applies
+uniformly to every serializable type -- class types, ``string``, collections and value types
+alike. The server enforces it:
+
+* Passing ``null`` as an argument for a parameter that is not nullable fails the call with an
+  error.
+
+* Returning ``null`` from a procedure, method or property getter that is not nullable fails the
+  call with an error.
+
+A **parameter** is nullable if any of the following hold:
+
+* It is annotated with :csharp:attr:`KRPCNullable`.
+
+* It has a default value of ``null`` (for example ``Vessel target = null``). A null default is
+  itself a declaration that ``null`` is a valid value, so no further annotation is needed.
+
+* Its type is a nullable value type, ``Nullable<T>`` (for example ``int?``); see below.
+
+A **return value** is nullable if the ``Nullable`` parameter of its :csharp:attr:`KRPCProcedure`,
+:csharp:attr:`KRPCMethod` or :csharp:attr:`KRPCProperty` attribute is set to true, or if its type
+is ``Nullable<T>``. For a property, ``Nullable = true`` makes the getter's return value *and* the
+setter's argument nullable.
+
+Whether a procedure returns ``null`` cannot be determined from its code, so return nullability
+must always be declared -- kRPC never infers it from the method body. The one exception is a
+``Nullable<T>`` return type, which declares nullability in the signature itself.
+
+.. _service-api-nullable-value-types:
+
+Nullable Value Types
+""""""""""""""""""""
+
+A parameter or return value of type ``Nullable<T>`` -- ``int?``, ``float?``, ``bool?``, an
+``enum?`` and so on -- is automatically nullable; it needs neither :csharp:attr:`KRPCNullable` nor
+``Nullable = true``. To clients it appears as an ordinary value of type ``T`` that may be null.
+
+Only value types can be ``Nullable<T>``. Reference types -- ``string``, :csharp:attr:`KRPCClass`
+types and collections such as ``IList<T>`` -- cannot be, so a nullable-reference annotation like
+``string?`` or ``IList<int>?`` is **not** recognized: the ``?`` is erased before kRPC sees the
+type, and the parameter or return value is treated as non-nullable. Use :csharp:attr:`KRPCNullable`
+or ``Nullable = true`` to make a reference-typed parameter or return value nullable.
 
 Events
 ^^^^^^
