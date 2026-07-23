@@ -1,4 +1,4 @@
-set(VCPKG_LIBRARY_LINKAGE static)
+vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
 
 vcpkg_download_distfile(ARCHIVE
     URLS "https://github.com/krpc/krpc/releases/download/v${VERSION}/krpc-cpp-${VERSION}.zip"
@@ -26,4 +26,8 @@ vcpkg_copy_pdbs()
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/share")
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/usage" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}")
-vcpkg_install_copyright(FILE_LIST "${SOURCE_PATH}/COPYING.LESSER")
+vcpkg_install_copyright(FILE_LIST
+    "${SOURCE_PATH}/LICENSE"
+    "${SOURCE_PATH}/COPYING"
+    "${SOURCE_PATH}/COPYING.LESSER"
+)
