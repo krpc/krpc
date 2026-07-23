@@ -80,11 +80,11 @@ py_sdist(
     files = [
         "CHANGELOG.md",
         "LICENSE",
+        "README.md",
         "pyproject.toml",
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
-        "README.md",
         "//:version",
         "//protobuf:python",
     ] + glob(["krpc/**/*"]),
@@ -110,6 +110,7 @@ py_sdist(
     files = [
         "CHANGELOG.md",
         "LICENSE",
+        "README.md",
         "pyproject.toml",
         ":services-dockingcamera",
         ":services-drawing",
@@ -124,7 +125,6 @@ py_sdist(
         "//:COPYING",
         "//:COPYING.LESSER",
         "//:python_version",
-        "README.md",
         "//:version",
         "//protobuf:python",
     ] + glob(["krpc/**/*"]),
