@@ -134,12 +134,16 @@ def _normalize_permissions(path):
             os.chmod(os.path.join(root, name), 0o644)
 
 
-def install(mods=(), ksp_dir=None, validate_gamedata=True):
+def install(mods=(), ksp_dir=None, validate_gamedata=True, skip_mod_install=False):
     """Build the mod and install it (plus exactly the requested managed mods) into the KSP
     GameData directory. mods is an iterable of names from MODS; ksp_dir defaults to the
     KSP install given by KSP_DIR. Set validate_gamedata=False to skip the check that
     GameData holds only the known-valid set, for a dev deliberately running an unmanaged
-    mod alongside the tests."""
+    mod alongside the tests. Set skip_mod_install=True to leave the managed third-party
+    mods in GameData exactly as they are — neither installing the requested ones nor
+    removing the others — so a locally built or hand-placed mod assembly is preserved
+    across a launch; the requested mods are still used to validate GameData, so name
+    whatever is installed."""
     mods = list(mods)
     unknown = [m for m in mods if m not in MODS]
     if unknown:
@@ -183,7 +187,8 @@ def install(mods=(), ksp_dir=None, validate_gamedata=True):
     for module_manager in glob.glob(os.path.join(gamedata_root, "ModuleManager*.dll")):
         os.chmod(module_manager, 0o644)
 
-    _reconcile_mods(mods, root, gamedata_root)
+    if not skip_mod_install:
+        _reconcile_mods(mods, root, gamedata_root)
     if validate_gamedata:
         _validate_gamedata(gamedata_root, _requested_mod_subdirs(mods))
 
@@ -270,6 +275,14 @@ def main():
         help="skip the check that GameData holds only the known-valid set, to allow "
         "an unmanaged mod to remain installed",
     )
+    parser.add_argument(
+        "--skip-mod-install",
+        action="store_true",
+        default=False,
+        help="leave the managed third-party mods in GameData untouched — neither "
+        "installing the requested ones nor removing others — to preserve a locally "
+        "built mod assembly",
+    )
     args = parser.parse_args()
     mods = [m for m in args.mods.split(",") if m]
     try:
@@ -277,6 +290,7 @@ def main():
             mods=mods,
             ksp_dir=args.ksp_dir,
             validate_gamedata=not args.skip_gamedata_check,
+            skip_mod_install=args.skip_mod_install,
         )
     except (ValueError, RuntimeError) as ex:
         sys.stderr.write("Error: %s\n" % ex)

@@ -1,3 +1,9 @@
+## [v0.7.0] - unreleased
+- Add `--skip-mod-install` to `krpc-install` and `krpc-run-ksp`, and the
+  `KRPC_SKIP_MOD_INSTALL` environment variable honored when the tests auto-launch KSP,
+  to leave the managed third-party mods in GameData untouched so a locally built mod
+  assembly is preserved across a launch (#1016)
+
 ## [v0.6.0]
 - Add the `TestCase.expansions` attribute, to declare KSP expansions a test class
   requires; the class is skipped when a required expansion is not installed
