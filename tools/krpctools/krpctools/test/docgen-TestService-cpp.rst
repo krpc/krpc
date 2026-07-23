@@ -141,7 +141,47 @@
 
    
 
+   .. function:: int32_t echo_nullable_int(int32_t value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<int32_t> echo_nullable_list(std::vector<int32_t> l)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::string echo_nullable_string(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: TestClass echo_test_object(TestClass value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<std::string> empty_list_default(std::vector<std::string> x = std::vector<std::string>())
 
 
 
@@ -268,6 +308,23 @@
 
    
 
+   .. function:: TestClass not_nullable_object(TestClass value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestClass nullable_object()
+   .. function:: void set_nullable_object(TestClass value)
+
+
+
+   
+
    .. function:: TestClass object_property()
    .. function:: void set_object_property(TestClass value)
 
@@ -296,7 +353,7 @@
 
    
 
-   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestClass obj = TestClass())
+   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestClass obj)
 
 
 
@@ -440,6 +497,16 @@
 
    Class documentation string.
 
+   .. function:: TestClass echo_nullable_object(TestClass value)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::string float_to_string(float x)
 
 
@@ -481,7 +548,7 @@
 
    
 
-   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestClass obj = TestClass())
+   .. function:: std::string optional_arguments(std::string x, std::string y = "foo", std::string z = "bar", TestClass obj)
 
 
 
@@ -500,6 +567,16 @@
 
       :Parameters:
 
+
+
+
+   
+
+   .. function:: static TestClass static_nullable_object(Client& connection, TestClass value)
+
+
+
+      :Parameters:
 
 
 

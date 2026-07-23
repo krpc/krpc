@@ -152,12 +152,56 @@ Service documentation string.
 
 
 
+.. staticmethod:: echo_nullable_int(value)
+
+
+
+   :param int value:
+   :rtype: int
+   
+
+
+
+
+.. staticmethod:: echo_nullable_list(l)
+
+
+
+   :param list l:
+   :rtype: list(int)
+   
+
+
+
+
+.. staticmethod:: echo_nullable_string(value)
+
+
+
+   :param str value:
+   :rtype: str
+   
+
+
+
+
 .. staticmethod:: echo_test_object(value)
 
 
 
    :param TestClass value:
    :rtype: :class:`TestClass`
+   
+
+
+
+
+.. staticmethod:: empty_list_default([x = []])
+
+
+
+   :param list x:
+   :rtype: list(str)
    
 
 
@@ -294,6 +338,28 @@ Service documentation string.
 
 
 
+.. staticmethod:: not_nullable_object(value)
+
+
+
+   :param TestClass value:
+   :rtype: :class:`TestClass`
+   
+
+
+
+
+.. attribute:: nullable_object
+
+
+
+   :Attribute: Can be read or written
+   :rtype: :class:`TestClass`
+   
+
+
+
+
 .. attribute:: object_property
 
 
@@ -328,7 +394,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
+.. staticmethod:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
 
 
 
@@ -513,6 +579,14 @@ Service documentation string.
 
    Class documentation string.
 
+   .. method:: echo_nullable_object(value)
+
+
+
+      :param TestClass value:
+      :rtype: :class:`TestClass`
+   
+
    .. method:: float_to_string(x)
 
 
@@ -552,7 +626,7 @@ Service documentation string.
       :rtype: str
    
 
-   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], [obj = None])
+   .. method:: optional_arguments(x, [y = 'foo'], [z = 'bar'], obj)
 
 
 
@@ -570,6 +644,14 @@ Service documentation string.
       :param str a:
       :param str b:
       :rtype: str
+   
+
+   .. staticmethod:: static_nullable_object(value)
+
+
+
+      :param TestClass value:
+      :rtype: :class:`TestClass`
    
 
    .. attribute:: string_property_private_get

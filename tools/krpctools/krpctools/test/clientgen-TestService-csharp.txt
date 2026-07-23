@@ -173,6 +173,36 @@ namespace KRPC.Client.Services.TestService
             return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableInt")]
+        public int EchoNullableInt (int value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(int))
+            };
+            ByteString _data = connection.Invoke ("TestService", "EchoNullableInt", _args);
+            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableList")]
+        public global::System.Collections.Generic.IList<int> EchoNullableList (global::System.Collections.Generic.IList<int> l)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<int>))
+            };
+            ByteString _data = connection.Invoke ("TestService", "EchoNullableList", _args);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IList<int>), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableString")]
+        public string EchoNullableString (string value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(string))
+            };
+            ByteString _data = connection.Invoke ("TestService", "EchoNullableString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTestObject")]
         public global::KRPC.Client.Services.TestService.TestClass EchoTestObject (global::KRPC.Client.Services.TestService.TestClass value)
         {
@@ -181,6 +211,16 @@ namespace KRPC.Client.Services.TestService
             };
             ByteString _data = connection.Invoke ("TestService", "EchoTestObject", _args);
             return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EmptyListDefault")]
+        public global::System.Collections.Generic.IList<string> EmptyListDefault (global::System.Collections.Generic.IList<string> x = null)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<string> {  }, typeof(global::System.Collections.Generic.IList<string>))
+            };
+            ByteString _data = connection.Invoke ("TestService", "EmptyListDefault", _args);
+            return (global::System.Collections.Generic.IList<string>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IList<string>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg")]
@@ -301,6 +341,16 @@ namespace KRPC.Client.Services.TestService
             };
             ByteString _data = connection.Invoke ("TestService", "ListDefault", _args);
             return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IList<int>), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NotNullableObject")]
+        public global::KRPC.Client.Services.TestService.TestClass NotNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+            };
+            ByteString _data = connection.Invoke ("TestService", "NotNullableObject", _args);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimer")]
@@ -456,6 +506,20 @@ namespace KRPC.Client.Services.TestService
                     global::KRPC.Client.Encoder.Encode (value, typeof(string))
                 };
                 connection.Invoke ("TestService", "set_DeprecatedProperty", _args);
+            }
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_NullableObject")]
+        public global::KRPC.Client.Services.TestService.TestClass NullableObject {
+            get {
+                ByteString _data = connection.Invoke ("TestService", "get_NullableObject");
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            }
+            set {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                };
+                connection.Invoke ("TestService", "set_NullableObject", _args);
             }
         }
 
@@ -658,6 +722,17 @@ namespace KRPC.Client.Services.TestService
         {
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_EchoNullableObject")]
+        public global::KRPC.Client.Services.TestService.TestClass EchoNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
+                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+            };
+            ByteString _data = connection.Invoke ("TestService", "TestClass_EchoNullableObject", _args);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_FloatToString")]
         public string FloatToString (float x)
         {
@@ -719,6 +794,19 @@ namespace KRPC.Client.Services.TestService
             };
             ByteString _data = connection.Invoke ("TestService", "TestClass_static_StaticMethod", _args);
             return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+        }
+
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticNullableObject")]
+        public static global::KRPC.Client.Services.TestService.TestClass StaticNullableObject (IConnection connection, global::KRPC.Client.Services.TestService.TestClass value)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+            };
+            ByteString _data = connection.Invoke ("TestService", "TestClass_static_StaticNullableObject", _args);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
         }
 
         /// <summary>

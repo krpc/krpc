@@ -187,6 +187,36 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoNullableInt", types = _Types.class)
+    public int echoNullableInt(int value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+        };
+        ByteString _data = this.connection.invoke("TestService", "EchoNullableInt", _args);
+        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoNullableList", types = _Types.class)
+    public java.util.List<Integer> echoNullableList(java.util.List<Integer> l) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
+        };
+        ByteString _data = this.connection.invoke("TestService", "EchoNullableList", _args);
+        return (java.util.List<Integer>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EchoNullableString", types = _Types.class)
+    public String echoNullableString(String value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+        };
+        ByteString _data = this.connection.invoke("TestService", "EchoNullableString", _args);
+        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoTestObject", types = _Types.class)
     public krpc.client.services.TestService.TestClass echoTestObject(krpc.client.services.TestService.TestClass value) throws RPCException {
         ByteString[] _args = new ByteString[] {
@@ -194,6 +224,16 @@ public class TestService {
         };
         ByteString _data = this.connection.invoke("TestService", "EchoTestObject", _args);
         return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EmptyListDefault", types = _Types.class)
+    public java.util.List<String> emptyListDefault(java.util.List<String> x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)))
+        };
+        ByteString _data = this.connection.invoke("TestService", "EmptyListDefault", _args);
+        return (java.util.List<String>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -314,6 +354,16 @@ public class TestService {
         };
         ByteString _data = this.connection.invoke("TestService", "ListDefault", _args);
         return (java.util.List<Integer>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "NotNullableObject", types = _Types.class)
+    public krpc.client.services.TestService.TestClass notNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
+        };
+        ByteString _data = this.connection.invoke("TestService", "NotNullableObject", _args);
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -480,6 +530,22 @@ public class TestService {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
         this.connection.invoke("TestService", "set_DeprecatedProperty", _args);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "get_NullableObject", types = _Types.class)
+    public krpc.client.services.TestService.TestClass getNullableObject() throws RPCException {
+        ByteString _data = this.connection.invoke("TestService", "get_NullableObject");
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "set_NullableObject", types = _Types.class)
+    public void setNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
+        };
+        this.connection.invoke("TestService", "set_NullableObject", _args);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -665,6 +731,18 @@ public class TestService {
         }
 
         @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "TestService", procedure = "TestClass_EchoNullableObject", types = _Types.class)
+        public krpc.client.services.TestService.TestClass echoNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
+                Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
+            };
+            ByteString _data = this.connection.invoke("TestService", "TestClass_EchoNullableObject", _args);
+            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        }
+
+        @SuppressWarnings({ "unchecked" })
         @RPCInfo(service = "TestService", procedure = "TestClass_FloatToString", types = _Types.class)
         public String floatToString(float x) throws RPCException
         {
@@ -800,6 +878,17 @@ public class TestService {
             ByteString _data = connection.invoke("TestService", "TestClass_static_StaticMethod", _args);
             return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
+
+        @SuppressWarnings({ "unchecked" })
+        @RPCInfo(service = "TestService", procedure = "TestClass_static_StaticNullableObject", types = _Types.class)
+        public static krpc.client.services.TestService.TestClass staticNullableObject(Connection connection, krpc.client.services.TestService.TestClass value) throws RPCException
+        {
+            ByteString[] _args = new ByteString[] {
+                Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
+            };
+            ByteString _data = connection.invoke("TestService", "TestClass_static_StaticNullableObject", _args);
+            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), connection);
+        }
     }
 
     public static class _Types {
@@ -840,8 +929,16 @@ public class TestService {
             PARAMETER_TYPES.put("DictionaryDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
             RETURN_TYPES.put("DoubleToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DoubleToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
+            RETURN_TYPES.put("EchoNullableInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
+            PARAMETER_TYPES.put("EchoNullableInt", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("EchoNullableList", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("EchoNullableList", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("EchoNullableString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
+            PARAMETER_TYPES.put("EchoNullableString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("EchoTestObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("EchoTestObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
+            RETURN_TYPES.put("EmptyListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)));
+            PARAMETER_TYPES.put("EmptyListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)) });
             RETURN_TYPES.put("EnumDefaultArg", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EnumDefaultArg", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
             RETURN_TYPES.put("EnumEcho", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
@@ -866,6 +963,8 @@ public class TestService {
             PARAMETER_TYPES.put("Int64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("ListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("NotNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("NotNullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("OnTimer", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
             PARAMETER_TYPES.put("OnTimer", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("OnTimerUsingLambda", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
@@ -902,8 +1001,15 @@ public class TestService {
             PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_DeprecatedProperty", null);
             PARAMETER_TYPES.put("set_DeprecatedProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("get_NullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("get_NullableObject", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("set_NullableObject", null);
+            PARAMETER_TYPES.put("set_NullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("get_ObjectProperty", new krpc.schema.KRPC.Type[] {  });
+        }
+
+        private static void initTypes1() {
             RETURN_TYPES.put("set_ObjectProperty", null);
             PARAMETER_TYPES.put("set_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("get_StringProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -916,11 +1022,10 @@ public class TestService {
             PARAMETER_TYPES.put("get_StringPropertyPrivateSet", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("DeprecatedClass_DeprecatedMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DeprecatedClass_DeprecatedMethod", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "DeprecatedClass") });
+            RETURN_TYPES.put("TestClass_EchoNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("TestClass_EchoNullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("TestClass_FloatToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass"), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("TestClass_GetValue", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("TestClass_GetValue", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_ObjectToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -941,6 +1046,8 @@ public class TestService {
             PARAMETER_TYPES.put("TestClass_get_StringPropertyPrivateSet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("TestClass_static_StaticMethod", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("TestClass_static_StaticMethod", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("TestClass_static_StaticNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("TestClass_static_StaticNullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
         }
 
         public static krpc.schema.KRPC.Type getReturnType(String procedure) {

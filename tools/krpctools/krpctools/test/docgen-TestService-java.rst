@@ -104,11 +104,39 @@
       :param double value:
    
 
+   .. method:: int echoNullableInt(int value)
+
+
+
+      :param int value:
+   
+
+   .. method:: java.util.List<Integer> echoNullableList(java.util.List<Integer> l)
+
+
+
+      :param java.util.List<Integer> l:
+   
+
+   .. method:: String echoNullableString(String value)
+
+
+
+      :param String value:
+   
+
    .. method:: TestClass echoTestObject(TestClass value)
 
 
 
       :param TestClass value:
+   
+
+   .. method:: java.util.List<String> emptyListDefault(java.util.List<String> x)
+
+
+
+      :param java.util.List<String> x:
    
 
    .. method:: TestEnum enumDefaultArg(TestEnum x)
@@ -192,6 +220,21 @@
 
 
       :param java.util.List<Integer> x:
+   
+
+   .. method:: TestClass notNullableObject(TestClass value)
+
+
+
+      :param TestClass value:
+   
+
+   .. method:: TestClass getNullableObject()
+
+   .. method:: void setNullableObject(TestClass value)
+
+
+
    
 
    .. method:: TestClass getObjectProperty()
@@ -337,6 +380,13 @@
 
    Class documentation string.
 
+   .. method:: TestClass echoNullableObject(TestClass value)
+
+
+
+      :param TestClass value:
+   
+
    .. method:: String floatToString(float x)
 
 
@@ -389,6 +439,13 @@
 
       :param String a:
       :param String b:
+   
+
+   .. method:: static TestClass staticNullableObject(Connection connection, TestClass value)
+
+
+
+      :param TestClass value:
    
 
    .. method:: void setStringPropertyPrivateGet(String value)
