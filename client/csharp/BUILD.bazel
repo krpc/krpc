@@ -38,6 +38,7 @@ nuget_package(
     id = "KRPC.Client",
     license = "LGPL-3.0-only",
     project_url = "https://github.com/krpc/krpc",
+    readme = "README.md",
     version = nuget_version,
     deps = {
         "Google.Protobuf": "3.35.1",
