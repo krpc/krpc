@@ -43,6 +43,11 @@ class TestCamera(krpctest.TestCase):
         self.wait(1)
         self.assertEqual(self.mode.automatic, self.camera.mode)
 
+    def test_focussed_rejects_null(self):
+        # The focussed body and vessel are nullable for reads, but their setters reject null
+        self.assertRaises(ValueError, setattr, self.camera, "focussed_body", None)
+        self.assertRaises(ValueError, setattr, self.camera, "focussed_vessel", None)
+
 
 class CameraTestBase:
     def reset_distance(self):
