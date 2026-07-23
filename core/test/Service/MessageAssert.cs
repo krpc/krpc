@@ -25,6 +25,29 @@ namespace KRPC.Test.Service
             Assert.AreEqual (name, parameter.Name);
             Assert.IsFalse (parameter.HasDefaultValue);
             Assert.IsNull (parameter.DefaultValue);
+            Assert.IsFalse (parameter.Nullable);
+        }
+
+        public static void HasNullableParameter (Procedure procedure, int position, Type type, string name)
+        {
+            Assert.Less (position, procedure.Parameters.Count);
+            var parameter = procedure.Parameters [position];
+            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (name, parameter.Name);
+            Assert.IsFalse (parameter.HasDefaultValue);
+            Assert.IsNull (parameter.DefaultValue);
+            Assert.IsTrue (parameter.Nullable);
+        }
+
+        public static void HasNullableParameterWithDefaultValue (Procedure procedure, int position, Type type, string name, object defaultValue)
+        {
+            Assert.Less (position, procedure.Parameters.Count);
+            var parameter = procedure.Parameters [position];
+            Assert.AreEqual (type, parameter.Type);
+            Assert.AreEqual (name, parameter.Name);
+            Assert.IsTrue (parameter.HasDefaultValue);
+            Assert.AreEqual (defaultValue, parameter.DefaultValue);
+            Assert.IsTrue (parameter.Nullable);
         }
 
         public static void HasParameterWithDefaultValue (Procedure procedure, int position, Type type, string name, object defaultValue)

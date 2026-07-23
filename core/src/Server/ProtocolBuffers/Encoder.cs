@@ -24,10 +24,11 @@ namespace KRPC.Server.ProtocolBuffers
 
         static ByteString EncodeObject (object value, MemoryStream buffer, CodedOutputStream stream)
         {
-            buffer.SetLength (0);
             if (value == null) {
-                stream.WriteUInt64 (0);
-            } else if (value is Enum) {
+                throw new ArgumentNullException (nameof (value));
+            }
+            buffer.SetLength (0);
+            if (value is Enum) {
                 stream.WriteSInt32 ((int)value);
             } else {
                 var type = value.GetType ();

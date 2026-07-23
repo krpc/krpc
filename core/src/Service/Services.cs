@@ -271,7 +271,7 @@ namespace KRPC.Service
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
-                if (value == null && !TypeUtils.IsAClassType (type))
+                if (value == null && !parameter.Nullable)
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got null");
@@ -326,8 +326,8 @@ namespace KRPC.Service
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got " + value.GetType ());
-                } else if (value == null && !TypeUtils.IsAClassType (type)) {
-                    // Check the type of the null argument value
+                } else if (value == null && !parameter.Nullable) {
+                    // Reject a null argument for a parameter that is not nullable
                     throw new RPCException (
                         "Incorrect argument type for parameter " + parameter.Name + " in " + procedure.FullyQualifiedName + ". " +
                         "Expected an argument of type " + type + ", got null");
@@ -347,11 +347,6 @@ namespace KRPC.Service
                 throw new RPCException (
                     "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
                     "Expected a value of type " + procedure.ReturnType + ", got " + returnValue.GetType ());
-            }
-            if (returnValue == null && !TypeUtils.IsAClassType (procedure.ReturnType)) {
-                throw new RPCException (
-                    "Incorrect value returned by " + procedure.FullyQualifiedName + ". " +
-                    "Expected a value of type " + procedure.ReturnType + ", got null");
             }
             // Check if the return value is null, but the procedure is not marked as nullable
             if (returnValue == null && !procedure.ReturnIsNullable)

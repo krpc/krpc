@@ -67,10 +67,14 @@ namespace KRPC.Server.ProtocolBuffers
                 }
                 var pr = protoResult.Result;
                 pr.Value = ByteString.Empty;
+                pr.IsNull = false;
                 pr.Error = null;
-                if (r.Result.HasValue)
-                    pr.Value = Encoder.Encode (r.Result.Value);
-                else if (r.Result.HasError)
+                if (r.Result.HasValue) {
+                    if (r.Result.Value == null)
+                        pr.IsNull = true;
+                    else
+                        pr.Value = Encoder.Encode (r.Result.Value);
+                } else if (r.Result.HasError)
                     pr.Error = r.Result.Error.ToProtobufMessage ();
                 streamUpdateMessage.Add (protoResult);
             }

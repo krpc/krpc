@@ -34,8 +34,12 @@ namespace KRPC.Server.ProtocolBuffers
         public static Schema.KRPC.ProcedureResult ToProtobufMessage (this ProcedureResult procedureResult)
         {
             var result = new Schema.KRPC.ProcedureResult ();
-            if (procedureResult.HasValue)
-                result.Value = Encoder.Encode (procedureResult.Value);
+            if (procedureResult.HasValue) {
+                if (procedureResult.Value == null)
+                    result.IsNull = true;
+                else
+                    result.Value = Encoder.Encode (procedureResult.Value);
+            }
             if (procedureResult.HasError)
                 result.Error = procedureResult.Error.ToProtobufMessage ();
             return result;
@@ -129,9 +133,14 @@ namespace KRPC.Server.ProtocolBuffers
             var result = new Schema.KRPC.Parameter ();
             result.Name = parameter.Name;
             result.Type = parameter.Type.ToProtobufMessage ();
-            if (parameter.HasDefaultValue)
-                result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
             result.Nullable = parameter.Nullable;
+            result.HasDefaultValue = parameter.HasDefaultValue;
+            if (parameter.HasDefaultValue) {
+                if (parameter.DefaultValue == null)
+                    result.DefaultValueIsNull = true;
+                else
+                    result.DefaultValue = Encoder.Encode (parameter.DefaultValue);
+            }
             return result;
         }
 
@@ -319,7 +328,8 @@ namespace KRPC.Server.ProtocolBuffers
 
         public static Argument ToMessage (this Schema.KRPC.Argument argument, Type type)
         {
-            return new Argument (argument.Position, Encoder.Decode (argument.Value, type));
+            var value = argument.IsNull ? null : Encoder.Decode (argument.Value, type);
+            return new Argument (argument.Position, value);
         }
     }
 }

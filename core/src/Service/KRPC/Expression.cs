@@ -132,8 +132,13 @@ namespace KRPC.Service.KRPC
             var result = LinqExpression.Call(
                 servicesExpr, executeCallMethod,
                 new[] { procedureExpr, instanceExpr, argumentsExpr });
+            var returnType = procedure.ReturnType;
+            // A nullable value-type return may be null, so evaluate it as Nullable<T> so the
+            // null is representable rather than faulting the conversion.
+            if (procedure.ReturnIsNullable && returnType.IsValueType)
+                returnType = typeof(System.Nullable<>).MakeGenericType(returnType);
             var value = LinqExpression.Convert(
-                LinqExpression.Property(result, "Value"), procedure.ReturnType);
+                LinqExpression.Property(result, "Value"), returnType);
             return new Expression(value);
         }
 

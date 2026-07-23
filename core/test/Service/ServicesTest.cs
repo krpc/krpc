@@ -134,7 +134,8 @@ namespace KRPC.Test.Service
             mock.Setup (x => x.ProcedureNoArgsReturns ()).Returns ((string)null);
             TestService.Service = mock.Object;
             CheckError (String.Empty, "Incorrect value returned by TestService.ProcedureNoArgsReturns. " +
-                        "Expected a value of type System.String, got null",
+                        "Expected a non-null value of type System.String, got null, " +
+                        "but the procedure is not marked as nullable.",
                         Run (Call ("TestService", "ProcedureNoArgsReturns")));
             mock.Verify (x => x.ProcedureNoArgsReturns (), Times.Once ());
         }
@@ -290,6 +291,111 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ExecuteCallWithNullArgumentToNonNullableParameter ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()));
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Incorrect argument type for parameter obj in " +
+                        "TestService.DeleteTestObject. Expected an argument of type " +
+                        "KRPC.Test.Service.TestService+TestClass, got null",
+                        Run (Call ("TestService", "DeleteTestObject", Arg (0, null))));
+            mock.Verify (x => x.DeleteTestObject (It.IsAny<TestService.TestClass> ()), Times.Never ());
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableStringArgumentAndReturn ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableString (It.IsAny<string> ()))
+                .Callback ((string x) => Assert.IsNull (x))
+                .Returns ((string x) => x);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableString", Arg (0, null)));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableIntArgumentAndReturnNull ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableInt (It.IsAny<int?> ()))
+                .Callback ((int? x) => Assert.IsFalse (x.HasValue))
+                .Returns ((int? x) => x);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableInt", Arg (0, null)));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableIntArgumentAndReturnValue ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableInt (It.IsAny<int?> ()))
+                .Callback ((int? x) => Assert.AreEqual (42, x))
+                .Returns ((int? x) => x);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableInt", Arg (0, 42)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual (42, (int)result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableEnumArgumentAndReturnNull ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableEnum (It.IsAny<TestService.TestEnum?> ()))
+                .Callback ((TestService.TestEnum? x) => Assert.IsFalse (x.HasValue))
+                .Returns ((TestService.TestEnum? x) => x);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableEnum", Arg (0, null)));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableEnumArgumentAndReturnValue ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableEnum (It.IsAny<TestService.TestEnum?> ()))
+                .Callback ((TestService.TestEnum? x) => Assert.AreEqual (TestService.TestEnum.Y, x))
+                .Returns ((TestService.TestEnum? x) => x);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableEnum", Arg (0, TestService.TestEnum.Y)));
+            CheckResultNotEmpty (result);
+            Assert.AreEqual (TestService.TestEnum.Y, (TestService.TestEnum)result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableListArgumentAndReturnNull ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableList (It.IsAny<IList<string>> ()))
+                .Callback ((IList<string> l) => Assert.IsNull (l))
+                .Returns ((IList<string> l) => l);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableList", Arg (0, null)));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallWithNullableListArgumentAndReturnValue ()
+        {
+            var list = new List<string> { "foo", "bar" };
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.EchoNullableList (It.IsAny<IList<string>> ()))
+                .Callback ((IList<string> l) => CollectionAssert.AreEqual (list, l))
+                .Returns ((IList<string> l) => l);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "EchoNullableList", Arg (0, list)));
+            CheckResultNotEmpty (result);
+            CollectionAssert.AreEqual (list, (IList<string>)result.Value);
+        }
+
+        [Test]
         public void ExecuteCallForObjectMethod ()
         {
             var instance = new TestService.TestClass ("jeb");
@@ -335,6 +441,99 @@ namespace KRPC.Test.Service
             var result = Run (Call ("TestService", "TestClass_static_StaticMethod", Arg (0, "bob")));
             CheckResultNotEmpty (result);
             Assert.AreEqual ("jebbob", (string)result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallForNullableObjectMethodWithNull ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            var result = Run (Call ("TestService", "TestClass_EchoNullableObject",
+                             Arg (0, instance), Arg (1, null)));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallOptionalNullArgExplicitNull ()
+        {
+            // A null default makes the parameter nullable, so passing null explicitly is accepted
+            // as well as omitting the argument (see ExecuteCallOptionalNullArg).
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ProcedureOptionalNullArg (It.IsAny<TestService.TestClass> ()))
+                .Callback ((TestService.TestClass x) => Assert.IsNull (x));
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "ProcedureOptionalNullArg", Arg (0, null)));
+            mock.Verify (x => x.ProcedureOptionalNullArg (It.IsAny<TestService.TestClass> ()), Times.Once ());
+            CheckResultEmpty (result);
+        }
+
+        [Test]
+        public void ExecuteCallForClassStaticNullableMethod ()
+        {
+            var result = Run (Call ("TestService", "TestClass_static_StaticNullableMethod", Arg (0, null)));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallSetNullablePropertyToNull ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.SetupSet (x => x.NullableProperty = null);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "set_NullableProperty", Arg (0, null)));
+            mock.VerifySet (x => x.NullableProperty = null, Times.Once ());
+            CheckResultEmpty (result);
+        }
+
+        [Test]
+        public void ExecuteCallGetNullablePropertyReturningNull ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.NullableProperty).Returns ((string)null);
+            TestService.Service = mock.Object;
+            var result = Run (Call ("TestService", "get_NullableProperty"));
+            CheckResultNotEmpty (result);
+            Assert.IsNull (result.Value);
+        }
+
+        [Test]
+        public void ExecuteCallGetNonNullablePropertyReturningNull ()
+        {
+            // A property getter is a return: a null read from a property not marked nullable is
+            // rejected, exactly like a null return from a non-nullable procedure.
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.PropertyWithGet).Returns ((string)null);
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Incorrect value returned by TestService.get_PropertyWithGet. " +
+                        "Expected a non-null value of type System.String, got null, " +
+                        "but the procedure is not marked as nullable.",
+                        Run (Call ("TestService", "get_PropertyWithGet")));
+            mock.Verify (x => x.PropertyWithGet, Times.Once ());
+        }
+
+        [Test]
+        public void ExecuteCallSetNonNullablePropertyToNull ()
+        {
+            var mock = new Mock<ITestService> (MockBehavior.Strict);
+            mock.SetupSet (x => x.PropertyWithSet = It.IsAny<string> ());
+            TestService.Service = mock.Object;
+            CheckError (String.Empty, "Incorrect argument type for parameter value in " +
+                        "TestService.set_PropertyWithSet. Expected an argument of type " +
+                        "System.String, got null",
+                        Run (Call ("TestService", "set_PropertyWithSet", Arg (0, null))));
+            mock.VerifySet (x => x.PropertyWithSet = It.IsAny<string> (), Times.Never ());
+        }
+
+        [Test]
+        public void ExecuteCallSetNullableClassPropertyToNull ()
+        {
+            var instance = new TestService.TestClass ("jeb");
+            instance.ObjectProperty = new TestService.TestClass ("initial");
+            var result = Run (Call ("TestService", "TestClass_set_ObjectProperty",
+                             Arg (0, instance), Arg (1, null)));
+            CheckResultEmpty (result);
+            Assert.IsNull (instance.ObjectProperty);
         }
 
         [Test]
