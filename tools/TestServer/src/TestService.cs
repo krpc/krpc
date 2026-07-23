@@ -103,6 +103,44 @@ namespace TestServer
             return null;
         }
 
+        [KRPCProcedure]
+        public static TestClass NotNullableObject (TestClass value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static string EchoNullableString ([KRPCNullable] string value)
+        {
+            return value;
+        }
+
+        [KRPCProcedure (Nullable = true)]
+        public static IList<int> EchoNullableList ([KRPCNullable] IList<int> l)
+        {
+            return l;
+        }
+
+        [KRPCProcedure]
+        public static int? EchoNullableInt (int? value)
+        {
+            return value;
+        }
+
+        static TestClass nullableObject;
+
+        // Nullable for reads, but the setter rejects null: the value may be null yet cannot be
+        // cleared by writing null.
+        [KRPCProperty (Nullable = true)]
+        public static TestClass NullableObject {
+            get { return nullableObject; }
+            set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (value));
+                nullableObject = value;
+            }
+        }
+
         /// <summary>
         /// Class documentation string.
         /// </summary>
@@ -147,6 +185,12 @@ namespace TestServer
                 return instanceValue + (ReferenceEquals (other, null) ? "null" : other.instanceValue);
             }
 
+            [KRPCMethod (Nullable = true)]
+            public TestClass EchoNullableObject ([KRPCNullable] TestClass value)
+            {
+                return value;
+            }
+
             /// <summary>
             /// Property documentation string.
             /// </summary>
@@ -176,6 +220,12 @@ namespace TestServer
             public static string StaticMethod (string a = "", string b = "")
             {
                 return "jeb" + a + b;
+            }
+
+            [KRPCMethod (Nullable = true)]
+            public static TestClass StaticNullableObject ([KRPCNullable] TestClass value)
+            {
+                return value;
             }
         }
 
@@ -340,6 +390,21 @@ namespace TestServer
         [KRPCProcedure]
         public static IDictionary<int,bool> DictionaryDefault (
             [KRPCDefaultValue (typeof(CreateDictionaryDefault))] IDictionary<int,bool> x)
+        {
+            return x;
+        }
+
+        public static class CreateEmptyListDefault
+        {
+            public static object Create ()
+            {
+                return new List<string> ();
+            }
+        }
+
+        [KRPCProcedure]
+        public static IList<string> EmptyListDefault (
+            [KRPCDefaultValue (typeof(CreateEmptyListDefault))] IList<string> x)
         {
             return x;
         }
