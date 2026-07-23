@@ -45,7 +45,7 @@ py_sdist(
     out = "krpctools-%s.tar.gz" % version,
     files = [
         "CHANGELOG.md",
-        "README.txt",
+        "README.md",
         "pyproject.toml",
         ":license",
         "//:COPYING",

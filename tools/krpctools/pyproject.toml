@@ -9,7 +9,7 @@ authors = [
     {name = "djungelorm", email = "djungelorm@users.noreply.github.com"},
 ]
 description = "Development tools and scripts for kRPC."
-readme = "README.txt"
+readme = "README.md"
 license = "GPL-3.0-only"
 requires-python = ">=3.10"
 dependencies = ["krpc >= 0.4", "jinja2"]
@@ -40,7 +40,7 @@ pattern = '__version__ = "(?P<version>[^"]+)"'
 [tool.hatch.build.targets.sdist]
 include = [
     "krpctools/",
-    "README.txt",
+    "README.md",
     "CHANGELOG.md",
     "LICENSE",
     "COPYING",
