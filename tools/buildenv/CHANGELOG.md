@@ -1,4 +1,4 @@
-## [v3.9.1] - unreleased
+## [v3.9.1]
 - Add `python-is-python3`, providing a `python` executable for the CI
   version-stamping step in the build-setup action
 
