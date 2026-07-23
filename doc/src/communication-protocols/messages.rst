@@ -54,6 +54,7 @@ format:
    message Argument {
      uint32 position = 1;
      bytes value = 2;
+     bool is_null = 3;
    }
 
 A request message contains one or more procedure calls. This allows efficient batching of multiple
@@ -75,7 +76,11 @@ The fields of a procedure call are:
   * ``position`` - The zero-indexed position of the of the argument in the procedure's
     signature.
 
-  * ``value`` - The value of the argument, encoded in Protocol Buffer format.
+  * ``value`` - The value of the argument, encoded in Protocol Buffer format. Ignored when
+    ``is_null`` is set.
+
+  * ``is_null`` - Whether the argument's value is null. When set, the argument is null and
+    ``value`` is unset. Only permitted for parameters that accept null.
 
 The service containing the procedure to call is specified by setting either ``service`` or
 ``service_id``. The procedure to call is specified by setting either ``procedure`` or
@@ -106,6 +111,7 @@ format:
    message ProcedureResult {
      Error error = 1;
      bytes value = 2;
+     bool is_null = 3;
    }
 
    message Error {
@@ -121,6 +127,9 @@ associated request message.
 The ``value`` field of a procedure result message contains the value of the return value of the
 remote procedure, if any, encoded in protocol buffer format. See
 :ref:`communication-protocol-protobuf-encoding` for details on how to decode the return value.
+
+The ``is_null`` field indicates that the return value is null. When it is set, the ``value`` field
+is unset and must be ignored. This is only permitted for procedures whose return value is nullable.
 
 If an error occurs processing a request message, the ``error`` field in the response message will
 contain a description of the error. If an individual procedure call encounters an error, the
@@ -166,6 +175,12 @@ Protocol Buffer version 3 serialization format:
 
 * Protocol Buffer libraries in many languages are available here:
   https://github.com/google/protobuf/releases
+
+A null value is not encoded in the ``value`` field. Instead it is signaled out-of-band by the
+``is_null`` field on the ``Argument`` or ``ProcedureResult`` message. When ``is_null`` is set, the
+``value`` field is unset and carries no encoded value. This applies to values of any type; a null
+value is never represented by a sentinel within the encoded bytes. Note that a zero-length ``value``
+is a valid encoding — for example an empty collection — and is distinct from a null value.
 
 .. _communication-protocol-streams:
 
@@ -400,8 +415,10 @@ Details about a procedure are given by a ``Procedure`` message, with the format:
    message Parameter {
      string name = 1;
      Type type = 2;
-     bytes default_value = 3;
      bool nullable = 4;
+     bool has_default_value = 5;
+     bytes default_value = 3;
+     bool default_value_is_null = 6;
    }
 
 The fields are:
@@ -416,15 +433,47 @@ The fields are:
 
   * ``type`` - The :ref:`type <communication-protocol-type>` of the parameter.
 
-  * ``default_value`` - The value of the default value of the parameter, if any, :ref:`encoded
-    using Protocol Buffer format <communication-protocol-protobuf-encoding>`.
+  * ``nullable`` - Whether null can be passed as the argument for this parameter. Applies to
+    parameters of any type, not just class types.
 
-  * ``nullable`` - If the parameter has a class type, indicates whether null can be passed.
+  * ``has_default_value`` - Whether the parameter has a default value. When it is not set, the
+    parameter is required and ``default_value`` and ``default_value_is_null`` are unset.
+
+  * ``default_value`` - The default value of the parameter, :ref:`encoded using Protocol Buffer
+    format <communication-protocol-protobuf-encoding>`. Set only when ``has_default_value`` is set
+    and ``default_value_is_null`` is not. A zero-length value is a valid default, for example an
+    empty collection.
+
+  * ``default_value_is_null`` - Whether the default value is null. Set only when ``has_default_value``
+    is set, in which case ``default_value`` is unset.
+
+  The presence and nullability of the default value are given by these three fields as follows:
+
+  .. list-table::
+     :header-rows: 1
+
+     * - Default value
+       - ``has_default_value``
+       - ``default_value_is_null``
+       - ``default_value``
+     * - none (required parameter)
+       - unset
+       - unset
+       - unset
+     * - a value (including an empty collection)
+       - set
+       - unset
+       - encoded bytes (may be zero-length)
+     * - null
+       - set
+       - set
+       - unset
 
 * ``return_type`` - The :ref:`return type <communication-protocol-type>` of the procedure. If the
   procedure does not return anything its type is set to ``NONE``.
 
-* ``return_is_nullable`` - If the return type is a class type, indicates whether null could returned.
+* ``return_is_nullable`` - Whether the procedure can return null. Applies to a return value of any
+  type, not just class types.
 
 * ``game_scenes`` - The :ref:`game scenes <communication-protocol-game-scene>` that the procedure is
   available in. If this repeated field is empty, the procedure is available in all game scenes.
@@ -663,5 +712,9 @@ properties make remote procedure calls to the server. Object identifiers have ty
 
 When a procedure returns a proxy object or takes one as a parameter, the type code will be set to
 ``CLASS``.
+
+A null object reference is signaled by the ``is_null`` field of the ``ProcedureResult`` or
+``Argument`` message, in the same way as a null value of any other type. The object identifier is
+not used to represent null on the wire.
 
 .. _C# XML documentation: https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx
