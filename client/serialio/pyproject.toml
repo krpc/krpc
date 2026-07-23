@@ -9,7 +9,6 @@ authors = [
     {name = "djungelorm", email = "djungelorm@users.noreply.github.com"},
 ]
 description = "Serial IO communication tests for kRPC"
-readme = "README.txt"
 license = "LGPL-3.0-only"
 requires-python = ">=3.10"
 dependencies = ["krpc", "pyserial"]
@@ -35,7 +34,6 @@ pattern = '__version__ = "(?P<version>[^"]+)"'
 [tool.hatch.build.targets.sdist]
 include = [
     "krpcserialio/",
-    "README.txt",
     "VERSION.txt",
 ]
 

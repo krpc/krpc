@@ -45,7 +45,7 @@ py_sdist(
     out = "krpctools-%s.tar.gz" % version,
     files = [
         "CHANGELOG.md",
-        "README.txt",
+        "README.md",
         "pyproject.toml",
         ":license",
         "//:COPYING",
@@ -104,14 +104,6 @@ py_binary(
     name = "docgen",
     srcs = ["docgen_main.py"],
     main = "docgen_main.py",
-    visibility = ["//visibility:public"],
-    deps = [":krpctools_lib"],
-)
-
-py_binary(
-    name = "changeloggen",
-    srcs = ["changeloggen_main.py"],
-    main = "changeloggen_main.py",
     visibility = ["//visibility:public"],
     deps = [":krpctools_lib"],
 )

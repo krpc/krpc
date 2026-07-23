@@ -34,7 +34,7 @@ changeloggen = rule(
             mandatory = True,
         ),
         "_changeloggen": attr.label(
-            default = Label("//tools/krpctools:changeloggen"),
+            default = Label("//doc:changeloggen"),
             executable = True,
             cfg = "exec",
         ),

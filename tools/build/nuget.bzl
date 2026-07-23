@@ -28,6 +28,9 @@ def _nuget_package_impl(ctx):
         "  <authors>%s</authors>" % ctx.attr.author,
         "  <description>%s</description>" % ctx.attr.description,
     ]
+    if ctx.attr.readme:
+        # nuget.org renders this Markdown file as the package's landing page.
+        nuspec_contents.append("  <readme>README.md</readme>")
     if ctx.attr.project_url:
         nuspec_contents.append("  <projectUrl>%s</projectUrl>" % ctx.attr.project_url)
     if ctx.attr.license:
@@ -66,6 +69,7 @@ def _nuget_package_impl(ctx):
         '  <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />',
         '  <Default Extension="dll" ContentType="application/octet" />',
         '  <Default Extension="xml" ContentType="application/octet" />',
+        '  <Default Extension="md" ContentType="text/markdown" />',
         '  <Default Extension="nuspec" ContentType="application/octet" />',
         '  <Default Extension="psmdcp" ContentType="application/vnd.openxmlformats-package.core-properties+xml" />',
         "</Types>",
@@ -108,6 +112,10 @@ def _nuget_package_impl(ctx):
     args.add("--entry", "%s=%s" % (psmdcp_file.path, psmdcp_path))
 
     inputs = [nuspec, content_types_file, rels_file, psmdcp_file]
+    if ctx.attr.readme:
+        readme_file = ctx.file.readme
+        args.add("--entry", "%s=README.md" % readme_file.path)
+        inputs.append(readme_file)
     for framework, info in assemblies.items():
         args.add("--entry", "%s=lib/%s/%s.dll" % (info.lib.path, framework, ctx.attr.id))
         args.add("--entry", "%s=lib/%s/%s.xml" % (info.doc.path, framework, ctx.attr.id))
@@ -131,6 +139,7 @@ nuget_package = rule(
         "author": attr.string(mandatory = True),
         "project_url": attr.string(),
         "license": attr.string(),
+        "readme": attr.label(allow_single_file = [".md"]),
         "description": attr.string(mandatory = True),
         "framework_deps": attr.string_list(),
         "deps": attr.string_dict(),

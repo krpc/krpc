@@ -1,31 +1,17 @@
 load("@rules_dotnet//dotnet:defs.bzl", "csharp_library", "csharp_nunit_test")
-load("//:config.bzl", "assembly_version", "author", "nuget_version", "version")
+load("//:config.bzl", "assembly_version", "author", "nuget_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:nuget.bzl", "nuget_package")
-load("//tools/build:pkg.bzl", "pkg_zip")
 load("//tools/krpctools:clientgen.bzl", "clientgen_csharp")
 
 exports_files(["CHANGELOG.md"])
 
-pkg_zip(
+# Default target for the package, so `bazel build //client/csharp` builds the
+# release artifact, matching the other clients.
+alias(
     name = "csharp",
-    out = "krpc-csharp-%s.zip" % version,
-    exclude = ["*.mdb"],
-    files = [
-        "CHANGELOG.md",
-        "LICENSE",
-        ":KRPC.Client",
-        "//:COPYING",
-        "//:COPYING.LESSER",
-        "//:readme",
-        "//:version",
-    ],
-    path_map = {
-        "client/csharp/KRPC.Client/net472/KRPC.Client.dll": "net472/KRPC.Client.dll",
-        "client/csharp/KRPC.Client/net472/KRPC.Client.xml": "net472/KRPC.Client.xml",
-        "client/csharp/": "",
-    },
+    actual = ":nuget",
     visibility = ["//visibility:public"],
 )
 
@@ -38,6 +24,7 @@ nuget_package(
     id = "KRPC.Client",
     license = "LGPL-3.0-only",
     project_url = "https://github.com/krpc/krpc",
+    readme = "README.md",
     version = nuget_version,
     deps = {
         "Google.Protobuf": "3.35.1",
@@ -96,7 +83,7 @@ csharp_library(
 
 # net8.0 build of the client, for the unit tests. A separate target rather
 # than a multi-targeted KRPC.Client so that the default build flavor staged
-# into the client zip and nupkg stays net472.
+# into the nupkg stays net472.
 csharp_library(
     name = "KRPC.Client.net8",
     srcs = srcs,

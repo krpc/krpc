@@ -42,27 +42,8 @@ std::string encode(const std::map<K, V>& dictionary);
 template <typename T>
 std::string encode(const std::set<T>& set);
 
-/*[[[cog
-import cog
-import itertools
-for n in range(1,int(nargs)+1):
-    cog.out("""
-    template <""" + ', '.join('typename T%d' % i for i in range(n)) + """>
-    std::string encode(const std::tuple<""" + ', '.join('T%d' % i for i in range(n)) + """>&
-tuple);""")
-]]]*/
-
-template <typename T0>
-std::string encode(const std::tuple<T0>& tuple);
-template <typename T0, typename T1>
-std::string encode(const std::tuple<T0, T1>& tuple);
-template <typename T0, typename T1, typename T2>
-std::string encode(const std::tuple<T0, T1, T2>& tuple);
-template <typename T0, typename T1, typename T2, typename T3>
-std::string encode(const std::tuple<T0, T1, T2, T3>& tuple);
-template <typename T0, typename T1, typename T2, typename T3, typename T4>
-std::string encode(const std::tuple<T0, T1, T2, T3, T4>& tuple);
-// [[[end]]]
+template <typename... Ts>
+std::string encode(const std::tuple<Ts...>& tuple);
 
 std::string encode_message_with_size(const google::protobuf::MessageLite& message);
 
@@ -98,67 +79,13 @@ inline std::string encode(const std::set<T>& set) {
   return encode(setMessage);
 }
 
-/*[[[cog
-import cog
-import itertools
-for n in range(1,int(nargs)+1):
-    cog.out("""
-template <""" + ', '.join('typename T%d' % i for i in range(n)) + """>
-inline std::string encode(const std::tuple<""" + ', '.join('T%d' % i for i in range(n)) + """>&
-tuple) { krpc::schema::Tuple tupleMessage;
-""")
-    for i in range(n):
-        cog.outl('  tupleMessage.add_items(encode(std::get<%d>(tuple)));' % i)
-    cog.out("""  return encode(tupleMessage);
-}
-""")
-]]]*/
-
-template <typename T0>
-inline std::string encode(const std::tuple<T0>& tuple) {
+template <typename... Ts>
+inline std::string encode(const std::tuple<Ts...>& tuple) {
   krpc::schema::Tuple tupleMessage;
-  tupleMessage.add_items(encode(std::get<0>(tuple)));
+  std::apply([&tupleMessage](const Ts&... args) { (tupleMessage.add_items(encode(args)), ...); },
+             tuple);
   return encode(tupleMessage);
 }
-
-template <typename T0, typename T1>
-inline std::string encode(const std::tuple<T0, T1>& tuple) {
-  krpc::schema::Tuple tupleMessage;
-  tupleMessage.add_items(encode(std::get<0>(tuple)));
-  tupleMessage.add_items(encode(std::get<1>(tuple)));
-  return encode(tupleMessage);
-}
-
-template <typename T0, typename T1, typename T2>
-inline std::string encode(const std::tuple<T0, T1, T2>& tuple) {
-  krpc::schema::Tuple tupleMessage;
-  tupleMessage.add_items(encode(std::get<0>(tuple)));
-  tupleMessage.add_items(encode(std::get<1>(tuple)));
-  tupleMessage.add_items(encode(std::get<2>(tuple)));
-  return encode(tupleMessage);
-}
-
-template <typename T0, typename T1, typename T2, typename T3>
-inline std::string encode(const std::tuple<T0, T1, T2, T3>& tuple) {
-  krpc::schema::Tuple tupleMessage;
-  tupleMessage.add_items(encode(std::get<0>(tuple)));
-  tupleMessage.add_items(encode(std::get<1>(tuple)));
-  tupleMessage.add_items(encode(std::get<2>(tuple)));
-  tupleMessage.add_items(encode(std::get<3>(tuple)));
-  return encode(tupleMessage);
-}
-
-template <typename T0, typename T1, typename T2, typename T3, typename T4>
-inline std::string encode(const std::tuple<T0, T1, T2, T3, T4>& tuple) {
-  krpc::schema::Tuple tupleMessage;
-  tupleMessage.add_items(encode(std::get<0>(tuple)));
-  tupleMessage.add_items(encode(std::get<1>(tuple)));
-  tupleMessage.add_items(encode(std::get<2>(tuple)));
-  tupleMessage.add_items(encode(std::get<3>(tuple)));
-  tupleMessage.add_items(encode(std::get<4>(tuple)));
-  return encode(tupleMessage);
-}
-// [[[end]]]
 
 }  // namespace encoder
 }  // namespace krpc

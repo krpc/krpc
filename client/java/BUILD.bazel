@@ -46,9 +46,9 @@ java_library(
     resources = [
         "CHANGELOG.md",
         "LICENSE",
+        "README.txt",
         "//:COPYING",
         "//:COPYING.LESSER",
-        "//:readme",
         "//:version",
     ],
     visibility = ["//visibility:public"],

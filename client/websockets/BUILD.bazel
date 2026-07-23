@@ -6,7 +6,6 @@ py_sdist(
     name = "krpcwebsockets",
     out = "krpcwebsockets-%s.tar.gz" % version,
     files = [
-        "README.txt",
         "pyproject.toml",
         "//:python_version",
         "//:version",

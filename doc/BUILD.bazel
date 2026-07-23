@@ -1,13 +1,13 @@
 load("@rules_python//python:defs.bzl", "py_binary", "py_test")
 load("@rules_python//python/entry_points:py_console_script_binary.bzl", "py_console_script_binary")
 load("//:config.bzl", "version")
+load("//doc:changelog.bzl", "changeloggen")
 load("//doc:check_documented.bzl", "check_documented_test")
 load("//doc:macros.bzl", "cc_binary_multiple", "csharp_library_multiple", "java_binary_multiple")
 load("//tools/build:image.bzl", "png_images")
 load("//tools/build:pkg.bzl", "stage_files")
 load("//tools/build:python.bzl", "py_lint_test")
 load("//tools/build:sphinx.bzl", "sphinx_build", "sphinx_linkcheck_test", "sphinx_spelling_test")
-load("//tools/krpctools:changelog.bzl", "changeloggen")
 load("//tools/krpctools:docgen.bzl", "docgen_multiple")
 
 filegroup(
@@ -51,6 +51,14 @@ stage_files(
     path_map = {
         "doc/src/": "",
     },
+)
+
+# Merges the per-component CHANGELOG.md files into the unified changelog page.
+# A docs-only build helper, driven by the changeloggen rule below.
+py_binary(
+    name = "changeloggen",
+    srcs = ["changeloggen.py"],
+    main = "changeloggen.py",
 )
 
 # Unified changelog page, merged from every component's CHANGELOG.md. The dict

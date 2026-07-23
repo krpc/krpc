@@ -1,4 +1,4 @@
-## [v0.6.0] - unreleased
+## [v0.6.0]
 - Add the `TestCase.expansions` attribute, to declare KSP expansions a test class
   requires; the class is skipped when a required expansion is not installed
 - Run the integration tests with `pytest`, replacing the custom test runner

@@ -10,6 +10,12 @@ py_binary(
 )
 
 py_binary(
+    name = "run_cog_check",
+    srcs = ["run_cog_check.py"],
+    deps = ["@pypi//cogapp"],
+)
+
+py_binary(
     name = "write_zip",
     srcs = ["write_zip.py"],
 )

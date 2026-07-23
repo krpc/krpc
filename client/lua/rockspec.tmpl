@@ -1,3 +1,4 @@
+rockspec_format = "3.0"
 package = "krpc"
 version = "%LUA_VERSION%-0"
 source = {
@@ -5,7 +6,14 @@ source = {
 }
 description = {
   summary = "Lua client library for kRPC",
+  detailed = [[
+Lua client for kRPC, a Remote Procedure Call server for Kerbal Space Program.
+It lets you control the game from an external program over the network.
+
+Documentation: https://krpc.github.io/krpc/latest/lua/client.html
+Source and issue tracker: https://github.com/krpc/krpc]],
   homepage = "https://krpc.github.io/krpc",
+  issues_url = "https://github.com/krpc/krpc/issues",
   license = "GNU LGPL v3"
 }
 dependencies = {

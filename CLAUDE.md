@@ -137,8 +137,10 @@ but with entries grouped logically rather than by add/change/fix type. Entries a
 Add entries under that header, creating it if needed, only for components actually modified.
 `doc/src/changelog.rst` is generated from these files.
 
- * **Never update on regular commits** — use a dedicated final commit (single-commit PRs excepted);
-   every PR touches these files.
+ * **Before a branch is pushed, consolidate into a dedicated final commit** (single-commit PRs
+   excepted) — every PR touches these files. On an unpushed local branch this is relaxed: you may
+   commit changelog entries freely, e.g. alongside the change they describe. Squash them into that
+   single final commit before the branch is pushed.
  * Relative to the **last release**, not the previous commit. A fix to behavior introduced during the
    current unreleased dev cycle gets **no entry**.
  * User-facing changes only. No changes since the last release → no version section at all; never add
@@ -146,8 +148,9 @@ Add entries under that header, creating it if needed, only for components actual
  * Code identifiers (RPCs, types, settings, file names) go in backticks for monospace, e.g. `` `SpaceCenter.Camera` ``.
  * At most one marker: `**Breaking:**` (users must react) or `**Deprecated:**` (exists, avoid). Both →
    `**Breaking:**`, mention the deprecation in the text. A marker opens the entry, before the text.
- * Suffix `(#NNN)`. Issues and PRs share one number sequence, so predict the PR's number before
-   writing the entry — one more than the highest existing number:
+ * Suffix `(#NNN)`. Issues and PRs share one number sequence. The number is only required before the
+   branch is pushed as a PR — on an unpushed local branch you may commit an entry without it and fill
+   it in later. To predict it, take one more than the highest existing number:
 
    ```bash
    gh api repos/:owner/:repo/issues -X GET -f state=all -f per_page=1 --jq '.[0].number'
