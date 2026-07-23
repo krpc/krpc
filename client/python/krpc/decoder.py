@@ -63,16 +63,12 @@ class Decoder:
         if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
-            return typ.python_type(client, object_id) if object_id != 0 else None
+            return typ.python_type(client, object_id)
         msg: object
         if isinstance(typ, ListType):
-            if data == b"\x00":
-                return None
             msg = cast(KRPC.List, cls.decode_message(data, KRPC.List))
             return [cls.decode(client, item, typ.value_type) for item in msg.items]
         if isinstance(typ, DictionaryType):
-            if data == b"\x00":
-                return None
             msg = cast(KRPC.Dictionary, cls.decode_message(data, KRPC.Dictionary))
             return dict(
                 (
@@ -82,13 +78,9 @@ class Decoder:
                 for entry in msg.entries
             )
         if isinstance(typ, SetType):
-            if data == b"\x00":
-                return None
             msg = cast(KRPC.Set, cls.decode_message(data, KRPC.Set))
             return set(cls.decode(client, item, typ.value_type) for item in msg.items)
         if isinstance(typ, TupleType):
-            if data == b"\x00":
-                return None
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
             return tuple(
                 cls.decode(client, item, value_type)

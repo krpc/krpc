@@ -207,6 +207,8 @@ class StreamManager:
                 stream = self._streams[result.id]
                 if result.result.HasField("error"):
                     value = self._client._build_error(result.result.error)
+                elif result.result.is_null:
+                    value = None
                 else:
                     # Decode the return value
                     value = Decoder.decode(

@@ -40,6 +40,8 @@ def _signature(param_types: Iterable[TypeBase], return_type: TypeBase) -> str:
 
 
 def _as_literal(value: object, typ: TypeBase) -> str:
+    if value is None:
+        return "None"
     if typ.python_type == str:
         return "'" + cast(str, value) + "'"
     return str(value)
@@ -389,10 +391,12 @@ class ServiceBase(DynamicType):
         param_types = [
             cls._client._types.as_type(param.type) for param in procedure.parameters
         ]
-        param_required = [not param.default_value for param in procedure.parameters]
+        param_required = [
+            not param.has_default_value for param in procedure.parameters
+        ]
         param_default: List[Optional[object]] = []
         for param, typ in zip(procedure.parameters, param_types):
-            if param.default_value:
+            if param.has_default_value and not param.default_value_is_null:
                 param_default.append(
                     Decoder.decode(cls._client, param.default_value, typ)
                 )

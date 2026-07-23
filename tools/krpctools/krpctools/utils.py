@@ -57,6 +57,9 @@ def _as_protobuf_type(types, type_info):
 
 
 def decode_default_value(value, typ):
+    if value is None:
+        # A JSON null default value means the default is null
+        return None
     value = base64.b64decode(value)
     value = array.array("B", value).tobytes()
     # Note: following is a workaround for decoding EnumerationType,

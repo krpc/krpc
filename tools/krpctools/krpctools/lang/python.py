@@ -54,10 +54,10 @@ class PythonLanguage(Language):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def parse_default_value(self, value, typ):
-        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
-            return "'%s'" % value
         if value is None:
             return "None"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
+            return "'%s'" % value
         if isinstance(typ, EnumerationType):
             return self.parse_type(typ) + "(%d)" % value
         return str(value)

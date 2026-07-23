@@ -226,7 +226,7 @@ class Client(krpc.services.Client):
 
         # Decode the response and return the (optional) result
         result = None
-        if return_type is not None:
+        if return_type is not None and not response.results[0].is_null:
             result = Decoder.decode(self, response.results[0].value, return_type)
             if isinstance(result, KRPC.Event):
                 result = Event(self, result)
@@ -249,6 +249,10 @@ class Client(krpc.services.Client):
 
         for i, (value, typ) in enumerate(zip(args, param_types)):
             if isinstance(value, DefaultArgument):
+                continue
+            if value is None:
+                # A null argument is signaled out-of-band; the value field is left unset
+                call.arguments.add(position=i, is_null=True)
                 continue
             if not isinstance(value, typ.python_type):
                 try:

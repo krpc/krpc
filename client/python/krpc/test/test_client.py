@@ -166,6 +166,77 @@ class TestClient(ServerTestCase, unittest.TestCase):
             )
         )
 
+    def test_nullable_procedure_non_class(self) -> None:
+        # Nullable value-type, string and collection parameters and return values
+        self.assertEqual(42, self.conn.test_service.echo_nullable_int(42))
+        self.assertIsNone(self.conn.test_service.echo_nullable_int(None))
+        self.assertEqual("foo", self.conn.test_service.echo_nullable_string("foo"))
+        self.assertIsNone(self.conn.test_service.echo_nullable_string(None))
+        self.assertEqual([1, 2, 3], self.conn.test_service.echo_nullable_list([1, 2, 3]))
+        self.assertIsNone(self.conn.test_service.echo_nullable_list(None))
+
+    def test_nullable_procedure_class(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        self.assertEqual(obj, self.conn.test_service.echo_test_object(obj))
+        self.assertIsNone(self.conn.test_service.echo_test_object(None))
+
+    def test_non_nullable_parameter_rejects_null(self) -> None:
+        with self.assertRaises(krpc.error.RPCError):
+            self.conn.test_service.not_nullable_object(None)
+
+    def test_nullable_class_method(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        obj2 = self.conn.test_service.create_test_object("bob")
+        self.assertEqual(obj2, obj.echo_nullable_object(obj2))
+        self.assertIsNone(obj.echo_nullable_object(None))
+
+    def test_nullable_class_static_method(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        self.assertEqual(
+            obj, self.conn.test_service.TestClass.static_nullable_object(obj)
+        )
+        self.assertIsNone(
+            self.conn.test_service.TestClass.static_nullable_object(None)
+        )
+
+    def test_nullable_property(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        # ObjectProperty is nullable and its setter accepts null
+        self.conn.test_service.object_property = None
+        self.assertIsNone(self.conn.test_service.object_property)
+        # NullableObject is nullable for reads, but its setter guards against null, so writing
+        # null raises the server's ArgumentNullException (mapped to ValueError on the client)
+        self.conn.test_service.nullable_object = obj
+        self.assertEqual(obj, self.conn.test_service.nullable_object)
+        with self.assertRaises(ValueError):
+            self.conn.test_service.nullable_object = None
+
+    def test_non_nullable_property_rejects_null(self) -> None:
+        with self.assertRaises(krpc.error.RPCError):
+            self.conn.test_service.string_property = None
+
+    def test_nullable_class_property(self) -> None:
+        obj = self.conn.test_service.create_test_object("jeb")
+        obj2 = self.conn.test_service.create_test_object("bob")
+        obj.object_property = obj2
+        self.assertEqual(obj2, obj.object_property)
+        obj.object_property = None
+        self.assertIsNone(obj.object_property)
+
+    def test_empty_collection_default(self) -> None:
+        # An empty-collection default is distinguishable from no default: the argument
+        # can be omitted and the empty list is used.
+        self.assertEqual([], self.conn.test_service.empty_list_default())
+        self.assertEqual(
+            ["foo", "bar"], self.conn.test_service.empty_list_default(["foo", "bar"])
+        )
+
+    def test_nullable_stream(self) -> None:
+        with self.conn.stream(
+            self.conn.test_service.echo_nullable_int, None
+        ) as stream:
+            self.assertIsNone(stream())
+
     def test_class_methods(self) -> None:
         obj = self.conn.test_service.create_test_object("bob")
         self.assertEqual("value=bob", obj.get_value())
@@ -316,9 +387,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set([1, 2, 3]), self.conn.test_service.increment_set(set([0, 1, 2]))
         )
         self.assertEqual((2, 3), self.conn.test_service.increment_tuple((1, 2)))
-        self.assertRaises(TypeError, self.conn.test_service.increment_list, None)
-        self.assertRaises(TypeError, self.conn.test_service.increment_set, None)
-        self.assertRaises(TypeError, self.conn.test_service.increment_dictionary, None)
+        # These collection parameters are not nullable, so null is rejected by the server
+        self.assertRaises(RPCError, self.conn.test_service.increment_list, None)
+        self.assertRaises(RPCError, self.conn.test_service.increment_set, None)
+        self.assertRaises(RPCError, self.conn.test_service.increment_dictionary, None)
 
     def test_nested_collections(self) -> None:
         self.assertEqual({}, self.conn.test_service.increment_nested_collection({}))
@@ -468,6 +540,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "echo_test_object",
                     "object_property",
                     "return_null_when_not_allowed",
+                    "not_nullable_object",
+                    "echo_nullable_string",
+                    "echo_nullable_list",
+                    "echo_nullable_int",
+                    "nullable_object",
+                    "empty_list_default",
                     "TestClass",
                     "optional_arguments",
                     "TestEnum",
@@ -516,12 +594,14 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "get_value",
                     "float_to_string",
                     "object_to_string",
+                    "echo_nullable_object",
                     "int_property",
                     "object_property",
                     "string_property_private_get",
                     "string_property_private_set",
                     "optional_arguments",
                     "static_method",
+                    "static_nullable_object",
                 ]
             ),
             set(
