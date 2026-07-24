@@ -163,7 +163,7 @@ class TestCase(AssertionsMixin):
         if launch_site is None:
             space_center.launch_vessel_from_vab(name)
         else:
-            space_center.launch_vessel("VAB", name, launch_site, [])
+            space_center.launch_vessel("VAB", name, launch_site)
         # Ensure the crew are all pilots, for full control
         cls.set_crew_to_pilot()
 
@@ -176,7 +176,7 @@ class TestCase(AssertionsMixin):
         if launch_site is None:
             space_center.launch_vessel_from_sph(name)
         else:
-            space_center.launch_vessel("SPH", name, launch_site, [])
+            space_center.launch_vessel("SPH", name, launch_site)
         # Ensure the crew are all pilots, for full control
         cls.set_crew_to_pilot()
 

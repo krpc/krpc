@@ -279,6 +279,20 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         sealed class LaunchConfig {
             public LaunchConfig(string craftDirectory, string name, string launchSite, bool recover, IList<string> crew, string flagUrl) {
+                // Resolve the requested crew before touching any game state, so an unknown or
+                // unavailable Kerbal aborts the launch without side effects.
+                List<ProtoCrewMember> requestedCrew = null;
+                if (crew != null && crew.Count > 0) {
+                    requestedCrew = new List<ProtoCrewMember>();
+                    foreach (var crewName in crew) {
+                        var kerbal = GetKerbal(crewName);
+                        if (kerbal == null)
+                            throw new ArgumentException("No Kerbal named '" + crewName + "'");
+                        if (kerbal.InternalCrewMember.rosterStatus != ProtoCrewMember.RosterStatus.Available)
+                            throw new ArgumentException("Kerbal '" + crewName + "' is not available");
+                        requestedCrew.Add(kerbal.InternalCrewMember);
+                    }
+                }
                 LaunchSite = launchSite;
                 Recover = recover;
                 FlagUrl = string.IsNullOrEmpty(flagUrl) ? EditorLogic.FlagURL : flagUrl;
@@ -296,27 +310,21 @@ namespace KRPC.SpaceCenter.Services
                 manifest = VesselCrewManifest.FromConfigNode(template.config);
                 if (manifest == null)
                     throw new InvalidOperationException("Failed to load manifest from vessel template");
-                if (crew == null || crew.Count == 0) {
+                if (crew == null) {
+                    // Use the craft's default crew assignments.
                     manifest = HighLogic.CurrentGame.CrewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
-                } else {
+                } else if (crew.Count == 0) {
+                    // Launch with no crew. An empty roster with auto-hire disabled leaves every
+                    // seat unfilled.
                     var crewRoster = new KerbalRoster(HighLogic.CurrentGame.Mode);
-                    foreach (var crewName in crew) {
-                        var kerbal = GetKerbal(crewName);
-                        if (kerbal != null && kerbal.InternalCrewMember.rosterStatus == ProtoCrewMember.RosterStatus.Available) {
-                            crewRoster.AddCrewMember(kerbal.InternalCrewMember);
-                        }
-                    }
-                    manifest = crewRoster.DefaultCrewForVessel(template.config, manifest, true, false);
-                    if (manifest == null)
-                        throw new InvalidOperationException("Failed to load manifest");
-                    if (manifest.CrewCount < crewRoster.Count) {
-                        foreach (var crewMember in crewRoster.Crew) {
-                            if (!manifest.Contains(crewMember)) {
-                                if (!AddCrewToManifest(manifest, crewMember)) {
-                                    Debug.LogError($"Failed to add {crewMember.name} to a seat");
-                                }
-                            }
-                        }
+                    manifest = crewRoster.DefaultCrewForVessel(template.config, manifest, false, false);
+                } else {
+                    // Place exactly the named Kerbals, in the order given. Each takes the next
+                    // empty seat, scanning parts in manifest order then seats by index, so a
+                    // Kerbal's position in the list maps deterministically onto the craft's seats.
+                    foreach (var crewMember in requestedCrew) {
+                        if (!AddCrewToManifest(manifest, crewMember))
+                            throw new ArgumentException("The craft does not have enough seats for the requested crew");
                     }
                 }
                 if (manifest == null)
@@ -386,17 +394,30 @@ namespace KRPC.SpaceCenter.Services
         /// in the save directory, without the ".craft" file extension.</param>
         /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or
         /// <c>"Runway"</c>.</param>
+        /// <param name="crew">The Kerbals to place in the craft, by name. Controls how the craft is
+        /// crewed, as described in the remarks.</param>
         /// <param name="recover">If true and there is a vessel on the launch site,
         /// recover it before launching.</param>
-        /// <param name="crew">If not <c>null</c>, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</param>
         /// <param name="flagUrl">If not <c>null</c>, the asset URL of the mission flag to use for the launch.</param>
         /// <remarks>
+        /// The <paramref name="crew"/> parameter controls how the craft is crewed:
+        /// <list type="bullet">
+        /// <item><description>If <c>null</c>, the craft's default crew assignments are used.
+        /// </description></item>
+        /// <item><description>If an empty list, the craft is launched with no crew.
+        /// </description></item>
+        /// <item><description>Otherwise, the named Kerbals are placed in the craft in the order
+        /// given: the first name takes the first seat, the second name the next seat, and so on,
+        /// scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+        /// An exception is thrown, without launching, if a name does not match an available Kerbal
+        /// or the craft has too few seats for the requested crew.</description></item>
+        /// </list>
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
         public static void LaunchVessel (
-            string craftDirectory, string name, string launchSite, bool recover = true,
-            IList<string> crew = null, string flagUrl = "")
+            string craftDirectory, string name, string launchSite, IList<string> crew = null,
+            bool recover = true, string flagUrl = "")
         {
             CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
@@ -486,7 +507,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name, bool recover = true)
         {
-            LaunchVessel ("VAB", name, "LaunchPad", recover);
+            LaunchVessel ("VAB", name, "LaunchPad", recover: recover);
         }
 
         /// <summary>
@@ -503,7 +524,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void LaunchVesselFromSPH (string name, bool recover = true)
         {
-            LaunchVessel ("SPH", name, "Runway", recover);
+            LaunchVessel ("SPH", name, "Runway", recover: recover);
         }
 
         /// <summary>
