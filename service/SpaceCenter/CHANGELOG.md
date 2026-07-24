@@ -1,7 +1,12 @@
 ## [v0.7.0] - unreleased
 
 - Space center
-  - `SpaceCenter.LaunchVessel` now accepts an optional `crew` parameter (#1017)
+  - **Breaking:** `SpaceCenter.LaunchVessel` takes its `crew` parameter as an exact
+    instruction, and the parameter is optional again. A `null` crew (the default) uses the
+    craft's default crew assignments; an empty list, which previously also used the default
+    assignments, launches with no crew; and a populated list seats exactly the named Kerbals,
+    in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats,
+    raises an exception without launching (#1017)
 
 ## [v0.6.0]
 
