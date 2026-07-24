@@ -1,3 +1,7 @@
+## [v0.7.0] - unreleased
+- **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
+  form (`int?`) (#1017)
+
 ## [v0.6.0]
 - **Breaking:** Requires .NET Framework 4.7.2 or later (#948)
 - Update to protobuf v3.35.1 (#850)

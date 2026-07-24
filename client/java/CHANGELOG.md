@@ -1,3 +1,7 @@
+## [v0.7.0] - unreleased
+- **Breaking:** Support `null` for any nullable type; nullable value types use the boxed type
+  (`Integer`, `Double`, …) (#1017)
+
 ## [v0.6.0]
 - Update to protobuf v4.35.1, guava 33.4.8-jre, antlr4-runtime 4.13.2 (#850)
 - Mark deprecated members with the `@Deprecated` annotation and an `@deprecated` javadoc tag (#904)

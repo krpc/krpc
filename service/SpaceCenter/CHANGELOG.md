@@ -1,3 +1,8 @@
+## [v0.7.0] - unreleased
+
+- Space center
+  - `SpaceCenter.LaunchVessel` now accepts an optional `crew` parameter (#1017)
+
 ## [v0.6.0]
 
 - Space center

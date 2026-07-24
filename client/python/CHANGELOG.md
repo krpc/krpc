@@ -1,3 +1,6 @@
+## [v0.7.0] - unreleased
+- **Breaking:** Support `None` for any nullable type (#1017)
+
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)
 - Update to protobuf v7.35.1 (#850)
