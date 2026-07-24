@@ -69,8 +69,8 @@ public class TestService {
             Encoder.encode(y, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
             Encoder.encode(z, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
         };
-        ByteString _data = this.connection.invoke("TestService", "AddMultipleValues", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "AddMultipleValues", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -80,8 +80,8 @@ public class TestService {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass"))),
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
-        ByteString _data = this.connection.invoke("TestService", "AddToObjectList", _args);
-        return (java.util.List<krpc.client.services.TestService.TestClass>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass")), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "AddToObjectList", _args);
+        return (java.util.List<krpc.client.services.TestService.TestClass>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createClass("TestService", "TestClass")), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -91,8 +91,8 @@ public class TestService {
             Encoder.encode(n, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
             Encoder.encode(sum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "BlockingProcedure", _args);
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "BlockingProcedure", _args);
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -101,8 +101,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL))
         };
-        ByteString _data = this.connection.invoke("TestService", "BoolToString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "BoolToString", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -111,8 +111,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES))
         };
-        ByteString _data = this.connection.invoke("TestService", "BytesToHexString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "BytesToHexString", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -122,8 +122,8 @@ public class TestService {
             Encoder.encode(id, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
             Encoder.encode(divisor, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "Counter", _args);
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Counter", _args);
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -132,8 +132,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
-        ByteString _data = this.connection.invoke("TestService", "CreateTestObject", _args);
-        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CreateTestObject", _args);
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     /**
@@ -148,8 +148,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
-        ByteString _data = this.connection.invoke("TestService", "DeprecatedProcedure", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DeprecatedProcedure", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -162,8 +162,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
-        ByteString _data = this.connection.invoke("TestService", "DeprecatedProcedureNoMessage", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DeprecatedProcedureNoMessage", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -172,8 +172,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)))
         };
-        ByteString _data = this.connection.invoke("TestService", "DictionaryDefault", _args);
-        return (java.util.Map<Integer,Boolean>) Encoder.decode(_data, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DictionaryDefault", _args);
+        return (java.util.Map<Integer,Boolean>) Encoder.decode(_data.getValue(), krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -182,18 +182,21 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE))
         };
-        ByteString _data = this.connection.invoke("TestService", "DoubleToString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DoubleToString", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EchoNullableInt", types = _Types.class)
-    public int echoNullableInt(int value) throws RPCException {
+    public Integer echoNullableInt(Integer value) throws RPCException {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "EchoNullableInt", _args);
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoNullableInt", _args);
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (Integer) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -202,8 +205,11 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
-        ByteString _data = this.connection.invoke("TestService", "EchoNullableList", _args);
-        return (java.util.List<Integer>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoNullableList", _args);
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (java.util.List<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -212,8 +218,11 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
-        ByteString _data = this.connection.invoke("TestService", "EchoNullableString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoNullableString", _args);
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -222,8 +231,11 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
-        ByteString _data = this.connection.invoke("TestService", "EchoTestObject", _args);
-        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EchoTestObject", _args);
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -232,8 +244,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)))
         };
-        ByteString _data = this.connection.invoke("TestService", "EmptyListDefault", _args);
-        return (java.util.List<String>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EmptyListDefault", _args);
+        return (java.util.List<String>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -242,8 +254,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
-        ByteString _data = this.connection.invoke("TestService", "EnumDefaultArg", _args);
-        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data, krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumDefaultArg", _args);
+        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -252,15 +264,15 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createEnumeration("TestService", "TestEnum"))
         };
-        ByteString _data = this.connection.invoke("TestService", "EnumEcho", _args);
-        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data, krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumEcho", _args);
+        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EnumReturn", types = _Types.class)
     public krpc.client.services.TestService.TestEnum enumReturn() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "EnumReturn");
-        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data, krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumReturn");
+        return (krpc.client.services.TestService.TestEnum) Encoder.decode(_data.getValue(), krpc.client.Types.createEnumeration("TestService", "TestEnum"), this.connection);
     }
 
     /**
@@ -272,8 +284,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
         };
-        ByteString _data = this.connection.invoke("TestService", "FloatToString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FloatToString", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -282,8 +294,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
-        ByteString _data = this.connection.invoke("TestService", "IncrementDictionary", _args);
-        return (java.util.Map<String,Integer>) Encoder.decode(_data, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IncrementDictionary", _args);
+        return (java.util.Map<String,Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -292,8 +304,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
-        ByteString _data = this.connection.invoke("TestService", "IncrementList", _args);
-        return (java.util.List<Integer>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IncrementList", _args);
+        return (java.util.List<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -302,8 +314,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(d, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))))
         };
-        ByteString _data = this.connection.invoke("TestService", "IncrementNestedCollection", _args);
-        return (java.util.Map<String,java.util.List<Integer>>) Encoder.decode(_data, krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IncrementNestedCollection", _args);
+        return (java.util.Map<String,java.util.List<Integer>>) Encoder.decode(_data.getValue(), krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -312,8 +324,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(h, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
-        ByteString _data = this.connection.invoke("TestService", "IncrementSet", _args);
-        return (java.util.Set<Integer>) Encoder.decode(_data, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IncrementSet", _args);
+        return (java.util.Set<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -322,8 +334,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(t, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)))
         };
-        ByteString _data = this.connection.invoke("TestService", "IncrementTuple", _args);
-        return (org.javatuples.Pair<Integer,Long>) Encoder.decode(_data, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IncrementTuple", _args);
+        return (org.javatuples.Pair<Integer,Long>) Encoder.decode(_data.getValue(), krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -332,8 +344,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "Int32ToString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Int32ToString", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -342,8 +354,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
         };
-        ByteString _data = this.connection.invoke("TestService", "Int64ToString", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Int64ToString", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -352,8 +364,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
-        ByteString _data = this.connection.invoke("TestService", "ListDefault", _args);
-        return (java.util.List<Integer>) Encoder.decode(_data, krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ListDefault", _args);
+        return (java.util.List<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -362,8 +374,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
         };
-        ByteString _data = this.connection.invoke("TestService", "NotNullableObject", _args);
-        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "NotNullableObject", _args);
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -373,8 +385,8 @@ public class TestService {
             Encoder.encode(milliseconds, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)),
             Encoder.encode(repeats, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "OnTimer", _args);
-        return (krpc.client.Event) Encoder.decode(_data, krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "OnTimer", _args);
+        return (krpc.client.Event) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -383,8 +395,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(milliseconds, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "OnTimerUsingLambda", _args);
-        return (krpc.client.Event) Encoder.decode(_data, krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "OnTimerUsingLambda", _args);
+        return (krpc.client.Event) Encoder.decode(_data.getValue(), krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -396,8 +408,8 @@ public class TestService {
             Encoder.encode(z, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
             Encoder.encode(obj, krpc.client.Types.createClass("TestService", "TestClass"))
         };
-        ByteString _data = this.connection.invoke("TestService", "OptionalArguments", _args);
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "OptionalArguments", _args);
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -415,8 +427,8 @@ public class TestService {
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ReturnNullWhenNotAllowed", types = _Types.class)
     public krpc.client.services.TestService.TestClass returnNullWhenNotAllowed() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "ReturnNullWhenNotAllowed");
-        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ReturnNullWhenNotAllowed");
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -425,8 +437,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)))
         };
-        ByteString _data = this.connection.invoke("TestService", "SetDefault", _args);
-        return (java.util.Set<Integer>) Encoder.decode(_data, krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "SetDefault", _args);
+        return (java.util.Set<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -435,15 +447,15 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(value, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
-        ByteString _data = this.connection.invoke("TestService", "StringToInt32", _args);
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "StringToInt32", _args);
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowArgumentException", types = _Types.class)
     public int throwArgumentException() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "ThrowArgumentException");
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowArgumentException");
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -452,8 +464,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(foo, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
         };
-        ByteString _data = this.connection.invoke("TestService", "ThrowArgumentNullException", _args);
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowArgumentNullException", _args);
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -462,36 +474,36 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(foo, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
         };
-        ByteString _data = this.connection.invoke("TestService", "ThrowArgumentOutOfRangeException", _args);
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowArgumentOutOfRangeException", _args);
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomException", types = _Types.class)
     public int throwCustomException() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "ThrowCustomException");
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowCustomException");
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowCustomExceptionLater", types = _Types.class)
     public int throwCustomExceptionLater() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "ThrowCustomExceptionLater");
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowCustomExceptionLater");
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowInvalidOperationException", types = _Types.class)
     public int throwInvalidOperationException() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "ThrowInvalidOperationException");
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowInvalidOperationException");
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "ThrowInvalidOperationExceptionLater", types = _Types.class)
     public int throwInvalidOperationExceptionLater() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "ThrowInvalidOperationExceptionLater");
-        return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "ThrowInvalidOperationExceptionLater");
+        return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -500,8 +512,8 @@ public class TestService {
         ByteString[] _args = new ByteString[] {
             Encoder.encode(x, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)))
         };
-        ByteString _data = this.connection.invoke("TestService", "TupleDefault", _args);
-        return (org.javatuples.Pair<Integer,Boolean>) Encoder.decode(_data, krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TupleDefault", _args);
+        return (org.javatuples.Pair<Integer,Boolean>) Encoder.decode(_data.getValue(), krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
     }
 
     /**
@@ -513,8 +525,8 @@ public class TestService {
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_DeprecatedProperty", types = _Types.class)
     public String getDeprecatedProperty() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "get_DeprecatedProperty");
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_DeprecatedProperty");
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -535,8 +547,11 @@ public class TestService {
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_NullableObject", types = _Types.class)
     public krpc.client.services.TestService.TestClass getNullableObject() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "get_NullableObject");
-        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_NullableObject");
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -551,8 +566,11 @@ public class TestService {
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_ObjectProperty", types = _Types.class)
     public krpc.client.services.TestService.TestClass getObjectProperty() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "get_ObjectProperty");
-        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_ObjectProperty");
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -570,8 +588,8 @@ public class TestService {
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_StringProperty", types = _Types.class)
     public String getStringProperty() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "get_StringProperty");
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_StringProperty");
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -598,8 +616,8 @@ public class TestService {
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "get_StringPropertyPrivateSet", types = _Types.class)
     public String getStringPropertyPrivateSet() throws RPCException {
-        ByteString _data = this.connection.invoke("TestService", "get_StringPropertyPrivateSet");
-        return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "get_StringPropertyPrivateSet");
+        return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
     }
 
     /**
@@ -714,8 +732,8 @@ public class TestService {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "DeprecatedClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
     }
 
@@ -738,8 +756,11 @@ public class TestService {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
                 Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_EchoNullableObject", _args);
-            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_EchoNullableObject", _args);
+            if (_data.getIsNull()) {
+              return null;
+            }
+            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
         }
 
         @SuppressWarnings({ "unchecked" })
@@ -750,8 +771,8 @@ public class TestService {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
                 Encoder.encode(x, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_FloatToString", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_FloatToString", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         /**
@@ -764,8 +785,8 @@ public class TestService {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_GetValue", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_GetValue", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         @SuppressWarnings({ "unchecked" })
@@ -776,8 +797,8 @@ public class TestService {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass")),
                 Encoder.encode(other, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_ObjectToString", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_ObjectToString", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         @SuppressWarnings({ "unchecked" })
@@ -791,8 +812,8 @@ public class TestService {
                 Encoder.encode(z, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
                 Encoder.encode(obj, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_OptionalArguments", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_OptionalArguments", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         /**
@@ -805,8 +826,8 @@ public class TestService {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_get_IntProperty", _args);
-            return (int) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_get_IntProperty", _args);
+            return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
         }
 
         /**
@@ -830,8 +851,11 @@ public class TestService {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_get_ObjectProperty", _args);
-            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_get_ObjectProperty", _args);
+            if (_data.getIsNull()) {
+              return null;
+            }
+            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), this.connection);
         }
 
         @SuppressWarnings({ "unchecked" })
@@ -863,8 +887,8 @@ public class TestService {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(this, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = this.connection.invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+            krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
         }
 
         @SuppressWarnings({ "unchecked" })
@@ -875,8 +899,8 @@ public class TestService {
                 Encoder.encode(a, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)),
                 Encoder.encode(b, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
             };
-            ByteString _data = connection.invoke("TestService", "TestClass_static_StaticMethod", _args);
-            return (String) Encoder.decode(_data, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "TestClass_static_StaticMethod", _args);
+            return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), connection);
         }
 
         @SuppressWarnings({ "unchecked" })
@@ -886,8 +910,11 @@ public class TestService {
             ByteString[] _args = new ByteString[] {
                 Encoder.encode(value, krpc.client.Types.createClass("TestService", "TestClass"))
             };
-            ByteString _data = connection.invoke("TestService", "TestClass_static_StaticNullableObject", _args);
-            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data, krpc.client.Types.createClass("TestService", "TestClass"), connection);
+            krpc.schema.KRPC.ProcedureResult _data = connection.invoke("TestService", "TestClass_static_StaticNullableObject", _args);
+            if (_data.getIsNull()) {
+              return null;
+            }
+            return (krpc.client.services.TestService.TestClass) Encoder.decode(_data.getValue(), krpc.client.Types.createClass("TestService", "TestClass"), connection);
         }
     }
 

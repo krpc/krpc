@@ -57,6 +57,10 @@ public class Encoder {
 
   /** Encode an object. */
   public static ByteString encode(Object value, KRPC.Type type) {
+    // A null value is signaled out-of-band by is_null; return null to indicate this.
+    if (value == null) {
+      return null;
+    }
     try {
       switch (type.getCode()) {
         case DOUBLE:
@@ -78,11 +82,7 @@ public class Encoder {
         case BYTES:
           return encodeBytes((byte[]) value);
         case CLASS:
-          if (value == null) {
-            return encodeUint64(0);
-          } else {
-            return encodeObject((RemoteObject) value);
-          }
+          return encodeObject((RemoteObject) value);
         case ENUMERATION:
           return encodeEnum((RemoteEnum) value);
         case TUPLE:
@@ -343,7 +343,7 @@ public class Encoder {
       Class<?> classType = Class.forName(
           "krpc.client.services." + type.getService() + "$" + type.getName());
       Constructor<?> ctor = classType.getConstructor(Connection.class, long.class);
-      return id == 0 ? null : (T) ctor.newInstance(connection, id);
+      return (T) ctor.newInstance(connection, id);
     } catch (ClassNotFoundException exn) {
       throw new EncodingException("Failed to decode object", exn);
     } catch (NoSuchMethodException exn) {

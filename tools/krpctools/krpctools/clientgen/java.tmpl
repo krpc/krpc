@@ -8,10 +8,15 @@ ByteString[] _args = new ByteString[] {
 };
 {% endmacro %}
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}ByteString _data = {% endif %}{% if is_static %}connection{% else %}this.connection{% endif %}.invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% if has_return %}krpc.schema.KRPC.ProcedureResult _data = {% endif %}{% if is_static %}connection{% else %}this.connection{% endif %}.invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro return(type, is_static=False) %}
-return ({{type.name}}) Encoder.decode(_data, {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
+{% if type.nullable %}
+if (_data.getIsNull()) {
+  return null;
+}
+{% endif %}
+return ({{type.name}}) Encoder.decode(_data.getValue(), {{type.spec}}, {% if is_static %}connection{% else %}this.connection{% endif %});
 {% endmacro %}
 {% macro sig_parameters(parameters) %}
 {% for x in parameters %}{{x.type.name}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}

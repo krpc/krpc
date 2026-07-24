@@ -2,6 +2,7 @@ package krpc.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -50,6 +51,17 @@ public class StreamTest {
     Stream<String> stream = connection.addStream(TestService.class, "getStringProperty");
     for (int i = 0; i < 5; i++) {
       assertEquals("foo", stream.get());
+      pause();
+    }
+  }
+
+  @Test
+  public void testNullable()
+      throws RPCException, StreamException, NoSuchMethodException {
+    Stream<Integer> stream =
+        connection.addStream(TestService.class, "echoNullableInt", (Object) null);
+    for (int i = 0; i < 5; i++) {
+      assertNull(stream.get());
       pause();
     }
   }
