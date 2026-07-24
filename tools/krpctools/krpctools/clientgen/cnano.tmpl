@@ -17,7 +17,15 @@ KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, {{ parameters
 KRPC_CHECK(krpc_call(&_call, {{ service_id }}, {{ procedure_id }}, 0, NULL));
 {% endif %}
 {% for x in parameters %}
+{% if x.nullable is defined and x.nullable %}
+if ({{ x.null_check }}) {
+  KRPC_CHECK(krpc_add_null_argument(&_call, {{ loop.index0 }}));
+} else {
+  KRPC_CHECK(krpc_add_argument(&_call, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
+}
+{% else %}
 KRPC_CHECK(krpc_add_argument(&_call, {{ loop.index0 }}, &krpc_encode_callback_{{ x.type.name }}, {{ x.type.getptr }}{{ x.name }}));
+{% endif %}
 {% endfor %}
 {% endmacro %}
 {% macro return(return_type) %}
@@ -26,9 +34,30 @@ KRPC_CHECK(krpc_init_result(&_result));
 KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
 {% if return_type.ctype != 'void' %}
 if (returnValue) {
+{% if return_type.nullable and return_type.is_class %}
+  if (_result.message.is_null) {
+    *returnValue = KRPC_NULL;
+  } else {
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_{{ return_type.name }}(&_stream, returnValue));
+  }
+{% elif return_type.nullable %}
+  if (_result.message.is_null) {
+    if (returnValueIsNull)
+      *returnValueIsNull = true;
+  } else {
+    if (returnValueIsNull)
+      *returnValueIsNull = false;
+    pb_istream_t _stream;
+    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+    KRPC_CHECK(krpc_decode_{{ return_type.name }}(&_stream, {% if return_type.name == 'enum' %}(int*){% endif %}returnValue));
+  }
+{% else %}
   pb_istream_t _stream;
   KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
   KRPC_CHECK(krpc_decode_{{ return_type.name }}(&_stream, {% if return_type.name == 'enum' %}(int*){% endif %}returnValue));
+{% endif %}
 }
 {% else %}
 {% endif %}
@@ -39,7 +68,7 @@ return KRPC_OK;
 {% for x in [{'type': {'ccvtype': 'krpc_connection_t'}, 'name': 'connection'}] + parameters %}{{x.type.ccvtype}} {{x.name}}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 {% macro parameters(return_type, parameters) %}
-{% if return_type.ctype != 'void' %}{{ _parameters([{'type': return_type, 'name': 'returnValue'}] + parameters) }}{% else %}{{ _parameters(parameters) }}{% endif %}
+{% if return_type.ctype != 'void' %}{% if return_type.nullable and not return_type.is_class %}{{ _parameters([{'type': return_type, 'name': 'returnValue'}, {'type': {'ccvtype': 'bool *'}, 'name': 'returnValueIsNull'}] + parameters) }}{% else %}{{ _parameters([{'type': return_type, 'name': 'returnValue'}] + parameters) }}{% endif %}{% else %}{{ _parameters(parameters) }}{% endif %}
 {% endmacro %}
 {% macro procedure_parameters(procedure) %}
 {{ parameters(procedure.return_type, procedure.parameters) }}{% endmacro %}

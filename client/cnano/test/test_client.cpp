@@ -108,6 +108,89 @@ TEST_F(test_client, test_class_none_value) {
   ASSERT_EQ(none, object);
 }
 
+TEST_F(test_client, test_nullable_non_class_values) {
+  // Nullable value-type, string and collection parameters and return values. Each nullable
+  // non-class argument is a pointer where NULL means null, and each such return has an extra
+  // returnValueIsNull out-parameter.
+  int32_t int_result = 0;
+  bool int_null = false;
+  int32_t int_value = 42;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableInt(conn, &int_result, &int_null, &int_value));
+  ASSERT_FALSE(int_null);
+  ASSERT_EQ(42, int_result);
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableInt(conn, &int_result, &int_null, NULL));
+  ASSERT_TRUE(int_null);
+
+  char* string_result = nullptr;
+  bool string_null = false;
+  ASSERT_EQ(KRPC_OK,
+            krpc_TestService_EchoNullableString(conn, &string_result, &string_null, "foo"));
+  ASSERT_FALSE(string_null);
+  ASSERT_STREQ("foo", string_result);
+  krpc_free(string_result);
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableString(conn, &string_result, &string_null, NULL));
+  ASSERT_TRUE(string_null);
+
+  krpc_list_int32_t list = KRPC_NULL_LIST;
+  list.size = 3;
+  list.items = new int32_t[3];
+  list.items[0] = 1;
+  list.items[1] = 2;
+  list.items[2] = 3;
+  krpc_list_int32_t list_result = KRPC_NULL_LIST;
+  bool list_null = false;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableList(conn, &list_result, &list_null, &list));
+  ASSERT_FALSE(list_null);
+  ASSERT_EQ(3u, list_result.size);
+  delete[] list.items;
+  KRPC_FREE_LIST(list_result);
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EchoNullableList(conn, &list_result, &list_null, NULL));
+  ASSERT_TRUE(list_null);
+}
+
+TEST_F(test_client, test_non_nullable_parameter_rejects_null) {
+  // A null argument to a parameter that is not nullable is rejected by the server
+  krpc_TestService_TestClass_t result;
+  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_NotNullableObject(conn, &result, KRPC_NULL));
+}
+
+TEST_F(test_client, test_nullable_class_method) {
+  krpc_TestService_TestClass_t obj;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
+  krpc_TestService_TestClass_t obj2;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj2, "bob"));
+  krpc_TestService_TestClass_t result;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_EchoNullableObject(conn, &result, obj, obj2));
+  ASSERT_EQ(obj2, result);
+  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_EchoNullableObject(conn, &result, obj, KRPC_NULL));
+  ASSERT_EQ(KRPC_NULL, result);
+}
+
+TEST_F(test_client, test_nullable_class_static_method) {
+  krpc_TestService_TestClass_t obj;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
+  krpc_TestService_TestClass_t result;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticNullableObject(conn, &result, obj));
+  ASSERT_EQ(obj, result);
+  ASSERT_EQ(KRPC_OK, krpc_TestService_TestClass_StaticNullableObject(conn, &result, KRPC_NULL));
+  ASSERT_EQ(KRPC_NULL, result);
+}
+
+TEST_F(test_client, test_nullable_property) {
+  krpc_TestService_TestClass_t obj;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "jeb"));
+  krpc_TestService_TestClass_t result;
+  // ObjectProperty is nullable and its setter accepts null
+  ASSERT_EQ(KRPC_OK, krpc_TestService_set_ObjectProperty(conn, KRPC_NULL));
+  ASSERT_EQ(KRPC_OK, krpc_TestService_ObjectProperty(conn, &result));
+  ASSERT_EQ(KRPC_NULL, result);
+  // NullableObject is nullable for reads, but its setter guards against null
+  ASSERT_EQ(KRPC_OK, krpc_TestService_set_NullableObject(conn, obj));
+  ASSERT_EQ(KRPC_OK, krpc_TestService_NullableObject(conn, &result));
+  ASSERT_EQ(obj, result);
+  ASSERT_EQ(KRPC_ERROR_RPC_FAILED, krpc_TestService_set_NullableObject(conn, KRPC_NULL));
+}
+
 TEST_F(test_client, test_class_methods) {
   krpc_TestService_TestClass_t object;
   ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &object, "bob"));

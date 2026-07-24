@@ -282,11 +282,11 @@ static inline krpc_error_t krpc_TestService_DictionaryDefault(krpc_connection_t 
 
 static inline krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * returnValue, double value);
 
-static inline krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, int32_t value);
+static inline krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, bool * returnValueIsNull, const int32_t * value);
 
-static inline krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l);
+static inline krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * returnValue, bool * returnValueIsNull, const krpc_list_int32_t * l);
 
-static inline krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * returnValue, const char * value);
+static inline krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, const char * value);
 
 static inline krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * returnValue, krpc_TestService_TestClass_t value);
 
@@ -1520,52 +1520,85 @@ static inline krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t con
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, int32_t value) {
+static inline krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * returnValue, bool * returnValueIsNull, const int32_t * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 15, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_int32, &value));
+  if (value == NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_int32, value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+    if (_result.message.is_null) {
+      if (returnValueIsNull)
+        *returnValueIsNull = true;
+    } else {
+      if (returnValueIsNull)
+        *returnValueIsNull = false;
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_int32(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * returnValue, const krpc_list_int32_t * l) {
+static inline krpc_error_t krpc_TestService_EchoNullableList(krpc_connection_t connection, krpc_list_int32_t * returnValue, bool * returnValueIsNull, const krpc_list_int32_t * l) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 14, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_list_int32, l));
+  if (l == NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_list_int32, l));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_list_int32(&_stream, returnValue));
+    if (_result.message.is_null) {
+      if (returnValueIsNull)
+        *returnValueIsNull = true;
+    } else {
+      if (returnValueIsNull)
+        *returnValueIsNull = false;
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_list_int32(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
 }
 
-static inline krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * returnValue, const char * value) {
+static inline krpc_error_t krpc_TestService_EchoNullableString(krpc_connection_t connection, char * * returnValue, bool * returnValueIsNull, const char * value) {
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 13, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_string, &value));
+  if (value == NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_string, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+    if (_result.message.is_null) {
+      if (returnValueIsNull)
+        *returnValueIsNull = true;
+    } else {
+      if (returnValueIsNull)
+        *returnValueIsNull = false;
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_string(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -1575,14 +1608,22 @@ static inline krpc_error_t krpc_TestService_EchoTestObject(krpc_connection_t con
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 10, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  if (value == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    if (_result.message.is_null) {
+      *returnValue = KRPC_NULL;
+    } else {
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -1866,7 +1907,11 @@ static inline krpc_error_t krpc_TestService_OptionalArguments(krpc_connection_t 
   KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_string, &x));
   KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_string, &y));
   KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_string, &z));
-  KRPC_CHECK(krpc_add_argument(&_call, 3, &krpc_encode_callback_object, &obj));
+  if (obj == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 3));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 3, &krpc_encode_callback_object, &obj));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -2108,9 +2153,13 @@ static inline krpc_error_t krpc_TestService_NullableObject(krpc_connection_t con
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    if (_result.message.is_null) {
+      *returnValue = KRPC_NULL;
+    } else {
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -2120,7 +2169,11 @@ static inline krpc_error_t krpc_TestService_set_NullableObject(krpc_connection_t
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 53, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  if (value == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -2135,9 +2188,13 @@ static inline krpc_error_t krpc_TestService_ObjectProperty(krpc_connection_t con
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    if (_result.message.is_null) {
+      *returnValue = KRPC_NULL;
+    } else {
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -2147,7 +2204,11 @@ static inline krpc_error_t krpc_TestService_set_ObjectProperty(krpc_connection_t
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 51, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  if (value == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -2231,14 +2292,22 @@ static inline krpc_error_t krpc_TestService_TestClass_EchoNullableObject(krpc_co
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 59, 2, _arguments));
   KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
-  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_object, &value));
+  if (value == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 1));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_object, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    if (_result.message.is_null) {
+      *returnValue = KRPC_NULL;
+    } else {
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -2284,7 +2353,11 @@ static inline krpc_error_t krpc_TestService_TestClass_ObjectToString(krpc_connec
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 58, 2, _arguments));
   KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
-  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_object, &other));
+  if (other == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 1));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_object, &other));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -2305,7 +2378,11 @@ static inline krpc_error_t krpc_TestService_TestClass_OptionalArguments(krpc_con
   KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_string, &x));
   KRPC_CHECK(krpc_add_argument(&_call, 2, &krpc_encode_callback_string, &y));
   KRPC_CHECK(krpc_add_argument(&_call, 3, &krpc_encode_callback_string, &z));
-  KRPC_CHECK(krpc_add_argument(&_call, 4, &krpc_encode_callback_object, &obj));
+  if (obj == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 4));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 4, &krpc_encode_callback_object, &obj));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -2357,9 +2434,13 @@ static inline krpc_error_t krpc_TestService_TestClass_ObjectProperty(krpc_connec
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    if (_result.message.is_null) {
+      *returnValue = KRPC_NULL;
+    } else {
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
@@ -2370,7 +2451,11 @@ static inline krpc_error_t krpc_TestService_TestClass_set_ObjectProperty(krpc_co
   krpc_argument_t _arguments[2];
   KRPC_CHECK(krpc_call(&_call, 9999, 66, 2, _arguments));
   KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_uint64, &instance));
-  KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_object, &value));
+  if (value == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 1));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 1, &krpc_encode_callback_object, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
@@ -2430,14 +2515,22 @@ static inline krpc_error_t krpc_TestService_TestClass_StaticNullableObject(krpc_
   krpc_call_t _call;
   krpc_argument_t _arguments[1];
   KRPC_CHECK(krpc_call(&_call, 9999, 62, 1, _arguments));
-  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  if (value == KRPC_NULL) {
+    KRPC_CHECK(krpc_add_null_argument(&_call, 0));
+  } else {
+    KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_object, &value));
+  }
   krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
   KRPC_CHECK(krpc_init_result(&_result));
   KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
   if (returnValue) {
-    pb_istream_t _stream;
-    KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
-    KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    if (_result.message.is_null) {
+      *returnValue = KRPC_NULL;
+    } else {
+      pb_istream_t _stream;
+      KRPC_CHECK(krpc_get_return_value(&_result, &_stream));
+      KRPC_CHECK(krpc_decode_object(&_stream, returnValue));
+    }
   }
   KRPC_CHECK(krpc_free_result(&_result));
   return KRPC_OK;
