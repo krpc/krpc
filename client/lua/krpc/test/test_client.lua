@@ -91,6 +91,52 @@ function TestClient:test_class_none_value()
   luaunit.assertEquals(self.conn.test_service.object_property, Types.none)
 end
 
+function TestClient:test_nullable_non_class_values()
+  -- Nullable value-type, string and collection parameters and return values
+  luaunit.assertEquals(42, self.conn.test_service.echo_nullable_int(42))
+  luaunit.assertEquals(Types.none, self.conn.test_service.echo_nullable_int(Types.none))
+  luaunit.assertEquals('foo', self.conn.test_service.echo_nullable_string('foo'))
+  luaunit.assertEquals(Types.none, self.conn.test_service.echo_nullable_string(Types.none))
+  luaunit.assertEquals(List{1,2,3}, self.conn.test_service.echo_nullable_list(List{1,2,3}))
+  luaunit.assertEquals(Types.none, self.conn.test_service.echo_nullable_list(Types.none))
+end
+
+function TestClient:test_non_nullable_parameter_rejects_null()
+  -- A null argument to a parameter that is not nullable is rejected by the server
+  luaunit.assertError(self.conn.test_service.not_nullable_object, Types.none)
+end
+
+function TestClient:test_nullable_class_method()
+  local obj = self.conn.test_service.create_test_object('jeb')
+  local obj2 = self.conn.test_service.create_test_object('bob')
+  luaunit.assertEquals(obj2, obj:echo_nullable_object(obj2))
+  luaunit.assertEquals(Types.none, obj:echo_nullable_object(Types.none))
+end
+
+function TestClient:test_nullable_class_static_method()
+  local obj = self.conn.test_service.create_test_object('jeb')
+  luaunit.assertEquals(obj, self.conn.test_service.TestClass.static_nullable_object(obj))
+  luaunit.assertEquals(Types.none, self.conn.test_service.TestClass.static_nullable_object(Types.none))
+end
+
+function TestClient:test_nullable_property()
+  local obj = self.conn.test_service.create_test_object('jeb')
+  -- object_property is nullable and its setter accepts null
+  self.conn.test_service.object_property = Types.none
+  luaunit.assertEquals(Types.none, self.conn.test_service.object_property)
+  -- nullable_object is nullable for reads, but its setter guards against null
+  self.conn.test_service.nullable_object = obj
+  luaunit.assertEquals(obj, self.conn.test_service.nullable_object)
+  luaunit.assertError(function() self.conn.test_service.nullable_object = Types.none end)
+end
+
+function TestClient:test_empty_collection_default()
+  -- An empty-collection default is distinguishable from no default: the argument can be
+  -- omitted and the empty list is used.
+  luaunit.assertEquals(List{}, self.conn.test_service.empty_list_default())
+  luaunit.assertEquals(List{'foo', 'bar'}, self.conn.test_service.empty_list_default(List{'foo', 'bar'}))
+end
+
 function TestClient:test_class_methods()
   local obj = self.conn.test_service.create_test_object('bob')
   luaunit.assertEquals('value=bob', obj:get_value())
@@ -324,12 +370,17 @@ function TestClient:test_test_service_service_members()
      'deprecated_procedure_no_message',
      'dictionary_default',
      'double_to_string',
+     'echo_nullable_int',
+     'echo_nullable_list',
+     'echo_nullable_string',
      'echo_test_object',
+     'empty_list_default',
      'enum_default_arg',
      'enum_echo',
      'enum_return',
      'float_to_string',
      'get_deprecated_property',
+     'get_nullable_object',
      'get_object_property',
      'get_string_property',
      'get_string_property_private_set',
@@ -341,6 +392,7 @@ function TestClient:test_test_service_service_members()
      'int32_to_string',
      'int64_to_string',
      'list_default',
+     'not_nullable_object',
      'on_timer',
      'on_timer_using_lambda',
      'optional_arguments',
@@ -349,6 +401,7 @@ function TestClient:test_test_service_service_members()
      'return_null_when_not_allowed',
      'set_default',
      'set_deprecated_property',
+     'set_nullable_object',
      'set_object_property',
      'set_string_property',
      'set_string_property_private_get',
@@ -368,7 +421,8 @@ function TestClient:test_test_service_test_class_members()
   table.sort(members)
   luaunit.assertEquals(
     members,
-    {'float_to_string',
+    {'echo_nullable_object',
+     'float_to_string',
      'get_int_property',
      'get_object_property',
      'get_string_property_private_set',
@@ -378,7 +432,8 @@ function TestClient:test_test_service_test_class_members()
      'set_int_property',
      'set_object_property',
      'set_string_property_private_get',
-     'static_method'})
+     'static_method',
+     'static_nullable_object'})
 end
 
 function TestClient:test_test_service_enum_members()

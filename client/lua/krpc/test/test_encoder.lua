@@ -46,11 +46,4 @@ function TestEncoder:test_encode_class()
   luaunit.assertEquals('ac02', platform.hexlify(data))
 end
 
-function TestEncoder:test_encode_class_none()
-  local typ = types:class_type('ServiceName', 'ClassName')
-  local value = nil
-  local data = encoder.encode(value, typ)
-  luaunit.assertEquals('00', platform.hexlify(data))
-end
-
 return TestEncoder

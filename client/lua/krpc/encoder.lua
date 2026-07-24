@@ -76,11 +76,7 @@ function encoder.encode(x, typ)
   elseif typ:is_a(Types.EnumerationType) then
     return _encode_value(x.value, _types:sint32_type())
   elseif typ:is_a(Types.ClassType) then
-    local object_id = 0
-    if x then
-      object_id = x._object_id
-    end
-    return _encode_value(object_id, _types:uint64_type())
+    return _encode_value(x._object_id, _types:uint64_type())
   elseif typ:is_a(Types.ListType) then
     local msg = schema.List()
     for item in x:iter() do

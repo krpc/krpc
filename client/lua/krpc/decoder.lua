@@ -81,15 +81,8 @@ function decoder.decode(data, typ)
   elseif typ:is_a(Types.ClassType) then
     local object_id_typ = _types:uint64_type()
     local object_id = _decode_value(data, object_id_typ)
-    if object_id == 0 then
-      return Types.none
-    else
-      return typ.lua_type(object_id)
-    end
+    return typ.lua_type(object_id)
   elseif typ:is_a(Types.ListType) then
-    if data == '\00' then
-      return nil
-    end
     local msg = decoder.decode_message(data, schema.List)
     local result = List{}
     for _,item in ipairs(msg.items) do
@@ -97,9 +90,6 @@ function decoder.decode(data, typ)
     end
     return result
   elseif typ:is_a(Types.DictionaryType) then
-    if data == '\00' then
-      return nil
-    end
     local msg = decoder.decode_message(data, schema.Dictionary)
     local result = Map{}
     for _,item in ipairs(msg.entries) do
@@ -109,9 +99,6 @@ function decoder.decode(data, typ)
     end
     return result
   elseif typ:is_a(Types.SetType) then
-    if data == '\00' then
-      return nil
-    end
     local msg = decoder.decode_message(data, schema.Set)
     local result = Set{}
     for _,item in ipairs(msg.items) do
@@ -119,9 +106,6 @@ function decoder.decode(data, typ)
     end
     return result
   elseif typ:is_a(Types.TupleType) then
-    if data == '\00' then
-      return nil
-    end
     local msg = decoder.decode_message(data, schema.Tuple)
     local result = List{}
     for _,item in ipairs(tablex.zip(msg.items, typ.value_types)) do
