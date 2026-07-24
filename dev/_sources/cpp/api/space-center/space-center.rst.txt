@@ -106,7 +106,7 @@ SpaceCenter
 
    
 
-   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, bool recover = true, std::vector<std::string> crew, std::string flag_url = "")
+   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::vector<std::string> crew, bool recover = true, std::string flag_url = "")
 
       Launch a vessel.
 
@@ -115,13 +115,23 @@ SpaceCenter
        * **craft_directory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
        * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
        * **launch_site** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+       * **crew** -- The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
        * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
-       * **crew** -- If not ``NULL``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
        * **flag_url** -- If not ``NULL``, the asset URL of the mission flag to use for the launch.
 
    
 
       .. note::
+
+         The *crew* parameter controls how the craft is crewed:
+
+         * If ``NULL``, the craft's default crew assignments are used.
+         * If an empty list, the craft is launched with no crew.
+         * Otherwise, the named Kerbals are placed in the craft in the order
+           given: the first name takes the first seat, the second name the next seat, and so on,
+           scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+           An exception is thrown, without launching, if a name does not match an available Kerbal
+           or the craft has too few seats for the requested crew.
 
          Throws an exception if any of the games pre-flight checks fail.
 

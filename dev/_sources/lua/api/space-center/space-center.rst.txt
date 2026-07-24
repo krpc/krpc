@@ -143,18 +143,28 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: launch_vessel(craft_directory, name, launch_site, [recover = True], crew, [flag_url = ''])
+.. staticmethod:: launch_vessel(craft_directory, name, launch_site, crew, [recover = True], [flag_url = ''])
 
    Launch a vessel.
 
    :param string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
    :param string name: Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
    :param string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+   :param List crew: The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
    :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
-   :param List crew: If not ``nil``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
    :param string flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch.
 
    .. note::
+
+      The *crew* parameter controls how the craft is crewed:
+
+      * If ``nil``, the craft's default crew assignments are used.
+      * If an empty list, the craft is launched with no crew.
+      * Otherwise, the named Kerbals are placed in the craft in the order
+        given: the first name takes the first seat, the second name the next seat, and so on,
+        scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+        An exception is thrown, without launching, if a name does not match an available Kerbal
+        or the craft has too few seats for the requested crew.
 
       Throws an exception if any of the games pre-flight checks fail.
 

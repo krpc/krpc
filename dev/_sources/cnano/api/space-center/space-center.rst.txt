@@ -143,7 +143,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. function:: krpc_error_t krpc_SpaceCenter_LaunchVessel(krpc_connection_t connection, const char * craftDirectory, const char * name, const char * launchSite, bool recover, const krpc_list_string_t * crew, const char * flagUrl)
+.. function:: krpc_error_t krpc_SpaceCenter_LaunchVessel(krpc_connection_t connection, const char * craftDirectory, const char * name, const char * launchSite, const krpc_list_string_t * crew, bool recover, const char * flagUrl)
 
    Launch a vessel.
 
@@ -152,13 +152,23 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
     * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
     * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
     * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+    * **crew** -- The Kerbals to place in the craft, by name. Controls how the craft is crewed, as described in the remarks.
     * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
-    * **crew** -- If not ``nullptr``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
     * **flagUrl** -- If not ``nullptr``, the asset URL of the mission flag to use for the launch.
 
    
 
    .. note::
+
+      The *crew* parameter controls how the craft is crewed:
+
+      * If ``nullptr``, the craft's default crew assignments are used.
+      * If an empty list, the craft is launched with no crew.
+      * Otherwise, the named Kerbals are placed in the craft in the order
+        given: the first name takes the first seat, the second name the next seat, and so on,
+        scanning the craft's parts in order. No other Kerbals are hired to fill remaining seats.
+        An exception is thrown, without launching, if a name does not match an available Kerbal
+        or the craft has too few seats for the requested crew.
 
       Throws an exception if any of the games pre-flight checks fail.
 
