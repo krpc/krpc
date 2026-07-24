@@ -45,10 +45,25 @@ namespace KRPC.Client.Test
         }
 
         [Test]
-        public void EncodeNullRemoteObject ()
+        public void EncodeNull ()
         {
-            var data = Encoder.Encode (null, typeof(Services.SpaceCenter.Vessel));
-            Assert.AreEqual ("00", data.ToHexString ());
+            // A null value is signaled out-of-band by is_null; the encoder returns null to
+            // indicate this, regardless of the type.
+            Assert.IsNull (Encoder.Encode (null, typeof(Services.SpaceCenter.Vessel)));
+            Assert.IsNull (Encoder.Encode (null, typeof(string)));
+            Assert.IsNull (Encoder.Encode (null, typeof(int?)));
+            Assert.IsNull (Encoder.Encode (null, typeof(IList<int>)));
+        }
+
+        [Test]
+        public void NullableValue ()
+        {
+            // A Nullable<T> value encodes and decodes as its underlying type.
+            int? value = 300;
+            var data = Encoder.Encode (value, typeof(int?));
+            Assert.AreEqual ("d804", data.ToHexString ());
+            var result = (int?)Encoder.Decode (data, typeof(int?), null);
+            Assert.AreEqual (300, result);
         }
 
         [Test]
@@ -81,14 +96,6 @@ namespace KRPC.Client.Test
             var value = (Services.SpaceCenter.Vessel)Encoder.Decode ("ac02".ToByteString (), typeof(Services.SpaceCenter.Vessel), mockClient.Object);
             Assert.AreEqual (300, value.id);
             Assert.AreSame (mockClient.Object, value.connection);
-        }
-
-        [Test]
-        public void DecodeNullRemoteObject ()
-        {
-            var mockClient = new Mock<IConnection> ();
-            var value = (string)Encoder.Decode ("00".ToByteString (), typeof(Services.SpaceCenter.Vessel), mockClient.Object);
-            Assert.IsNull (value);
         }
 
         [TestCase (3.14159265359f, "db0f4940")]

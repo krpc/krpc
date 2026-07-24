@@ -28,6 +28,11 @@ namespace KRPC.Client
         /// </summary>
         public static ByteString Encode (object value, Type type)
         {
+            // A Nullable<T> value is boxed to a plain T (or null), so encode it as its
+            // underlying type; the null itself is signaled out-of-band by is_null.
+            type = Nullable.GetUnderlyingType (type) ?? type;
+            if (value == null)
+                return null;
             using (var buffer = new MemoryStream ()) {
                 var stream = new CodedOutputStream (buffer, true);
                 return EncodeObject (value, type, buffer, stream);
@@ -37,13 +42,11 @@ namespace KRPC.Client
         static ByteString EncodeObject (object value, Type type, MemoryStream buffer, CodedOutputStream stream)
         {
             buffer.SetLength (0);
-            if (value != null && !type.IsInstanceOfType (value))
-                throw new ArgumentException ("Value of type " + value.GetType () + " cannot be encoded to type " + type);
-            if (value == null && !type.IsSubclassOf (typeof(RemoteObject)) && !IsACollectionType (type))
-                throw new ArgumentException ("null cannot be encoded to type " + type);
             if (value == null)
-                stream.WriteUInt64 (0);
-            else if (value is Enum)
+                throw new ArgumentException ("null cannot be encoded to type " + type);
+            if (!type.IsInstanceOfType (value))
+                throw new ArgumentException ("Value of type " + value.GetType () + " cannot be encoded to type " + type);
+            if (value is Enum)
                 stream.WriteSInt32 ((int)value);
             else {
                 switch (Type.GetTypeCode (type)) {
@@ -163,6 +166,9 @@ namespace KRPC.Client
         {
             if (ReferenceEquals (type, null))
                 throw new ArgumentNullException (nameof (type));
+            // A Nullable<T> value decodes as its underlying type T; a null value is
+            // signaled out-of-band by is_null and never reaches this method.
+            type = Nullable.GetUnderlyingType (type) ?? type;
             var stream = value.CreateCodedInput ();
             if (type.IsEnum)
                 return stream.ReadSInt32 ();
@@ -190,7 +196,7 @@ namespace KRPC.Client
                     if (client == null)
                         throw new ArgumentException ("Client not passed when decoding remote object");
                     var id = stream.ReadUInt64 ();
-                    return id == 0 ? null : (RemoteObject)Activator.CreateInstance (type, client, id);
+                    return (RemoteObject)Activator.CreateInstance (type, client, id);
                 }
                 if (IsATupleType (type))
                     return DecodeTuple (stream, type, client);

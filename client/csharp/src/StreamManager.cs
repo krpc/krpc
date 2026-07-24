@@ -102,10 +102,12 @@ namespace KRPC.Client
                 if (!streams.ContainsKey (id))
                     return;
                 stream = streams [id];
-                if (result.Error == null)
-                    value = Encoder.Decode (result.Value, stream.ReturnType, connection);
-                else
+                if (result.Error != null)
                     value = connection.GetException (result.Error);
+                else if (result.IsNull)
+                    value = null;
+                else
+                    value = Encoder.Decode (result.Value, stream.ReturnType, connection);
                 callbacks = new List<Action<object>> (stream.Callbacks.Values);
             }
             var condition = stream.Condition;

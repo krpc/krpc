@@ -70,6 +70,18 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void NullableValue ()
+        {
+            var x = Connection.AddStream (() => Connection.TestService ().EchoNullableInt (null));
+            var y = Connection.AddStream (() => Connection.TestService ().EchoNullableString (null));
+            for (int i = 0; i < 5; i++) {
+                Assert.IsNull (x.Get ());
+                Assert.IsNull (y.Get ());
+                Wait ();
+            }
+        }
+
+        [Test]
         public void Counter ()
         {
             var count = 0;

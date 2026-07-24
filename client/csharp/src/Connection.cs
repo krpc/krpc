@@ -144,13 +144,13 @@ namespace KRPC.Client
         /// Invoke a remote procedure.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
-        public ByteString Invoke (string service, string procedure, IList<ByteString> arguments = null)
+        public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             CheckDisposed ();
             return Invoke (GetCall (service, procedure, arguments));
         }
 
-        internal ByteString Invoke (ProcedureCall call)
+        internal ProcedureResult Invoke (ProcedureCall call)
         {
             var request = new Request ();
             request.Calls.Add (call);
@@ -170,7 +170,7 @@ namespace KRPC.Client
                 throw GetException(response.Error);
             if (response.Results[0].Error != null)
                 throw GetException (response.Results [0].Error);
-            return response.Results[0].Value;
+            return response.Results[0];
         }
 
         internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)
@@ -183,7 +183,12 @@ namespace KRPC.Client
                 foreach (var value in arguments) {
                     var argument = new Argument ();
                     argument.Position = position;
-                    argument.Value = value;
+                    // A null encoding signals a null value, carried out-of-band by is_null
+                    // with the value field left unset.
+                    if (value == null)
+                        argument.IsNull = true;
+                    else
+                        argument.Value = value;
                     call.Arguments.Add (argument);
                     position++;
                 }
