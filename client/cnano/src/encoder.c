@@ -51,8 +51,20 @@ krpc_error_t krpc_add_argument(krpc_call_t* call, uint32_t position,
                                const void* arg) {
   krpc_argument_t* argument = call->arguments + position;
   argument->message.position = position;
+  // The arguments array is caller-allocated and may be uninitialized, so is_null is set
+  // explicitly rather than relying on it being zeroed.
+  argument->message.is_null = false;
   argument->message.value.funcs.encode = encode;
   argument->message.value.arg = (void*)arg;
+  return KRPC_OK;
+}
+
+krpc_error_t krpc_add_null_argument(krpc_call_t* call, uint32_t position) {
+  krpc_argument_t* argument = call->arguments + position;
+  argument->message.position = position;
+  // A null argument is signaled by is_null with the value field left unset.
+  argument->message.is_null = true;
+  argument->message.value.funcs.encode = NULL;
   return KRPC_OK;
 }
 

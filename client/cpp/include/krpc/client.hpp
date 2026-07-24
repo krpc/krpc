@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include "krpc/encoder.hpp"
 #include "krpc/krpc.pb.hpp"
 
 namespace krpc {
@@ -24,16 +25,18 @@ class Client {
   Client(const std::string& name, const std::string& address, unsigned int rpc_port = 50000,
          unsigned int stream_port = 50001);
 
-  std::string invoke(const schema::Request& request);
-  std::string invoke(const schema::ProcedureCall& call);
-  std::string invoke(const std::string& service, const std::string& procedure,
-                     const std::vector<std::string>& args = std::vector<std::string>());
+  schema::ProcedureResult invoke(const schema::Request& request);
+  schema::ProcedureResult invoke(const schema::ProcedureCall& call);
+  schema::ProcedureResult invoke(
+      const std::string& service, const std::string& procedure,
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
 
-  schema::Request build_request(const std::string& service, const std::string& procedure,
-                                const std::vector<std::string>& args = std::vector<std::string>());
+  schema::Request build_request(
+      const std::string& service, const std::string& procedure,
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
   schema::ProcedureCall build_call(
       const std::string& service, const std::string& procedure,
-      const std::vector<std::string>& args = std::vector<std::string>());
+      const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
   void add_exception_thrower(const std::string& service, const std::string& name,
                              const std::function<void(std::string)>& thrower);
 

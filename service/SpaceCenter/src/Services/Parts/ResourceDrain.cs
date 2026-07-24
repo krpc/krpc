@@ -70,8 +70,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void SetResource(Resource resource, bool enabled)
         {
-            if (ReferenceEquals (resource, null))
-                throw new ArgumentNullException (nameof (resource));
             drain.TogglePartResource(resource.InternalResource, enabled);
         }
 
@@ -81,8 +79,6 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool CheckResource(Resource resource)
         {
-            if (ReferenceEquals (resource, null))
-                throw new ArgumentNullException (nameof (resource));
             return drain.IsResourceDraining(resource.InternalResource);
         }
 

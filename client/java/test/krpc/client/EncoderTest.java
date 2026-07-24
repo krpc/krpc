@@ -54,10 +54,13 @@ public class EncoderTest {
   }
 
   @Test
-  public void testEncodeClassNull() {
-    Type type = Types.createClass("TestService", "TestClass");
-    ByteString data = Encoder.encode(null, type);
-    assertEquals("00", hexlify(data));
+  public void testEncodeNull() {
+    // A null value is signaled out-of-band by is_null; the encoder returns null to indicate
+    // this, regardless of the type.
+    assertNull(Encoder.encode(null, Types.createClass("TestService", "TestClass")));
+    assertNull(Encoder.encode(null, Types.createValue(TypeCode.STRING)));
+    assertNull(Encoder.encode(null, Types.createValue(TypeCode.SINT32)));
+    assertNull(Encoder.encode(null, Types.createList(Types.createValue(TypeCode.SINT32))));
   }
 
   @Test
@@ -92,13 +95,6 @@ public class EncoderTest {
     assertEquals(new TestService.TestClass(null, 300), value);
   }
 
-  @Test
-  public void testDecodeClassNull() {
-    Type type = Types.createClass("TestService", "TestClass");
-    TestService.TestClass value =
-        (TestService.TestClass) Encoder.decode(unhexlify("00"), type, null);
-    assertNull(value);
-  }
 
   @Test
   public void testGuid() {

@@ -198,8 +198,6 @@ namespace KRPC.SpaceCenter.Services
                 if (maneuverAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a Maneuver alarm, it has no associated maneuver node.");
-                if (ReferenceEquals(value, null))
-                    throw new ArgumentNullException(nameof(value));
                 maneuverAlarm.Maneuver = value.InternalNode;
                 UpdateAlarm();
             }
@@ -236,8 +234,6 @@ namespace KRPC.SpaceCenter.Services
                 if (transferAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a TransferWindow alarm, it has no associated origin body.");
-                if (ReferenceEquals(value, null))
-                    throw new ArgumentNullException(nameof(value));
                 transferAlarm.source = value.InternalBody;
                 UpdateAlarm();
             }
@@ -274,8 +270,6 @@ namespace KRPC.SpaceCenter.Services
                 if (transferAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a TransferWindow alarm, it has no associated destination body.");
-                if (ReferenceEquals(value, null))
-                    throw new ArgumentNullException(nameof(value));
                 transferAlarm.dest = value.InternalBody;
                 UpdateAlarm();
             }

@@ -58,8 +58,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (y, typeof(int)),
                 global::KRPC.Client.Encoder.Encode (z, typeof(long))
             };
-            ByteString _data = connection.Invoke ("TestService", "AddMultipleValues", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "AddMultipleValues", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "AddToObjectList")]
@@ -69,8 +69,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)),
                 global::KRPC.Client.Encoder.Encode (value, typeof(string))
             };
-            ByteString _data = connection.Invoke ("TestService", "AddToObjectList", _args);
-            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>), connection);
+            var _result = connection.Invoke ("TestService", "AddToObjectList", _args);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestClass>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BlockingProcedure")]
@@ -80,8 +80,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (n, typeof(int)),
                 global::KRPC.Client.Encoder.Encode (sum, typeof(int))
             };
-            ByteString _data = connection.Invoke ("TestService", "BlockingProcedure", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "BlockingProcedure", _args);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BoolToString")]
@@ -90,8 +90,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(bool))
             };
-            ByteString _data = connection.Invoke ("TestService", "BoolToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "BoolToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "BytesToHexString")]
@@ -100,8 +100,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(byte[]))
             };
-            ByteString _data = connection.Invoke ("TestService", "BytesToHexString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "BytesToHexString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Counter")]
@@ -111,8 +111,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (id, typeof(string)),
                 global::KRPC.Client.Encoder.Encode (divisor, typeof(int))
             };
-            ByteString _data = connection.Invoke ("TestService", "Counter", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "Counter", _args);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CreateTestObject")]
@@ -121,8 +121,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(string))
             };
-            ByteString _data = connection.Invoke ("TestService", "CreateTestObject", _args);
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            var _result = connection.Invoke ("TestService", "CreateTestObject", _args);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
         }
 
         /// <summary>
@@ -135,8 +135,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(float))
             };
-            ByteString _data = connection.Invoke ("TestService", "DeprecatedProcedure", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "DeprecatedProcedure", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         /// <summary>
@@ -149,8 +149,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(float))
             };
-            ByteString _data = connection.Invoke ("TestService", "DeprecatedProcedureNoMessage", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "DeprecatedProcedureNoMessage", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DictionaryDefault")]
@@ -159,8 +159,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.Dictionary<int,bool> {{ 1, false }, { 2, true }}, typeof(global::System.Collections.Generic.IDictionary<int,bool>))
             };
-            ByteString _data = connection.Invoke ("TestService", "DictionaryDefault", _args);
-            return (global::System.Collections.Generic.IDictionary<int,bool>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IDictionary<int,bool>), connection);
+            var _result = connection.Invoke ("TestService", "DictionaryDefault", _args);
+            return (global::System.Collections.Generic.IDictionary<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<int,bool>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleToString")]
@@ -169,8 +169,44 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(double))
             };
-            ByteString _data = connection.Invoke ("TestService", "DoubleToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "DoubleToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableInt")]
+        public int? EchoNullableInt (int? value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(int?))
+            };
+            var _result = connection.Invoke ("TestService", "EchoNullableInt", _args);
+            if (_result.IsNull)
+                return null;
+            return (int?)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int?), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableList")]
+        public global::System.Collections.Generic.IList<int> EchoNullableList (global::System.Collections.Generic.IList<int> l)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<int>))
+            };
+            var _result = connection.Invoke ("TestService", "EchoNullableList", _args);
+            if (_result.IsNull)
+                return null;
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoNullableString")]
+        public string EchoNullableString (string value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(string))
+            };
+            var _result = connection.Invoke ("TestService", "EchoNullableString", _args);
+            if (_result.IsNull)
+                return null;
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EchoTestObject")]
@@ -179,8 +215,20 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
             };
-            ByteString _data = connection.Invoke ("TestService", "EchoTestObject", _args);
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            var _result = connection.Invoke ("TestService", "EchoTestObject", _args);
+            if (_result.IsNull)
+                return null;
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EmptyListDefault")]
+        public global::System.Collections.Generic.IList<string> EmptyListDefault (global::System.Collections.Generic.IList<string> x = null)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<string> {  }, typeof(global::System.Collections.Generic.IList<string>))
+            };
+            var _result = connection.Invoke ("TestService", "EmptyListDefault", _args);
+            return (global::System.Collections.Generic.IList<string>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<string>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg")]
@@ -189,8 +237,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestEnum))
             };
-            ByteString _data = connection.Invoke ("TestService", "EnumDefaultArg", _args);
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+            var _result = connection.Invoke ("TestService", "EnumDefaultArg", _args);
+            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumEcho")]
@@ -199,15 +247,15 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestEnum))
             };
-            ByteString _data = connection.Invoke ("TestService", "EnumEcho", _args);
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+            var _result = connection.Invoke ("TestService", "EnumEcho", _args);
+            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumReturn")]
         public global::KRPC.Client.Services.TestService.TestEnum EnumReturn ()
         {
-            ByteString _data = connection.Invoke ("TestService", "EnumReturn");
-            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+            var _result = connection.Invoke ("TestService", "EnumReturn");
+            return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
         }
 
         /// <summary>
@@ -219,8 +267,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(float))
             };
-            ByteString _data = connection.Invoke ("TestService", "FloatToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "FloatToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementDictionary")]
@@ -229,8 +277,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (d, typeof(global::System.Collections.Generic.IDictionary<string,int>))
             };
-            ByteString _data = connection.Invoke ("TestService", "IncrementDictionary", _args);
-            return (global::System.Collections.Generic.IDictionary<string,int>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IDictionary<string,int>), connection);
+            var _result = connection.Invoke ("TestService", "IncrementDictionary", _args);
+            return (global::System.Collections.Generic.IDictionary<string,int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<string,int>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementList")]
@@ -239,8 +287,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<int>))
             };
-            ByteString _data = connection.Invoke ("TestService", "IncrementList", _args);
-            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IList<int>), connection);
+            var _result = connection.Invoke ("TestService", "IncrementList", _args);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementNestedCollection")]
@@ -249,8 +297,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (d, typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>))
             };
-            ByteString _data = connection.Invoke ("TestService", "IncrementNestedCollection", _args);
-            return (global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>), connection);
+            var _result = connection.Invoke ("TestService", "IncrementNestedCollection", _args);
+            return (global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementSet")]
@@ -259,8 +307,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (h, typeof(genericCollectionsAlias::ISet<int>))
             };
-            ByteString _data = connection.Invoke ("TestService", "IncrementSet", _args);
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_data, typeof(genericCollectionsAlias::ISet<int>), connection);
+            var _result = connection.Invoke ("TestService", "IncrementSet", _args);
+            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(genericCollectionsAlias::ISet<int>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementTuple")]
@@ -269,8 +317,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (t, typeof(systemAlias::Tuple<int,long>))
             };
-            ByteString _data = connection.Invoke ("TestService", "IncrementTuple", _args);
-            return (systemAlias::Tuple<int,long>)global::KRPC.Client.Encoder.Decode (_data, typeof(systemAlias::Tuple<int,long>), connection);
+            var _result = connection.Invoke ("TestService", "IncrementTuple", _args);
+            return (systemAlias::Tuple<int,long>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(systemAlias::Tuple<int,long>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32ToString")]
@@ -279,8 +327,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(int))
             };
-            ByteString _data = connection.Invoke ("TestService", "Int32ToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "Int32ToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64ToString")]
@@ -289,8 +337,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(long))
             };
-            ByteString _data = connection.Invoke ("TestService", "Int64ToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "Int64ToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ListDefault")]
@@ -299,8 +347,18 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<int> { 1, 2, 3 }, typeof(global::System.Collections.Generic.IList<int>))
             };
-            ByteString _data = connection.Invoke ("TestService", "ListDefault", _args);
-            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_data, typeof(global::System.Collections.Generic.IList<int>), connection);
+            var _result = connection.Invoke ("TestService", "ListDefault", _args);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NotNullableObject")]
+        public global::KRPC.Client.Services.TestService.TestClass NotNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+            };
+            var _result = connection.Invoke ("TestService", "NotNullableObject", _args);
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimer")]
@@ -310,8 +368,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (milliseconds, typeof(uint)),
                 global::KRPC.Client.Encoder.Encode (repeats, typeof(uint))
             };
-            ByteString _data = connection.Invoke ("TestService", "OnTimer", _args);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Event), connection);
+            var _result = connection.Invoke ("TestService", "OnTimer", _args);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Event), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OnTimerUsingLambda")]
@@ -320,8 +378,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (milliseconds, typeof(uint))
             };
-            ByteString _data = connection.Invoke ("TestService", "OnTimerUsingLambda", _args);
-            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Event), connection);
+            var _result = connection.Invoke ("TestService", "OnTimerUsingLambda", _args);
+            return (global::KRPC.Client.Event)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Event), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "OptionalArguments")]
@@ -333,8 +391,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (z, typeof(string)),
                 global::KRPC.Client.Encoder.Encode (obj, typeof(global::KRPC.Client.Services.TestService.TestClass))
             };
-            ByteString _data = connection.Invoke ("TestService", "OptionalArguments", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "OptionalArguments", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ResetCustomExceptionLater")]
@@ -352,8 +410,8 @@ namespace KRPC.Client.Services.TestService
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ReturnNullWhenNotAllowed")]
         public global::KRPC.Client.Services.TestService.TestClass ReturnNullWhenNotAllowed ()
         {
-            ByteString _data = connection.Invoke ("TestService", "ReturnNullWhenNotAllowed");
-            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            var _result = connection.Invoke ("TestService", "ReturnNullWhenNotAllowed");
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "SetDefault")]
@@ -362,8 +420,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.HashSet<int> { 1, 2, 3 }, typeof(genericCollectionsAlias::ISet<int>))
             };
-            ByteString _data = connection.Invoke ("TestService", "SetDefault", _args);
-            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_data, typeof(genericCollectionsAlias::ISet<int>), connection);
+            var _result = connection.Invoke ("TestService", "SetDefault", _args);
+            return (genericCollectionsAlias::ISet<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(genericCollectionsAlias::ISet<int>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StringToInt32")]
@@ -372,15 +430,15 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (value, typeof(string))
             };
-            ByteString _data = connection.Invoke ("TestService", "StringToInt32", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "StringToInt32", _args);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentException")]
         public int ThrowArgumentException ()
         {
-            ByteString _data = connection.Invoke ("TestService", "ThrowArgumentException");
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowArgumentException");
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentNullException")]
@@ -389,8 +447,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (foo, typeof(string))
             };
-            ByteString _data = connection.Invoke ("TestService", "ThrowArgumentNullException", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowArgumentNullException", _args);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentOutOfRangeException")]
@@ -399,36 +457,36 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (foo, typeof(int))
             };
-            ByteString _data = connection.Invoke ("TestService", "ThrowArgumentOutOfRangeException", _args);
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowArgumentOutOfRangeException", _args);
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomException")]
         public int ThrowCustomException ()
         {
-            ByteString _data = connection.Invoke ("TestService", "ThrowCustomException");
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowCustomException");
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowCustomExceptionLater")]
         public int ThrowCustomExceptionLater ()
         {
-            ByteString _data = connection.Invoke ("TestService", "ThrowCustomExceptionLater");
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowCustomExceptionLater");
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowInvalidOperationException")]
         public int ThrowInvalidOperationException ()
         {
-            ByteString _data = connection.Invoke ("TestService", "ThrowInvalidOperationException");
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowInvalidOperationException");
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowInvalidOperationExceptionLater")]
         public int ThrowInvalidOperationExceptionLater ()
         {
-            ByteString _data = connection.Invoke ("TestService", "ThrowInvalidOperationExceptionLater");
-            return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+            var _result = connection.Invoke ("TestService", "ThrowInvalidOperationExceptionLater");
+            return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TupleDefault")]
@@ -437,8 +495,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x ?? new systemAlias::Tuple<int,bool> (1, false), typeof(systemAlias::Tuple<int,bool>))
             };
-            ByteString _data = connection.Invoke ("TestService", "TupleDefault", _args);
-            return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Encoder.Decode (_data, typeof(systemAlias::Tuple<int,bool>), connection);
+            var _result = connection.Invoke ("TestService", "TupleDefault", _args);
+            return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(systemAlias::Tuple<int,bool>), connection);
         }
 
         /// <summary>
@@ -448,8 +506,8 @@ namespace KRPC.Client.Services.TestService
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_DeprecatedProperty")]
         public string DeprecatedProperty {
             get {
-                ByteString _data = connection.Invoke ("TestService", "get_DeprecatedProperty");
-                return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+                var _result = connection.Invoke ("TestService", "get_DeprecatedProperty");
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -459,11 +517,29 @@ namespace KRPC.Client.Services.TestService
             }
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_NullableObject")]
+        public global::KRPC.Client.Services.TestService.TestClass NullableObject {
+            get {
+                var _result = connection.Invoke ("TestService", "get_NullableObject");
+                if (_result.IsNull)
+                    return null;
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+            }
+            set {
+                var _args = new ByteString[] {
+                    global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+                };
+                connection.Invoke ("TestService", "set_NullableObject", _args);
+            }
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_ObjectProperty")]
         public global::KRPC.Client.Services.TestService.TestClass ObjectProperty {
             get {
-                ByteString _data = connection.Invoke ("TestService", "get_ObjectProperty");
-                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+                var _result = connection.Invoke ("TestService", "get_ObjectProperty");
+                if (_result.IsNull)
+                    return null;
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -479,8 +555,8 @@ namespace KRPC.Client.Services.TestService
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringProperty")]
         public string StringProperty {
             get {
-                ByteString _data = connection.Invoke ("TestService", "get_StringProperty");
-                return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+                var _result = connection.Invoke ("TestService", "get_StringProperty");
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -502,8 +578,8 @@ namespace KRPC.Client.Services.TestService
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "get_StringPropertyPrivateSet")]
         public string StringPropertyPrivateSet {
             get {
-                ByteString _data = connection.Invoke ("TestService", "get_StringPropertyPrivateSet");
-                return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+                var _result = connection.Invoke ("TestService", "get_StringPropertyPrivateSet");
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
             }
         }
     }
@@ -641,8 +717,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (this, typeof(TestService.DeprecatedClass))
             };
-            ByteString _data = connection.Invoke ("TestService", "DeprecatedClass_DeprecatedMethod", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "DeprecatedClass_DeprecatedMethod", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
     }
 
@@ -658,6 +734,19 @@ namespace KRPC.Client.Services.TestService
         {
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_EchoNullableObject")]
+        public global::KRPC.Client.Services.TestService.TestClass EchoNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
+                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+            };
+            var _result = connection.Invoke ("TestService", "TestClass_EchoNullableObject", _args);
+            if (_result.IsNull)
+                return null;
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_FloatToString")]
         public string FloatToString (float x)
         {
@@ -665,8 +754,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
                 global::KRPC.Client.Encoder.Encode (x, typeof(float))
             };
-            ByteString _data = connection.Invoke ("TestService", "TestClass_FloatToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "TestClass_FloatToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         /// <summary>
@@ -678,8 +767,8 @@ namespace KRPC.Client.Services.TestService
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
             };
-            ByteString _data = connection.Invoke ("TestService", "TestClass_GetValue", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "TestClass_GetValue", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_ObjectToString")]
@@ -689,8 +778,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass)),
                 global::KRPC.Client.Encoder.Encode (other, typeof(global::KRPC.Client.Services.TestService.TestClass))
             };
-            ByteString _data = connection.Invoke ("TestService", "TestClass_ObjectToString", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "TestClass_ObjectToString", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_OptionalArguments")]
@@ -703,8 +792,8 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (z, typeof(string)),
                 global::KRPC.Client.Encoder.Encode (obj, typeof(global::KRPC.Client.Services.TestService.TestClass))
             };
-            ByteString _data = connection.Invoke ("TestService", "TestClass_OptionalArguments", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "TestClass_OptionalArguments", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
         }
 
         /// <param name="connection">A connection object.</param>
@@ -717,8 +806,23 @@ namespace KRPC.Client.Services.TestService
                 global::KRPC.Client.Encoder.Encode (a, typeof(string)),
                 global::KRPC.Client.Encoder.Encode (b, typeof(string))
             };
-            ByteString _data = connection.Invoke ("TestService", "TestClass_static_StaticMethod", _args);
-            return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+            var _result = connection.Invoke ("TestService", "TestClass_static_StaticMethod", _args);
+            return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+        }
+
+        /// <param name="connection">A connection object.</param>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "TestClass_static_StaticNullableObject")]
+        public static global::KRPC.Client.Services.TestService.TestClass StaticNullableObject (IConnection connection, global::KRPC.Client.Services.TestService.TestClass value)
+        {
+            if (connection == null)
+                throw new ArgumentNullException (nameof (connection));
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (value, typeof(global::KRPC.Client.Services.TestService.TestClass))
+            };
+            var _result = connection.Invoke ("TestService", "TestClass_static_StaticNullableObject", _args);
+            if (_result.IsNull)
+                return null;
+            return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
         }
 
         /// <summary>
@@ -730,8 +834,8 @@ namespace KRPC.Client.Services.TestService
                 var _args = new ByteString[] {
                     global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
                 };
-                ByteString _data = connection.Invoke ("TestService", "TestClass_get_IntProperty", _args);
-                return (int)global::KRPC.Client.Encoder.Decode (_data, typeof(int), connection);
+                var _result = connection.Invoke ("TestService", "TestClass_get_IntProperty", _args);
+                return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -748,8 +852,10 @@ namespace KRPC.Client.Services.TestService
                 var _args = new ByteString[] {
                     global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
                 };
-                ByteString _data = connection.Invoke ("TestService", "TestClass_get_ObjectProperty", _args);
-                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_data, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
+                var _result = connection.Invoke ("TestService", "TestClass_get_ObjectProperty", _args);
+                if (_result.IsNull)
+                    return null;
+                return (global::KRPC.Client.Services.TestService.TestClass)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestClass), connection);
             }
             set {
                 var _args = new ByteString[] {
@@ -776,8 +882,8 @@ namespace KRPC.Client.Services.TestService
                 var _args = new ByteString[] {
                     global::KRPC.Client.Encoder.Encode (this, typeof(TestService.TestClass))
                 };
-                ByteString _data = connection.Invoke ("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
-                return (string)global::KRPC.Client.Encoder.Decode (_data, typeof(string), connection);
+                var _result = connection.Invoke ("TestService", "TestClass_get_StringPropertyPrivateSet", _args);
+                return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
             }
         }
     }

@@ -37,6 +37,15 @@ namespace KRPC.Service
 
         public bool ReturnIsNullable { get; private set; }
 
+        /// <summary>
+        /// Mark the property value parameter (the last parameter) as nullable. Used for the setter
+        /// of a nullable property, whose synthesized value parameter cannot carry [KRPCNullable].
+        /// </summary>
+        public void SetValueParameterNullable ()
+        {
+            parameters [parameters.Length - 1].Nullable = true;
+        }
+
         static Func<object, object[], object> BuildInvoker (MethodInfo method)
         {
             var instanceParam = Expression.Parameter (typeof(object), "instance");

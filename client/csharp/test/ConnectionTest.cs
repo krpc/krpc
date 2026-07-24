@@ -150,6 +150,96 @@ namespace KRPC.Client.Test
             Assert.AreEqual ("jebbobbillkermin", Connection.TestService ().OptionalArguments ("jeb", "bob", "bill", obj));
         }
 
+        [Test]
+        public void NullableNonClassValues ()
+        {
+            // Nullable value-type, string and collection parameters and return values
+            Assert.AreEqual (42, Connection.TestService ().EchoNullableInt (42));
+            Assert.IsNull (Connection.TestService ().EchoNullableInt (null));
+            Assert.AreEqual ("foo", Connection.TestService ().EchoNullableString ("foo"));
+            Assert.IsNull (Connection.TestService ().EchoNullableString (null));
+            CollectionAssert.AreEqual (
+                new List<int> { 1, 2, 3 },
+                Connection.TestService ().EchoNullableList (new List<int> { 1, 2, 3 }));
+            Assert.IsNull (Connection.TestService ().EchoNullableList (null));
+        }
+
+        [Test]
+        public void NullableClassValues ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            Assert.AreEqual (obj, Connection.TestService ().EchoTestObject (obj));
+            Assert.IsNull (Connection.TestService ().EchoTestObject (null));
+        }
+
+        [Test]
+        public void NonNullableParameterRejectsNull ()
+        {
+            // A null argument to a parameter that is not nullable is rejected by the server
+            Assert.Throws<RPCException> (() => Connection.TestService ().NotNullableObject (null));
+            Assert.Throws<RPCException> (() => Connection.TestService ().IncrementList (null));
+        }
+
+        [Test]
+        public void NullableClassMethod ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var obj2 = Connection.TestService ().CreateTestObject ("bob");
+            Assert.AreEqual (obj2, obj.EchoNullableObject (obj2));
+            Assert.IsNull (obj.EchoNullableObject (null));
+        }
+
+        [Test]
+        public void NullableClassStaticMethod ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            Assert.AreEqual (obj, TestClass.StaticNullableObject (Connection, obj));
+            Assert.IsNull (TestClass.StaticNullableObject (Connection, null));
+        }
+
+        [Test]
+        public void NullableProperty ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            // ObjectProperty is nullable and its setter accepts null
+            Connection.TestService ().ObjectProperty = null;
+            Assert.IsNull (Connection.TestService ().ObjectProperty);
+            // NullableObject is nullable for reads, but its setter guards against null,
+            // so writing null raises the server's ArgumentNullException
+            Connection.TestService ().NullableObject = obj;
+            Assert.AreEqual (obj, Connection.TestService ().NullableObject);
+            Assert.Throws<System.ArgumentNullException> (
+                () => Connection.TestService ().NullableObject = null);
+        }
+
+        [Test]
+        public void NonNullablePropertyRejectsNull ()
+        {
+            Assert.Throws<RPCException> (() => Connection.TestService ().StringProperty = null);
+        }
+
+        [Test]
+        public void NullableClassProperty ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            var obj2 = Connection.TestService ().CreateTestObject ("bob");
+            obj.ObjectProperty = obj2;
+            Assert.AreEqual (obj2, obj.ObjectProperty);
+            obj.ObjectProperty = null;
+            Assert.IsNull (obj.ObjectProperty);
+        }
+
+        [Test]
+        public void EmptyCollectionDefault ()
+        {
+            // An empty-collection default is distinguishable from no default: the argument
+            // can be omitted and the empty list is used.
+            CollectionAssert.AreEqual (new List<string> (), Connection.TestService ().EmptyListDefault ());
+            CollectionAssert.AreEqual (
+                new List<string> { "foo", "bar" },
+                Connection.TestService ().EmptyListDefault (new List<string> { "foo", "bar" }));
+        }
+
         [TestCase (0, 0)]
         [TestCase (1, 1)]
         [TestCase (2, 3)]

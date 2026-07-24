@@ -329,8 +329,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Tuple3 ReferencePlaneNormal (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (Planetarium.up).normalized.ToTuple ();
         }
 
@@ -344,8 +342,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public static Tuple3 ReferencePlaneDirection (ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.DirectionFromWorldSpace (Planetarium.right).normalized.ToTuple ();
         }
 
@@ -480,8 +476,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(ut)).ToTuple();
         }
 
@@ -492,8 +486,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public ClosestApproach NextClosestApproach (Orbit target)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             return new ClosestApproach (this, target, Planetarium.GetUniversalTime ());
         }
 
@@ -506,8 +498,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<ClosestApproach> ClosestApproaches (Orbit target, int orbits)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             var approaches = new List<ClosestApproach> ();
             double orbitstart = Planetarium.GetUniversalTime ();
             double period = InternalOrbit.period;
@@ -527,8 +517,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TimeOfClosestApproach (Orbit target)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             double distance;
             return CalcClosestAproach(this, target, Planetarium.GetUniversalTime(), out distance);
         }
@@ -541,8 +529,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double DistanceAtClosestApproach (Orbit target)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             double distance;
             CalcClosestAproach(this, target, Planetarium.GetUniversalTime(), out distance);
             return distance;
@@ -562,8 +548,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<IList<double>> ListClosestApproaches(Orbit target, int orbits)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             var times = new List<double>();
             var distances = new List<double>();
             double distance;
@@ -647,8 +631,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TrueAnomalyAtAN(Orbit target)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfAscendingNode(InternalOrbit, target.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
@@ -660,8 +642,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double TrueAnomalyAtDN(Orbit target)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             var degrees = FinePrint.Utilities.OrbitUtilities.AngleOfDescendingNode(InternalOrbit, target.InternalOrbit);
             return GeometryExtensions.ToRadians (GeometryExtensions.ClampAngle180 (degrees));
         }
@@ -673,8 +653,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public double RelativeInclination(Orbit target)
         {
-            if (ReferenceEquals (target, null))
-                throw new ArgumentNullException (nameof (target));
             var degrees = FinePrint.Utilities.OrbitUtilities.GetRelativeInclination(InternalOrbit, target.InternalOrbit);
             return GeometryExtensions.ToRadians(degrees);
         }

@@ -29,7 +29,7 @@ void Event::release() { _stream.release(); }
 
 void Event::wait(double timeout) {
   start();
-  _stream.impl->update(std::string("\x00", 1), nullptr);
+  _stream.impl->update(std::string("\x00", 1), false, nullptr);
   while (!_stream()) {
     bool origValue = _stream();
     _stream.wait(timeout);

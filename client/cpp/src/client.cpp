@@ -49,7 +49,7 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
   }
 }
 
-std::string Client::invoke(const schema::Request& request) {
+schema::ProcedureResult Client::invoke(const schema::Request& request) {
   std::string data;
   {
     std::lock_guard<std::mutex> lock_guard(*lock);
@@ -64,10 +64,10 @@ std::string Client::invoke(const schema::Request& request) {
 
   if (response.results(0).has_error()) throw_exception(response.results(0).error());
 
-  return response.results(0).value();
+  return response.results(0);
 }
 
-std::string Client::invoke(const schema::ProcedureCall& call) {
+schema::ProcedureResult Client::invoke(const schema::ProcedureCall& call) {
   schema::Request request;
   // Copied because the call is received by const reference and a Request owns its calls, so it
   // cannot be moved in. CopyFrom also stays correct if ProcedureCall gains fields.
@@ -75,13 +75,13 @@ std::string Client::invoke(const schema::ProcedureCall& call) {
   return this->invoke(request);
 }
 
-std::string Client::invoke(const std::string& service, const std::string& procedure,
-                           const std::vector<std::string>& args) {
+schema::ProcedureResult Client::invoke(const std::string& service, const std::string& procedure,
+                                       const std::vector<encoder::Value>& args) {
   return this->invoke(this->build_request(service, procedure, args));
 }
 
 schema::Request Client::build_request(const std::string& service, const std::string& procedure,
-                                      const std::vector<std::string>& args) {
+                                      const std::vector<encoder::Value>& args) {
   schema::Request request;
   schema::ProcedureCall* call = request.add_calls();
   call->set_service(service);
@@ -89,20 +89,28 @@ schema::Request Client::build_request(const std::string& service, const std::str
   for (unsigned int i = 0; i < args.size(); i++) {
     schema::Argument* arg = call->add_arguments();
     arg->set_position(i);
-    arg->set_value(args[i]);
+    // A null argument is signaled by is_null with the value left unset.
+    if (args[i].is_null)
+      arg->set_is_null(true);
+    else
+      arg->set_value(args[i].value);
   }
   return request;
 }
 
 schema::ProcedureCall Client::build_call(const std::string& service, const std::string& procedure,
-                                         const std::vector<std::string>& args) {
+                                         const std::vector<encoder::Value>& args) {
   schema::ProcedureCall call;
   call.set_service(service);
   call.set_procedure(procedure);
   for (unsigned int i = 0; i < args.size(); i++) {
     schema::Argument* arg = call.add_arguments();
     arg->set_position(i);
-    arg->set_value(args[i]);
+    // A null argument is signaled by is_null with the value left unset.
+    if (args[i].is_null)
+      arg->set_is_null(true);
+    else
+      arg->set_value(args[i].value);
   }
   return call;
 }

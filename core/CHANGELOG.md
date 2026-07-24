@@ -1,3 +1,8 @@
+## [v0.7.0] - unreleased
+- Support for nullable values across all types (#1017)
+- **Breaking:** Null values are now signaled by an `is_null` field rather than by an object id
+  of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (#1017)
+
 ## [v0.6.0]
 - Add `Version` property to `Core`, set by the server plugin on startup (#848)
 - Enable `TCP_NODELAY` on client TCP connections, reducing RPC round-trip latency (#879)

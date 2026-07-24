@@ -1,16 +1,17 @@
 #pragma once
 {% macro args(parameters) %}
-std::vector<std::string> _args;
+std::vector<krpc::encoder::Value> _args;
 {% for x in parameters %}
-_args.push_back(encoder::encode({{x.name}}));
+_args.push_back({% if x.nullable is defined and x.nullable %}encoder::encode_nullable({{x.name}}){% else %}encoder::encode({{x.name}}){% endif %});
 {% endfor %}
 {% endmacro %}
 {% macro call(service, procedure, has_return, has_args, is_static=False) %}
-{% if has_return %}std::string _data = {% endif %}{% if is_static %}_client.{% else %}this->_client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
+{% if has_return %}auto _data = {% endif %}{% if is_static %}_client.{% else %}this->_client->{% endif %}invoke("{{service}}", "{{procedure}}"{% if has_args %}, _args{% endif %});
 {% endmacro %}
 {% macro return(type, set_client, is_static=False) %}
-{{type}} _result;
-decoder::decode(_result, _data, {% if is_static %}&_client{% else %}this->_client{% endif %});
+{{type}} _result{};
+if (!_data.is_null())
+  decoder::decode(_result, _data.value(), {% if is_static %}&_client{% else %}this->_client{% endif %});
 return _result;
 {% endmacro %}
 {% macro stream(service, procedure, type, has_args, is_static=False) %}

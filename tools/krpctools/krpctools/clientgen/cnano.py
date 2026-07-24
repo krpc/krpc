@@ -1,4 +1,7 @@
 import collections
+
+# pylint: disable=no-name-in-module
+from krpc.schema.KRPC_pb2 import Type
 from krpc.types import (
     ValueType,
     ClassType,
@@ -13,6 +16,7 @@ from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 from ..lang.cnano import CnanoLanguage
+from ..utils import as_type
 
 
 class CnanoGenerator(Generator):
@@ -154,6 +158,37 @@ class CnanoGenerator(Generator):
     def parse_parameter_type(self, typ):
         return self.parse_type(typ)
 
+    @staticmethod
+    def _needs_pointer(typ):
+        # By-value non-class scalars and enums have no null sentinel, so a nullable one
+        # is passed as a pointer (NULL means null). Strings and collections are already
+        # pointers, and classes use KRPC_NULL, so they are unchanged.
+        if isinstance(typ, EnumerationType):
+            return True
+        if isinstance(typ, ValueType):
+            return typ.protobuf_type.code != Type.STRING
+        return False
+
+    def generate_context_parameters(self, procedure):
+        parameters = super().generate_context_parameters(procedure)
+        for i, parameter in enumerate(parameters):
+            if not parameter["nullable"]:
+                continue
+            typ = as_type(self.types, procedure["parameters"][i]["type"])
+            if isinstance(typ, ClassType):
+                parameter["null_check"] = "%s == KRPC_NULL" % parameter["name"]
+            else:
+                parameter["null_check"] = "%s == NULL" % parameter["name"]
+                if self._needs_pointer(typ):
+                    ctype = parameter["type"]["ctype"]
+                    parameter["type"]["ccvtype"] = "const %s *" % ctype
+                    parameter["type"]["getptr"] = ""
+        return parameters
+
+    def _annotate_return(self, return_type, procedure):
+        return_type["nullable"] = procedure.get("return_is_nullable", False)
+        return_type["is_class"] = isinstance(self.get_return_type(procedure), ClassType)
+
     def parse_default_value(self, value, typ):  # pylint: disable=unused-argument
         # No default arguments in C
         return None
@@ -172,13 +207,23 @@ class CnanoGenerator(Generator):
             typ["ccvtype"] = typ["cvtype"]
             return typ
 
+        for info in context["procedures"].values():
+            self._annotate_return(info["return_type"], info["procedure"])
+        for class_info in context["classes"].values():
+            for info in class_info["methods"].values():
+                self._annotate_return(info["return_type"], info["procedure"])
+            for info in class_info["static_methods"].values():
+                self._annotate_return(info["return_type"], info["procedure"])
+
         properties = collections.OrderedDict()
         for name, info in context["properties"].items():
             if info["getter"]:
+                getter_return = return_type(info["type"])
+                self._annotate_return(getter_return, info["getter"]["procedure"])
                 properties[name] = {
                     "remote_id": info["getter"]["remote_id"],
                     "parameters": [],
-                    "return_type": return_type(info["type"]),
+                    "return_type": getter_return,
                     "documentation": info["documentation"],
                     "deprecated": info["deprecated"],
                     "deprecated_reason": info["deprecated_reason"],
@@ -199,10 +244,12 @@ class CnanoGenerator(Generator):
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
                 if info["getter"]:
+                    getter_return = return_type(info["type"])
+                    self._annotate_return(getter_return, info["getter"]["procedure"])
                     class_properties[name] = {
                         "remote_id": info["getter"]["remote_id"],
                         "parameters": [],
-                        "return_type": return_type(info["type"]),
+                        "return_type": getter_return,
                         "documentation": info["documentation"],
                         "deprecated": info["deprecated"],
                         "deprecated_reason": info["deprecated_reason"],

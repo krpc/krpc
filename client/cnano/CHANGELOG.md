@@ -1,3 +1,7 @@
+## [v0.7.0] - unreleased
+- **Breaking:** Support null for any nullable type; a nullable non-class return adds a `bool*
+  returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)
+
 ## [v0.6.0]
 - Distribute via vcpkg (#874)
 - **Breaking:** Drop autotools build; CMake is now the only supported build system (#870)

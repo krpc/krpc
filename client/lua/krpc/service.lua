@@ -84,11 +84,15 @@ function ServiceBase:_parse_procedure(procedure)
 
   local param_names = seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, procedure.parameters))
   local param_types = seq.copy(seq.map(function (x) return self._client._types:as_type(x.type) end, procedure.parameters))
-  local param_required = seq.copy(seq.map(function (x) return not x:HasField('default_value') end, procedure.parameters))
+  local param_required = seq.copy(seq.map(function (x) return not x.has_default_value end, procedure.parameters))
   local param_default = List{}
   for param,typ in seq.zip(procedure.parameters, param_types) do
-    if param:HasField('default_value') then
-      param_default:append(decoder.decode(param.default_value, typ))
+    if param.has_default_value then
+      if param.default_value_is_null then
+        param_default:append(Types.none)
+      else
+        param_default:append(decoder.decode(param.default_value, typ))
+      end
     else
       param_default:append(nil)
     end

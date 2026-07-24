@@ -48,6 +48,7 @@ message ProcedureCall {
 message Argument {
   uint32 position = 1;
   bytes value = 2;
+  bool is_null = 3;
 }
 
 message Response {
@@ -58,6 +59,7 @@ message Response {
 message ProcedureResult {
   Error error = 1;
   bytes value = 2;
+  bool is_null = 3;
 }
 
 message Error {
@@ -122,8 +124,10 @@ message Procedure {
 message Parameter {
   string name = 1;
   Type type = 2;
-  bytes default_value = 3;
   bool nullable = 4;
+  bool has_default_value = 5;
+  bytes default_value = 3;
+  bool default_value_is_null = 6;
 }
 
 message Class {

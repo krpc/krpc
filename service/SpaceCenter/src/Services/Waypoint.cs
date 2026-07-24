@@ -65,8 +65,6 @@ namespace KRPC.SpaceCenter.Services
         public CelestialBody Body {
             get { return new CelestialBody (InternalWaypoint.celestialBody); }
             set {
-                if (ReferenceEquals (value, null))
-                    throw new ArgumentNullException ("Body");
                 if (HasContract)
                     throw new InvalidOperationException ("Cannot set body for waypoint attached to a contract.");
                 InternalWaypoint.celestialName = value.Name;

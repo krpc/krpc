@@ -12,7 +12,7 @@ namespace KRPC.Client
         /// <summary>
         /// Invoke a remote procedure call
         /// </summary>
-        ByteString Invoke (string service, string procedure, IList<ByteString> arguments = null);
+        global::KRPC.Schema.KRPC.ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null);
 
         /// <summary>
         /// Add an exception type

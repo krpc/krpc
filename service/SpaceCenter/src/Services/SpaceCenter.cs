@@ -386,17 +386,17 @@ namespace KRPC.SpaceCenter.Services
         /// in the save directory, without the ".craft" file extension.</param>
         /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or
         /// <c>"Runway"</c>.</param>
-        /// <param name="crew">A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.</param>
         /// <param name="recover">If true and there is a vessel on the launch site,
         /// recover it before launching.</param>
+        /// <param name="crew">If not <c>null</c>, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.</param>
         /// <param name="flagUrl">If not <c>null</c>, the asset URL of the mission flag to use for the launch.</param>
         /// <remarks>
         /// Throws an exception if any of the games pre-flight checks fail.
         /// </remarks>
         [KRPCProcedure]
         public static void LaunchVessel (
-            string craftDirectory, string name, string launchSite, IList<string> crew,
-            bool recover = true, string flagUrl = "")
+            string craftDirectory, string name, string launchSite, bool recover = true,
+            IList<string> crew = null, string flagUrl = "")
         {
             CloseDialogs();
             var config = new LaunchConfig(craftDirectory, name, launchSite, recover, crew, flagUrl);
@@ -486,7 +486,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void LaunchVesselFromVAB (string name, bool recover = true)
         {
-            LaunchVessel ("VAB", name, "LaunchPad", new List<string>(), recover);
+            LaunchVessel ("VAB", name, "LaunchPad", recover);
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static void LaunchVesselFromSPH (string name, bool recover = true)
         {
-            LaunchVessel ("SPH", name, "Runway", new List<string>(), recover);
+            LaunchVessel ("SPH", name, "Runway", recover);
         }
 
         /// <summary>
@@ -599,10 +599,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure(GameScene = GameScene.Flight)]
         public static void TransferCrew(CrewMember crewMember, Parts.Part targetPart)
         {
-            if (crewMember == null)
-                throw new ArgumentNullException (nameof (crewMember));
-            if (targetPart == null)
-                throw new ArgumentNullException (nameof (targetPart));
             var internalCrewMember = crewMember.InternalCrewMember;
             var transfer = CrewTransfer.Create(internalCrewMember.seat.part, internalCrewMember, delegate {});
             transfer.crew = internalCrewMember;
@@ -1018,8 +1014,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure]
         public static double RaycastDistance (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
             var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
             RaycastHit hitInfo;
@@ -1038,8 +1032,6 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProcedure (Nullable = true, GameScene = GameScene.Flight)]
         public static Parts.Part RaycastPart (Tuple3 position, Tuple3 direction, ReferenceFrame referenceFrame)
         {
-            if (ReferenceEquals (referenceFrame, null))
-                throw new ArgumentNullException (nameof (referenceFrame));
             var worldPosition = referenceFrame.PositionToWorldSpace (position.ToVector ());
             var worldDirection = referenceFrame.DirectionToWorldSpace (direction.ToVector ());
             RaycastHit hitInfo;

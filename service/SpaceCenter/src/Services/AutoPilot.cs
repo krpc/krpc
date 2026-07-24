@@ -230,8 +230,6 @@ namespace KRPC.SpaceCenter.Services
         public ReferenceFrame ReferenceFrame {
             get { return Controller.ReferenceFrame; }
             set {
-                if (ReferenceEquals (value, null))
-                    throw new ArgumentNullException ("ReferenceFrame");
                 var rotatesWithVessel = false;
                 switch (value.Type) {
                 case ReferenceFrameType.Vessel:

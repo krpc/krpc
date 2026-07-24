@@ -101,8 +101,10 @@ inline T Stream<T>::operator()() {
   check_exists();
   if (!impl->has_started()) start();
   std::string data = impl->get_data();
-  T value;
-  decoder::decode(value, data, impl->get_client());
+  // A null value is signaled out-of-band by is_null; leave value default-constructed
+  // (an empty optional, or an object with id 0).
+  T value{};
+  if (!impl->is_null()) decoder::decode(value, data, impl->get_client());
   return value;
 }
 
@@ -148,8 +150,8 @@ template <typename T>
 inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
   auto callback_wrapper = [this, callback](const std::string& data) {
-    T value;
-    decoder::decode(value, data, this->impl->get_client());
+    T value{};
+    if (!this->impl->is_null()) decoder::decode(value, data, this->impl->get_client());
     callback(value);
   };
   return impl->add_callback(callback_wrapper);

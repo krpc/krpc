@@ -1,3 +1,6 @@
+## [v0.7.0] - unreleased
+- Support for nullable values across all types (#1017)
+
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+
 - **Breaking:** `krpc-servicedefs` now runs the `ServiceDefinitions` tool

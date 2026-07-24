@@ -36,7 +36,7 @@ namespace KRPC.Service
         /// <summary>
         /// Whether the parameters value could be null.
         /// </summary>
-        public bool Nullable { get; private set; }
+        public bool Nullable { get; internal set; }
 
         /// <summary>
         /// Create parameter information from a reflected parameter.
@@ -45,11 +45,21 @@ namespace KRPC.Service
         {
             Type = parameter.ParameterType;
             Name = parameter.Name;
+            // A Nullable<T> value-type parameter is represented by its underlying type T, and is
+            // implicitly nullable.
+            var underlyingType = System.Nullable.GetUnderlyingType (Type);
+            bool nullableValueType = underlyingType != null;
+            if (nullableValueType)
+                Type = underlyingType;
             bool hasDefaultValue = parameter.IsOptional && (parameter.Attributes & ParameterAttributes.HasDefault) == ParameterAttributes.HasDefault;
             DefaultValue = hasDefaultValue ? parameter.DefaultValue : DBNull.Value;
             if (Reflection.HasAttribute<KRPCDefaultValueAttribute> (parameter))
                 DefaultValue = Reflection.GetAttribute<KRPCDefaultValueAttribute> (parameter).Value;
-            Nullable = Reflection.HasAttribute<KRPCNullableAttribute> (parameter);
+            // A parameter is nullable if its type is Nullable<T>, or it has a null default value
+            // (itself a declaration that null is valid), or it is marked [KRPCNullable].
+            Nullable = nullableValueType
+                || Reflection.HasAttribute<KRPCNullableAttribute> (parameter)
+                || (HasDefaultValue && DefaultValue == null);
         }
 
         /// <summary>

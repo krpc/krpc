@@ -81,10 +81,12 @@ class StreamManager {
         return;
       }
       stream = streams.get(id);
-      if (!result.hasError()) {
-        value = Encoder.decode(result.getValue(), stream.getReturnType(), connection);
-      } else {
+      if (result.hasError()) {
         value = result.getError();
+      } else if (result.getIsNull()) {
+        value = null;
+      } else {
+        value = Encoder.decode(result.getValue(), stream.getReturnType(), connection);
       }
       callbacks = new ArrayList<Consumer<Object>>(stream.getCallbacks().values());
     }

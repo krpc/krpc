@@ -78,6 +78,39 @@ class JavaGenerator(Generator):
         lines = ["/**"] + [" * " + line for line in documentation.split("\n")] + [" */"]
         return "\n".join(line.rstrip() for line in lines)
 
+    @staticmethod
+    def _needs_boxing(typ):
+        # Java reference types (String, byte[], classes, enums, collections) carry null
+        # naturally; only the primitive value types need the boxed form to hold null.
+        return isinstance(typ, ValueType) and typ.protobuf_type.code not in (
+            Type.STRING,
+            Type.BYTES,
+        )
+
+    def generate_context_parameters(self, procedure):
+        parameters = super().generate_context_parameters(procedure)
+        for i, parameter in enumerate(parameters):
+            typ = as_type(self.types, procedure["parameters"][i]["type"])
+            if parameter["nullable"] and self._needs_boxing(typ):
+                parameter["type"] = self.language.type_map_classes[
+                    typ.protobuf_type.code
+                ]
+        return parameters
+
+    def _make_return_type(self, info):
+        procedure = info["procedure"]
+        name = info["return_type"]
+        nullable = procedure.get("return_is_nullable", False)
+        if nullable:
+            return_type = self.get_return_type(procedure)
+            if self._needs_boxing(return_type):
+                name = self.language.type_map_classes[return_type.protobuf_type.code]
+        return {
+            "name": name,
+            "spec": self.parse_type_specification(self.get_return_type(procedure)),
+            "nullable": nullable,
+        }
+
     def parse_context(self, context):
         # Expand service properties into get and set methods
         properties = collections.OrderedDict()
@@ -150,12 +183,7 @@ class JavaGenerator(Generator):
             )
         )
         for info in procedures:
-            info["return_type"] = {
-                "name": info["return_type"],
-                "spec": self.parse_type_specification(
-                    self.get_return_type(info["procedure"])
-                ),
-            }
+            info["return_type"] = self._make_return_type(info)
             pos = 0
             for i, pinfo in enumerate(info["parameters"]):
                 param_type = as_type(
@@ -172,12 +200,7 @@ class JavaGenerator(Generator):
                 class_info["properties"].values()
             )
             for info in items:
-                info["return_type"] = {
-                    "name": info["return_type"],
-                    "spec": self.parse_type_specification(
-                        self.get_return_type(info["procedure"])
-                    ),
-                }
+                info["return_type"] = self._make_return_type(info)
                 pos = 0
                 for i, pinfo in enumerate(info["parameters"]):
                     param_type = as_type(

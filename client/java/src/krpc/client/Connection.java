@@ -204,18 +204,18 @@ public class Connection implements AutoCloseable {
    * Invoke a remote procedure call. Should not be called directly. This
    * interface is for generated service code.
    */
-  public ByteString invoke(String service, String procedure, ByteString... arguments)
+  public KRPC.ProcedureResult invoke(String service, String procedure, ByteString... arguments)
       throws RPCException {
     return invoke(buildCall(service, procedure, arguments));
   }
 
-  private ByteString invoke(KRPC.ProcedureCall call) throws RPCException {
+  private KRPC.ProcedureResult invoke(KRPC.ProcedureCall call) throws RPCException {
     KRPC.Response response = invokeInternal(call);
     KRPC.Error error = getErrorFromResponse(response);
     if (error != null) {
       throwException(error);
     }
-    return getReturnValueFromResponse(response);
+    return getResultFromResponse(response);
   }
 
   KRPC.Response invokeInternal(KRPC.ProcedureCall call) throws RPCException {
@@ -244,22 +244,26 @@ public class Connection implements AutoCloseable {
     return null;
   }
 
-  ByteString getReturnValueFromResponse(KRPC.Response response) {
-    return response.getResultsList().get(0).getValue();
+  KRPC.ProcedureResult getResultFromResponse(KRPC.Response response) {
+    return response.getResultsList().get(0);
   }
 
   KRPC.ProcedureCall buildCall(String service, String procedure, ByteString... arguments) {
     KRPC.ProcedureCall.Builder callBuilder = KRPC.ProcedureCall.newBuilder();
     callBuilder.setService(service);
     callBuilder.setProcedure(procedure);
-    if (arguments.length > 0) {
-      KRPC.Argument.Builder argumentBuilder = KRPC.Argument.newBuilder();
-      int position = 0;
-      for (ByteString value : arguments) {
-        KRPC.Argument argument = argumentBuilder.setPosition(position).setValue(value).build();
-        callBuilder.addArguments(argument);
-        position++;
+    int position = 0;
+    for (ByteString value : arguments) {
+      KRPC.Argument.Builder argumentBuilder = KRPC.Argument.newBuilder().setPosition(position);
+      // A null encoded value signals a null argument, carried out-of-band by is_null
+      // with the value field left unset.
+      if (value == null) {
+        argumentBuilder.setIsNull(true);
+      } else {
+        argumentBuilder.setValue(value);
       }
+      callBuilder.addArguments(argumentBuilder.build());
+      position++;
     }
     return callBuilder.build();
   }

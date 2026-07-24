@@ -143,7 +143,7 @@ class TestClass(ClassBase):
         )
 
     @object_property.setter
-    def object_property(self, value: TestClass) -> None:
+    def object_property(self, value: Optional[TestClass]) -> None:
         return self._client._invoke(
             "TestService",
             "TestClass_set_ObjectProperty",
@@ -203,6 +203,29 @@ class TestClass(ClassBase):
             ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
+        )
+
+    def echo_nullable_object(self, value: Optional[TestClass]) -> Optional[TestClass]:
+        return self._client._invoke(
+            "TestService",
+            "TestClass_EchoNullableObject",
+            [self, value],
+            ["self", "value"],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
+            self._client._types.class_type("TestService", "TestClass")
+        )
+
+    def _return_type_echo_nullable_object(self) -> TypeBase:
+        return self._client._types.class_type("TestService", "TestClass")
+
+    def _build_call_echo_nullable_object(self, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "TestClass_EchoNullableObject",
+            [self, value],
+            ["self", "value"],
+            [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
+            self._client._types.class_type("TestService", "TestClass")
         )
 
     def float_to_string(self, x: float) -> str:
@@ -277,7 +300,7 @@ class TestClass(ClassBase):
             self._client._types.string_type
         )
 
-    def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: TestClass = None) -> str:
+    def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
         return self._client._invoke(
             "TestService",
             "TestClass_OptionalArguments",
@@ -290,7 +313,7 @@ class TestClass(ClassBase):
     def _return_type_optional_arguments(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: TestClass = None) -> KRPC_pb2.ProcedureCall:
+    def _build_call_optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "TestClass_OptionalArguments",
@@ -327,6 +350,35 @@ class TestClass(ClassBase):
             ["a", "b"],
             [self._client._types.string_type, self._client._types.string_type],
             self._client._types.string_type
+        )
+
+    @StaticMethod
+    def static_nullable_object(cls, value: Optional[TestClass]) -> Optional[TestClass]:
+        self = cls
+        return cls._client._invoke(
+            "TestService",
+            "TestClass_static_StaticNullableObject",
+            [value],
+            ["value"],
+            [self._client._types.class_type("TestService", "TestClass")],
+            self._client._types.class_type("TestService", "TestClass")
+        )
+
+    @StaticMethod
+    def _return_type_static_nullable_object(cls) -> TypeBase:
+        self = cls
+        return self._client._types.class_type("TestService", "TestClass")
+
+    @StaticMethod
+    def _build_call_static_nullable_object(cls, value: Optional[TestClass]) -> KRPC_pb2.ProcedureCall:
+        self = cls
+        return self._client._build_call(
+            "TestService",
+            "TestClass_static_StaticNullableObject",
+            [value],
+            ["value"],
+            [self._client._types.class_type("TestService", "TestClass")],
+            self._client._types.class_type("TestService", "TestClass")
         )
 
 
@@ -424,6 +476,41 @@ class TestService:
         )
 
     @property
+    def nullable_object(self) -> Optional[TestClass]:
+        return self._client._invoke(
+            "TestService",
+            "get_NullableObject",
+            [],
+            [],
+            [],
+            self._client._types.class_type("TestService", "TestClass")
+        )
+
+    @nullable_object.setter
+    def nullable_object(self, value: Optional[TestClass]) -> None:
+        return self._client._invoke(
+            "TestService",
+            "set_NullableObject",
+            [value],
+            ["value"],
+            [self._client._types.class_type("TestService", "TestClass")],
+            None
+        )
+
+    def _return_type_nullable_object(self) -> TypeBase:
+        return self._client._types.class_type("TestService", "TestClass")
+
+    def _build_call_nullable_object(self) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "get_NullableObject",
+            [],
+            [],
+            [],
+            self._client._types.class_type("TestService", "TestClass")
+        )
+
+    @property
     def object_property(self) -> Optional[TestClass]:
         return self._client._invoke(
             "TestService",
@@ -435,7 +522,7 @@ class TestService:
         )
 
     @object_property.setter
-    def object_property(self, value: TestClass) -> None:
+    def object_property(self, value: Optional[TestClass]) -> None:
         return self._client._invoke(
             "TestService",
             "set_ObjectProperty",
@@ -800,6 +887,75 @@ class TestService:
             self._client._types.string_type
         )
 
+    def echo_nullable_int(self, value: Optional[int]) -> Optional[int]:
+        return self._client._invoke(
+            "TestService",
+            "EchoNullableInt",
+            [value],
+            ["value"],
+            [self._client._types.sint32_type],
+            self._client._types.sint32_type
+        )
+
+    def _return_type_echo_nullable_int(self) -> TypeBase:
+        return self._client._types.sint32_type
+
+    def _build_call_echo_nullable_int(self, value: Optional[int]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoNullableInt",
+            [value],
+            ["value"],
+            [self._client._types.sint32_type],
+            self._client._types.sint32_type
+        )
+
+    def echo_nullable_list(self, l: Optional[List[int]]) -> Optional[List[int]]:
+        return self._client._invoke(
+            "TestService",
+            "EchoNullableList",
+            [l],
+            ["l"],
+            [self._client._types.list_type(self._client._types.sint32_type)],
+            self._client._types.list_type(self._client._types.sint32_type)
+        )
+
+    def _return_type_echo_nullable_list(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.sint32_type)
+
+    def _build_call_echo_nullable_list(self, l: Optional[List[int]]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoNullableList",
+            [l],
+            ["l"],
+            [self._client._types.list_type(self._client._types.sint32_type)],
+            self._client._types.list_type(self._client._types.sint32_type)
+        )
+
+    def echo_nullable_string(self, value: Optional[str]) -> Optional[str]:
+        return self._client._invoke(
+            "TestService",
+            "EchoNullableString",
+            [value],
+            ["value"],
+            [self._client._types.string_type],
+            self._client._types.string_type
+        )
+
+    def _return_type_echo_nullable_string(self) -> TypeBase:
+        return self._client._types.string_type
+
+    def _build_call_echo_nullable_string(self, value: Optional[str]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EchoNullableString",
+            [value],
+            ["value"],
+            [self._client._types.string_type],
+            self._client._types.string_type
+        )
+
     def echo_test_object(self, value: Optional[TestClass]) -> Optional[TestClass]:
         return self._client._invoke(
             "TestService",
@@ -821,6 +977,29 @@ class TestService:
             ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
+        )
+
+    def empty_list_default(self, x: List[str] = []) -> List[str]:
+        return self._client._invoke(
+            "TestService",
+            "EmptyListDefault",
+            [x],
+            ["x"],
+            [self._client._types.list_type(self._client._types.string_type)],
+            self._client._types.list_type(self._client._types.string_type)
+        )
+
+    def _return_type_empty_list_default(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.string_type)
+
+    def _build_call_empty_list_default(self, x: List[str] = []) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EmptyListDefault",
+            [x],
+            ["x"],
+            [self._client._types.list_type(self._client._types.string_type)],
+            self._client._types.list_type(self._client._types.string_type)
         )
 
     def enum_default_arg(self, x: TestEnum = TestEnum(2)) -> TestEnum:
@@ -1102,6 +1281,29 @@ class TestService:
             self._client._types.list_type(self._client._types.sint32_type)
         )
 
+    def not_nullable_object(self, value: TestClass) -> TestClass:
+        return self._client._invoke(
+            "TestService",
+            "NotNullableObject",
+            [value],
+            ["value"],
+            [self._client._types.class_type("TestService", "TestClass")],
+            self._client._types.class_type("TestService", "TestClass")
+        )
+
+    def _return_type_not_nullable_object(self) -> TypeBase:
+        return self._client._types.class_type("TestService", "TestClass")
+
+    def _build_call_not_nullable_object(self, value: TestClass) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "NotNullableObject",
+            [value],
+            ["value"],
+            [self._client._types.class_type("TestService", "TestClass")],
+            self._client._types.class_type("TestService", "TestClass")
+        )
+
     def on_timer(self, milliseconds: int, repeats: int = 1) -> Event:
         return self._client._invoke(
             "TestService",
@@ -1148,7 +1350,7 @@ class TestService:
             self._client._types.event_type
         )
 
-    def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: TestClass = None) -> str:
+    def optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> str:
         return self._client._invoke(
             "TestService",
             "OptionalArguments",
@@ -1161,7 +1363,7 @@ class TestService:
     def _return_type_optional_arguments(self) -> TypeBase:
         return self._client._types.string_type
 
-    def _build_call_optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: TestClass = None) -> KRPC_pb2.ProcedureCall:
+    def _build_call_optional_arguments(self, x: str, y: str = 'foo', z: str = 'bar', obj: Optional[TestClass] = None) -> KRPC_pb2.ProcedureCall:
         return self._client._build_call(
             "TestService",
             "OptionalArguments",

@@ -54,6 +54,10 @@ function Client:_invoke(service, procedure, args, param_names, param_types, retu
 
   -- Decode the response and return the (optional) result
   if return_type then
+    -- A null result is signaled out-of-band by is_null; the value field is unset
+    if result.is_null then
+      return Types.none
+    end
     return decoder.decode(result.value, return_type)
   end
   return nil
@@ -68,24 +72,29 @@ function Client:_build_request(service, procedure, args, param_names, param_type
 
   for i,value in ipairs(args) do
     local typ = param_types[i]
-    local valid = false
-    if type(typ.lua_type) == 'string' then
-      valid = typ.lua_type == type(value)
-    elseif type(typ.lua_type) == 'table' then
-      valid = typ.lua_type:class_of(value)
-    end
-    if not valid then
-      -- Only ok is declared here; value is the loop variable and must stay so, as the
-      -- coerced value is read below, outside this block
-      local ok
-      ok,value = pcall(self._types.coerce_to, self._types, value, typ)
-      if not ok then
-        error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
-      end
-    end
     local arg = call.arguments:add()
     arg.position = i-1
-    arg.value = encoder.encode(value, typ)
+    if value == Types.none then
+      -- A null argument is signaled out-of-band by is_null; the value field is left unset
+      arg.is_null = true
+    else
+      local valid = false
+      if type(typ.lua_type) == 'string' then
+        valid = typ.lua_type == type(value)
+      elseif type(typ.lua_type) == 'table' then
+        valid = typ.lua_type:class_of(value)
+      end
+      if not valid then
+        -- Only ok is declared here; value is the loop variable and must stay so, as the
+        -- coerced value is read below, outside this block
+        local ok
+        ok,value = pcall(self._types.coerce_to, self._types, value, typ)
+        if not ok then
+          error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
+        end
+      end
+      arg.value = encoder.encode(value, typ)
+    end
   end
 
   return request

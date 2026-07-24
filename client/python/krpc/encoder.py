@@ -48,7 +48,7 @@ class Encoder:
         if isinstance(typ, EnumerationType):
             return cls._encode_value(cast(Enum, x).value, cls._types.sint32_type)
         if isinstance(typ, ClassType):
-            object_id = x._object_id if x is not None else 0  # type: ignore[attr-defined]
+            object_id = x._object_id  # type: ignore[attr-defined]
             return cls._encode_value(object_id, cls._types.uint64_type)
         if isinstance(typ, ListType):
             list_msg = KRPC.List()

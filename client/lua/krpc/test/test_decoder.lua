@@ -40,12 +40,6 @@ function TestDecoder:test_decode_class()
   luaunit.assertEquals(300, value._object_id)
 end
 
-function TestDecoder:test_decode_class_none()
-  local typ = types:class_type('ServiceName', 'ClassName')
-  local value = decoder.decode(platform.unhexlify('00'), typ)
-  luaunit.assertEquals(Types.none, value)
-end
-
 function TestDecoder:test_guid()
   luaunit.assertEquals(
     '6f271b39-00dd-4de4-9732-f0d3a68838df',

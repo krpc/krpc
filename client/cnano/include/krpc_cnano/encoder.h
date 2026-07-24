@@ -32,6 +32,9 @@ krpc_error_t krpc_add_argument(krpc_call_t* call, uint32_t position,
                                               void* const* arg),
                                const void* arg);
 
+/* Add a null argument, signaled by is_null with the value left unset */
+krpc_error_t krpc_add_null_argument(krpc_call_t* call, uint32_t position);
+
 /*[[[cog
 types = [
   ('double', 'double'),

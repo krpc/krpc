@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <tuple>
@@ -49,6 +50,8 @@ template <typename... Ts>
 void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* client = nullptr);
 
 template <typename T>
+void decode(std::optional<T>& value, const std::string& data, Client* client = nullptr);
+template <typename T>
 void decode(std::vector<T>& list, const std::string& data, Client* client = nullptr);
 template <typename T>
 void decode(std::set<T>& set, const std::string& data, Client* client = nullptr);
@@ -71,6 +74,15 @@ inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* cl
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   int index = 0;
   std::apply([&](Ts&... args) { (decode(args, tupleMessage.items(index++), client), ...); }, tuple);
+}
+
+template <typename T>
+inline void decode(std::optional<T>& value, const std::string& data, Client* client) {
+  // Only called for a present value; a null value is signaled by is_null and leaves the
+  // optional empty.
+  T inner;
+  decode(inner, data, client);
+  value = inner;
 }
 
 template <typename T>

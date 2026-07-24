@@ -117,6 +117,51 @@ public class ConnectionTest {
   }
 
   @Test
+  public void testNullableNonClassValues() throws RPCException {
+    // Nullable value-type, string and collection parameters and return values
+    assertEquals(Integer.valueOf(42), testService.echoNullableInt(42));
+    assertNull(testService.echoNullableInt(null));
+    assertEquals("foo", testService.echoNullableString("foo"));
+    assertNull(testService.echoNullableString(null));
+    assertEquals(Arrays.asList(1, 2, 3), testService.echoNullableList(Arrays.asList(1, 2, 3)));
+    assertNull(testService.echoNullableList(null));
+  }
+
+  @Test
+  public void testNonNullableParameterRejectsNull() {
+    // A null argument to a parameter that is not nullable is rejected by the server
+    assertThrows(RPCException.class, () -> testService.notNullableObject(null));
+  }
+
+  @Test
+  public void testNullableClassMethod() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    TestService.TestClass obj2 = testService.createTestObject("bob");
+    assertEquals(obj2, obj.echoNullableObject(obj2));
+    assertNull(obj.echoNullableObject(null));
+  }
+
+  @Test
+  public void testNullableClassStaticMethod() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    assertEquals(obj, TestService.TestClass.staticNullableObject(connection, obj));
+    assertNull(TestService.TestClass.staticNullableObject(connection, null));
+  }
+
+  @Test
+  public void testNullableProperty() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("jeb");
+    // ObjectProperty is nullable and its setter accepts null
+    testService.setObjectProperty(null);
+    assertNull(testService.getObjectProperty());
+    // NullableObject is nullable for reads, but its setter guards against null, so writing
+    // null raises the server's ArgumentNullException
+    testService.setNullableObject(obj);
+    assertEquals(obj, testService.getNullableObject());
+    assertThrows(IllegalArgumentException.class, () -> testService.setNullableObject(null));
+  }
+
+  @Test
   public void testClassMethods() throws RPCException {
     TestService.TestClass obj = testService.createTestObject("bob");
     assertEquals("value=bob", obj.getValue());

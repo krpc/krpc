@@ -72,12 +72,12 @@ void StreamManager::update(uint64_t id, const schema::ProcedureResult& result) {
   auto stream = it->second.lock();
   if (!stream) return;
   if (!result.has_error()) {
-    stream->update(result.value(), nullptr);
+    stream->update(result.value(), result.is_null(), nullptr);
   } else {
     try {
       client->throw_exception(result.error());
     } catch (...) {
-      stream->update("", std::current_exception());
+      stream->update("", false, std::current_exception());
     }
   }
   stream->get_condition().notify_all();

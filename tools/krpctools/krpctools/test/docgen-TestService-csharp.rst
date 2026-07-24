@@ -135,7 +135,47 @@
 
       :Game Scenes: All
 
+   .. method:: int EchoNullableInt(int value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<int> EchoNullableList(System.Collections.Generic.IList<int> l)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: string EchoNullableString(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: TestClass EchoTestObject(TestClass value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<string> EmptyListDefault(System.Collections.Generic.IList<string> x = {  })
 
 
 
@@ -262,6 +302,22 @@
 
       :Game Scenes: All
 
+   .. method:: TestClass NotNullableObject(TestClass value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. property:: TestClass NullableObject { get; set; }
+
+
+
+      :Game Scenes: All
+
    .. property:: TestClass ObjectProperty { get; set; }
 
 
@@ -289,7 +345,7 @@
 
       :Game Scenes: All
 
-   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj = null)
+   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
 
 
 
@@ -432,6 +488,16 @@
 
    Class documentation string.
 
+   .. method:: TestClass EchoNullableObject(TestClass value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: string FloatToString(float x)
 
 
@@ -471,7 +537,7 @@
 
       :Game Scenes: All
 
-   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj = null)
+   .. method:: string OptionalArguments(string x, string y = "foo", string z = "bar", TestClass obj)
 
 
 
@@ -490,6 +556,16 @@
 
       :parameters:
 
+
+
+
+      :Game Scenes: All
+
+   .. method:: static TestClass StaticNullableObject(IConnection connection, TestClass value)
+
+
+
+      :parameters:
 
 
 

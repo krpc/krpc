@@ -4,6 +4,7 @@
 #include <atomic>
 #include <chrono>  // NOLINT(build/c++11)
 #include <cstddef>
+#include <optional>
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
 #include <vector>
@@ -37,6 +38,16 @@ TEST_F(test_stream, test_property) {
   krpc::Stream<std::string> x = test_service.string_property_stream();
   for (int i = 0; i < 5; i++) {
     ASSERT_EQ("foo", x());
+    wait();
+  }
+}
+
+TEST_F(test_stream, test_nullable) {
+  auto x = test_service.echo_nullable_int_stream(std::nullopt);
+  auto y = test_service.echo_nullable_string_stream(std::nullopt);
+  for (int i = 0; i < 5; i++) {
+    ASSERT_FALSE(x().has_value());
+    ASSERT_FALSE(y().has_value());
     wait();
   }
 }
