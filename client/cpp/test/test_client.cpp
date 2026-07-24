@@ -8,6 +8,7 @@
 #include <iosfwd>
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -131,6 +132,59 @@ TEST_F(test_client, test_class_none_value) {
   ASSERT_EQ("bobnull", object.object_to_string(none));
   test_service.set_object_property(none);
   ASSERT_EQ(none, test_service.object_property());
+}
+
+TEST_F(test_client, test_nullable_non_class_values) {
+  // Nullable value-type, string and collection parameters and return values
+  ASSERT_EQ(42, test_service.echo_nullable_int(42).value());
+  ASSERT_FALSE(test_service.echo_nullable_int(std::nullopt).has_value());
+  ASSERT_EQ("foo", test_service.echo_nullable_string("foo").value());
+  ASSERT_FALSE(test_service.echo_nullable_string(std::nullopt).has_value());
+  std::vector<int32_t> list = {1, 2, 3};
+  ASSERT_EQ(list, test_service.echo_nullable_list(list).value());
+  ASSERT_FALSE(test_service.echo_nullable_list(std::nullopt).has_value());
+}
+
+TEST_F(test_client, test_non_nullable_parameter_rejects_null) {
+  // A null argument to a parameter that is not nullable is rejected by the server
+  krpc::services::TestService::TestClass none;
+  ASSERT_THROW(test_service.not_nullable_object(none), krpc::RPCError);
+}
+
+TEST_F(test_client, test_nullable_class_method) {
+  krpc::services::TestService::TestClass none;
+  krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
+  krpc::services::TestService::TestClass obj2 = test_service.create_test_object("bob");
+  ASSERT_EQ(obj2, obj.echo_nullable_object(obj2));
+  ASSERT_EQ(none, obj.echo_nullable_object(none));
+}
+
+TEST_F(test_client, test_nullable_class_static_method) {
+  krpc::services::TestService::TestClass none;
+  krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
+  ASSERT_EQ(obj, krpc::services::TestService::TestClass::static_nullable_object(conn, obj));
+  ASSERT_EQ(none, krpc::services::TestService::TestClass::static_nullable_object(conn, none));
+}
+
+TEST_F(test_client, test_nullable_property) {
+  krpc::services::TestService::TestClass none;
+  krpc::services::TestService::TestClass obj = test_service.create_test_object("jeb");
+  // ObjectProperty is nullable and its setter accepts null
+  test_service.set_object_property(none);
+  ASSERT_EQ(none, test_service.object_property());
+  // NullableObject is nullable for reads, but its setter guards against null, so writing
+  // null raises the server's ArgumentNullException
+  test_service.set_nullable_object(obj);
+  ASSERT_EQ(obj, test_service.nullable_object());
+  ASSERT_THROW(test_service.set_nullable_object(none), krpc::services::KRPC::ArgumentNullException);
+}
+
+TEST_F(test_client, test_empty_collection_default) {
+  // An empty-collection default is distinguishable from no default: the argument can be
+  // omitted and the empty list is used.
+  ASSERT_EQ(std::vector<std::string>(), test_service.empty_list_default());
+  std::vector<std::string> list = {"foo", "bar"};
+  ASSERT_EQ(list, test_service.empty_list_default(list));
 }
 
 TEST_F(test_client, test_class_methods) {

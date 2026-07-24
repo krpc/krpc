@@ -4,6 +4,7 @@ from krpc.utils import snake_case
 from .generator import Generator
 from .docparser import DocParser
 from ..lang.cpp import CppLanguage
+from ..utils import as_type
 
 
 def _cpp_template_fix(typ):
@@ -25,6 +26,38 @@ class CppGenerator(Generator):
         return _cpp_template_fix(self.language.parse_type(typ))
 
     @staticmethod
+    def _wrap_optional(type_str):
+        return _cpp_template_fix("std::optional<%s>" % type_str)
+
+    def generate_context_parameters(self, procedure):
+        parameters = super().generate_context_parameters(procedure)
+        for i, parameter in enumerate(parameters):
+            # A nullable class parameter keeps its class type (null is the id-0 object);
+            # every other nullable parameter is wrapped in std::optional.
+            typ = as_type(self.types, procedure["parameters"][i]["type"])
+            if parameter["nullable"] and not isinstance(typ, ClassType):
+                parameter["type"] = self._wrap_optional(parameter["type"])
+        return parameters
+
+    def _wrap_nullable_return(self, info):
+        procedure = info["procedure"]
+        if procedure.get("return_is_nullable", False):
+            typ = self.get_return_type(procedure)
+            if not isinstance(typ, ClassType):
+                info["return_type"] = self._wrap_optional(info["return_type"])
+
+    def _property_return_type(self, info):
+        # info["type"] is the property's C++ type; wrap it in std::optional when the getter
+        # is a nullable non-class return (a nullable class stays the id-0 object type).
+        return_type = info["type"]
+        getter = info["getter"]
+        if getter and getter["procedure"].get("return_is_nullable", False):
+            typ = self.get_return_type(getter["procedure"])
+            if not isinstance(typ, ClassType):
+                return_type = self._wrap_optional(return_type)
+        return return_type
+
+    @staticmethod
     def parse_documentation(documentation):
         documentation = CppDocParser().parse(documentation)
         if documentation == "":
@@ -35,6 +68,7 @@ class CppGenerator(Generator):
     def parse_context(self, context):
         for info in context["procedures"].values():
             info["return_set_client"] = self.parse_set_client(info["procedure"])
+            self._wrap_nullable_return(info)
 
         properties = collections.OrderedDict()
         for name, info in context["properties"].items():
@@ -42,7 +76,7 @@ class CppGenerator(Generator):
                 properties[name] = {
                     "remote_name": info["getter"]["remote_name"],
                     "parameters": [],
-                    "return_type": info["type"],
+                    "return_type": self._property_return_type(info),
                     "return_set_client": self.parse_set_client(
                         info["getter"]["procedure"]
                     ),
@@ -66,9 +100,11 @@ class CppGenerator(Generator):
         for class_info in context["classes"].values():
             for info in class_info["methods"].values():
                 info["return_set_client"] = self.parse_set_client(info["procedure"])
+                self._wrap_nullable_return(info)
 
             for info in class_info["static_methods"].values():
                 info["return_set_client"] = self.parse_set_client(info["procedure"])
+                self._wrap_nullable_return(info)
 
             class_properties = collections.OrderedDict()
             for name, info in class_info["properties"].items():
@@ -76,7 +112,7 @@ class CppGenerator(Generator):
                     class_properties[name] = {
                         "remote_name": info["getter"]["remote_name"],
                         "parameters": [],
-                        "return_type": info["type"],
+                        "return_type": self._property_return_type(info),
                         "return_set_client_fn": self.parse_set_client(
                             info["getter"]["procedure"]
                         ),

@@ -2,9 +2,11 @@
 
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <set>
 #include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 #include "krpc/krpc.pb.hpp"
@@ -85,6 +87,35 @@ inline std::string encode(const std::tuple<Ts...>& tuple) {
   std::apply([&tupleMessage](const Ts&... args) { (tupleMessage.add_items(encode(args)), ...); },
              tuple);
   return encode(tupleMessage);
+}
+
+// An encoded argument value together with whether the argument is null. A null argument
+// is signaled by is_null on the wire and leaves the value field unset.
+struct Value {
+  std::string value;
+  bool is_null;
+  // Implicit so a plain encoded value (the common, non-null case) becomes a Value.
+  Value(std::string value) : value(std::move(value)), is_null(false) {}  // NOLINT(runtime/explicit)
+  static Value null() {
+    Value value("");
+    value.is_null = true;
+    return value;
+  }
+};
+
+// Encode a nullable non-class argument: an empty optional is null, otherwise the
+// contained value is encoded as its underlying type.
+template <typename T>
+inline Value encode_nullable(const std::optional<T>& value) {
+  if (value) return Value(encode(*value));
+  return Value::null();
+}
+
+// Encode a nullable class argument: an object with id 0 is the null representation.
+template <typename T>
+inline Value encode_nullable(const Object<T>& object) {
+  if (object._id == 0) return Value::null();
+  return Value(encode(object));
 }
 
 }  // namespace encoder

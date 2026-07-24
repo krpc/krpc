@@ -14,6 +14,7 @@ StreamImpl::StreamImpl(Client* client, uint64_t id, std::recursive_mutex* update
       update_lock(update_lock),
       started(false),
       updated(false),
+      _is_null(false),
       condition_lock(condition_mutex, std::defer_lock),
       next_callback_tag(0),
       _rate(0) {}
@@ -44,10 +45,14 @@ const std::string& StreamImpl::get_data() {
   return data;
 }
 
-void StreamImpl::update(const std::string& data, const std::exception_ptr& exception) {
+bool StreamImpl::is_null() const { return _is_null; }
+
+void StreamImpl::update(const std::string& data, bool is_null,
+                        const std::exception_ptr& exception) {
   std::lock_guard<std::recursive_mutex> guard(*update_lock);
   updated = true;
   this->data = data;
+  this->_is_null = is_null;
   this->exception = exception;
 }
 

@@ -22,7 +22,8 @@ class StreamImpl {
   float rate() const;
   void set_rate(float value);
   const std::string& get_data();
-  void update(const std::string& data, const std::exception_ptr& exception);
+  bool is_null() const;
+  void update(const std::string& data, bool is_null, const std::exception_ptr& exception);
   bool has_updated() const;
   std::condition_variable& get_condition();
   std::unique_lock<std::mutex>& get_condition_lock();
@@ -40,6 +41,7 @@ class StreamImpl {
   bool started;
   bool updated;
   std::string data;
+  bool _is_null;
   std::exception_ptr exception;
   std::condition_variable condition;
   std::mutex condition_mutex;
