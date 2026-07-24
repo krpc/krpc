@@ -86,7 +86,7 @@ Closest Approach
       :rtype: :class:`CelestialBody`
    
 
-   .. method:: position([reference_frame = None])
+   .. method:: position(reference_frame)
 
       The position of the orbiting object at the closest approach.
 
@@ -95,7 +95,7 @@ Closest Approach
       :rtype: tuple(float, float, float)
    
 
-   .. method:: target_position([reference_frame = None])
+   .. method:: target_position(reference_frame)
 
       The position of the target object at the closest approach.
 
@@ -104,7 +104,7 @@ Closest Approach
       :rtype: tuple(float, float, float)
    
 
-   .. method:: velocity([reference_frame = None])
+   .. method:: velocity(reference_frame)
 
       The velocity of the orbiting object at the closest approach.
 
@@ -113,7 +113,7 @@ Closest Approach
       :rtype: tuple(float, float, float)
    
 
-   .. method:: target_velocity([reference_frame = None])
+   .. method:: target_velocity(reference_frame)
 
       The velocity of the target object at the closest approach.
 
@@ -122,7 +122,7 @@ Closest Approach
       :rtype: tuple(float, float, float)
    
 
-   .. method:: relative_position([reference_frame = None])
+   .. method:: relative_position(reference_frame)
 
       The position of the target relative to the orbiting object at the closest
       approach.
@@ -132,7 +132,7 @@ Closest Approach
       :rtype: tuple(float, float, float)
    
 
-   .. method:: relative_velocity([reference_frame = None])
+   .. method:: relative_velocity(reference_frame)
 
       The velocity of the target relative to the orbiting object at the closest
       approach.

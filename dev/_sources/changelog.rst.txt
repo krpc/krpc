@@ -8,6 +8,68 @@ Changelog
 =========
 
 
+v0.7.0 - unreleased
+-------------------
+
+
+Core
+^^^^
+
+* Support for nullable values across all types (:issue:`1017`)
+* :breaking:`Breaking` Null values are now signaled by an ``is_null`` field rather than by an object id of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (:issue:`1017`)
+
+
+SpaceCenter service
+^^^^^^^^^^^^^^^^^^^
+
+* Space center
+
+  * ``SpaceCenter.LaunchVessel`` now accepts an optional ``crew`` parameter (:issue:`1017`)
+
+
+
+C-nano client
+^^^^^^^^^^^^^
+
+* :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
+
+
+C# client
+^^^^^^^^^
+
+* :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
+
+
+C++ client
+^^^^^^^^^^
+
+* :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
+
+
+Java client
+^^^^^^^^^^^
+
+* :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
+
+
+Lua client
+^^^^^^^^^^
+
+* :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
+
+
+Python client
+^^^^^^^^^^^^^
+
+* :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
+
+
+krpctools
+^^^^^^^^^
+
+* Support for nullable values across all types (:issue:`1017`)
+
+
 v0.6.0
 ------
 

@@ -106,7 +106,7 @@ SpaceCenter
 
    
 
-   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, std::vector<std::string> crew, bool recover = true, std::string flag_url = "")
+   .. function:: void launch_vessel(std::string craft_directory, std::string name, std::string launch_site, bool recover = true, std::vector<std::string> crew, std::string flag_url = "")
 
       Launch a vessel.
 
@@ -115,8 +115,8 @@ SpaceCenter
        * **craft_directory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
        * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
        * **launch_site** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-       * **crew** -- A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
        * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **crew** -- If not ``NULL``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
        * **flag_url** -- If not ``NULL``, the asset URL of the mission flag to use for the launch.
 
    

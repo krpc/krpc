@@ -108,7 +108,7 @@ Vessel
 
       :Game Scenes: All
 
-   .. method:: Flight Flight(ReferenceFrame referenceFrame = null)
+   .. method:: Flight Flight(ReferenceFrame referenceFrame)
 
       Returns a :meth:`Vessel.Flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.

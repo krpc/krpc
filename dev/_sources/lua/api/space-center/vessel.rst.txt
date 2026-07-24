@@ -113,7 +113,7 @@ Vessel
       :Attribute: Read-only, cannot be set
       :rtype: string
 
-   .. method:: flight([reference_frame = None])
+   .. method:: flight(reference_frame)
 
       Returns a :meth:`SpaceCenter.Vessel.flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.

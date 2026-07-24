@@ -97,7 +97,7 @@ SpaceCenter
 
       :Game Scenes: All
 
-   .. method:: void LaunchVessel(string craftDirectory, string name, string launchSite, System.Collections.Generic.IList<string> crew, bool recover = true, string flagUrl = "")
+   .. method:: void LaunchVessel(string craftDirectory, string name, string launchSite, bool recover = true, System.Collections.Generic.IList<string> crew, string flagUrl = "")
 
       Launch a vessel.
 
@@ -106,8 +106,8 @@ SpaceCenter
        * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
        * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
        * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-       * **crew** -- A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
        * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **crew** -- If not ``null``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
        * **flagUrl** -- If not ``null``, the asset URL of the mission flag to use for the launch.
 
       :Game Scenes: All

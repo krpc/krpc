@@ -36,7 +36,7 @@ ReferenceFrame
 
       :Game Scenes: All
 
-   .. method:: static ReferenceFrame CreateHybrid(IConnection connection, ReferenceFrame position, ReferenceFrame rotation = null, ReferenceFrame velocity = null, ReferenceFrame angularVelocity = null)
+   .. method:: static ReferenceFrame CreateHybrid(IConnection connection, ReferenceFrame position, ReferenceFrame rotation, ReferenceFrame velocity, ReferenceFrame angularVelocity)
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.

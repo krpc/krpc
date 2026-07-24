@@ -53,7 +53,7 @@ Node
       :Attribute: Read-only, cannot be set
       :rtype: number
 
-   .. method:: burn_vector([reference_frame = None])
+   .. method:: burn_vector(reference_frame)
 
       Returns the burn vector for the maneuver node.
 
@@ -65,7 +65,7 @@ Node
 
          Does not change when executing the maneuver node. See :meth:`SpaceCenter.Node.remaining_burn_vector`.
 
-   .. method:: remaining_burn_vector([reference_frame = None])
+   .. method:: remaining_burn_vector(reference_frame)
 
       Returns the remaining burn vector for the maneuver node.
 

@@ -143,7 +143,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. function:: krpc_error_t krpc_SpaceCenter_LaunchVessel(krpc_connection_t connection, const char * craftDirectory, const char * name, const char * launchSite, const krpc_list_string_t * crew, bool recover, const char * flagUrl)
+.. function:: krpc_error_t krpc_SpaceCenter_LaunchVessel(krpc_connection_t connection, const char * craftDirectory, const char * name, const char * launchSite, bool recover, const krpc_list_string_t * crew, const char * flagUrl)
 
    Launch a vessel.
 
@@ -152,8 +152,8 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
     * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
     * **name** -- Name of the vessel to launch. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
     * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
-    * **crew** -- A list of names of Kerbals to place in the craft. Pass an empty list to use default crew assignments.
     * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+    * **crew** -- If not ``nullptr``, a list of names of Kerbals to place in the craft. Otherwise the crew will use default assignments.
     * **flagUrl** -- If not ``nullptr``, the asset URL of the mission flag to use for the launch.
 
    

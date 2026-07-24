@@ -70,7 +70,7 @@ Closest Approach
 
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> Position(ReferenceFrame referenceFrame)
 
       The position of the orbiting object at the closest approach.
 
@@ -81,7 +81,7 @@ Closest Approach
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> TargetPosition(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> TargetPosition(ReferenceFrame referenceFrame)
 
       The position of the target object at the closest approach.
 
@@ -92,7 +92,7 @@ Closest Approach
       :returns: The position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> Velocity(ReferenceFrame referenceFrame)
 
       The velocity of the orbiting object at the closest approach.
 
@@ -103,7 +103,7 @@ Closest Approach
       :returns: The velocity as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> TargetVelocity(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> TargetVelocity(ReferenceFrame referenceFrame)
 
       The velocity of the target object at the closest approach.
 
@@ -114,7 +114,7 @@ Closest Approach
       :returns: The velocity as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> RelativePosition(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> RelativePosition(ReferenceFrame referenceFrame)
 
       The position of the target relative to the orbiting object at the closest
       approach.
@@ -126,7 +126,7 @@ Closest Approach
       :returns: The relative position as a vector.
       :Game Scenes: All
 
-   .. method:: System.Tuple<double,double,double> RelativeVelocity(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> RelativeVelocity(ReferenceFrame referenceFrame)
 
       The velocity of the target relative to the orbiting object at the closest
       approach.

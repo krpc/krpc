@@ -34,7 +34,7 @@ ReferenceFrame
       :rtype: :class:`ReferenceFrame`
    
 
-   .. staticmethod:: create_hybrid(position, [rotation = None], [velocity = None], [angular_velocity = None])
+   .. staticmethod:: create_hybrid(position, rotation, velocity, angular_velocity)
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.

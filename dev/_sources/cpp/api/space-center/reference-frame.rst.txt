@@ -36,7 +36,7 @@ ReferenceFrame
 
    
 
-   .. function:: static ReferenceFrame create_hybrid(Client& connection, ReferenceFrame position, ReferenceFrame rotation = ReferenceFrame(), ReferenceFrame velocity = ReferenceFrame(), ReferenceFrame angular_velocity = ReferenceFrame())
+   .. function:: static ReferenceFrame create_hybrid(Client& connection, ReferenceFrame position, ReferenceFrame rotation, ReferenceFrame velocity, ReferenceFrame angular_velocity)
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.

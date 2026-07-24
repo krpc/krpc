@@ -125,7 +125,7 @@ Vessel
       :rtype: str
    
 
-   .. method:: flight([reference_frame = None])
+   .. method:: flight(reference_frame)
 
       Returns a :meth:`Vessel.flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.

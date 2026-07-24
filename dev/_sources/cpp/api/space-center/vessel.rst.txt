@@ -111,7 +111,7 @@ Vessel
 
    
 
-   .. function:: Flight flight(ReferenceFrame reference_frame = ReferenceFrame())
+   .. function:: Flight flight(ReferenceFrame reference_frame)
 
       Returns a :func:`Vessel::flight` object that can be used to get flight
       telemetry for the vessel, in the specified reference frame.

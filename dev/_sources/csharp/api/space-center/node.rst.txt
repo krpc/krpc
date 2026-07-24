@@ -49,7 +49,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. method:: System.Tuple<double,double,double> BurnVector(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> BurnVector(ReferenceFrame referenceFrame)
 
       Returns the burn vector for the maneuver node.
 
@@ -65,7 +65,7 @@ Node
 
          Does not change when executing the maneuver node. See :meth:`Node.RemainingBurnVector`.
 
-   .. method:: System.Tuple<double,double,double> RemainingBurnVector(ReferenceFrame referenceFrame = null)
+   .. method:: System.Tuple<double,double,double> RemainingBurnVector(ReferenceFrame referenceFrame)
 
       Returns the remaining burn vector for the maneuver node.
 

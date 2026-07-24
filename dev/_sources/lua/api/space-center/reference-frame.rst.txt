@@ -33,7 +33,7 @@ ReferenceFrame
       :param Tuple angular_velocity: The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`.
       :rtype: :class:`SpaceCenter.ReferenceFrame`
 
-   .. staticmethod:: create_hybrid(position, [rotation = None], [velocity = None], [angular_velocity = None])
+   .. staticmethod:: create_hybrid(position, rotation, velocity, angular_velocity)
 
       Create a hybrid reference frame. This is a custom reference frame
       whose components inherited from other reference frames.

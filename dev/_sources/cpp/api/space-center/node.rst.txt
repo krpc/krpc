@@ -53,7 +53,7 @@ Node
 
       :Game Scenes: Flight
 
-   .. function:: std::tuple<double, double, double> burn_vector(ReferenceFrame reference_frame = ReferenceFrame())
+   .. function:: std::tuple<double, double, double> burn_vector(ReferenceFrame reference_frame)
 
       Returns the burn vector for the maneuver node.
 
@@ -69,7 +69,7 @@ Node
 
          Does not change when executing the maneuver node. See :func:`Node::remaining_burn_vector`.
 
-   .. function:: std::tuple<double, double, double> remaining_burn_vector(ReferenceFrame reference_frame = ReferenceFrame())
+   .. function:: std::tuple<double, double, double> remaining_burn_vector(ReferenceFrame reference_frame)
 
       Returns the remaining burn vector for the maneuver node.
 
