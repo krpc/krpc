@@ -25,8 +25,13 @@ namespace KRPC.Server.ProtocolBuffers
                 Schema.KRPC.Request message = null;
                 var read = Utils.ReadMessage<Schema.KRPC.Request>(
                     ref message, Schema.KRPC.Request.Parser, data, offset, length);
-                if (message != null)
-                    request = message.ToMessage ();
+                if (message != null) {
+                    try {
+                        request = message.ToMessage ();
+                    } catch (System.Exception e) {
+                        throw new RequestDecodeException (read, e);
+                    }
+                }
                 return read;
             } catch (System.InvalidOperationException e) {
                 throw new MalformedRequestException (e.Message);

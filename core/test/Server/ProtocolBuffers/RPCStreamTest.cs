@@ -180,6 +180,50 @@ namespace KRPC.Test.Server.ProtocolBuffers
         }
 
         [Test]
+        public void ReadRequestThatCannotBeDecoded ()
+        {
+            // A request that arrives in full, but names an object identifier the server does
+            // not have, so the call it names cannot be built.
+            var call = new Schema.KRPC.ProcedureCall {
+                Service = "TestService",
+                Procedure = "DeleteTestObject"
+            };
+            call.Arguments.Add (new Schema.KRPC.Argument {
+                Position = 0,
+                Value = ByteString.CopyFrom (new byte [] { 42 })
+            });
+            var undecodableRequest = new Schema.KRPC.Request ();
+            undecodableRequest.Calls.Add (call);
+            byte[] undecodableRequestBytes;
+            using (var stream = new MemoryStream ()) {
+                var codedStream = new CodedOutputStream (stream, true);
+                codedStream.WriteMessage (undecodableRequest);
+                codedStream.Flush ();
+                undecodableRequestBytes = stream.ToArray ();
+            }
+
+            // Send it, followed by a request that can be decoded
+            var data = new byte [undecodableRequestBytes.Length + requestBytes.Length];
+            Array.Copy (undecodableRequestBytes, 0, data, 0, undecodableRequestBytes.Length);
+            Array.Copy (requestBytes, 0, data, undecodableRequestBytes.Length, requestBytes.Length);
+            var byteStream = new TestStream (data);
+            var rpcStream = new RPCStream (byteStream);
+
+            // The failure is reported, and the connection is left open
+            var exn = Assert.Throws<KRPC.Server.Message.RequestDecodeException> (() => rpcStream.Read ());
+            Assert.IsInstanceOf<ArgumentException> (exn.InnerException);
+            Assert.IsFalse (byteStream.Closed);
+
+            // The bytes of the failed request are gone, so the request behind it is read
+            Assert.IsTrue (rpcStream.DataAvailable);
+            Request request = rpcStream.Read ();
+            Assert.AreEqual (expectedRequest.Calls [0].Service, request.Calls [0].Service);
+            Assert.AreEqual (expectedRequest.Calls [0].Procedure, request.Calls [0].Procedure);
+            Assert.IsFalse (rpcStream.DataAvailable);
+            Assert.IsFalse (byteStream.Closed);
+        }
+
+        [Test]
         public void WriteSingleResponse ()
         {
             var stream = new MemoryStream ();

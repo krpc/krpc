@@ -139,6 +139,12 @@ namespace KRPC.Server.Message
             } catch (MalformedRequestException) {
                 Close ();
                 throw;
+            } catch (RequestDecodeException e) {
+                // The request arrived in full and only what it names is wrong, so drop the
+                // bytes it occupied before letting the error be reported. The connection is
+                // then still in step with the client, which can carry on making calls.
+                ConsumeReceiveBuffer (e.BytesRead);
+                throw;
             }
 
             // Sanity check the bytes read by the class implementing Read()
@@ -147,17 +153,22 @@ namespace KRPC.Server.Message
                 throw new InvalidOperationException ("Read too many bytes");
             }
 
-            // Update the buffer
-            // Note: shuffling the buffer by copying should happen rarely as Read() usually consumes the entire buffer
-            if (read == receiveBufferSize)
+            ConsumeReceiveBuffer (read);
+
+            // Return whether a request was decoded and is available
+            return (bufferedRequest != null);
+        }
+
+        /// Drop the given number of bytes from the front of the receive buffer.
+        /// Note: shuffling the buffer by copying should happen rarely as Read() usually consumes the entire buffer
+        void ConsumeReceiveBuffer (int read)
+        {
+            if (read >= receiveBufferSize)
                 receiveBufferSize = 0;
             else if (read > 0 && receiveBufferSize > 0) {
                 Array.Copy (receiveBuffer, read, receiveBuffer, 0, receiveBufferSize - read);
                 receiveBufferSize -= read;
             }
-
-            // Return whether a request was decoded and is available
-            return (bufferedRequest != null);
         }
     }
 }
