@@ -2,6 +2,8 @@
 - Support for nullable values across all types (#1017)
 - **Breaking:** Null values are now signaled by an `is_null` field rather than by an object id
   of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (#1017)
+- Fix a request that names an object the server no longer has leaving the connection stuck, with
+  every later call failing; the failure is now reported to the client as the error it is (#1019)
 
 ## [v0.6.0]
 - Add `Version` property to `Core`, set by the server plugin on startup (#848)

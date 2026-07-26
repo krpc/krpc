@@ -139,7 +139,12 @@ namespace KRPC.Server.WebSockets
                             Stream.Write (Frame.Binary (payload).ToBytes ());
                         else {
                             try {
-                                request = Schema.KRPC.Request.Parser.ParseFrom (payload).ToMessage ();
+                                var message = Schema.KRPC.Request.Parser.ParseFrom (payload);
+                                try {
+                                    request = message.ToMessage ();
+                                } catch (System.Exception e) {
+                                    throw new RequestDecodeException (read + frame.Length, e);
+                                }
                             } catch (InvalidProtocolBufferException) {
                                 Logger.WriteLine ("WebSockets invalid message: failed to decode protobuf message", Logger.Severity.Error);
                                 Stream.Write (Frame.Close (1007, "Malformed protocol buffer message").ToBytes ());

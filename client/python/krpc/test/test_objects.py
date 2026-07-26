@@ -58,6 +58,23 @@ class TestObjects(ServerTestCase, unittest.TestCase):
         # pylint: disable=comparison-with-itself
         self.assertTrue(obj1 >= obj1)
 
+    def test_invalid_object_id(self) -> None:
+        # A call naming an object identifier the server does not have fails as an
+        # argument error, and the connection is left able to make further calls
+        obj = self.conn.test_service.TestClass(self.conn, 1000000)
+        with self.assertRaises(ValueError) as cm:
+            obj.get_value()
+        self.assertTrue(str(cm.exception).startswith("Instance not found"))
+        self.assertEqual(
+            "value=jeb", self.conn.test_service.create_test_object("jeb").get_value()
+        )
+
+        # An object passed as an argument is no different
+        with self.assertRaises(ValueError) as cm:
+            self.conn.test_service.echo_test_object(obj)
+        self.assertTrue(str(cm.exception).startswith("Instance not found"))
+        self.assertEqual("3.14159", self.conn.test_service.float_to_string(3.14159))
+
     def test_memory_allocation(self) -> None:
         obj1 = self.conn.test_service.create_test_object("jeb")
         obj2 = self.conn.test_service.create_test_object("jeb")

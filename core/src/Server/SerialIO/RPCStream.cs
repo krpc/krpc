@@ -39,7 +39,11 @@ namespace KRPC.Server.SerialIO
                     ((ByteServer)server).ClientConnectionRequest (bufferedData);
                     throw new ClientDisconnectedException ();
                 }
-                request = multiplexedRequest.Request.ToMessage ();
+                try {
+                    request = multiplexedRequest.Request.ToMessage ();
+                } catch (System.Exception e) {
+                    throw new RequestDecodeException (read, e);
+                }
                 return read;
             } catch (System.InvalidOperationException e) {
                 throw new MalformedRequestException (e.Message);

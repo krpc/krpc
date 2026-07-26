@@ -676,6 +676,22 @@ namespace KRPC
         HashSet<IClient<Request,Response>> pollRequestsCurrentClients = new HashSet<IClient<Request, Response>> ();
 
         /// <summary>
+        /// Send a response carrying nothing but an error, for a request that could not be
+        /// turned into a call to make.
+        /// </summary>
+        static void SendErrorResponse (IClient<Request,Response> client, Error error)
+        {
+            var response = new Response ();
+            response.Error = error;
+            try {
+                client.Stream.Write (response);
+                Logger.WriteLine ("Sent error response to client " + client.Address + " (" + error + ")", Logger.Severity.Debug);
+            } catch (ServerException exn) {
+                Logger.WriteLine ("Failed to send error response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
+            }
+        }
+
+        /// <summary>
         /// Poll connected clients for new requests.
         /// Adds a continuation to the queue for any client with a new request,
         /// if a continuation is not already being processed for the client.
@@ -717,17 +733,17 @@ namespace KRPC
                     Logger.WriteLine ("Error receiving request from client " + client.Address + ": " + e.Message, Logger.Severity.Error);
                     client.Stream.Close ();
                     continue;
+                } catch (KRPC.Server.Message.RequestDecodeException e) {
+                    // The request arrived intact but names something the server cannot
+                    // give, such as an object it has reclaimed. That is a failed call
+                    // rather than a broken connection, so it is reported as the error it
+                    // is and the client carries on.
+                    SendErrorResponse (client, KRPC.Service.Services.Instance.HandleException (e.InnerException ?? e));
                 } catch (System.Exception e) {
-                    var response = new Response ();
-                    response.Error = new Error ("Error receiving message" + Environment.NewLine + e.Message, e.StackTrace);
                     if (Logger.ShouldLog (Logger.Severity.Debug))
                         Logger.WriteLine (e.Message + Environment.NewLine + e.StackTrace, Logger.Severity.Error);
-                    try {
-                        client.Stream.Write (response);
-                        Logger.WriteLine ("Sent error response to client " + client.Address + " (" + response.Error + ")", Logger.Severity.Debug);
-                    } catch (ServerException exn) {
-                        Logger.WriteLine ("Failed to send error response to client " + client.Address + Environment.NewLine + exn, Logger.Severity.Error);
-                    }
+                    SendErrorResponse (client, new Error (
+                        "Error receiving message" + Environment.NewLine + e.Message, e.StackTrace));
                 }
                 item = item.Next;
             }
