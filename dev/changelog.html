@@ -603,6 +603,7 @@
 <ul class="simple">
 <li><p>Support for nullable values across all types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Null values are now signaled by an <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field rather than by an object id of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
+<li><p>Fix a request that names an object the server no longer has leaving the connection stuck, with every later call failing; the failure is now reported to the client as the error it is (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1019">#1019</a>)</p></li>
 </ul>
 </section>
 <section id="spacecenter-service">
