@@ -56,6 +56,10 @@ InfernalRobotics service is accessible via ``conn.infernal_robotics``.
 Calling methods, getting or setting properties, etc. are mapped to remote
 procedure calls and passed to the server by the lua client.
 
+Many procedures return an object standing for something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
+when a game is loaded or the thing they stand for is destroyed.
+
 Streams and Events
 ------------------
 

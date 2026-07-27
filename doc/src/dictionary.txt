@@ -139,6 +139,7 @@ py
 quaternion
 quaternions
 quickload
+quickloading
 quicksave
 radians
 reactively
