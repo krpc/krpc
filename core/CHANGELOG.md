@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Fix one server stopping emptying the object store that every server shares, which invalidated
+  the objects held by clients of the servers still running (#1020)
 - Support for nullable values across all types (#1017)
 - **Breaking:** Null values are now signaled by an `is_null` field rather than by an object id
   of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (#1017)

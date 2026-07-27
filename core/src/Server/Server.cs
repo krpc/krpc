@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KRPC.Service;
 using KRPC.Service.Messages;
 using KRPC.Utils;
 
@@ -111,7 +110,6 @@ namespace KRPC.Server
         {
             RPCServer.Stop ();
             StreamServer.Stop ();
-            ObjectStore.Clear ();
         }
 
         /// <summary>

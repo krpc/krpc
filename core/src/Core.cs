@@ -187,6 +187,11 @@ namespace KRPC
             server.OnStopped += (s, e) => {
                 Logger.WriteLine ("Server '" + ((Server.Server)s).Name + "' stopped");
                 AnyRunning = Servers.Any (x => x.Running);
+                // The object store is shared by every server, and its object identifiers
+                // are handed out from a single sequence, so it is only emptied once no
+                // server is left for a client to hold an identifier through.
+                if (!AnyRunning)
+                    ObjectStore.Clear ();
                 EventHandlerExtensions.Invoke (OnServerStopped, this, new ServerStoppedEventArgs ((Server.Server)s));
             };
             server.OnClientRequestingConnection += (s, e) => EventHandlerExtensions.Invoke (OnClientRequestingConnection, this, e);
