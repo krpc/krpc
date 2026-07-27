@@ -30,6 +30,50 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertRaises(self.destroyed, getattr, part, "name")
         self.assertRaises(self.destroyed, getattr, part, "mass")
 
+    def test_reading_a_module_of_a_destroyed_part(self):
+        part = self.a_part("sensorThermometer")
+        module = part.modules[0]
+        sensor = part.sensor
+        self.assertNotEqual("", module.name)
+        self.conn.testing_tools.destroy_part(part)
+        self.wait(0.5)
+        # The module belongs to the part's game object, so it goes when the part does,
+        # and says so rather than failing with a null reference.
+        self.assertRaises(self.destroyed, getattr, module, "name")
+        self.assertRaises(self.destroyed, getattr, sensor, "active")
+
+    def test_modules_survive_a_quickload(self):
+        part = self.a_part("longAntenna")
+        module = part.modules[0]
+        antenna = part.antenna
+        name = module.name
+        power = antenna.power
+        self.space_center.quicksave()
+        self.wait(1)
+        self.space_center.quickload()
+        self.wait(1)
+        # The game built new part modules, and the objects the client holds name the
+        # same ones, so they read the new modules rather than the replaced ones.
+        self.assertEqual(name, module.name)
+        self.assertEqual(power, antenna.power)
+
+    def test_modules_survive_a_load_of_a_save_that_predates_them(self):
+        # The game names a part module only when something asks it to, and writes out only
+        # the names it has already given, so a save taken before the client named a module
+        # holds nothing that says which module was meant. Loading one still has to give the
+        # client back the module it named.
+        self.space_center.quicksave()
+        self.wait(1)
+        part = self.a_part("longAntenna")
+        module = part.modules[0]
+        antenna = part.antenna
+        name = module.name
+        power = antenna.power
+        self.space_center.quickload()
+        self.wait(1)
+        self.assertEqual(name, module.name)
+        self.assertEqual(power, antenna.power)
+
     def test_objects_survive_a_quickload(self):
         vessel = self.space_center.active_vessel
         part = self.a_part("sensorThermometer")
