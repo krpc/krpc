@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using KRPC.Utils;
 
 namespace KRPC.Service
 {
@@ -59,6 +60,46 @@ namespace KRPC.Service
                 instances.Remove (obj);
                 objectIds.Remove (objectId);
             }
+        }
+
+        /// <summary>
+        /// Remove every instance whose game object no longer exists, and return how many
+        /// were removed. Instances that do not implement <see cref="IGameObjectState"/>
+        /// are kept, as are those reporting anything but
+        /// <see cref="GameObjectState.Destroyed"/>.
+        /// </summary>
+        public int Sweep ()
+        {
+            List<object> dead = null;
+            foreach (var entry in instances) {
+                var instance = entry.Key as IGameObjectState;
+                if (instance == null)
+                    continue;
+                GameObjectState state;
+                try {
+                    state = instance.GameObjectState;
+                } catch (Exception e) {
+                    // One pass covers the whole store, so an instance that breaks the
+                    // interface's promise not to throw must not stop the rest from being
+                    // checked. Keeping it is the safe answer, on the same grounds as
+                    // reporting anything uncertain as dormant: an instance wrongly kept
+                    // costs memory until the next sweep, where one wrongly removed is gone.
+                    Logger.WriteLine (
+                        "Failed to determine whether an instance in the object store still " +
+                        "exists, so it was kept: " + e.Message, Logger.Severity.Error);
+                    continue;
+                }
+                if (state != GameObjectState.Destroyed)
+                    continue;
+                if (dead == null)
+                    dead = new List<object> ();
+                dead.Add (entry.Key);
+            }
+            if (dead == null)
+                return 0;
+            foreach (var obj in dead)
+                RemoveInstance (obj);
+            return dead.Count;
         }
 
         /// <summary>
