@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services.Parts;
@@ -24,14 +25,17 @@ namespace KRPC.SpaceCenter.Services
     /// used as a parameter to other functions.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class ReferenceFrame : Equatable<ReferenceFrame>
+    public class ReferenceFrame : Equatable<ReferenceFrame>, IGameObjectState
     {
         readonly ReferenceFrameType type;
         readonly global::CelestialBody body;
         readonly Guid vesselId;
         readonly ManeuverNode node;
         readonly uint partId;
-        readonly ModuleDockingNode dockingPort;
+        // The part object is what finds the KSP part again and says whether it is still
+        // there; the identifier beside it is what the frame is identified by.
+        readonly Parts.Part servicePart;
+        ModuleRef dockingPortRef;
         readonly Thruster thruster;
         readonly Orbit orbit;
         readonly ReferenceFrame parent;
@@ -55,9 +59,16 @@ namespace KRPC.SpaceCenter.Services
             this.body = body;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
-            if (part != null)
+            if (part != null) {
                 partId = part.flightID;
-            this.dockingPort = dockingPort;
+                servicePart = new Parts.Part (part);
+            }
+            if (dockingPort != null) {
+                var dockingPortPart = dockingPort.part;
+                partId = dockingPortPart.flightID;
+                servicePart = new Parts.Part (dockingPortPart);
+                dockingPortRef = ModuleRef.ForModule (dockingPort);
+            }
             this.thruster = thruster;
             this.orbit = orbit;
             this.parent = parent;
@@ -89,7 +100,7 @@ namespace KRPC.SpaceCenter.Services
             vesselId == other.vesselId &&
             node == other.node &&
             partId == other.partId &&
-            dockingPort == other.dockingPort &&
+            dockingPortRef == other.dockingPortRef &&
             thruster == other.thruster &&
             orbit == other.orbit &&
             parent == other.parent &&
@@ -115,10 +126,9 @@ namespace KRPC.SpaceCenter.Services
                 hash ^= body.name.GetHashCode ();
             hash ^= vesselId.GetHashCode ();
             if (node != null)
-                hash ^= node.GetHashCode ();
+                hash ^= RuntimeHelpers.GetHashCode (node);
             hash ^= partId.GetHashCode ();
-            if (dockingPort != null)
-                hash ^= dockingPort.GetHashCode ();
+            hash ^= dockingPortRef.GetHashCode ();
             if (thruster != null)
                 hash ^= thruster.GetHashCode ();
             if (orbit != null)
@@ -188,9 +198,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public DockingPort DockingPort {
             get {
-                if (dockingPort == null)
+                if (type != ReferenceFrameType.DockingPort)
                     throw new InvalidOperationException ("Reference frame has no docking port");
-                return new DockingPort (new Parts.Part (dockingPort.part));
+                return new DockingPort (servicePart);
             }
         }
 
@@ -233,7 +243,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.transform;
                 case ReferenceFrameType.DockingPort:
-                    return dockingPort.nodeTransform;
+                    return InternalDockingPort.nodeTransform;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform;
                 case ReferenceFrameType.Relative:
@@ -255,9 +265,47 @@ namespace KRPC.SpaceCenter.Services
 
         Part InternalPart {
             get {
-                if (partId == 0)
+                if (servicePart == null)
                     throw new InvalidOperationException ("Reference frame has no part");
-                return FlightGlobals.FindPartByID (partId);
+                return servicePart.InternalPart;
+            }
+        }
+
+        /// <summary>
+        /// The KSP docking port, found again on its part.
+        /// </summary>
+        ModuleDockingNode InternalDockingPort {
+            get { return (ModuleDockingNode)dockingPortRef.Get (InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for everything the frame is built from. A frame needs each
+        /// of the vessel, part, maneuver node, thruster, orbit and other frames it is
+        /// defined against, so it is as alive as the least alive of them; one defined
+        /// against a celestial body alone never dies.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var state = GameObjectState.Live;
+                if (vesselId != Guid.Empty)
+                    state = node == null
+                        ? FlightGlobalsExtensions.VesselState (vesselId)
+                        : new Node (vesselId, node).GameObjectState;
+                if (servicePart != null)
+                    state = state.LeastAlive (servicePart.GameObjectState);
+                if (thruster != null)
+                    state = state.LeastAlive (thruster.GameObjectState);
+                if (orbit != null)
+                    state = state.LeastAlive (orbit.GameObjectState);
+                if (parent != null)
+                    state = state.LeastAlive (parent.GameObjectState);
+                if (type == ReferenceFrameType.Hybrid)
+                    state = state
+                        .LeastAlive (hybridPosition.GameObjectState)
+                        .LeastAlive (hybridRotation.GameObjectState)
+                        .LeastAlive (hybridVelocity.GameObjectState)
+                        .LeastAlive (hybridAngularVelocity.GameObjectState);
+                return state;
             }
         }
 
@@ -496,7 +544,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.CenterOfMass ();
                 case ReferenceFrameType.DockingPort:
-                    return dockingPort.nodeTransform.position;
+                    return InternalDockingPort.nodeTransform.position;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldTransform.position;
                 case ReferenceFrameType.Relative:
@@ -640,7 +688,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.transform.up;
                 case ReferenceFrameType.DockingPort:
-                    return dockingPort.nodeTransform.forward;
+                    return InternalDockingPort.nodeTransform.forward;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustDirection;
                 case ReferenceFrameType.Relative:
@@ -720,7 +768,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.transform.forward;
                 case ReferenceFrameType.DockingPort:
-                    return -dockingPort.nodeTransform.up;
+                    return -InternalDockingPort.nodeTransform.up;
                 case ReferenceFrameType.Thrust:
                     return thruster.WorldThrustPerpendicularDirection;
                 case ReferenceFrameType.Relative:
@@ -777,7 +825,7 @@ namespace KRPC.SpaceCenter.Services
                     // by the tangential contribution of the vessel's spin.
                     return InternalPart.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.DockingPort:
-                    return dockingPort.vessel.GetOrbit ().GetVel ();
+                    return InternalDockingPort.vessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.Relative:
                     return parent.VelocityToWorldSpace (relativePosition, relativeVelocity);
                 case ReferenceFrameType.Hybrid:
@@ -904,7 +952,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.vessel.WorldAngularVelocity ();
                 case ReferenceFrameType.DockingPort:
-                    return dockingPort.vessel.WorldAngularVelocity ();
+                    return InternalDockingPort.vessel.WorldAngularVelocity ();
                 case ReferenceFrameType.Thrust:
                     return InternalPart.vessel.WorldAngularVelocity ();
                 case ReferenceFrameType.Relative:
