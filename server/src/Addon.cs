@@ -85,6 +85,10 @@ namespace KRPC
             Service.CallContext.GameScene = gameScene;
             Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
 
+            // The scene being left takes its game objects with it, so the service objects
+            // standing for them are due to be swept once the new scene is built.
+            Service.GameState.Changed ();
+
             // Auto-start the server, if required
             if (config.Configuration.AutoStartServers) {
                 Utils.Logger.WriteLine ("Auto-starting server");
@@ -199,6 +203,7 @@ namespace KRPC
 
             // KSP events
             IsPaused = false;
+            GameEvents.onGameStatePostLoad.Add(OnGameStatePostLoad);
             GameEvents.onGamePause.Add(OnGamePause);
             GameEvents.onGameUnpause.Add(OnGameUnpause);
             GameEvents.onEditorRestart.Add(OnEditorRestart);
@@ -236,6 +241,13 @@ namespace KRPC
                 Utils.Logger.WriteLine("Asking player to accept client connection (" + e.Client.Address + ")");
                 clientConnectingDialog.OnClientRequestingConnection(sender, e);
             }
+        }
+
+        void OnGameStatePostLoad(ConfigNode node)
+        {
+            // Fired when a game is loaded, quickloaded or reverted, which replaces every
+            // game object the service objects stand for.
+            Service.GameState.Changed();
         }
 
         void OnGamePause()
@@ -321,6 +333,7 @@ namespace KRPC
         /// </summary>
         public void OnDestroy ()
         {
+            GameEvents.onGameStatePostLoad.Remove(OnGameStatePostLoad);
             GameEvents.onGamePause.Remove(OnGamePause);
             GameEvents.onGameUnpause.Remove(OnGameUnpause);
             GameEvents.onEditorRestart.Remove(OnEditorRestart);
@@ -367,6 +380,34 @@ namespace KRPC
             GUILayoutExtensions.OnGUI ();
         }
 
+        // The number of vessels the game had on the previous update, used to tell whether
+        // it has finished listing them. -1 means nothing has been counted yet.
+        static int lastVesselCount = -1;
+
+        /// <summary>
+        /// Sweep the object store, once the game has finished building the state it loaded.
+        /// </summary>
+        /// <remarks>
+        /// A scene is not populated at the moment it is switched to: the game adds its
+        /// vessels over the following frames, and a sweep run before it has finished sees
+        /// objects that are about to exist as gone. There is no event for having finished,
+        /// so wait for the count to stop changing, which also covers a game that adds
+        /// vessels more slowly than usual. A game with no vessels at all says nothing
+        /// about what exists, so nothing is swept then.
+        /// </remarks>
+        static void SweepObjectStore ()
+        {
+            if (HighLogic.CurrentGame == null || FlightGlobals.Vessels == null) {
+                lastVesselCount = -1;
+                return;
+            }
+            var count = FlightGlobals.Vessels.Count;
+            var settled = count > 0 && count == lastVesselCount;
+            lastVesselCount = count;
+            if (settled)
+                Service.GameState.Sweep ();
+        }
+
         /// <summary>
         /// Trigger server update
         /// </summary>
@@ -374,6 +415,8 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
+            if (Service.GameState.SweepPending)
+                SweepObjectStore ();
             if (core != null && core.AnyRunning)
                 core.Update ();
         }

@@ -116,6 +116,7 @@
     <Compile Include="Service\Event.cs" />
     <Compile Include="Service\EventStream.cs" />
     <Compile Include="Service\GameScene.cs" />
+    <Compile Include="Service\GameState.cs" />
     <Compile Include="Service\IProcedureHandler.cs" />
     <Compile Include="Service\KRPC\ArgumentException.cs" />
     <Compile Include="Service\KRPC\ArgumentNullException.cs" />
