@@ -207,7 +207,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<ScienceData> Data {
-            get { return InternalDataContainer.GetData().Select (data => new ScienceData (InternalExperiment, data)).ToList (); }
+            get { return InternalDataContainer.GetData().Select (data => new ScienceData (Part, InternalExperiment, data)).ToList (); }
         }
 
         /// <summary>
