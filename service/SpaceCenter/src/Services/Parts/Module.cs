@@ -18,14 +18,14 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// functionality of an engine.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Module : Equatable<Module>
+    public class Module : Equatable<Module>, IGameObjectState
     {
-        readonly PartModule module;
+        ModuleRef reference;
 
         internal Module (Part part, PartModule partModule)
         {
             Part = part;
-            module = partModule;
+            reference = ModuleRef.ForModule (partModule);
         }
 
         /// <summary>
@@ -33,7 +33,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// and <see cref="PartAction"/> to read and write against the host module.
         /// </summary>
         internal PartModule InternalModule {
-            get { return module; }
+            get { return reference.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the module. A module belongs to its part's game object,
+        /// so a module of a part that is not loaded is no more gone than the part is.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return reference.StateOn (Part); }
         }
 
         /// <summary>
@@ -41,7 +49,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Module other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && module.Equals (other.module);
+            return !ReferenceEquals (other, null) && Part == other.Part && reference == other.reference;
         }
 
         /// <summary>
@@ -49,7 +57,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ module.GetHashCode ();
+            return Part.GetHashCode () ^ reference.GetHashCode ();
         }
 
         /// <summary>
@@ -57,7 +65,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return module.moduleName; }
+            get { return InternalModule.moduleName; }
         }
 
         /// <summary>
@@ -83,13 +91,15 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         global::ConfigNode FindConfigNode ()
         {
-            var info = Part.InternalPart.partInfo;
+            var part = Part.InternalPart;
+            var info = part.partInfo;
             if (info == null || info.partConfig == null)
                 return null;
             // Find the position of this module among the modules on the part that share
             // its name, then return the config node for the same occurrence.
+            var module = reference.Get (part);
             int occurrence = 0;
-            var modules = Part.InternalPart.Modules;
+            var modules = part.Modules;
             for (int i = 0; i < modules.Count; i++) {
                 if (ReferenceEquals (modules [i], module))
                     break;
@@ -108,23 +118,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         IEnumerable<BaseField> VisibleFields {
-            get { return module.Fields.Cast<BaseField> ().Where (f => f != null && (HighLogic.LoadedSceneIsEditor ? f.guiActiveEditor : f.guiActive)); }
+            get { return InternalModule.Fields.Cast<BaseField> ().Where (f => f != null && (HighLogic.LoadedSceneIsEditor ? f.guiActiveEditor : f.guiActive)); }
         }
 
         IEnumerable<BaseField> AllBaseFields {
-            get { return module.Fields.Cast<BaseField> ().Where (f => f != null); }
+            get { return InternalModule.Fields.Cast<BaseField> ().Where (f => f != null); }
         }
 
         IEnumerable<BaseEvent> AllEvents {
-            get { return module.Events.Where (e => e != null && (HighLogic.LoadedSceneIsEditor ? e.guiActiveEditor : e.guiActive) && e.active); }
+            get { return InternalModule.Events.Where (e => e != null && (HighLogic.LoadedSceneIsEditor ? e.guiActiveEditor : e.guiActive) && e.active); }
         }
 
         IEnumerable<BaseEvent> AllBaseEvents {
-            get { return module.Events.Where (e => e != null); }
+            get { return InternalModule.Events.Where (e => e != null); }
         }
 
         IEnumerable<BaseAction> AllActions {
-            get { return module.Actions; }
+            get { return InternalModule.Actions; }
         }
 
         // The following three helpers match on the display name, which the game translates.
@@ -201,7 +211,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var result = new Dictionary<string,string> ();
                 foreach (var f in VisibleFields)
-                    result.Add (f.guiName, f.GetValueString (module));
+                    result.Add (f.guiName, f.GetValueString (InternalModule));
                 return result;
             }
         }
@@ -216,7 +226,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var result = new Dictionary<string,string> ();
                 foreach (var f in VisibleFields)
-                    result.Add (f.name, f.GetValueString (module));
+                    result.Add (f.name, f.GetValueString (InternalModule));
                 return result;
             }
         }
@@ -261,7 +271,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public string GetField (string name)
         {
-            return GetBaseFieldByName (name).GetValueString (module);
+            return GetBaseFieldByName (name).GetValueString (InternalModule);
         }
 
         /// <summary>
@@ -272,7 +282,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public string GetFieldById (string id)
         {
-            return GetBaseFieldById (id).GetValueString (module);
+            return GetBaseFieldById (id).GetValueString (InternalModule);
         }
 
         /// <summary>
@@ -286,7 +296,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (!type.IsAssignableFrom(value.GetType()))
                 throw new ArgumentException(
                     "Cannot set field with type " + type + " to a value of type " + value.GetType());
-            field.SetValue (value, module);
+            field.SetValue (value, InternalModule);
         }
 
         /// <summary>
@@ -299,7 +309,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             var original = field.originalValue;
             if (original == null && field.FieldInfo.FieldType.IsValueType)
                 return;
-            field.SetValue (original, module);
+            field.SetValue (original, InternalModule);
         }
 
         private void AssignFieldByName(string name, object value) {

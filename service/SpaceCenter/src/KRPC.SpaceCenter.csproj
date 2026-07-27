@@ -89,6 +89,7 @@
     <Compile Include="ExternalAPI\RealFuels.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="Lifetime\CachedObject.cs" />
+    <Compile Include="Lifetime\ModuleRef.cs" />
     <Compile Include="NameTag\Career.cs" />
     <Compile Include="NameTag\NameTag.cs" />
     <Compile Include="NameTag\Utils.cs" />
