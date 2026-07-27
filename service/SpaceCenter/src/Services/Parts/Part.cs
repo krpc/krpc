@@ -20,9 +20,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Instances of this class can be obtained by several methods in <see cref="Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Part : Equatable<Part>
+    public class Part : Equatable<Part>, IGameObjectState
     {
         readonly PartId partId;
+        CachedObject<global::Part> cache;
 
         /// <summary>
         /// Create a part object for the given KSP part
@@ -30,6 +31,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Part (global::Part part)
         {
             partId = new PartId (part);
+        }
+
+        /// <summary>
+        /// Create a part object for the part in flight with the given flight identifier,
+        /// which the game need not currently have.
+        /// </summary>
+        internal Part (uint flightId)
+        {
+            partId = new PartId (flightId);
         }
 
         /// <summary>
@@ -49,11 +59,38 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         /// <summary>
-        /// The KSP part. Looked up by identifier on each use, so the object keeps working
-        /// across a reload that destroys the part and recreates it.
+        /// The KSP part. Looked up by identifier whenever the last part looked up is gone,
+        /// so the object keeps working across a reload that destroys the part and
+        /// recreates it.
         /// </summary>
         public global::Part InternalPart {
-            get { return partId.Resolve (); }
+            get {
+                var part = cache.Get ();
+                if (part != null)
+                    return part;
+                part = partId.Resolve ();
+                cache.Set (part);
+                return part;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the part.
+        /// </summary>
+        /// <remarks>
+        /// A part looked up in this game state and still there is the part, so there is
+        /// nothing to search for. That is what makes this affordable to a caller that asks
+        /// on every update, such as a force being applied or a resource being transferred.
+        /// It holds in flight only: a part in an editor belongs to the vessel it was taken
+        /// from, and one of a vessel the editor has loaded over is gone however alive the
+        /// game object it was is.
+        /// </remarks>
+        public GameObjectState GameObjectState {
+            get {
+                if (!partId.InEditor && cache.Get () != null)
+                    return GameObjectState.Live;
+                return partId.GameObjectState;
+            }
         }
 
         /// <summary>
