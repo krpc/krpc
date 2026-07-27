@@ -39,6 +39,7 @@
       <Link>TestAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ConfigurationTest.cs" />
+    <Compile Include="CoreTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
     <Compile Include="Server\HTTP\RequestTest.cs" />
     <Compile Include="Server\HTTP\ResponseTest.cs" />
