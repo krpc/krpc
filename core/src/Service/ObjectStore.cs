@@ -69,9 +69,17 @@ namespace KRPC.Service
             if (id == 0ul)
                 return null;
             object result;
-            if (!objectIds.TryGetValue (id, out result))
-                throw new ArgumentException ("Instance not found");
-            return result;
+            if (objectIds.TryGetValue (id, out result))
+                return result;
+            // Identifiers are allocated in sequence and never reused, so an identifier
+            // below the next one to be allocated was issued and has since been removed.
+            // That means the object it referred to is gone, rather than the client
+            // having made the identifier up.
+            if (id < nextObjectId)
+                throw new global::KRPC.Service.KRPC.ObjectDestroyedException (
+                    "The object with id " + id + " no longer exists, " +
+                    "as the game object it referred to was destroyed");
+            throw new ArgumentException ("Instance not found");
         }
 
         /// <summary>

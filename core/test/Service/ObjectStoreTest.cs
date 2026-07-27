@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service;
 using NUnit.Framework;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.Test.Service
 {
@@ -25,11 +26,11 @@ namespace KRPC.Test.Service
             Assert.AreSame (b, store.GetInstance (2));
             Assert.AreSame (c, store.GetInstance (3));
             store.RemoveInstance (a);
-            Assert.Throws<ArgumentException> (() => store.GetInstance (1));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (1));
             store.RemoveInstance (b);
-            Assert.Throws<ArgumentException> (() => store.GetInstance (2));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (2));
             store.RemoveInstance (c);
-            Assert.Throws<ArgumentException> (() => store.GetInstance (3));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (3));
         }
 
         [Test]
@@ -39,6 +40,16 @@ namespace KRPC.Test.Service
             Assert.Throws<ArgumentException> (() => store.GetObjectId (a));
             Assert.Throws<ArgumentException> (() => store.GetInstance (1));
             Assert.DoesNotThrow (() => store.RemoveInstance (a));
+        }
+
+        [Test]
+        public void RemovedAndUnissuedObjectIds ()
+        {
+            var store = new ObjectStore ();
+            var id = store.AddInstance (a);
+            store.RemoveInstance (a);
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (id));
+            Assert.Throws<ArgumentException> (() => store.GetInstance (id + 1));
         }
 
         [Test]
