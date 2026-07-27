@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services
     /// are converted from kilonewtons and tonnes).
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Stage : Equatable<Stage>
+    public class Stage : Equatable<Stage>, IGameObjectState
     {
         /// <summary>
         /// The id of the vessel the stage belongs to. Unused when the stage belongs to
@@ -67,6 +67,17 @@ namespace KRPC.SpaceCenter.Services
             editorVessel = true;
             stageNumber = number;
             decoupleStage = decouple;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel the stage belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return editorVessel
+                    ? EditorExtensions.ShipState
+                    : FlightGlobalsExtensions.VesselState (vesselId);
+            }
         }
 
         /// <summary>
