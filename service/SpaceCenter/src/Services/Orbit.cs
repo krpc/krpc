@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -13,29 +14,38 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="CelestialBody.Orbit"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Orbit : Equatable<Orbit>
+    public class Orbit : Equatable<Orbit>, IGameObjectState
     {
         readonly Vessel ownerVessel;
         readonly CelestialBody ownerBody;
         readonly Node ownerNode;
+        // The KSP orbit, held only where it is not the orbit of the thing the object
+        // belongs to and so cannot be asked for again: a patch, or an orbit a caller
+        // handed in. An orbit that has an owner is looked up on it instead, because the
+        // game builds a new one whenever it builds the owner, and the object has to read
+        // the loaded game rather than the state it was made in.
+        readonly global::Orbit patch;
 
         internal Orbit (Vessel vessel)
         {
-            InternalOrbit = vessel.InternalVessel.GetOrbit ();
+            if (ReferenceEquals (vessel, null))
+                throw new ArgumentNullException (nameof (vessel));
             ownerVessel = vessel;
         }
 
         internal Orbit (CelestialBody body)
         {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
             if (body.InternalBody == body.InternalBody.referenceBody)
                 throw new ArgumentException ("Body does not orbit anything");
-            InternalOrbit = body.InternalBody.GetOrbit ();
             ownerBody = body;
         }
 
         internal Orbit (Node node)
         {
-            InternalOrbit = node.InternalNode.nextPatch;
+            if (ReferenceEquals (node, null))
+                throw new ArgumentNullException (nameof (node));
             ownerNode = node;
         }
 
@@ -44,7 +54,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Orbit (global::Orbit orbit)
         {
-            InternalOrbit = orbit;
+            if (ReferenceEquals (orbit, null))
+                throw new ArgumentNullException (nameof (orbit));
+            patch = orbit;
         }
 
         // Construct an orbit from a KSP orbit object, inheriting the owner of an
@@ -52,18 +64,45 @@ namespace KRPC.SpaceCenter.Services
         // which belongs to the same object).
         internal Orbit (global::Orbit orbit, Orbit owner)
         {
-            InternalOrbit = orbit;
+            patch = orbit;
             ownerVessel = owner.ownerVessel;
             ownerBody = owner.ownerBody;
             ownerNode = owner.ownerNode;
         }
 
         /// <summary>
+        /// What the game holds for the thing the orbit belongs to. An orbit built from a KSP
+        /// orbit alone has no owner to ask, so it is kept.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                if (ownerVessel != null)
+                    return ownerVessel.GameObjectState;
+                if (ownerNode != null)
+                    return ownerNode.GameObjectState;
+                return GameObjectState.Live;
+            }
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
+        /// <remarks>
+        /// What the object stands for is the thing whose orbit it is, so two objects for
+        /// one vessel's orbit are the same orbit however often the game rebuilds it. Only
+        /// an orbit with no owner to name it by, a patch or one a caller handed in, is
+        /// named by the KSP orbit itself. Neither may look anything up: the object store
+        /// compares and hashes the objects it holds, including while removing one whose
+        /// owner the game no longer has.
+        /// </remarks>
         public override bool Equals (Orbit other)
         {
-            return !ReferenceEquals (other, null) && InternalOrbit == other.InternalOrbit;
+            if (ReferenceEquals (other, null))
+                return false;
+            if (!ReferenceEquals (patch, null) || !ReferenceEquals (other.patch, null))
+                return ReferenceEquals (patch, other.patch);
+            return ownerVessel == other.ownerVessel && ownerBody == other.ownerBody &&
+            ownerNode == other.ownerNode;
         }
 
         /// <summary>
@@ -71,13 +110,35 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return InternalOrbit.GetHashCode ();
+            if (!ReferenceEquals (patch, null))
+                return RuntimeHelpers.GetHashCode (patch);
+            int hash = 0;
+            if (ownerVessel != null)
+                hash ^= ownerVessel.GetHashCode ();
+            if (ownerBody != null)
+                hash ^= ownerBody.GetHashCode ();
+            if (ownerNode != null)
+                hash ^= ownerNode.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
-        /// The KSP orbit object.
+        /// The KSP orbit object, asked of the thing the orbit belongs to on each use, so
+        /// that the object keeps working across a load that rebuilds that thing and its
+        /// orbit with it. A patch, and an orbit a caller handed in, have nothing to be
+        /// asked of and are held.
         /// </summary>
-        public global::Orbit InternalOrbit { get; private set; }
+        public global::Orbit InternalOrbit {
+            get {
+                if (!ReferenceEquals (patch, null))
+                    return patch;
+                if (ownerVessel != null)
+                    return ownerVessel.InternalVessel.GetOrbit ();
+                if (ownerBody != null)
+                    return ownerBody.InternalBody.GetOrbit ();
+                return ownerNode.InternalNode.nextPatch;
+            }
+        }
 
         /// <summary>
         /// The celestial body (e.g. planet or moon) around which the object is orbiting.

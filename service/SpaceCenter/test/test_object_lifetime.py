@@ -116,6 +116,42 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertEqual(name, vessel.name)
         self.assertEqual("sensorThermometer", part.name)
 
+    def test_the_store_drops_dead_objects_on_a_load(self):
+        # A maneuver node is what a load definitively kills. The game builds the vessel's
+        # parts again under the ids their objects name them by, so those survive a load
+        # and show nothing, but it offers nothing to find a node by and the flight plan it
+        # loads is a new one. Nothing raises a destruction event for a node either, so the
+        # sweep at the load boundary is the only thing that can drop the object.
+        vessel = self.space_center.active_vessel
+        node = vessel.control.add_node(self.space_center.ut + 60, 100, 0, 0)
+        self.assertAlmostEqual(100, node.prograde, places=3)
+        before = self.conn.testing_tools.object_store_size
+        self.space_center.quicksave()
+        self.wait(1)
+        self.space_center.quickload()
+        self.wait(1)
+        self.assertEqual("Parts", vessel.name)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the load did not drop the maneuver node from the object store",
+        )
+        self.assertRaises(self.destroyed, getattr, node, "prograde")
+
+    def test_an_orbit_survives_a_quickload(self):
+        vessel = self.space_center.active_vessel
+        orbit = vessel.orbit
+        self.assertEqual("Kerbin", orbit.body.name)
+        self.space_center.quicksave()
+        self.wait(1)
+        self.space_center.quickload()
+        self.wait(1)
+        # The game built a new orbit along with the vessel it rebuilt. The object names
+        # the vessel whose orbit it is rather than the orbit it was made from, so it
+        # reads the new one, and asking the vessel again gives back the same object
+        # rather than a second one for the orbit that replaced it.
+        self.assertEqual("Kerbin", orbit.body.name)
+        self.assertEqual(vessel.orbit, orbit)
+
 
 class TestObjectLifetimeUnloaded(krpctest.TestCase):
     """A part of a vessel the game has unloaded is not a destroyed part.

@@ -9,9 +9,11 @@ class TestNode(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.set_circular_orbit("Kerbin", 100000)
-        cls.space_center = cls.connect().space_center
+        cls.conn = cls.connect()
+        cls.space_center = cls.conn.space_center
         cls.vessel = cls.space_center.active_vessel
         cls.control = cls.vessel.control
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
 
     def tearDown(self):
         self.control.remove_nodes()
@@ -54,7 +56,7 @@ class TestNode(krpctest.TestCase):
     def test_remove_node(self):
         node = self.control.add_node(self.space_center.ut, 0, 0, 0)
         node.remove()
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(self.destroyed):
             node.prograde = 0
 
     def test_remove_nodes(self):
@@ -63,7 +65,7 @@ class TestNode(krpctest.TestCase):
         node2 = self.control.add_node(self.space_center.ut + 60, 0, 4, 0)
         self.control.remove_nodes()
         for node in (node0, node1, node2):
-            with self.assertRaises(RuntimeError):
+            with self.assertRaises(self.destroyed):
                 node.prograde = 0
 
     def test_get_nodes(self):

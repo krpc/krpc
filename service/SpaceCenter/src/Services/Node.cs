@@ -1,8 +1,10 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 
@@ -11,9 +13,8 @@ namespace KRPC.SpaceCenter.Services
     /// <summary>
     /// Represents a maneuver node. Can be created using <see cref="Control.AddNode"/>.
     /// </summary>
-    // FIXME: need to perform memory management for node objects
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Node : Equatable<Node>
+    public class Node : Equatable<Node>, IGameObjectState
     {
         /// Note: Maneuver node delta-v vectors use a special coordinate system.
         /// The z-component is the prograde component.
@@ -21,29 +22,42 @@ namespace KRPC.SpaceCenter.Services
         /// The x-component is the radial component.
 
         readonly Guid vesselId;
+        // The game's own maneuver node. It offers nothing to identify a node by, so this is
+        // held rather than found again; a node the game no longer has in the vessel's flight
+        // plan, which includes every node after a game is loaded, is reclaimed instead.
+        readonly ManeuverNode node;
 
         internal Node (global::Vessel vessel, double ut, double prograde, double normal, double radial)
         {
             vesselId = vessel.id;
             if (InternalVessel.patchedConicSolver == null)
                 throw new InvalidOperationException ("Cannot add maneuver node");
-            var node = vessel.patchedConicSolver.AddManeuverNode (ut);
+            node = vessel.patchedConicSolver.AddManeuverNode (ut);
             node.DeltaV = new Vector3d (radial, normal, prograde);
             Update ();
-            InternalNode = node;
+        }
+
+        /// <summary>
+        /// Construct a node from a KSP node and the id of the vessel whose flight plan it
+        /// belongs to, for a caller that has the id and must not resolve it.
+        /// </summary>
+        internal Node (Guid vessel, ManeuverNode maneuverNode)
+        {
+            vesselId = vessel;
+            node = maneuverNode;
         }
 
         /// <summary>
         /// Construct a node from a KSP node.
         /// </summary>
-        public Node (global::Vessel vessel, ManeuverNode node)
+        public Node (global::Vessel vessel, ManeuverNode maneuverNode)
         {
             if (ReferenceEquals (vessel, null))
                 throw new ArgumentNullException (nameof (vessel));
-            if (ReferenceEquals (node, null))
-                throw new ArgumentNullException (nameof (node));
+            if (ReferenceEquals (maneuverNode, null))
+                throw new ArgumentNullException (nameof (maneuverNode));
             vesselId = vessel.id;
-            InternalNode = node;
+            node = maneuverNode;
         }
 
         /// <summary>
@@ -51,7 +65,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (Node other)
         {
-            return !ReferenceEquals (other, null) && vesselId == other.vesselId && InternalNode == other.InternalNode;
+            return !ReferenceEquals (other, null) && vesselId == other.vesselId &&
+            ReferenceEquals (node, other.node);
         }
 
         /// <summary>
@@ -59,11 +74,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = vesselId.GetHashCode ();
-            // Note: InternalNode could be set to null by Remove
-            if (InternalNode != null)
-                hash ^= InternalNode.GetHashCode ();
-            return hash;
+            // The node's identity hash rather than its own: it is what the game holds, and
+            // nothing about it may change while a client has this object.
+            return vesselId.GetHashCode () ^ RuntimeHelpers.GetHashCode (node);
         }
 
         /// <summary>
@@ -74,32 +87,61 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The KSP node.
+        /// The KSP maneuver node, checked to still be part of the vessel's flight plan.
+        /// A node can be removed through this object, through another object standing for
+        /// the same node (including Control.RemoveNodes), or by the player in the in-game
+        /// UI, and loading a game replaces every node the vessel had; in all cases the node
+        /// this stands for is gone for good. A vessel the game is not solving conics for has
+        /// no flight plan to look in, which says nothing about the node either way.
         /// </summary>
-        public ManeuverNode InternalNode { get; private set; }
+        public ManeuverNode InternalNode {
+            get {
+                var solver = InternalVessel.patchedConicSolver;
+                if (solver != null && solver.maneuverNodes.Contains (node))
+                    return node;
+                throw NotResolvable ();
+            }
+        }
 
         /// <summary>
-        /// The KSP maneuver node, checked to still be part of the vessel's flight plan.
-        /// A node can be removed through this object, through another object wrapping
-        /// the same node (including Control.RemoveNodes), or manually in the in-game
-        /// UI; in all cases accessing it through this object is an error.
+        /// The error to raise when the node cannot be found in the vessel's flight plan,
+        /// which <see cref="GameObjectState" /> decides between so that one rule says what
+        /// the absence of the node from the plan means.
         /// </summary>
-        ManeuverNode SafeNode {
+        Exception NotResolvable ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                return new ObjectDestroyedException (
+                    "The maneuver node no longer exists, as it is not in the vessel's flight plan.");
+            return new InvalidOperationException (
+                "The maneuver node is not loaded, as the game is not computing a flight " +
+                "plan for the vessel it belongs to. It can be used again once the game does.");
+        }
+
+        /// <summary>
+        /// What the game holds for the node. It is live while the vessel still has it in
+        /// its flight plan, and destroyed once the vessel is there to ask and does not,
+        /// as a node that leaves the plan is gone for good. A vessel the game is not
+        /// solving conics for has no flight plan to look in, which says nothing about the
+        /// node either way.
+        /// </summary>
+        public GameObjectState GameObjectState {
             get {
-                var node = InternalNode;
-                if (node != null) {
-                    var solver = InternalVessel.patchedConicSolver;
-                    if (solver != null && solver.maneuverNodes.Contains (node))
-                        return node;
-                }
-                throw new InvalidOperationException ("Maneuver node has been removed");
+                var vesselState = FlightGlobalsExtensions.VesselState (vesselId);
+                if (vesselState != GameObjectState.Live)
+                    return vesselState;
+                var solver = FlightGlobalsExtensions.FindVesselById (vesselId).patchedConicSolver;
+                if (solver == null)
+                    return GameObjectState.Dormant;
+                return solver.maneuverNodes.Contains (node)
+                    ? GameObjectState.Live : GameObjectState.Destroyed;
             }
         }
 
         internal Vector3d WorldBurnVector {
             get {
-                var prograde = SafeNode.patch.getOrbitalVelocityAtUT (SafeNode.UT).SwapYZ ().normalized;
-                var normal = SafeNode.patch.GetOrbitNormal ().SwapYZ ().normalized;
+                var prograde = InternalNode.patch.getOrbitalVelocityAtUT (InternalNode.UT).SwapYZ ().normalized;
+                var normal = InternalNode.patch.GetOrbitNormal ().SwapYZ ().normalized;
                 var radial = Vector3d.Cross (normal, prograde);
                 return Prograde * prograde + Normal * normal + Radial * radial;
             }
@@ -111,9 +153,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Prograde {
-            get { return SafeNode.DeltaV.z; }
+            get { return InternalNode.DeltaV.z; }
             set {
-                SafeNode.DeltaV.z = value;
+                InternalNode.DeltaV.z = value;
                 Update ();
             }
         }
@@ -124,9 +166,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Normal {
-            get { return SafeNode.DeltaV.y; }
+            get { return InternalNode.DeltaV.y; }
             set {
-                SafeNode.DeltaV.y = value;
+                InternalNode.DeltaV.y = value;
                 Update ();
             }
         }
@@ -137,9 +179,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Radial {
-            get { return SafeNode.DeltaV.x; }
+            get { return InternalNode.DeltaV.x; }
             set {
-                SafeNode.DeltaV.x = value;
+                InternalNode.DeltaV.x = value;
                 Update ();
             }
         }
@@ -152,10 +194,10 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public double DeltaV {
-            get { return SafeNode.DeltaV.magnitude; }
+            get { return InternalNode.DeltaV.magnitude; }
             set {
-                var direction = SafeNode.DeltaV.normalized;
-                SafeNode.DeltaV = new Vector3d (direction.x * value, direction.y * value, direction.z * value);
+                var direction = InternalNode.DeltaV.normalized;
+                InternalNode.DeltaV = new Vector3d (direction.x * value, direction.y * value, direction.z * value);
                 Update ();
             }
         }
@@ -166,7 +208,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RemainingDeltaV {
-            get { return SafeNode.GetBurnVector (SafeNode.patch).magnitude; }
+            get { return InternalNode.GetBurnVector (InternalNode.patch).magnitude; }
         }
 
         /// <summary>
@@ -204,7 +246,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (ReferenceEquals (referenceFrame, null))
                 referenceFrame = ReferenceFrame.Orbital (InternalVessel);
-            return referenceFrame.DirectionFromWorldSpace (SafeNode.GetBurnVector (SafeNode.patch)).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalNode.GetBurnVector (InternalNode.patch)).ToTuple ();
         }
 
         /// <summary>
@@ -212,9 +254,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double UT {
-            get { return SafeNode.UT; }
+            get { return InternalNode.UT; }
             set {
-                SafeNode.UT = value;
+                InternalNode.UT = value;
                 Update ();
             }
         }
@@ -248,10 +290,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Remove ()
         {
-            // Note: the Node object itself is not removed from the object store; that
-            // is the object-lifetime gap tracked by issue #771
-            SafeNode.RemoveSelf ();
-            InternalNode = null;
+            InternalNode.RemoveSelf ();
         }
 
         /// <summary>
@@ -264,7 +303,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Object (InternalVessel, SafeNode); }
+            get { return ReferenceFrame.Object (InternalVessel, InternalNode); }
         }
 
         /// <summary>
@@ -283,7 +322,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
-            get { return ReferenceFrame.Orbital (InternalVessel, SafeNode); }
+            get { return ReferenceFrame.Orbital (InternalVessel, InternalNode); }
         }
 
         /// <summary>
@@ -295,7 +334,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.PositionFromWorldSpace (SafeNode.patch.getPositionAtUT (SafeNode.UT)).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalNode.patch.getPositionAtUT (InternalNode.UT)).ToTuple ();
         }
 
         /// <summary>
