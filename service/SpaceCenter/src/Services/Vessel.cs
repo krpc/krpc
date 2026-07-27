@@ -22,6 +22,8 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass (Service = "SpaceCenter")]
     public class Vessel : Equatable<Vessel>
     {
+        CachedObject<global::Vessel> cache;
+
         /// <summary>
         /// Construct from a KSP vessel object.
         /// </summary>
@@ -65,7 +67,14 @@ namespace KRPC.SpaceCenter.Services
         /// The KSP vessel object.
         /// </summary>
         public global::Vessel InternalVessel {
-            get { return FlightGlobalsExtensions.GetVesselById (Id); }
+            get {
+                var vessel = cache.Get ();
+                if (vessel != null)
+                    return vessel;
+                vessel = FlightGlobalsExtensions.GetVesselById (Id);
+                cache.Set (vessel);
+                return vessel;
+            }
         }
 
         /// <summary>

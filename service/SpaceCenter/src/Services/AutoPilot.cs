@@ -199,11 +199,8 @@ namespace KRPC.SpaceCenter.Services
             var controller = PilotAddon.FindAttitudeController (id);
             if (controller == null || !controller.Engaged)
                 return null;
-            try {
-                return new AutoPilot (FlightGlobalsExtensions.GetVesselById (id));
-            } catch (ArgumentException) {
-                return null;
-            }
+            var vessel = FlightGlobalsExtensions.FindVesselById (id);
+            return vessel == null ? null : new AutoPilot (vessel);
         }
 
         /// <summary>
