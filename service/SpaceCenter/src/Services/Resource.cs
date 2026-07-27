@@ -9,7 +9,7 @@ namespace KRPC.SpaceCenter.Services
     /// Created using methods in the <see cref="Resources"/> class.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight | GameScene.Editor)]
-    public class Resource : Equatable<Resource>
+    public class Resource : Equatable<Resource>, IGameObjectState
     {
         readonly PartId partId;
         readonly int resourceId;
@@ -18,6 +18,13 @@ namespace KRPC.SpaceCenter.Services
         {
             partId = new PartId (resource.part);
             resourceId = resource.info.id;
+        }
+
+        /// <summary>
+        /// What the game holds for the part this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return partId.GameObjectState; }
         }
 
         /// <summary>

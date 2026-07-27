@@ -12,7 +12,7 @@ namespace KRPC.SpaceCenter.Services
     /// Obtained by calling <see cref="Vessel.Comms"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Comms : Equatable<Comms>
+    public class Comms : Equatable<Comms>, IGameObjectState
     {
         /// <summary>
         /// Construct from a KSP vessel object.
@@ -30,6 +30,13 @@ namespace KRPC.SpaceCenter.Services
         public Comms (Guid vesselId)
         {
             VesselId = vesselId;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return FlightGlobalsExtensions.VesselState (VesselId); }
         }
 
         /// <summary>

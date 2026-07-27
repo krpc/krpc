@@ -55,6 +55,7 @@
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\ContractStateExtensions.cs" />
     <Compile Include="ExtensionMethods\DeployableStateExtensions.cs" />
+    <Compile Include="ExtensionMethods\EditorExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
     <Compile Include="ExtensionMethods\GameModeExtensions.cs" />

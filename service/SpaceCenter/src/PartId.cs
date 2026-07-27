@@ -50,7 +50,7 @@ namespace KRPC.SpaceCenter
             if (!inEditor)
                 return FlightGlobals.FindPartByID (id);
             var editorId = id;
-            var construct = EditorShip;
+            var construct = EditorExtensions.Ship;
             return ReferenceEquals (construct, null)
                 ? null
                 : construct.Parts.FirstOrDefault (x => x.craftID == editorId);
@@ -83,10 +83,12 @@ namespace KRPC.SpaceCenter
             get {
                 if (Find () != null)
                     return GameObjectState.Live;
-                if (inEditor)
-                    return !HighLogic.LoadedSceneIsEditor || !ReferenceEquals (EditorShip, null)
-                        ? GameObjectState.Destroyed
-                        : GameObjectState.Dormant;
+                // The editor holds nothing that is not in the vessel it has open, so a
+                // part it does not have is gone as soon as it is known to have one.
+                if (inEditor) {
+                    var ship = EditorExtensions.ShipState;
+                    return ship == GameObjectState.Live ? GameObjectState.Destroyed : ship;
+                }
                 if (!FlightGlobalsExtensions.VesselsKnown)
                     return GameObjectState.Dormant;
                 foreach (var vessel in FlightGlobals.Vessels) {
@@ -119,16 +121,6 @@ namespace KRPC.SpaceCenter
                   "from the vessel, or the editor was left."
                 : "The part no longer exists. It was destroyed, or the vessel " +
                   "carrying it was destroyed or recovered.");
-        }
-
-        /// <summary>
-        /// The vessel the editor has open, or null if it has none.
-        /// </summary>
-        static ShipConstruct EditorShip {
-            get {
-                var logic = EditorLogic.fetch;
-                return ReferenceEquals (logic, null) ? null : logic.ship;
-            }
         }
 
         /// <summary>

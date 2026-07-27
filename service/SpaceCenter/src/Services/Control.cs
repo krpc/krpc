@@ -38,7 +38,7 @@ namespace KRPC.SpaceCenter.Services
     /// passes on the way.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Control : Equatable<Control>
+    public class Control : Equatable<Control>, IGameObjectState
     {
         readonly Guid vesselId;
         readonly Parts.Parts parts;
@@ -47,6 +47,13 @@ namespace KRPC.SpaceCenter.Services
         {
             vesselId = vessel.id;
             parts = new Vessel (vessel).Parts;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return FlightGlobalsExtensions.VesselState (vesselId); }
         }
 
         /// <summary>

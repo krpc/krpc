@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -36,7 +37,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return node.GetHashCode ();
+            // The node's identity hash rather than its own: a config node's contents are
+            // not what this object stands for, and a hash must not move under the store.
+            return RuntimeHelpers.GetHashCode (node);
         }
 
         /// <summary>

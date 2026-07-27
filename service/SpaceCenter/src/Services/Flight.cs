@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services
     /// To get orbital information, such as the apoapsis or inclination, see <see cref="Orbit"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Flight : Equatable<Flight>
+    public class Flight : Equatable<Flight>, IGameObjectState
     {
         readonly Guid vesselId;
         readonly ReferenceFrame referenceFrame;
@@ -31,6 +31,13 @@ namespace KRPC.SpaceCenter.Services
         {
             vesselId = vessel.id;
             this.referenceFrame = referenceFrame;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return FlightGlobalsExtensions.VesselState (vesselId); }
         }
 
         /// <summary>

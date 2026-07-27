@@ -15,7 +15,7 @@ namespace KRPC.SpaceCenter.Services
     /// or <see cref="Parts.Part.Resources"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight | GameScene.Editor)]
-    public class Resources : Equatable<Resources>
+    public class Resources : Equatable<Resources>, IGameObjectState
     {
         /// <summary>
         /// The id of the vessel the resources belong to, or <c>Guid.Empty</c> when they
@@ -62,6 +62,19 @@ namespace KRPC.SpaceCenter.Services
             decoupleStage = true;
             partId = new PartId (part);
             hasPart = true;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel or part these are the resources of.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                if (hasPart)
+                    return partId.GameObjectState;
+                return editorVessel
+                    ? EditorExtensions.ShipState
+                    : FlightGlobalsExtensions.VesselState (vesselId);
+            }
         }
 
         /// <summary>

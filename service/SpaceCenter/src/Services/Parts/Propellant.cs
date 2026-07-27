@@ -9,7 +9,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A propellant for an engine. Obtains by calling <see cref="Engine.Propellants"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Propellant : Equatable<Propellant>
+    public class Propellant : Equatable<Propellant>, IGameObjectState
     {
         readonly int resourceId;
         readonly uint partId;
@@ -19,6 +19,13 @@ namespace KRPC.SpaceCenter.Services.Parts
             propellantResource.UpdateConnectedResources(underlyingPart);
             resourceId = propellantResource.id;
             partId = underlyingPart.flightID;
+        }
+
+        /// <summary>
+        /// What the game holds for the part this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return new Part (partId).GameObjectState; }
         }
 
         /// <summary>
