@@ -4,6 +4,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -11,9 +12,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A parachute. Obtained by calling <see cref="Part.Parachute"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Parachute : Equatable<Parachute>
+    public class Parachute : Equatable<Parachute>, IGameObjectState
     {
-        readonly ModuleParachute parachute;
+        ModuleRef parachuteRef;
         readonly Module realChute;
 
         internal static bool Is (Part part)
@@ -27,12 +28,40 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            parachute = internalPart.Module<ModuleParachute> ();
+            parachuteRef = ModuleRef.ForType<ModuleParachute> (internalPart);
             var realChuteModule = internalPart.Module ("RealChuteModule");
             if (realChuteModule != null)
                 realChute = new Module(part, realChuteModule);
-            if (parachute == null && realChute == null)
+            if (parachuteRef.Find (internalPart) == null && realChute == null)
                 throw new ArgumentException ("Part is not a parachute");
+        }
+
+        /// <summary>
+        /// The stock parachute module, or null where the part carries a RealChutes one
+        /// instead, which every member that reads this falls back to. A part that carries
+        /// neither has no parachute left for this to stand for, so it raises rather than
+        /// handing back a null for the fallback to be tried against.
+        /// </summary>
+        ModuleParachute InternalParachute {
+            get {
+                var parachute = (ModuleParachute)parachuteRef.Find (Part.InternalPart);
+                if (parachute == null && realChute == null)
+                    throw new ObjectDestroyedException (
+                        "The parachute no longer exists, as its part no longer has one.");
+                return parachute;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the parachute. A part carries a stock parachute
+        /// module, a RealChutes one, or both, and either is enough for the parachute,
+        /// so it is as alive as the more alive of them.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var state = parachuteRef.StateOn (Part);
+                return realChute == null ? state : state.MostAlive (realChute.GameObjectState);
+            }
         }
 
         /// <summary>
@@ -53,7 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         void CheckStock ()
         {
-            if (parachute == null || realChute != null)
+            if (InternalParachute == null || realChute != null)
                 throw new InvalidOperationException ("Operation not defined for a RealChutes parachute");
         }
 
@@ -70,6 +99,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Deploy ()
         {
+            var parachute = InternalParachute;
             if (parachute)
                 parachute.Deploy ();
             else if (realChute.HasVisibleEvent ("Deploy Chute"))
@@ -82,6 +112,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Deployed {
             get {
+                var parachute = InternalParachute;
                 if (parachute)
                     return parachute.deploymentState != ModuleParachute.deploymentStates.STOWED;
                 return realChute.VisibleEventNames.Any (x => x.Contains ("Cut"));
@@ -99,8 +130,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 if (realChute.HasVisibleEvent("Arm parachute"))
                     realChute.TriggerVisibleEvent("Arm parachute");
+                return;
             }
-            else if (parachute)
+            var parachute = InternalParachute;
+            if (parachute)
                 parachute.Deploy();
         }
 
@@ -112,10 +145,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (realChute != null)
                     return realChute.HasVisibleEvent("Disarm parachute");
-                else if (parachute)
-                    return parachute.deploymentState == ModuleParachute.deploymentStates.ACTIVE;
-                else
-                    return false;
+                var parachute = InternalParachute;
+                return parachute && parachute.deploymentState == ModuleParachute.deploymentStates.ACTIVE;
             }
         }
 
@@ -128,8 +159,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             if (realChute != null) {
                 if (realChute.HasVisibleEvent("Cut main chute"))
                     realChute.TriggerVisibleEvent("Cut main chute");
+                return;
             }
-            else if (parachute)
+            var parachute = InternalParachute;
+            if (parachute)
                 parachute.CutParachute();
         }
 
@@ -139,6 +172,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public ParachuteState State {
             get {
+                var parachute = InternalParachute;
                 if (parachute)
                     return parachute.deploymentState.ToParachuteState ();
                 if (Armed)
@@ -159,11 +193,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float DeployAltitude {
             get {
                 CheckStock();
-                return parachute.deployAltitude;
+                return InternalParachute.deployAltitude;
             }
             set {
                 CheckStock();
-                parachute.deployAltitude = value;
+                InternalParachute.deployAltitude = value;
             }
         }
 
@@ -175,11 +209,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float DeployMinPressure {
             get {
                 CheckStock ();
-                return parachute.minAirPressureToOpen;
+                return InternalParachute.minAirPressureToOpen;
             }
             set {
                 CheckStock ();
-                parachute.minAirPressureToOpen = value;
+                InternalParachute.minAirPressureToOpen = value;
             }
         }
 
@@ -194,7 +228,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public ParachuteSafeState SafeState {
             get {
                 CheckStock ();
-                return parachute.deploymentSafeState.ToParachuteSafeState ();
+                return InternalParachute.deploymentSafeState.ToParachuteSafeState ();
             }
         }
     }

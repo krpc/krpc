@@ -10,9 +10,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An air intake. Obtained by calling <see cref="Part.Intake"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Intake : Equatable<Intake>
+    public class Intake : Equatable<Intake>, IGameObjectState
     {
-        readonly ModuleResourceIntake intake;
+        ModuleRef intakeRef;
 
         internal static bool Is (Part part)
         {
@@ -22,9 +22,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Intake (Part part)
         {
             Part = part;
-            intake = part.InternalPart.Module<ModuleResourceIntake> ();
-            if (intake == null)
+            intakeRef = ModuleRef.ForType<ModuleResourceIntake> (part.InternalPart);
+            if (intakeRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part is not an intake");
+        }
+
+        ModuleResourceIntake InternalIntake {
+            get { return (ModuleResourceIntake)intakeRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the intake: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return intakeRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -32,7 +44,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Intake other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && intake.Equals (other.intake);
+            return !ReferenceEquals (other, null) && Part == other.Part && intakeRef == other.intakeRef;
         }
 
         /// <summary>
@@ -40,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ intake.GetHashCode ();
+            return Part.GetHashCode () ^ intakeRef.GetHashCode ();
         }
 
         /// <summary>
@@ -54,12 +66,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Open {
-            get { return intake.intakeEnabled; }
+            get { return InternalIntake.intakeEnabled; }
             set {
                 if (value)
-                    intake.Activate ();
+                    InternalIntake.Activate ();
                 else
-                    intake.Deactivate ();
+                    InternalIntake.Deactivate ();
             }
         }
 
@@ -68,7 +80,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Speed {
-            get { return Open ? (float)intake.intakeSpeed : 0f; }
+            get { return Open ? (float)InternalIntake.intakeSpeed : 0f; }
         }
 
         /// <summary>
@@ -76,7 +88,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Flow {
-            get { return Open ? intake.airFlow : 0f; }
+            get { return Open ? InternalIntake.airFlow : 0f; }
         }
 
         /// <summary>
@@ -84,7 +96,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float Area {
-            get { return (float)intake.area; }
+            get { return (float)InternalIntake.area; }
         }
     }
 }

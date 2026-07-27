@@ -13,9 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A robotic rotor. Obtained by calling <see cref="Part.RoboticRotor"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class RoboticRotor : Equatable<RoboticRotor>
+    public class RoboticRotor : Equatable<RoboticRotor>, IGameObjectState
     {
-        readonly ModuleRoboticServoRotor servo;
+        ModuleRef servoRef;
 
         internal static bool Is(Part part)
         {
@@ -28,7 +28,19 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException("Part is not a robotic rotor");
             Part = part;
             var internalPart = part.InternalPart;
-            servo = internalPart.Module<ModuleRoboticServoRotor>();
+            servoRef = ModuleRef.ForType<ModuleRoboticServoRotor> (internalPart);
+        }
+
+        ModuleRoboticServoRotor InternalServo {
+            get { return (ModuleRoboticServoRotor)servoRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the rotor servo: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return servoRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -36,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticRotor other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && servo.Equals(other.servo);
+            return !ReferenceEquals(other, null) && Part == other.Part && servoRef == other.servoRef;
         }
 
         /// <summary>
@@ -44,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ servo.GetHashCode();
+            return Part.GetHashCode() ^ servoRef.GetHashCode();
         }
 
         /// <summary>
@@ -59,9 +71,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float TargetRPM
         {
-            get { return servo.rpmLimit; }
+            get { return InternalServo.rpmLimit; }
             set {
-                var axisField = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(servo);
+                var axisField = (BaseAxisField)typeof(ModuleRoboticServoRotor).GetField("rpmLimitAxisField", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(InternalServo);
                 axisField.SetValue(value, axisField.module);
             }
         }
@@ -78,7 +90,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 return (float)typeof(BaseServo)
                     .GetField("transformRateOfMotion", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .GetValue(servo);
+                    .GetValue(InternalServo);
             }
         }
 
@@ -88,8 +100,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Inverted
         {
-            get { return servo.inverted; }
-            set { servo.inverted = value; }
+            get { return InternalServo.inverted; }
+            set { InternalServo.inverted = value; }
         }
 
         /// <summary>
@@ -98,13 +110,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Locked
         {
-            get { return servo.servoIsLocked; }
+            get { return InternalServo.servoIsLocked; }
             set
             {
                 if (value == true)
-                    servo.EngageServoLock();
+                    InternalServo.EngageServoLock();
                 else
-                    servo.DisengageServoLock();
+                    InternalServo.DisengageServoLock();
             }
         }
 
@@ -114,13 +126,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool MotorEngaged
         {
-            get { return servo.servoMotorIsEngaged; }
+            get { return InternalServo.servoMotorIsEngaged; }
             set
             {
                 if (value == true)
-                    servo.EngageMotor();
+                    InternalServo.EngageMotor();
                 else
-                    servo.DisengageMotor();
+                    InternalServo.DisengageMotor();
             }
         }
 
@@ -130,8 +142,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float TorqueLimit
         {
-            get { return servo.servoMotorLimit; }
-            set { servo.Fields["servoMotorLimit"].SetValue((float)value, servo); }
+            get { return InternalServo.servoMotorLimit; }
+            set { InternalServo.Fields["servoMotorLimit"].SetValue((float)value, InternalServo); }
         }
 
         /// <summary>
@@ -140,8 +152,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MaxTorque
         {
-            get { return servo.maxTorque; }
-            set { servo.maxTorque = value; }
+            get { return InternalServo.maxTorque; }
+            set { InternalServo.maxTorque = value; }
         }
 
         /// <summary>
@@ -150,8 +162,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float BrakePercentage
         {
-            get { return servo.brakePercentage; }
-            set { servo.brakePercentage = value; }
+            get { return InternalServo.brakePercentage; }
+            set { InternalServo.brakePercentage = value; }
         }
 
         /// <summary>
@@ -164,7 +176,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 return (bool)typeof(BaseServo)
                     .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(servo, null);
+                    .Invoke(InternalServo, null);
             }
         }
 

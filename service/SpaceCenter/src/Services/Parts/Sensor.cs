@@ -11,9 +11,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A sensor, such as a thermometer. Obtained by calling <see cref="Part.Sensor"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Sensor : Equatable<Sensor>
+    public class Sensor : Equatable<Sensor>, IGameObjectState
     {
-        readonly ModuleEnviroSensor sensor;
+        ModuleRef sensorRef;
 
         internal static bool Is (Part part)
         {
@@ -23,9 +23,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Sensor (Part part)
         {
             Part = part;
-            sensor = part.InternalPart.Module<ModuleEnviroSensor> ();
-            if (sensor == null)
+            sensorRef = ModuleRef.ForType<ModuleEnviroSensor> (part.InternalPart);
+            if (sensorRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part is not a sensor");
+        }
+
+        ModuleEnviroSensor InternalSensor {
+            get { return (ModuleEnviroSensor)sensorRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the sensor: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return sensorRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -33,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Sensor other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && sensor == other.sensor;
+            return !ReferenceEquals (other, null) && Part == other.Part && sensorRef == other.sensorRef;
         }
 
         /// <summary>
@@ -41,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ sensor.GetHashCode ();
+            return Part.GetHashCode () ^ sensorRef.GetHashCode ();
         }
 
         /// <summary>
@@ -55,8 +67,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return sensor.sensorActive; }
-            set { sensor.sensorActive = value; }
+            get { return InternalSensor.sensorActive; }
+            set { InternalSensor.sensorActive = value; }
         }
 
         /// <summary>
@@ -83,14 +95,14 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // readout exactly.
                 var off = Localizer.Format ("#autoLOC_237153");
                 var internalPart = Part.InternalPart;
-                if (!sensor.sensorActive || !internalPart.started)
+                if (!InternalSensor.sensorActive || !internalPart.started)
                     return off;
                 // No power: only reachable for sensors with a declared input
                 // resource (stock sensors have none); the game reports "Off".
-                if (sensor.resHandler.currentResourceLowerThanLayoff)
+                if (InternalSensor.resHandler.currentResourceLowerThanLayoff)
                     return off;
                 var internalVessel = internalPart.vessel;
-                switch (sensor.sensorType) {
+                switch (InternalSensor.sensorType) {
                 case ModuleEnviroSensor.SensorType.TEMP:
                     return internalPart.temperature.ToString ("0.##") + " " +
                         Localizer.Format ("#autoLOC_7001406");

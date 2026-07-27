@@ -13,9 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A robotic piston part. Obtained by calling <see cref="Part.RoboticPiston"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class RoboticPiston : Equatable<RoboticPiston>
+    public class RoboticPiston : Equatable<RoboticPiston>, IGameObjectState
     {
-        readonly ModuleRoboticServoPiston servo;
+        ModuleRef servoRef;
 
         internal static bool Is(Part part)
         {
@@ -28,7 +28,19 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException("Part is not a robotic piston");
             Part = part;
             var internalPart = part.InternalPart;
-            servo = internalPart.Module<ModuleRoboticServoPiston>();
+            servoRef = ModuleRef.ForType<ModuleRoboticServoPiston> (internalPart);
+        }
+
+        ModuleRoboticServoPiston InternalServo {
+            get { return (ModuleRoboticServoPiston)servoRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the piston servo: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return servoRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -36,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticPiston other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && servo.Equals(other.servo);
+            return !ReferenceEquals(other, null) && Part == other.Part && servoRef == other.servoRef;
         }
 
         /// <summary>
@@ -44,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ servo.GetHashCode();
+            return Part.GetHashCode() ^ servoRef.GetHashCode();
         }
 
         /// <summary>
@@ -59,7 +71,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float TargetExtension
         {
-            get { return servo.targetExtension; }
+            get { return InternalServo.targetExtension; }
             set { SetExtension(value); }
         }
 
@@ -69,7 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float CurrentExtension
         {
-            get { return servo.currentExtension; }
+            get { return InternalServo.currentExtension; }
         }
 
         /// <summary>
@@ -78,8 +90,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MinExtension
         {
-            get { return servo.softMinMaxExtension.x; }
-            set { servo.SetSoftLimits("targetExtension", new Vector2(value, servo.softMinMaxExtension.y)); }
+            get { return InternalServo.softMinMaxExtension.x; }
+            set { InternalServo.SetSoftLimits("targetExtension", new Vector2(value, InternalServo.softMinMaxExtension.y)); }
         }
 
         /// <summary>
@@ -88,8 +100,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MaxExtension
         {
-            get { return servo.softMinMaxExtension.y; }
-            set { servo.SetSoftLimits("targetExtension", new Vector2(servo.softMinMaxExtension.x, value)); }
+            get { return InternalServo.softMinMaxExtension.y; }
+            set { InternalServo.SetSoftLimits("targetExtension", new Vector2(InternalServo.softMinMaxExtension.x, value)); }
         }
 
         /// <summary>
@@ -97,8 +109,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Rate {
-            get { return servo.traverseVelocity; }
-            set { servo.traverseVelocity = value; }
+            get { return InternalServo.traverseVelocity; }
+            set { InternalServo.traverseVelocity = value; }
         }
 
         /// <summary>
@@ -106,8 +118,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Damping {
-            get { return servo.pistonDamping; }
-            set { servo.pistonDamping = value; }
+            get { return InternalServo.pistonDamping; }
+            set { InternalServo.pistonDamping = value; }
         }
 
         /// <summary>
@@ -116,13 +128,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Locked
         {
-            get { return servo.servoIsLocked; }
+            get { return InternalServo.servoIsLocked; }
             set
             {
                 if (value == true)
-                    servo.EngageServoLock();
+                    InternalServo.EngageServoLock();
                 else
-                    servo.DisengageServoLock();
+                    InternalServo.DisengageServoLock();
             }
         }
 
@@ -132,13 +144,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool MotorEngaged
         {
-            get { return servo.servoMotorIsEngaged; }
+            get { return InternalServo.servoMotorIsEngaged; }
             set
             {
                 if (value == true)
-                    servo.EngageMotor();
+                    InternalServo.EngageMotor();
                 else
-                    servo.DisengageMotor();
+                    InternalServo.DisengageMotor();
             }
         }
 
@@ -152,7 +164,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 return (bool)typeof(BaseServo)
                     .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(servo, null);
+                    .Invoke(InternalServo, null);
             }
         }
 
@@ -162,13 +174,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void MoveHome()
         {
-            SetExtension(servo.launchPosition);
+            SetExtension(InternalServo.launchPosition);
         }
 
         private void SetExtension(float value)
         {
             BaseAxisField field = (BaseAxisField)typeof(ModuleRoboticServoPiston)
-                .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(servo);
+                .GetField("targetExtensionAxisField", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(InternalServo);
             field.SetValue((float)value, field.module);
         }
     }

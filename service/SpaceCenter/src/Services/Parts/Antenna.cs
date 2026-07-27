@@ -10,10 +10,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An antenna. Obtained by calling <see cref="Part.Antenna"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Antenna : Equatable<Antenna>
+    public class Antenna : Equatable<Antenna>, IGameObjectState
     {
-        readonly ModuleDataTransmitter transmitter;
-        readonly ModuleDeployableAntenna deployment;
+        ModuleRef transmitterRef;
+        ModuleRef deploymentRef;
 
         internal static bool Is (Part part)
         {
@@ -26,8 +26,24 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part is not an antenna");
             Part = part;
             var internalPart = part.InternalPart;
-            transmitter = internalPart.Module<ModuleDataTransmitter> ();
-            deployment = internalPart.Module<ModuleDeployableAntenna> ();
+            transmitterRef = ModuleRef.ForType<ModuleDataTransmitter> (internalPart);
+            deploymentRef = ModuleRef.ForType<ModuleDeployableAntenna> (internalPart);
+        }
+
+        ModuleDataTransmitter InternalTransmitter {
+            get { return (ModuleDataTransmitter)transmitterRef.Get (Part.InternalPart); }
+        }
+
+        ModuleDeployableAntenna InternalDeployment {
+            get { return (ModuleDeployableAntenna)deploymentRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the antenna: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return transmitterRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -35,7 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Antenna other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && transmitter == other.transmitter;
+            return !ReferenceEquals (other, null) && Part == other.Part && transmitterRef == other.transmitterRef;
         }
 
         /// <summary>
@@ -43,7 +59,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ transmitter.GetHashCode ();
+            return Part.GetHashCode () ^ transmitterRef.GetHashCode ();
         }
 
         /// <summary>
@@ -58,9 +74,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public DeployableState State {
             get {
-                if (deployment == null)
+                if (InternalDeployment == null)
                     return DeployableState.Deployed;
-                return deployment.deployState.ToDeployableState ();
+                return InternalDeployment.deployState.ToDeployableState ();
             }
         }
 
@@ -69,7 +85,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployable {
-            get { return deployment != null; }
+            get { return InternalDeployment != null; }
         }
 
         /// <summary>
@@ -83,12 +99,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployed {
             get { return State == DeployableState.Deployed; }
             set {
-                if (deployment == null)
+                if (InternalDeployment == null)
                     throw new InvalidOperationException ("Antenna is not deployable");
                 if (value)
-                    deployment.Extend ();
+                    InternalDeployment.Extend ();
                 else
-                    deployment.Retract ();
+                    InternalDeployment.Retract ();
             }
         }
 
@@ -97,7 +113,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool CanTransmit {
-            get { return transmitter.CanTransmit(); }
+            get { return InternalTransmitter.CanTransmit(); }
         }
 
         /// <summary>
@@ -106,7 +122,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Transmit ()
         {
-            transmitter.StartTransmission ();
+            InternalTransmitter.StartTransmission ();
         }
 
         /// <summary>
@@ -115,7 +131,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Cancel ()
         {
-            transmitter.StopTransmission ();
+            InternalTransmitter.StopTransmission ();
         }
 
         /// <summary>
@@ -124,10 +140,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool AllowPartial
         {
-            get { return transmitter.xmitIncomplete; }
+            get { return InternalTransmitter.xmitIncomplete; }
             set {
-                if (value != transmitter.xmitIncomplete)
-                    transmitter.TransmitIncompleteToggle ();
+                if (value != InternalTransmitter.xmitIncomplete)
+                    InternalTransmitter.TransmitIncompleteToggle ();
             }
         }
 
@@ -136,7 +152,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public double Power {
-            get { return transmitter.CommPower; }
+            get { return InternalTransmitter.CommPower; }
         }
 
         /// <summary>
@@ -145,7 +161,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Combinable {
-            get { return transmitter.CommCombinable; }
+            get { return InternalTransmitter.CommCombinable; }
         }
 
         /// <summary>
@@ -153,7 +169,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public double CombinableExponent {
-            get { return transmitter.CommCombinableExponent; }
+            get { return InternalTransmitter.CommCombinableExponent; }
         }
 
         /// <summary>
@@ -161,7 +177,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float PacketInterval {
-            get { return transmitter.packetInterval; }
+            get { return InternalTransmitter.packetInterval; }
         }
 
         /// <summary>
@@ -169,7 +185,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float PacketSize {
-            get { return transmitter.packetSize; }
+            get { return InternalTransmitter.packetSize; }
         }
 
         /// <summary>
@@ -177,7 +193,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public double PacketResourceCost {
-            get { return transmitter.packetResourceCost; }
+            get { return InternalTransmitter.packetResourceCost; }
         }
     }
 }

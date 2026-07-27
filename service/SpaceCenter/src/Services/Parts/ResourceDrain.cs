@@ -16,9 +16,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A resource drain. Obtained by calling <see cref="Part.ResourceDrain"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class ResourceDrain : Equatable<ResourceDrain>
+    public class ResourceDrain : Equatable<ResourceDrain>, IGameObjectState
     {
-        readonly ModuleResourceDrain drain;
+        ModuleRef drainRef;
 
         internal static bool Is(Part part)
         {
@@ -31,7 +31,19 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part is not a resource drain");
             Part = part;
             var internalPart = part.InternalPart;
-            drain = internalPart.Module<ModuleResourceDrain>();
+            drainRef = ModuleRef.ForType<ModuleResourceDrain> (internalPart);
+        }
+
+        ModuleResourceDrain InternalDrain {
+            get { return (ModuleResourceDrain)drainRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the resource drain: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return drainRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -39,7 +51,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(ResourceDrain other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && drain == other.drain;
+            return !ReferenceEquals(other, null) && Part == other.Part && drainRef == other.drainRef;
         }
 
         /// <summary>
@@ -47,7 +59,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ drain.GetHashCode();
+            return Part.GetHashCode() ^ drainRef.GetHashCode();
         }
 
         /// <summary>
@@ -62,7 +74,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public List<Resource> AvailableResources
         {
-            get { return drain.resourcesAvailable.Select(x => new Resource(x)).ToList(); }
+            get { return InternalDrain.resourcesAvailable.Select(x => new Resource(x)).ToList(); }
         }
 
         /// <summary>
@@ -71,7 +83,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void SetResource(Resource resource, bool enabled)
         {
-            drain.TogglePartResource(resource.InternalResource, enabled);
+            InternalDrain.TogglePartResource(resource.InternalResource, enabled);
         }
 
         /// <summary>
@@ -80,7 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool CheckResource(Resource resource)
         {
-            return drain.IsResourceDraining(resource.InternalResource);
+            return InternalDrain.IsResourceDraining(resource.InternalResource);
         }
 
         /// <summary>
@@ -89,29 +101,29 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public DrainMode DrainMode
         {
-            get { return drain.flowMode ? DrainMode.Vessel : DrainMode.Part; }
-            set { drain.flowMode = (value == DrainMode.Vessel); }
+            get { return InternalDrain.flowMode ? DrainMode.Vessel : DrainMode.Part; }
+            set { InternalDrain.flowMode = (value == DrainMode.Vessel); }
         }
 
         /// <summary>
         /// Maximum possible drain rate.
         /// </summary>
         [KRPCProperty]
-        public float MaxRate { get { return drain.maxDrainRate; } }
+        public float MaxRate { get { return InternalDrain.maxDrainRate; } }
 
         /// <summary>
         /// Minimum possible drain rate
         /// </summary>
         [KRPCProperty]
-        public float MinRate { get { return drain.minDrainRate; } }
+        public float MinRate { get { return InternalDrain.minDrainRate; } }
 
         /// <summary>
         /// Current drain rate.
         /// </summary>
         [KRPCProperty]
         public float Rate {
-            get { return drain.drainRate; }
-            set { drain.drainRate = value; }
+            get { return InternalDrain.drainRate; }
+            set { InternalDrain.drainRate = value; }
         }
 
         /// <summary>
@@ -120,7 +132,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Start()
         {
-            drain.TurnOnDrain();
+            InternalDrain.TurnOnDrain();
         }
 
         /// <summary>
@@ -129,7 +141,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Stop()
         {
-            drain.TurnOffDrain();
+            InternalDrain.TurnOffDrain();
         }
     }
 }

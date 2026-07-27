@@ -13,9 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A robotic hinge. Obtained by calling <see cref="Part.RoboticHinge"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class RoboticHinge : Equatable<RoboticHinge>
+    public class RoboticHinge : Equatable<RoboticHinge>, IGameObjectState
     {
-        readonly ModuleRoboticServoHinge servo;
+        ModuleRef servoRef;
 
         internal static bool Is(Part part)
         {
@@ -28,7 +28,19 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException("Part is not a robotic hinge");
             Part = part;
             var internalPart = part.InternalPart;
-            servo = internalPart.Module<ModuleRoboticServoHinge>();
+            servoRef = ModuleRef.ForType<ModuleRoboticServoHinge> (internalPart);
+        }
+
+        ModuleRoboticServoHinge InternalServo {
+            get { return (ModuleRoboticServoHinge)servoRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the hinge servo: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return servoRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -36,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticHinge other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && servo.Equals(other.servo);
+            return !ReferenceEquals(other, null) && Part == other.Part && servoRef == other.servoRef;
         }
 
         /// <summary>
@@ -44,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ servo.GetHashCode();
+            return Part.GetHashCode() ^ servoRef.GetHashCode();
         }
 
         /// <summary>
@@ -58,8 +70,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float TargetAngle {
-            get { return servo.targetAngle; }
-            set { servo.targetAngle = value; }
+            get { return InternalServo.targetAngle; }
+            set { InternalServo.targetAngle = value; }
         }
 
         /// <summary>
@@ -70,9 +82,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                return servo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
+                return InternalServo.modelInitialAngle + (float)typeof(ModuleRoboticServoHinge)
                     .GetMethod("currentTransformAngle", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(servo, null);
+                    .Invoke(InternalServo, null);
             }
         }
 
@@ -82,8 +94,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MinAngle
         {
-            get { return servo.softMinMaxAngles.x; }
-            set { servo.SetSoftLimits("targetAngle", new Vector2(value, servo.softMinMaxAngles.y)); }
+            get { return InternalServo.softMinMaxAngles.x; }
+            set { InternalServo.SetSoftLimits("targetAngle", new Vector2(value, InternalServo.softMinMaxAngles.y)); }
         }
 
         /// <summary>
@@ -92,8 +104,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MaxAngle
         {
-            get { return servo.softMinMaxAngles.y; }
-            set { servo.SetSoftLimits("targetAngle", new Vector2(servo.softMinMaxAngles.x, value)); }
+            get { return InternalServo.softMinMaxAngles.y; }
+            set { InternalServo.SetSoftLimits("targetAngle", new Vector2(InternalServo.softMinMaxAngles.x, value)); }
         }
 
         /// <summary>
@@ -102,8 +114,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float Rate
         {
-            get { return servo.traverseVelocity; }
-            set { servo.traverseVelocity = value; }
+            get { return InternalServo.traverseVelocity; }
+            set { InternalServo.traverseVelocity = value; }
         }
 
         /// <summary>
@@ -112,8 +124,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float Damping
         {
-            get { return servo.hingeDamping; }
-            set { servo.hingeDamping = value; }
+            get { return InternalServo.hingeDamping; }
+            set { InternalServo.hingeDamping = value; }
         }
 
         /// <summary>
@@ -122,12 +134,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Locked
         {
-            get { return servo.servoIsLocked; }
+            get { return InternalServo.servoIsLocked; }
             set {
                 if (value == true)
-                    servo.EngageServoLock();
+                    InternalServo.EngageServoLock();
                 else
-                    servo.DisengageServoLock();
+                    InternalServo.DisengageServoLock();
             }
         }
 
@@ -137,13 +149,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool MotorEngaged
         {
-            get { return servo.servoMotorIsEngaged; }
+            get { return InternalServo.servoMotorIsEngaged; }
             set
             {
                 if (value == true)
-                    servo.EngageMotor();
+                    InternalServo.EngageMotor();
                 else
-                    servo.DisengageMotor();
+                    InternalServo.DisengageMotor();
             }
         }
 
@@ -157,7 +169,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             {
                 return (bool)typeof(BaseServo)
                     .GetMethod("IsMoving", BindingFlags.Instance | BindingFlags.NonPublic)
-                    .Invoke(servo, null);
+                    .Invoke(InternalServo, null);
             }
         }
 
@@ -167,7 +179,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void MoveHome()
         {
-            servo.targetAngle = servo.modelInitialAngle;
+            InternalServo.targetAngle = InternalServo.modelInitialAngle;
         }
     }
 }
