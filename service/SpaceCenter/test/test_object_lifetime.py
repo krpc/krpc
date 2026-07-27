@@ -32,15 +32,22 @@ class TestObjectLifetime(krpctest.TestCase):
 
     def test_reading_a_module_of_a_destroyed_part(self):
         part = self.a_part("sensorThermometer")
-        module = part.modules[0]
+        module = next(m for m in part.modules if m.field_list)
+        field = module.field_list[0]
         sensor = part.sensor
         self.assertNotEqual("", module.name)
+        self.assertNotEqual("", field.name)
         self.conn.testing_tools.destroy_part(part)
         self.wait(0.5)
         # The module belongs to the part's game object, so it goes when the part does,
         # and says so rather than failing with a null reference.
         self.assertRaises(self.destroyed, getattr, module, "name")
         self.assertRaises(self.destroyed, getattr, sensor, "active")
+        # A field is found on its module on each access, so it goes the same way. The
+        # store has let the object go by now, so even the members that read nothing
+        # raise, which is what makes the two cases indistinguishable to a client.
+        self.assertRaises(self.destroyed, getattr, field, "value")
+        self.assertRaises(self.destroyed, getattr, field, "name")
 
     def test_modules_survive_a_quickload(self):
         part = self.a_part("longAntenna")
@@ -73,6 +80,28 @@ class TestObjectLifetime(krpctest.TestCase):
         self.wait(1)
         self.assertEqual(name, module.name)
         self.assertEqual(power, antenna.power)
+
+    def test_module_members_survive_a_quickload(self):
+        part = self.a_part("mk1-3pod")
+        module = next(m for m in part.modules if m.name == "ModuleCommand")
+        field = next(f for f in module.field_list if f.name == "controlSrcStatusText")
+        event = next(e for e in module.event_list if e.name == "MakeReference")
+        action = next(a for a in module.action_list if a.name == "MakeReferenceToggle")
+        value = field.value
+        self.space_center.quicksave()
+        self.wait(1)
+        self.space_center.quickload()
+        self.wait(1)
+        # A field, event or action is found by name on whichever module the object's
+        # part carries now, so it reads the module the load built rather than the one
+        # it replaced. Reading one is what proves it: the game rebuilt the module, so
+        # anything held from before the load would be reading a replaced game state.
+        self.assertEqual(value, field.value)
+        self.assertEqual(module, field.module)
+        self.assertTrue(event.visible)
+        action.enabled = True
+        self.assertTrue(action.enabled)
+        action.enabled = False
 
     def test_objects_survive_a_quickload(self):
         vessel = self.space_center.active_vessel

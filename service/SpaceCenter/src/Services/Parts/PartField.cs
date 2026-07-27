@@ -2,6 +2,7 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -9,14 +10,34 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A field of a part module. Obtained by calling <see cref="Module.FieldList"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class PartField : Equatable<PartField>
+    public class PartField : Equatable<PartField>, IGameObjectState
     {
-        readonly BaseField baseField;
+        readonly string name;
 
         internal PartField (Module module, BaseField partField)
         {
             Module = module;
-            baseField = partField;
+            name = partField.name;
+        }
+
+        /// <summary>
+        /// The underlying KSP field, found on the module by its identifier.
+        /// </summary>
+        BaseField InternalField {
+            get {
+                var field = Module.InternalModule.Fields [name];
+                if (field == null)
+                    throw new ObjectDestroyedException (
+                        "The part module no longer has a field called " + name + ".");
+                return field;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the module this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Module.GameObjectState; }
         }
 
         /// <summary>
@@ -24,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (PartField other)
         {
-            return !ReferenceEquals (other, null) && Module == other.Module && ReferenceEquals (baseField, other.baseField);
+            return !ReferenceEquals (other, null) && Module == other.Module && name == other.name;
         }
 
         /// <summary>
@@ -32,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Module.GetHashCode () ^ baseField.GetHashCode ();
+            return Module.GetHashCode () ^ name.GetHashCode ();
         }
 
         /// <summary>
@@ -47,7 +68,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return baseField.name; }
+            get { return name; }
         }
 
         /// <summary>
@@ -56,7 +77,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string GuiName {
-            get { return baseField.guiName; }
+            get { return InternalField.guiName; }
         }
 
         /// <summary>
@@ -65,7 +86,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Visible {
-            get { return HighLogic.LoadedSceneIsEditor ? baseField.guiActiveEditor : baseField.guiActive; }
+            get { return HighLogic.LoadedSceneIsEditor ? InternalField.guiActiveEditor : InternalField.guiActive; }
         }
 
         /// <summary>
@@ -73,7 +94,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public FieldType Type {
-            get { return TypeOf (baseField.FieldInfo.FieldType); }
+            get { return TypeOf (InternalField.FieldInfo.FieldType); }
         }
 
         static FieldType TypeOf (Type type)
@@ -102,18 +123,18 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         void Assign (object value)
         {
-            var type = baseField.FieldInfo.FieldType;
+            var type = InternalField.FieldInfo.FieldType;
             if (!type.IsAssignableFrom (value.GetType ()))
                 throw new ArgumentException (
                     "Cannot set field with type " + type + " to a value of type " + value.GetType ());
-            baseField.SetValue (value, Module.InternalModule);
+            InternalField.SetValue (value, Module.InternalModule);
         }
 
         void CheckType (FieldType expected)
         {
             if (Type != expected)
                 throw new InvalidOperationException (
-                    "Field " + baseField.name + " has type " + Type + ", not " + expected);
+                    "Field " + InternalField.name + " has type " + Type + ", not " + expected);
         }
 
         /// <summary>
@@ -127,7 +148,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public string Value {
-            get { return baseField.GetValueString (Module.InternalModule); }
+            get { return InternalField.GetValueString (Module.InternalModule); }
             set { Assign (value); }
         }
 
@@ -142,7 +163,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool BoolValue {
             get {
                 CheckType (FieldType.Boolean);
-                return Convert.ToBoolean (baseField.GetValue (Module.InternalModule));
+                return Convert.ToBoolean (InternalField.GetValue (Module.InternalModule));
             }
             set { Assign (value); }
         }
@@ -158,7 +179,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public int IntValue {
             get {
                 CheckType (FieldType.Integer);
-                return Convert.ToInt32 (baseField.GetValue (Module.InternalModule));
+                return Convert.ToInt32 (InternalField.GetValue (Module.InternalModule));
             }
             set { Assign (value); }
         }
@@ -174,7 +195,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float FloatValue {
             get {
                 CheckType (FieldType.Float);
-                return Convert.ToSingle (baseField.GetValue (Module.InternalModule));
+                return Convert.ToSingle (InternalField.GetValue (Module.InternalModule));
             }
             set { Assign (value); }
         }
@@ -190,7 +211,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public double DoubleValue {
             get {
                 CheckType (FieldType.Double);
-                return Convert.ToDouble (baseField.GetValue (Module.InternalModule));
+                return Convert.ToDouble (InternalField.GetValue (Module.InternalModule));
             }
             set { Assign (value); }
         }
@@ -205,7 +226,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Reset ()
         {
-            Module.RestoreOriginalFieldValue (baseField);
+            Module.RestoreOriginalFieldValue (InternalField);
         }
     }
 }
