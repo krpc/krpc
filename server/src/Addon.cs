@@ -204,6 +204,8 @@ namespace KRPC
             // KSP events
             IsPaused = false;
             GameEvents.onGameStatePostLoad.Add(OnGameStatePostLoad);
+            GameEvents.onPartDie.Add(OnPartDie);
+            GameEvents.onVesselDestroy.Add(OnVesselDestroy);
             GameEvents.onGamePause.Add(OnGamePause);
             GameEvents.onGameUnpause.Add(OnGameUnpause);
             GameEvents.onEditorRestart.Add(OnEditorRestart);
@@ -248,6 +250,18 @@ namespace KRPC
             // Fired when a game is loaded, quickloaded or reverted, which replaces every
             // game object the service objects stand for.
             Service.GameState.Changed();
+        }
+
+        void OnPartDie(Part part)
+        {
+            // The part is gone, so the objects standing for it and for its modules can go
+            // too, without waiting for the next game to be loaded.
+            Service.GameState.RequestSweep();
+        }
+
+        void OnVesselDestroy(Vessel vessel)
+        {
+            Service.GameState.RequestSweep();
         }
 
         void OnGamePause()
@@ -334,6 +348,8 @@ namespace KRPC
         public void OnDestroy ()
         {
             GameEvents.onGameStatePostLoad.Remove(OnGameStatePostLoad);
+            GameEvents.onPartDie.Remove(OnPartDie);
+            GameEvents.onVesselDestroy.Remove(OnVesselDestroy);
             GameEvents.onGamePause.Remove(OnGamePause);
             GameEvents.onGameUnpause.Remove(OnGameUnpause);
             GameEvents.onEditorRestart.Remove(OnEditorRestart);

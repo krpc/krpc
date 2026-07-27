@@ -116,6 +116,20 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertEqual(name, vessel.name)
         self.assertEqual("sensorThermometer", part.name)
 
+    def test_the_store_drops_a_destroyed_part(self):
+        part = self.a_part("strutConnector")
+        self.assertEqual("strutConnector", part.name)
+        before = self.conn.testing_tools.object_store_size
+        self.conn.testing_tools.destroy_part(part)
+        # The game says the part died, so the object goes without waiting for a load.
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="destroyed part was not dropped from the object store",
+        )
+        # The server no longer has the object at all, and says so in the same terms
+        # as an object it still has whose part is gone.
+        self.assertRaises(self.destroyed, getattr, part, "name")
+
     def test_the_store_drops_dead_objects_on_a_load(self):
         # A maneuver node is what a load definitively kills. The game builds the vessel's
         # parts again under the ids their objects name them by, so those survive a load

@@ -28,6 +28,17 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void ARequestedSweepLeavesTheGenerationAlone ()
+        {
+            var generation = GameState.Generation;
+            GameState.RequestSweep ();
+            Assert.IsTrue (GameState.SweepPending);
+            Assert.AreEqual (generation, GameState.Generation);
+            GameState.Sweep ();
+            Assert.IsFalse (GameState.SweepPending);
+        }
+
+        [Test]
         public void SweepsTheObjectStore ()
         {
             var store = ObjectStore.Instance;

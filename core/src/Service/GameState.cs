@@ -19,7 +19,7 @@ namespace KRPC.Service
         public static uint Generation { get; private set; }
 
         /// <summary>
-        /// Whether the object store is waiting to be swept, following a change of game state.
+        /// Whether the object store is waiting to be swept.
         /// </summary>
         public static bool SweepPending { get; private set; }
 
@@ -51,6 +51,22 @@ namespace KRPC.Service
         {
             Generation++;
             settled = false;
+            RequestSweep ();
+        }
+
+        /// <summary>
+        /// Called when the game destroys something that service objects may stand for, such
+        /// as a part or a vessel. Asks for the object store to be swept without moving the
+        /// generation on: what was destroyed is gone, but nothing else has been rebuilt, so
+        /// there is nothing for anyone to look up again.
+        /// </summary>
+        /// <remarks>
+        /// Several things can be destroyed in the same moment, a vessel breaking up being
+        /// the obvious case, and this only records that a sweep is due; one sweep then
+        /// covers all of them.
+        /// </remarks>
+        public static void RequestSweep ()
+        {
             SweepPending = true;
         }
 
