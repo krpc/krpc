@@ -12,7 +12,7 @@ namespace KRPC.SpaceCenter.Services
     /// Represents crew in a vessel. Can be obtained using <see cref="Vessel.Crew"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class CrewMember : Equatable<CrewMember>
+    public class CrewMember : Equatable<CrewMember>, IGameObjectState
     {
         /// <summary>
         /// Construct a crew member from a KSP crew member.
@@ -23,11 +23,35 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// What the game holds for the crew member, who is live while the game still
+        /// has them on its roster. A game that has not been loaded has no roster to look
+        /// in, which says nothing about anyone.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var roster = HighLogic.CurrentGame?.CrewRoster;
+                if (roster == null)
+                    return GameObjectState.Dormant;
+                return roster [m_protoCrewMemberName] != null
+                    ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
+        /// <remarks>
+        /// The kerbal's name is what this stands for, and comparing it is all this may do.
+        /// The object store compares and hashes the objects it holds, including while removing
+        /// one whose kerbal the game no longer has, so this has to agree with the hash code
+        /// wherever the hash code can be taken. Looking the kerbal up here instead would make
+        /// two objects standing for different kerbals the game no longer has, which both look
+        /// up to nothing, compare equal while hashing differently.
+        /// </remarks>
         public override bool Equals (CrewMember other)
         {
-            return !ReferenceEquals (other, null) && InternalCrewMember == other.InternalCrewMember;
+            return !ReferenceEquals (other, null) &&
+            m_protoCrewMemberName == other.m_protoCrewMemberName;
         }
 
         /// <summary>
@@ -48,7 +72,7 @@ namespace KRPC.SpaceCenter.Services
                 return HighLogic.CurrentGame?.CrewRoster?[m_protoCrewMemberName];
             }
         }
-        private string m_protoCrewMemberName;
+        readonly string m_protoCrewMemberName;
 
         /// <summary>
         /// The crew members name.
