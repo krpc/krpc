@@ -63,6 +63,13 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// The number of instances in the store.
+        /// </summary>
+        public int Count {
+            get { return instances.Count; }
+        }
+
+        /// <summary>
         /// Remove every instance whose game object no longer exists, and return how many
         /// were removed. Instances that do not implement <see cref="IGameObjectState"/>
         /// are kept, as are those reporting anything but

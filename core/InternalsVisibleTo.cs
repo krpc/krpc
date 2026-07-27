@@ -4,3 +4,4 @@ using System.Runtime.CompilerServices;
 // via rules_dotnet's internals_visible_to attr instead, so this file lives
 // outside src/ (which Bazel globs) to avoid a duplicate attribute.
 [assembly: InternalsVisibleTo("KRPC.Core.Test")]
+[assembly: InternalsVisibleTo("TestingTools")]

@@ -133,6 +133,28 @@ namespace TestingTools
                 vessel.Die ();
         }
 
+        /// <summary>
+        /// Destroy a part, the way the game does when it is blown up or overheats.
+        /// Used by tests that need a part to stop existing under a client's part object.
+        /// </summary>
+        /// <param name="part">The part to destroy.</param>
+        [KRPCProcedure]
+        public static void DestroyPart (KRPC.SpaceCenter.Services.Parts.Part part)
+        {
+            if (part == null)
+                throw new ArgumentNullException (nameof (part));
+            part.InternalPart.Die ();
+        }
+
+        /// <summary>
+        /// The number of objects the server is holding on behalf of its clients. Used by tests
+        /// that check the server reclaims the objects whose game objects are gone.
+        /// </summary>
+        [KRPCProperty]
+        public static int ObjectStoreSize {
+            get { return ObjectStore.Instance.Count; }
+        }
+
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;

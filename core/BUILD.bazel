@@ -62,6 +62,7 @@ csharp_library(
     srcs = srcs,
     internals_visible_to = [
         "KRPC.Core.Test",
+        "TestingTools",
         "DynamicProxyGenAssembly2",
     ],
     target_frameworks = ["net472"],
@@ -83,6 +84,7 @@ csharp_library(
     out = "KRPC.Core",
     internals_visible_to = [
         "KRPC.Core.Test",
+        "TestingTools",
         "DynamicProxyGenAssembly2",
     ],
     # CS1701: Google.Protobuf's net5.0 build references net5-era framework
