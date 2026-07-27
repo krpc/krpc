@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -7,17 +8,15 @@ namespace KRPC.SpaceCenter.Services
     /// Transfer resources between parts.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class ResourceTransfer
+    public class ResourceTransfer : IGameObjectState
     {
-        readonly Part internalFromPart;
-        readonly Part internalToPart;
+        // The resource's definition comes from the game's part database rather than from any
+        // craft, so unlike the parts it is not something the game tears down.
         readonly PartResourceDefinition internalResource;
         readonly float transferRate;
 
         ResourceTransfer (Part fromPart, Part toPart, PartResourceDefinition resource, float amount)
         {
-            internalFromPart = fromPart;
-            internalToPart = toPart;
             internalResource = resource;
             FromPart = new Parts.Part (fromPart);
             ToPart = new Parts.Part (toPart);
@@ -27,6 +26,14 @@ namespace KRPC.SpaceCenter.Services
             var totalStorage = (float)toPart.Resources.Get (resource.id).maxAmount;
             transferRate = 0.1f * totalStorage;
             ResourceTransferAddon.AddTransfer (this);
+        }
+
+        /// <summary>
+        /// What the game holds for the transfer, which needs both of the parts it runs
+        /// between and so is as alive as the less alive of them.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return FromPart.GameObjectState.LeastAlive (ToPart.GameObjectState); }
         }
 
         /// <summary>
@@ -126,13 +133,28 @@ namespace KRPC.SpaceCenter.Services
         {
             if (Complete)
                 return;
-            var resourceAvailable = (float)internalFromPart.Resources.Get (internalResource.id).amount;
-            var storage = internalToPart.Resources.Get (internalResource.id);
+            // A transfer runs from the game's fixed update, so it has to decide for itself
+            // what to do about a part it can no longer reach rather than raise the error a
+            // call would get. A destroyed part ends the transfer, as nothing can move into
+            // or out of it again. A part whose vessel the game has unloaded is not gone and
+            // is not being simulated either, so the transfer waits for it to come back.
+            var fromState = FromPart.GameObjectState;
+            var toState = ToPart.GameObjectState;
+            if (fromState == GameObjectState.Destroyed || toState == GameObjectState.Destroyed) {
+                Cancel ();
+                return;
+            }
+            if (fromState != GameObjectState.Live || toState != GameObjectState.Live)
+                return;
+            var fromPart = FromPart.InternalPart;
+            var toPart = ToPart.InternalPart;
+            var resourceAvailable = (float)fromPart.Resources.Get (internalResource.id).amount;
+            var storage = toPart.Resources.Get (internalResource.id);
             var storageAvailable = (float)(storage.maxAmount - storage.amount);
             var available = Math.Min (resourceAvailable, storageAvailable);
             var amountToTransfer = Math.Min (available, Math.Min (TotalAmount - Amount, transferRate * deltaTime));
-            internalFromPart.TransferResource (internalResource.id, -amountToTransfer);
-            internalToPart.TransferResource (internalResource.id, amountToTransfer);
+            fromPart.TransferResource (internalResource.id, -amountToTransfer);
+            toPart.TransferResource (internalResource.id, amountToTransfer);
             Amount += amountToTransfer;
             Complete |= amountToTransfer < 0.0001f;
         }
