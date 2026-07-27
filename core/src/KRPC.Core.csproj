@@ -124,6 +124,7 @@
     <Compile Include="Service\KRPC\GameScene.cs" />
     <Compile Include="Service\KRPC\InvalidOperationException.cs" />
     <Compile Include="Service\KRPC\KRPC.cs" />
+    <Compile Include="Service\KRPC\ObjectDestroyedException.cs" />
     <Compile Include="Service\KRPC\Type.cs" />
     <Compile Include="Service\Messages\Argument.cs" />
     <Compile Include="Service\Messages\Class.cs" />

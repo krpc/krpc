@@ -144,10 +144,13 @@ namespace KRPC.Test.Service.KRPC
                 } else if (exception.Name == "ArgumentOutOfRangeException") {
                     MessageAssert.HasDocumentation (exception,
                         "<doc>\n<summary>\nThe value of an argument is outside the allowable range of values as defined by the invoked method.\n</summary>\n</doc>");
+                } else if (exception.Name == "ObjectDestroyedException") {
+                    MessageAssert.HasDocumentation (exception,
+                        "<doc>\n<summary>\nThe game object that a service object refers to no longer exists,\nso the object cannot be used. For example, the part it represents\nwas destroyed, or the vessel it belongs to was recovered.\n</summary>\n</doc>");
                 }
                 foundExceptions++;
             }
-            Assert.AreEqual (4, foundExceptions);
+            Assert.AreEqual (5, foundExceptions);
         }
 
         [Test]
