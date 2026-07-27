@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services
     /// Created using <see cref="SpaceCenter.ActiveVessel"/> or <see cref="SpaceCenter.Vessels"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Vessel : Equatable<Vessel>
+    public class Vessel : Equatable<Vessel>, IGameObjectState
     {
         CachedObject<global::Vessel> cache;
 
@@ -75,6 +75,15 @@ namespace KRPC.SpaceCenter.Services
                 cache.Set (vessel);
                 return vessel;
             }
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel. A vessel is either there to be
+        /// found, loaded or not, or it is gone for good; it has no unloaded form that
+        /// the game can bring back.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return FlightGlobalsExtensions.VesselState (Id); }
         }
 
         /// <summary>
