@@ -85,6 +85,34 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// The number of parts alive in the scene, across every vessel.
+        /// </summary>
+        [KRPCProperty]
+        public static int LoadedPartCount {
+            get { return UnityEngine.Object.FindObjectsOfType<Part> ().Length; }
+        }
+
+        /// <summary>
+        /// The number of vessels the game's flight state lists.
+        /// </summary>
+        [KRPCProperty]
+        public static int FlightStateVesselCount {
+            get { return HighLogic.CurrentGame.flightState.protoVessels.Count; }
+        }
+
+        /// <summary>
+        /// The number of mission summary dialogs open. The game puts one up when a vessel is
+        /// recovered, and it stays up until it is dismissed by hand.
+        /// </summary>
+        [KRPCProperty]
+        public static int RecoveryDialogCount {
+            get {
+                return UnityEngine.Object.FindObjectsOfType<
+                    KSP.UI.Screens.MissionRecoveryDialog> ().Length;
+            }
+        }
+
+        /// <summary>
         /// Remove all vessels except the active vessel.
         /// </summary>
         [KRPCProcedure]

@@ -161,23 +161,63 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Recover the vessel.
+        /// Recover the vessel. The crew return to the astronaut complex, and the funds and
+        /// science the vessel is worth are awarded.
         /// </summary>
+        /// <remarks>
+        /// Recovering the active vessel ends the flight and returns to the space center, as
+        /// pressing recover in game does. When a non-active vessel is recovered the current scene
+        /// is unaffected, and the mission completion dialog is not shown, so a script flying
+        /// several vessels keeps control of the rest of them.
+        ///
+        /// Returns immediately, does not wait for the vessel to be recovered.
+        /// </remarks>
         [KRPCMethod]
         public void Recover ()
         {
             var vessel = InternalVessel;
             if (!vessel.IsRecoverable)
                 throw new InvalidOperationException ("Vessel is not recoverable");
-            vessel.StartCoroutine(RecoverVesselCoroutine(vessel));
+            vessel.StartCoroutine (RecoverVesselCoroutine (vessel));
         }
 
-        static IEnumerator RecoverVesselCoroutine(global::Vessel vessel)
+        /// <summary>
+        /// Recover a vessel at the end of the frame it was asked for. Recovery destroys the
+        /// vessel, or leaves the scene entirely, so it cannot run part way through the game's
+        /// own processing; a <c>WaitUntil</c> that is already satisfied resumes after Update
+        /// and before LateUpdate, which is a safe point for both.
+        /// https://docs.unity3d.com/ScriptReference/WaitUntil.html
+        /// </summary>
+        static IEnumerator RecoverVesselCoroutine (global::Vessel vessel)
         {
-			// calling OnVesselRecoveryRequested.Fire from Update will cause issues.  Using WaitUntil makes it execute after Update and before LateUpdate:
-			// https://docs.unity3d.com/ScriptReference/WaitUntil.html
-			yield return new WaitUntil(() => true);
-            GameEvents.OnVesselRecoveryRequested.Fire(vessel);
+            yield return new WaitUntil (() => true);
+            // The same comparison the game makes before it removes a vessel, so that the two
+            // cannot disagree over which vessel is the active one.
+            if (vessel == FlightGlobals.ActiveVessel) {
+                // The active vessel cannot be removed from the scene it is being flown in, so
+                // hand it to the game, which saves, returns to the space center and recovers it
+                // there.
+                GameEvents.OnVesselRecoveryRequested.Fire (vessel);
+            } else {
+                var flightState = HighLogic.CurrentGame.flightState;
+                // A vessel's protovessel object is replaced every time it is backed up or
+                // unloaded, so the one the flight state holds is not necessarily the one the
+                // vessel points at now, and the game drops only the object it is handed. Drop
+                // every entry for this vessel by id instead: one left behind still records the
+                // vessel as standing where it was, and the next thing to read the list, such as
+                // the launch site check, recovers it a second time.
+                flightState.protoVessels.RemoveAll (x => x.vesselID == vessel.id);
+                // Recovery is computed from the protovessel, which for a loaded vessel still
+                // describes it as it was when the scene was entered or the game last saved.
+                // Back it up so that the crew, parts and resources recovered are the ones the
+                // vessel actually has.
+                vessel.BackupVessel ();
+                // Recovering quickly awards the same crew, funds and science, and differs only
+                // in showing no mission summary. That dialog belongs to a player who pressed
+                // recover and is waiting to read it; here it would sit over the flight with
+                // nobody to dismiss it.
+                ShipConstruction.RecoverVesselFromFlight (vessel.protoVessel, flightState, true);
+            }
         }
 
         /// <summary>

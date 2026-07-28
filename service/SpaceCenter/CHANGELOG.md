@@ -8,6 +8,10 @@
     in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats,
     raises an exception without launching (#1017)
 
+- Vessels and crew
+  - `Vessel.Recover` now recovers non-active vessels without switching to
+     the space center scene, and the mission completion dialog is auto-closed. (#1021)
+
 ## [v0.6.0]
 
 - Space center
