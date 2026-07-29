@@ -113,6 +113,16 @@ namespace TestingTools
         }
 
         /// <summary>
+        /// The game's own staging lock flag, which Alt+L toggles alongside the "manualStageLock"
+        /// input lock and then reads to decide whether the next press locks or unlocks. Nothing
+        /// else in the game reads it, so it is only reachable from here.
+        /// </summary>
+        [KRPCProperty]
+        public static bool FlightInputStageLock {
+            get { return FlightInputHandler.fetch != null && FlightInputHandler.fetch.stageLock; }
+        }
+
+        /// <summary>
         /// Remove all vessels except the active vessel.
         /// </summary>
         [KRPCProcedure]
