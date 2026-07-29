@@ -615,6 +615,11 @@
 <li><p><span class="changelog-marker breaking">Breaking</span> <code class="docutils literal notranslate"><span class="pre">SpaceCenter.LaunchVessel</span></code> takes its <code class="docutils literal notranslate"><span class="pre">crew</span></code> parameter as an exact instruction, and the parameter is optional again. A <code class="docutils literal notranslate"><span class="pre">null</span></code> crew (the default) uses the craft’s default crew assignments; an empty list, which previously also used the default assignments, launches with no crew; and a populated list seats exactly the named Kerbals, in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats, raises an exception without launching (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
 </ul>
 </li>
+<li><p>Vessels and crew</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Vessel.Recover</span></code> now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1021">#1021</a>)</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="c-nano-client">

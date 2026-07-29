@@ -28,6 +28,10 @@ SpaceCenter service
 
   * :breaking:`Breaking` ``SpaceCenter.LaunchVessel`` takes its ``crew`` parameter as an exact instruction, and the parameter is optional again. A ``null`` crew (the default) uses the craft's default crew assignments; an empty list, which previously also used the default assignments, launches with no crew; and a populated list seats exactly the named Kerbals, in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats, raises an exception without launching (:issue:`1017`)
 
+* Vessels and crew
+
+  * ``Vessel.Recover`` now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (:issue:`1021`)
+
 
 
 C-nano client

@@ -781,7 +781,16 @@ need it, by as little as they need.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.recover()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">recover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.recover()" title="Link to this definition">#</a></dt>
-<dd><p>Recover the vessel.</p>
+<dd><p>Recover the vessel. The crew return to the astronaut complex, and the funds and
+science the vessel is worth are awarded.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Recovering the active vessel ends the flight and returns to the space center, as
+pressing recover in game does. When a non-active vessel is recovered the current scene
+is unaffected, and the mission completion dialog is not shown, so a script flying
+several vessels keeps control of the rest of them.</p>
+<p>Returns immediately, does not wait for the vessel to be recovered.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
