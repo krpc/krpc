@@ -32,6 +32,10 @@ SpaceCenter service
 
   * ``Vessel.Recover`` now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (:issue:`1021`)
 
+* Control
+
+  * Setting ``Control.StageLock`` now leaves the in-game Alt+L shortcut in step with it, so the next press of Alt+L locks or unlocks staging rather than being absorbed (:issue:`1022`)
+
 
 
 C-nano client
