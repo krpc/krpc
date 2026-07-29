@@ -71,3 +71,92 @@ class TestStage(krpctest.TestCase):
         legacy = self.vessel.resources_in_decouple_stage(0, False)
         new_way = self.vessel.decouple_stage_at(0).resources(False)
         assert_resources_equivalent(self, legacy, new_way)
+
+
+class TestStageRevertToLaunch(krpctest.TestCase):
+    # Regression for stages breaking after a Revert to Launch. The revert destroys the
+    # vessel and recreates it under the same id, so a stage that holds the vessel object
+    # is left pointing at the destroyed one and reports that delta-v has not been
+    # calculated. Because stages compare equal on vessel id, stage number and kind, the
+    # broken stage stays in the object store and is handed back to every later call, so
+    # even a freshly requested stage is affected.
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab("Staging")
+
+    def wait_for_flight(self):
+        conn = self.connect()
+
+        def in_flight():
+            try:
+                return (
+                    conn.krpc.game_scene == conn.krpc.GameScene.flight
+                    and conn.space_center.active_vessel is not None
+                    and conn.space_center.active_vessel.parts.root is not None
+                )
+            except RuntimeError:
+                return False
+
+        self.wait_until(in_flight, timeout=60, message="flight scene after revert")
+
+    def wait_for_delta_v(self, vessel):
+        # The recreated vessel builds its delta-v simulation over the first few frames of
+        # the reloaded scene, so wait for it before reading any stage. This uses the
+        # vessel-level figure, which resolves the vessel by id and so is unaffected by
+        # what this test is checking.
+        def ready():
+            try:
+                return vessel.vacuum_delta_v > 0
+            except RuntimeError:
+                return False
+
+        self.wait_until(ready, timeout=30, message="delta-v after revert")
+
+    def stage_state(self, stage, decouple_stage):
+        # Everything a stage exposes that has to survive the reload: the delta-v figures
+        # the bug report is about, the part list, and the resource collection.
+        return (
+            round(stage.vacuum_delta_v),
+            round(stage.vacuum_thrust),
+            len(stage.parts),
+            len(decouple_stage.parts),
+            sorted(decouple_stage.resources().names),
+        )
+
+    def test_stages_after_revert_to_launch(self):
+        space_center = self.connect().space_center
+        vessel = space_center.active_vessel
+        # Pick stages that actually carry the data being checked, so that reading zeros
+        # after the revert is a failure rather than the craft's own layout.
+        stage = max(vessel.stages, key=lambda s: s.vacuum_delta_v)
+        decouple_stage = max(vessel.decouple_stages, key=lambda s: len(s.parts))
+        stage_number = stage.number
+        decouple_stage_number = decouple_stage.number
+        before = self.stage_state(stage, decouple_stage)
+        self.assertGreater(before[0], 0)
+        self.assertGreater(before[2], 0)
+        self.assertGreater(before[3], 0)
+
+        self.assertTrue(space_center.can_revert_to_launch)
+        space_center.revert_to_launch()
+        self.wait_for_flight()
+
+        space_center = self.connect().space_center
+        vessel = space_center.active_vessel
+        self.wait_for_delta_v(vessel)
+
+        # Stage handles kept across the reload, as a client that does not reconnect has.
+        self.assertEqual(before, self.stage_state(stage, decouple_stage))
+
+        # And stages requested after the reload, which the object store hands back as the
+        # same instances because they compare equal to the ones from before it.
+        self.assertEqual(
+            before,
+            self.stage_state(
+                vessel.stage_at(stage_number),
+                vessel.decouple_stage_at(decouple_stage_number),
+            ),
+        )
