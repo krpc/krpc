@@ -693,6 +693,11 @@ namespace KRPC.SpaceCenter.Services
                     InputLockManager.SetControlLock(ControlTypes.STAGING, "manualStageLock");
                 else
                     InputLockManager.RemoveControlLock("manualStageLock");
+                // Alt+L toggles this flag alongside the input lock, and decides from it whether the
+                // next press locks or unlocks. Setting it keeps the keybinding in step, so the next
+                // press does the opposite of what was set here rather than repeating it.
+                if (FlightInputHandler.fetch != null)
+                    FlightInputHandler.fetch.stageLock = value;
             }
         }
 

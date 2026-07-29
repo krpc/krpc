@@ -339,6 +339,16 @@ class TestControlStaging(krpctest.TestCase):
         stage -= 1
         self.assertEqual(stage, self.control.current_stage)
 
+    def test_stage_lock_tracks_alt_l_toggle(self):
+        # Alt+L decides whether the next press locks or unlocks by reading the game's own flag,
+        # so setting stage_lock has to move it too or the keybinding takes an extra press to
+        # respond.
+        tools = self.connect().testing_tools
+        self.control.stage_lock = True
+        self.assertTrue(tools.flight_input_stage_lock)
+        self.control.stage_lock = False
+        self.assertFalse(tools.flight_input_stage_lock)
+
     def test_staging(self):
         for i in reversed(range(12)):
             self.assertEqual(i, self.control.current_stage)
