@@ -22,6 +22,12 @@
   - Setting `Control.StageLock` now leaves the in-game Alt+L shortcut in step with it, so the
     next press of Alt+L locks or unlocks staging rather than being absorbed (#1022)
 
+- Parts
+  - `Part.BoundingBox` and `Vessel.BoundingBox` now measure only the meshes of a part's own
+    model. The boxes no longer take in the models of physicsless child parts, nor any object
+    another mod has attached to a part, which could stretch a box to an arbitrary size (#1024)
+  - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
+
 ## [v0.6.0]
 
 - Space center

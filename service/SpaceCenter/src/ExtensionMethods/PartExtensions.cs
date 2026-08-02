@@ -120,7 +120,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// Computes the axis-aligned bounding box for a part in the given reference frame.
         /// </summary>
         /// <remarks>
-        /// This is an expensive calculation. It iterates over the parts collider meshes
+        /// This is an expensive calculation. It iterates over the meshes of the parts model
         /// to compute a tight axis-aligned bounding box.
         /// It does not use part.collider.bounds, as this is aligned to world space and
         /// would not provide a tight bounding box in the given reference frame.
@@ -128,10 +128,22 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Bounds GetBounds (this Part part, ReferenceFrame referenceFrame)
         {
             var bounds = new Bounds (referenceFrame.PositionFromWorldSpace (part.WCoM), Vector3.zero);
-            var meshes = part.GetComponentsInChildren<MeshFilter> ();
-            for (int i = 0; i < meshes.Length; i++) {
+            // Only the parts own model, the same subtree KSP measures a part against. Searching
+            // the whole part transform instead would pick up the models of physicsless child
+            // parts, which hang off it, along with any object a mod parents to the part.
+            var meshes = part.FindModelComponents<MeshFilter> ();
+            for (int i = 0; i < meshes.Count; i++) {
                 var mesh = meshes [i];
-                var vertices = mesh.mesh.bounds.ToVertices ();
+                // The model subtree is walked in full, so meshes that are currently switched
+                // off - a hidden part variant, a stowed animation state - have to be skipped.
+                if (!mesh.gameObject.activeInHierarchy)
+                    continue;
+                // sharedMesh, not mesh: the latter instantiates a private copy of the mesh
+                // on the first access and leaves the part rendering that copy.
+                var geometry = mesh.sharedMesh;
+                if (geometry == null)
+                    continue;
+                var vertices = geometry.bounds.ToVertices ();
                 for (int j = 0; j < vertices.Length; j++) {
                     // mesh space -> world space -> reference frame space
                     var vertex = referenceFrame.PositionFromWorldSpace (mesh.transform.TransformPoint (vertices [j]));

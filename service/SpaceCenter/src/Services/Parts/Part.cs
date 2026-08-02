@@ -796,9 +796,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vectors are in.</param>
         /// <remarks>
-        /// This is computed from the collision mesh of the part.
-        /// If the part is not collidable, the box has zero volume and is centered on
-        /// the <see cref="Position"/> of the part.
+        /// This is computed from the meshes that make up the parts model, and covers only
+        /// this part - the models of any child parts are excluded.
+        /// If the part has no visible model, the box has zero volume and is centered on
+        /// the <see cref="CenterOfMass"/> of the part.
         /// </remarks>
         [KRPCMethod]
         public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
