@@ -214,6 +214,9 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.VesselOrbital:
                 case ReferenceFrameType.VesselSurface:
                 case ReferenceFrameType.VesselSurfaceVelocity:
+                case ReferenceFrameType.VesselOrbitSpeed:
+                case ReferenceFrameType.VesselSurfaceSpeed:
+                case ReferenceFrameType.VesselTargetSpeed:
                     return InternalVessel.transform;
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
@@ -248,6 +251,36 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException ("Reference frame has no part");
                 return FlightGlobals.FindPartByID (partId);
             }
+        }
+
+        // The target of the vessel this frame is attached to (another vessel, a
+        // celestial body or a docking port), as set in-game. There is a single target,
+        // shared by the active vessel, so this is only meaningful for that vessel.
+        static ITargetable InternalTarget {
+            get {
+                var target = FlightGlobals.fetch.VesselTarget;
+                if (target == null)
+                    throw new InvalidOperationException ("Reference frame has no target; the vessel's target is not set");
+                return target;
+            }
+        }
+
+        // The velocity of the vessel this frame is attached to, relative to its target, in
+        // world space. This is the velocity the navball shows in 'target' mode. It is
+        // measured against the same target velocity that the frame moves with, so the
+        // vessel's velocity in the frame points exactly along it.
+        Vector3d TargetRelativeVelocity {
+            get { return InternalVessel.GetOrbit ().GetVel () - InternalTarget.GetWorldVelocity (); }
+        }
+
+        // The navball speed mode frames take their orientation from the velocity they
+        // measure, so they are singular when it is zero -- as is the navball's prograde
+        // marker, which the game stops drawing at zero speed.
+        static void CheckSpeedNotSingular (Vector3d velocity, string name, string description)
+        {
+            if (velocity.sqrMagnitude < 0.01d)
+                throw new InvalidOperationException (
+                    name + " reference frame is singular when " + description + " is near zero");
         }
 
         internal static ReferenceFrame Object (global::CelestialBody body)
@@ -285,6 +318,21 @@ namespace KRPC.SpaceCenter.Services
         internal static ReferenceFrame SurfaceVelocity (global::Vessel vessel)
         {
             return new ReferenceFrame (ReferenceFrameType.VesselSurfaceVelocity, vessel: vessel);
+        }
+
+        internal static ReferenceFrame OrbitSpeed (global::Vessel vessel)
+        {
+            return new ReferenceFrame (ReferenceFrameType.VesselOrbitSpeed, vessel: vessel);
+        }
+
+        internal static ReferenceFrame SurfaceSpeed (global::Vessel vessel)
+        {
+            return new ReferenceFrame (ReferenceFrameType.VesselSurfaceSpeed, vessel: vessel);
+        }
+
+        internal static ReferenceFrame TargetSpeed (global::Vessel vessel)
+        {
+            return new ReferenceFrame (ReferenceFrameType.VesselTargetSpeed, vessel: vessel);
         }
 
         internal static ReferenceFrame Object (global::Vessel vessel, ManeuverNode node)
@@ -403,6 +451,9 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.VesselOrbital:
                 case ReferenceFrameType.VesselSurface:
                 case ReferenceFrameType.VesselSurfaceVelocity:
+                case ReferenceFrameType.VesselOrbitSpeed:
+                case ReferenceFrameType.VesselSurfaceSpeed:
+                case ReferenceFrameType.VesselTargetSpeed:
                     return InternalVessel.CoM;
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
@@ -459,6 +510,14 @@ namespace KRPC.SpaceCenter.Services
                         throw new InvalidOperationException (
                             "VesselSurfaceVelocity reference frame is singular when surface velocity is near zero");
                     break;
+                case ReferenceFrameType.VesselSurfaceSpeed:
+                    CheckSpeedNotSingular (
+                        InternalVessel.srf_velocity, "VesselSurfaceSpeed", "surface velocity");
+                    break;
+                case ReferenceFrameType.VesselTargetSpeed:
+                    CheckSpeedNotSingular (
+                        TargetRelativeVelocity, "VesselTargetSpeed", "velocity relative to the target");
+                    break;
                 default:
                     break;
                 }
@@ -499,6 +558,15 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Vector from the center of the body being orbited to the given vessel, in world
+        /// space. Points in the zenith direction.
+        /// </summary>
+        static Vector3d ToZenith (global::Vessel vessel)
+        {
+            return vessel.CoM - vessel.mainBody.position;
+        }
+
+        /// <summary>
         /// Returns the up vector for the reference frame in world coordinates.
         /// The direction in which the y-axis points.
         /// The vector is not normalized.
@@ -515,6 +583,7 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.ReferenceTransform.up;
                 case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselOrbitSpeed:
                     return InternalVessel.GetOrbit ().GetVel ();
                 case ReferenceFrameType.VesselSurface:
                     {
@@ -522,7 +591,10 @@ namespace KRPC.SpaceCenter.Services
                         return Vector3d.Exclude (right, ToNorthPole (InternalVessel).normalized);
                     }
                 case ReferenceFrameType.VesselSurfaceVelocity:
+                case ReferenceFrameType.VesselSurfaceSpeed:
                     return InternalVessel.srf_velocity;
+                case ReferenceFrameType.VesselTargetSpeed:
+                    return TargetRelativeVelocity;
                 case ReferenceFrameType.Maneuver:
                     return node.GetBurnVector(node.patch);
                 case ReferenceFrameType.ManeuverOrbital:
@@ -565,12 +637,22 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.ReferenceTransform.forward;
                 case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselOrbitSpeed:
                     return InternalVessel.GetOrbit ().GetOrbitNormal ().SwapYZ ();
                 case ReferenceFrameType.VesselSurface:
                     {
                         var right = InternalVessel.CoM - InternalVessel.mainBody.position;
                         var northPole = ToNorthPole (InternalVessel).normalized;
                         return Vector3d.Cross (right, northPole);
+                    }
+                case ReferenceFrameType.VesselSurfaceSpeed:
+                case ReferenceFrameType.VesselTargetSpeed:
+                    {
+                        // Normal to the plane of the motion, in the same sense as the
+                        // orbital frame's normal: the velocity crossed with the zenith.
+                        // The remaining axis then points towards the body, opposite the
+                        // navball's radial out marker.
+                        return Vector3d.Cross (UpNotNormalized, ToZenith (InternalVessel));
                     }
                 case ReferenceFrameType.VesselSurfaceVelocity:
                     {
@@ -625,6 +707,20 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.VesselSurface:
                 case ReferenceFrameType.VesselSurfaceVelocity:
                     return InternalVessel.GetOrbit ().GetVel ();
+                case ReferenceFrameType.VesselOrbitSpeed:
+                    // The body being orbited, not rotating with it. The vessel's velocity
+                    // relative to this is the navball's orbital velocity.
+                    return InternalVessel.mainBody.GetWorldVelocity ();
+                case ReferenceFrameType.VesselSurfaceSpeed: {
+                    // The point on the rotating body that the vessel is currently above,
+                    // so that the vessel's velocity relative to this is the navball's
+                    // surface velocity.
+                    var vessel = InternalVessel;
+                    var mainBody = vessel.mainBody;
+                    return mainBody.GetWorldVelocity () + mainBody.getRFrmVel (vessel.CoM);
+                }
+                case ReferenceFrameType.VesselTargetSpeed:
+                    return InternalTarget.GetWorldVelocity ();
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ () + node.patch.referenceBody.GetWorldVelocity ();
@@ -668,7 +764,8 @@ namespace KRPC.SpaceCenter.Services
                 }
                 case ReferenceFrameType.Vessel:
                     return InternalVessel.WorldAngularVelocity ();
-                case ReferenceFrameType.VesselOrbital: {
+                case ReferenceFrameType.VesselOrbital:
+                case ReferenceFrameType.VesselOrbitSpeed: {
                     var r = InternalVessel.CoM - InternalVessel.mainBody.position;
                     var v = InternalVessel.GetOrbit ().GetVel ();
                     return Vector3d.Cross (r, v) / r.sqrMagnitude;
@@ -708,6 +805,36 @@ namespace KRPC.SpaceCenter.Services
                     var a_srf = grav - Vector3d.Cross (vessel.mainBody.angularVelocity, v_orb);
                     return vessel.mainBody.angularVelocity + Vector3d.Cross (srf_vel, a_srf) / srf_vel.sqrMagnitude;
                 }
+                case ReferenceFrameType.VesselSurfaceSpeed: {
+                    var vessel = InternalVessel;
+                    var srfVelocity = vessel.srf_velocity;
+                    CheckSpeedNotSingular (srfVelocity, "VesselSurfaceSpeed", "surface velocity");
+                    // d(srf_vel)/dt ≈ grav − body.ω × v_orbital
+                    var grav = (Vector3d)FlightGlobals.getGeeForceAtPosition (vessel.CoM);
+                    var acceleration = grav - Vector3d.Cross (
+                        vessel.mainBody.angularVelocity, vessel.GetOrbit ().GetVel ());
+                    return SpeedModeAngularVelocity (vessel, srfVelocity, acceleration);
+                }
+                case ReferenceFrameType.VesselTargetSpeed: {
+                    var vessel = InternalVessel;
+                    var relativeVelocity = TargetRelativeVelocity;
+                    CheckSpeedNotSingular (
+                        relativeVelocity, "VesselTargetSpeed", "velocity relative to the target");
+                    // Vessel and target are both in free fall, so their relative velocity
+                    // turns with the difference in gravity between the two positions. Each
+                    // is taken against the body that object orbits, as the gravity of a
+                    // body at its own center -- where a targeted body sits -- is undefined.
+                    // Whatever pulls on both of them cancels in the difference. Thrust and
+                    // drag on either of them are not accounted for.
+                    var target = InternalTarget;
+                    var targetOrbit = target.GetOrbit ();
+                    var acceleration =
+                        (Vector3d)FlightGlobals.getGeeForceAtPosition (vessel.CoM, vessel.mainBody);
+                    if (targetOrbit != null)
+                        acceleration -= (Vector3d)FlightGlobals.getGeeForceAtPosition (
+                            target.GetTransform ().position, targetOrbit.referenceBody);
+                    return SpeedModeAngularVelocity (vessel, relativeVelocity, acceleration);
+                }
                 case ReferenceFrameType.Maneuver: {
                     // The burn vector is stored in prograde/normal/radial components, so it rotates
                     // with the orbital frame. The z-axis (arbitrary inertial projection) introduces
@@ -736,6 +863,32 @@ namespace KRPC.SpaceCenter.Services
                     throw new InvalidOperationException ();
                 }
             }
+        }
+
+        /// <summary>
+        /// The angular velocity, in world space, of a navball speed mode frame oriented by
+        /// the given velocity, which is changing at the given acceleration.
+        /// </summary>
+        /// <remarks>
+        /// The basis is ŷ along the velocity, ẑ along the velocity crossed with the zenith
+        /// and x̂ the remaining axis. For a basis whose axes obey ė = ω × e, the angular
+        /// velocity is ω = (ŷ × dŷ/dt) + ŷ (x̂ · dẑ/dt): the swing of the velocity direction,
+        /// plus the roll about it as the plane through the velocity and the zenith turns.
+        /// </remarks>
+        static Vector3d SpeedModeAngularVelocity (
+            global::Vessel vessel, Vector3d velocity, Vector3d acceleration)
+        {
+            var swing = Vector3d.Cross (velocity, acceleration) / velocity.sqrMagnitude;
+            // The zenith runs from the center of the body to the vessel, so it changes at
+            // the vessel's orbital velocity.
+            var zenith = ToZenith (vessel);
+            var zenithRate = vessel.GetOrbit ().GetVel ();
+            var normal = Vector3d.Cross (velocity, zenith);
+            var normalRate = Vector3d.Cross (acceleration, zenith) + Vector3d.Cross (velocity, zenithRate);
+            var y = velocity.normalized;
+            var x = Vector3d.Cross (y, normal.normalized);
+            var roll = Vector3d.Dot (x, normalRate) / normal.magnitude;
+            return swing + roll * y;
         }
 
         /// <summary>

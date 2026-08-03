@@ -180,6 +180,9 @@ kRPC provides the following reference frames:
       * :csharp:prop:`Vessel.OrbitalReferenceFrame`
       * :csharp:prop:`Vessel.SurfaceReferenceFrame`
       * :csharp:prop:`Vessel.SurfaceVelocityReferenceFrame`
+      * :csharp:prop:`Vessel.OrbitSpeedReferenceFrame`
+      * :csharp:prop:`Vessel.SurfaceSpeedReferenceFrame`
+      * :csharp:prop:`Vessel.TargetSpeedReferenceFrame`
       * :csharp:prop:`CelestialBody.ReferenceFrame`
       * :csharp:prop:`CelestialBody.NonRotatingReferenceFrame`
       * :csharp:prop:`CelestialBody.OrbitalReferenceFrame`
@@ -196,6 +199,9 @@ kRPC provides the following reference frames:
       * :cpp:func:`Vessel::orbital_reference_frame`
       * :cpp:func:`Vessel::surface_reference_frame`
       * :cpp:func:`Vessel::surface_velocity_reference_frame`
+      * :cpp:func:`Vessel::orbit_speed_reference_frame`
+      * :cpp:func:`Vessel::surface_speed_reference_frame`
+      * :cpp:func:`Vessel::target_speed_reference_frame`
       * :cpp:func:`CelestialBody::reference_frame`
       * :cpp:func:`CelestialBody::non_rotating_reference_frame`
       * :cpp:func:`CelestialBody::orbital_reference_frame`
@@ -212,6 +218,9 @@ kRPC provides the following reference frames:
       * :c:func:`krpc_SpaceCenter_Vessel_OrbitalReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Vessel_SurfaceReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_OrbitalReferenceFrame`
@@ -228,6 +237,9 @@ kRPC provides the following reference frames:
       * :java:meth:`Vessel.getOrbitalReferenceFrame`
       * :java:meth:`Vessel.getSurfaceReferenceFrame`
       * :java:meth:`Vessel.getSurfaceVelocityReferenceFrame`
+      * :java:meth:`Vessel.getOrbitSpeedReferenceFrame`
+      * :java:meth:`Vessel.getSurfaceSpeedReferenceFrame`
+      * :java:meth:`Vessel.getTargetSpeedReferenceFrame`
       * :java:meth:`CelestialBody.getReferenceFrame`
       * :java:meth:`CelestialBody.getNonRotatingReferenceFrame`
       * :java:meth:`CelestialBody.getOrbitalReferenceFrame`
@@ -244,6 +256,9 @@ kRPC provides the following reference frames:
       * :lua:attr:`SpaceCenter.Vessel.orbital_reference_frame`
       * :lua:attr:`SpaceCenter.Vessel.surface_reference_frame`
       * :lua:attr:`SpaceCenter.Vessel.surface_velocity_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.orbit_speed_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.surface_speed_reference_frame`
+      * :lua:attr:`SpaceCenter.Vessel.target_speed_reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.orbital_reference_frame`
@@ -260,6 +275,9 @@ kRPC provides the following reference frames:
       * :py:attr:`Vessel.orbital_reference_frame`
       * :py:attr:`Vessel.surface_reference_frame`
       * :py:attr:`Vessel.surface_velocity_reference_frame`
+      * :py:attr:`Vessel.orbit_speed_reference_frame`
+      * :py:attr:`Vessel.surface_speed_reference_frame`
+      * :py:attr:`Vessel.target_speed_reference_frame`
       * :py:attr:`CelestialBody.reference_frame`
       * :py:attr:`CelestialBody.non_rotating_reference_frame`
       * :py:attr:`CelestialBody.orbital_reference_frame`
@@ -612,6 +630,11 @@ rotates with the body.
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselSpeed.py
          :language: python
 
+.. seealso:: :attr:`Vessel.orbit_speed_reference_frame` and
+   :attr:`Vessel.surface_speed_reference_frame` give the same two speeds
+   directly, in frames centered on the vessel and oriented like the navball is in
+   each mode. See :ref:`tutorial-reference-frames-navball-speed`.
+
 .. _tutorial-reference-frames-vessel-velocity:
 
 Vessel Velocity
@@ -661,6 +684,77 @@ the body.
 
       .. literalinclude:: /scripts/tutorials/reference-frames/VesselVelocity.py
          :language: python
+
+.. seealso:: :attr:`Vessel.surface_speed_reference_frame` gives the same velocity
+   without constructing a frame, although in its own prograde/normal/radial axes
+   rather than as upwards, north and east components. See
+   :ref:`tutorial-reference-frames-navball-speed`.
+
+.. _tutorial-reference-frames-navball-speed:
+
+Navball speed modes
+^^^^^^^^^^^^^^^^^^^
+
+The navball measures speed against one of three things, depending on the speed
+mode it is in: the body being orbited ('orbit' mode), the surface of that body
+('surface' mode) or the vessel's target ('target' mode).
+:attr:`Vessel.orbit_speed_reference_frame`,
+:attr:`Vessel.surface_speed_reference_frame` and
+:attr:`Vessel.target_speed_reference_frame` are reference frames that move with
+each of these in turn.
+
+The velocity of the vessel in one of them is therefore the velocity the navball
+shows in that mode, and :attr:`Flight.speed` is the speed it displays.
+
+Each frame is also oriented like the navball is in that mode, in the same
+arrangement as :attr:`Vessel.orbital_reference_frame`: the y-axis points where
+the prograde marker does, the z-axis where the normal marker does and the x-axis
+in the anti-radial direction, towards the body. A direction of
+``(0,1,0)`` in the frame is therefore prograde and ``(0,-1,0)`` is
+retrograde, whichever mode the frame is for, and the velocity of the vessel in
+the frame points along its y-axis.
+
+Because the velocity gives these frames their orientation, they are singular
+when it is zero: the surface speed frame cannot be used by a vessel that is
+stationary on the ground, nor the target speed frame by one that has matched
+velocity with its target.
+
+This example prints the speeds the navball shows in orbit and surface modes:
+
+.. tabs::
+
+   .. tab:: C#
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.cs
+         :language: csharp
+
+   .. tab:: C++
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.cpp
+         :language: cpp
+
+   .. tab:: C
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.c
+         :language: c
+
+   .. tab:: Java
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.java
+         :language: java
+
+   .. tab:: Lua
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.lua
+         :language: lua
+
+   .. tab:: Python
+
+      .. literalinclude:: /scripts/tutorials/reference-frames/NavballSpeed.py
+         :language: python
+
+.. note:: :attr:`Vessel.target_speed_reference_frame` requires a target to be
+   set, and raises an error otherwise.
 
 Angle of attack
 ^^^^^^^^^^^^^^^

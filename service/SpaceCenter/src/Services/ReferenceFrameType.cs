@@ -39,6 +39,25 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         VesselSurfaceVelocity,
         /// <summary>
+        /// Centered on a vessel, oriented with its orbital prograde/normal/radial
+        /// directions, and moving with the body being orbited but not rotating with
+        /// it. The velocity measured against it is the navballs orbit speed mode.
+        /// </summary>
+        VesselOrbitSpeed,
+        /// <summary>
+        /// Centered on a vessel, oriented with the prograde/normal/radial directions
+        /// of its motion relative to the surface of the body being orbited, and moving
+        /// with that surface. The velocity measured against it is the navballs surface
+        /// speed mode.
+        /// </summary>
+        VesselSurfaceSpeed,
+        /// <summary>
+        /// Centered on a vessel, oriented with the prograde/normal/radial directions
+        /// of its motion relative to its target, and moving with that target. The
+        /// velocity measured against it is the navballs target speed mode.
+        /// </summary>
+        VesselTargetSpeed,
+        /// <summary>
         /// Centered on a maneuver node and oriented with the burn vector.
         /// </summary>
         Maneuver,

@@ -1070,6 +1070,82 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The reference frame that the navball measures speed against in 'orbit' mode.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the vessel.</description></item>
+        /// <item><description>The axes are those of <see cref="OrbitalReferenceFrame"/>, which are
+        /// the directions the navball marks in this mode: the x-axis points in the orbital
+        /// anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+        /// the orbital normal direction.</description></item>
+        /// <item><description>The frame moves with the body being orbited, but does not rotate
+        /// with it.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// The velocity of the vessel in this frame is the one the navball shows in 'orbit' mode:
+        /// <see cref="Flight.Speed"/> is the speed it displays, and <see cref="Flight.Velocity"/>
+        /// points along the y-axis, towards its prograde marker.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public ReferenceFrame OrbitSpeedReferenceFrame {
+            get { return ReferenceFrame.OrbitSpeed (InternalVessel); }
+        }
+
+        /// <summary>
+        /// The reference frame that the navball measures speed against in 'surface' mode.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the vessel.</description></item>
+        /// <item><description>The axes are the directions the navball marks in this mode, in the
+        /// same arrangement as <see cref="OrbitalReferenceFrame"/>: the y-axis points in the
+        /// direction the vessel is moving relative to the surface, which is where the prograde
+        /// marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        /// anti-radial, pointing towards the body and perpendicular to the other
+        /// two.</description></item>
+        /// <item><description>The frame moves with the surface of the body being orbited, so it
+        /// rotates with the body.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// The velocity of the vessel in this frame is the one the navball shows in 'surface' mode:
+        /// <see cref="Flight.Speed"/> is the speed it displays, and <see cref="Flight.Velocity"/>
+        /// points along the y-axis, towards its prograde marker. The velocity gives the frame its
+        /// orientation, so, as with <see cref="SurfaceVelocityReferenceFrame"/>, the frame is
+        /// singular and raises an error when the vessel is stationary relative to the surface.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public ReferenceFrame SurfaceSpeedReferenceFrame {
+            get { return ReferenceFrame.SurfaceSpeed (InternalVessel); }
+        }
+
+        /// <summary>
+        /// The reference frame that the navball measures speed against in 'target' mode.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the center of mass of the vessel.</description></item>
+        /// <item><description>The axes are the directions the navball marks in this mode, in the
+        /// same arrangement as <see cref="OrbitalReferenceFrame"/>: the y-axis points in the
+        /// direction the vessel is moving relative to the target, which is where the prograde
+        /// marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        /// anti-radial, pointing towards the body being orbited and perpendicular to the other
+        /// two.</description></item>
+        /// <item><description>The frame moves with the vessels target.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// The velocity of the vessel in this frame is the one the navball shows in 'target' mode:
+        /// <see cref="Flight.Speed"/> is the speed it displays, and <see cref="Flight.Velocity"/>
+        /// points along the y-axis, towards its prograde marker.
+        /// The target is the one set for the active vessel, via for example
+        /// <see cref="SpaceCenter.TargetVessel"/> or <see cref="SpaceCenter.TargetBody"/>.
+        /// This is undefined when no target is set. The velocity gives the frame its orientation,
+        /// so it is also singular, and raises an error, when the vessel matches the velocity of
+        /// its target.
+        /// </remarks>
+        [KRPCProperty (GameScene = GameScene.Flight)]
+        public ReferenceFrame TargetSpeedReferenceFrame {
+            get { return ReferenceFrame.TargetSpeed (InternalVessel); }
+        }
+
+        /// <summary>
         /// The position of the center of mass of the vessel, in the given reference frame.
         /// </summary>
         /// <returns>The position as a vector.</returns>
