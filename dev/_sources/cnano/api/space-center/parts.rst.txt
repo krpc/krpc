@@ -864,9 +864,10 @@ Part
 
       .. note::
 
-         This is computed from the collision mesh of the part.
-         If the part is not collidable, the box has zero volume and is centered on
-         the :func:`krpc_SpaceCenter_Part_Position` of the part.
+         This is computed from the meshes that make up the parts model, and covers only
+         this part - the models of any child parts are excluded.
+         If the part has no visible model, the box has zero volume and is centered on
+         the :func:`krpc_SpaceCenter_Part_CenterOfMass` of the part.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 

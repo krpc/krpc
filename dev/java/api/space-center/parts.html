@@ -1657,9 +1657,10 @@ If the part is physicsless, this is equivalent to <a class="reference internal" 
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is computed from the collision mesh of the part.
-If the part is not collidable, the box has zero volume and is centered on
-the <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.position(ReferenceFrame)</span></code></a> of the part.</p>
+<p>This is computed from the meshes that make up the parts model, and covers only
+this part - the models of any child parts are excluded.
+If the part has no visible model, the box has zero volume and is centered on
+the <a class="reference internal" href="#krpc.client.services.SpaceCenter.Part.centerOfMass(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.centerOfMass(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.centerOfMass(ReferenceFrame)</span></code></a> of the part.</p>
 </div>
 </dd></dl>
 

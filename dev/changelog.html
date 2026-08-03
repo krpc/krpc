@@ -630,6 +630,12 @@
 <li><p>Setting <code class="docutils literal notranslate"><span class="pre">Control.StageLock</span></code> now leaves the in-game Alt+L shortcut in step with it, so the next press of Alt+L locks or unlocks staging rather than being absorbed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1022">#1022</a>)</p></li>
 </ul>
 </li>
+<li><p>Parts</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">Part.BoundingBox</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.BoundingBox</span></code> now measure only the meshes of a part’s own model. The boxes no longer take in the models of physicsless child parts, nor any object another mod has attached to a part, which could stretch a box to an arbitrary size (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1024">#1024</a>)</p></li>
+<li><p>Computing a bounding box no longer duplicates the meshes of every part it measures (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1024">#1024</a>)</p></li>
+</ul>
+</li>
 </ul>
 </section>
 <section id="c-nano-client">

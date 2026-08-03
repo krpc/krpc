@@ -2442,9 +2442,10 @@ If the part is physicsless, this is equivalent to <a class="reference internal" 
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is computed from the collision mesh of the part.
-If the part is not collidable, the box has zero volume and is centered on
-the <a class="reference internal" href="#SpaceCenter.Part.position" title="SpaceCenter.Part.position"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Part.position()</span></code></a> of the part.</p>
+<p>This is computed from the meshes that make up the parts model, and covers only
+this part - the models of any child parts are excluded.
+If the part has no visible model, the box has zero volume and is centered on
+the <a class="reference internal" href="#SpaceCenter.Part.center_of_mass" title="SpaceCenter.Part.center_of_mass"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Part.center_of_mass()</span></code></a> of the part.</p>
 </div>
 </dd></dl>
 
