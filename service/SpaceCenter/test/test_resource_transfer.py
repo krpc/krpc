@@ -110,6 +110,66 @@ class TestResourceTransfer(krpctest.TestCase):
         self.assertTrue("Destination part cannot store" in str(cm.exception))
 
 
+class TestResourceTransferCancel(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("ResourceTransfer")
+        cls.remove_other_vessels()
+        cls.sc = cls.connect().space_center
+        cls.parts = cls.sc.active_vessel.parts
+
+    def test_cancel(self):
+        from_part = self.parts.with_name("fuelTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
+
+        # A transfer that would take several seconds to complete
+        transfer = self.sc.ResourceTransfer.start(
+            from_part, to_part, "Oxidizer", float("inf")
+        )
+        self.wait(0.5)
+        self.assertFalse(transfer.complete)
+
+        transfer.cancel()
+        self.assertTrue(transfer.complete)
+
+        # Some, but not all, of the resource was moved before the transfer was
+        # cancelled (the destination has free space, so the transfer would still
+        # be running had it not been cancelled)...
+        amount = transfer.amount
+        self.assertGreater(amount, 0.1)
+        self.assertLess(
+            to_part.resources.amount("Oxidizer"), to_part.resources.max("Oxidizer")
+        )
+        # ...and no more is moved afterwards
+        from_amount = from_part.resources.amount("Oxidizer")
+        to_amount = to_part.resources.amount("Oxidizer")
+        self.wait(1)
+        self.assertAlmostEqual(amount, transfer.amount, places=3)
+        self.assertAlmostEqual(
+            from_amount, from_part.resources.amount("Oxidizer"), places=2
+        )
+        self.assertAlmostEqual(
+            to_amount, to_part.resources.amount("Oxidizer"), places=2
+        )
+
+    def test_cancel_when_complete(self):
+        from_part = self.parts.with_name("rcsTankRadialLong")[0]
+        to_part = self.parts.with_name("radialRCSTank")[0]
+        transfer = self.sc.ResourceTransfer.start(
+            from_part, to_part, "MonoPropellant", 5
+        )
+        while not transfer.complete:
+            self.wait()
+        amount = transfer.amount
+        self.assertAlmostEqual(5, amount)
+
+        # Cancelling a transfer that has already finished changes nothing
+        transfer.cancel()
+        self.assertTrue(transfer.complete)
+        self.assertAlmostEqual(amount, transfer.amount)
+
+
 class TestResourceTransferDisconnect(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):

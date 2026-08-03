@@ -28,6 +28,10 @@
     another mod has attached to a part, which could stretch a box to an arbitrary size (#1024)
   - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
 
+- Resources
+  - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes; no more of the
+    resource is moved and the transfer is marked as complete (#1028)
+
 ## [v0.6.0]
 
 - Space center
