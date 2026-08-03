@@ -174,8 +174,17 @@ Resources
 
       .. note::
 
-         The transfer is canceled if the client that started it disconnects;
-         a canceled transfer is marked as complete.
+         Use :func:`ResourceTransfer::cancel` to stop the transfer before it finishes. The transfer is
+         also canceled if the client that started it disconnects. A canceled transfer is
+         marked as complete.
+
+   .. function:: void cancel()
+
+      Cancel the transfer. No more of the resource is moved and
+      :func:`ResourceTransfer::complete` becomes true.
+
+
+   
 
    .. function:: float amount()
 
@@ -185,8 +194,9 @@ Resources
 
    .. function:: bool complete()
 
-      Whether the transfer has completed. Also becomes true if the transfer is
-      canceled because the client that started it disconnected.
+      Whether the transfer has completed. Also becomes true if the transfer is canceled,
+      either by calling :func:`ResourceTransfer::cancel` or because the client that started it
+      disconnected.
 
    
 

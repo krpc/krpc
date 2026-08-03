@@ -904,9 +904,17 @@ Use <a class="reference internal" href="#c.krpc_SpaceCenter_ResourceTransfer_t.k
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The transfer is canceled if the client that started it disconnects;
-a canceled transfer is marked as complete.</p>
+<p>Use <a class="reference internal" href="#c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Cancel" title="krpc_SpaceCenter_ResourceTransfer_Cancel"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ResourceTransfer_Cancel()</span></code></a> to stop the transfer before it finishes. The transfer is
+also canceled if the client that started it disconnects. A canceled transfer is
+marked as complete.</p>
 </div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Cancel">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ResourceTransfer_Cancel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Cancel" title="Link to this definition">#</a><br /></dt>
+<dd><p>Cancel the transfer. No more of the resource is moved and
+<a class="reference internal" href="#c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Complete" title="krpc_SpaceCenter_ResourceTransfer_Complete"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ResourceTransfer_Complete()</span></code></a> becomes true.</p>
 </dd></dl>
 
 <dl class="c function">
@@ -918,8 +926,9 @@ a canceled transfer is marked as complete.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Complete">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_ResourceTransfer_Complete</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Complete" title="Link to this definition">#</a><br /></dt>
-<dd><p>Whether the transfer has completed. Also becomes true if the transfer is
-canceled because the client that started it disconnected.</p>
+<dd><p>Whether the transfer has completed. Also becomes true if the transfer is canceled,
+either by calling <a class="reference internal" href="#c.krpc_SpaceCenter_ResourceTransfer_t.krpc_SpaceCenter_ResourceTransfer_Cancel" title="krpc_SpaceCenter_ResourceTransfer_Cancel"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_ResourceTransfer_Cancel()</span></code></a> or because the client that started it
+disconnected.</p>
 </dd></dl>
 
 </dd></dl>

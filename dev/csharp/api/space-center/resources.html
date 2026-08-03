@@ -932,9 +932,22 @@ Use <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCent
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The transfer is canceled if the client that started it disconnects;
-a canceled transfer is marked as complete.</p>
+<p>Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Cancel" title="KRPC.Client.Services.SpaceCenter.ResourceTransfer.Cancel method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ResourceTransfer.Cancel</span></code></a> to stop the transfer before it finishes. The transfer is
+also canceled if the client that started it disconnects. A canceled transfer is
+marked as complete.</p>
 </div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Cancel">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Cancel</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Cancel" title="Link to this definition">#</a></dt>
+<dd><p>Cancel the transfer. No more of the resource is moved and
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Complete" title="KRPC.Client.Services.SpaceCenter.ResourceTransfer.Complete property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">ResourceTransfer.Complete</span></code></a> becomes true.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="csharp property">
@@ -951,8 +964,9 @@ a canceled transfer is marked as complete.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Complete">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Complete</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Complete" title="Link to this definition">#</a></dt>
-<dd><p>Whether the transfer has completed. Also becomes true if the transfer is
-canceled because the client that started it disconnected.</p>
+<dd><p>Whether the transfer has completed. Also becomes true if the transfer is canceled,
+either by calling <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ResourceTransfer.Cancel" title="KRPC.Client.Services.SpaceCenter.ResourceTransfer.Cancel method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ResourceTransfer.Cancel</span></code></a> or because the client that started it
+disconnected.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>

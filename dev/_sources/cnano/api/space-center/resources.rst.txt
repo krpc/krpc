@@ -174,8 +174,17 @@ Resources
 
       .. note::
 
-         The transfer is canceled if the client that started it disconnects;
-         a canceled transfer is marked as complete.
+         Use :func:`krpc_SpaceCenter_ResourceTransfer_Cancel` to stop the transfer before it finishes. The transfer is
+         also canceled if the client that started it disconnects. A canceled transfer is
+         marked as complete.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Cancel(krpc_connection_t connection)
+
+      Cancel the transfer. No more of the resource is moved and
+      :func:`krpc_SpaceCenter_ResourceTransfer_Complete` becomes true.
+
+
+   
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Amount(krpc_connection_t connection, float * result)
 
@@ -185,8 +194,9 @@ Resources
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Complete(krpc_connection_t connection, bool * result)
 
-      Whether the transfer has completed. Also becomes true if the transfer is
-      canceled because the client that started it disconnected.
+      Whether the transfer has completed. Also becomes true if the transfer is canceled,
+      either by calling :func:`krpc_SpaceCenter_ResourceTransfer_Cancel` or because the client that started it
+      disconnected.
 
    
 

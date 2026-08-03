@@ -907,9 +907,17 @@ Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.Resour
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The transfer is canceled if the client that started it disconnects;
-a canceled transfer is marked as complete.</p>
+<p>Use <a class="reference internal" href="#krpc.client.services.SpaceCenter.ResourceTransfer.cancel()" title="krpc.client.services.SpaceCenter.ResourceTransfer.cancel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ResourceTransfer.cancel()</span></code></a> to stop the transfer before it finishes. The transfer is
+also canceled if the client that started it disconnects. A canceled transfer is
+marked as complete.</p>
 </div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ResourceTransfer.cancel()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ResourceTransfer.cancel()" title="Link to this definition">#</a></dt>
+<dd><p>Cancel the transfer. No more of the resource is moved and
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.ResourceTransfer.getComplete()" title="krpc.client.services.SpaceCenter.ResourceTransfer.getComplete()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ResourceTransfer.getComplete()</span></code></a> becomes true.</p>
 </dd></dl>
 
 <dl class="java method">
@@ -921,8 +929,9 @@ a canceled transfer is marked as complete.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ResourceTransfer.getComplete()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getComplete</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ResourceTransfer.getComplete()" title="Link to this definition">#</a></dt>
-<dd><p>Whether the transfer has completed. Also becomes true if the transfer is
-canceled because the client that started it disconnected.</p>
+<dd><p>Whether the transfer has completed. Also becomes true if the transfer is canceled,
+either by calling <a class="reference internal" href="#krpc.client.services.SpaceCenter.ResourceTransfer.cancel()" title="krpc.client.services.SpaceCenter.ResourceTransfer.cancel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ResourceTransfer.cancel()</span></code></a> or because the client that started it
+disconnected.</p>
 </dd></dl>
 
 </dd></dl>

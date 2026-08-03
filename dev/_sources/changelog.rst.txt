@@ -45,6 +45,10 @@ SpaceCenter service
   * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` now measure only the meshes of a part's own model. The boxes no longer take in the models of physicsless child parts, nor any object another mod has attached to a part, which could stretch a box to an arbitrary size (:issue:`1024`)
   * Computing a bounding box no longer duplicates the meshes of every part it measures (:issue:`1024`)
 
+* Resources
+
+  * Add ``ResourceTransfer.Cancel`` to stop a transfer before it finishes; no more of the resource is moved and the transfer is marked as complete (:issue:`1028`)
+
 
 
 C-nano client

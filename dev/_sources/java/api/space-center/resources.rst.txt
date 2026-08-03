@@ -163,8 +163,16 @@ Resources
 
       .. note::
 
-         The transfer is canceled if the client that started it disconnects;
-         a canceled transfer is marked as complete.
+         Use :meth:`ResourceTransfer.cancel()` to stop the transfer before it finishes. The transfer is
+         also canceled if the client that started it disconnects. A canceled transfer is
+         marked as complete.
+
+   .. method:: void cancel()
+
+      Cancel the transfer. No more of the resource is moved and
+      :meth:`ResourceTransfer.getComplete()` becomes true.
+
+   
 
    .. method:: float getAmount()
 
@@ -176,8 +184,9 @@ Resources
    .. method:: boolean getComplete()
 
 
-      Whether the transfer has completed. Also becomes true if the transfer is
-      canceled because the client that started it disconnected.
+      Whether the transfer has completed. Also becomes true if the transfer is canceled,
+      either by calling :meth:`ResourceTransfer.cancel()` or because the client that started it
+      disconnected.
 
    
 
