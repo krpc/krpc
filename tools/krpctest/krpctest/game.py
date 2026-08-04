@@ -57,6 +57,14 @@ _MOD_MODULES = {
     "AGExt": "ModuleAGX",
 }
 
+# Some mods add nothing to the part catalog at all, but are reported by a flag on a service
+# that wraps them (Ferram Aerospace Research replaces the aerodynamics model, and the
+# SpaceCenter service reports whether it is installed and active). Detect these by reading
+# that flag, given as a (service, property) pair.
+_MOD_FLAGS = {
+    "FAR": ("space_center", "far_available"),
+}
+
 # The KSP process this test run launched, or None if KSP was started externally (a
 # manually-started game is never killed or reinstalled).
 _owned_ksp = None  # pylint: disable=invalid-name
@@ -134,11 +142,16 @@ def _installed_mods(conn):
         for name, module in _MOD_MODULES.items()
         if conn.testing_tools.part_module_available(module)
     }
+    installed |= {
+        name
+        for name, (service, flag) in _MOD_FLAGS.items()
+        if getattr(getattr(conn, service), flag)
+    }
     return installed
 
 
 def _validate_mods(required):
-    known = set(_MOD_SERVICES) | set(_MOD_PARTS) | set(_MOD_MODULES)
+    known = set(_MOD_SERVICES) | set(_MOD_PARTS) | set(_MOD_MODULES) | set(_MOD_FLAGS)
     unknown = set(required) - known
     if unknown:
         raise ValueError(

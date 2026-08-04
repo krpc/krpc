@@ -47,6 +47,21 @@ namespace KRPC.SpaceCenter.ExternalAPI
 
         public static Func<Vessel, double> VesselStallFrac { get; internal set; }
 
+        /// <summary>
+        /// The total aerodynamic force FAR applied to the vessel on the last physics frame,
+        /// in world space, in kilonewtons. It is the sum of the per-part forces of FAR's own
+        /// aerodynamics model, so it carries the direction those forces actually act in.
+        /// Zero for a vessel FAR is not tracking.
+        /// </summary>
+        public static Func<Vessel, Vector3> VesselAerodynamicForce { get; internal set; }
+
+        /// <summary>
+        /// The total aerodynamic torque FAR applied to the vessel about its center of mass on
+        /// the last physics frame, in world space, in kilonewton-meters. Zero for a vessel FAR
+        /// is not tracking.
+        /// </summary>
+        public static Func<Vessel, Vector3> VesselAerodynamicTorque { get; internal set; }
+
         public static double VesselMachNumber (Vessel vessel)
         {
             var aero = vessel.GetComponent ("FARVesselAero");

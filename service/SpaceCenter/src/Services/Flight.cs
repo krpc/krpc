@@ -138,11 +138,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Total aerodynamic forces acting on vessel in world space.
+        /// Total aerodynamic force acting on the vessel in world space, in Newtons. With the
+        /// stock model this is the sum of the lift and drag the game applied to every part.
+        /// Ferram Aerospace Research replaces that model wholesale and sums its own per-part
+        /// forces about the center of mass, in kilonewtons, so take the force it reports
+        /// rather than rebuilding one from its lift and drag coefficients, which are scalars
+        /// carrying no direction.
         /// </summary>
         Vector3d WorldAerodynamicForce {
             get {
-                CheckNoFAR ();
+                if (FAR.IsAvailable)
+                    return (Vector3d)FAR.VesselAerodynamicForce (InternalVessel) * 1000d;
                 return WorldPartsLift + WorldPartsDrag;
             }
         }
@@ -158,11 +164,14 @@ namespace KRPC.SpaceCenter.Services
         /// center-of-pressure points they are applied at. Also includes the first-order
         /// equivalent of the per-part rigidbody angular drag the engine applies
         /// (-rb.angularDrag * I_part * omega), which damps rotation without ever
-        /// appearing as a force.
+        /// appearing as a force. Ferram Aerospace Research applies its own per-part forces and
+        /// reports the torque they exert about the center of mass directly, in
+        /// kilonewton-meters.
         /// </summary>
         Vector3d WorldAerodynamicTorque {
             get {
-                CheckNoFAR ();
+                if (FAR.IsAvailable)
+                    return (Vector3d)FAR.VesselAerodynamicTorque (InternalVessel) * 1000d;
                 var com = WorldCoM;
                 Vector3d torque = Vector3d.zero;
                 foreach (var part in InternalVessel.Parts) {
@@ -219,35 +228,6 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Reference area used for lift and drag calculations
-        /// </summary>
-        double ReferenceArea {
-            get { return InternalVessel.WetMass () / (BallisticCoefficient * DragCoefficient); }
-        }
-
-        /// <summary>
-        /// Direction of the lift force acting on the vessel (perpendicular to air stream and up wrt roll angle) in world space.
-        /// </summary>
-        Vector3d WorldLiftDirection {
-            get {
-                var vessel = InternalVessel;
-                return -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized);
-            }
-        }
-
-        /// <summary>
-        /// Magnitude of the lift force acting on the vessel, in Newtons.
-        /// </summary>
-        double LiftMagnitude {
-            get {
-                if (FAR.IsAvailable)
-                    return LiftCoefficient * ReferenceArea * DynamicPressure;
-                else
-                    return Vector3d.Dot (WorldAerodynamicForce, WorldLiftDirection);
-            }
-        }
-
-        /// <summary>
         /// Direction of the drag force acting on the vessel (opposite direction to air stream) in world space.
         /// </summary>
         Vector3d WorldDragDirection {
@@ -255,15 +235,51 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Magnitude of the drag force acting on the vessel.
+        /// Direction of the lift force acting on the vessel in world space: across the air
+        /// stream, in the plane the vessel's nose and its top sit in. Perpendicular to the
+        /// air stream and to the vessel's right, which is what makes it the lift direction of
+        /// the classical wind axes rather than an arbitrary crosswise direction. Zero for a
+        /// vessel flying exactly sideways, where that plane holds no such direction.
         /// </summary>
-        double DragMagnitude {
+        Vector3d WorldLiftDirection {
             get {
-                if (FAR.IsAvailable)
-                    return DragCoefficient * ReferenceArea * DynamicPressure;
-                else
-                    return Vector3d.Dot (WorldAerodynamicForce, WorldDragDirection);
+                var vessel = InternalVessel;
+                return -Vector3d.Cross (vessel.transform.right, vessel.srf_velocity.normalized).normalized;
             }
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force that acts along the air stream, in world space,
+        /// in Newtons.
+        /// </summary>
+        Vector3d WorldDrag {
+            get {
+                var direction = WorldDragDirection;
+                return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
+            }
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force that acts across the air stream and towards the
+        /// top of the vessel, in world space, in Newtons.
+        /// </summary>
+        Vector3d WorldLift {
+            get {
+                var direction = WorldLiftDirection;
+                return Vector3d.Dot (WorldAerodynamicForce, direction) * direction;
+            }
+        }
+
+        /// <summary>
+        /// The part of the aerodynamic force that acts across the air stream and out of the
+        /// vessel's side, in world space, in Newtons. The drag, lift and side directions are
+        /// mutually perpendicular, so this is what the total force has left once the drag and
+        /// lift are taken out of it, and taking it as the remainder keeps the three summing
+        /// back to <see cref="WorldAerodynamicForce"/> even for a vessel flying so far
+        /// sideways that there is no lift direction to speak of.
+        /// </summary>
+        Vector3d WorldSideForce {
+            get { return WorldAerodynamicForce - WorldDrag - WorldLift; }
         }
 
         /// <summary>
@@ -273,6 +289,17 @@ namespace KRPC.SpaceCenter.Services
         {
             if (!FAR.IsAvailable)
                 throw new InvalidOperationException ("FAR is not available");
+        }
+
+        /// <summary>
+        /// Whether an airflow is too slow for FAR to compute a force from. FAR normalizes the
+        /// airflow to get the direction the air comes from, which is not a number when the air
+        /// is still, so answer such a state directly instead of passing the NaN on. The stock
+        /// model needs no such guard: it multiplies by the airflow rather than dividing by it.
+        /// </summary>
+        static bool IsStillAir (Vector3d airflow)
+        {
+            return airflow.sqrMagnitude < 1e-6;
         }
 
         /// <summary>
@@ -633,14 +660,15 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <returns>A vector pointing in the direction that the force acts,
         /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <remarks>
+        /// This is the force the aerodynamics model actually applied to the vessel on the
+        /// last physics frame, summed over its parts, so it points where the air pushes the
+        /// vessel whatever the vessel's orientation. It equals <see cref="Lift"/> plus
+        /// <see cref="SideForce"/> plus <see cref="Drag"/>.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 AerodynamicForce {
-            get {
-                if (FAR.IsAvailable)
-                    return referenceFrame.DirectionFromWorldSpace (WorldDragDirection * DragMagnitude + WorldLiftDirection * LiftMagnitude).ToTuple ();
-                else
-                    return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicForce).ToTuple ();
-            }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicForce).ToTuple (); }
         }
 
         /// <summary>
@@ -651,21 +679,15 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>A vector pointing along the axis of the torque, with its magnitude
         /// equal to the strength of the torque in newton-meters.</returns>
         /// <remarks>
-        /// This is the live counterpart to <see cref="AerodynamicForce"/>: it reconstructs
-        /// the per-part aerodynamic forces and application points that the game applied on
-        /// the current physics frame and levers them about the center of mass, rather than
-        /// re-simulating them for hypothetical conditions the way
+        /// This is the live counterpart to <see cref="AerodynamicForce"/>: it is the torque
+        /// the aerodynamics model applied on the current physics frame, taken about the
+        /// center of mass, rather than one re-simulated for hypothetical conditions the way
         /// <see cref="SimulateAerodynamicTorqueAt"/> does. It is intended for validating the
-        /// simulator against the live game state. Not available when
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
-        /// is installed, as FAR does not expose a live per-frame torque.
+        /// simulator against the live game state.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 AerodynamicTorque {
-            get {
-                CheckNoFAR ();
-                return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicTorque).ToTuple ();
-            }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicTorque).ToTuple (); }
         }
 
         /// <summary>
@@ -712,6 +734,8 @@ namespace KRPC.SpaceCenter.Services
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
                 var adjustedVelocity = delta.Inverse ()
                     * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
+                if (IsStillAir (adjustedVelocity))
+                    return referenceFrame.DirectionFromWorldSpace (Vector3d.zero).ToTuple ();
                 FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
                 // CalculateVesselAeroForces returns kilonewtons; convert to newtons to
                 // match the stock path and this method's documented units.
@@ -783,12 +807,17 @@ namespace KRPC.SpaceCenter.Services
                     * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
                 var altitude = (worldPosition - body.InternalBody.position).magnitude
                                - body.InternalBody.Radius;
-                FAR.CalculateVesselAeroForces(
-                    vessel, out farForce, out farTorque, adjustedVelocity, altitude);
-                // FAR returns kilonewtons and kilonewton-meters. Rotate the one
-                // evaluation into the hypothetical attitude and convert both to SI.
-                force = delta * (Vector3d)farForce * 1000d;
-                torque = delta * (Vector3d)farTorque * 1000d;
+                if (IsStillAir (adjustedVelocity)) {
+                    force = Vector3d.zero;
+                    torque = Vector3d.zero;
+                } else {
+                    FAR.CalculateVesselAeroForces(
+                        vessel, out farForce, out farTorque, adjustedVelocity, altitude);
+                    // FAR returns kilonewtons and kilonewton-meters. Rotate the one
+                    // evaluation into the hypothetical attitude and convert both to SI.
+                    force = delta * (Vector3d)farForce * 1000d;
+                    torque = delta * (Vector3d)farTorque * 1000d;
+                }
             }
             return new TupleT3(
                 referenceFrame.DirectionFromWorldSpace(force).ToTuple(),
@@ -845,9 +874,32 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <returns>A vector pointing in the direction that the force acts,
         /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <remarks>
+        /// The part of <see cref="AerodynamicForce"/> that acts across the air stream and
+        /// towards the top of the vessel: perpendicular to the air stream, in the plane the
+        /// vessel's nose and its top sit in. A vessel flying with sideslip is also pushed out
+        /// of that plane, and that part of the force is <see cref="SideForce"/>. Zero for a
+        /// vessel flying exactly sideways, which has no such plane to speak of.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 Lift {
-            get { return (referenceFrame.DirectionFromWorldSpace (WorldLiftDirection) * LiftMagnitude).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldLift).ToTuple (); }
+        }
+
+        /// <summary>
+        /// The aerodynamic side force currently acting on the vessel.
+        /// </summary>
+        /// <returns>A vector pointing in the direction that the force acts,
+        /// with its magnitude equal to the strength of the force in Newtons.</returns>
+        /// <remarks>
+        /// The part of <see cref="AerodynamicForce"/> that acts across the air stream and out
+        /// of the vessel's side, which is what the air does to a vessel flying with sideslip.
+        /// It is perpendicular to both <see cref="Lift"/> and <see cref="Drag"/>, and the
+        /// three of them sum to <see cref="AerodynamicForce"/>.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 SideForce {
+            get { return referenceFrame.DirectionFromWorldSpace (WorldSideForce).ToTuple (); }
         }
 
         /// <summary>
@@ -855,9 +907,13 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         /// <returns>A vector pointing in the direction of the force, with its magnitude
         /// equal to the strength of the force in Newtons.</returns>
+        /// <remarks>
+        /// The part of <see cref="AerodynamicForce"/> along the air stream, opposing the
+        /// vessel's motion through the air.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 Drag {
-            get { return (referenceFrame.DirectionFromWorldSpace (WorldDragDirection) * DragMagnitude).ToTuple (); }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldDrag).ToTuple (); }
         }
 
         /// <summary>
@@ -871,12 +927,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 AerodynamicAcceleration {
             get {
                 var mass = new Vessel (InternalVessel).Mass;
-                Vector3d worldForce;
-                if (FAR.IsAvailable)
-                    worldForce = WorldDragDirection * DragMagnitude + WorldLiftDirection * LiftMagnitude;
-                else
-                    worldForce = WorldAerodynamicForce;
-                return referenceFrame.DirectionFromWorldSpace (worldForce / mass).ToTuple ();
+                return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicForce / mass).ToTuple ();
             }
         }
 
@@ -891,7 +942,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 LiftAcceleration {
             get {
                 var mass = new Vessel (InternalVessel).Mass;
-                return (referenceFrame.DirectionFromWorldSpace (WorldLiftDirection) * (LiftMagnitude / mass)).ToTuple ();
+                return referenceFrame.DirectionFromWorldSpace (WorldLift / mass).ToTuple ();
             }
         }
 
@@ -906,7 +957,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 DragAcceleration {
             get {
                 var mass = new Vessel (InternalVessel).Mass;
-                return (referenceFrame.DirectionFromWorldSpace (WorldDragDirection) * (DragMagnitude / mass)).ToTuple ();
+                return referenceFrame.DirectionFromWorldSpace (WorldDrag / mass).ToTuple ();
             }
         }
 
@@ -1047,7 +1098,12 @@ namespace KRPC.SpaceCenter.Services
         public float StallFraction {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselStallFrac (InternalVessel);
+                // FAR averages how far each of the vessel's lifting surfaces is stalled,
+                // weighted by their area, which is zero over zero for a vessel that has
+                // none. Nothing on such a vessel can stall, so report no stall rather than
+                // passing the NaN on.
+                var stall = FAR.VesselStallFrac (InternalVessel);
+                return double.IsNaN (stall) ? 0f : (float)stall;
             }
         }
 

@@ -1,4 +1,7 @@
 ## [v0.7.0] - unreleased
+- Add Ferram Aerospace Research to the managed third-party mods, requested with
+  `mods = ["FAR"]` or `krpc-install --mods=FAR`, so the tests can exercise the aerodynamic
+  readouts against it (#1032)
 - Add `--skip-mod-install` to `krpc-install` and `krpc-run-ksp`, and the
   `KRPC_SKIP_MOD_INSTALL` environment variable honored when the tests auto-launch KSP,
   to leave the managed third-party mods in GameData untouched so a locally built mod

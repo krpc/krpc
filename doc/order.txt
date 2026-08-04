@@ -363,6 +363,7 @@ SpaceCenter.Flight.SimulateAerodynamicForceAt
 SpaceCenter.Flight.SimulateAerodynamicTorqueAt
 SpaceCenter.Flight.SimulateAerodynamicWrenchAt
 SpaceCenter.Flight.Lift
+SpaceCenter.Flight.SideForce
 SpaceCenter.Flight.Drag
 SpaceCenter.Flight.AerodynamicAcceleration
 SpaceCenter.Flight.LiftAcceleration

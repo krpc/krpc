@@ -33,6 +33,27 @@
 - Flight and aerodynamics
   - Add `Flight.SurfaceNormal` to get the slope of the terrain under a vessel, as a unit vector
     normal to the surface (#1030)
+  - Fix `Flight.AerodynamicForce` and `Flight.AerodynamicAcceleration` turning with the roll
+    of the vessel when Ferram Aerospace Research is installed. They were rebuilt from FAR's
+    lift and drag coefficients, which are scalars measured against the vessel's own axes, and
+    now report the force FAR applies to the vessel (#1032)
+  - Add `Flight.SideForce`, the part of `Flight.AerodynamicForce` that acts across the air
+    stream and out of the vessel's side, which the air exerts on a vessel flying with
+    sideslip. `Flight.Lift`, `Flight.SideForce` and `Flight.Drag` are mutually perpendicular
+    and sum to `Flight.AerodynamicForce` (#1032)
+  - Fix `Flight.Lift` and `Flight.LiftAcceleration` reporting a force scaled by the cosine
+    squared of the sideslip angle, from a lift direction that was never normalized. A vessel
+    flying with no sideslip was unaffected; one flying at 20 degrees of sideslip had its lift
+    reported 12% low (#1032)
+  - `Flight.AerodynamicTorque` now works with Ferram Aerospace Research installed, reporting
+    the torque FAR applies about the vessel's center of mass. It previously refused,
+    reporting that it was unavailable (#1032)
+  - Fix `Flight.SimulateAerodynamicForceAt`, `Flight.SimulateAerodynamicTorqueAt` and
+    `Flight.SimulateAerodynamicWrenchAt` returning `NaN` with Ferram Aerospace Research
+    installed when asked for a state with no relative airflow. They now report no force and
+    no torque, as they do without FAR (#1032)
+  - Fix `Flight.StallFraction` returning `NaN` for a vessel with no lifting surfaces, which
+    has nothing that can stall; it now reports no stall (#1032)
 
 - Control
   - Setting `Control.StageLock` now leaves the in-game Alt+L shortcut in step with it, so the

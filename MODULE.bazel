@@ -524,6 +524,42 @@ http_archive(
     url = "https://github.com/linuxgurugamer/AGExt/releases/download/2.4.1.4/AGExt-1.12.0-2.4.1.4.zip",
 )
 
+# Ferram Aerospace Research, an alternative aerodynamics model that replaces the stock one.
+# The SpaceCenter Flight class reads its aerodynamic force and its flight parameters through
+# FARAPI, so the tests need it installed to exercise that path. The archive also ships stock
+# example craft under Ships/, which are not installed.
+http_archive(
+    name = "far",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/FerramAerospaceResearch/**']), visibility = ['//visibility:public'])",
+    sha256 = "422c6b404e7d050844f9b41218205d0bb85aed1a6e66941019d55b0ed0a30e8e",
+    url = "https://github.com/KSPModStewards/Ferram-Aerospace-Research/releases/download/v0.16.1.2_Marangoni/FAR_0_16_1_2_Marangoni.zip",
+)
+
+# FAR's ModularFlightIntegrator dependency, which lets several mods hook the game's flight
+# integrator at once. It is a hard dependency: without it KSP does not load FAR's assembly at
+# all, so FARAPI is missing and kRPC reports FAR as not installed. Installed only alongside
+# FAR, never requested on its own. The archive holds the GameData subdir at its root, so add
+# the GameData prefix the other mod archives already have.
+http_archive(
+    name = "modular_flight_integrator",
+    add_prefix = "GameData",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/ModularFlightIntegrator/**']), visibility = ['//visibility:public'])",
+    sha256 = "0134c0950298e8703f27809f918fc57b6f9f7202a9ad988decbf1ac924fdd9e7",
+    url = "https://ksp.sarbian.com/jenkins/job/ModularFlightIntegrator/40/artifact/ModularFlightIntegrator-1.2.10.0.zip",
+)
+
+# FAR's other hard dependency: the Unity job-system assemblies (Unity.Mathematics and
+# friends) that KSP does not ship, which FAR's voxelizer is built against. Without them its
+# types fail to load and its flight GUI throws every frame instead of computing forces. This
+# is the KSPBurst-Lite package - the assemblies alone, without the 400MB Burst compiler,
+# which only makes them faster. It references Harmony, installed alongside it.
+http_archive(
+    name = "kspburst",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/000_KSPBurst/**']), visibility = ['//visibility:public'])",
+    sha256 = "83ad604b2a0b3f646f69fe7a6679f4955cbd6cd16613db89919ed460bd2a19dd",
+    url = "https://github.com/KSPModdingLibs/KSPBurst/releases/download/v1.7.4.9/KSPBurst_1.7.4.9.zip",
+)
+
 # SpaceTuxLibrary — LinuxGuruGamer's shared library bundle (KSP_Log, etc.), an AGExt dependency.
 http_archive(
     name = "spacetuxlibrary",
