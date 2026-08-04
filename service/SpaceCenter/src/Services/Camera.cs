@@ -100,51 +100,115 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// Switch to the next available camera
+        /// Switch to the next available camera.
+        /// In flight, this moves to the next flight camera mode. In IVA, it moves the
+        /// view to the next crew member in the active vessel.
         /// </summary>
         [KRPCMethod]
         public void NextCamera()
         {
-            CameraManager.Instance.NextCamera();
+            switch (CameraManager.Instance.currentCameraMode) {
+            case CameraManager.CameraMode.Flight:
+                SetFlightMode (1);
+                break;
+            case CameraManager.CameraMode.IVA:
+                CycleIVACrewMember (1);
+                break;
+            }
         }
 
         /// <summary>
-        /// Switch to the previous available camera
+        /// Switch to the previous available camera.
+        /// In flight, this moves to the previous flight camera mode. In IVA, it moves
+        /// the view to the previous crew member in the active vessel.
         /// </summary>
         [KRPCMethod]
         public void PreviousCamera()
         {
-            var cameraManager = CameraManager.Instance;
-            switch(cameraManager.currentCameraMode)
-            {
-                case CameraManager.CameraMode.Flight :
-                    if (InputLockManager.IsUnlocked(ControlTypes.CAMERAMODES))
-                    {
-                        var camera = FlightCamera.fetch;
-                        if (camera.targetMode != FlightCamera.TargetMode.Vessel || camera.vesselTarget != FlightGlobals.ActiveVessel)
-                        {
-                            camera.SetTargetVessel(FlightGlobals.ActiveVessel);
-                        }
-                        // There is 5 camera modes in the enum.
-                        // As KSP1's development has ceased its cheaper to hardcode it than compute it each time. - Sofie 10-07-2024
-                        camera.setMode((FlightCamera.Modes)((int)(camera.mode + 4) % 5));
-                    }
-                    break;
-                case CameraManager.CameraMode.IVA :
-                    List<ProtoCrewMember> vesselCrew = FlightGlobals.fetch.activeVessel.GetVesselCrew();
-                    if (vesselCrew.Count != 0)
-                    {
-                        if (cameraManager.IVACameraActiveKerbal == null || cameraManager.IVACameraActiveKerbalIndex == -1)
-                        {
-                            cameraManager.SetCameraIVA(vesselCrew[0].KerbalRef, true);
-                        }
-                        var newIndex = InternalCameraExtensions.GetPreviousIVA(vesselCrew, cameraManager);
-
-                        cameraManager.SetCameraIVA(vesselCrew[newIndex].KerbalRef, true);
-                        GameEvents.OnIVACameraKerbalChange.Fire(vesselCrew[newIndex].KerbalRef);
-                    }
-                    break;
+            switch (CameraManager.Instance.currentCameraMode) {
+            case CameraManager.CameraMode.Flight:
+                SetFlightMode (-1);
+                break;
+            case CameraManager.CameraMode.IVA:
+                CycleIVACrewMember (-1);
+                break;
             }
+        }
+
+        /// <summary>
+        /// The number of modes the flight camera cycles through.
+        /// </summary>
+        const int NumFlightCameraModes = 5;
+
+        /// <summary>
+        /// Move the flight camera the given number of places along its list of modes,
+        /// wrapping around the ends of the list. The camera is re-targeted at the active
+        /// vessel first, and nothing happens while camera mode switching is locked, as
+        /// the game does when cycling the modes itself.
+        /// </summary>
+        static void SetFlightMode (int step)
+        {
+            if (!InputLockManager.IsUnlocked (ControlTypes.CAMERAMODES))
+                return;
+            var camera = FlightCamera.fetch;
+            if (camera.targetMode != FlightCamera.TargetMode.Vessel || camera.vesselTarget != FlightGlobals.ActiveVessel)
+                camera.SetTargetVessel (FlightGlobals.ActiveVessel);
+            var mode = ((int)camera.mode + step + NumFlightCameraModes) % NumFlightCameraModes;
+            camera.setMode ((FlightCamera.Modes)mode);
+        }
+
+        /// <summary>
+        /// Move the IVA view the given number of places along the active vessel's crew
+        /// list from the crew member currently in view.
+        /// </summary>
+        static void CycleIVACrewMember (int step)
+        {
+            var crew = FlightGlobals.ActiveVessel.GetVesselCrew ();
+            var index = FindIVACrewMember (crew, step);
+            if (index != -1)
+                FocusIVACrewMember (crew [index].KerbalRef);
+        }
+
+        /// <summary>
+        /// The index in the crew list of the crew member the given number of places from
+        /// the one currently in view, wrapping around the ends of the list. Crew that the
+        /// game has not placed in an interior are skipped, as there is no view to move to.
+        /// Returns -1 if there is no crew member to move to.
+        /// </summary>
+        static int FindIVACrewMember (IList<ProtoCrewMember> crew, int step)
+        {
+            var count = crew.Count;
+            if (count == 0)
+                return -1;
+            // The camera manager reports an index of -1 when no crew member is in view.
+            // Starting from just off either end of the list then gives its first or last
+            // crew member, depending on the direction being stepped in.
+            var current = CameraManager.Instance.IVACameraActiveKerbalIndex;
+            if (current < 0 || current >= count)
+                current = step > 0 ? -1 : count;
+            for (var offset = 1; offset <= count; offset++) {
+                var index = (current + (offset * step)) % count;
+                if (index < 0)
+                    index += count;
+                if (crew [index].KerbalRef != null)
+                    return index;
+            }
+            return -1;
+        }
+
+        /// <summary>
+        /// Move the IVA view to a crew member, switching the camera to IVA mode if it is
+        /// not already. Selecting the crew member already in view does nothing, as the
+        /// game's camera manager takes that as a request to leave IVA.
+        /// </summary>
+        static void FocusIVACrewMember (Kerbal kerbal)
+        {
+            var cameraManager = CameraManager.Instance;
+            if (cameraManager.currentCameraMode == CameraManager.CameraMode.IVA &&
+                cameraManager.IVACameraActiveKerbal == kerbal)
+                return;
+            cameraManager.SetCameraIVA (kerbal, true);
+            GameEvents.OnIVACameraKerbalChange.Fire (kerbal);
         }
 
         /// <summary>
@@ -588,29 +652,33 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// When the internal camera is active the kerbal that is in focus
+        /// In IVA mode, the crew member whose view the camera is showing.
+        /// Returns <c>null</c> if no crew member is in view.
         /// Returns an error if the camera is not in IVA mode.
+        /// Setting this moves the view to the given crew member, switching the camera to
+        /// IVA mode if it is not already. The crew member must be in the active vessel,
+        /// and in a part whose interior the game has placed them in.
         /// </summary>
         [KRPCProperty (Nullable = true)]
         public CrewMember FocussedCrewMember
         {
             get
             {
-                var camera = CameraManager.Instance;
-
-                if (camera.currentCameraMode == CameraManager.CameraMode.IVA)
-                {
-                    return new CrewMember(camera.IVACameraActiveKerbal.protoCrewMember);
-                }
-                throw new InvalidOperationException ("There is no focussed kerbal when the camera is not in IVA mode.");
+                if (CameraManager.Instance.currentCameraMode != CameraManager.CameraMode.IVA)
+                    throw new InvalidOperationException ("There is no focussed kerbal when the camera is not in IVA mode.");
+                var kerbal = CameraManager.Instance.IVACameraActiveKerbal;
+                return kerbal == null ? null : new CrewMember (kerbal.protoCrewMember);
             }
             set
             {
-                if (FlightGlobals.ActiveVessel.GetVesselCrew().Contains(value.InternalCrewMember))
-                {
-                    CameraManager.Instance.SetCameraIVA(value.InternalCrewMember.KerbalRef, true);
-                    GameEvents.OnIVACameraKerbalChange.Fire(value.InternalCrewMember.KerbalRef);
-                }
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException ("FocussedCrewMember");
+                var crewMember = value.InternalCrewMember;
+                if (!FlightGlobals.ActiveVessel.GetVesselCrew ().Contains (crewMember))
+                    throw new InvalidOperationException ("The crew member is not in the active vessel.");
+                if (crewMember.KerbalRef == null)
+                    throw new InvalidOperationException ("The crew member is not in the interior of a part.");
+                FocusIVACrewMember (crewMember.KerbalRef);
             }
         }
 
