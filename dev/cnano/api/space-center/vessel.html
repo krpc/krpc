@@ -1671,6 +1671,94 @@ relative to the surface of the body being orbited.</p></li>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘orbit’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are those of <a class="reference internal" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitalReferenceFrame" title="krpc_SpaceCenter_Vessel_OrbitalReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_OrbitalReferenceFrame()</span></code></a>, which are
+the directions the navball marks in this mode: the x-axis points in the orbital
+anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+the orbital normal direction.</p></li>
+<li><p>The frame moves with the body being orbited, but does not rotate
+with it.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘orbit’ mode:
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Speed()</span></code> is the speed it displays, and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Velocity()</span></code>
+points along the y-axis, towards its prograde marker.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘surface’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitalReferenceFrame" title="krpc_SpaceCenter_Vessel_OrbitalReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_OrbitalReferenceFrame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the surface, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the surface of the body being orbited, so it
+rotates with the body.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘surface’ mode:
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Speed()</span></code> is the speed it displays, and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Velocity()</span></code>
+points along the y-axis, towards its prograde marker. The velocity gives the frame its
+orientation, so, as with <a class="reference internal" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame" title="krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame()</span></code></a>, the frame is
+singular and raises an error when the vessel is stationary relative to the surface.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘target’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitalReferenceFrame" title="krpc_SpaceCenter_Vessel_OrbitalReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_OrbitalReferenceFrame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the target, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body being orbited and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the vessels target.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘target’ mode:
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Speed()</span></code> is the speed it displays, and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Flight_Velocity()</span></code>
+points along the y-axis, towards its prograde marker.
+The target is the one set for the active vessel, via for example
+<a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_TargetVessel" title="krpc_SpaceCenter_TargetVessel"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_TargetVessel()</span></code></a> or <a class="reference internal" href="space-center.html#c.krpc_SpaceCenter_TargetBody" title="krpc_SpaceCenter_TargetBody"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_TargetBody()</span></code></a>.
+This is undefined when no target is set. The velocity gives the frame its orientation,
+so it is also singular, and raises an error, when the vessel matches the velocity of
+its target.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Position">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_Position</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Position" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>

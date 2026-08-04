@@ -3561,10 +3561,10 @@
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
@@ -3724,6 +3724,8 @@
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getOrbitalReferenceFrame()">getOrbitalReferenceFrame() (Java method)</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.getOrbitalReferenceFrame()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()">[2]</a>
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getOrbitalSpeed()">getOrbitalSpeed() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getOrbitSpeedReferenceFrame()">getOrbitSpeedReferenceFrame() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getOriginBody()">getOriginBody() (Java method)</a>
 </li>
@@ -4129,6 +4131,8 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getSurfaceRetrograde()">getSurfaceRetrograde() (Java method)</a>
 </li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame()">getSurfaceSpeedReferenceFrame() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame()">getSurfaceVelocityReferenceFrame() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getSuspensionDamperStrength()">getSuspensionDamperStrength() (Java method)</a>
@@ -4168,6 +4172,8 @@
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getTargetSmoothingTime()">getTargetSmoothingTime() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.getTargetSpeed()">getTargetSpeed() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getTargetSpeedReferenceFrame()">getTargetSpeedReferenceFrame() (Java method)</a>
 </li>
       <li><a href="java/api/remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getTargetVessel()">getTargetVessel() (Java method)</a>, <a href="java/api/space-center/closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getTargetVessel()">[1]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getTargetVessel()">[2]</a>
 </li>
@@ -8741,6 +8747,8 @@
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel5orbitEv">krpc::services::SpaceCenter::Vessel::orbit (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv">krpc::services::SpaceCenter::Vessel::orbit_speed_reference_frame (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv">krpc::services::SpaceCenter::Vessel::orbital_reference_frame (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel6packedEv">krpc::services::SpaceCenter::Vessel::packed (C++ function)</a>
@@ -8783,7 +8791,11 @@
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel23surface_reference_frameEv">krpc::services::SpaceCenter::Vessel::surface_reference_frame (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv">krpc::services::SpaceCenter::Vessel::surface_speed_reference_frame (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel32surface_velocity_reference_frameEv">krpc::services::SpaceCenter::Vessel::surface_velocity_reference_frame (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv">krpc::services::SpaceCenter::Vessel::target_speed_reference_frame (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel6thrustEv">krpc::services::SpaceCenter::Vessel::thrust (C++ function)</a>
 </li>
@@ -13021,6 +13033,8 @@
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitalReferenceFrame">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitalReferenceFrame (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_OrbitSpeedReferenceFrame (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Packed">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Packed (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Parts">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Parts (C function)</a>
@@ -13061,7 +13075,11 @@
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceReferenceFrame">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceReferenceFrame (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceSpeedReferenceFrame (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_SurfaceVelocityReferenceFrame (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_TargetSpeedReferenceFrame (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Thrust">krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Thrust (C function)</a>
 </li>
@@ -14329,6 +14347,8 @@
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.orbit">(Vessel attribute)</a>
 </li>
       </ul></li>
+      <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.orbit_speed_reference_frame">orbit_speed_reference_frame (Vessel attribute)</a>
+</li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.CameraMode.ORBITAL">ORBITAL (Java field)</a>
 </li>
   </ul></td>
@@ -16865,12 +16885,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.flameout">SpaceCenter.SpaceCenter.Engine.flameout (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_actuation">SpaceCenter.SpaceCenter.Engine.gimbal_actuation (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_limit">SpaceCenter.SpaceCenter.Engine.gimbal_limit (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_locked">SpaceCenter.SpaceCenter.Engine.gimbal_locked (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_override">SpaceCenter.SpaceCenter.Engine.gimbal_override (attribute)</a>
@@ -17901,6 +17921,8 @@
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.orbit">SpaceCenter.SpaceCenter.Vessel.orbit (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.orbit_speed_reference_frame">SpaceCenter.SpaceCenter.Vessel.orbit_speed_reference_frame (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.orbital_reference_frame">SpaceCenter.SpaceCenter.Vessel.orbital_reference_frame (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.packed">SpaceCenter.SpaceCenter.Vessel.packed (attribute)</a>
@@ -17925,7 +17947,11 @@
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.surface_reference_frame">SpaceCenter.SpaceCenter.Vessel.surface_reference_frame (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.surface_speed_reference_frame">SpaceCenter.SpaceCenter.Vessel.surface_speed_reference_frame (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.surface_velocity_reference_frame">SpaceCenter.SpaceCenter.Vessel.surface_velocity_reference_frame (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.target_speed_reference_frame">SpaceCenter.SpaceCenter.Vessel.target_speed_reference_frame (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.SpaceCenter.Vessel.thrust">SpaceCenter.SpaceCenter.Vessel.thrust (attribute)</a>
 </li>
@@ -18317,6 +18343,8 @@
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.surface_retrograde">surface_retrograde (Flight attribute)</a>
 </li>
+      <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.surface_speed_reference_frame">surface_speed_reference_frame (Vessel attribute)</a>
+</li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.surface_velocity_reference_frame">surface_velocity_reference_frame (Vessel attribute)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.surfaceHeight(double, double)">surfaceHeight(double, double) (Java method)</a>
@@ -18398,6 +18426,8 @@
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.target_smoothing_time">target_smoothing_time (AutoPilot attribute)</a>
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.target_speed">target_speed (Servo attribute)</a>
+</li>
+      <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.target_speed_reference_frame">target_speed_reference_frame (Vessel attribute)</a>
 </li>
       <li><a href="lua/api/space-center/closest-approach.html#SpaceCenter.ClosestApproach.target_velocity">target_velocity() (ClosestApproach method)</a>, <a href="python/api/space-center/closest-approach.html#SpaceCenter.ClosestApproach.target_velocity">[1]</a>
 </li>
@@ -18533,10 +18563,10 @@
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.thrust_specific_fuel_consumption">thrust_specific_fuel_consumption (Flight attribute)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.thrustDirection(ReferenceFrame)">thrustDirection(ReferenceFrame) (Java method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.thrustDirection(ReferenceFrame)">thrustDirection(ReferenceFrame) (Java method)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Thruster">Thruster (class in SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Thruster">[1]</a>
 
       <ul>

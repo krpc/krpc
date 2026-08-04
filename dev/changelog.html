@@ -618,6 +618,7 @@
 <li><p>Vessels and crew</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">Vessel.Recover</span></code> now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1021">#1021</a>)</p></li>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Vessel.OrbitSpeedReferenceFrame</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.SurfaceSpeedReferenceFrame</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.TargetSpeedReferenceFrame</span></code>, one per navball speed mode. The velocity of the vessel in one of these frames is the velocity the navball shows in that mode, and its magnitude the speed displayed. Each frame is oriented with the prograde/normal/radial directions the navball marks in that mode, arranged as in <code class="docutils literal notranslate"><span class="pre">Vessel.OrbitalReferenceFrame</span></code>, so a direction of (0,1,0) in the frame is prograde (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1029">#1029</a>)</p></li>
 </ul>
 </li>
 <li><p>Staging</p>

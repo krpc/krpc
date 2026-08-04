@@ -1671,6 +1671,94 @@ relative to the surface of the body being orbited.</p></li>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getOrbitSpeedReferenceFrame()">
+ <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getOrbitSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘orbit’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are those of <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getOrbitalReferenceFrame()</span></code></a>, which are
+the directions the navball marks in this mode: the x-axis points in the orbital
+anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+the orbital normal direction.</p></li>
+<li><p>The frame moves with the body being orbited, but does not rotate
+with it.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘orbit’ mode:
+<a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getSpeed()" title="krpc.client.services.SpaceCenter.Flight.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getSpeed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getVelocity()" title="krpc.client.services.SpaceCenter.Flight.getVelocity()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getVelocity()</span></code></a>
+points along the y-axis, towards its prograde marker.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame()">
+ <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getSurfaceSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘surface’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getOrbitalReferenceFrame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the surface, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the surface of the body being orbited, so it
+rotates with the body.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘surface’ mode:
+<a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getSpeed()" title="krpc.client.services.SpaceCenter.Flight.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getSpeed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getVelocity()" title="krpc.client.services.SpaceCenter.Flight.getVelocity()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getVelocity()</span></code></a>
+points along the y-axis, towards its prograde marker. The velocity gives the frame its
+orientation, so, as with <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getSurfaceVelocityReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getSurfaceVelocityReferenceFrame()</span></code></a>, the frame is
+singular and raises an error when the vessel is stationary relative to the surface.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.getTargetSpeedReferenceFrame()">
+ <a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">getTargetSpeedReferenceFrame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.getTargetSpeedReferenceFrame()" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘target’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()" title="krpc.client.services.SpaceCenter.Vessel.getOrbitalReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getOrbitalReferenceFrame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the target, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body being orbited and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the vessels target.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘target’ mode:
+<a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getSpeed()" title="krpc.client.services.SpaceCenter.Flight.getSpeed()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getSpeed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#krpc.client.services.SpaceCenter.Flight.getVelocity()" title="krpc.client.services.SpaceCenter.Flight.getVelocity()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Flight.getVelocity()</span></code></a>
+points along the y-axis, towards its prograde marker.
+The target is the one set for the active vessel, via for example
+<a class="reference internal" href="../remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getTargetVessel()" title="krpc.client.services.RemoteTech.Antenna.getTargetVessel()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getTargetVessel()</span></code></a> or <a class="reference internal" href="../remote-tech/antenna.html#krpc.client.services.RemoteTech.Antenna.getTargetBody()" title="krpc.client.services.RemoteTech.Antenna.getTargetBody()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">getTargetBody()</span></code></a>.
+This is undefined when no target is set. The velocity gives the frame its orientation,
+so it is also singular, and raises an error, when the vessel matches the velocity of
+its target.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Vessel.position(ReferenceFrame)">
  <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">position</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Vessel.position(ReferenceFrame)" title="Link to this definition">#</a></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>

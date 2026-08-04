@@ -1725,6 +1725,94 @@ relative to the surface of the body being orbited.</p></li>
 </figure>
 </dd></dl>
 
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitSpeedReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">OrbitSpeedReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitSpeedReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘orbit’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are those of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.OrbitalReferenceFrame</span></code></a>, which are
+the directions the navball marks in this mode: the x-axis points in the orbital
+anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+the orbital normal direction.</p></li>
+<li><p>The frame moves with the body being orbited, but does not rotate
+with it.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘orbit’ mode:
+<a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.Speed" title="KRPC.Client.Services.SpaceCenter.Flight.Speed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Speed</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.Velocity" title="KRPC.Client.Services.SpaceCenter.Flight.Velocity property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Velocity</span></code></a>
+points along the y-axis, towards its prograde marker.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.SurfaceSpeedReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">SurfaceSpeedReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.SurfaceSpeedReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘surface’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.OrbitalReferenceFrame</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the surface, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the surface of the body being orbited, so it
+rotates with the body.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘surface’ mode:
+<a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.Speed" title="KRPC.Client.Services.SpaceCenter.Flight.Speed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Speed</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.Velocity" title="KRPC.Client.Services.SpaceCenter.Flight.Velocity property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Velocity</span></code></a>
+points along the y-axis, towards its prograde marker. The velocity gives the frame its
+orientation, so, as with <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.SurfaceVelocityReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.SurfaceVelocityReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.SurfaceVelocityReferenceFrame</span></code></a>, the frame is
+singular and raises an error when the vessel is stationary relative to the surface.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Vessel.TargetSpeedReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">TargetSpeedReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.TargetSpeedReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘target’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.OrbitalReferenceFrame</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the target, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body being orbited and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the vessels target.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘target’ mode:
+<a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.Speed" title="KRPC.Client.Services.SpaceCenter.Flight.Speed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Speed</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#property-KRPC.Client.Services.SpaceCenter.Flight.Velocity" title="KRPC.Client.Services.SpaceCenter.Flight.Velocity property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Velocity</span></code></a>
+points along the y-axis, towards its prograde marker.
+The target is the one set for the active vessel, via for example
+<a class="reference internal" href="space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.TargetVessel" title="KRPC.Client.Services.SpaceCenter.SpaceCenter.TargetVessel property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">SpaceCenter.TargetVessel</span></code></a> or <a class="reference internal" href="space-center.html#property-KRPC.Client.Services.SpaceCenter.SpaceCenter.TargetBody" title="KRPC.Client.Services.SpaceCenter.SpaceCenter.TargetBody property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">SpaceCenter.TargetBody</span></code></a>.
+This is undefined when no target is set. The velocity gives the frame its orientation,
+so it is also singular, and raises an error, when the vessel matches the velocity of
+its target.</p>
+</div>
+</dd></dl>
+
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Vessel.Position">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Position</span></span> <span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Vessel.Position" title="Link to this definition">#</a></dt>

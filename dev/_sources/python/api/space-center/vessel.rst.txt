@@ -797,6 +797,85 @@ Vessel
 
          Vessel surface velocity reference frame origin and axes
 
+   .. attribute:: orbit_speed_reference_frame
+
+      The reference frame that the navball measures speed against in 'orbit' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are those of :attr:`Vessel.orbital_reference_frame`, which are
+        the directions the navball marks in this mode: the x-axis points in the orbital
+        anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+        the orbital normal direction.
+      * The frame moves with the body being orbited, but does not rotate
+        with it.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'orbit' mode:
+         :attr:`Flight.speed` is the speed it displays, and :attr:`Flight.velocity`
+         points along the y-axis, towards its prograde marker.
+
+   .. attribute:: surface_speed_reference_frame
+
+      The reference frame that the navball measures speed against in 'surface' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :attr:`Vessel.orbital_reference_frame`: the y-axis points in the
+        direction the vessel is moving relative to the surface, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body and perpendicular to the other
+        two.
+      * The frame moves with the surface of the body being orbited, so it
+        rotates with the body.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'surface' mode:
+         :attr:`Flight.speed` is the speed it displays, and :attr:`Flight.velocity`
+         points along the y-axis, towards its prograde marker. The velocity gives the frame its
+         orientation, so, as with :attr:`Vessel.surface_velocity_reference_frame`, the frame is
+         singular and raises an error when the vessel is stationary relative to the surface.
+
+   .. attribute:: target_speed_reference_frame
+
+      The reference frame that the navball measures speed against in 'target' mode.
+
+      * The origin is at the center of mass of the vessel.
+      * The axes are the directions the navball marks in this mode, in the
+        same arrangement as :attr:`Vessel.orbital_reference_frame`: the y-axis points in the
+        direction the vessel is moving relative to the target, which is where the prograde
+        marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+        anti-radial, pointing towards the body being orbited and perpendicular to the other
+        two.
+      * The frame moves with the vessels target.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`ReferenceFrame`
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The velocity of the vessel in this frame is the one the navball shows in 'target' mode:
+         :attr:`Flight.speed` is the speed it displays, and :attr:`Flight.velocity`
+         points along the y-axis, towards its prograde marker.
+         The target is the one set for the active vessel, via for example
+         :attr:`target_vessel` or :attr:`target_body`.
+         This is undefined when no target is set. The velocity gives the frame its orientation,
+         so it is also singular, and raises an error, when the vessel matches the velocity of
+         its target.
+
    .. method:: position(reference_frame)
 
       The position of the center of mass of the vessel, in the given reference frame.

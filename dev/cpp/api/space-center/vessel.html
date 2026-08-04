@@ -1671,6 +1671,94 @@ relative to the surface of the body being orbited.</p></li>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Vessel::orbit_speed_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbit_speed_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel27orbit_speed_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘orbit’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are those of <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a>, which are
+the directions the navball marks in this mode: the x-axis points in the orbital
+anti-radial direction, the y-axis in the orbital prograde direction and the z-axis in
+the orbital normal direction.</p></li>
+<li><p>The frame moves with the body being orbited, but does not rotate
+with it.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘orbit’ mode:
+<a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv" title="krpc::services::SpaceCenter::Flight::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::speed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight8velocityEv" title="krpc::services::SpaceCenter::Flight::velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::velocity()</span></code></a>
+points along the y-axis, towards its prograde marker.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Vessel::surface_speed_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surface_speed_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel29surface_speed_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘surface’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the surface, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the surface of the body being orbited, so it
+rotates with the body.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘surface’ mode:
+<a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv" title="krpc::services::SpaceCenter::Flight::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::speed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight8velocityEv" title="krpc::services::SpaceCenter::Flight::velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::velocity()</span></code></a>
+points along the y-axis, towards its prograde marker. The velocity gives the frame its
+orientation, so, as with <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel32surface_velocity_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::surface_velocity_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::surface_velocity_reference_frame()</span></code></a>, the frame is
+singular and raises an error when the vessel is stationary relative to the surface.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Vessel::target_speed_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">target_speed_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel28target_speed_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that the navball measures speed against in ‘target’ mode.</p>
+<ul class="simple">
+<li><p>The origin is at the center of mass of the vessel.</p></li>
+<li><p>The axes are the directions the navball marks in this mode, in the
+same arrangement as <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a>: the y-axis points in the
+direction the vessel is moving relative to the target, which is where the prograde
+marker points; the z-axis is normal to the plane of that motion; and the x-axis is
+anti-radial, pointing towards the body being orbited and perpendicular to the other
+two.</p></li>
+<li><p>The frame moves with the vessels target.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The velocity of the vessel in this frame is the one the navball shows in ‘target’ mode:
+<a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight5speedEv" title="krpc::services::SpaceCenter::Flight::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::speed()</span></code></a> is the speed it displays, and <a class="reference internal" href="flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight8velocityEv" title="krpc::services::SpaceCenter::Flight::velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Flight::velocity()</span></code></a>
+points along the y-axis, towards its prograde marker.
+The target is the one set for the active vessel, via for example
+<a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter13target_vesselEv" title="krpc::services::SpaceCenter::target_vessel"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">target_vessel()</span></code></a> or <a class="reference internal" href="space-center.html#_CPPv4N4krpc8services11SpaceCenter11target_bodyEv" title="krpc::services::SpaceCenter::target_body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">target_body()</span></code></a>.
+This is undefined when no target is set. The velocity gives the frame its orientation,
+so it is also singular, and raises an error, when the vessel matches the velocity of
+its target.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame">
 <span id="_CPPv3N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Vessel::position__ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">position</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel8positionE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
 <dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
