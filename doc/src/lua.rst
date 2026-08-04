@@ -14,3 +14,4 @@ Lua
    lua/api/remote-tech
    lua/api/lidar
    lua/api/docking-camera
+   lua/api/debug

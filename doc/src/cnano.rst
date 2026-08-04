@@ -14,3 +14,4 @@ C-nano
    cnano/api/remote-tech
    cnano/api/lidar
    cnano/api/docking-camera
+   cnano/api/debug

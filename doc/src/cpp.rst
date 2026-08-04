@@ -14,3 +14,4 @@ C++
    cpp/api/remote-tech
    cpp/api/lidar
    cpp/api/docking-camera
+   cpp/api/debug

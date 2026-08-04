@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('Debug') }}
+{% import domain.macros as macros with context %}
+
+Debug
+=====
+
+{{ macros.service(services['Debug']) }}

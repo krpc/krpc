@@ -14,3 +14,4 @@ C#
    csharp/api/remote-tech
    csharp/api/lidar
    csharp/api/docking-camera
+   csharp/api/debug
