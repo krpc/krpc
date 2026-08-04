@@ -16,6 +16,7 @@ from krpctest.geometry import (
     cross,
     dot,
     norm,
+    normalize,
     quaternion_conjugate,
     quaternion_mult,
     quaternion_vector_mult,
@@ -34,6 +35,7 @@ class TestReferenceFrame(krpctest.TestCase):
         cls.vessel = cls.space_center.active_vessel
         cls.bodies = cls.space_center.bodies
         cls.kerbin = cls.bodies["Kerbin"]
+        cls.mun = cls.bodies["Mun"]
         cls.root_part = cls.vessel.parts.root
         cls.docking_port = cls.vessel.parts.docking_ports[0]
         cls.thruster = cls.vessel.parts.engines[0].thrusters[0]
@@ -720,6 +722,217 @@ class TestReferenceFrame(krpctest.TestCase):
             self.assertAlmostEqual(vel, roundtrip, delta=0.5)
 
     # -------------------------------------------------------------------------
+    # Navball speed mode frame tests
+    #
+    # One frame per navball speed mode. Each is centered on the vessel, oriented
+    # with the prograde/normal/radial directions of the motion that mode measures
+    # (the directions the navball marks in it) and moving with what that motion is
+    # measured against. The vessel's velocity in the frame is therefore the
+    # velocity the navball shows, pointing along the frame's y-axis. The target
+    # mode tests set a target and clear it again, since the class-wide setup
+    # deliberately leaves no target set.
+    # -------------------------------------------------------------------------
+
+    def _speed_mode_frames(self):
+        """The orbit and surface speed frames. The target frame is excluded as it
+        needs a target set."""
+        return [
+            self.vessel.orbit_speed_reference_frame,
+            self.vessel.surface_speed_reference_frame,
+        ]
+
+    def _axes_in_non_rotating_frame(self, ref):
+        """The x, y and z axes of the given frame, as directions in Kerbin's
+        non-rotating reference frame."""
+        nonrot = self.kerbin.non_rotating_reference_frame
+        return [
+            vector(self.space_center.transform_direction(axis, ref, nonrot))
+            for axis in ((1, 0, 0), (0, 1, 0), (0, 0, 1))
+        ]
+
+    def _velocity_in_non_rotating_frame(self, ref):
+        """The vessel's velocity in the given frame, as a vector in Kerbin's
+        non-rotating reference frame."""
+        return vector(
+            self.space_center.transform_direction(
+                self.vessel.velocity(ref), ref, self.kerbin.non_rotating_reference_frame
+            )
+        )
+
+    def _check_velocity_frame_axes(self, ref, velocity):
+        """Check that the given frame is oriented by the given velocity, which is a
+        direction in Kerbin's non-rotating reference frame.
+
+        The y-axis points along the velocity, the z-axis is normal to the plane the
+        motion sweeps out (velocity crossed with the zenith) and the x-axis is
+        anti-radial, completing the frame the same way the orbital frame does.
+        """
+        nonrot = self.kerbin.non_rotating_reference_frame
+        zenith = self.vessel.position(nonrot)
+        x_axis, y_axis, z_axis = self._axes_in_non_rotating_frame(ref)
+        self.assertAlmostEqual(1, dot(y_axis, normalize(velocity)), places=3)
+        self.assertAlmostEqual(
+            1, dot(z_axis, normalize(cross(velocity, zenith))), places=3
+        )
+        self.assertAlmostEqual(tuple(cross(y_axis, z_axis)), tuple(x_axis), places=3)
+        # The x-axis points back towards the body, as the orbital frame's does
+        self.assertLess(dot(x_axis, normalize(zenith)), -0.9)
+
+    def test_speed_mode_frames_centered_on_vessel(self):
+        """The vessel is at the origin of every speed mode frame."""
+        for ref in self._speed_mode_frames():
+            self.assertAlmostEqual((0, 0, 0), self.vessel.position(ref), delta=1)
+
+    def test_speed_mode_frames_velocity_along_prograde_axis(self):
+        """The frames are oriented by the velocity they measure, so that velocity has
+        no x or z component -- it points along the y-axis, at the navball's prograde
+        marker."""
+        for ref in self._speed_mode_frames():
+            velocity = self.vessel.velocity(ref)
+            self.assertAlmostEqual(0, velocity[0], delta=1)
+            self.assertAlmostEqual(0, velocity[2], delta=1)
+            self.assertGreater(velocity[1], 0)
+
+    def test_orbit_speed_frame_uses_orbital_axes(self):
+        """The navball marks the orbital prograde/normal/radial directions in 'orbit'
+        mode, so the orbit speed frame is oriented like the orbital reference frame.
+        Only the velocity of the frame differs between the two."""
+        self.assertQuaternionsAlmostEqual(
+            self.vessel.rotation(self.vessel.orbital_reference_frame),
+            self.vessel.rotation(self.vessel.orbit_speed_reference_frame),
+            places=4,
+        )
+
+    def test_orbit_speed_frame_axes_are_navball_directions(self):
+        """The frame's axes point where the navball's markers do in 'orbit' mode: the
+        y-axis at prograde, the z-axis at normal and the x-axis at anti-radial."""
+        ref = self.vessel.orbit_speed_reference_frame
+        flight = self.vessel.flight(self.kerbin.non_rotating_reference_frame)
+        x_axis, y_axis, z_axis = self._axes_in_non_rotating_frame(ref)
+        self.assertAlmostEqual(1, dot(y_axis, vector(flight.prograde)), places=3)
+        self.assertAlmostEqual(1, dot(z_axis, vector(flight.normal)), places=3)
+        self.assertAlmostEqual(1, dot(x_axis, vector(flight.anti_radial)), places=3)
+
+    def test_surface_speed_frame_axes(self):
+        """The surface speed frame is oriented by the vessel's velocity relative to
+        the surface, which is where the navball's prograde marker points in 'surface'
+        mode."""
+        body_frame = self.kerbin.reference_frame
+        velocity = vector(
+            self.space_center.transform_direction(
+                self.vessel.velocity(body_frame),
+                body_frame,
+                self.kerbin.non_rotating_reference_frame,
+            )
+        )
+        self._check_velocity_frame_axes(
+            self.vessel.surface_speed_reference_frame, velocity
+        )
+
+    def test_orbit_speed_frame_gives_orbital_speed(self):
+        """The orbit speed frame moves with Kerbin without rotating with it, so the
+        vessel's speed in it is its orbital speed -- the navball's 'orbit' mode."""
+        speed = norm(self.vessel.velocity(self.vessel.orbit_speed_reference_frame))
+        self.assertAlmostEqual(self.vessel.orbit.speed, speed, delta=1)
+
+    def test_surface_speed_frame_gives_surface_speed(self):
+        """The surface speed frame moves with the point of the rotating body below the
+        vessel, so the vessel's speed in it is its surface speed -- the navball's
+        'surface' mode. Checked against Kerbin's rotating frame and against the
+        independently computed orbital − ω×r speed."""
+        speed = norm(self.vessel.velocity(self.vessel.surface_speed_reference_frame))
+        speed_body = norm(self.vessel.velocity(self.kerbin.reference_frame))
+        self.assertAlmostEqual(speed_body, speed, delta=1)
+        self.assertAlmostEqual(self._expected_surface_speed(), speed, delta=1)
+
+    def test_surface_speed_frame_velocity_is_the_navball_velocity(self):
+        """The velocity in the surface speed frame is the surface velocity, the vector
+        the navball's prograde marker follows in 'surface' mode.
+
+        Compared against transforming the velocity from Kerbin's rotating frame into
+        the speed frame, which is the same vector computed the long way round.
+        """
+        ref = self.vessel.surface_speed_reference_frame
+        body_frame = self.kerbin.reference_frame
+        expected = self.space_center.transform_direction(
+            self.vessel.velocity(body_frame), body_frame, ref
+        )
+        velocity = self.vessel.velocity(ref)
+        self.assertAlmostEqual(expected, velocity, delta=1)
+
+    def test_surface_speed_frame_off_equator(self):
+        """The body rotation term is taken at the vessel, in world space, so the
+        surface speed frame is correct away from the equator too. Checked at ~45°
+        latitude in an inclined orbit, where the co-rotation velocity is neither
+        aligned with nor perpendicular to the orbital velocity."""
+        # Inclination 45°, observed a quarter orbit past the ascending node
+        # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
+        self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
+        expected = self._expected_surface_speed()
+        speed = norm(self.vessel.velocity(self.vessel.surface_speed_reference_frame))
+        self.assertAlmostEqual(expected, speed, delta=1)
+
+    def test_speed_mode_frames_differ_by_body_rotation(self):
+        """The orbit and surface speed frames differ by the velocity of the ground
+        beneath the vessel, so their velocities differ by ω×r. The two frames are
+        oriented differently, so the comparison is made in Kerbin's non-rotating
+        frame."""
+        nonrot = self.kerbin.non_rotating_reference_frame
+        r = vector(self.vessel.position(nonrot))
+        w = vector(self.kerbin.angular_velocity(nonrot))
+        orbit_velocity = self._velocity_in_non_rotating_frame(
+            self.vessel.orbit_speed_reference_frame
+        )
+        surface_velocity = self._velocity_in_non_rotating_frame(
+            self.vessel.surface_speed_reference_frame
+        )
+        self.assertAlmostEqual(
+            tuple(orbit_velocity - vector(cross(w, r))),
+            tuple(surface_velocity),
+            delta=1,
+        )
+
+    def test_target_speed_frame_gives_relative_speed(self):
+        """The target speed frame moves with the target, so the vessel's speed in it is
+        its speed relative to the target -- the navball's 'target' mode."""
+        self.space_center.target_body = self.mun
+        try:
+            nonrot = self.kerbin.non_rotating_reference_frame
+            expected = norm(
+                vector(self.vessel.velocity(nonrot)) - vector(self.mun.velocity(nonrot))
+            )
+            speed = norm(self.vessel.velocity(self.vessel.target_speed_reference_frame))
+            self.assertAlmostEqual(expected, speed, delta=1)
+        finally:
+            self.space_center.target_body = None
+
+    def test_target_speed_frame_axes(self):
+        """The target speed frame is oriented by the vessel's velocity relative to the
+        target, which is where the navball's prograde marker points in 'target' mode,
+        and the velocity in it points along the y-axis."""
+        self.space_center.target_body = self.mun
+        try:
+            nonrot = self.kerbin.non_rotating_reference_frame
+            velocity = vector(self.vessel.velocity(nonrot)) - vector(
+                self.mun.velocity(nonrot)
+            )
+            ref = self.vessel.target_speed_reference_frame
+            self._check_velocity_frame_axes(ref, velocity)
+            in_frame = self.vessel.velocity(ref)
+            self.assertAlmostEqual(0, in_frame[0], delta=1)
+            self.assertAlmostEqual(0, in_frame[2], delta=1)
+            self.assertGreater(in_frame[1], 0)
+        finally:
+            self.space_center.target_body = None
+
+    def test_target_speed_frame_requires_a_target(self):
+        """With no target set, using the target speed reference frame raises."""
+        self.space_center.target_body = None
+        ref = self.vessel.target_speed_reference_frame
+        self.assertRaises(RuntimeError, self.vessel.velocity, ref)
+
+    # -------------------------------------------------------------------------
     # Angular velocity tests
     # -------------------------------------------------------------------------
 
@@ -755,6 +968,69 @@ class TestReferenceFrame(krpctest.TestCase):
         orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
         expected = orbital_angular_speed - self.kerbin.rotational_speed
         self.assertAlmostEqual(expected, norm(ang_vel), delta=1e-4)
+
+    def _frame_angular_velocity(self, ref):
+        """The angular velocity of the given frame itself, as a vector in Kerbin's
+        non-rotating reference frame.
+
+        Taken from how fast Kerbin appears to rotate in the frame: that is Kerbin's
+        angular velocity less the frame's own, so the frame's is the difference.
+        """
+        nonrot = self.kerbin.non_rotating_reference_frame
+        relative = self.space_center.transform_direction(
+            self.kerbin.angular_velocity(ref), ref, nonrot
+        )
+        return vector(self.kerbin.angular_velocity(nonrot)) - vector(relative)
+
+    def _measured_angular_velocity(self, ref, dt=1):
+        """The angular velocity of the given frame, measured by how far its axes turn
+        over dt seconds, as a vector in Kerbin's non-rotating reference frame.
+
+        For a basis whose axes obey de/dt = ω × e, ω = ½ Σ e × de/dt.
+        """
+        before = self._axes_in_non_rotating_frame(ref)
+        start = self.space_center.ut
+        self.wait(dt)
+        after = self._axes_in_non_rotating_frame(ref)
+        elapsed = self.space_center.ut - start
+        angular_velocity = vector((0, 0, 0))
+        for axis, moved in zip(before, after):
+            rate = [(b - a) / elapsed for a, b in zip(axis, moved)]
+            angular_velocity = angular_velocity + vector(cross(axis, rate))
+        return 0.5 * angular_velocity
+
+    def test_orbit_speed_frame_angular_velocity(self):
+        """The orbit speed frame shares the orbital frame's axes, so it turns with it."""
+        self.assertAlmostEqual(
+            self.kerbin.angular_velocity(self.vessel.orbital_reference_frame),
+            self.kerbin.angular_velocity(self.vessel.orbit_speed_reference_frame),
+            delta=1e-5,
+        )
+
+    def test_surface_speed_frame_angular_velocity(self):
+        """The surface speed frame's angular velocity is the rate its own axes turn:
+        the swing of the surface velocity direction plus the roll about it as the plane
+        through that velocity and the zenith turns."""
+        ref = self.vessel.surface_speed_reference_frame
+        self.assertAlmostEqual(
+            tuple(self._measured_angular_velocity(ref)),
+            tuple(self._frame_angular_velocity(ref)),
+            delta=1e-4,
+        )
+
+    def test_target_speed_frame_angular_velocity(self):
+        """The target speed frame's axes turn with the velocity relative to the target,
+        which changes as the two fall through different gravity."""
+        self.space_center.target_body = self.mun
+        try:
+            ref = self.vessel.target_speed_reference_frame
+            self.assertAlmostEqual(
+                tuple(self._measured_angular_velocity(ref)),
+                tuple(self._frame_angular_velocity(ref)),
+                delta=1e-4,
+            )
+        finally:
+            self.space_center.target_body = None
 
     def test_kerbin_angular_velocity_in_surface_velocity_frame(self):
         """Kerbin's angular velocity in the surface velocity frame is dominated by the

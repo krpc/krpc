@@ -235,6 +235,9 @@ SpaceCenter.Vessel.ReferenceFrame
 SpaceCenter.Vessel.OrbitalReferenceFrame
 SpaceCenter.Vessel.SurfaceReferenceFrame
 SpaceCenter.Vessel.SurfaceVelocityReferenceFrame
+SpaceCenter.Vessel.OrbitSpeedReferenceFrame
+SpaceCenter.Vessel.SurfaceSpeedReferenceFrame
+SpaceCenter.Vessel.TargetSpeedReferenceFrame
 SpaceCenter.Vessel.Position
 SpaceCenter.Vessel.BoundingBox
 SpaceCenter.Vessel.Velocity

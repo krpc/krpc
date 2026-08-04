@@ -11,6 +11,13 @@
 - Vessels and crew
   - `Vessel.Recover` now recovers non-active vessels without switching to
      the space center scene, and the mission completion dialog is auto-closed. (#1021)
+  - Add `Vessel.OrbitSpeedReferenceFrame`, `Vessel.SurfaceSpeedReferenceFrame` and
+    `Vessel.TargetSpeedReferenceFrame`, one per navball speed mode. The velocity of the
+    vessel in one of these frames is the velocity the navball shows in that mode, and its
+    magnitude the speed displayed. Each frame is oriented with the prograde/normal/radial
+    directions the navball marks in that mode, arranged as in
+    `Vessel.OrbitalReferenceFrame`, so a direction of (0,1,0) in the frame is prograde
+    (#1029)
 
 - Staging
   - Fix stages from `Vessel.Stages`, `Vessel.StageAt`, `Vessel.DecoupleStages` and
