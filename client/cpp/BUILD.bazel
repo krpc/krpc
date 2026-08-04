@@ -24,6 +24,7 @@ pkg_zip(
         "LICENSE",
         "README.txt",
         ":cmake",
+        ":services-debug",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
@@ -119,6 +120,13 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
+    name = "services-debug",
+    out = "include/krpc/services/debug.hpp",
+    defs = "//service/Debug:ServiceDefinitions",
+    service = "Debug",
+)
+
+clientgen_cpp(
     name = "services-test-service",
     out = "test/services/test_service.hpp",
     defs = "//tools/TestServer:ServiceDefinitions",
@@ -136,6 +144,7 @@ hdrs = glob(["include/**/*.hpp"]) + [
     ":services-remotetech",
     ":services-ui",
     ":services-lidar",
+    ":services-debug",
     ":services-dockingcamera",
 ]
 

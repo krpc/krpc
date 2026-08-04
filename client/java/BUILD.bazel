@@ -31,6 +31,7 @@ genrule(
 java_library(
     name = "krpc",
     srcs = glob(["src/krpc/**/*.java"]) + [
+        ":services-debug",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
@@ -171,6 +172,13 @@ clientgen_java(
     out = "services/DockingCamera.java",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
+)
+
+clientgen_java(
+    name = "services-debug",
+    out = "services/Debug.java",
+    defs = "//service/Debug:ServiceDefinitions",
+    service = "Debug",
 )
 
 clientgen_java(

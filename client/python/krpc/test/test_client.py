@@ -485,6 +485,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "remote_tech",
                     "space_center",
                     "docking_camera",
+                    "debug",
                 ]
             ),
             set(x for x in dir(self.conn) if not x.startswith("_")),
