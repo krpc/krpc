@@ -114,7 +114,10 @@ class TestCommsMultiHop(krpctest.TestCase):
         # Mid is relay satellite
         mid = link0.end
         self.assertEqual(mid, link1.start)
-        self.assertEqual("MediumRangeProbe (unloaded)", mid.name)
+        # The game names a comm node after the vessel when it is unloaded and after its
+        # control part when it is loaded, and the relay sits close enough to the active
+        # vessel for either to happen, so only check that the name identifies the relay.
+        self.assertIn("MediumRangeProbe", mid.name)
         self.assertFalse(mid.is_home)
         self.assertFalse(mid.is_control_point)
         self.assertTrue(mid.is_vessel)

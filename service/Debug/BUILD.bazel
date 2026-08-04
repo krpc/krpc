@@ -1,0 +1,68 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("//:config.bzl", "assembly_version", "author")
+load("//service:build.bzl", "service_deps")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/ServiceDefinitions:build.bzl", "service_definitions")
+
+exports_files(["CHANGELOG.md"])
+
+filegroup(
+    name = "Debug",
+    srcs = [
+        "CHANGELOG.md",
+        "LICENSE",
+        ":KRPC.Debug",
+        ":ServiceDefinitions",
+    ],
+    visibility = ["//:__pkg__"],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    description = "Debug and cheat API for kRPC",
+    title = "KRPC.Debug",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+srcs = [":AssemblyInfo"] + glob(["src/**/*.cs"])
+
+deps = service_deps + [
+    "//service/SpaceCenter:KRPC.SpaceCenter",
+]
+
+csharp_library(
+    name = "KRPC.Debug",
+    srcs = srcs,
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = deps,
+)
+
+service_definitions(
+    name = "ServiceDefinitions",
+    out = "KRPC.Debug.json",
+    assemblies = [
+        ":KRPC.Debug",
+        "//service/SpaceCenter:KRPC.SpaceCenter",
+        "//server:KRPC",
+    ],
+    service = "Debug",
+    visibility = ["//visibility:public"],
+)
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)

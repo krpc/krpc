@@ -22,6 +22,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.LiDAR", "service\LiDAR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.DockingCamera", "service\DockingCamera\src\KRPC.DockingCamera.csproj", "{1555BA26-0DF2-4E56-B191-EE4D9DB14539}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Debug", "service\Debug\src\KRPC.Debug.csproj", "{7E772428-6FFF-43D3-B051-2863F2378FC8}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceDefinitions", "tools\ServiceDefinitions\src\ServiceDefinitions.csproj", "{3F97909B-0ABE-49F2-8CA0-100F4286E03F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestServer\src\TestServer.csproj", "{A75677CB-9D81-4C3F-8B53-C99110B4F124}"
@@ -102,5 +104,9 @@ Global
 		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1555BA26-0DF2-4E56-B191-EE4D9DB14539}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E772428-6FFF-43D3-B051-2863F2378FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
