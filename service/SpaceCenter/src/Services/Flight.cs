@@ -276,6 +276,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether an airflow is too slow for FAR to compute a force from. FAR normalizes the
+        /// airflow to get the direction the air comes from, which is not a number when the air
+        /// is still, so answer such a state directly instead of passing the NaN on. The stock
+        /// model needs no such guard: it multiplies by the airflow rather than dividing by it.
+        /// </summary>
+        static bool IsStillAir (Vector3d airflow)
+        {
+            return airflow.sqrMagnitude < 1e-6;
+        }
+
+        /// <summary>
         /// Check that FAR is not installed
         /// </summary>
         static void CheckNoFAR ()
@@ -712,6 +723,8 @@ namespace KRPC.SpaceCenter.Services
                 var altitude = (worldPosition - body.InternalBody.position).magnitude - body.InternalBody.Radius;
                 var adjustedVelocity = delta.Inverse ()
                     * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
+                if (IsStillAir (adjustedVelocity))
+                    return referenceFrame.DirectionFromWorldSpace (Vector3d.zero).ToTuple ();
                 FAR.CalculateVesselAeroForces(vessel, out force, out torque, adjustedVelocity, altitude);
                 // CalculateVesselAeroForces returns kilonewtons; convert to newtons to
                 // match the stock path and this method's documented units.
@@ -783,12 +796,17 @@ namespace KRPC.SpaceCenter.Services
                     * (worldVelocity - body.InternalBody.getRFrmVel(worldPosition));
                 var altitude = (worldPosition - body.InternalBody.position).magnitude
                                - body.InternalBody.Radius;
-                FAR.CalculateVesselAeroForces(
-                    vessel, out farForce, out farTorque, adjustedVelocity, altitude);
-                // FAR returns kilonewtons and kilonewton-meters. Rotate the one
-                // evaluation into the hypothetical attitude and convert both to SI.
-                force = delta * (Vector3d)farForce * 1000d;
-                torque = delta * (Vector3d)farTorque * 1000d;
+                if (IsStillAir (adjustedVelocity)) {
+                    force = Vector3d.zero;
+                    torque = Vector3d.zero;
+                } else {
+                    FAR.CalculateVesselAeroForces(
+                        vessel, out farForce, out farTorque, adjustedVelocity, altitude);
+                    // FAR returns kilonewtons and kilonewton-meters. Rotate the one
+                    // evaluation into the hypothetical attitude and convert both to SI.
+                    force = delta * (Vector3d)farForce * 1000d;
+                    torque = delta * (Vector3d)farTorque * 1000d;
+                }
             }
             return new TupleT3(
                 referenceFrame.DirectionFromWorldSpace(force).ToTuple(),
@@ -1047,7 +1065,12 @@ namespace KRPC.SpaceCenter.Services
         public float StallFraction {
             get {
                 CheckFAR ();
-                return (float)FAR.VesselStallFrac (InternalVessel);
+                // FAR averages how far each of the vessel's lifting surfaces is stalled,
+                // weighted by their area, which is zero over zero for a vessel that has
+                // none. Nothing on such a vessel can stall, so report no stall rather than
+                // passing the NaN on.
+                var stall = FAR.VesselStallFrac (InternalVessel);
+                return double.IsNaN (stall) ? 0f : (float)stall;
             }
         }
 
