@@ -345,6 +345,21 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The normal to the surface under the vessel, in the reference frame
+        /// <see cref="ReferenceFrame"/>. This describes the slope of the terrain,
+        /// and points straight up when the vessel is over water.
+        /// </summary>
+        /// <returns>The normal as a unit vector.</returns>
+        [KRPCProperty]
+        public Tuple3 SurfaceNormal {
+            get {
+                var body = new CelestialBody (InternalVessel.mainBody);
+                var normal = body.SurfaceNormalWorldSpace (Latitude, Longitude);
+                return referenceFrame.DirectionFromWorldSpace (normal).normalized.ToTuple ();
+            }
+        }
+
+        /// <summary>
         /// The velocity of the vessel, in the reference frame <see cref="ReferenceFrame"/>.
         /// </summary>
         /// <returns>The velocity as a vector. The vector points in the direction of travel,

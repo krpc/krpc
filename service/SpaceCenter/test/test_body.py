@@ -4,6 +4,13 @@ import unittest
 import krpctest
 from krpctest.geometry import dot, norm, normalize
 
+# Latitude and longitude pairs to sample the surface at, including both poles
+# where the lines of longitude meet
+SURFACE_COORDINATES = ((0, 0), (12, -34), (-56, 78), (0, 180), (90, 0), (-90, 45))
+
+# A point over one of Kerbin's oceans, where the sea-bed slopes
+OCEAN_COORDINATE = (-60, -150)
+
 
 class TestBody(krpctest.TestCase):
     @classmethod
@@ -266,6 +273,45 @@ class TestBody(krpctest.TestCase):
             self.assertAlmostEqual(
                 abs(rotational_speed + body.orbit.speed), norm(v), delta=500
             )
+
+    def test_msl_normal(self):
+        for body in self.space_center.bodies.values():
+            frame = body.reference_frame
+            for lat, lon in SURFACE_COORDINATES:
+                normal = body.msl_normal(lat, lon, frame)
+                self.assertAlmostEqual(1, norm(normal))
+                # In the body's own reference frame, sea level positions are
+                # measured from the center of the body, so are themselves
+                # normal to the sphere
+                self.assertAlmostEqual(
+                    normalize(body.msl_position(lat, lon, frame)), normal, places=4
+                )
+
+    def test_surface_normal(self):
+        for body in self.space_center.bodies.values():
+            frame = body.reference_frame
+            for lat, lon in SURFACE_COORDINATES:
+                up = body.msl_normal(lat, lon, frame)
+                for normal in (
+                    body.surface_normal(lat, lon, frame),
+                    body.bedrock_normal(lat, lon, frame),
+                ):
+                    self.assertAlmostEqual(1, norm(normal))
+                    # Terrain slopes away from the vertical, but always faces
+                    # away from the body rather than into it
+                    self.assertGreater(dot(normal, up), 0)
+
+    def test_surface_normal_over_water(self):
+        kerbin = self.space_center.bodies["Kerbin"]
+        frame = kerbin.reference_frame
+        lat, lon = OCEAN_COORDINATE
+        self.assertEqual(0, kerbin.surface_height(lat, lon))
+        self.assertLess(kerbin.bedrock_height(lat, lon), 0)
+        up = kerbin.msl_normal(lat, lon, frame)
+        # The surface of the water is flat, so points straight up
+        self.assertAlmostEqual(up, kerbin.surface_normal(lat, lon, frame), places=4)
+        # The sea-bed beneath it is not
+        self.assertLess(dot(up, kerbin.bedrock_normal(lat, lon, frame)), 0.9999)
 
     def test_rotation(self):
         for body in self.space_center.bodies.values():

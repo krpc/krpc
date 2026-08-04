@@ -297,6 +297,9 @@ SpaceCenter.CelestialBody.MSLPosition
 SpaceCenter.CelestialBody.SurfacePosition
 SpaceCenter.CelestialBody.BedrockPosition
 SpaceCenter.CelestialBody.PositionAtAltitude
+SpaceCenter.CelestialBody.MSLNormal
+SpaceCenter.CelestialBody.SurfaceNormal
+SpaceCenter.CelestialBody.BedrockNormal
 SpaceCenter.CelestialBody.AltitudeAtPosition
 SpaceCenter.CelestialBody.LatitudeAtPosition
 SpaceCenter.CelestialBody.LongitudeAtPosition
@@ -330,6 +333,7 @@ SpaceCenter.Flight.BedrockAltitude
 SpaceCenter.Flight.Elevation
 SpaceCenter.Flight.Latitude
 SpaceCenter.Flight.Longitude
+SpaceCenter.Flight.SurfaceNormal
 SpaceCenter.Flight.Velocity
 SpaceCenter.Flight.Speed
 SpaceCenter.Flight.HorizontalSpeed
