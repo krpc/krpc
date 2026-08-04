@@ -1790,6 +1790,7 @@ UI.Canvas.AddInputField
 UI.Canvas.AddButton
 UI.Canvas.AddToggle
 UI.Canvas.AddToggleGroup
+UI.Canvas.AddScrollView
 UI.Canvas.Remove
 UI.Panel
 UI.Panel.RectTransform
@@ -1801,6 +1802,7 @@ UI.Panel.AddInputField
 UI.Panel.AddButton
 UI.Panel.AddToggle
 UI.Panel.AddToggleGroup
+UI.Panel.AddScrollView
 UI.Panel.Layout
 UI.Panel.AddHorizontalLayout
 UI.Panel.AddVerticalLayout
@@ -1874,6 +1876,14 @@ UI.ToggleGroup.Visible
 UI.ToggleGroup.Selected
 UI.ToggleGroup.AllowSwitchOff
 UI.ToggleGroup.Remove
+UI.ScrollView
+UI.ScrollView.RectTransform
+UI.ScrollView.LayoutElement
+UI.ScrollView.Visible
+UI.ScrollView.Content
+UI.ScrollView.Horizontal
+UI.ScrollView.Vertical
+UI.ScrollView.Remove
 UI.Layout
 UI.Layout.Spacing
 UI.Layout.Padding

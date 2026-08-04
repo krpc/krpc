@@ -114,6 +114,65 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Create a game object against the top left corner of its parent, growing down and
+        /// to the right, which is how the contents of a scroll view are measured.
+        /// </summary>
+        internal static GameObject CreateTopLeft (
+            GameObject parent, string name, float width, float height)
+        {
+            var obj = NewObject (parent, name);
+            var rect = obj.GetComponent<UnityEngine.RectTransform> ();
+            rect.anchorMin = new Vector2 (0, 1);
+            rect.anchorMax = new Vector2 (0, 1);
+            rect.pivot = new Vector2 (0, 1);
+            rect.anchoredPosition = Vector2.zero;
+            rect.sizeDelta = new Vector2 (width, height);
+            return obj;
+        }
+
+        /// <summary>
+        /// Create a scroll bar along one edge of its parent, with a handle that is drawn
+        /// using the skin's thumb style.
+        /// </summary>
+        internal static UnityEngine.UI.Scrollbar CreateScrollbar (
+            GameObject parent, bool vertical, float thickness)
+        {
+            var obj = NewObject (
+                parent, vertical ? "krpc.scrollbar.vertical" : "krpc.scrollbar.horizontal");
+            var rect = obj.GetComponent<UnityEngine.RectTransform> ();
+            if (vertical) {
+                rect.anchorMin = new Vector2 (1, 0);
+                rect.anchorMax = new Vector2 (1, 1);
+                rect.pivot = new Vector2 (1, 1);
+                rect.sizeDelta = new Vector2 (thickness, 0);
+            } else {
+                rect.anchorMin = new Vector2 (0, 0);
+                rect.anchorMax = new Vector2 (1, 0);
+                rect.pivot = new Vector2 (0, 0);
+                rect.sizeDelta = new Vector2 (0, thickness);
+            }
+            AddImage (obj, Style (
+                skin => vertical ? skin.verticalScrollbar : skin.horizontalScrollbar));
+
+            // Unity moves and resizes the handle within the sliding area as the view is
+            // scrolled, so the handle has to be a child of the scroll bar.
+            var slidingArea = CreateFilling (obj, "krpc.scrollbar.slidingArea", 0);
+            var handle = CreateFilling (slidingArea, "krpc.scrollbar.handle", 0);
+            var thumb = Style (
+                skin => vertical ? skin.verticalScrollbarThumb : skin.horizontalScrollbarThumb);
+            var handleImage = AddImage (handle, thumb);
+
+            var scrollbar = obj.AddComponent<UnityEngine.UI.Scrollbar> ();
+            scrollbar.handleRect = handle.GetComponent<UnityEngine.RectTransform> ();
+            scrollbar.targetGraphic = handleImage;
+            scrollbar.direction = vertical
+                ? UnityEngine.UI.Scrollbar.Direction.BottomToTop
+                : UnityEngine.UI.Scrollbar.Direction.LeftToRight;
+            AddTransition (scrollbar, thumb);
+            return scrollbar;
+        }
+
+        /// <summary>
         /// Keep an object that is not drawn, such as a toggle group, from being given space
         /// of its own by a layout group.
         /// </summary>

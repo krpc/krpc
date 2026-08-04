@@ -18,6 +18,15 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Wrap a game object that is already part of another control, such as the
+        /// contents of a scroll view, as a panel.
+        /// </summary>
+        internal Panel (GameObject obj)
+            : base (obj, true, false)
+        {
+        }
+
+        /// <summary>
         /// The layout that arranges the elements of the panel, or <c>null</c> if they are
         /// positioned by hand.
         /// </summary>

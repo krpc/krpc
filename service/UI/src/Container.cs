@@ -11,8 +11,14 @@ namespace KRPC.UI
         /// <summary>
         /// Create a container.
         /// </summary>
-        protected Container (GameObject gameObject, bool visible)
-            : base (gameObject, visible)
+        /// <param name="gameObject">The Unity game object for the container.</param>
+        /// <param name="visible">Whether the container is visible.</param>
+        /// <param name="register">
+        /// Whether the container is owned by the calling client. False for a container that
+        /// is part of another control and is removed along with it.
+        /// </param>
+        protected Container (GameObject gameObject, bool visible, bool register = true)
+            : base (gameObject, visible, register)
         {
         }
 
@@ -53,6 +59,16 @@ namespace KRPC.UI
         public InputField AddInputField (bool visible = true)
         {
             return new InputField (GameObject, visible);
+        }
+
+        /// <summary>
+        /// Add a scroll view to this object.
+        /// </summary>
+        /// <param name="visible">Whether the scroll view is visible.</param>
+        [KRPCMethod]
+        public ScrollView AddScrollView (bool visible = true)
+        {
+            return new ScrollView (GameObject, visible);
         }
 
         /// <summary>

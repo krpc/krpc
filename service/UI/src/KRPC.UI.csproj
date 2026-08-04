@@ -57,6 +57,7 @@
     <Compile Include="Object.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="RectTransform.cs" />
+    <Compile Include="ScrollView.cs" />
     <Compile Include="SizeFitter.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="TextAlignment.cs" />
