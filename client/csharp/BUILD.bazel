@@ -54,6 +54,7 @@ srcs = glob(["src/**/*.cs"]) + [
     ":services-remotetech",
     ":services-ui",
     ":services-lidar",
+    ":services-debug",
     ":services-dockingcamera",
 ]
 
@@ -176,6 +177,13 @@ clientgen_csharp(
     out = "Services/DockingCamera.cs",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
+)
+
+clientgen_csharp(
+    name = "services-debug",
+    out = "Services/Debug.cs",
+    defs = "//service/Debug:ServiceDefinitions",
+    service = "Debug",
 )
 
 test_suite(

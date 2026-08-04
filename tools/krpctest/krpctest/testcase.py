@@ -6,6 +6,7 @@ timed waiting. KSP process lifecycle lives in ``krpctest.game``; tolerance-based
 assertions come from ``krpctest.assertions.AssertionsMixin``.
 """
 
+import math
 import os
 import shutil
 import sys
@@ -192,30 +193,38 @@ class TestCase(AssertionsMixin):
         mean_anomaly_at_epoch,
         epoch,
     ):
-        cls.connect().testing_tools.set_orbit(
-            body,
+        """Move the active vessel onto the orbit with the given elements. The three
+        orientation angles are in degrees here, for readability at the call sites; the
+        Debug service takes them in radians, as SpaceCenter.Orbit reports them."""
+        conn = cls.connect()
+        conn.debug.set_orbit(
+            conn.space_center.bodies[body],
             semi_major_axis,
             eccentricity,
-            inclination,
-            longitude_of_ascending_node,
-            argument_of_periapsis,
+            math.radians(inclination),
+            math.radians(longitude_of_ascending_node),
+            math.radians(argument_of_periapsis),
             mean_anomaly_at_epoch,
             epoch,
         )
 
     @classmethod
     def set_circular_orbit(cls, body, altitude):
-        cls.connect().testing_tools.set_circular_orbit(body, altitude)
+        conn = cls.connect()
+        conn.debug.set_circular_orbit(conn.space_center.bodies[body], altitude)
 
     @classmethod
     def set_landed(cls, body, latitude, longitude, altitude=0):
-        cls.connect().testing_tools.set_landed(body, latitude, longitude, altitude)
+        conn = cls.connect()
+        conn.debug.set_landed(
+            conn.space_center.bodies[body], latitude, longitude, altitude
+        )
 
     @classmethod
     def set_pitch_heading_roll(cls, pitch, heading, roll):
         """Point the active vessel at the given pitch, heading and roll (degrees)
         in its surface reference frame, and zero its rotational velocity."""
-        cls.connect().testing_tools.set_pitch_heading_roll(pitch, heading, roll)
+        cls.connect().debug.set_pitch_heading_roll(pitch, heading, roll)
 
     @classmethod
     def set_flight(
@@ -241,8 +250,9 @@ class TestCase(AssertionsMixin):
             latitude = cls.KSC_LATITUDE
         if longitude is None:
             longitude = cls.KSC_LONGITUDE
-        cls.connect().testing_tools.set_flight(
-            body,
+        conn = cls.connect()
+        conn.debug.set_flight(
+            conn.space_center.bodies[body],
             latitude,
             longitude,
             altitude,
@@ -255,11 +265,11 @@ class TestCase(AssertionsMixin):
 
     @classmethod
     def fill_all_resources(cls):
-        cls.connect().testing_tools.fill_all_resources()
+        cls.connect().debug.fill_all_resources()
 
     @classmethod
     def fill_resources(cls, resource_name):
-        cls.connect().testing_tools.fill_resources(resource_name)
+        cls.connect().debug.fill_resources(resource_name)
 
     @classmethod
     def set_crew_to_pilot(cls):

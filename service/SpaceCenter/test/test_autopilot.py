@@ -129,7 +129,7 @@ def _make_autopilot_test_class(
             self.assertEqual(self.ap, self.vessel.auto_pilot)
 
         def cheat_orientation_to(self, pitch, heading, roll=None):
-            self.connect().testing_tools.set_pitch_heading_roll(
+            self.connect().debug.set_pitch_heading_roll(
                 pitch,
                 heading,
                 roll or 0,
@@ -140,7 +140,7 @@ def _make_autopilot_test_class(
             self.wait(0.5)
 
         def cheat_orientation_to_direction(self, direction, roll=None):
-            self.connect().testing_tools.set_direction_and_roll(
+            self.connect().debug.set_direction(
                 direction,
                 roll or 0,
                 self.vessel.surface_reference_frame,
@@ -653,7 +653,7 @@ def _make_autopilot_test_class(
             self.set_direction(direction)
             self.wait_for_autopilot()
             angular_velocity = tuple(self.nudge_rate * value for value in axis)
-            self.connect().testing_tools.apply_angular_velocity(
+            self.connect().debug.set_angular_velocity(
                 angular_velocity, self.vessel.surface_reference_frame, self.vessel
             )
             samples = self.capture_recovery(self.recover_timeout)
@@ -740,7 +740,7 @@ def _make_autopilot_test_class(
 
         def apply_nudge(self, axis, rate):
             angular_velocity = tuple(rate * value for value in axis)
-            self.connect().testing_tools.apply_angular_velocity(
+            self.connect().debug.set_angular_velocity(
                 angular_velocity, self.vessel.surface_reference_frame, self.vessel
             )
 
@@ -842,7 +842,7 @@ def _make_autopilot_test_class(
             axis = self.perpendicular_axis(self.surface_direction())
             omega = tuple(self.flip_seed_rate * value for value in axis)
             self.set_rotation(0, 270)
-            self.connect().testing_tools.apply_angular_velocity(
+            self.connect().debug.set_angular_velocity(
                 omega, self.vessel.surface_reference_frame, self.vessel
             )
             self.ap.engaged = True
@@ -882,7 +882,7 @@ def _make_autopilot_test_class(
             axis = self.perpendicular_axis(self.surface_direction())
             omega = tuple(self.flip_seed_rate * value for value in axis)
             self.set_rotation(0, 225)
-            self.connect().testing_tools.apply_angular_velocity(
+            self.connect().debug.set_angular_velocity(
                 omega, self.vessel.surface_reference_frame, self.vessel
             )
             self.ap.engaged = True
@@ -923,7 +923,7 @@ def _make_autopilot_test_class(
             axis = self.perpendicular_axis(self.surface_direction())
             omega = tuple(self.flip_seed_rate * value for value in axis)
             self.set_rotation(0, 270)
-            self.connect().testing_tools.apply_angular_velocity(
+            self.connect().debug.set_angular_velocity(
                 omega, self.vessel.surface_reference_frame, self.vessel
             )
             self.ap.engaged = True

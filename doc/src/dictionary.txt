@@ -161,6 +161,7 @@ streamPort
 sudo
 symlink
 targetting
+teleporting
 thruster
 thrusters
 toggleable

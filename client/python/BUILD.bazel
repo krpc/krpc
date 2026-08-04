@@ -11,6 +11,7 @@ exports_files(["CHANGELOG.md"])
 py_library(
     name = "krpc_lib",
     srcs = [
+        ":services-debug",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
@@ -112,6 +113,7 @@ py_sdist(
         "LICENSE",
         "README.md",
         "pyproject.toml",
+        ":services-debug",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
@@ -203,6 +205,13 @@ clientgen_python(
     out = "krpc/services/dockingcamera.py",
     defs = "//service/DockingCamera:ServiceDefinitions",
     service = "DockingCamera",
+)
+
+clientgen_python(
+    name = "services-debug",
+    out = "krpc/services/debug.py",
+    defs = "//service/Debug:ServiceDefinitions",
+    service = "Debug",
 )
 
 test_suite(

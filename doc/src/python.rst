@@ -14,3 +14,4 @@ Python
    python/api/remote-tech
    python/api/lidar
    python/api/docking-camera
+   python/api/debug

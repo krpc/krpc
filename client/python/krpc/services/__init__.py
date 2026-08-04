@@ -9,6 +9,7 @@ try:
     from krpc.services.remotetech import RemoteTech
     from krpc.services.lidar import LiDAR
     from krpc.services.dockingcamera import DockingCamera
+    from krpc.services.debug import Debug
 except ImportError as exn:
     KRPC = lambda _: None
     TestService = lambda _: None
@@ -20,6 +21,7 @@ except ImportError as exn:
     RemoteTech = lambda _: None
     LiDAR = lambda _: None
     DockingCamera = lambda _: None
+    Debug = lambda _: None
 
 
 class Client:
@@ -34,6 +36,7 @@ class Client:
         self.remote_tech = RemoteTech(self)
         self.lidar = LiDAR(self)
         self.docking_camera = DockingCamera(self)
+        self.debug = Debug(self)
 
         self._services = {
             "KRPC": self.krpc,
@@ -46,4 +49,5 @@ class Client:
             "RemoteTech": self.remote_tech,
             "LiDAR": self.lidar,
             "DockingCamera": self.docking_camera,
+            "Debug": self.debug,
         }

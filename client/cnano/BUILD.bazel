@@ -24,6 +24,7 @@ pkg_zip(
         "src/krpc.options",
         ":cmake",
         ":protobuf",
+        ":services-debug",
         ":services-dockingcamera",
         ":services-drawing",
         ":services-infernalrobotics",
@@ -120,6 +121,13 @@ clientgen_cnano(
 )
 
 clientgen_cnano(
+    name = "services-debug",
+    out = "include/krpc_cnano/services/debug.h",
+    defs = "//service/Debug:ServiceDefinitions",
+    service = "Debug",
+)
+
+clientgen_cnano(
     name = "services-test-service",
     out = "test/services/test_service.h",
     defs = "//tools/TestServer:ServiceDefinitions",
@@ -137,6 +145,7 @@ hdrs = glob(["include/**/*.h"]) + [
     ":services-remotetech",
     ":services-ui",
     ":services-lidar",
+    ":services-debug",
     ":services-dockingcamera",
 ]
 

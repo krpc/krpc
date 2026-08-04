@@ -29,6 +29,10 @@
       <Project>{48205F2E-3CEE-4480-873A-DEAFCD291407}</Project>
       <Name>KRPC.SpaceCenter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\service\Debug\src\KRPC.Debug.csproj">
+      <Project>{7E772428-6FFF-43D3-B051-2863F2378FC8}</Project>
+      <Name>KRPC.Debug</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(bazel-bin)\tools\TestingTools\AssemblyInfo.cs">
@@ -37,7 +41,6 @@
     <Compile Include="AutoLoadGame.cs" />
     <Compile Include="AutoSwitchVessel.cs" />
     <Compile Include="Fatal.cs" />
-    <Compile Include="OrbitTools.cs" />
     <Compile Include="TestingTools.cs" />
     <Compile Include="TestingToolsOptions.cs" />
   </ItemGroup>

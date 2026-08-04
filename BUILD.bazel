@@ -22,6 +22,9 @@ license_text = """This license (LGPL v3) applies to all parts of kRPC except for
   - GameData/kRPC/KRPC.SpaceCenter.* is under the GPLv3 license.
     See LICENSE.KRPC.SpaceCenter
 
+  - GameData/kRPC/KRPC.Debug.* is under the GPLv3 license.
+    See LICENSE.KRPC.Debug
+
   - GameData/kRPC/Google.Protobuf.dll is a binary from Google's protobuf project.
     See LICENSE.Google.Protobuf
 
@@ -116,6 +119,7 @@ pkg_zip(
         "@csharp_krpc_io_ports_license//file",
         # Services
         "//service/SpaceCenter",
+        "//service/Debug",
         "//service/Drawing",
         "//service/InfernalRobotics",
         "//service/KerbalAlarmClock",
@@ -146,6 +150,10 @@ pkg_zip(
         "service/SpaceCenter/CHANGELOG.md": "GameData/kRPC/CHANGELOG.SpaceCenter.md",
         "service/SpaceCenter/LICENSE": "LICENSE.KRPC.SpaceCenter",
         "service/SpaceCenter/src/module-manager.cfg": "GameData/kRPC/module-manager.cfg",
+        "service/Debug/KRPC.Debug/net472/": "GameData/kRPC/",
+        "service/Debug/": "GameData/kRPC/",
+        "service/Debug/CHANGELOG.md": "GameData/kRPC/CHANGELOG.Debug.md",
+        "service/Debug/LICENSE": "LICENSE.KRPC.Debug",
         "service/Drawing/KRPC.Drawing/net472/": "GameData/kRPC/",
         "service/Drawing/": "GameData/kRPC/",
         "service/Drawing/CHANGELOG.md": "GameData/kRPC/CHANGELOG.Drawing.md",
@@ -185,6 +193,7 @@ py_test(
         "//client/csharp:csproj-srcs",
         "//core:csproj-srcs",
         "//server:csproj-srcs",
+        "//service/Debug:csproj-srcs",
         "//service/DockingCamera:csproj-srcs",
         "//service/Drawing:csproj-srcs",
         "//service/InfernalRobotics:csproj-srcs",
@@ -214,6 +223,7 @@ test_suite(
         "//client/websockets:test",
         "//core:test",
         "//doc:test",
+        "//service/Debug:test",
         "//service/Drawing:test",
         "//service/InfernalRobotics:test",
         "//service/KerbalAlarmClock:test",
@@ -248,6 +258,7 @@ test_suite(
         "//client/python:lint",
         "//client/websockets:lint",
         "//doc:lint",
+        "//service/Debug:lint",
         "//service/Drawing:lint",
         "//service/InfernalRobotics:lint",
         "//service/KerbalAlarmClock:lint",
@@ -268,6 +279,7 @@ filegroup(
         "//core",
         "//core:test-KRPC.Core",
         "//server",
+        "//service/Debug",
         "//service/DockingCamera",
         "//service/Drawing",
         "//service/InfernalRobotics",

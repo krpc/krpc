@@ -77,6 +77,7 @@ changeloggen(
         "//service/RemoteTech:CHANGELOG.md": "RemoteTech service",
         "//service/LiDAR:CHANGELOG.md": "LiDAR service",
         "//service/DockingCamera:CHANGELOG.md": "DockingCamera service",
+        "//service/Debug:CHANGELOG.md": "Debug service",
         "//client/cnano:CHANGELOG.md": "C-nano client",
         "//client/csharp:CHANGELOG.md": "C# client",
         "//client/cpp:CHANGELOG.md": "C++ client",
@@ -191,6 +192,7 @@ defs = [
     "//service/UI:ServiceDefinitions",
     "//service/LiDAR:ServiceDefinitions",
     "//service/DockingCamera:ServiceDefinitions",
+    "//service/Debug:ServiceDefinitions",
 ]
 
 docgen_multiple(
