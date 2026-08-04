@@ -1,6 +1,8 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
+using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.UI
 {
@@ -11,10 +13,12 @@ namespace KRPC.UI
     [KRPCClass (Service = "UI")]
     public class Panel : Container
     {
+        PanelStyle style;
+
         internal Panel (GameObject parent, bool visible)
             : base (Widgets.Create (parent, "krpc.panel", 200, 200), visible)
         {
-            Widgets.AddImage (GameObject, Widgets.Style (skin => skin.window));
+            Style = PanelStyle.Window;
         }
 
         /// <summary>
@@ -24,6 +28,93 @@ namespace KRPC.UI
         internal Panel (GameObject obj)
             : base (obj, true, false)
         {
+            style = PanelStyle.None;
+        }
+
+        /// <summary>
+        /// The image the background of the panel is drawn with, added on first use so that
+        /// a panel which is only ever a container costs nothing to draw.
+        /// </summary>
+        UnityEngine.UI.Image Background {
+            get {
+                var image = GameObject.GetComponent<UnityEngine.UI.Image> ();
+                if (image == null) {
+                    image = Widgets.AddImage (GameObject, null);
+                    // It has no sprite yet, and Unity draws an image that has no sprite
+                    // as a rectangle filled with its color, so it is left undrawn until
+                    // a style gives it one.
+                    image.enabled = false;
+                }
+                return image;
+            }
+        }
+
+        /// <summary>
+        /// How the background of the panel is drawn. A box is the frame to group related
+        /// controls in, and is how a group box is made.
+        /// </summary>
+        [KRPCProperty]
+        public PanelStyle Style {
+            get { return style; }
+            set {
+                var background = Background;
+                var newStyle = value == PanelStyle.Box
+                    ? Widgets.Style (skin => skin.box)
+                    : value == PanelStyle.Window ? Widgets.Style (skin => skin.window) : null;
+                var sprite = newStyle == null || newStyle.normal == null
+                    ? null : newStyle.normal.background;
+                background.sprite = sprite;
+                if (sprite != null)
+                    background.type = UnityEngine.UI.Image.Type.Sliced;
+                // Unity draws an image that has no sprite as a rectangle filled with its
+                // color, so a panel is stopped from being drawn rather than left to fill
+                // itself in: one with no style, and one whose style the game gave no
+                // sprite for, which falls back to not being drawn rather than to a solid
+                // block hiding whatever is behind it.
+                background.enabled = sprite != null;
+                style = value;
+            }
+        }
+
+        /// <summary>
+        /// The color the background of the panel is tinted with.
+        /// </summary>
+        /// <remarks>
+        /// Has no effect while the style of the panel is <see cref="PanelStyle.None" />,
+        /// as the panel is then not drawn at all.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple3 Color {
+            get { return Background.color.ToTuple (); }
+            set { Background.color = value.ToColor (); }
+        }
+
+        /// <summary>
+        /// Whether the user can move the panel by dragging it.
+        /// </summary>
+        /// <remarks>
+        /// Dragging anywhere on the panel moves it, including over the elements it
+        /// contains, unless one of them takes the pointer for itself. Give a panel a title
+        /// bar of its own if only part of it should move it.
+        /// A panel whose style is <see cref="PanelStyle.None" /> is not drawn, so it takes
+        /// no pointer events of its own and can only be dragged by the elements it
+        /// contains.
+        /// </remarks>
+        [KRPCProperty]
+        public bool Draggable {
+            get {
+                var handler = GameObject.GetComponent<DragHandler> ();
+                return handler != null && handler.enabled;
+            }
+            set {
+                var handler = GameObject.GetComponent<DragHandler> ();
+                if (handler == null) {
+                    if (!value)
+                        return;
+                    handler = GameObject.AddComponent<DragHandler> ();
+                }
+                handler.enabled = value;
+            }
         }
 
         /// <summary>

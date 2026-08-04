@@ -46,6 +46,7 @@
     <Compile Include="Container.cs" />
     <Compile Include="ContentSizeFit.cs" />
     <Compile Include="Control.cs" />
+    <Compile Include="DragHandler.cs" />
     <Compile Include="ExtensionMethods\LayoutExtensions.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="MessagePosition.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Panel.cs" />
+    <Compile Include="PanelStyle.cs" />
     <Compile Include="RectTransform.cs" />
     <Compile Include="ScrollView.cs" />
     <Compile Include="SizeFitter.cs" />
