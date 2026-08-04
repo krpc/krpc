@@ -1,3 +1,4 @@
+using System;
 using KRPC.Service.Attributes;
 using KSP.UI;
 using UnityEngine;
@@ -14,8 +15,17 @@ namespace KRPC.UI
 
         internal static Canvas StockCanvas {
             get {
-                if (stockCanvas == null)
-                    stockCanvas = new Canvas (UIMasterController.Instance.appCanvas);
+                // The wrapper is cached so that repeated calls return the same object, but the
+                // game object it wraps is destroyed by a scene change. Comparing the game object
+                // against null uses Unity's equality, which is true once it has been destroyed,
+                // so a stale wrapper is replaced rather than handed out.
+                if (stockCanvas == null || stockCanvas.GameObject == null) {
+                    var controller = UIMasterController.Instance;
+                    if (controller == null || controller.appCanvas == null)
+                        throw new InvalidOperationException (
+                            "The stock UI canvas is not available in the current game scene");
+                    stockCanvas = new Canvas (controller.appCanvas);
+                }
                 return stockCanvas;
             }
         }

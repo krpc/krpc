@@ -9,7 +9,7 @@ namespace KRPC.UI
     /// <summary>
     /// Addon for managing the UI
     /// </summary>
-    [KSPAddon (KSPAddon.Startup.Flight, false)]
+    [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     public sealed class Addon : ClientCleanupAddon
     {
         static AssetBundle prefabs;
