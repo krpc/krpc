@@ -18,6 +18,9 @@
 #                        + GameData/000_Harmony, GameData/000_ClickThroughBlocker,
 #                          GameData/001_ToolbarControl (deps, shared with RealChute),
 #                          GameData/SpaceTuxLibrary (dep)
+#   FAR               -> GameData/FerramAerospaceResearch
+#                        + GameData/ModularFlightIntegrator, GameData/000_KSPBurst (deps),
+#                          GameData/000_Harmony (dep, shared with RealChute and AGExt)
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -79,6 +82,30 @@ filegroup(
 filegroup(
     name = "agext",
     srcs = ["@agext//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# Ferram Aerospace Research. Installing it swaps the game's aerodynamics model, so it is only
+# ever requested by the tests that check the Flight class against FAR.
+filegroup(
+    name = "far",
+    srcs = ["@far//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# FAR's dependencies, installed alongside it and never requested on their own. KSP refuses to
+# load FAR's assembly without ModularFlightIntegrator, and FAR's own types fail to load
+# without the Unity job-system assemblies in KSPBurst (which in turn needs Harmony, shared
+# with RealChute and AGExt).
+filegroup(
+    name = "modular_flight_integrator",
+    srcs = ["@modular_flight_integrator//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "kspburst",
+    srcs = ["@kspburst//:gamedata"],
     visibility = ["//visibility:public"],
 )
 
