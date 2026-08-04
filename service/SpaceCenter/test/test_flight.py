@@ -934,6 +934,25 @@ class TestFlightFAR(krpctest.TestCase):
             delta=0.15 * math.hypot(upright_lift, upright_side),
         )
 
+    def test_aerodynamic_torque_matches_far(self):
+        # The live torque is the one FAR applies about the center of mass, so it agrees with
+        # FAR's simulation of the same state.
+        flight = self.fly()
+        torque = vector(flight.aerodynamic_torque)
+        simulated = vector(
+            flight.simulate_aerodynamic_torque_at(
+                self.body,
+                self.vessel.position(self.ref),
+                self.vessel.velocity(self.ref),
+                self.vessel.rotation(self.ref),
+                (0.0, 0.0, 0.0),
+            )
+        )
+        # A capsule at an angle of attack has its center of pressure off its center of
+        # mass, so there is a real torque to compare.
+        self.assertGreater(norm(simulated), 10)
+        self.assertLess(norm(torque - simulated), 1 + 0.25 * norm(simulated))
+
     def test_flight_parameters(self):
         # The flight parameters FAR computes, read while flying a known state: the pod is
         # placed at a set airspeed and angle of attack with no sideslip, and the pressures

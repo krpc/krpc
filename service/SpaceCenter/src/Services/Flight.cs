@@ -164,11 +164,14 @@ namespace KRPC.SpaceCenter.Services
         /// center-of-pressure points they are applied at. Also includes the first-order
         /// equivalent of the per-part rigidbody angular drag the engine applies
         /// (-rb.angularDrag * I_part * omega), which damps rotation without ever
-        /// appearing as a force.
+        /// appearing as a force. Ferram Aerospace Research applies its own per-part forces and
+        /// reports the torque they exert about the center of mass directly, in
+        /// kilonewton-meters.
         /// </summary>
         Vector3d WorldAerodynamicTorque {
             get {
-                CheckNoFAR ();
+                if (FAR.IsAvailable)
+                    return (Vector3d)FAR.VesselAerodynamicTorque (InternalVessel) * 1000d;
                 var com = WorldCoM;
                 Vector3d torque = Vector3d.zero;
                 foreach (var part in InternalVessel.Parts) {
@@ -676,21 +679,15 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>A vector pointing along the axis of the torque, with its magnitude
         /// equal to the strength of the torque in newton-meters.</returns>
         /// <remarks>
-        /// This is the live counterpart to <see cref="AerodynamicForce"/>: it reconstructs
-        /// the per-part aerodynamic forces and application points that the game applied on
-        /// the current physics frame and levers them about the center of mass, rather than
-        /// re-simulating them for hypothetical conditions the way
+        /// This is the live counterpart to <see cref="AerodynamicForce"/>: it is the torque
+        /// the aerodynamics model applied on the current physics frame, taken about the
+        /// center of mass, rather than one re-simulated for hypothetical conditions the way
         /// <see cref="SimulateAerodynamicTorqueAt"/> does. It is intended for validating the
-        /// simulator against the live game state. Not available when
-        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
-        /// is installed, as FAR does not expose a live per-frame torque.
+        /// simulator against the live game state.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 AerodynamicTorque {
-            get {
-                CheckNoFAR ();
-                return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicTorque).ToTuple ();
-            }
+            get { return referenceFrame.DirectionFromWorldSpace (WorldAerodynamicTorque).ToTuple (); }
         }
 
         /// <summary>
