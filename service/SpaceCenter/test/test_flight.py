@@ -308,6 +308,22 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
         self.assertAlmostEqual(-0.09694444, flight.latitude, places=3)
         self.assertAlmostEqual(-74.5575, flight.longitude, places=3)
 
+    def test_surface_normal(self):
+        body = self.vessel.orbit.body
+        frame = body.reference_frame
+        flight = self.vessel.flight(frame)
+        normal = flight.surface_normal
+        self.assertAlmostEqual(1, norm(normal))
+        # It is the normal of the surface at the position of the vessel
+        self.assertAlmostEqual(
+            body.surface_normal(flight.latitude, flight.longitude, frame),
+            normal,
+            places=6,
+        )
+        # The launchpad is level, so its normal points straight up
+        up = body.msl_normal(flight.latitude, flight.longitude, frame)
+        self.assertAlmostEqual(1, dot(up, normal), places=5)
+
     def test_ferram_aerospace_research(self):
         if self.far:
             flight = self.vessel.flight()

@@ -333,6 +333,7 @@ SpaceCenter.Flight.BedrockAltitude
 SpaceCenter.Flight.Elevation
 SpaceCenter.Flight.Latitude
 SpaceCenter.Flight.Longitude
+SpaceCenter.Flight.SurfaceNormal
 SpaceCenter.Flight.Velocity
 SpaceCenter.Flight.Speed
 SpaceCenter.Flight.HorizontalSpeed
