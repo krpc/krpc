@@ -349,6 +349,14 @@ Flight
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+      .. note::
+
+         This is the force the aerodynamics model actually applied to the vessel on the
+         last physics frame, summed over its parts, so it points where the air pushes the
+         vessel whatever the vessel's orientation. It equals :attr:`Flight.lift` plus
+         :attr:`Flight.side_force` plus :attr:`Flight.drag`.
+
    .. attribute:: aerodynamic_torque
 
       The net aerodynamic torque currently acting on the vessel about its center of
@@ -363,14 +371,11 @@ Flight
 
       .. note::
 
-         This is the live counterpart to :attr:`Flight.aerodynamic_force`: it reconstructs
-         the per-part aerodynamic forces and application points that the game applied on
-         the current physics frame and levers them about the center of mass, rather than
-         re-simulating them for hypothetical conditions the way
+         This is the live counterpart to :attr:`Flight.aerodynamic_force`: it is the torque
+         the aerodynamics model applied on the current physics frame, taken about the
+         center of mass, rather than one re-simulated for hypothetical conditions the way
          :meth:`Flight.simulate_aerodynamic_torque_at` does. It is intended for validating the
-         simulator against the live game state. Not available when
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
-         is installed, as FAR does not expose a live per-frame torque.
+         simulator against the live game state.
 
    .. method:: simulate_aerodynamic_force_at(body, position, velocity, rotation)
 
@@ -467,6 +472,32 @@ Flight
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The part of :attr:`Flight.aerodynamic_force` that acts across the air stream and
+         towards the top of the vessel: perpendicular to the air stream, in the plane the
+         vessel's nose and its top sit in. A vessel flying with sideslip is also pushed out
+         of that plane, and that part of the force is :attr:`Flight.side_force`. Zero for a
+         vessel flying exactly sideways, which has no such plane to speak of.
+
+   .. attribute:: side_force
+
+      The aerodynamic side force currently acting on the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :attr:`Flight.aerodynamic_force` that acts across the air stream and out
+         of the vessel's side, which is what the air does to a vessel flying with sideslip.
+         It is perpendicular to both :attr:`Flight.lift` and :attr:`Flight.drag`, and the
+         three of them sum to :attr:`Flight.aerodynamic_force`.
+
    .. attribute:: drag
 
       The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
@@ -475,6 +506,12 @@ Flight
       :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
       :rtype: tuple(float, float, float)
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :attr:`Flight.aerodynamic_force` along the air stream, opposing the
+         vessel's motion through the air.
 
    .. attribute:: aerodynamic_acceleration
 

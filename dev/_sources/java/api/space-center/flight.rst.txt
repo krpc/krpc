@@ -317,6 +317,14 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+
+      .. note::
+
+         This is the force the aerodynamics model actually applied to the vessel on the
+         last physics frame, summed over its parts, so it points where the air pushes the
+         vessel whatever the vessel's orientation. It equals :meth:`Flight.getLift()` plus
+         :meth:`Flight.getSideForce()` plus :meth:`Flight.getDrag()`.
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> getAerodynamicTorque()
 
 
@@ -330,14 +338,11 @@ Flight
 
       .. note::
 
-         This is the live counterpart to :meth:`Flight.getAerodynamicForce()`: it reconstructs
-         the per-part aerodynamic forces and application points that the game applied on
-         the current physics frame and levers them about the center of mass, rather than
-         re-simulating them for hypothetical conditions the way
+         This is the live counterpart to :meth:`Flight.getAerodynamicForce()`: it is the torque
+         the aerodynamics model applied on the current physics frame, taken about the
+         center of mass, rather than one re-simulated for hypothetical conditions the way
          :meth:`Flight.simulateAerodynamicTorqueAt(CelestialBody, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Quartet<Double,Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>)` does. It is intended for validating the
-         simulator against the live game state. Not available when
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
-         is installed, as FAR does not expose a live per-frame torque.
+         simulator against the live game state.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> simulateAerodynamicForceAt(CelestialBody body, org.javatuples.Triplet<Double,Double,Double> position, org.javatuples.Triplet<Double,Double,Double> velocity, org.javatuples.Quartet<Double,Double,Double,Double> rotation)
 
@@ -430,6 +435,31 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The part of :meth:`Flight.getAerodynamicForce()` that acts across the air stream and
+         towards the top of the vessel: perpendicular to the air stream, in the plane the
+         vessel's nose and its top sit in. A vessel flying with sideslip is also pushed out
+         of that plane, and that part of the force is :meth:`Flight.getSideForce()`. Zero for a
+         vessel flying exactly sideways, which has no such plane to speak of.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getSideForce()
+
+
+      The aerodynamic side force currently acting on the vessel.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :meth:`Flight.getAerodynamicForce()` that acts across the air stream and out
+         of the vessel's side, which is what the air does to a vessel flying with sideslip.
+         It is perpendicular to both :meth:`Flight.getLift()` and :meth:`Flight.getDrag()`, and the
+         three of them sum to :meth:`Flight.getAerodynamicForce()`.
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> getDrag()
 
 
@@ -437,6 +467,12 @@ Flight
 
       :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :meth:`Flight.getAerodynamicForce()` along the air stream, opposing the
+         vessel's motion through the air.
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getAerodynamicAcceleration()
 

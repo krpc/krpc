@@ -1334,6 +1334,13 @@ in reference frame <a class="reference internal" href="reference-frame.html#Spac
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the force the aerodynamics model actually applied to the vessel on the
+last physics frame, summed over its parts, so it points where the air pushes the
+vessel whatever the vessel’s orientation. It equals <a class="reference internal" href="#SpaceCenter.Flight.lift" title="SpaceCenter.Flight.lift"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.lift</span></code></a> plus
+<a class="reference internal" href="#SpaceCenter.Flight.side_force" title="SpaceCenter.Flight.side_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.side_force</span></code></a> plus <a class="reference internal" href="#SpaceCenter.Flight.drag" title="SpaceCenter.Flight.drag"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.drag</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1358,14 +1365,11 @@ newton-meters.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the live counterpart to <a class="reference internal" href="#SpaceCenter.Flight.aerodynamic_force" title="SpaceCenter.Flight.aerodynamic_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.aerodynamic_force</span></code></a>: it reconstructs
-the per-part aerodynamic forces and application points that the game applied on
-the current physics frame and levers them about the center of mass, rather than
-re-simulating them for hypothetical conditions the way
+<p>This is the live counterpart to <a class="reference internal" href="#SpaceCenter.Flight.aerodynamic_force" title="SpaceCenter.Flight.aerodynamic_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.aerodynamic_force</span></code></a>: it is the torque
+the aerodynamics model applied on the current physics frame, taken about the
+center of mass, rather than one re-simulated for hypothetical conditions the way
 <a class="reference internal" href="#SpaceCenter.Flight.simulate_aerodynamic_torque_at" title="SpaceCenter.Flight.simulate_aerodynamic_torque_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Flight.simulate_aerodynamic_torque_at()</span></code></a> does. It is intended for validating the
-simulator against the live game state. Not available when
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
-is installed, as FAR does not expose a live per-frame torque.</p>
+simulator against the live game state.</p>
 </div>
 </dd></dl>
 
@@ -1507,6 +1511,41 @@ currently acting on the vessel.</p>
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#SpaceCenter.Flight.aerodynamic_force" title="SpaceCenter.Flight.aerodynamic_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.aerodynamic_force</span></code></a> that acts across the air stream and
+towards the top of the vessel: perpendicular to the air stream, in the plane the
+vessel’s nose and its top sit in. A vessel flying with sideslip is also pushed out
+of that plane, and that part of the force is <a class="reference internal" href="#SpaceCenter.Flight.side_force" title="SpaceCenter.Flight.side_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.side_force</span></code></a>. Zero for a
+vessel flying exactly sideways, which has no such plane to speak of.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Flight.side_force">
+<span class="sig-name descname"><span class="pre">side_force</span></span><a class="headerlink" href="#SpaceCenter.Flight.side_force" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic side force currently acting on the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#SpaceCenter.Flight.aerodynamic_force" title="SpaceCenter.Flight.aerodynamic_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.aerodynamic_force</span></code></a> that acts across the air stream and out
+of the vessel’s side, which is what the air does to a vessel flying with sideslip.
+It is perpendicular to both <a class="reference internal" href="#SpaceCenter.Flight.lift" title="SpaceCenter.Flight.lift"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.lift</span></code></a> and <a class="reference internal" href="#SpaceCenter.Flight.drag" title="SpaceCenter.Flight.drag"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.drag</span></code></a>, and the
+three of them sum to <a class="reference internal" href="#SpaceCenter.Flight.aerodynamic_force" title="SpaceCenter.Flight.aerodynamic_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.aerodynamic_force</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1527,6 +1566,11 @@ currently acting on the vessel.</p>
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#SpaceCenter.Flight.aerodynamic_force" title="SpaceCenter.Flight.aerodynamic_force"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Flight.aerodynamic_force</span></code></a> along the air stream, opposing the
+vessel’s motion through the air.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">

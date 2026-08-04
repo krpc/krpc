@@ -285,6 +285,14 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+
+      .. note::
+
+         This is the force the aerodynamics model actually applied to the vessel on the
+         last physics frame, summed over its parts, so it points where the air pushes the
+         vessel whatever the vessel's orientation. It equals :func:`Flight::lift` plus
+         :func:`Flight::side_force` plus :func:`Flight::drag`.
+
    .. function:: std::tuple<double, double, double> aerodynamic_torque()
 
       The net aerodynamic torque currently acting on the vessel about its center of
@@ -297,14 +305,11 @@ Flight
 
       .. note::
 
-         This is the live counterpart to :func:`Flight::aerodynamic_force`: it reconstructs
-         the per-part aerodynamic forces and application points that the game applied on
-         the current physics frame and levers them about the center of mass, rather than
-         re-simulating them for hypothetical conditions the way
+         This is the live counterpart to :func:`Flight::aerodynamic_force`: it is the torque
+         the aerodynamics model applied on the current physics frame, taken about the
+         center of mass, rather than one re-simulated for hypothetical conditions the way
          :func:`Flight::simulate_aerodynamic_torque_at` does. It is intended for validating the
-         simulator against the live game state. Not available when
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
-         is installed, as FAR does not expose a live per-frame torque.
+         simulator against the live game state.
 
    .. function:: std::tuple<double, double, double> simulate_aerodynamic_force_at(CelestialBody body, std::tuple<double, double, double> position, std::tuple<double, double, double> velocity, std::tuple<double, double, double, double> rotation)
 
@@ -405,12 +410,42 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The part of :func:`Flight::aerodynamic_force` that acts across the air stream and
+         towards the top of the vessel: perpendicular to the air stream, in the plane the
+         vessel's nose and its top sit in. A vessel flying with sideslip is also pushed out
+         of that plane, and that part of the force is :func:`Flight::side_force`. Zero for a
+         vessel flying exactly sideways, which has no such plane to speak of.
+
+   .. function:: std::tuple<double, double, double> side_force()
+
+      The aerodynamic side force currently acting on the vessel.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :func:`Flight::aerodynamic_force` that acts across the air stream and out
+         of the vessel's side, which is what the air does to a vessel flying with sideslip.
+         It is perpendicular to both :func:`Flight::lift` and :func:`Flight::drag`, and the
+         three of them sum to :func:`Flight::aerodynamic_force`.
+
    .. function:: std::tuple<double, double, double> drag()
 
       The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
 
       :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :func:`Flight::aerodynamic_force` along the air stream, opposing the
+         vessel's motion through the air.
 
    .. function:: std::tuple<double, double, double> aerodynamic_acceleration()
 

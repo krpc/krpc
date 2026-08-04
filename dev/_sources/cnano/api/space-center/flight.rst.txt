@@ -285,6 +285,14 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+
+      .. note::
+
+         This is the force the aerodynamics model actually applied to the vessel on the
+         last physics frame, summed over its parts, so it points where the air pushes the
+         vessel whatever the vessel's orientation. It equals :func:`krpc_SpaceCenter_Flight_Lift` plus
+         :func:`krpc_SpaceCenter_Flight_SideForce` plus :func:`krpc_SpaceCenter_Flight_Drag`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_AerodynamicTorque(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 
       The net aerodynamic torque currently acting on the vessel about its center of
@@ -297,14 +305,11 @@ Flight
 
       .. note::
 
-         This is the live counterpart to :func:`krpc_SpaceCenter_Flight_AerodynamicForce`: it reconstructs
-         the per-part aerodynamic forces and application points that the game applied on
-         the current physics frame and levers them about the center of mass, rather than
-         re-simulating them for hypothetical conditions the way
+         This is the live counterpart to :func:`krpc_SpaceCenter_Flight_AerodynamicForce`: it is the torque
+         the aerodynamics model applied on the current physics frame, taken about the
+         center of mass, rather than one re-simulated for hypothetical conditions the way
          :func:`krpc_SpaceCenter_Flight_SimulateAerodynamicTorqueAt` does. It is intended for validating the
-         simulator against the live game state. Not available when
-         `Ferram Aerospace Research <https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/>`_
-         is installed, as FAR does not expose a live per-frame torque.
+         simulator against the live game state.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_SimulateAerodynamicForceAt(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_CelestialBody_t body, const krpc_tuple_double_double_double_t * position, const krpc_tuple_double_double_double_t * velocity, const krpc_tuple_double_double_double_double_t * rotation)
 
@@ -405,12 +410,42 @@ Flight
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
 
+
+      .. note::
+
+         The part of :func:`krpc_SpaceCenter_Flight_AerodynamicForce` that acts across the air stream and
+         towards the top of the vessel: perpendicular to the air stream, in the plane the
+         vessel's nose and its top sit in. A vessel flying with sideslip is also pushed out
+         of that plane, and that part of the force is :func:`krpc_SpaceCenter_Flight_SideForce`. Zero for a
+         vessel flying exactly sideways, which has no such plane to speak of.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SideForce(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The aerodynamic side force currently acting on the vessel.
+
+      :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :func:`krpc_SpaceCenter_Flight_AerodynamicForce` that acts across the air stream and out
+         of the vessel's side, which is what the air does to a vessel flying with sideslip.
+         It is perpendicular to both :func:`krpc_SpaceCenter_Flight_Lift` and :func:`krpc_SpaceCenter_Flight_Drag`, and the
+         three of them sum to :func:`krpc_SpaceCenter_Flight_AerodynamicForce`.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Drag(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 
       The `aerodynamic drag <https://en.wikipedia.org/wiki/Aerodynamic_force>`_ currently acting on the vessel.
 
       :returns: A vector pointing in the direction of the force, with its magnitude equal to the strength of the force in Newtons.
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The part of :func:`krpc_SpaceCenter_Flight_AerodynamicForce` along the air stream, opposing the
+         vessel's motion through the air.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_AerodynamicAcceleration(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 

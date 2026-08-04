@@ -1142,6 +1142,13 @@ in reference frame <a class="reference internal" href="reference-frame.html#clas
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the force the aerodynamics model actually applied to the vessel on the
+last physics frame, summed over its parts, so it points where the air pushes the
+vessel whatever the vessel’s orientation. It equals <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.Lift" title="KRPC.Client.Services.SpaceCenter.Flight.Lift property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Lift</span></code></a> plus
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.SideForce" title="KRPC.Client.Services.SpaceCenter.Flight.SideForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.SideForce</span></code></a> plus <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.Drag" title="KRPC.Client.Services.SpaceCenter.Flight.Drag property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Drag</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -1160,14 +1167,11 @@ newton-meters.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This is the live counterpart to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce" title="KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.AerodynamicForce</span></code></a>: it reconstructs
-the per-part aerodynamic forces and application points that the game applied on
-the current physics frame and levers them about the center of mass, rather than
-re-simulating them for hypothetical conditions the way
+<p>This is the live counterpart to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce" title="KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.AerodynamicForce</span></code></a>: it is the torque
+the aerodynamics model applied on the current physics frame, taken about the
+center of mass, rather than one re-simulated for hypothetical conditions the way
 <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Flight.SimulateAerodynamicTorqueAt" title="KRPC.Client.Services.SpaceCenter.Flight.SimulateAerodynamicTorqueAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Flight.SimulateAerodynamicTorqueAt</span></code></a> does. It is intended for validating the
-simulator against the live game state. Not available when
-<a class="reference external" href="https://forum.kerbalspaceprogram.com/index.php?/topic/19321-130-ferram-aerospace-research-v0159-liebe-82117/">Ferram Aerospace Research</a>
-is installed, as FAR does not expose a live per-frame torque.</p>
+simulator against the live game state.</p>
 </div>
 </dd></dl>
 
@@ -1294,6 +1298,35 @@ currently acting on the vessel.</p>
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce" title="KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.AerodynamicForce</span></code></a> that acts across the air stream and
+towards the top of the vessel: perpendicular to the air stream, in the plane the
+vessel’s nose and its top sit in. A vessel flying with sideslip is also pushed out
+of that plane, and that part of the force is <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.SideForce" title="KRPC.Client.Services.SpaceCenter.Flight.SideForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.SideForce</span></code></a>. Zero for a
+vessel flying exactly sideways, which has no such plane to speak of.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Flight.SideForce">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">SideForce</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Flight.SideForce" title="Link to this definition">#</a></dt>
+<dd><p>The aerodynamic side force currently acting on the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce" title="KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.AerodynamicForce</span></code></a> that acts across the air stream and out
+of the vessel’s side, which is what the air does to a vessel flying with sideslip.
+It is perpendicular to both <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.Lift" title="KRPC.Client.Services.SpaceCenter.Flight.Lift property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Lift</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.Drag" title="KRPC.Client.Services.SpaceCenter.Flight.Drag property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.Drag</span></code></a>, and the
+three of them sum to <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce" title="KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.AerodynamicForce</span></code></a>.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -1308,6 +1341,11 @@ currently acting on the vessel.</p>
 <dd class="field-even"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The part of <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce" title="KRPC.Client.Services.SpaceCenter.Flight.AerodynamicForce property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Flight.AerodynamicForce</span></code></a> along the air stream, opposing the
+vessel’s motion through the air.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
