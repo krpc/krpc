@@ -324,29 +324,6 @@ class TestFlightAtLaunchpad(krpctest.TestCase):
         up = body.msl_normal(flight.latitude, flight.longitude, frame)
         self.assertAlmostEqual(1, dot(up, normal), places=5)
 
-    def test_ferram_aerospace_research(self):
-        if self.far:
-            flight = self.vessel.flight()
-
-            self.assertAlmostEqual(1.188, flight.atmosphere_density, places=3)
-            self.assertAlmostEqual(0, flight.drag, delta=0.5)
-            self.assertAlmostEqual(0, flight.dynamic_pressure)
-
-            self.assertAlmostEqual(0, flight.angle_of_attack, delta=2.5)
-            self.assertAlmostEqual(-27, flight.sideslip_angle, delta=2)
-            self.assertAlmostEqual(0, flight.stall_fraction)
-
-            self.assertAlmostEqual(0, flight.mach_number)
-            self.assertAlmostEqual(193, flight.terminal_velocity, delta=0.5)
-
-            self.assertAlmostEqual(0.103, flight.drag_coefficient, places=3)
-            self.assertAlmostEqual(0, flight.lift_coefficient, places=3)
-            self.assertAlmostEqual(0, flight.pitching_moment_coefficient, places=3)
-            self.assertAlmostEqual(2246.8, flight.ballistic_coefficient, delta=50)
-            self.assertAlmostEqual(0, flight.thrust_specific_fuel_consumption)
-
-            self.assertEqual("Nominal", flight.far_status)
-
     def test_simulate_aerodynamic_force_rotation(self):
         # The rotation argument sets the vessel attitude the force is computed
         # for (issue #913). A 300 m/s head-on wind (angle of attack 0 at the
@@ -699,6 +676,14 @@ class TestFlightAero(krpctest.TestCase):
         self.assertGreater(norm(vector(broadside[1]) - vector(head_on[1])), 1)
 
 
+class TestFlightAeroFAR(TestFlightAero):
+    """The aerodynamic simulation suite run against Ferram Aerospace Research instead of the
+    stock model. The simulation RPCs hand the whole state to FAR when it is installed, so the
+    same expectations hold; the base class skips the few checks that are stock-only."""
+
+    mods = ["FAR"]
+
+
 class TestFlightAirbrake(krpctest.TestCase):
     """Regression for issue #622: SimulateAerodynamicForceAt must account for
     the current physical deflection of ModuleAeroSurface airbrakes."""
@@ -786,6 +771,235 @@ class TestFlightAirbrake(krpctest.TestCase):
         finally:
             for cs in self._airbrakes():
                 cs.deployed = False
+
+
+class TestFlightFAR(krpctest.TestCase):
+    """The live aerodynamic readouts with Ferram Aerospace Research installed, which
+    replaces the stock aerodynamics model with its own (issue #498)."""
+
+    mods = ["FAR"]
+
+    ALTITUDE = 5000
+    SPEED = 200
+    # A nose-up attitude relative to the flight path, so the air stream pushes the pod
+    # sideways as well as backwards and there is a lift force to check.
+    ANGLE_OF_ATTACK = 20
+    # Time given to the flight readouts to catch up with a freshly placed vessel. A couple
+    # of physics frames: the pod is unstable at this angle of attack and starts pitching up
+    # as soon as physics resume, so every extra frame moves the state being measured.
+    SETTLE = 0.05
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Basic")
+        cls.remove_other_vessels()
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.body = cls.vessel.orbit.body
+        cls.ref = cls.body.reference_frame
+
+    def fly(self, roll=0):
+        """Put the pod in level flight at a fixed angle of attack and the given roll, and
+        wait until FAR reports a force on it (it voxelizes the craft asynchronously, and
+        reports nothing until the vessel is unpacked and moving through the air)."""
+        self.set_flight(
+            altitude=self.ALTITUDE,
+            speed=self.SPEED,
+            pitch=self.ANGLE_OF_ATTACK,
+            angle_of_attack=self.ANGLE_OF_ATTACK,
+            roll=roll,
+        )
+        flight = self.vessel.flight(self.ref)
+        self.wait_until(
+            lambda: norm(vector(flight.aerodynamic_force)) > 1,
+            message="FAR to report an aerodynamic force on the vessel",
+        )
+        # The per-frame flight readouts lag the teleport by a frame or two, so let them
+        # catch up with the state the vessel was placed in before reading any of them.
+        self.wait(self.SETTLE)
+        return flight
+
+    def airstream_angles(self):
+        """The angle of attack and sideslip angle the vessel is currently flying at, in
+        degrees, worked out from the direction the air stream comes from in the vessel's own
+        axes: +x to its right, +y along its nose, +z out of its belly. Each is the angle
+        between the nose and the air stream in one plane, so the air stream is projected
+        onto the nose-belly plane for the angle of attack and the nose-right plane for the
+        sideslip angle."""
+        airstream = self.space_center.transform_direction(
+            self.vessel.flight(self.ref).velocity, self.ref, self.vessel.reference_frame
+        )
+        right, nose, belly = airstream
+        return (
+            rad2deg(math.atan2(belly, nose)),
+            rad2deg(math.atan2(right, nose)),
+        )
+
+    def test_aerodynamic_force_matches_far(self):
+        # The reported force is the one FAR applies to the vessel, so it agrees with FAR's
+        # own simulation of the same state in direction as well as magnitude. Building it
+        # from FAR's lift and drag coefficients instead, as kRPC used to, gets the
+        # direction wrong because those coefficients are scalars measured against the
+        # vessel's own axes.
+        flight = self.fly()
+        force = vector(flight.aerodynamic_force)
+        simulated = vector(
+            flight.simulate_aerodynamic_force_at(
+                self.body,
+                self.vessel.position(self.ref),
+                self.vessel.velocity(self.ref),
+                self.vessel.rotation(self.ref),
+            )
+        )
+        self.assertGreater(norm(simulated), 1)
+        # The live force and the state passed to the simulation are read a few physics
+        # frames apart while the pod pitches up, so allow for the state moving on between
+        # them. The force the old code built pointed somewhere else entirely.
+        self.assertLess(norm(force - simulated), 0.2 * norm(simulated))
+
+    def test_lift_and_drag_split_the_force(self):
+        # Drag, lift and side force are the components of the total force along the air
+        # stream, across it towards the top of the vessel, and across it out of its side.
+        # The three are mutually perpendicular and sum back to the total force, and each
+        # acceleration is its force over the mass.
+        flight = self.fly()
+        force = vector(flight.aerodynamic_force)
+        lift = vector(flight.lift)
+        drag = vector(flight.drag)
+        side_force = vector(flight.side_force)
+        airstream = normalize(vector(flight.velocity))
+        magnitude = norm(force)
+        self.assertGreater(magnitude, 1)
+        self.assertLess(norm(lift + side_force + drag - force), 1e-3 * magnitude)
+        # Drag opposes the motion through the air; the other two are across it.
+        self.assertLess(dot(drag, airstream), 0)
+        self.assertLess(abs(dot(lift, airstream)), 1e-3 * magnitude)
+        self.assertLess(abs(dot(side_force, airstream)), 1e-3 * magnitude)
+        self.assertLess(abs(dot(lift, side_force)), 1e-3 * magnitude * magnitude)
+        # The pod is placed with its nose in the plane of its flight path, so the air
+        # stream pushes it towards its top and hardly at all out of its side.
+        self.assertGreater(norm(lift), 10 * norm(side_force))
+        mass = self.vessel.mass
+        for force_attr, accel_attr in (
+            ("aerodynamic_force", "aerodynamic_acceleration"),
+            ("lift", "lift_acceleration"),
+            ("drag", "drag_acceleration"),
+        ):
+            expected = tuple(f / mass for f in getattr(flight, force_attr))
+            self.assertAlmostEqual(
+                expected, getattr(flight, accel_attr), delta=1e-3 * magnitude / mass
+            )
+
+    def test_aerodynamic_force_independent_of_roll(self):
+        # Issue #498: rolling a vessel of revolution about its own axis does not change the
+        # aerodynamic force acting on it. Compare the two quantities that describe the
+        # force relative to the air stream - how strong it is, and how far it is turned
+        # from the air stream - after flying at the same angle of attack, once upright and
+        # once rolled onto its side.
+        def measure(roll):
+            flight = self.fly(roll)
+            force = vector(flight.aerodynamic_force)
+            airstream = normalize(vector(flight.velocity))
+            return norm(force), rad2deg(math.acos(dot(normalize(force), airstream)))
+
+        upright_magnitude, upright_angle = measure(0)
+        rolled_magnitude, rolled_angle = measure(90)
+        self.assertGreater(upright_magnitude, 1)
+        # The pod is a body of revolution apart from its hatch and windows, so allow a
+        # little for those. Reconstructing the force from FAR's lift coefficient loses the
+        # whole across-stream component when rolled, which is far larger than this.
+        self.assertAlmostEqual(
+            upright_magnitude, rolled_magnitude, delta=0.1 * upright_magnitude
+        )
+        self.assertAlmostEqual(upright_angle, rolled_angle, delta=5)
+
+    def test_rolling_moves_lift_into_side_force(self):
+        # Lift and side force are named for the vessel, not for the world: they are the two
+        # halves of the across-stream force, one towards the vessel's top and one out of its
+        # side. Flying the same angle of attack rolled onto its side turns what was lift into
+        # side force, while the total force across the stream is unchanged.
+        def measure(roll):
+            flight = self.fly(roll)
+            return norm(vector(flight.lift)), norm(vector(flight.side_force))
+
+        upright_lift, upright_side = measure(0)
+        rolled_lift, rolled_side = measure(90)
+        self.assertGreater(upright_lift, 10 * upright_side)
+        self.assertGreater(rolled_side, 10 * rolled_lift)
+        # The air pushes the pod just as hard across the stream either way round.
+        self.assertAlmostEqual(
+            math.hypot(upright_lift, upright_side),
+            math.hypot(rolled_lift, rolled_side),
+            delta=0.15 * math.hypot(upright_lift, upright_side),
+        )
+
+    def test_flight_parameters(self):
+        # The flight parameters FAR computes, read while flying a known state: the pod is
+        # placed at a set airspeed and angle of attack with no sideslip, and the pressures
+        # and speeds follow from the atmosphere it is flying through.
+        flight = self.fly()
+        speed = flight.true_air_speed
+        density = flight.atmosphere_density
+        dynamic_pressure = flight.dynamic_pressure
+        mach = flight.mach
+        self.assertAlmostEqual(self.SPEED, speed, delta=15)
+        self.assertAlmostEqual(
+            0.5 * density * speed * speed,
+            dynamic_pressure,
+            delta=0.05 * dynamic_pressure,
+        )
+        # FAR derives the speed of sound from its own atmosphere model, so its Mach number
+        # is near, but not equal to, the airspeed over the speed of sound the game reports.
+        self.assertAlmostEqual(speed / flight.speed_of_sound, mach, delta=0.2 * mach)
+        # The angle of attack and sideslip angle are the two angles between the nose and the
+        # air stream, measured in the vessel's pitch and yaw planes. Check them against the
+        # air stream in the vessel's own axes, which moves with the pod as it pitches up
+        # out of the attitude it was placed in.
+        angle_of_attack, sideslip_angle = self.airstream_angles()
+        self.assertGreater(
+            angle_of_attack, 0
+        )  # placed nose-up, so the air comes from below
+        self.assertAlmostEqual(angle_of_attack, flight.angle_of_attack, delta=2)
+        self.assertAlmostEqual(sideslip_angle, flight.sideslip_angle, delta=2)
+        # Terminal velocity is an estimate for this vessel falling in this atmosphere. The
+        # pod carries no lifting surface, so there is nothing on it that can stall.
+        self.assertGreater(flight.terminal_velocity, 0)
+        self.assertEqual(0, flight.stall_fraction)
+        # A blunt capsule at 200 m/s in the lower atmosphere: a large Reynolds number, real
+        # drag, and lift towards its back as it is held nose-up.
+        self.assertGreater(flight.reynolds_number, 1e6)
+        self.assertGreater(flight.drag_coefficient, 0)
+        self.assertGreater(flight.lift_coefficient, 0)
+        self.assertGreater(flight.ballistic_coefficient, 0)
+        # The pod carries no engine, so nothing is burning fuel to make thrust.
+        self.assertEqual(0, flight.thrust_specific_fuel_consumption)
+
+    def test_lift_and_drag_coefficients_match_the_forces(self):
+        # Both coefficients are their force divided by the same dynamic pressure and
+        # reference area, so their ratio is the ratio of the forces they measure. FAR
+        # measures its lift against the vessel's own axes rather than the air stream, as the
+        # component of the whole across-stream force that points towards the top of the
+        # vessel, so take that force in the vessel frame, whose z-axis points out of its
+        # bottom.
+        self.fly()
+        flight = self.vessel.flight(self.vessel.reference_frame)
+        across_stream = vector(flight.lift) + vector(flight.side_force)
+        lift_over_drag = -across_stream[2] / norm(vector(flight.drag))
+        self.assertGreater(abs(lift_over_drag), 0.01)
+        self.assertAlmostEqual(
+            lift_over_drag,
+            flight.lift_coefficient / flight.drag_coefficient,
+            delta=0.1 * abs(lift_over_drag),
+        )
+
+    def test_stock_only_readouts_unavailable(self):
+        # The per-part stock aerodynamic readouts have no FAR counterpart, so they refuse
+        # rather than report a stale stock value.
+        self.assertTrue(self.space_center.far_available)
+        part = self.vessel.parts.root
+        self.assertRaises(RuntimeError, part.lift, part.reference_frame)
+        self.assertRaises(RuntimeError, part.drag, part.reference_frame)
 
 
 if __name__ == "__main__":
