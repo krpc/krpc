@@ -25,6 +25,15 @@
     not been calculated for the vessel. Stages requested after the revert were affected
     too, so the game had to be restarted to get working stages back (#1023)
 
+- Orbits, nodes and bodies
+  - Add `CelestialBody.SurfaceNormal`, `CelestialBody.BedrockNormal` and `CelestialBody.MSLNormal`
+    to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to
+    the surface, to the sea-bed, or to the sphere at sea level (#1030)
+
+- Flight and aerodynamics
+  - Add `Flight.SurfaceNormal` to get the slope of the terrain under a vessel, as a unit vector
+    normal to the surface (#1030)
+
 - Control
   - Setting `Control.StageLock` now leaves the in-game Alt+L shortcut in step with it, so the
     next press of Alt+L locks or unlocks staging rather than being absorbed (#1022)
