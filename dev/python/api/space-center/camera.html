@@ -701,6 +701,32 @@ Obtained by calling <a class="reference internal" href="space-center.html#SpaceC
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Camera.next_camera">
+<span class="sig-name descname"><span class="pre">next_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Camera.next_camera" title="Link to this definition">#</a></dt>
+<dd><p>Switch to the next available camera.
+In flight, this moves to the next flight camera mode. In IVA, it moves the
+view to the next crew member in the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Camera.previous_camera">
+<span class="sig-name descname"><span class="pre">previous_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Camera.previous_camera" title="Link to this definition">#</a></dt>
+<dd><p>Switch to the previous available camera.
+In flight, this moves to the previous flight camera mode. In IVA, it moves
+the view to the previous crew member in the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Camera.pitch">
 <span class="sig-name descname"><span class="pre">pitch</span></span><a class="headerlink" href="#SpaceCenter.Camera.pitch" title="Link to this definition">#</a></dt>
@@ -968,8 +994,12 @@ Returns an error is the camera is not in map mode.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Camera.focussed_crew_member">
 <span class="sig-name descname"><span class="pre">focussed_crew_member</span></span><a class="headerlink" href="#SpaceCenter.Camera.focussed_crew_member" title="Link to this definition">#</a></dt>
-<dd><p>When the internal camera is active the kerbal that is in focus
-Returns an error if the camera is not in IVA mode.</p>
+<dd><p>In IVA mode, the crew member whose view the camera is showing.
+Returns <code class="docutils literal notranslate"><span class="pre">None</span></code> if no crew member is in view.
+Returns an error if the camera is not in IVA mode.
+Setting this moves the view to the given crew member, switching the camera to
+IVA mode if it is not already. The crew member must be in the active vessel,
+and in a part whose interior the game has placed them in.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -977,28 +1007,6 @@ Returns an error if the camera is not in IVA mode.</p>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="vessel.html#SpaceCenter.CrewMember" title="SpaceCenter.CrewMember"><code class="xref py py-class docutils literal notranslate"><span class="pre">CrewMember</span></code></a></p>
 </dd>
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Camera.next_camera">
-<span class="sig-name descname"><span class="pre">next_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Camera.next_camera" title="Link to this definition">#</a></dt>
-<dd><p>Switch to the next available camera</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="SpaceCenter.Camera.previous_camera">
-<span class="sig-name descname"><span class="pre">previous_camera</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Camera.previous_camera" title="Link to this definition">#</a></dt>
-<dd><p>Switch to the previous available camera</p>
-<dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
 </dd>

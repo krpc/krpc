@@ -701,6 +701,32 @@ Obtained by calling <a class="reference internal" href="space-center.html#c.krpc
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_NextCamera">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Camera_NextCamera</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_NextCamera" title="Link to this definition">#</a><br /></dt>
+<dd><p>Switch to the next available camera.
+In flight, this moves to the next flight camera mode. In IVA, it moves the
+view to the next crew member in the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_PreviousCamera">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Camera_PreviousCamera</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_PreviousCamera" title="Link to this definition">#</a><br /></dt>
+<dd><p>Switch to the previous available camera.
+In flight, this moves to the previous flight camera mode. In IVA, it moves
+the view to the previous crew member in the active vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_Pitch">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Camera_Pitch</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_Pitch" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -917,30 +943,12 @@ Returns an error is the camera is not in map mode.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_set_FocussedCrewMember">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Camera_set_FocussedCrewMember</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="vessel.html#c.krpc_SpaceCenter_CrewMember_t" title="krpc_SpaceCenter_CrewMember_t"><span class="n"><span class="pre">krpc_SpaceCenter_CrewMember_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_set_FocussedCrewMember" title="Link to this definition">#</a><br /></dt>
-<dd><p>When the internal camera is active the kerbal that is in focus
-Returns an error if the camera is not in IVA mode.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_NextCamera">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Camera_NextCamera</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_NextCamera" title="Link to this definition">#</a><br /></dt>
-<dd><p>Switch to the next available camera</p>
-<dl class="field-list simple">
-<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="c function">
-<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_PreviousCamera">
-<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Camera_PreviousCamera</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Camera_t.krpc_SpaceCenter_Camera_PreviousCamera" title="Link to this definition">#</a><br /></dt>
-<dd><p>Switch to the previous available camera</p>
+<dd><p>In IVA mode, the crew member whose view the camera is showing.
+Returns <code class="docutils literal notranslate"><span class="pre">nullptr</span></code> if no crew member is in view.
+Returns an error if the camera is not in IVA mode.
+Setting this moves the view to the given crew member, switching the camera to
+IVA mode if it is not already. The crew member must be in the active vessel,
+and in a part whose interior the game has placed them in.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

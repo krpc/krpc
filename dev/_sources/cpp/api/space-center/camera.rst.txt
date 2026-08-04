@@ -18,6 +18,24 @@ Camera
 
       :Game Scenes: Flight
 
+   .. function:: void next_camera()
+
+      Switch to the next available camera.
+      In flight, this moves to the next flight camera mode. In IVA, it moves the
+      view to the next crew member in the active vessel.
+
+
+      :Game Scenes: Flight
+
+   .. function:: void previous_camera()
+
+      Switch to the previous available camera.
+      In flight, this moves to the previous flight camera mode. In IVA, it moves
+      the view to the previous crew member in the active vessel.
+
+
+      :Game Scenes: Flight
+
    .. function:: float pitch()
    .. function:: void set_pitch(float value)
 
@@ -127,22 +145,12 @@ Camera
    .. function:: CrewMember focussed_crew_member()
    .. function:: void set_focussed_crew_member(CrewMember value)
 
-      When the internal camera is active the kerbal that is in focus
+      In IVA mode, the crew member whose view the camera is showing.
+      Returns ``NULL`` if no crew member is in view.
       Returns an error if the camera is not in IVA mode.
-
-      :Game Scenes: Flight
-
-   .. function:: void next_camera()
-
-      Switch to the next available camera
-
-
-      :Game Scenes: Flight
-
-   .. function:: void previous_camera()
-
-      Switch to the previous available camera
-
+      Setting this moves the view to the given crew member, switching the camera to
+      IVA mode if it is not already. The crew member must be in the active vessel,
+      and in a part whose interior the game has placed them in.
 
       :Game Scenes: Flight
 

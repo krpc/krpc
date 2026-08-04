@@ -18,6 +18,18 @@ Camera
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.CameraMode`
 
+   .. method:: next_camera()
+
+      Switch to the next available camera.
+      In flight, this moves to the next flight camera mode. In IVA, it moves the
+      view to the next crew member in the active vessel.
+
+   .. method:: previous_camera()
+
+      Switch to the previous available camera.
+      In flight, this moves to the previous flight camera mode. In IVA, it moves
+      the view to the previous crew member in the active vessel.
+
    .. attribute:: pitch: number
 
       The pitch of the camera, in degrees.
@@ -134,19 +146,15 @@ Camera
 
    .. attribute:: focussed_crew_member: SpaceCenter.CrewMember
 
-      When the internal camera is active the kerbal that is in focus
+      In IVA mode, the crew member whose view the camera is showing.
+      Returns ``nil`` if no crew member is in view.
       Returns an error if the camera is not in IVA mode.
+      Setting this moves the view to the given crew member, switching the camera to
+      IVA mode if it is not already. The crew member must be in the active vessel,
+      and in a part whose interior the game has placed them in.
 
       :Attribute: Can be read or written
       :rtype: :class:`SpaceCenter.CrewMember`
-
-   .. method:: next_camera()
-
-      Switch to the next available camera
-
-   .. method:: previous_camera()
-
-      Switch to the previous available camera
 
 
 
