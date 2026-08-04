@@ -256,6 +256,117 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The normal to the sphere at mean sea level, at the given latitude and longitude,
+        /// in the given reference frame. This points straight up, away from the center of
+        /// the body, and takes no account of the shape of the terrain.
+        /// </summary>
+        /// <returns>The normal as a unit vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="referenceFrame">Reference frame for the returned normal vector.</param>
+        [KRPCMethod]
+        public Tuple3 MSLNormal (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            return NormalIn (InternalBody.GetSurfaceNVector (latitude, longitude), referenceFrame);
+        }
+
+        /// <summary>
+        /// The normal to the surface at the given latitude and longitude, in the given reference
+        /// frame. This describes the slope of the terrain, and is the normal of the surface of
+        /// the water when over water.
+        /// </summary>
+        /// <returns>The normal as a unit vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="referenceFrame">Reference frame for the returned normal vector.</param>
+        [KRPCMethod]
+        public Tuple3 SurfaceNormal (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            return NormalIn (SurfaceNormalWorldSpace (latitude, longitude), referenceFrame);
+        }
+
+        /// <summary>
+        /// The normal to the surface at the given latitude and longitude, in the given reference
+        /// frame. This describes the slope of the terrain, and is the normal of the sea-bed
+        /// when over water.
+        /// </summary>
+        /// <returns>The normal as a unit vector.</returns>
+        /// <param name="latitude">Latitude in degrees.</param>
+        /// <param name="longitude">Longitude in degrees.</param>
+        /// <param name="referenceFrame">Reference frame for the returned normal vector.</param>
+        [KRPCMethod]
+        public Tuple3 BedrockNormal (double latitude, double longitude, ReferenceFrame referenceFrame)
+        {
+            return NormalIn (TerrainNormal (latitude, longitude, BedrockHeight), referenceFrame);
+        }
+
+        static Tuple3 NormalIn (Vector3d worldNormal, ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.DirectionFromWorldSpace (worldNormal).normalized.ToTuple ();
+        }
+
+        /// <summary>
+        /// The normal to the surface at the given latitude and longitude, as a unit vector
+        /// in world space.
+        /// </summary>
+        internal Vector3d SurfaceNormalWorldSpace (double latitude, double longitude)
+        {
+            // Where the terrain colliders exist, the mesh a vessel actually rests on is a better
+            // description of the slope than the height map the terrain is generated from.
+            var alt = Math.Max (0, BedrockHeight (latitude, longitude));
+            const double raySource = 1000;
+            const double raySecondPoint = 500;
+            Vector3d rayCastStart = InternalBody.GetWorldSurfacePosition (latitude, longitude, alt + raySource);
+            Vector3d rayCastStop = InternalBody.GetWorldSurfacePosition (latitude, longitude, alt + raySecondPoint);
+            RaycastHit hit;
+            // Casting a ray on the surface (layer 15 in KSP).
+            if (Physics.Raycast (rayCastStart, (rayCastStop - rayCastStart), out hit, float.MaxValue, 1 << 15)) {
+                // Ensure hit is on the topside of planet, near the rayCastStart, not on the far side.
+                if (Mathf.Abs (hit.distance) < 3000)
+                    return ((Vector3d)hit.normal).normalized;
+            }
+            return TerrainNormal (latitude, longitude, SurfaceHeight);
+        }
+
+        /// <summary>
+        /// The normal to the terrain at the given latitude and longitude, as a unit vector in
+        /// world space, taken from the plane through three nearby points on the terrain.
+        /// The height of the terrain at a latitude and longitude is given by
+        /// <paramref name="height"/>.
+        /// </summary>
+        Vector3d TerrainNormal (double latitude, double longitude, Func<double, double, double> height)
+        {
+            // How far apart to take the samples. Far enough that the height difference between
+            // them survives rounding, close enough to follow the local shape of the terrain.
+            const double sampleDistance = 10;
+            var up = InternalBody.GetSurfaceNVector (latitude, longitude);
+            // Any vector that is not parallel to the normal gives a pair of directions tangent to
+            // the sphere. The polar axis works everywhere except at the poles themselves.
+            Vector3d axis = InternalBody.bodyTransform.up;
+            if (Math.Abs (Vector3d.Dot (axis, up)) > 0.999)
+                axis = InternalBody.bodyTransform.forward;
+            var tangent = Vector3d.Cross (axis, up).normalized;
+            var bitangent = Vector3d.Cross (up, tangent).normalized;
+            var origin = TerrainPosition (latitude, longitude, height);
+            var normal = Vector3d.Cross (
+                             TerrainPositionBelow (origin + tangent * sampleDistance, height) - origin,
+                             TerrainPositionBelow (origin + bitangent * sampleDistance, height) - origin).normalized;
+            // The two edges span the terrain, so their cross product is normal to it, but which of
+            // the two opposite normals it is depends on how the terrain slopes.
+            return Vector3d.Dot (normal, up) < 0 ? -normal : normal;
+        }
+
+        Vector3d TerrainPosition (double latitude, double longitude, Func<double, double, double> height)
+        {
+            return InternalBody.GetWorldSurfacePosition (latitude, longitude, height (latitude, longitude));
+        }
+
+        Vector3d TerrainPositionBelow (Vector3d position, Func<double, double, double> height)
+        {
+            return TerrainPosition (InternalBody.GetLatitude (position), InternalBody.GetLongitude (position), height);
+        }
+
+        /// <summary>
         /// The latitude of the given position, in the given reference frame.
         /// </summary>
         /// <param name="position">Position as a vector.</param>
