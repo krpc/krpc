@@ -48,6 +48,18 @@
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes; no more of the
     resource is moved and the transfer is marked as complete (#1028)
 
+- Camera
+  - `Camera.NextCamera` and `Camera.PreviousCamera` now move the IVA view between the crew of
+    the active vessel without ever dropping out of IVA mode, and pass over crew that the game
+    has not placed in an interior. Previously, moving to the crew member already in view, as
+    happens on a vessel with a single crew member, switched to the flight camera instead (#1031)
+  - Setting `Camera.FocussedCrewMember` to the crew member already in view no longer switches
+    to the flight camera. Setting it to a crew member who is not in the active vessel, or who
+    is not in the interior of a part, now raises an error rather than being ignored or failing
+    with a `NullReferenceException`, as does setting it to `null` (#1031)
+  - `Camera.FocussedCrewMember` returns `null` when no crew member is in view, instead of
+    failing with a `NullReferenceException` (#1031)
+
 ## [v0.6.0]
 
 - Space center

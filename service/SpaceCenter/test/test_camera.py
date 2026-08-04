@@ -44,9 +44,17 @@ class TestCamera(krpctest.TestCase):
         self.assertEqual(self.mode.automatic, self.camera.mode)
 
     def test_focussed_rejects_null(self):
-        # The focussed body and vessel are nullable for reads, but their setters reject null
+        # The focussed body, vessel and crew member are nullable for reads, but their
+        # setters reject null
         self.assertRaises(ValueError, setattr, self.camera, "focussed_body", None)
         self.assertRaises(ValueError, setattr, self.camera, "focussed_vessel", None)
+        self.assertRaises(
+            ValueError, setattr, self.camera, "focussed_crew_member", None
+        )
+
+    def test_focussed_crew_member_outside_iva(self):
+        self.assertEqual(self.mode.automatic, self.camera.mode)
+        self.assertRaises(RuntimeError, getattr, self.camera, "focussed_crew_member")
 
 
 class CameraTestBase:
@@ -123,6 +131,94 @@ class TestCameraIVA(krpctest.TestCase, CameraTestBase):
     def reset_distance(self):
         # The IVA camera has no distance
         pass
+
+    def test_cycle_single_crew_member(self):
+        # The vessel has a single crew member, so there is no other view to move to
+        # and the camera stays where it is. The game's camera manager takes a repeat
+        # selection of the crew member in view as a request to leave IVA.
+        member = self.camera.focussed_crew_member
+        for cycle in (self.camera.next_camera, self.camera.previous_camera):
+            cycle()
+            self.wait(1)
+            self.assertEqual(self.mode.iva, self.camera.mode)
+            self.assertEqual(member, self.camera.focussed_crew_member)
+
+
+class TestCameraIVACrew(krpctest.TestCase):
+    """Moving the IVA view between the crew of the active vessel. Multi has two
+    single-seat pods, so its two crew sit in separate interiors."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        space_center = cls.connect().space_center
+        cls.space_center = space_center
+        # Deterministic crew to launch with, and a Kerbal that stays in the roster so
+        # is never in the launched vessel.
+        for name in ("IVA One Kerman", "IVA Two Kerman", "IVA Absent Kerman"):
+            if space_center.get_kerbal(name) is None:
+                space_center.create_kerbal(name, "Pilot", True)
+        cls._stage_craft("Multi", "VAB", None)
+        space_center.launch_vessel(
+            "VAB", "Multi", "LaunchPad", ["IVA One Kerman", "IVA Two Kerman"]
+        )
+        cls.vessel = space_center.active_vessel
+        cls.camera = space_center.camera
+        cls.mode = space_center.CameraMode
+        cls.camera.mode = cls.mode.iva
+        cls.wait(2)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.camera.mode = cls.mode.automatic
+        cls.wait(2)
+
+    def setUp(self):
+        # Each test starts from the first crew member's view
+        self.camera.focussed_crew_member = self.vessel.crew[0]
+        self.wait(1)
+
+    def test_focussed_crew_member(self):
+        crew = self.vessel.crew
+        self.assertEqual(2, len(crew))
+        for member in crew:
+            self.camera.focussed_crew_member = member
+            self.wait(1)
+            self.assertEqual(self.mode.iva, self.camera.mode)
+            self.assertEqual(member, self.camera.focussed_crew_member)
+
+    def test_focussed_crew_member_unchanged(self):
+        # Selecting the crew member already in view leaves the camera where it is
+        member = self.camera.focussed_crew_member
+        self.camera.focussed_crew_member = member
+        self.wait(1)
+        self.assertEqual(self.mode.iva, self.camera.mode)
+        self.assertEqual(member, self.camera.focussed_crew_member)
+
+    def test_focussed_crew_member_not_in_vessel(self):
+        member = self.space_center.get_kerbal("IVA Absent Kerman")
+        self.assertNotIn(member, self.vessel.crew)
+        self.assertRaises(
+            RuntimeError, setattr, self.camera, "focussed_crew_member", member
+        )
+
+    def test_next_camera(self):
+        crew = self.vessel.crew
+        # Two crew, so the view moves to the other one and then wraps back around
+        for expected in (crew[1], crew[0]):
+            self.camera.next_camera()
+            self.wait(1)
+            self.assertEqual(self.mode.iva, self.camera.mode)
+            self.assertEqual(expected, self.camera.focussed_crew_member)
+
+    def test_previous_camera(self):
+        crew = self.vessel.crew
+        for expected in (crew[1], crew[0]):
+            self.camera.previous_camera()
+            self.wait(1)
+            self.assertEqual(self.mode.iva, self.camera.mode)
+            self.assertEqual(expected, self.camera.focussed_crew_member)
 
 
 class TestCameraMap(krpctest.TestCase, CameraTestBase, CameraDistanceTestBase):
