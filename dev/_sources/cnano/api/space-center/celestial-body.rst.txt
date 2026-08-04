@@ -161,6 +161,51 @@ CelestialBody
       :returns: Position as a vector.
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_MSLNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_SurfaceNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_BedrockNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, double latitude, double longitude, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
    .. function:: krpc_error_t krpc_SpaceCenter_CelestialBody_AltitudeAtPosition(krpc_connection_t connection, double * result, const krpc_tuple_double_double_double_t * position, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
       The altitude, in meters, of the given position in the given reference frame.

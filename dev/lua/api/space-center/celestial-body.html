@@ -968,6 +968,75 @@ reference frame. When over water, this is the position at the bottom of the sea-
 </dd></dl>
 
 <dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.msl_normal">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">msl_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.msl_normal" title="Link to this definition">#</a></dt>
+<dd><p>The normal to the sphere at mean sea level, at the given latitude and longitude,
+in the given reference frame. This points straight up, away from the center of
+the body, and takes no account of the shape of the terrain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.surface_normal">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">surface_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.surface_normal" title="Link to this definition">#</a></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the surface of
+the water when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.bedrock_normal">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">bedrock_normal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">latitude</span></em>, <em class="sig-param"><span class="pre">longitude</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.bedrock_normal" title="Link to this definition">#</a></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the sea-bed
+when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua method">
 <dt class="sig sig-object lua" id="SpaceCenter.CelestialBody.altitude_at_position">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">altitude_at_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">position</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CelestialBody.altitude_at_position" title="Link to this definition">#</a></dt>
 <dd><p>The altitude, in meters, of the given position in the given reference frame.</p>

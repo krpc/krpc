@@ -161,6 +161,51 @@ CelestialBody
       :returns: Position as a vector.
    
 
+   .. function:: std::tuple<double, double, double> msl_normal(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **reference_frame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: std::tuple<double, double, double> surface_normal(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **reference_frame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
+   .. function:: std::tuple<double, double, double> bedrock_normal(double latitude, double longitude, ReferenceFrame reference_frame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :Parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **reference_frame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+   
+
    .. function:: double altitude_at_position(std::tuple<double, double, double> position, ReferenceFrame reference_frame)
 
       The altitude, in meters, of the given position in the given reference frame.

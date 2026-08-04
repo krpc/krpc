@@ -63,6 +63,15 @@ Flight
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Flight_SurfaceNormal(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The normal to the surface under the vessel, in the reference frame
+      :type:`krpc_SpaceCenter_ReferenceFrame_t`. This describes the slope of the terrain,
+      and points straight up when the vessel is over water.
+
+      :returns: The normal as a unit vector.
+      :Game Scenes: Flight
+
    .. function:: krpc_error_t krpc_SpaceCenter_Flight_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 
       The velocity of the vessel, in the reference frame :type:`krpc_SpaceCenter_ReferenceFrame_t`.

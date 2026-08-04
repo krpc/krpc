@@ -77,6 +77,17 @@ Flight
       :rtype: float
       :Game Scenes: Flight
 
+   .. attribute:: surface_normal
+
+      The normal to the surface under the vessel, in the reference frame
+      :class:`ReferenceFrame`. This describes the slope of the terrain,
+      and points straight up when the vessel is over water.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The normal as a unit vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
    .. attribute:: velocity
 
       The velocity of the vessel, in the reference frame :class:`ReferenceFrame`.

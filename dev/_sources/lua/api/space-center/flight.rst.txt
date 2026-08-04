@@ -70,6 +70,16 @@ Flight
       :Attribute: Read-only, cannot be set
       :rtype: number
 
+   .. attribute:: surface_normal: Tuple
+
+      The normal to the surface under the vessel, in the reference frame
+      :class:`SpaceCenter.ReferenceFrame`. This describes the slope of the terrain,
+      and points straight up when the vessel is over water.
+
+      :Attribute: Read-only, cannot be set
+      :returns: The normal as a unit vector.
+      :rtype: Tuple
+
    .. attribute:: velocity: Tuple
 
       The velocity of the vessel, in the reference frame :class:`SpaceCenter.ReferenceFrame`.

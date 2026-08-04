@@ -862,6 +862,66 @@ reference frame. When over water, this is the position at the bottom of the sea-
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody10msl_normalEdd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody10msl_normalEdd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody10msl_normalEdd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::CelestialBody::msl_normal__double.double.ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">msl_normal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">longitude</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody10msl_normalEdd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the sphere at mean sea level, at the given latitude and longitude,
+in the given reference frame. This points straight up, away from the center of
+the body, and takes no account of the shape of the terrain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody14surface_normalEdd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody14surface_normalEdd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody14surface_normalEdd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::CelestialBody::surface_normal__double.double.ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">surface_normal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">longitude</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14surface_normalEdd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the surface of
+the water when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody14bedrock_normalEdd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody14bedrock_normalEdd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody14bedrock_normalEdd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::CelestialBody::bedrock_normal__double.double.ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">bedrock_normal</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">longitude</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14bedrock_normalEdd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the sea-bed
+when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>reference_frame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter13CelestialBody20altitude_at_positionENSt5tupleIdddEE14ReferenceFrame">
 <span id="_CPPv3N4krpc8services11SpaceCenter13CelestialBody20altitude_at_positionENSt5tupleIdddEE14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter13CelestialBody20altitude_at_positionENSt5tupleIdddEE14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::CelestialBody::altitude_at_position__std::tuple:double.double.double:.ReferenceFrame"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">altitude_at_position</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter13CelestialBody20altitude_at_positionENSt5tupleIdddEE14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
 <dd><p>The altitude, in meters, of the given position in the given reference frame.</p>

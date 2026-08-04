@@ -63,6 +63,15 @@ Flight
 
       :Game Scenes: Flight
 
+   .. property:: System.Tuple<double,double,double> SurfaceNormal { get; }
+
+      The normal to the surface under the vessel, in the reference frame
+      :type:`ReferenceFrame`. This describes the slope of the terrain,
+      and points straight up when the vessel is over water.
+
+      :returns: The normal as a unit vector.
+      :Game Scenes: Flight
+
    .. property:: System.Tuple<double,double,double> Velocity { get; }
 
       The velocity of the vessel, in the reference frame :type:`ReferenceFrame`.

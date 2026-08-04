@@ -862,6 +862,66 @@ reference frame. When over water, this is the position at the bottom of the sea-
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_MSLNormal">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_MSLNormal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_MSLNormal" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the sphere at mean sea level, at the given latitude and longitude,
+in the given reference frame. This points straight up, away from the center of
+the body, and takes no account of the shape of the terrain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceNormal">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_SurfaceNormal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceNormal" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the surface of
+the water when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockNormal">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_BedrockNormal</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">latitude</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n"><span class="pre">longitude</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockNormal" title="Link to this definition">#</a><br /></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the sea-bed
+when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_AltitudeAtPosition">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CelestialBody_AltitudeAtPosition</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">position</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_AltitudeAtPosition" title="Link to this definition">#</a><br /></dt>
 <dd><p>The altitude, in meters, of the given position in the given reference frame.</p>

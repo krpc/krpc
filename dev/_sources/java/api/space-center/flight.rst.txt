@@ -70,6 +70,16 @@ Flight
 
       :Game Scenes: Flight
 
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getSurfaceNormal()
+
+
+      The normal to the surface under the vessel, in the reference frame
+      :type:`ReferenceFrame`. This describes the slope of the terrain,
+      and points straight up when the vessel is over water.
+
+      :returns: The normal as a unit vector.
+      :Game Scenes: Flight
+
    .. method:: org.javatuples.Triplet<Double,Double,Double> getVelocity()
 
 

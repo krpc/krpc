@@ -935,6 +935,75 @@ reference frame. When over water, this is the position at the bottom of the sea-
 </dd></dl>
 
 <dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.CelestialBody.MSLNormal">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">MSLNormal</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">latitude</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">longitude</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.CelestialBody.MSLNormal" title="Link to this definition">#</a></dt>
+<dd><p>The normal to the sphere at mean sea level, at the given latitude and longitude,
+in the given reference frame. This points straight up, away from the center of
+the body, and takes no account of the shape of the terrain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.CelestialBody.SurfaceNormal">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">SurfaceNormal</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">latitude</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">longitude</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.CelestialBody.SurfaceNormal" title="Link to this definition">#</a></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the surface of
+the water when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.CelestialBody.BedrockNormal">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">BedrockNormal</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">latitude</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">longitude</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.CelestialBody.BedrockNormal" title="Link to this definition">#</a></dt>
+<dd><p>The normal to the surface at the given latitude and longitude, in the given reference
+frame. This describes the slope of the terrain, and is the normal of the sea-bed
+when over water.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>latitude</strong> – Latitude in degrees.</p></li>
+<li><p><strong>longitude</strong> – Longitude in degrees.</p></li>
+<li><p><strong>referenceFrame</strong> – Reference frame for the returned normal vector.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The normal as a unit vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.CelestialBody.AltitudeAtPosition">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">AltitudeAtPosition</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">position</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.CelestialBody.AltitudeAtPosition" title="Link to this definition">#</a></dt>
 <dd><p>The altitude, in meters, of the given position in the given reference frame.</p>

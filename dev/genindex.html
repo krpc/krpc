@@ -1314,9 +1314,13 @@
       </ul></li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.bedrock_height">bedrock_height() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.bedrock_height">[1]</a>
 </li>
+      <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.bedrock_normal">bedrock_normal() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.bedrock_normal">[1]</a>
+</li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.bedrock_position">bedrock_position() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.bedrock_position">[1]</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.bedrockHeight(double, double)">bedrockHeight(double, double) (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.bedrockNormal(double, double, ReferenceFrame)">bedrockNormal(double, double, ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.bedrockPosition(double, double, ReferenceFrame)">bedrockPosition(double, double, ReferenceFrame) (Java method)</a>
 </li>
@@ -1348,10 +1352,10 @@
         <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.body">(Waypoint attribute)</a>
 </li>
       </ul></li>
-      <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.BOLD">BOLD (Java field)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.BOLD">BOLD (Java field)</a>
+</li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.BOLD_AND_ITALIC">BOLD_AND_ITALIC (Java field)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.bool">bool() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.bool">[1]</a>
@@ -3563,10 +3567,10 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLongitude()">getLongitude() (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getLongitude()">[1]</a>
@@ -4124,6 +4128,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.getSurfaceArea()">getSurfaceArea() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getSurfaceGravity()">getSurfaceGravity() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getSurfaceNormal()">getSurfaceNormal() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getSurfacePrograde()">getSurfacePrograde() (Java method)</a>
 </li>
@@ -6219,6 +6225,8 @@
 </li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14bedrock_heightEdd">krpc::services::SpaceCenter::CelestialBody::bedrock_height (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14bedrock_normalEdd14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::bedrock_normal (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody16bedrock_positionEdd14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::bedrock_position (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody8biome_atEdd">krpc::services::SpaceCenter::CelestialBody::biome_at (C++ function)</a>
@@ -6250,6 +6258,8 @@
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody21longitude_at_positionENSt5tupleIdddEE14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::longitude_at_position (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody4massEv">krpc::services::SpaceCenter::CelestialBody::mass (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody10msl_normalEdd14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::msl_normal (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody12msl_positionEdd14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::msl_position (C++ function)</a>
 </li>
@@ -6286,6 +6296,8 @@
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody15surface_gravityEv">krpc::services::SpaceCenter::CelestialBody::surface_gravity (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14surface_heightEdd">krpc::services::SpaceCenter::CelestialBody::surface_height (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody14surface_normalEdd14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::surface_normal (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody16surface_positionEdd14ReferenceFrame">krpc::services::SpaceCenter::CelestialBody::surface_position (C++ function)</a>
 </li>
@@ -7172,6 +7184,8 @@
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight22static_pressure_at_mslEv">krpc::services::SpaceCenter::Flight::static_pressure_at_msl (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight16surface_altitudeEv">krpc::services::SpaceCenter::Flight::surface_altitude (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight14surface_normalEv">krpc::services::SpaceCenter::Flight::surface_normal (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/flight.html#_CPPv4N4krpc8services11SpaceCenter6Flight16surface_progradeEv">krpc::services::SpaceCenter::Flight::surface_prograde (C++ function)</a>
 </li>
@@ -10505,6 +10519,8 @@
 </li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockHeight">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockHeight (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockNormal">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockNormal (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockPosition">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BedrockPosition (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BiomeAt">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_BiomeAt (C function)</a>
@@ -10536,6 +10552,8 @@
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_LongitudeAtPosition">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_LongitudeAtPosition (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_Mass">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_Mass (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_MSLNormal">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_MSLNormal (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_MSLPosition">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_MSLPosition (C function)</a>
 </li>
@@ -10572,6 +10590,8 @@
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceGravity">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceGravity (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceHeight">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceHeight (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceNormal">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfaceNormal (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/celestial-body.html#c.krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfacePosition">krpc_SpaceCenter_CelestialBody_t.krpc_SpaceCenter_CelestialBody_SurfacePosition (C function)</a>
 </li>
@@ -11458,6 +11478,8 @@
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_StaticPressureAtMSL">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_StaticPressureAtMSL (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SurfaceAltitude">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SurfaceAltitude (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SurfaceNormal">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SurfaceNormal (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/flight.html#c.krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SurfacePrograde">krpc_SpaceCenter_Flight_t.krpc_SpaceCenter_Flight_SurfacePrograde (C function)</a>
 </li>
@@ -13952,10 +13974,10 @@
 </li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_CENTER">MIDDLE_CENTER (Java field)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_LEFT">MIDDLE_LEFT (Java field)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_RIGHT">MIDDLE_RIGHT (Java field)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.min">min() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.min">[1]</a>
@@ -14155,7 +14177,11 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.moving_direction">moving_direction (ServoGroup attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.msl_normal">msl_normal() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.msl_normal">[1]</a>
+</li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.msl_position">msl_position() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.msl_position">[1]</a>
+</li>
+      <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.mSLNormal(double, double, ReferenceFrame)">mSLNormal(double, double, ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.mSLPosition(double, double, ReferenceFrame)">mSLPosition(double, double, ReferenceFrame) (Java method)</a>
 </li>
@@ -16889,12 +16915,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_limit">SpaceCenter.SpaceCenter.Engine.gimbal_limit (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_locked">SpaceCenter.SpaceCenter.Engine.gimbal_locked (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_override">SpaceCenter.SpaceCenter.Engine.gimbal_override (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_range">SpaceCenter.SpaceCenter.Engine.gimbal_range (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimballed">SpaceCenter.SpaceCenter.Engine.gimballed (attribute)</a>
@@ -17056,6 +17082,8 @@
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.static_pressure_at_msl">SpaceCenter.SpaceCenter.Flight.static_pressure_at_msl (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.surface_altitude">SpaceCenter.SpaceCenter.Flight.surface_altitude (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.surface_normal">SpaceCenter.SpaceCenter.Flight.surface_normal (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/flight.html#SpaceCenter.SpaceCenter.Flight.surface_prograde">SpaceCenter.SpaceCenter.Flight.surface_prograde (attribute)</a>
 </li>
@@ -18335,6 +18363,10 @@
 </li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.surface_height">surface_height() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.surface_height">[1]</a>
 </li>
+      <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.surface_normal">surface_normal (Flight attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.surface_normal">surface_normal() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.surface_normal">[1]</a>
+</li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.surface_position">surface_position() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.surface_position">[1]</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.surface_prograde">surface_prograde (Flight attribute)</a>
@@ -18348,6 +18380,8 @@
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.surface_velocity_reference_frame">surface_velocity_reference_frame (Vessel attribute)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.surfaceHeight(double, double)">surfaceHeight(double, double) (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.surfaceNormal(double, double, ReferenceFrame)">surfaceNormal(double, double, ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.surfacePosition(double, double, ReferenceFrame)">surfacePosition(double, double, ReferenceFrame) (Java method)</a>
 </li>

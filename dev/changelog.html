@@ -626,6 +626,16 @@
 <li><p>Fix stages from <code class="docutils literal notranslate"><span class="pre">Vessel.Stages</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.StageAt</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStages</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStageAt</span></code> breaking after a Revert to Launch, reporting that delta-v had not been calculated for the vessel. Stages requested after the revert were affected too, so the game had to be restarted to get working stages back (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1023">#1023</a>)</p></li>
 </ul>
 </li>
+<li><p>Orbits, nodes and bodies</p>
+<ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.SurfaceNormal</span></code>, <code class="docutils literal notranslate"><span class="pre">CelestialBody.BedrockNormal</span></code> and <code class="docutils literal notranslate"><span class="pre">CelestialBody.MSLNormal</span></code> to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to the surface, to the sea-bed, or to the sphere at sea level (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1030">#1030</a>)</p></li>
+</ul>
+</li>
+<li><p>Flight and aerodynamics</p>
+<ul>
+<li><p>Add <code class="docutils literal notranslate"><span class="pre">Flight.SurfaceNormal</span></code> to get the slope of the terrain under a vessel, as a unit vector normal to the surface (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1030">#1030</a>)</p></li>
+</ul>
+</li>
 <li><p>Control</p>
 <ul>
 <li><p>Setting <code class="docutils literal notranslate"><span class="pre">Control.StageLock</span></code> now leaves the in-game Alt+L shortcut in step with it, so the next press of Alt+L locks or unlocks staging rather than being absorbed (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1022">#1022</a>)</p></li>

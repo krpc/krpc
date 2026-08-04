@@ -161,6 +161,51 @@ CelestialBody
       :returns: Position as a vector.
       :Game Scenes: All
 
+   .. method:: System.Tuple<double,double,double> MSLNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The normal to the sphere at mean sea level, at the given latitude and longitude,
+      in the given reference frame. This points straight up, away from the center of
+      the body, and takes no account of the shape of the terrain.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> SurfaceNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the surface of
+      the water when over water.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+      :Game Scenes: All
+
+   .. method:: System.Tuple<double,double,double> BedrockNormal(double latitude, double longitude, ReferenceFrame referenceFrame)
+
+      The normal to the surface at the given latitude and longitude, in the given reference
+      frame. This describes the slope of the terrain, and is the normal of the sea-bed
+      when over water.
+
+      :parameters:
+
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **referenceFrame** -- Reference frame for the returned normal vector.
+
+      :returns: The normal as a unit vector.
+      :Game Scenes: All
+
    .. method:: double AltitudeAtPosition(System.Tuple<double,double,double> position, ReferenceFrame referenceFrame)
 
       The altitude, in meters, of the given position in the given reference frame.
