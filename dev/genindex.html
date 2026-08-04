@@ -996,6 +996,8 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.RoboticRotation.allow_full_rotation">allow_full_rotation (RoboticRotation attribute)</a>
 </li>
+      <li><a href="python/api/debug/debug.html#Debug.allow_part_clipping">allow_part_clipping (in module Debug)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Antenna.allow_partial">allow_partial (Antenna attribute)</a>
 </li>
       <li><a href="python/api/space-center/space-center.html#SpaceCenter.altimeter_mode">altimeter_mode (in module SpaceCenter)</a>
@@ -1095,6 +1097,10 @@
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.apoapsis_altitude">apoapsis_altitude (Orbit attribute)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMemberType.APPLICANT">APPLICANT (Java field)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.apply_rotation">apply_rotation() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.apply_rotation">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.applyRotation(double, org.javatuples.Triplet, SpaceCenter.Vessel)">applyRotation(double, org.javatuples.Triplet, SpaceCenter.Vessel) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Intake.area">area (Intake attribute)</a>
 </li>
@@ -1335,6 +1341,8 @@
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.biomeAt(double, double)">biomeAt(double, double) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.biomes">biomes (CelestialBody attribute)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.biomes_visible">biomes_visible (in module Debug)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Light.blink">blink (Light attribute)</a>
 </li>
@@ -2041,6 +2049,51 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.DEBRIS">DEBRIS (Java field)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.DEBRIS">[1]</a>
 </li>
+      <li>
+    Debug
+
+      <ul>
+        <li><a href="python/api/debug/debug.html#module-Debug">module</a>
+</li>
+      </ul></li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug">Debug (Java class)</a>
+
+      <ul>
+        <li><a href="lua/api/debug/debug.html#module-Debug">(module)</a>
+</li>
+      </ul></li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.allow_part_clipping">Debug.Debug.allow_part_clipping (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.biomes_visible">Debug.Debug.biomes_visible (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.funds">Debug.Debug.funds (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.gravity_multiplier">Debug.Debug.gravity_multiplier (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.ignore_agency_mindset_on_contracts">Debug.Debug.ignore_agency_mindset_on_contracts (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.ignore_eva_construction_mass_limit">Debug.Debug.ignore_eva_construction_mass_limit (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.ignore_kerbal_inventory_limits">Debug.Debug.ignore_kerbal_inventory_limits (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.ignore_max_temperature">Debug.Debug.ignore_max_temperature (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.infinite_electricity">Debug.Debug.infinite_electricity (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.infinite_propellant">Debug.Debug.infinite_propellant (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.no_crash_damage">Debug.Debug.no_crash_damage (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.non_strict_attachment_orientation">Debug.Debug.non_strict_attachment_orientation (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.pause_on_vessel_unpack">Debug.Debug.pause_on_vessel_unpack (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.reputation">Debug.Debug.reputation (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.science">Debug.Debug.science (attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.Debug.unbreakable_joints">Debug.Debug.unbreakable_joints (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/contracts.html#SpaceCenter.Contract.decline">decline() (Contract method)</a>, <a href="python/api/space-center/contracts.html#SpaceCenter.Contract.decline">[1]</a>
 
       <ul>
@@ -2189,6 +2242,8 @@
         <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.description">(Contract attribute)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.destination_body">destination_body (Alarm attribute)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.diagnostic_log">diagnostic_log (AutoPilot attribute)</a>
@@ -2211,8 +2266,6 @@
       </ul></li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.direction(ReferenceFrame)">direction(ReferenceFrame) (Java method)</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.direction(ReferenceFrame)">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.direction(ReferenceFrame)">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.direction(ReferenceFrame)">[3]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.direction(ReferenceFrame)">[4]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.MotorState.DISABLED">DISABLED (Java field)</a>
 </li>
       <li><a href="python/api/space-center/camera.html#SpaceCenter.Camera.distance">distance (Camera attribute)</a>
@@ -2605,6 +2658,14 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.FieldType.unknown">FieldType.unknown (in module SpaceCenter)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.FieldType.unknown">[1]</a>
 </li>
+      <li><a href="lua/api/debug/debug.html#Debug.fill_all_resources">fill_all_resources() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.fill_all_resources">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.fill_resources">fill_resources() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.fill_resources">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.fillAllResources(SpaceCenter.Vessel)">fillAllResources(SpaceCenter.Vessel) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.fillResources(String, SpaceCenter.Vessel)">fillResources(String, SpaceCenter.Vessel) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.FLAG">FLAG (Java field)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.flag_url">flag_url (Part attribute)</a>
@@ -2639,10 +2700,10 @@
 </li>
       <li><a href="lua/api/space-center/resources.html#SpaceCenter.Resources.flow_mode">flow_mode() (Resources static method)</a>, <a href="python/api/space-center/resources.html#SpaceCenter.Resources.flow_mode">[1]</a>
 </li>
-      <li><a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resources.flowMode(Connection, String)">flowMode(Connection, String) (Java method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.Resources.flowMode(Connection, String)">flowMode(Connection, String) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselSituation.FLYING">FLYING (Java field)</a>
 </li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.flying_high_altitude_threshold">flying_high_altitude_threshold (CelestialBody attribute)</a>
@@ -2711,8 +2772,12 @@
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.function(Connection, java.util.List, Expression)">function(Connection, java.util.List, Expression) (Java method)</a>
 </li>
-      <li><a href="python/api/space-center/space-center.html#SpaceCenter.funds">funds (in module SpaceCenter)</a>
+      <li><a href="python/api/debug/debug.html#Debug.funds">funds (in module Debug)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/space-center.html#SpaceCenter.funds">(in module SpaceCenter)</a>
 </li>
+      </ul></li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.funds_advance">funds_advance (Contract attribute)</a>
 </li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.funds_completion">funds_completion (Contract attribute)</a>
@@ -2883,6 +2948,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getAllowFullRotation()">getAllowFullRotation() (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getAllowPartClipping()">getAllowPartClipping() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Antenna.getAllowPartial()">getAllowPartial() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getAltimeterMode()">getAltimeterMode() (Java method)</a>
@@ -2988,6 +3055,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Experiment.getBiome()">getBiome() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getBiome()">[1]</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getBiomes()">getBiomes() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getBiomesVisible()">getBiomesVisible() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getBlink()">getBlink() (Java method)</a>
 </li>
@@ -3371,7 +3440,7 @@
 </li>
       <li><a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getFuelMass()">getFuelMass() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getFunds()">getFunds() (Java method)</a>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getFunds()">getFunds() (Java method)</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getFunds()">[1]</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getFundsAdvance()">getFundsAdvance() (Java method)</a>
 </li>
@@ -3406,6 +3475,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getGimbalRange()">getGimbalRange() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getGravitationalParameter()">getGravitationalParameter() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getGravityMultiplier()">getGravityMultiplier() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getGrounded()">getGrounded() (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getGrounded()">[1]</a>
 </li>
@@ -3461,9 +3532,17 @@
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ActionGroupAction.getId()">getId() (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getIgnoreAgencyMindsetOnContracts()">getIgnoreAgencyMindsetOnContracts() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getIgnoreEVAConstructionMassLimit()">getIgnoreEVAConstructionMassLimit() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Propellant.getIgnoreForIsp()">getIgnoreForIsp() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Propellant.getIgnoreForThrustCurve()">getIgnoreForThrustCurve() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getIgnoreKerbalInventoryLimits()">getIgnoreKerbalInventoryLimits() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getIgnoreMaxTemperature()">getIgnoreMaxTemperature() (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getIKActive()">getIKActive() (Java method)</a>
 </li>
@@ -3480,6 +3559,10 @@
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getIndex()">getIndex() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getInertiaTensor()">getInertiaTensor() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getInertiaTensor()">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getInfiniteElectricity()">getInfiniteElectricity() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getInfinitePropellant()">getInfinitePropellant() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getInitialRotation()">getInitialRotation() (Java method)</a>
 </li>
@@ -3565,12 +3648,12 @@
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getLineSpacing()">getLineSpacing() (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getLineSpacing()">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getLoaded()">getLoaded() (Java method)</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getLocalPosition()">getLocalPosition() (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticHinge.getLocked()">getLocked() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticPiston.getLocked()">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.getLocked()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotor.getLocked()">[3]</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLongitude()">getLongitude() (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getLongitude()">[1]</a>
@@ -3695,6 +3778,8 @@
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getNextOrbit()">getNextOrbit() (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getNoCrashDamage()">getNoCrashDamage() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getNode()">getNode() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ConfigNode.getNode(String)">getNode(String) (Java method)</a>
@@ -3704,6 +3789,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ConfigNode.getNodes(String)">getNodes(String) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getNonRotatingReferenceFrame()">getNonRotatingReferenceFrame() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getNonStrictAttachmentOrientation()">getNonStrictAttachmentOrientation() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getNormal()">getNormal() (Java method)</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.getNormal()">[1]</a>
 </li>
@@ -3768,6 +3855,8 @@
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.getParts()">getParts() (Java method)</a>, <a href="java/api/space-center/stage.html#krpc.client.services.SpaceCenter.Stage.getParts()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getParts()">[2]</a>
 </li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.getPaused()">getPaused() (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getPauseOnVesselUnpack()">getPauseOnVesselUnpack() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.getPeriapsis()">getPeriapsis() (Java method)</a>
 </li>
@@ -3873,7 +3962,7 @@
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.getRepeatPeriod()">getRepeatPeriod() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getReputation()">getReputation() (Java method)</a>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getReputation()">getReputation() (Java method)</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getReputation()">[1]</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getReputationCompletion()">getReputationCompletion() (Java method)</a>, <a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.ContractParameter.getReputationCompletion()">[1]</a>
 </li>
@@ -3983,7 +4072,7 @@
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getScale()">getScale() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ScienceSubject.getScience()">getScience() (Java method)</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getScience()">[1]</a>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getScience()">getScience() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ScienceSubject.getScience()">[1]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getScience()">[2]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ScienceSubject.getScienceCap()">getScienceCap() (Java method)</a>
 </li>
@@ -4279,6 +4368,8 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getUIVisible()">getUIVisible() (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getUnbreakableJoints()">getUnbreakableJoints() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getUp()">getUp() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getUpEnabled()">getUpEnabled() (Java method)</a>
@@ -4378,6 +4469,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.AutoStrutMode.GRANDPARENT">GRANDPARENT (Java field)</a>
 </li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.gravitational_parameter">gravitational_parameter (CelestialBody attribute)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.gravity_multiplier">gravity_multiplier (in module Debug)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.greater_than">greater_than() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.greater_than">[1]</a>
 </li>
@@ -4529,9 +4622,17 @@
       </ul></li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.MotorState.IDLE">IDLE (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverterState.IDLE">[1]</a>
 </li>
+      <li><a href="python/api/debug/debug.html#Debug.ignore_agency_mindset_on_contracts">ignore_agency_mindset_on_contracts (in module Debug)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.ignore_eva_construction_mass_limit">ignore_eva_construction_mass_limit (in module Debug)</a>
+</li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Propellant.ignore_for_isp">ignore_for_isp (Propellant attribute)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Propellant.ignore_for_thrust_curve">ignore_for_thrust_curve (Propellant attribute)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.ignore_kerbal_inventory_limits">ignore_kerbal_inventory_limits (in module Debug)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.ignore_max_temperature">ignore_max_temperature (in module Debug)</a>
 </li>
       <li><a href="python/api/infernal-robotics/servo-group.html#InfernalRobotics.ServoGroup.ik_active">ik_active (ServoGroup attribute)</a>
 </li>
@@ -4652,10 +4753,10 @@
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.advanced_mode">InfernalRobotics.InfernalRobotics.ServoGroup.advanced_mode (attribute)</a>
 </li>
-      <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.build_aid">InfernalRobotics.InfernalRobotics.ServoGroup.build_aid (attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.build_aid">InfernalRobotics.InfernalRobotics.ServoGroup.build_aid (attribute)</a>
+</li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.electric_charge_required">InfernalRobotics.InfernalRobotics.ServoGroup.electric_charge_required (attribute)</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.expanded">InfernalRobotics.InfernalRobotics.ServoGroup.expanded (attribute)</a>
@@ -4677,6 +4778,10 @@
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.speed">InfernalRobotics.InfernalRobotics.ServoGroup.speed (attribute)</a>
 </li>
       <li><a href="lua/api/infernal-robotics/servo-group.html#InfernalRobotics.InfernalRobotics.ServoGroup.vessel">InfernalRobotics.InfernalRobotics.ServoGroup.vessel (attribute)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.infinite_electricity">infinite_electricity (in module Debug)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.infinite_propellant">infinite_propellant (in module Debug)</a>
 </li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.initial_rotation">initial_rotation (CelestialBody attribute)</a>
 </li>
@@ -4914,6 +5019,8 @@
 </li>
       <li><a href="python/client.html#krpc.client.KRPC">krpc.client.KRPC (built-in class)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#package-krpc.client.services.Debug">krpc.client.services.Debug (package)</a>
+</li>
       <li><a href="java/api/docking-camera/camera.html#package-krpc.client.services.DockingCamera">krpc.client.services.DockingCamera (package)</a>, <a href="java/api/docking-camera/docking-camera.html#package-krpc.client.services.DockingCamera">[1]</a>
 </li>
       <li><a href="java/api/drawing/drawing.html#package-krpc.client.services.Drawing">krpc.client.services.Drawing (package)</a>, <a href="java/api/drawing/line.html#package-krpc.client.services.Drawing">[1]</a>, <a href="java/api/drawing/polygon.html#package-krpc.client.services.Drawing">[2]</a>, <a href="java/api/drawing/text.html#package-krpc.client.services.Drawing">[3]</a>
@@ -5004,6 +5111,104 @@
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event6streamEv">krpc::Event::stream (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5Event4waitEd">krpc::Event::wait (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5DebugE">krpc::services::Debug (C++ class)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug19allow_part_clippingEv">krpc::services::Debug::allow_part_clipping (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug14apply_rotationEdNSt5tupleIdddEEN11SpaceCenter6VesselE">krpc::services::Debug::apply_rotation (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug14biomes_visibleEv">krpc::services::Debug::biomes_visible (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug5DebugEPN4krpc6ClientE">krpc::services::Debug::Debug (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18fill_all_resourcesEN11SpaceCenter6VesselE">krpc::services::Debug::fill_all_resources (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug14fill_resourcesENSt6stringEN11SpaceCenter6VesselE">krpc::services::Debug::fill_resources (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug5fundsEv">krpc::services::Debug::funds (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18gravity_multiplierEv">krpc::services::Debug::gravity_multiplier (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug34ignore_agency_mindset_on_contractsEv">krpc::services::Debug::ignore_agency_mindset_on_contracts (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug34ignore_eva_construction_mass_limitEv">krpc::services::Debug::ignore_eva_construction_mass_limit (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug30ignore_kerbal_inventory_limitsEv">krpc::services::Debug::ignore_kerbal_inventory_limits (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug22ignore_max_temperatureEv">krpc::services::Debug::ignore_max_temperature (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug20infinite_electricityEv">krpc::services::Debug::infinite_electricity (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug19infinite_propellantEv">krpc::services::Debug::infinite_propellant (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug21max_kerbal_experienceEv">krpc::services::Debug::max_kerbal_experience (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug15no_crash_damageEv">krpc::services::Debug::no_crash_damage (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug33non_strict_attachment_orientationEv">krpc::services::Debug::non_strict_attachment_orientation (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug22pause_on_vessel_unpackEv">krpc::services::Debug::pause_on_vessel_unpack (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug10reputationEv">krpc::services::Debug::reputation (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug7scienceEv">krpc::services::Debug::science (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug23set_allow_part_clippingEb">krpc::services::Debug::set_allow_part_clipping (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug20set_angular_velocityENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEN11SpaceCenter6VesselE">krpc::services::Debug::set_angular_velocity (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18set_biomes_visibleEb">krpc::services::Debug::set_biomes_visible (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18set_circular_orbitEN11SpaceCenter13CelestialBodyEd">krpc::services::Debug::set_circular_orbit (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug13set_directionENSt5tupleIdddEEdN11SpaceCenter14ReferenceFrameEN11SpaceCenter6VesselE">krpc::services::Debug::set_direction (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug10set_flightEN11SpaceCenter13CelestialBodyEdddddddd">krpc::services::Debug::set_flight (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug9set_fundsEd">krpc::services::Debug::set_funds (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug22set_gravity_multiplierEd">krpc::services::Debug::set_gravity_multiplier (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug38set_ignore_agency_mindset_on_contractsEb">krpc::services::Debug::set_ignore_agency_mindset_on_contracts (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug38set_ignore_eva_construction_mass_limitEb">krpc::services::Debug::set_ignore_eva_construction_mass_limit (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug34set_ignore_kerbal_inventory_limitsEb">krpc::services::Debug::set_ignore_kerbal_inventory_limits (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug26set_ignore_max_temperatureEb">krpc::services::Debug::set_ignore_max_temperature (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug24set_infinite_electricityEb">krpc::services::Debug::set_infinite_electricity (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug23set_infinite_propellantEb">krpc::services::Debug::set_infinite_propellant (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug10set_landedEN11SpaceCenter13CelestialBodyEddd">krpc::services::Debug::set_landed (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug19set_no_crash_damageEb">krpc::services::Debug::set_no_crash_damage (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug37set_non_strict_attachment_orientationEb">krpc::services::Debug::set_non_strict_attachment_orientation (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug9set_orbitEN11SpaceCenter13CelestialBodyEddddddd">krpc::services::Debug::set_orbit (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug26set_pause_on_vessel_unpackEb">krpc::services::Debug::set_pause_on_vessel_unpack (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug22set_pitch_heading_rollEdddN11SpaceCenter14ReferenceFrameEN11SpaceCenter6VesselE">krpc::services::Debug::set_pitch_heading_roll (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug12set_positionENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE">krpc::services::Debug::set_position (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug14set_reputationEf">krpc::services::Debug::set_reputation (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug11set_scienceEf">krpc::services::Debug::set_science (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug22set_unbreakable_jointsEb">krpc::services::Debug::set_unbreakable_joints (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug12set_velocityENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameE">krpc::services::Debug::set_velocity (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18unbreakable_jointsEv">krpc::services::Debug::unbreakable_joints (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug22unlock_technology_treeEv">krpc::services::Debug::unlock_technology_tree (C++ function)</a>
+</li>
+      <li><a href="cpp/api/debug/debug.html#_CPPv4N4krpc8services5Debug18upgrade_facilitiesEv">krpc::services::Debug::upgrade_facilities (C++ function)</a>
 </li>
       <li><a href="cpp/api/docking-camera/docking-camera.html#_CPPv4N4krpc8services13DockingCameraE">krpc::services::DockingCamera (C++ class)</a>
 </li>
@@ -9197,10 +9402,10 @@
 </li>
       <li><a href="cpp/api/ui/rect-transform.html#_CPPv4N4krpc8services2UI13RectTransform9set_scaleENSt5tupleIdddEE">krpc::services::UI::RectTransform::set_scale (C++ function)</a>
 </li>
-      <li><a href="cpp/api/ui/rect-transform.html#_CPPv4N4krpc8services2UI13RectTransform8set_sizeENSt5tupleIddEE">krpc::services::UI::RectTransform::set_size (C++ function)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="cpp/api/ui/rect-transform.html#_CPPv4N4krpc8services2UI13RectTransform8set_sizeENSt5tupleIddEE">krpc::services::UI::RectTransform::set_size (C++ function)</a>
+</li>
       <li><a href="cpp/api/ui/rect-transform.html#_CPPv4N4krpc8services2UI13RectTransform15set_upper_rightENSt5tupleIddEE">krpc::services::UI::RectTransform::set_upper_right (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/rect-transform.html#_CPPv4N4krpc8services2UI13RectTransform4sizeEv">krpc::services::UI::RectTransform::size (C++ function)</a>
@@ -9314,6 +9519,100 @@
       <li><a href="cnano/client.html#c.krpc_close">krpc_close (C function)</a>
 </li>
       <li><a href="cnano/client.html#c.krpc_connect">krpc_connect (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_AllowPartClipping">krpc_Debug_AllowPartClipping (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_ApplyRotation">krpc_Debug_ApplyRotation (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_BiomesVisible">krpc_Debug_BiomesVisible (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_FillAllResources">krpc_Debug_FillAllResources (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_FillResources">krpc_Debug_FillResources (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_Funds">krpc_Debug_Funds (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_GravityMultiplier">krpc_Debug_GravityMultiplier (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_IgnoreAgencyMindsetOnContracts">krpc_Debug_IgnoreAgencyMindsetOnContracts (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_IgnoreEVAConstructionMassLimit">krpc_Debug_IgnoreEVAConstructionMassLimit (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_IgnoreKerbalInventoryLimits">krpc_Debug_IgnoreKerbalInventoryLimits (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_IgnoreMaxTemperature">krpc_Debug_IgnoreMaxTemperature (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_InfiniteElectricity">krpc_Debug_InfiniteElectricity (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_InfinitePropellant">krpc_Debug_InfinitePropellant (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_MaxKerbalExperience">krpc_Debug_MaxKerbalExperience (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_NoCrashDamage">krpc_Debug_NoCrashDamage (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_NonStrictAttachmentOrientation">krpc_Debug_NonStrictAttachmentOrientation (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_PauseOnVesselUnpack">krpc_Debug_PauseOnVesselUnpack (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_Reputation">krpc_Debug_Reputation (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_Science">krpc_Debug_Science (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_AllowPartClipping">krpc_Debug_set_AllowPartClipping (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_BiomesVisible">krpc_Debug_set_BiomesVisible (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_Funds">krpc_Debug_set_Funds (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_GravityMultiplier">krpc_Debug_set_GravityMultiplier (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_IgnoreAgencyMindsetOnContracts">krpc_Debug_set_IgnoreAgencyMindsetOnContracts (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_IgnoreEVAConstructionMassLimit">krpc_Debug_set_IgnoreEVAConstructionMassLimit (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_IgnoreKerbalInventoryLimits">krpc_Debug_set_IgnoreKerbalInventoryLimits (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_IgnoreMaxTemperature">krpc_Debug_set_IgnoreMaxTemperature (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_InfiniteElectricity">krpc_Debug_set_InfiniteElectricity (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_InfinitePropellant">krpc_Debug_set_InfinitePropellant (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_NoCrashDamage">krpc_Debug_set_NoCrashDamage (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_NonStrictAttachmentOrientation">krpc_Debug_set_NonStrictAttachmentOrientation (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_PauseOnVesselUnpack">krpc_Debug_set_PauseOnVesselUnpack (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_Reputation">krpc_Debug_set_Reputation (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_Science">krpc_Debug_set_Science (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_set_UnbreakableJoints">krpc_Debug_set_UnbreakableJoints (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetAngularVelocity">krpc_Debug_SetAngularVelocity (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetCircularOrbit">krpc_Debug_SetCircularOrbit (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetDirection">krpc_Debug_SetDirection (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetFlight">krpc_Debug_SetFlight (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetLanded">krpc_Debug_SetLanded (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetOrbit">krpc_Debug_SetOrbit (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetPitchHeadingRoll">krpc_Debug_SetPitchHeadingRoll (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetPosition">krpc_Debug_SetPosition (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_SetVelocity">krpc_Debug_SetVelocity (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_UnbreakableJoints">krpc_Debug_UnbreakableJoints (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_UnlockTechnologyTree">krpc_Debug_UnlockTechnologyTree (C function)</a>
+</li>
+      <li><a href="cnano/api/debug/debug.html#c.krpc_Debug_UpgradeFacilities">krpc_Debug_UpgradeFacilities (C function)</a>
 </li>
       <li><a href="cnano/api/docking-camera/docking-camera.html#c.krpc_DockingCamera_Available">krpc_DockingCamera_Available (C function)</a>
 </li>
@@ -13886,6 +14185,8 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.max_force">max_force (Servo attribute)</a>
 </li>
+      <li><a href="lua/api/debug/debug.html#Debug.max_kerbal_experience">max_kerbal_experience() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.max_kerbal_experience">[1]</a>
+</li>
       <li><a href="python/api/space-center/camera.html#SpaceCenter.Camera.max_pitch">max_pitch (Camera attribute)</a>
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.max_position">max_position (Servo attribute)</a>
@@ -13934,6 +14235,8 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.DockingPort.maximum_rotation">maximum_rotation (DockingPort attribute)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.maxKerbalExperience()">maxKerbalExperience() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.maxThrustAt(double)">maxThrustAt(double) (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.maxThrustAt(double)">[1]</a>
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.mean_altitude">mean_altitude (Flight attribute)</a>
@@ -13980,10 +14283,10 @@
 </li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_CENTER">MIDDLE_CENTER (Java field)</a>
 </li>
-      <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_LEFT">MIDDLE_LEFT (Java field)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_LEFT">MIDDLE_LEFT (Java field)</a>
+</li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.MIDDLE_RIGHT">MIDDLE_RIGHT (Java field)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.min">min() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.min">[1]</a>
@@ -14048,6 +14351,8 @@
     module
 
       <ul>
+        <li><a href="python/api/debug/debug.html#module-Debug">Debug</a>
+</li>
         <li><a href="python/api/docking-camera/docking-camera.html#module-DockingCamera">DockingCamera</a>
 </li>
         <li><a href="python/api/drawing/drawing.html#module-Drawing">Drawing</a>
@@ -14261,10 +14566,10 @@
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String)">newInstance(String, String) (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int)">newInstance(String, String, int, int) (Java method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/camera.html#SpaceCenter.Camera.next_camera">next_camera() (Camera method)</a>, <a href="python/api/space-center/camera.html#SpaceCenter.Camera.next_camera">[1]</a>
 </li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.next_closest_approach">next_closest_approach() (Orbit method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.next_closest_approach">[1]</a>
@@ -14276,6 +14581,8 @@
       <li><a href="java/api/space-center/orbit.html#krpc.client.services.SpaceCenter.Orbit.nextClosestApproach(Orbit)">nextClosestApproach(Orbit) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmWarpAction.NO_CHANGE">NO_CHANGE (Java field)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.no_crash_damage">no_crash_damage (in module Debug)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmMessageAction.NO_MESSAGE">NO_MESSAGE (Java field)</a>
 </li>
@@ -14294,6 +14601,8 @@
 </li>
       </ul></li>
       <li><a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.non_rotating_reference_frame">non_rotating_reference_frame (CelestialBody attribute)</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.non_strict_attachment_orientation">non_strict_attachment_orientation (in module Debug)</a>
 </li>
       <li><a href="java/api/remote-tech/antenna.html#krpc.client.services.RemoteTech.Target.NONE">NONE (Java field)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlSource.NONE">[1]</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.ControlState.NONE">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.NONE">[3]</a>, <a href="java/api/space-center/resources.html#krpc.client.services.SpaceCenter.ResourceFlowMode.NONE">[4]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.EditorFacility.NONE">[5]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.NONE">[6]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.WarpMode.NONE">[7]</a>
 </li>
@@ -14622,6 +14931,8 @@
 </li>
       </ul></li>
       <li><a href="java/api/kerbal-alarm-clock/alarm-action.html#krpc.client.services.KerbalAlarmClock.AlarmAction.PAUSE_GAME">PAUSE_GAME (Java field)</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmWarpAction.PAUSE_GAME">[1]</a>
+</li>
+      <li><a href="python/api/debug/debug.html#Debug.pause_on_vessel_unpack">pause_on_vessel_unpack (in module Debug)</a>
 </li>
       <li><a href="python/api/krpc/krpc.html#KRPC.paused">paused (in module KRPC)</a>
 </li>
@@ -15116,10 +15427,14 @@
 </li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat_period">repeat_period (Alarm attribute)</a>
 </li>
+      <li><a href="python/api/debug/debug.html#Debug.reputation">reputation (in module Debug)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/space-center.html#SpaceCenter.reputation">(in module SpaceCenter)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/api/space-center/space-center.html#SpaceCenter.reputation">reputation (in module SpaceCenter)</a>
-</li>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.reputation_completion">reputation_completion (Contract attribute)</a>
 
       <ul>
@@ -15498,8 +15813,12 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.GameMode.SCENARIO_NON_RESUMABLE">SCENARIO_NON_RESUMABLE (Java field)</a>
 </li>
-      <li><a href="python/api/space-center/space-center.html#SpaceCenter.science">science (in module SpaceCenter)</a>
+      <li><a href="python/api/debug/debug.html#Debug.science">science (in module Debug)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/space-center.html#SpaceCenter.science">(in module SpaceCenter)</a>
 </li>
+      </ul></li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.GameMode.SCIENCE">SCIENCE (Java field)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.ScienceSubject.science">science (ScienceSubject attribute)</a>
@@ -15622,6 +15941,12 @@
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.set_action_group">set_action_group() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.set_action_group">[1]</a>
 </li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_angular_velocity">set_angular_velocity() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_angular_velocity">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_circular_orbit">set_circular_orbit() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_circular_orbit">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_direction">set_direction() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_direction">[1]</a>
+</li>
       <li><a href="lua/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.set_direction_and_up">set_direction_and_up() (AutoPilot method)</a>, <a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.set_direction_and_up">[1]</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.set_field_bool">set_field_bool() (Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.set_field_bool">[1]</a>
@@ -15640,7 +15965,19 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.Module.set_field_string_by_id">set_field_string_by_id() (Module method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Module.set_field_string_by_id">[1]</a>
 </li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_flight">set_flight() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_flight">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_landed">set_landed() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_landed">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_orbit">set_orbit() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_orbit">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_pitch_heading_roll">set_pitch_heading_roll() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_pitch_heading_roll">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_position">set_position() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_position">[1]</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.ResourceDrain.set_resource">set_resource() (ResourceDrain method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.ResourceDrain.set_resource">[1]</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.set_velocity">set_velocity() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.set_velocity">[1]</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setAbort(boolean)">setAbort(boolean) (Java method)</a>
 </li>
@@ -15670,6 +16007,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RoboticRotation.setAllowFullRotation(boolean)">setAllowFullRotation(boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setAllowPartClipping(boolean)">setAllowPartClipping(boolean) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Antenna.setAllowPartial(boolean)">setAllowPartial(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.setAltimeterMode(AltimeterMode)">setAltimeterMode(AltimeterMode) (Java method)</a>
@@ -15681,6 +16020,8 @@
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.setAnchorMax(org.javatuples.Pair)">setAnchorMax(org.javatuples.Pair) (Java method)</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.setAnchorMin(org.javatuples.Pair)">setAnchorMin(org.javatuples.Pair) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setAngularVelocity(org.javatuples.Triplet, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel)">setAngularVelocity(org.javatuples.Triplet, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setAntennas(boolean)">setAntennas(boolean) (Java method)</a>
 </li>
@@ -15695,6 +16036,8 @@
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.setBadass(boolean)">setBadass(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.setBedrockAltitude(double)">setBedrockAltitude(double) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setBiomesVisible(boolean)">setBiomesVisible(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.setBlink(boolean)">setBlink(boolean) (Java method)</a>
 </li>
@@ -15717,6 +16060,8 @@
       <li><a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.setChanged(boolean)">setChanged(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setCharacterSize(float)">setCharacterSize(float) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setCircularOrbit(SpaceCenter.CelestialBody, double)">setCircularOrbit(SpaceCenter.CelestialBody, double) (Java method)</a>
 </li>
       <li><a href="java/api/ui/button.html#krpc.client.services.UI.Button.setClicked(boolean)">setClicked(boolean) (Java method)</a>
 </li>
@@ -15762,6 +16107,8 @@
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setDiagnosticLogging(boolean)">setDiagnosticLogging(boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setDirection(org.javatuples.Triplet, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel)">setDirection(org.javatuples.Triplet, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)">setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.setDistance(float)">setDistance(float) (Java method)</a>
@@ -15804,6 +16151,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.setFlagURL(String)">setFlagURL(String) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setFlight(SpaceCenter.CelestialBody, double, double, double, double, double, double, double, double)">setFlight(SpaceCenter.CelestialBody, double, double, double, double, double, double, double, double) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.setFloatValue(float)">setFloatValue(float) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.setFocussedBody(CelestialBody)">setFocussedBody(CelestialBody) (Java method)</a>
@@ -15828,6 +16177,8 @@
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.setFoV(float)">setFoV(float) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setFunds(double)">setFunds(double) (Java method)</a>
+</li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.setGameScene(GameScene)">setGameScene(GameScene) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setGear(boolean)">setGear(boolean) (Java method)</a>
@@ -15842,6 +16193,8 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.setGlow(boolean)">setGlow(boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setGravityMultiplier(double)">setGravityMultiplier(double) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.setHeading(float)">setHeading(float) (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.setHighlight(boolean)">setHighlight(boolean) (Java method)</a>
@@ -15852,9 +16205,21 @@
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.setIcon(String)">setIcon(String) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setIgnoreAgencyMindsetOnContracts(boolean)">setIgnoreAgencyMindsetOnContracts(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setIgnoreEVAConstructionMassLimit(boolean)">setIgnoreEVAConstructionMassLimit(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setIgnoreKerbalInventoryLimits(boolean)">setIgnoreKerbalInventoryLimits(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setIgnoreMaxTemperature(boolean)">setIgnoreMaxTemperature(boolean) (Java method)</a>
+</li>
       <li><a href="java/api/infernal-robotics/servo-group.html#krpc.client.services.InfernalRobotics.ServoGroup.setIKActive(boolean)">setIKActive(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.setIndependentThrottle(boolean)">setIndependentThrottle(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setInfiniteElectricity(boolean)">setInfiniteElectricity(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setInfinitePropellant(boolean)">setInfinitePropellant(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setInputMode(ControlInputMode)">setInputMode(ControlInputMode) (Java method)</a>
 </li>
@@ -15871,6 +16236,8 @@
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.setIsLimited(boolean)">setIsLimited(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/infernal-robotics/servo.html#krpc.client.services.InfernalRobotics.Servo.setIsLocked(boolean)">setIsLocked(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setLanded(SpaceCenter.CelestialBody, double, double, double)">setLanded(SpaceCenter.CelestialBody, double, double, double) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.setLatitude(double)">setLatitude(double) (Java method)</a>
 </li>
@@ -15930,13 +16297,19 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.setNavball(boolean)">setNavball(boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setNoCrashDamage(boolean)">setNoCrashDamage(boolean) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.setNode(Node)">setNode(Node) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setNonStrictAttachmentOrientation(boolean)">setNonStrictAttachmentOrientation(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.setNormal(double)">setNormal(double) (Java method)</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.setNotes(String)">setNotes(String) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.CargoBay.setOpen(boolean)">setOpen(boolean) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Intake.setOpen(boolean)">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setOrbit(SpaceCenter.CelestialBody, double, double, double, double, double, double, double)">setOrbit(SpaceCenter.CelestialBody, double, double, double, double, double, double, double) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.setOriginBody(CelestialBody)">setOriginBody(CelestialBody) (Java method)</a>
 </li>
@@ -15956,6 +16329,8 @@
 </li>
       <li><a href="java/api/krpc/krpc.html#krpc.client.services.KRPC.KRPC.setPaused(boolean)">setPaused(boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setPauseOnVesselUnpack(boolean)">setPauseOnVesselUnpack(boolean) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.setPhysicsRange(float)">setPhysicsRange(float) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.setPhysicsWarpFactor(int)">setPhysicsWarpFactor(int) (Java method)</a>
@@ -15963,6 +16338,8 @@
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.setPitch(float)">setPitch(float) (Java method)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setPitch(float)">[1]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ControlSurface.setPitchEnabled(boolean)">setPitchEnabled(boolean) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.setPitchEnabled(boolean)">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setPitchHeadingRoll(double, double, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel)">setPitchHeadingRoll(double, double, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setPitchPIDGains(org.javatuples.Triplet)">setPitchPIDGains(org.javatuples.Triplet) (Java method)</a>
 </li>
@@ -15983,6 +16360,8 @@
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.setPosition(org.javatuples.Pair)">setPosition(org.javatuples.Pair) (Java method)</a>
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setPosition(org.javatuples.Triplet)">setPosition(org.javatuples.Triplet) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.setPosition(org.javatuples.Triplet)">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setPosition(org.javatuples.Triplet, SpaceCenter.ReferenceFrame)">setPosition(org.javatuples.Triplet, SpaceCenter.ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.setPrograde(double)">setPrograde(double) (Java method)</a>
 </li>
@@ -16005,6 +16384,8 @@
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.setRepeat(boolean)">setRepeat(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.setRepeatPeriod(double)">setRepeatPeriod(double) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setReputation(float)">setReputation(float) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceDrain.setResource(Resource, boolean)">setResource(Resource, boolean) (Java method)</a>
 </li>
@@ -16051,6 +16432,8 @@
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setSASMode(SASMode)">setSASMode(SASMode) (Java method)</a>, <a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setSASMode(SASMode)">[1]</a>
 </li>
       <li><a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.setScale(org.javatuples.Triplet)">setScale(org.javatuples.Triplet) (Java method)</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setScience(float)">setScience(float) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.setShielded(boolean)">setShielded(boolean) (Java method)</a>
 </li>
@@ -16160,6 +16543,8 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.setUIVisible(boolean)">setUIVisible(boolean) (Java method)</a>
 </li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setUnbreakableJoints(boolean)">setUnbreakableJoints(boolean) (Java method)</a>
+</li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.setUp(float)">setUp(float) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.setUpEnabled(boolean)">setUpEnabled(boolean) (Java method)</a>
@@ -16171,6 +16556,8 @@
       <li><a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.setUT(double)">setUT(double) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.setValue(String)">setValue(String) (Java method)</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.setValue(String)">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setVelocity(org.javatuples.Triplet, SpaceCenter.ReferenceFrame)">setVelocity(org.javatuples.Triplet, SpaceCenter.ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setVertices(java.util.List)">setVertices(java.util.List) (Java method)</a>
 </li>
@@ -16893,6 +17280,8 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reengage_distance">SpaceCenter.SpaceCenter.DockingPort.reengage_distance (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reference_frame">SpaceCenter.SpaceCenter.DockingPort.reference_frame (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.rotation_locked">SpaceCenter.SpaceCenter.DockingPort.rotation_locked (attribute)</a>
@@ -16927,8 +17316,6 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_override">SpaceCenter.SpaceCenter.Engine.gimbal_override (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimbal_range">SpaceCenter.SpaceCenter.Engine.gimbal_range (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.Engine.gimballed">SpaceCenter.SpaceCenter.Engine.gimballed (attribute)</a>
@@ -18872,14 +19259,14 @@
 </li>
       <li><a href="lua/api/ui/ui.html#UI.UI.stock_canvas">UI.UI.stock_canvas (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.alignment">UI.UI.Text.alignment (attribute)</a>
 </li>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.available_fonts">UI.UI.Text.available_fonts (attribute)</a>
 </li>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.color">UI.UI.Text.color (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.content">UI.UI.Text.content (attribute)</a>
 </li>
       <li><a href="lua/api/ui/text.html#UI.UI.Text.font">UI.UI.Text.font (attribute)</a>
@@ -18898,6 +19285,8 @@
 </li>
       <li><a href="python/api/infernal-robotics/servo.html#InfernalRobotics.Servo.uid">uid (Servo attribute)</a>
 </li>
+      <li><a href="python/api/debug/debug.html#Debug.unbreakable_joints">unbreakable_joints (in module Debug)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.DockingPort.undock">undock() (DockingPort method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.DockingPort.undock">[1]</a>
 
       <ul>
@@ -18908,6 +19297,10 @@
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmType.UNKNOWN">UNKNOWN (Java field)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.FieldType.UNKNOWN">[1]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ResourceConverterState.UNKNOWN">[2]</a>, <a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.UNKNOWN">[3]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.UNKNOWN">[4]</a>
 </li>
+      <li><a href="lua/api/debug/debug.html#Debug.unlock_technology_tree">unlock_technology_tree() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.unlock_technology_tree">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.unlockTechnologyTree()">unlockTechnologyTree() (Java method)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMemberType.UNOWNED">UNOWNED (Java field)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.ParachuteSafeState.UNSAFE">UNSAFE (Java field)</a>
@@ -18917,6 +19310,10 @@
       <li><a href="python/api/space-center/parts.html#SpaceCenter.RCS.up_enabled">up_enabled (RCS attribute)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.up_reference">up_reference (AutoPilot attribute)</a>
+</li>
+      <li><a href="lua/api/debug/debug.html#Debug.upgrade_facilities">upgrade_facilities() (in module Debug)</a>, <a href="python/api/debug/debug.html#Debug.upgrade_facilities">[1]</a>
+</li>
+      <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.upgradeFacilities()">upgradeFacilities() (Java method)</a>
 </li>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.TextAnchor.UPPER_CENTER">UPPER_CENTER (Java field)</a>
 </li>

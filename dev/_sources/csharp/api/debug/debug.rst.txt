@@ -1,0 +1,339 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Debug
+
+Debug
+=====
+
+
+.. class:: Debug
+
+   Provides functionality to modify the state of the simulation directly, in ways
+   the game normally does not allow: teleporting a vessel, setting its attitude,
+   refilling its tanks and enabling the game's cheat options.
+
+   .. note::
+
+      Everything in this service is cheating. It has the same effect on a save as the
+      game's own debug menu (Alt+F12), and the same consequences: contracts, records and
+      career progress made with it are not earned. It is intended for setting up a
+      scenario to fly or a script to test, without flying there first.
+
+   .. method:: void SetCircularOrbit(SpaceCenter.CelestialBody body, double altitude)
+
+      Move the active vessel onto a circular orbit around a body.
+
+      :parameters:
+
+       * **body** -- Body to orbit.
+       * **altitude** -- Altitude of the orbit, in meters above sea level.
+
+      :Game Scenes: Flight
+
+   .. method:: void SetOrbit(SpaceCenter.CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Move the active vessel onto the orbit with the given orbital elements. The angles use
+      the same units and conventions as :type:`SpaceCenter.Orbit`.
+
+      :parameters:
+
+       * **body** -- Body to orbit.
+       * **semiMajorAxis** -- Semi-major axis of the orbit, in meters.
+       * **eccentricity** -- Eccentricity of the orbit.
+       * **inclination** -- Inclination of the orbit, in radians.
+       * **longitudeOfAscendingNode** -- Longitude of the ascending node, in radians.
+       * **argumentOfPeriapsis** -- Argument of periapsis, in radians.
+       * **meanAnomalyAtEpoch** -- Mean anomaly at epoch, in radians.
+       * **epoch** -- Universal time of the epoch, in seconds.
+
+      :Game Scenes: Flight
+
+   .. method:: void SetLanded(SpaceCenter.CelestialBody body, double latitude, double longitude, double altitude = 0.0)
+
+      Place the active vessel on the surface of a body at the given latitude and longitude,
+      and wait for it to come to rest.
+
+      :parameters:
+
+       * **body** -- Body to land on.
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Height above the terrain to settle at, in meters. Defaults to 0, resting on the surface.
+
+      :Game Scenes: Flight
+
+   .. method:: void SetFlight(SpaceCenter.CelestialBody body, double latitude, double longitude, double altitude, double speed, double heading, double pitch = 0.0, double roll = 0.0, double angleOfAttack = 0.0)
+
+      Place the active vessel in atmospheric flight over the given point: at the given altitude
+      and airspeed, pointing along the given heading at the given pitch and roll, and
+      let physics resume so that it is flying. Use this to set up an in-air scenario
+      without flying the craft up from the runway.
+
+      :parameters:
+
+       * **body** -- Body to fly over.
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Altitude in meters above sea level.
+       * **speed** -- Airspeed in meters per second, relative to the surface.
+       * **heading** -- Compass heading to point along, in degrees (90 is east).
+       * **pitch** -- Pitch above the horizon, in degrees. Defaults to 0 (level).
+       * **roll** -- Roll, in degrees. Defaults to 0 (wings level).
+       * **angleOfAttack** -- Angle of attack in degrees: how far the airspeed vector sits below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose; a positive value gives a nose-up attitude relative to the flight path, so the flight-path angle is *pitch* minus this.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch, heading and roll match those reported by the vessel's
+         :type:`SpaceCenter.Flight`.
+
+   .. method:: void SetPosition(System.Tuple<double,double,double> position, SpaceCenter.ReferenceFrame referenceFrame)
+
+      Move the active vessel to the given position, leaving its velocity as it is. To put it
+      alongside another vessel, pass a position in that vessel's reference frame.
+
+      :parameters:
+
+       * **position** -- Position of the vessel's center of mass, in meters.
+       * **referenceFrame** -- Reference frame the position is in. Defaults to the reference frame of the body being orbited.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the inverse of :meth:`SpaceCenter.Vessel.Position` in the same
+         reference frame.
+
+   .. method:: void SetVelocity(System.Tuple<double,double,double> velocity, SpaceCenter.ReferenceFrame referenceFrame)
+
+      Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
+      orbit that passes through its current position at the new velocity, so this works
+      in orbit and in the atmosphere alike.
+
+      :parameters:
+
+       * **velocity** -- Velocity in meters per second.
+       * **referenceFrame** -- Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the inverse of :meth:`SpaceCenter.Vessel.Velocity` in the same
+         reference frame.
+
+   .. method:: void SetPitchHeadingRoll(double pitch, double heading, double roll, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
+
+      Set the attitude of a vessel to the given pitch, heading and roll in the given
+      reference frame, and stop it rotating. Lets a script start from a fixed, still
+      pose without first flying the autopilot there.
+
+      :parameters:
+
+       * **pitch** -- Target pitch, in degrees.
+       * **heading** -- Target heading, in degrees.
+       * **roll** -- Target roll, in degrees.
+       * **referenceFrame** -- Reference frame the angles are in. Defaults to the vessel's surface reference frame.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The angles match those reported by the vessel's
+         :type:`SpaceCenter.Flight`.
+
+   .. method:: void SetDirection(System.Tuple<double,double,double> direction, double roll, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
+
+      Point a vessel along the given direction in the given reference frame, and stop it
+      rotating. This is :meth:`Debug.SetPitchHeadingRoll <Debug.Debug.SetPitchHeadingRoll>` with a pointing vector instead
+      of a pitch and heading, matching the attitude the autopilot holds for the same
+      target direction and roll.
+
+      :parameters:
+
+       * **direction** -- Direction to point the nose of the vessel in.
+       * **roll** -- Target roll, in degrees, or ``NaN`` to leave the roll uncontrolled.
+       * **referenceFrame** -- Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: void ApplyRotation(double angle, System.Tuple<double,double,double> axis, SpaceCenter.Vessel vessel)
+
+      Rotate a vessel about the given axis, in its own reference frame, by the given angle.
+
+      :parameters:
+
+       * **angle** -- Angle to rotate by, in degrees.
+       * **axis** -- Axis to rotate about.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: void SetAngularVelocity(System.Tuple<double,double,double> angularVelocity, SpaceCenter.ReferenceFrame referenceFrame, SpaceCenter.Vessel vessel)
+
+      Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
+      zero vector to stop the vessel rotating.
+
+      :parameters:
+
+       * **angularVelocity** -- Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.
+       * **referenceFrame** -- Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The whole vessel is put into a rigid rotation about its center of mass, so it spins in
+         place rather than shearing apart or translating.
+
+   .. method:: void FillAllResources(SpaceCenter.Vessel vessel)
+
+      Fill every resource tank on a vessel to its maximum capacity.
+
+      :parameters:
+
+       * **vessel** -- Vessel to fill. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. method:: void FillResources(string resourceName, SpaceCenter.Vessel vessel)
+
+      Fill the tanks of a single resource on a vessel to their maximum capacity.
+
+      :parameters:
+
+       * **resourceName** -- Name of the resource to fill, for example ``"LiquidFuel"``.
+       * **vessel** -- Vessel to fill. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. property:: bool InfinitePropellant { get; set; }
+
+      Whether engines and RCS thrusters draw no propellant.
+
+      :Game Scenes: All
+
+   .. property:: bool InfiniteElectricity { get; set; }
+
+      Whether parts draw no electric charge.
+
+      :Game Scenes: All
+
+   .. property:: bool NoCrashDamage { get; set; }
+
+      Whether parts survive collisions that would otherwise destroy them.
+
+      :Game Scenes: All
+
+   .. property:: bool UnbreakableJoints { get; set; }
+
+      Whether the joints between parts are rigid and cannot break.
+
+      :Game Scenes: All
+
+   .. property:: bool IgnoreMaxTemperature { get; set; }
+
+      Whether parts survive temperatures above their maximum, instead of exploding.
+
+      :Game Scenes: All
+
+   .. property:: bool AllowPartClipping { get; set; }
+
+      Whether parts may be placed so that they intersect one another in the editor.
+
+      :Game Scenes: All
+
+   .. property:: bool NonStrictAttachmentOrientation { get; set; }
+
+      Whether parts may be attached in any orientation, rather than only the ones their
+      attachment nodes allow.
+
+      :Game Scenes: All
+
+   .. property:: bool IgnoreKerbalInventoryLimits { get; set; }
+
+      Whether a kerbal's inventory may hold more than its slot and mass limits allow.
+
+      :Game Scenes: All
+
+   .. property:: bool IgnoreEVAConstructionMassLimit { get; set; }
+
+      Whether EVA construction may move parts heavier than a kerbal can normally carry.
+
+      :Game Scenes: All
+
+   .. property:: bool IgnoreAgencyMindsetOnContracts { get; set; }
+
+      Whether contracts are offered regardless of the agency mindset that normally
+      restricts which ones appear.
+
+      :Game Scenes: All
+
+   .. property:: bool PauseOnVesselUnpack { get; set; }
+
+      Whether the game pauses whenever a vessel comes off rails.
+
+      :Game Scenes: All
+
+   .. property:: bool BiomesVisible { get; set; }
+
+      Whether biome boundaries are drawn on the surface of bodies.
+
+      :Game Scenes: All
+
+   .. property:: double GravityMultiplier { get; set; }
+
+      Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
+      0 is weightlessness.
+
+      :Game Scenes: All
+
+   .. property:: double Funds { get; set; }
+
+      The number of funds the player has. Only available in career mode.
+
+      :Game Scenes: All
+
+   .. property:: float Science { get; set; }
+
+      The amount of science the player has. Only available in career and science mode.
+
+      :Game Scenes: All
+
+   .. property:: float Reputation { get; set; }
+
+      The player's reputation. Only available in career mode.
+
+      :Game Scenes: All
+
+   .. method:: void UnlockTechnologyTree()
+
+      Research every node in the technology tree and purchase every part in it.
+      Only available in career and science mode.
+
+
+      :Game Scenes: All
+
+   .. method:: void UpgradeFacilities()
+
+      Upgrade every building at the space center to its highest level.
+      Only available in career mode.
+
+
+      :Game Scenes: All
+
+   .. method:: void MaxKerbalExperience()
+
+      Raise every kerbal in the roster to the highest experience level.
+
+
+      :Game Scenes: All

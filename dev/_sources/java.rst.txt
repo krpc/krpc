@@ -14,3 +14,4 @@ Java
    java/api/remote-tech
    java/api/lidar
    java/api/docking-camera
+   java/api/debug

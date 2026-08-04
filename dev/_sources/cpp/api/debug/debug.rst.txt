@@ -1,0 +1,357 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Debug
+
+Debug
+=====
+
+
+.. namespace:: krpc::services
+.. class:: Debug : public krpc::Service
+
+   Provides functionality to modify the state of the simulation directly, in ways
+   the game normally does not allow: teleporting a vessel, setting its attitude,
+   refilling its tanks and enabling the game's cheat options.
+
+   .. note::
+
+      Everything in this service is cheating. It has the same effect on a save as the
+      game's own debug menu (Alt+F12), and the same consequences: contracts, records and
+      career progress made with it are not earned. It is intended for setting up a
+      scenario to fly or a script to test, without flying there first.
+
+   .. function:: Debug(krpc::Client* client)
+
+      Construct an instance of this service.
+
+   .. function:: void set_circular_orbit(SpaceCenter::CelestialBody body, double altitude)
+
+      Move the active vessel onto a circular orbit around a body.
+
+      :Parameters:
+
+       * **body** -- Body to orbit.
+       * **altitude** -- Altitude of the orbit, in meters above sea level.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_orbit(SpaceCenter::CelestialBody body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
+
+      Move the active vessel onto the orbit with the given orbital elements. The angles use
+      the same units and conventions as :class:`SpaceCenter::Orbit`.
+
+      :Parameters:
+
+       * **body** -- Body to orbit.
+       * **semi_major_axis** -- Semi-major axis of the orbit, in meters.
+       * **eccentricity** -- Eccentricity of the orbit.
+       * **inclination** -- Inclination of the orbit, in radians.
+       * **longitude_of_ascending_node** -- Longitude of the ascending node, in radians.
+       * **argument_of_periapsis** -- Argument of periapsis, in radians.
+       * **mean_anomaly_at_epoch** -- Mean anomaly at epoch, in radians.
+       * **epoch** -- Universal time of the epoch, in seconds.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_landed(SpaceCenter::CelestialBody body, double latitude, double longitude, double altitude = 0.0)
+
+      Place the active vessel on the surface of a body at the given latitude and longitude,
+      and wait for it to come to rest.
+
+      :Parameters:
+
+       * **body** -- Body to land on.
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Height above the terrain to settle at, in meters. Defaults to 0, resting on the surface.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_flight(SpaceCenter::CelestialBody body, double latitude, double longitude, double altitude, double speed, double heading, double pitch = 0.0, double roll = 0.0, double angle_of_attack = 0.0)
+
+      Place the active vessel in atmospheric flight over the given point: at the given altitude
+      and airspeed, pointing along the given heading at the given pitch and roll, and
+      let physics resume so that it is flying. Use this to set up an in-air scenario
+      without flying the craft up from the runway.
+
+      :Parameters:
+
+       * **body** -- Body to fly over.
+       * **latitude** -- Latitude in degrees.
+       * **longitude** -- Longitude in degrees.
+       * **altitude** -- Altitude in meters above sea level.
+       * **speed** -- Airspeed in meters per second, relative to the surface.
+       * **heading** -- Compass heading to point along, in degrees (90 is east).
+       * **pitch** -- Pitch above the horizon, in degrees. Defaults to 0 (level).
+       * **roll** -- Roll, in degrees. Defaults to 0 (wings level).
+       * **angle_of_attack** -- Angle of attack in degrees: how far the airspeed vector sits below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose; a positive value gives a nose-up attitude relative to the flight path, so the flight-path angle is *pitch* minus this.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The pitch, heading and roll match those reported by the vessel's
+         :class:`SpaceCenter::Flight`.
+
+   .. function:: void set_position(std::tuple<double, double, double> position, SpaceCenter::ReferenceFrame reference_frame)
+
+      Move the active vessel to the given position, leaving its velocity as it is. To put it
+      alongside another vessel, pass a position in that vessel's reference frame.
+
+      :Parameters:
+
+       * **position** -- Position of the vessel's center of mass, in meters.
+       * **reference_frame** -- Reference frame the position is in. Defaults to the reference frame of the body being orbited.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the inverse of :func:`SpaceCenter::Vessel::position` in the same
+         reference frame.
+
+   .. function:: void set_velocity(std::tuple<double, double, double> velocity, SpaceCenter::ReferenceFrame reference_frame)
+
+      Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
+      orbit that passes through its current position at the new velocity, so this works
+      in orbit and in the atmosphere alike.
+
+      :Parameters:
+
+       * **velocity** -- Velocity in meters per second.
+       * **reference_frame** -- Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         This is the inverse of :func:`SpaceCenter::Vessel::velocity` in the same
+         reference frame.
+
+   .. function:: void set_pitch_heading_roll(double pitch, double heading, double roll, SpaceCenter::ReferenceFrame reference_frame, SpaceCenter::Vessel vessel)
+
+      Set the attitude of a vessel to the given pitch, heading and roll in the given
+      reference frame, and stop it rotating. Lets a script start from a fixed, still
+      pose without first flying the autopilot there.
+
+      :Parameters:
+
+       * **pitch** -- Target pitch, in degrees.
+       * **heading** -- Target heading, in degrees.
+       * **roll** -- Target roll, in degrees.
+       * **reference_frame** -- Reference frame the angles are in. Defaults to the vessel's surface reference frame.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The angles match those reported by the vessel's
+         :class:`SpaceCenter::Flight`.
+
+   .. function:: void set_direction(std::tuple<double, double, double> direction, double roll, SpaceCenter::ReferenceFrame reference_frame, SpaceCenter::Vessel vessel)
+
+      Point a vessel along the given direction in the given reference frame, and stop it
+      rotating. This is :func:`set_pitch_heading_roll` with a pointing vector instead
+      of a pitch and heading, matching the attitude the autopilot holds for the same
+      target direction and roll.
+
+      :Parameters:
+
+       * **direction** -- Direction to point the nose of the vessel in.
+       * **roll** -- Target roll, in degrees, or ``NaN`` to leave the roll uncontrolled.
+       * **reference_frame** -- Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: void apply_rotation(double angle, std::tuple<double, double, double> axis, SpaceCenter::Vessel vessel)
+
+      Rotate a vessel about the given axis, in its own reference frame, by the given angle.
+
+      :Parameters:
+
+       * **angle** -- Angle to rotate by, in degrees.
+       * **axis** -- Axis to rotate about.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: void set_angular_velocity(std::tuple<double, double, double> angular_velocity, SpaceCenter::ReferenceFrame reference_frame, SpaceCenter::Vessel vessel)
+
+      Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
+      zero vector to stop the vessel rotating.
+
+      :Parameters:
+
+       * **angular_velocity** -- Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.
+       * **reference_frame** -- Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
+       * **vessel** -- Vessel to rotate. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         The whole vessel is put into a rigid rotation about its center of mass, so it spins in
+         place rather than shearing apart or translating.
+
+   .. function:: void fill_all_resources(SpaceCenter::Vessel vessel)
+
+      Fill every resource tank on a vessel to its maximum capacity.
+
+      :Parameters:
+
+       * **vessel** -- Vessel to fill. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: void fill_resources(std::string resource_name, SpaceCenter::Vessel vessel)
+
+      Fill the tanks of a single resource on a vessel to their maximum capacity.
+
+      :Parameters:
+
+       * **resource_name** -- Name of the resource to fill, for example ``"LiquidFuel"``.
+       * **vessel** -- Vessel to fill. Defaults to the active vessel.
+
+      :Game Scenes: Flight
+
+   .. function:: bool infinite_propellant()
+   .. function:: void set_infinite_propellant(bool value)
+
+      Whether engines and RCS thrusters draw no propellant.
+
+   
+
+   .. function:: bool infinite_electricity()
+   .. function:: void set_infinite_electricity(bool value)
+
+      Whether parts draw no electric charge.
+
+   
+
+   .. function:: bool no_crash_damage()
+   .. function:: void set_no_crash_damage(bool value)
+
+      Whether parts survive collisions that would otherwise destroy them.
+
+   
+
+   .. function:: bool unbreakable_joints()
+   .. function:: void set_unbreakable_joints(bool value)
+
+      Whether the joints between parts are rigid and cannot break.
+
+   
+
+   .. function:: bool ignore_max_temperature()
+   .. function:: void set_ignore_max_temperature(bool value)
+
+      Whether parts survive temperatures above their maximum, instead of exploding.
+
+   
+
+   .. function:: bool allow_part_clipping()
+   .. function:: void set_allow_part_clipping(bool value)
+
+      Whether parts may be placed so that they intersect one another in the editor.
+
+   
+
+   .. function:: bool non_strict_attachment_orientation()
+   .. function:: void set_non_strict_attachment_orientation(bool value)
+
+      Whether parts may be attached in any orientation, rather than only the ones their
+      attachment nodes allow.
+
+   
+
+   .. function:: bool ignore_kerbal_inventory_limits()
+   .. function:: void set_ignore_kerbal_inventory_limits(bool value)
+
+      Whether a kerbal's inventory may hold more than its slot and mass limits allow.
+
+   
+
+   .. function:: bool ignore_eva_construction_mass_limit()
+   .. function:: void set_ignore_eva_construction_mass_limit(bool value)
+
+      Whether EVA construction may move parts heavier than a kerbal can normally carry.
+
+   
+
+   .. function:: bool ignore_agency_mindset_on_contracts()
+   .. function:: void set_ignore_agency_mindset_on_contracts(bool value)
+
+      Whether contracts are offered regardless of the agency mindset that normally
+      restricts which ones appear.
+
+   
+
+   .. function:: bool pause_on_vessel_unpack()
+   .. function:: void set_pause_on_vessel_unpack(bool value)
+
+      Whether the game pauses whenever a vessel comes off rails.
+
+   
+
+   .. function:: bool biomes_visible()
+   .. function:: void set_biomes_visible(bool value)
+
+      Whether biome boundaries are drawn on the surface of bodies.
+
+   
+
+   .. function:: double gravity_multiplier()
+   .. function:: void set_gravity_multiplier(double value)
+
+      Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
+      0 is weightlessness.
+
+   
+
+   .. function:: double funds()
+   .. function:: void set_funds(double value)
+
+      The number of funds the player has. Only available in career mode.
+
+   
+
+   .. function:: float science()
+   .. function:: void set_science(float value)
+
+      The amount of science the player has. Only available in career and science mode.
+
+   
+
+   .. function:: float reputation()
+   .. function:: void set_reputation(float value)
+
+      The player's reputation. Only available in career mode.
+
+   
+
+   .. function:: void unlock_technology_tree()
+
+      Research every node in the technology tree and purchase every part in it.
+      Only available in career and science mode.
+
+
+   
+
+   .. function:: void upgrade_facilities()
+
+      Upgrade every building at the space center to its highest level.
+      Only available in career mode.
+
+
+   
+
+   .. function:: void max_kerbal_experience()
+
+      Raise every kerbal in the roster to the highest experience level.

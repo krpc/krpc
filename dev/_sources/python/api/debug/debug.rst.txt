@@ -1,0 +1,429 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Debug
+
+Debug
+=====
+
+
+.. module:: Debug
+
+Provides functionality to modify the state of the simulation directly, in ways
+the game normally does not allow: teleporting a vessel, setting its attitude,
+refilling its tanks and enabling the game's cheat options.
+
+.. note::
+
+   Everything in this service is cheating. It has the same effect on a save as the
+   game's own debug menu (Alt+F12), and the same consequences: contracts, records and
+   career progress made with it are not earned. It is intended for setting up a
+   scenario to fly or a script to test, without flying there first.
+
+
+
+.. staticmethod:: set_circular_orbit(body, altitude)
+
+   Move the active vessel onto a circular orbit around a body.
+
+   :param SpaceCenter.CelestialBody body: Body to orbit.
+   :param float altitude: Altitude of the orbit, in meters above sea level.
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: set_orbit(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node, argument_of_periapsis, mean_anomaly_at_epoch, epoch)
+
+   Move the active vessel onto the orbit with the given orbital elements. The angles use
+   the same units and conventions as :class:`SpaceCenter.Orbit`.
+
+   :param SpaceCenter.CelestialBody body: Body to orbit.
+   :param float semi_major_axis: Semi-major axis of the orbit, in meters.
+   :param float eccentricity: Eccentricity of the orbit.
+   :param float inclination: Inclination of the orbit, in radians.
+   :param float longitude_of_ascending_node: Longitude of the ascending node, in radians.
+   :param float argument_of_periapsis: Argument of periapsis, in radians.
+   :param float mean_anomaly_at_epoch: Mean anomaly at epoch, in radians.
+   :param float epoch: Universal time of the epoch, in seconds.
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: set_landed(body, latitude, longitude, [altitude = 0.0])
+
+   Place the active vessel on the surface of a body at the given latitude and longitude,
+   and wait for it to come to rest.
+
+   :param SpaceCenter.CelestialBody body: Body to land on.
+   :param float latitude: Latitude in degrees.
+   :param float longitude: Longitude in degrees.
+   :param float altitude: Height above the terrain to settle at, in meters. Defaults to 0, resting on the surface.
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: set_flight(body, latitude, longitude, altitude, speed, heading, [pitch = 0.0], [roll = 0.0], [angle_of_attack = 0.0])
+
+   Place the active vessel in atmospheric flight over the given point: at the given altitude
+   and airspeed, pointing along the given heading at the given pitch and roll, and
+   let physics resume so that it is flying. Use this to set up an in-air scenario
+   without flying the craft up from the runway.
+
+   :param SpaceCenter.CelestialBody body: Body to fly over.
+   :param float latitude: Latitude in degrees.
+   :param float longitude: Longitude in degrees.
+   :param float altitude: Altitude in meters above sea level.
+   :param float speed: Airspeed in meters per second, relative to the surface.
+   :param float heading: Compass heading to point along, in degrees (90 is east).
+   :param float pitch: Pitch above the horizon, in degrees. Defaults to 0 (level).
+   :param float roll: Roll, in degrees. Defaults to 0 (wings level).
+   :param float angle_of_attack: Angle of attack in degrees: how far the airspeed vector sits below the nose, in the pitch plane. 0 (the default) puts the airspeed along the nose; a positive value gives a nose-up attitude relative to the flight path, so the flight-path angle is *pitch* minus this.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The pitch, heading and roll match those reported by the vessel's
+      :class:`SpaceCenter.Flight`.
+
+
+
+
+.. staticmethod:: set_position(position, reference_frame)
+
+   Move the active vessel to the given position, leaving its velocity as it is. To put it
+   alongside another vessel, pass a position in that vessel's reference frame.
+
+   :param tuple position: Position of the vessel's center of mass, in meters.
+   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the position is in. Defaults to the reference frame of the body being orbited.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      This is the inverse of :meth:`SpaceCenter.Vessel.position` in the same
+      reference frame.
+
+
+
+
+.. staticmethod:: set_velocity(velocity, reference_frame)
+
+   Set the velocity of the active vessel, leaving it where it is. The vessel is moved onto the
+   orbit that passes through its current position at the new velocity, so this works
+   in orbit and in the atmosphere alike.
+
+   :param tuple velocity: Velocity in meters per second.
+   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the velocity is in. Defaults to the reference frame of the body being orbited, which rotates with it, so a zero velocity leaves the vessel at rest relative to the ground.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      This is the inverse of :meth:`SpaceCenter.Vessel.velocity` in the same
+      reference frame.
+
+
+
+
+.. staticmethod:: set_pitch_heading_roll(pitch, heading, roll, reference_frame, vessel)
+
+   Set the attitude of a vessel to the given pitch, heading and roll in the given
+   reference frame, and stop it rotating. Lets a script start from a fixed, still
+   pose without first flying the autopilot there.
+
+   :param float pitch: Target pitch, in degrees.
+   :param float heading: Target heading, in degrees.
+   :param float roll: Target roll, in degrees.
+   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the angles are in. Defaults to the vessel's surface reference frame.
+   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The angles match those reported by the vessel's
+      :class:`SpaceCenter.Flight`.
+
+
+
+
+.. staticmethod:: set_direction(direction, roll, reference_frame, vessel)
+
+   Point a vessel along the given direction in the given reference frame, and stop it
+   rotating. This is :meth:`set_pitch_heading_roll` with a pointing vector instead
+   of a pitch and heading, matching the attitude the autopilot holds for the same
+   target direction and roll.
+
+   :param tuple direction: Direction to point the nose of the vessel in.
+   :param float roll: Target roll, in degrees, or ``NaN`` to leave the roll uncontrolled.
+   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the direction and roll are in. Defaults to the vessel's surface reference frame.
+   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: apply_rotation(angle, axis, vessel)
+
+   Rotate a vessel about the given axis, in its own reference frame, by the given angle.
+
+   :param float angle: Angle to rotate by, in degrees.
+   :param tuple axis: Axis to rotate about.
+   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: set_angular_velocity(angular_velocity, reference_frame, vessel)
+
+   Set the angular velocity of a vessel, expressed in the given reference frame. Pass a
+   zero vector to stop the vessel rotating.
+
+   :param tuple angular_velocity: Angular velocity, in radians per second. The direction is the axis of rotation and the magnitude is the rate.
+   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame the angular velocity is in. Defaults to the vessel's surface reference frame.
+   :param SpaceCenter.Vessel vessel: Vessel to rotate. Defaults to the active vessel.
+   :Game Scenes: Flight
+
+
+   .. note::
+
+      The whole vessel is put into a rigid rotation about its center of mass, so it spins in
+      place rather than shearing apart or translating.
+
+
+
+
+.. staticmethod:: fill_all_resources(vessel)
+
+   Fill every resource tank on a vessel to its maximum capacity.
+
+   :param SpaceCenter.Vessel vessel: Vessel to fill. Defaults to the active vessel.
+   :Game Scenes: Flight
+
+
+
+
+
+.. staticmethod:: fill_resources(resource_name, vessel)
+
+   Fill the tanks of a single resource on a vessel to their maximum capacity.
+
+   :param str resource_name: Name of the resource to fill, for example ``"LiquidFuel"``.
+   :param SpaceCenter.Vessel vessel: Vessel to fill. Defaults to the active vessel.
+   :Game Scenes: Flight
+
+
+
+
+
+.. attribute:: infinite_propellant
+
+   Whether engines and RCS thrusters draw no propellant.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: infinite_electricity
+
+   Whether parts draw no electric charge.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: no_crash_damage
+
+   Whether parts survive collisions that would otherwise destroy them.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: unbreakable_joints
+
+   Whether the joints between parts are rigid and cannot break.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: ignore_max_temperature
+
+   Whether parts survive temperatures above their maximum, instead of exploding.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: allow_part_clipping
+
+   Whether parts may be placed so that they intersect one another in the editor.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: non_strict_attachment_orientation
+
+   Whether parts may be attached in any orientation, rather than only the ones their
+   attachment nodes allow.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: ignore_kerbal_inventory_limits
+
+   Whether a kerbal's inventory may hold more than its slot and mass limits allow.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: ignore_eva_construction_mass_limit
+
+   Whether EVA construction may move parts heavier than a kerbal can normally carry.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: ignore_agency_mindset_on_contracts
+
+   Whether contracts are offered regardless of the agency mindset that normally
+   restricts which ones appear.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: pause_on_vessel_unpack
+
+   Whether the game pauses whenever a vessel comes off rails.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: biomes_visible
+
+   Whether biome boundaries are drawn on the surface of bodies.
+
+   :Attribute: Can be read or written
+   :rtype: bool
+   
+
+
+
+
+.. attribute:: gravity_multiplier
+
+   Multiplier applied to the force of gravity on every vessel. 1 is normal gravity,
+   0 is weightlessness.
+
+   :Attribute: Can be read or written
+   :rtype: float
+   
+
+
+
+
+.. attribute:: funds
+
+   The number of funds the player has. Only available in career mode.
+
+   :Attribute: Can be read or written
+   :rtype: float
+   
+
+
+
+
+.. attribute:: science
+
+   The amount of science the player has. Only available in career and science mode.
+
+   :Attribute: Can be read or written
+   :rtype: float
+   
+
+
+
+
+.. attribute:: reputation
+
+   The player's reputation. Only available in career mode.
+
+   :Attribute: Can be read or written
+   :rtype: float
+   
+
+
+
+
+.. staticmethod:: unlock_technology_tree()
+
+   Research every node in the technology tree and purchase every part in it.
+   Only available in career and science mode.
+
+   
+
+
+
+
+.. staticmethod:: upgrade_facilities()
+
+   Upgrade every building at the space center to its highest level.
+   Only available in career mode.
+
+   
+
+
+
+
+.. staticmethod:: max_kerbal_experience()
+
+   Raise every kerbal in the roster to the highest experience level.
