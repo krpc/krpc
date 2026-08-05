@@ -132,6 +132,7 @@ SpaceCenter.TransformVelocity
 SpaceCenter.RaycastDistance
 SpaceCenter.RaycastPart
 SpaceCenter.FARAvailable
+SpaceCenter.RealFuelsAvailable
 SpaceCenter.CreateKerbal
 SpaceCenter.GetKerbal
 SpaceCenter.LoadSpaceCenter
@@ -768,6 +769,9 @@ SpaceCenter.Part.AddForce
 SpaceCenter.Part.InstantaneousForce
 SpaceCenter.Part.Glow
 SpaceCenter.Part.AutoStrutMode
+SpaceCenter.Part.HasRealFuelsTank
+SpaceCenter.Part.HighlyPressurized
+SpaceCenter.Part.BoiloffRate
 SpaceCenter.AutoStrutMode
 SpaceCenter.AutoStrutMode.Off
 SpaceCenter.AutoStrutMode.Root
@@ -970,6 +974,14 @@ SpaceCenter.Engine.AvailableTorque
 SpaceCenter.Engine.CanReverseThrust
 SpaceCenter.Engine.ThrustReversed
 SpaceCenter.Engine.ToggleThrustReversal
+SpaceCenter.Engine.HasRealFuels
+SpaceCenter.Engine.Ignitions
+SpaceCenter.Engine.IgnitionResources
+SpaceCenter.Engine.HasUllage
+SpaceCenter.Engine.PropellantStability
+SpaceCenter.Engine.PropellantReliability
+SpaceCenter.Engine.PressureFed
+SpaceCenter.Engine.HasFeedPressure
 SpaceCenter.Propellant
 SpaceCenter.Propellant.Name
 SpaceCenter.Propellant.CurrentAmount
