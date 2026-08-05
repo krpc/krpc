@@ -37,6 +37,12 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
  * Client comms tests use a local `TestServer` (no KSP needed); SerialIO ones need `socat`.
  * Flags: `--test_output=streamed`, `--cache_test_results=false`, `--subcommands`,
    `--config=system-llvm` (C/C++ as CI), `--config=windows`.
+ * A full `//:test` takes several minutes, over the foreground Bash timeout. Start it with
+   `run_in_background` and wait for the completion notification, which carries the exit code.
+   Judge the result by the exit code, then `Read` the tail of the output file for the summary.
+   Do not re-run the suite just to see how it ended.
+ * Run **one bazel command at a time**. A second blocks on the server lock, printing
+   `Another command … is running. Waiting for it to complete`, and also looks hung.
 
 ### C# sources
 
@@ -71,8 +77,10 @@ bazel run //:test-ingame -- -k test_camera_mode                           # by n
 
  * **Auto-launches KSP**: builds/installs DLLs and required mods, launches, loads a save, runs, stops.
    All code changes picked up automatically.
- * Cold run ~70–90s → **start with `run_in_background`**, wait via Monitor
-   `until grep -qE " passed| failed"`. Never poll.
+ * Cold run ~70–90s → **start with `run_in_background`** and wait for the completion notification.
+   Never poll. The waiting rules under *Tests and lint* apply here too. `bazel run` passes pytest's
+   output through, so ` passed`/`failed` does match, but only a Monitor watching the stage
+   progress of a run in flight needs it.
  * Progress logged per stage (`building and installing kRPC`, `launching KSP`, `waiting for kRPC
    server...`, `stopping KSP`).
 
