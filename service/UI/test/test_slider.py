@@ -66,6 +66,18 @@ class TestSlider(krpctest.TestCase):
         self.assertEqual(10, slider.max)
         slider.remove()
 
+    def test_vertical(self):
+        slider = self.canvas.add_slider(vertical=True)
+        self.assertTrue(slider.visible)
+        # A vertical slider is taller than it is wide, where a horizontal one is the
+        # other way round.
+        size = slider.rect_transform.size
+        self.assertGreater(size[1], size[0])
+        slider.max = 10
+        slider.value = 5
+        self.assertEqual(5, slider.value)
+        slider.remove()
+
     def test_interactable(self):
         slider = self.canvas.add_slider()
         self.assertTrue(slider.interactable)

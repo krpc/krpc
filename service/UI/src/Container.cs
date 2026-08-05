@@ -64,11 +64,14 @@ namespace KRPC.UI
         /// <summary>
         /// Add a slider to this object.
         /// </summary>
+        /// <param name="vertical">
+        /// Whether the slider runs from bottom to top, rather than from left to right.
+        /// </param>
         /// <param name="visible">Whether the slider is visible.</param>
         [KRPCMethod]
-        public Slider AddSlider (bool visible = true)
+        public Slider AddSlider (bool vertical = false, bool visible = true)
         {
-            return new Slider (GameObject, visible);
+            return new Slider (GameObject, vertical, visible);
         }
 
         /// <summary>

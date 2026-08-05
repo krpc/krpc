@@ -24,34 +24,43 @@ namespace KRPC.UI
         /// </summary>
         bool settingRange;
 
-        internal Slider (GameObject parent, bool visible)
-            : base (Widgets.Create (parent, "krpc.slider", 160, 20), visible)
+        internal Slider (GameObject parent, bool vertical, bool visible)
+            : base (Widgets.Create (parent, "krpc.slider",
+                vertical ? 20 : 160, vertical ? 160 : 20), visible)
         {
             Widgets.AddImage (
                 Widgets.CreateFilling (GameObject, "krpc.slider.track", 0),
-                Widgets.Style (skin => skin.horizontalSlider));
+                Widgets.Style (
+                    skin => vertical ? skin.verticalSlider : skin.horizontalSlider));
 
             // The track the handle slides along is shortened by half a handle at each end,
             // so that the handle stays within the slider at either extreme.
             var slideArea = Widgets.CreateFilling (GameObject, "krpc.slider.slideArea", 0);
             var slideRect = slideArea.GetComponent<UnityEngine.RectTransform> ();
-            slideRect.offsetMin = new Vector2 (handleWidth / 2, 0);
-            slideRect.offsetMax = new Vector2 (-handleWidth / 2, 0);
+            slideRect.offsetMin = vertical
+                ? new Vector2 (0, handleWidth / 2) : new Vector2 (handleWidth / 2, 0);
+            slideRect.offsetMax = vertical
+                ? new Vector2 (0, -handleWidth / 2) : new Vector2 (-handleWidth / 2, 0);
 
             var handle = Widgets.CreateFilling (slideArea, "krpc.slider.handle", 0);
             var handleRect = handle.GetComponent<UnityEngine.RectTransform> ();
             // Unity positions the handle by moving its anchors along the track, so it is
-            // anchored to a point horizontally and given a fixed width.
+            // anchored to a point along the slider's direction and given a fixed size
+            // across it.
             handleRect.anchorMin = new Vector2 (0, 0);
-            handleRect.anchorMax = new Vector2 (0, 1);
-            handleRect.sizeDelta = new Vector2 (handleWidth, 0);
-            var thumb = Widgets.Style (skin => skin.horizontalSliderThumb);
+            handleRect.anchorMax = vertical ? new Vector2 (1, 0) : new Vector2 (0, 1);
+            handleRect.sizeDelta = vertical
+                ? new Vector2 (0, handleWidth) : new Vector2 (handleWidth, 0);
+            var thumb = Widgets.Style (
+                skin => vertical ? skin.verticalSliderThumb : skin.horizontalSliderThumb);
             var handleImage = Widgets.AddImage (handle, thumb);
 
             slider = GameObject.AddComponent<UnityEngine.UI.Slider> ();
             slider.handleRect = handleRect;
             slider.targetGraphic = handleImage;
-            slider.direction = UnityEngine.UI.Slider.Direction.LeftToRight;
+            slider.direction = vertical
+                ? UnityEngine.UI.Slider.Direction.BottomToTop
+                : UnityEngine.UI.Slider.Direction.LeftToRight;
             slider.minValue = 0;
             slider.maxValue = 1;
             slider.value = 0;
@@ -88,8 +97,8 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// The value at the left hand end of the slider. Must not be greater than
-        /// <see cref="Max" />.
+        /// The value at the low end of the slider, which is its left hand end, or the
+        /// bottom of a vertical slider. Must not be greater than <see cref="Max" />.
         /// </summary>
         [KRPCProperty]
         public float Min {
@@ -98,8 +107,8 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// The value at the right hand end of the slider. Must not be less than
-        /// <see cref="Min" />.
+        /// The value at the high end of the slider, which is its right hand end, or the
+        /// top of a vertical slider. Must not be less than <see cref="Min" />.
         /// </summary>
         [KRPCProperty]
         public float Max {
