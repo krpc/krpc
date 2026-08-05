@@ -74,7 +74,6 @@ def servicedefs(ksp, service, assemblies):
         "Assembly-CSharp-firstpass.dll",
         "UnityEngine.dll",
         "UnityEngine.AnimationModule.dll",
-        "UnityEngine.AssetBundleModule.dll",
         "UnityEngine.CoreModule.dll",
         "UnityEngine.IMGUIModule.dll",
         "UnityEngine.InputLegacyModule.dll",
@@ -83,7 +82,6 @@ def servicedefs(ksp, service, assemblies):
         "UnityEngine.TextRenderingModule.dll",
         "UnityEngine.UI.dll",
         "UnityEngine.UIModule.dll",
-        "UnityEngine.UnityWebRequestWWWModule.dll",
     ]
     ksp_data = "KSP_Data/Managed"
     if not os.path.exists(os.path.join(ksp, ksp_data)):

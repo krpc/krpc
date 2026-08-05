@@ -10,7 +10,8 @@ using Tuple3 = System.Tuple<double, double, double>;
 namespace KRPC.UI
 {
     /// <summary>
-    /// A text label. See <see cref="Panel.AddText" />.
+    /// A text label.
+    /// Added to a <see cref="Canvas" /> or a <see cref="Panel" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
     public class Text : Object
@@ -18,9 +19,10 @@ namespace KRPC.UI
         readonly UnityEngine.UI.Text text;
 
         internal Text (GameObject parent, string content, bool visible)
-            : base (Addon.Instantiate (parent, "Text"), visible)
+            : base (Widgets.Create (parent, "krpc.text", 160, 30), visible)
         {
-            text = GameObject.GetComponent<UnityEngine.UI.Text> ();
+            text = Widgets.AddText (
+                GameObject, Widgets.Style (skin => skin.label), UnityEngine.TextAnchor.UpperLeft);
             Content = content;
         }
 
@@ -28,14 +30,6 @@ namespace KRPC.UI
             : base (obj, true, false)
         {
             text = obj.GetComponent<UnityEngine.UI.Text> ();
-        }
-
-        /// <summary>
-        /// The rect transform for the text.
-        /// </summary>
-        [KRPCProperty]
-        public RectTransform RectTransform {
-            get{ return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>

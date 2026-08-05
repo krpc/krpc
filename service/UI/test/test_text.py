@@ -19,9 +19,11 @@ class TestText(krpctest.TestCase):
         self.assertEqual("Jebediah Kerman", text.content)
         self.assertEqual("Arial", text.font)
         self.assertGreater(len(text.available_fonts), 0)
-        self.assertEqual(14, text.size)
+        # The size and color a label starts out with are taken from the skin the game
+        # draws its own interface in, so they are not fixed values.
+        self.assertGreater(text.size, 0)
+        self.assertEqual(3, len(text.color))
         self.assertEqual(self.style.normal, text.style)
-        self.assertAlmostEqual((0.196, 0.196, 0.196), text.color, places=3)
         self.assertEqual(self.anchor.upper_left, text.alignment)
         self.assertEqual(1, text.line_spacing)
         text.remove()

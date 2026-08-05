@@ -1832,13 +1832,16 @@ UI.Button.RectTransform
 UI.Button.Visible
 UI.Button.Text
 UI.Button.Clicked
+UI.Button.Interactable
 UI.Button.Remove
 UI.InputField
 UI.InputField.RectTransform
 UI.InputField.Visible
 UI.InputField.Value
 UI.InputField.Text
+UI.InputField.Placeholder
 UI.InputField.Changed
+UI.InputField.Interactable
 UI.InputField.Remove
 LiDAR
 LiDAR.Available

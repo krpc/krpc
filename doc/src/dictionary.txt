@@ -81,6 +81,7 @@ greek
 hostname
 inkscape
 integration
+interactable
 internet
 intra
 javac

@@ -43,6 +43,8 @@
     <Compile Include="Button.cs" />
     <Compile Include="Canvas.cs" />
     <Compile Include="CanvasScale.cs" />
+    <Compile Include="Container.cs" />
+    <Compile Include="Control.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />
     <Compile Include="InputField.cs" />
@@ -54,5 +56,6 @@
     <Compile Include="TextAlignment.cs" />
     <Compile Include="TextAnchor.cs" />
     <Compile Include="UI.cs" />
+    <Compile Include="Widgets.cs" />
   </ItemGroup>
 </Project>

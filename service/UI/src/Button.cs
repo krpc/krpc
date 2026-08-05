@@ -4,31 +4,35 @@ using UnityEngine;
 namespace KRPC.UI
 {
     /// <summary>
-    /// A text label. See <see cref="Panel.AddButton" />.
+    /// A button that the user can click.
+    /// Added to a <see cref="Canvas" /> or a <see cref="Panel" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Button : Object
+    public class Button : Control
     {
         readonly UnityEngine.UI.Button button;
         readonly Text text;
 
         internal Button (GameObject parent, string content, bool visible)
-            : base (Addon.Instantiate (parent, "Button"), visible)
+            : base (Widgets.Create (parent, "krpc.button", 160, 30), visible)
         {
-            button = GameObject.GetComponent<UnityEngine.UI.Button> ();
-            text = new Text (GameObject.GetChild ("Text"));
+            var style = Widgets.Style (skin => skin.button);
+            var background = Widgets.AddImage (GameObject, style);
+            button = GameObject.AddComponent<UnityEngine.UI.Button> ();
+            button.targetGraphic = background;
+            Widgets.AddTransition (button, style);
+            var label = Widgets.CreateFilling (GameObject, "krpc.button.text", 0);
+            Widgets.AddText (label, style, UnityEngine.TextAnchor.MiddleCenter);
+            text = new Text (label);
             text.Content = content;
             button.onClick.AddListener (() => {
                 Clicked = true;
             });
         }
 
-        /// <summary>
-        /// The rect transform for the text.
-        /// </summary>
-        [KRPCProperty]
-        public RectTransform RectTransform {
-            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
+        /// <inheritdoc />
+        protected override UnityEngine.UI.Selectable Selectable {
+            get { return button; }
         }
 
         /// <summary>

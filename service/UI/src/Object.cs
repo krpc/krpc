@@ -9,6 +9,11 @@ namespace KRPC.UI
     /// </summary>
     public abstract class Object
     {
+        /// <summary>
+        /// Whether a client can remove the object. Only the objects a client owns can be
+        /// removed; the stock canvas and the parts a control is built from live and die
+        /// with what they belong to.
+        /// </summary>
         readonly bool removable;
 
         /// <summary>
@@ -25,7 +30,7 @@ namespace KRPC.UI
             gameObject.SetActive (visible);
             if (register)
                 Addon.Add (this);
-            removable = true;
+            removable = register;
         }
 
         /// <summary>
@@ -34,6 +39,14 @@ namespace KRPC.UI
         protected Object (UnityEngine.Canvas canvas)
         {
             GameObject = canvas.gameObject;
+        }
+
+        /// <summary>
+        /// The rect transform for the UI object.
+        /// </summary>
+        [KRPCProperty]
+        public RectTransform RectTransform {
+            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>
@@ -48,9 +61,14 @@ namespace KRPC.UI
         /// <summary>
         /// Destroy the UI object.
         /// </summary>
+        /// <remarks>
+        /// The teardown itself, with no say in whether it should happen: whether a client
+        /// may ask for it is <see cref="Remove" />'s to decide. This runs from the addon
+        /// sweeping up after a client or a scene as well, where throwing would abandon
+        /// whatever was left in the sweep.
+        /// </remarks>
         public void Destroy ()
         {
-            CheckNotRemovable ();
             UnityEngine.Object.Destroy (GameObject);
         }
 
@@ -60,14 +78,9 @@ namespace KRPC.UI
         [KRPCMethod]
         public void Remove ()
         {
-            CheckNotRemovable ();
-            Addon.Remove (this);
-        }
-
-        void CheckNotRemovable ()
-        {
             if (!removable)
                 throw new InvalidOperationException ("UI object is not removable");
+            Addon.Remove (this);
         }
     }
 }

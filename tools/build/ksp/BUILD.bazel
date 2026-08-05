@@ -14,11 +14,6 @@ import_dll(
 )
 
 import_dll(
-    name = "UnityEngine.AssetBundleModule",
-    dll = "@ksp//:KSP_Data/Managed/UnityEngine.AssetBundleModule.dll",
-)
-
-import_dll(
     name = "UnityEngine.CoreModule",
     dll = "@ksp//:KSP_Data/Managed/UnityEngine.CoreModule.dll",
 )
@@ -61,11 +56,6 @@ import_dll(
 import_dll(
     name = "UnityEngine.UIModule",
     dll = "@ksp//:KSP_Data/Managed/UnityEngine.UIModule.dll",
-)
-
-import_dll(
-    name = "UnityEngine.UnityWebRequestWWWModule",
-    dll = "@ksp//:KSP_Data/Managed/UnityEngine.UnityWebRequestWWWModule.dll",
 )
 
 import_dll(

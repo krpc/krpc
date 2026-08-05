@@ -20,6 +20,10 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual(self.canvas.rect_transform.scale, canvas.rect_transform.scale)
         canvas.remove()
 
+    def test_the_stock_canvas_cannot_be_removed(self):
+        # It belongs to the game, not to the client that reached it.
+        self.assertRaises(RuntimeError, self.canvas.remove)
+
     def test_add_panel(self):
         panel = self.canvas.add_panel()
         self.assertTrue(panel.visible)
