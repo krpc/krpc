@@ -57,12 +57,13 @@ _MOD_MODULES = {
     "AGExt": "ModuleAGX",
 }
 
-# Some mods add nothing to the part catalog at all, but are reported by a flag on a service
-# that wraps them (Ferram Aerospace Research replaces the aerodynamics model, and the
-# SpaceCenter service reports whether it is installed and active). Detect these by reading
-# that flag, given as a (service, property) pair.
+# Some mods add no part of their own, but are reported by a flag on a service that wraps them
+# (Ferram Aerospace Research replaces the aerodynamics model and RealFuels rewrites the fuels
+# of existing parts; the SpaceCenter service reports whether each is installed and active).
+# Detect these by reading that flag, given as a (service, property) pair.
 _MOD_FLAGS = {
     "FAR": ("space_center", "far_available"),
+    "RealFuels": ("space_center", "real_fuels_available"),
 }
 
 # The KSP process this test run launched, or None if KSP was started externally (a
