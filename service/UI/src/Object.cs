@@ -91,6 +91,38 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Whether the object is one that can be given a layout element. False for a
+        /// canvas, which is not inside anything that could lay it out.
+        /// </summary>
+        internal virtual bool CanHaveLayoutElement {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// How much space the UI object asks a layout for.
+        /// </summary>
+        /// <remarks>
+        /// Only has an effect when the object is in a panel that has a layout. A canvas is
+        /// not inside a layout and does not have one.
+        /// </remarks>
+        [KRPCProperty]
+        public LayoutElement LayoutElement {
+            get {
+                // The component is added the first time it is asked for, so asking must be
+                // refused for an object that would keep it for good. The stock canvas is
+                // the game's own, and kRPC never destroys it, so a component added to it
+                // would be left there for the rest of the session.
+                if (!CanHaveLayoutElement)
+                    throw new InvalidOperationException (
+                        "A canvas is not inside a layout, so it has no layout element");
+                var element = GameObject.GetComponent<UnityEngine.UI.LayoutElement> ();
+                if (element == null)
+                    element = GameObject.AddComponent<UnityEngine.UI.LayoutElement> ();
+                return new LayoutElement (element);
+            }
+        }
+
+        /// <summary>
         /// Whether the UI object is visible.
         /// </summary>
         [KRPCProperty]

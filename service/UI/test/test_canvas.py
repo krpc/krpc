@@ -16,6 +16,8 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual(self.canvas, self.ui.stock_canvas)
         panel = self.canvas.add_panel()
         self.assertEqual(panel.rect_transform, panel.rect_transform)
+        self.assertEqual(panel.size_fitter, panel.size_fitter)
+        self.assertEqual(panel.layout_element, panel.layout_element)
         other = self.canvas.add_panel()
         self.assertNotEqual(panel, other)
         other.remove()
@@ -29,6 +31,15 @@ class TestCanvas(krpctest.TestCase):
         # created, so the transform is only scaled from the next frame on.
         self.wait()
         self.assertEqual(self.canvas.rect_transform.scale, canvas.rect_transform.scale)
+        canvas.remove()
+
+    def test_a_canvas_has_no_layout_element(self):
+        # A layout element is added to an object the first time it is asked for, and a
+        # canvas is not inside anything that would lay it out. The stock canvas is the
+        # game's own object, which kRPC would never take the component back off.
+        self.assertRaises(RuntimeError, getattr, self.canvas, "layout_element")
+        canvas = self.ui.add_canvas()
+        self.assertRaises(RuntimeError, getattr, canvas, "layout_element")
         canvas.remove()
 
     def test_the_stock_canvas_cannot_be_removed(self):

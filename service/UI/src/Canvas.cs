@@ -26,6 +26,11 @@ namespace KRPC.UI
         {
         }
 
+        /// <inheritdoc />
+        internal override bool CanHaveLayoutElement {
+            get { return false; }
+        }
+
         internal Canvas ()
             : base (new GameObject ("krpc.canvas", typeof(UnityEngine.Canvas)), true)
         {
