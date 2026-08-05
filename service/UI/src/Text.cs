@@ -102,6 +102,21 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Whether the text wraps onto further lines when it is wider than the space it
+        /// has. When wrapping is off, the text carries on past the edge instead, and a
+        /// label asked for its preferred size asks for a single line, so a value that
+        /// changes does not reflow a layout.
+        /// </summary>
+        [KRPCProperty]
+        public bool WordWrap {
+            get { return text.horizontalOverflow == HorizontalWrapMode.Wrap; }
+            set {
+                text.horizontalOverflow = value
+                    ? HorizontalWrapMode.Wrap : HorizontalWrapMode.Overflow;
+            }
+        }
+
+        /// <summary>
         /// The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
         /// fully transparent and 1 is fully opaque.
         /// </summary>

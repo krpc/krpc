@@ -45,6 +45,17 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.anchor.upper_right, text.alignment)
         self.assertEqual(2, text.line_spacing)
         text.remove()
+
+    def test_word_wrap(self):
+        text = self.canvas.add_text("Jebediah Kerman")
+        self.assertTrue(text.word_wrap)
+        # Turned off for a value label, so that the label asks a layout for one line
+        # and a changing value does not reflow the interface.
+        text.word_wrap = False
+        self.assertFalse(text.word_wrap)
+        text.word_wrap = True
+        self.assertTrue(text.word_wrap)
+        text.remove()
         self.assertRaises(ValueError, text.remove)
 
 

@@ -1827,6 +1827,7 @@ UI.Text.RectTransform
 UI.Text.LayoutElement
 UI.Text.Visible
 UI.Text.Content
+UI.Text.WordWrap
 UI.Text.Font
 UI.Text.AvailableFonts
 UI.Text.Size
