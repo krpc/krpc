@@ -121,6 +121,60 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Redraw part of a picture drawn with <see cref="SetPixels" />: a block of the
+        /// given size, with its top left corner x pixels in from the left edge and y
+        /// pixels down from the top. The rest of the picture is left as it is, so a
+        /// change to a small part of a large picture, one new column of a scrolling
+        /// graph for instance, only sends the part that changed.
+        /// </summary>
+        /// <param name="data">
+        /// The pixels of the block, laid out as for <see cref="SetPixels" />: 4 bytes
+        /// per pixel, rows top to bottom, width times height times 4 bytes in all.
+        /// </param>
+        /// <param name="x">How many pixels the block sits in from the left edge.</param>
+        /// <param name="y">How many pixels the block sits down from the top.</param>
+        /// <param name="width">How many pixels wide the block is.</param>
+        /// <param name="height">How many pixels tall the block is.</param>
+        /// <remarks>
+        /// The image must already be showing a picture drawn from raw pixels, which is
+        /// what sets the size, and the block must fit inside it. A picture loaded from
+        /// a file cannot be redrawn this way: the file contents a client reads back
+        /// would no longer be what is on the screen.
+        /// </remarks>
+        [KRPCMethod]
+        public void UpdatePixels (byte[] data, int x, int y, int width, int height)
+        {
+            if (data == null)
+                throw new ArgumentNullException (nameof (data));
+            if (width <= 0 || height <= 0)
+                throw new ArgumentException ("The size of the block must be positive");
+            if (data.LongLength != (long)width * height * 4)
+                throw new ArgumentException (
+                    "The block needs width * height * 4 bytes, 4 bytes per pixel");
+            if (!rawPixels || texture == null)
+                throw new InvalidOperationException (
+                    "The image is not showing a picture drawn from raw pixels");
+            if (x < 0 || y < 0 ||
+                (long)x + width > texture.width || (long)y + height > texture.height)
+                throw new ArgumentException ("The block does not fit inside the picture");
+            // The block arrives top row first while Unity takes rows bottom first, so
+            // the rows are turned over as they are converted, and the y offset is
+            // measured down from the top while Unity measures up from the bottom.
+            var pixels = new Color32[width * height];
+            for (var row = 0; row < height; row++) {
+                var source = row * width * 4;
+                var target = (height - 1 - row) * width;
+                for (var column = 0; column < width; column++) {
+                    var i = source + column * 4;
+                    pixels [target + column] = new Color32 (
+                        data [i], data [i + 1], data [i + 2], data [i + 3]);
+                }
+            }
+            texture.SetPixels32 (x, texture.height - y - height, width, height, pixels);
+            texture.Apply ();
+        }
+
+        /// <summary>
         /// Turn the rows of a picture over, swapping the top row with the bottom one.
         /// </summary>
         static byte[] FlipRows (byte[] data, int width, int height)
