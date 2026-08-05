@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -7,7 +8,7 @@ namespace KRPC.UI
     /// <summary>
     /// Abstract base class for all UI objects.
     /// </summary>
-    public abstract class Object
+    public abstract class Object : Equatable<Object>
     {
         /// <summary>
         /// Whether a client can remove the object. Only the objects a client owns can be
@@ -39,6 +40,30 @@ namespace KRPC.UI
         protected Object (UnityEngine.Canvas canvas)
         {
             GameObject = canvas.gameObject;
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        /// <remarks>
+        /// Two objects are equal when they refer to the same user interface element, so
+        /// that a client is handed the same object identifier however it reaches the
+        /// element, and asking for the same element repeatedly does not accumulate
+        /// identifiers.
+        /// </remarks>
+        public override bool Equals (Object other)
+        {
+            return !ReferenceEquals (other, null) &&
+                GetType () == other.GetType () &&
+                GameObject == other.GameObject;
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return GameObject.GetHashCode ();
         }
 
         /// <summary>

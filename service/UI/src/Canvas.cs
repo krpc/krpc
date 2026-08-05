@@ -11,22 +11,13 @@ namespace KRPC.UI
     [KRPCClass (Service = "UI")]
     public class Canvas : Container
     {
-        static Canvas stockCanvas;
-
         internal static Canvas StockCanvas {
             get {
-                // The wrapper is cached so that repeated calls return the same object, but the
-                // game object it wraps is destroyed by a scene change. Comparing the game object
-                // against null uses Unity's equality, which is true once it has been destroyed,
-                // so a stale wrapper is replaced rather than handed out.
-                if (stockCanvas == null || stockCanvas.GameObject == null) {
-                    var controller = UIMasterController.Instance;
-                    if (controller == null || controller.appCanvas == null)
-                        throw new InvalidOperationException (
-                            "The stock UI canvas is not available in the current game scene");
-                    stockCanvas = new Canvas (controller.appCanvas);
-                }
-                return stockCanvas;
+                var controller = UIMasterController.Instance;
+                if (controller == null || controller.appCanvas == null)
+                    throw new InvalidOperationException (
+                        "The stock UI canvas is not available in the current game scene");
+                return new Canvas (controller.appCanvas);
             }
         }
 

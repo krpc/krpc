@@ -10,6 +10,17 @@ class TestCanvas(krpctest.TestCase):
         cls.ui = cls.connect().ui
         cls.canvas = cls.ui.stock_canvas
 
+    def test_same_element_is_the_same_object(self):
+        # An element is the same object however it is reached, so that a client can
+        # compare the objects it is given and hold on to them.
+        self.assertEqual(self.canvas, self.ui.stock_canvas)
+        panel = self.canvas.add_panel()
+        self.assertEqual(panel.rect_transform, panel.rect_transform)
+        other = self.canvas.add_panel()
+        self.assertNotEqual(panel, other)
+        other.remove()
+        panel.remove()
+
     def test_an_added_canvas_is_scaled_like_the_stock_one(self):
         # Unity applies the scale of a canvas to its transform, so an interface built on
         # a canvas a client adds comes out the same size as one on the stock canvas.
