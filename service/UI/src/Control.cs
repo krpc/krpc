@@ -54,5 +54,27 @@ namespace KRPC.UI
             get { return Selectable.targetGraphic.color.ToRgbaTuple (); }
             set { Selectable.targetGraphic.color = value.ToColor (); }
         }
+
+        /// <summary>
+        /// A short piece of text shown beside the pointer while it rests on the
+        /// control. Empty, the default, shows nothing.
+        /// </summary>
+        [KRPCProperty]
+        public string Tooltip {
+            get {
+                var handler = GameObject.GetComponent<TooltipHandler> ();
+                return handler == null || handler.Text == null
+                    ? string.Empty : handler.Text;
+            }
+            set {
+                var handler = GameObject.GetComponent<TooltipHandler> ();
+                if (handler == null) {
+                    if (string.IsNullOrEmpty (value))
+                        return;
+                    handler = GameObject.AddComponent<TooltipHandler> ();
+                }
+                handler.Text = value;
+            }
+        }
     }
 }

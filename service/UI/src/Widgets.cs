@@ -173,6 +173,38 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Create the box a tooltip is shown in: the skin's box sprite around a line of
+        /// text, sized to fit it. It is anchored to the bottom left corner of the given
+        /// canvas, so placing it is giving it the pointer position in canvas units, and
+        /// pivoted at its own top left, so it hangs below and to the right of that
+        /// point. Neither part takes pointer events, or the tooltip would sit between
+        /// the pointer and the control it describes and flicker.
+        /// </summary>
+        internal static GameObject CreateTooltip (GameObject canvas, string content)
+        {
+            const float paddingX = 8;
+            const float paddingY = 4;
+            var obj = NewObject (canvas, "krpc.tooltip");
+            var rect = obj.GetComponent<UnityEngine.RectTransform> ();
+            rect.anchorMin = Vector2.zero;
+            rect.anchorMax = Vector2.zero;
+            rect.pivot = new Vector2 (0, 1);
+            var image = AddImage (obj, Style (skin => skin.box));
+            image.raycastTarget = false;
+            var label = CreateFilling (obj, "krpc.tooltip.text", 0);
+            var text = AddText (
+                label, Style (skin => skin.label), UnityEngine.TextAnchor.MiddleCenter);
+            text.text = content;
+            // The text must not wrap: its preferred width is what the box is sized
+            // from, and wrapping would measure it against the box being sized.
+            text.horizontalOverflow = HorizontalWrapMode.Overflow;
+            text.raycastTarget = false;
+            rect.sizeDelta = new Vector2 (
+                text.preferredWidth + 2 * paddingX, text.preferredHeight + 2 * paddingY);
+            return obj;
+        }
+
+        /// <summary>
         /// Keep an object that is not drawn, such as a toggle group, from being given space
         /// of its own by a layout group.
         /// </summary>

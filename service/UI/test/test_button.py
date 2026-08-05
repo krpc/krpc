@@ -41,6 +41,17 @@ class TestButton(krpctest.TestCase):
         self.assertEqual((0, 1, 0, 1), button.color)
         button.remove()
 
+    def test_tooltip(self):
+        # The tooltip is only shown while the pointer rests on the control, which a
+        # test does not have, so this covers the round trip.
+        button = self.canvas.add_button("Foo")
+        self.assertEqual("", button.tooltip)
+        button.tooltip = "Runs the self test"
+        self.assertEqual("Runs the self test", button.tooltip)
+        button.tooltip = ""
+        self.assertEqual("", button.tooltip)
+        button.remove()
+
     def test_interactable(self):
         button = self.canvas.add_button("Foo")
         self.assertTrue(button.interactable)
