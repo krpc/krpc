@@ -18,6 +18,13 @@ namespace KRPC.UI
         Texture2D texture;
         Sprite sprite;
 
+        /// <summary>
+        /// Whether the picture being shown was drawn from raw pixels, in which case the
+        /// texture is the size of the picture, holds one byte per channel and can be
+        /// redrawn in place.
+        /// </summary>
+        bool rawPixels;
+
         internal Image (GameObject parent, bool visible)
             : base (Widgets.Create (parent, "krpc.image", 100, 100), visible)
         {
@@ -30,7 +37,8 @@ namespace KRPC.UI
         /// </summary>
         /// <remarks>
         /// Reading this returns what was last set, not what is on the screen, and returns
-        /// an empty array if no picture has been set.
+        /// an empty array if no picture has been set. A picture drawn with
+        /// <see cref="SetPixels" /> is not returned here either.
         /// </remarks>
         [KRPCProperty]
         public byte[] Content {
@@ -60,6 +68,68 @@ namespace KRPC.UI
                 texture = loaded;
                 sprite = loadedSprite;
             }
+        }
+
+        /// <summary>
+        /// Draw the picture from raw pixels rather than a file, so that a client can
+        /// draw whatever it likes, a graph for instance, and redraw it as often as it
+        /// likes.
+        /// </summary>
+        /// <param name="data">
+        /// The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255.
+        /// Pixels run left to right and rows run top to bottom, the way image files
+        /// store them, so the array must hold width times height times 4 bytes.
+        /// </param>
+        /// <param name="width">How many pixels wide the picture is.</param>
+        /// <param name="height">How many pixels tall the picture is.</param>
+        /// <remarks>
+        /// Redrawing at an unchanged size draws into the picture already there, so a
+        /// picture redrawn every update does not build a new one each time.
+        /// </remarks>
+        [KRPCMethod]
+        public void SetPixels (byte[] data, int width, int height)
+        {
+            if (data == null)
+                throw new ArgumentNullException (nameof (data));
+            if (width <= 0 || height <= 0)
+                throw new ArgumentException ("The size of the picture must be positive");
+            if (data.LongLength != (long)width * height * 4)
+                throw new ArgumentException (
+                    "The picture needs width * height * 4 bytes, 4 bytes per pixel");
+            // Rows arrive top to bottom, the way image files store them, and Unity
+            // stores a texture bottom row first, so the rows are turned over.
+            var flipped = FlipRows (data, width, height);
+            if (rawPixels && texture != null &&
+                texture.width == width && texture.height == height) {
+                texture.LoadRawTextureData (flipped);
+                texture.Apply ();
+                return;
+            }
+            var loaded = new Texture2D (width, height, TextureFormat.RGBA32, false);
+            loaded.LoadRawTextureData (flipped);
+            loaded.Apply ();
+            var loadedSprite = Sprite.Create (
+                loaded, new Rect (0, 0, width, height), new Vector2 (0.5f, 0.5f));
+            // The image is pointed at the new picture before the old one is freed, so
+            // that it is never left drawing something that has been destroyed.
+            image.sprite = loadedSprite;
+            image.type = UnityEngine.UI.Image.Type.Simple;
+            DestroyContent ();
+            texture = loaded;
+            sprite = loadedSprite;
+            rawPixels = true;
+        }
+
+        /// <summary>
+        /// Turn the rows of a picture over, swapping the top row with the bottom one.
+        /// </summary>
+        static byte[] FlipRows (byte[] data, int width, int height)
+        {
+            var flipped = new byte[data.Length];
+            var stride = width * 4;
+            for (var row = 0; row < height; row++)
+                Array.Copy (data, row * stride, flipped, (height - 1 - row) * stride, stride);
+            return flipped;
         }
 
         /// <summary>
@@ -102,6 +172,7 @@ namespace KRPC.UI
         void DestroyContent ()
         {
             content = new byte[0];
+            rawPixels = false;
             if (sprite != null) {
                 UnityEngine.Object.Destroy (sprite);
                 sprite = null;

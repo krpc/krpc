@@ -1935,6 +1935,7 @@ UI.Image.RectTransform
 UI.Image.LayoutElement
 UI.Image.Visible
 UI.Image.Content
+UI.Image.SetPixels
 UI.Image.Color
 UI.Image.Remove
 UI.ScrollView
