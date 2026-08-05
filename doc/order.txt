@@ -1817,6 +1817,7 @@ UI.Panel.AddHorizontalLayout
 UI.Panel.AddVerticalLayout
 UI.Panel.AddGridLayout
 UI.Panel.SizeFitter
+UI.Panel.BringToFront
 UI.Panel.Remove
 UI.PanelStyle
 UI.PanelStyle.Window

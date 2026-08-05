@@ -172,6 +172,21 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Draw the panel in front of the other elements beside it. Elements are drawn
+        /// in the order they were added, so of two overlapping panels the newer hides
+        /// part of the older until the older is brought to the front.
+        /// </summary>
+        /// <remarks>
+        /// A draggable panel also brings itself to the front when the user starts
+        /// dragging it, the way a window comes to the front when it is clicked.
+        /// </remarks>
+        [KRPCMethod]
+        public void BringToFront ()
+        {
+            GameObject.transform.SetAsLastSibling ();
+        }
+
+        /// <summary>
         /// Sizes the panel to fit what it contains.
         /// </summary>
         /// <remarks>

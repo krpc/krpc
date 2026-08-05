@@ -8,8 +8,19 @@ namespace KRPC.UI
     /// used as a window. Dragging has to be handled in the game because it is driven by
     /// pointer events, which a client never sees.
     /// </summary>
-    sealed class DragHandler : MonoBehaviour, IDragHandler
+    sealed class DragHandler : MonoBehaviour, IDragHandler, IPointerDownHandler
     {
+        /// <summary>
+        /// Bring the panel in front of its siblings, the way a window comes to the
+        /// front when it is clicked. Unity hands the press to the topmost element under
+        /// the pointer that takes one, so pressing a control inside the panel does not
+        /// reach this; pressing the panel itself does.
+        /// </summary>
+        public void OnPointerDown (PointerEventData eventData)
+        {
+            transform.SetAsLastSibling ();
+        }
+
         /// <summary>
         /// Move the panel by however far the pointer moved.
         /// </summary>

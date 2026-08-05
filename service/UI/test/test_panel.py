@@ -78,6 +78,16 @@ class TestPanel(krpctest.TestCase):
         self.assertFalse(panel.draggable)
         panel.remove()
 
+    def test_bring_to_front(self):
+        # Which panel is drawn on top cannot be read back, so this covers that the
+        # call is accepted, including on a panel that is already at the front.
+        older = self.canvas.add_panel()
+        newer = self.canvas.add_panel()
+        older.bring_to_front()
+        newer.bring_to_front()
+        older.remove()
+        newer.remove()
+
     def test_group_box(self):
         # A box with a caption, which is what the style is mainly here for.
         panel = self.canvas.add_panel()
