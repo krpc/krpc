@@ -1,22 +1,17 @@
 using System;
 using System.IO;
-#if NET
-using System.IO.Ports;
-#else
-using KRPC.IO.Ports;
-#endif
 
 namespace KRPC.Server.SerialIO
 {
     sealed class ByteStream : IStream<byte,byte>
     {
-        SerialPort stream;
+        BufferedPort port;
         byte[] readBuffer;
         int readBufferOffset;
 
-        public ByteStream (SerialPort innerStream, byte[] buffer = null)
+        public ByteStream (BufferedPort innerPort, byte[] buffer = null)
         {
-            stream = innerStream;
+            port = innerPort;
             readBuffer = buffer;
         }
 
@@ -25,7 +20,7 @@ namespace KRPC.Server.SerialIO
                 try {
                     return
                         (readBuffer != null) ||
-                        (stream != null && stream.IsOpen && stream.BytesToRead > 0);
+                        (port != null && port.IsOpen && port.BytesAvailable > 0);
                 } catch (IOException) {
                     return false;
                 } catch (TimeoutException) {
@@ -57,10 +52,10 @@ namespace KRPC.Server.SerialIO
         {
             if (readBuffer != null)
                 return ReadBufferedData (buffer, offset, buffer.Length - offset);
-            if (stream == null)
+            if (port == null)
                 throw new ClientDisconnectedException ();
             try {
-                var size = stream.Read (buffer, offset, buffer.Length - offset);
+                var size = port.Read (buffer, offset, buffer.Length - offset);
                 BytesRead += (ulong)size;
                 return size;
             } catch (IOException e) {
@@ -76,10 +71,10 @@ namespace KRPC.Server.SerialIO
         {
             if (readBuffer != null)
                 return ReadBufferedData (buffer, offset, size);
-            if (stream == null)
+            if (port == null)
                 throw new ClientDisconnectedException ();
             try {
-                size = stream.Read (buffer, offset, size);
+                size = port.Read (buffer, offset, size);
                 BytesRead += (ulong)size;
                 return size;
             } catch (IOException e) {
@@ -103,10 +98,10 @@ namespace KRPC.Server.SerialIO
 
         public void Write (byte[] buffer, int offset, int size)
         {
-            if (stream == null)
+            if (port == null)
                 throw new ClientDisconnectedException ();
             try {
-                stream.Write (buffer, offset, size);
+                port.Write (buffer, offset, size);
                 BytesWritten += (ulong)size;
             } catch (IOException e) {
                 throw new ServerException (e.Message);
@@ -129,7 +124,7 @@ namespace KRPC.Server.SerialIO
 
         public void Close ()
         {
-            stream = null;
+            port = null;
         }
     }
 }

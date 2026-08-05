@@ -1,24 +1,19 @@
 using System;
-#if NET
-using System.IO.Ports;
-#else
-using KRPC.IO.Ports;
-#endif
 
 namespace KRPC.Server.SerialIO
 {
     sealed class ByteClient : IClient<byte,byte>
     {
         readonly Guid guid;
-        SerialPort port;
+        BufferedPort port;
         ByteStream stream;
 
-        public ByteClient (SerialPort serialPort, byte[] buffer = null)
+        public ByteClient (BufferedPort bufferedPort, byte[] buffer = null)
         {
-            if (serialPort == null)
-                throw new ArgumentNullException (nameof (serialPort));
+            if (bufferedPort == null)
+                throw new ArgumentNullException (nameof (bufferedPort));
             guid = Guid.NewGuid ();
-            port = serialPort;
+            port = bufferedPort;
             Address = port.PortName;
             stream = new ByteStream (port, buffer);
         }

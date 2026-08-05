@@ -46,7 +46,7 @@ namespace KRPC.Server.SerialIO
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs<byte,byte>> OnClientDisconnected;
 
-        SerialPort port;
+        BufferedPort port;
         ByteClient client;
         ByteClient pendingClient;
         ulong closedClientsBytesRead;
@@ -79,12 +79,13 @@ namespace KRPC.Server.SerialIO
                 return;
             }
             Logger.WriteLine ("SerialIO.Server: starting " + Address, Logger.Severity.Debug);
-            port = new SerialPort (Address, (int)BaudRate, Parity, DataBits, StopBits);
+            var serialPort = new SerialPort (Address, (int)BaudRate, Parity, DataBits, StopBits);
             Logger.WriteLine ("SerialIO.Server: port name = " + Address, Logger.Severity.Debug);
-            Logger.WriteLine ("SerialIO.Server: baud rate = " + port.BaudRate, Logger.Severity.Debug);
-            Logger.WriteLine ("SerialIO.Server: data bits = " + port.DataBits, Logger.Severity.Debug);
-            Logger.WriteLine ("SerialIO.Server: parity = " + port.Parity, Logger.Severity.Debug);
-            Logger.WriteLine ("SerialIO.Server: stop bits = " + port.StopBits, Logger.Severity.Debug);
+            Logger.WriteLine ("SerialIO.Server: baud rate = " + serialPort.BaudRate, Logger.Severity.Debug);
+            Logger.WriteLine ("SerialIO.Server: data bits = " + serialPort.DataBits, Logger.Severity.Debug);
+            Logger.WriteLine ("SerialIO.Server: parity = " + serialPort.Parity, Logger.Severity.Debug);
+            Logger.WriteLine ("SerialIO.Server: stop bits = " + serialPort.StopBits, Logger.Severity.Debug);
+            port = new BufferedPort (new SerialPortAdapter (serialPort));
             try {
                 port.Open();
             } catch (Exception exn) {
@@ -92,8 +93,6 @@ namespace KRPC.Server.SerialIO
                 Logger.WriteLine("SerialIO.Server: failed to start server; " + exn, Logger.Severity.Error);
                 throw new ServerException(exn.GetType() + ": " + exn.Message, exn);
             }
-            // Discard stale data from the port
-            port.DiscardInBuffer();
             Logger.WriteLine ("SerialIO.Server: started successfully", Logger.Severity.Debug);
             EventHandlerExtensions.Invoke (OnStarted, this);
         }
@@ -149,8 +148,17 @@ namespace KRPC.Server.SerialIO
         /// </summary>
         public void Update ()
         {
+            // The server is updated whether or not it is running, and has no port when stopped.
+            if (port == null)
+                return;
             try {
-                if (client == null && pendingClient == null && port.IsOpen && port.BytesToRead > 0) {
+                // The port stops being open once transferring data over it has failed, which the
+                // server cannot recover from and so stops.
+                if (!port.IsOpen) {
+                    Stop ();
+                    return;
+                }
+                if (client == null && pendingClient == null && port.BytesAvailable > 0) {
                     Logger.WriteLine (
                         "SerialIO.Server[" + Address + "]: client requesting connection",
                         Logger.Severity.Debug);
