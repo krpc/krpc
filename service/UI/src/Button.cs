@@ -11,6 +11,7 @@ namespace KRPC.UI
     public class Button : Control
     {
         readonly UnityEngine.UI.Button button;
+        readonly PressHandler press;
         readonly Text text;
 
         internal Button (GameObject parent, string content, bool visible)
@@ -21,6 +22,7 @@ namespace KRPC.UI
             button = GameObject.AddComponent<UnityEngine.UI.Button> ();
             button.targetGraphic = background;
             Widgets.AddTransition (button, style);
+            press = GameObject.AddComponent<PressHandler> ();
             var label = Widgets.CreateFilling (GameObject, "krpc.button.text", 0);
             Widgets.AddText (label, style, UnityEngine.TextAnchor.MiddleCenter);
             text = new Text (label);
@@ -52,5 +54,19 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool Clicked { get; set; }
+
+        /// <summary>
+        /// Whether the user is holding the button down right now.
+        /// </summary>
+        /// <remarks>
+        /// True from the button being pressed until the pointer is released, however far
+        /// it has moved by then. Polling this repeats an action for as long as the
+        /// button is held, for nudging a value; <see cref="Clicked" /> reports each
+        /// completed click instead.
+        /// </remarks>
+        [KRPCProperty]
+        public bool Pressed {
+            get { return press.Pressed; }
+        }
     }
 }

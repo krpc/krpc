@@ -25,6 +25,13 @@ class TestButton(krpctest.TestCase):
         self.assertRaises(RuntimeError, button.text.remove)
         button.remove()
 
+    def test_pressed(self):
+        # Pressing needs a pointer, which a test does not have, so this covers that a
+        # button that has never been touched is not reported as held down.
+        button = self.canvas.add_button("Foo")
+        self.assertFalse(button.pressed)
+        button.remove()
+
     def test_color(self):
         # Tinting the control is how a script shows a state of its own, such as an
         # engaged autopilot, the way the game's own interfaces do.

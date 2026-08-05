@@ -63,6 +63,7 @@
     <Compile Include="Object.cs" />
     <Compile Include="Panel.cs" />
     <Compile Include="PanelStyle.cs" />
+    <Compile Include="PressHandler.cs" />
     <Compile Include="RectTransform.cs" />
     <Compile Include="ScrollView.cs" />
     <Compile Include="SizeFitter.cs" />

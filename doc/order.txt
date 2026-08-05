@@ -1862,6 +1862,7 @@ UI.Button.LayoutElement
 UI.Button.Visible
 UI.Button.Text
 UI.Button.Clicked
+UI.Button.Pressed
 UI.Button.Interactable
 UI.Button.Color
 UI.Button.Remove
