@@ -40,7 +40,7 @@ int main() {
   krpc_UI_Text_RectTransform(conn, &text_rect, text);
   krpc_tuple_double_double_t text_pos = {0, -20};
   krpc_UI_RectTransform_set_Position(conn, text_rect, &text_pos);
-  krpc_tuple_double_double_double_t color = {1, 1, 1};
+  krpc_tuple_double_double_double_double_t color = {1, 1, 1, 1};
   krpc_UI_Text_set_Color(conn, text, &color);
   krpc_UI_Text_set_Size(conn, text, 18);
 

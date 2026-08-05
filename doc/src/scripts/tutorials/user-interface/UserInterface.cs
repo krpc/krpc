@@ -28,7 +28,7 @@ class UserInterface
         // Add some text displaying the total engine thrust
         var text = panel.AddText ("Thrust: 0 kN");
         text.RectTransform.Position = Tuple.Create (0.0, -20.0);
-        text.Color = Tuple.Create (1.0, 1.0, 1.0);
+        text.Color = Tuple.Create (1.0, 1.0, 1.0, 1.0);
         text.Size = 18;
 
         // Set up a stream to monitor the throttle button

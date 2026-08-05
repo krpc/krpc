@@ -48,6 +48,7 @@
     <Compile Include="Control.cs" />
     <Compile Include="DragHandler.cs" />
     <Compile Include="Dropdown.cs" />
+    <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\LayoutExtensions.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />

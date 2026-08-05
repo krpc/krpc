@@ -36,15 +36,18 @@ class TestPanel(krpctest.TestCase):
         view = self.canvas.add_scroll_view()
         content = view.content
         self.assertEqual(self.panel_style.none, content.style)
-        self.assertEqual((1, 1, 1), content.color)
+        self.assertEqual((1, 1, 1, 1), content.color)
         content.style = self.panel_style.box
         self.assertEqual(self.panel_style.box, content.style)
         view.remove()
 
     def test_color(self):
         panel = self.canvas.add_panel()
-        panel.color = (1, 0, 0)
-        self.assertEqual((1, 0, 0), panel.color)
+        panel.color = (1, 0, 0, 1)
+        self.assertEqual((1, 0, 0, 1), panel.color)
+        # A panel can be seen through, which is what the alpha channel is mainly here for.
+        panel.color = (1, 0, 0, 0.25)
+        self.assertEqual((1, 0, 0, 0.25), panel.color)
         panel.remove()
 
     def test_draggable(self):

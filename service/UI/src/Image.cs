@@ -1,8 +1,8 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.UI.ExtensionMethods;
 using UnityEngine;
-using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
@@ -114,11 +114,12 @@ namespace KRPC.UI
 
         /// <summary>
         /// The color the image is tinted with, or the color of the rectangle when no
-        /// picture is set.
+        /// picture is set, as (red, green, blue, alpha). An alpha of 0 is fully
+        /// transparent and 1 is fully opaque.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color {
-            get { return image.color.ToTuple (); }
+        public Tuple4 Color {
+            get { return image.color.ToRgbaTuple (); }
             set { image.color = value.ToColor (); }
         }
     }

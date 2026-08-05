@@ -12,7 +12,7 @@ import krpc.client.services.UI.RectTransform;
 import krpc.client.services.UI.Text;
 
 import org.javatuples.Pair;
-import org.javatuples.Triplet;
+import org.javatuples.Quartet;
 
 import java.io.IOException;
 
@@ -43,7 +43,7 @@ public class UserInterface {
         // Add some text displaying the total engine thrust
         Text text = panel.addText("Thrust: 0 kN", true);
         text.getRectTransform().setPosition(new Pair<Double,Double>(0.0, -20.0));
-        text.setColor(new Triplet<Double,Double,Double>(1.0, 1.0, 1.0));
+        text.setColor(new Quartet<Double,Double,Double,Double>(1.0, 1.0, 1.0, 1.0));
         text.setSize(18);
 
         // Set up a stream to monitor the throttle button

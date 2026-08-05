@@ -22,7 +22,7 @@ class TestText(krpctest.TestCase):
         # The size and color a label starts out with are taken from the skin the game
         # draws its own interface in, so they are not fixed values.
         self.assertGreater(text.size, 0)
-        self.assertEqual(3, len(text.color))
+        self.assertEqual(4, len(text.color))
         self.assertEqual(self.style.normal, text.style)
         self.assertEqual(self.anchor.upper_left, text.alignment)
         self.assertEqual(1, text.line_spacing)
@@ -35,13 +35,13 @@ class TestText(krpctest.TestCase):
         text.font = font
         text.size = 20
         text.style = self.style.bold
-        text.color = (1, 0, 0)
+        text.color = (1, 0, 0, 0.5)
         text.alignment = self.anchor.upper_right
         text.line_spacing = 2
         self.assertEqual(font, text.font)
         self.assertEqual(20, text.size)
         self.assertEqual(self.style.bold, text.style)
-        self.assertEqual((1, 0, 0), text.color)
+        self.assertEqual((1, 0, 0, 0.5), text.color)
         self.assertEqual(self.anchor.upper_right, text.alignment)
         self.assertEqual(2, text.line_spacing)
         text.remove()

@@ -1,8 +1,8 @@
 using System;
 using KRPC.Service.Attributes;
-using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.UI.ExtensionMethods;
 using UnityEngine;
-using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
@@ -77,15 +77,17 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// The color the background of the panel is tinted with.
+        /// The color the background of the panel is tinted with, as
+        /// (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully
+        /// opaque.
         /// </summary>
         /// <remarks>
         /// Has no effect while the style of the panel is <see cref="PanelStyle.None" />,
         /// as the panel is then not drawn at all.
         /// </remarks>
         [KRPCProperty]
-        public Tuple3 Color {
-            get { return Background.color.ToTuple (); }
+        public Tuple4 Color {
+            get { return Background.color.ToRgbaTuple (); }
             set { Background.color = value.ToColor (); }
         }
 

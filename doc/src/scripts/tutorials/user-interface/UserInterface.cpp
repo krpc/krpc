@@ -28,7 +28,7 @@ int main() {
   // Add some text displaying the total engine thrust
   auto text = panel.add_text("Thrust: 0 kN");
   text.rect_transform().set_position(std::make_tuple(0, -20));
-  text.set_color(std::make_tuple(1, 1, 1));
+  text.set_color(std::make_tuple(1, 1, 1, 1));
   text.set_size(18);
 
   // Set up a stream to monitor the throttle button

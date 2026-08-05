@@ -22,7 +22,7 @@ button.rect_transform.position = (0, 20)
 # Add some text displaying the total engine thrust
 text = panel.add_text("Thrust: 0 kN")
 text.rect_transform.position = (0, -20)
-text.color = (1, 1, 1)
+text.color = (1, 1, 1, 1)
 text.size = 18
 
 # Set up a stream to monitor the throttle button

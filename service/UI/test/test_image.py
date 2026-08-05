@@ -26,8 +26,8 @@ class TestImage(krpctest.TestCase):
 
     def test_color(self):
         image = self.canvas.add_image()
-        image.color = (0, 1, 0)
-        self.assertEqual((0, 1, 0), image.color)
+        image.color = (0, 1, 0, 1)
+        self.assertEqual((0, 1, 0, 1), image.color)
         image.remove()
 
     def test_content(self):
