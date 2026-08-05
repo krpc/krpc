@@ -29,6 +29,11 @@ namespace KRPC.Utils
         where TEntry : ClientOwnedEntry
     {
         readonly IDictionary<TKey, TEntry> entries = new Dictionary<TKey, TEntry> ();
+        // A list rather than a dictionary: a detach while an earlier detach is still
+        // waiting to be released must hold both entries, even for the same key, or the
+        // earlier override would never be released.
+        readonly List<KeyValuePair<TKey, TEntry>> detached =
+            new List<KeyValuePair<TKey, TEntry>> ();
         readonly Func<TKey, TEntry> install;
         readonly Action<TKey, TEntry> release;
 
@@ -111,13 +116,24 @@ namespace KRPC.Utils
         }
 
         /// <summary>
-        /// Release all overrides.
+        /// Take every override out of the collection, to be released by a later call to
+        /// <see cref="ReleaseDetached" />.
         /// </summary>
-        public void Clear ()
+        public void Detach ()
         {
-            foreach (var entry in entries)
-                release (entry.Key, entry.Value);
+            detached.AddRange (entries);
             entries.Clear ();
+        }
+
+        /// <summary>
+        /// Release the overrides taken out by <see cref="Detach" />.
+        /// </summary>
+        public void ReleaseDetached ()
+        {
+            var released = detached.ToList ();
+            detached.Clear ();
+            foreach (var entry in released)
+                release (entry.Key, entry.Value);
         }
 
         static bool Destroyed (UnityEngine.Object obj)
