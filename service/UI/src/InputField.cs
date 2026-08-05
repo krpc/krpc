@@ -1,4 +1,6 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.UI.ExtensionMethods;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -82,6 +84,49 @@ namespace KRPC.UI
         [KRPCProperty]
         public Text Placeholder {
             get { return placeholder; }
+        }
+
+        /// <summary>
+        /// What the field lets the user type into it. Keystrokes that do not fit are
+        /// ignored as they are typed, so a numeric field never shows text a client would
+        /// have to reject.
+        /// </summary>
+        /// <remarks>
+        /// Only what the user types is filtered. A value set by a client is shown as it
+        /// is given.
+        /// </remarks>
+        [KRPCProperty]
+        public InputContentType ContentType {
+            get { return inputField.contentType.ToInputContentType (); }
+            set { inputField.contentType = value.FromInputContentType (); }
+        }
+
+        /// <summary>
+        /// The most characters the user can type into the field, or 0 for no limit.
+        /// </summary>
+        [KRPCProperty]
+        public int CharacterLimit {
+            get { return inputField.characterLimit; }
+            set {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException (
+                        nameof (value), "The character limit must not be negative");
+                inputField.characterLimit = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the user is stopped from editing the field. The value can still be
+        /// selected and copied, and a client can still set it.
+        /// </summary>
+        /// <remarks>
+        /// A read-only field is drawn as normal. Make the field not interactable instead
+        /// to gray it out and stop the user selecting it.
+        /// </remarks>
+        [KRPCProperty]
+        public bool ReadOnly {
+            get { return inputField.readOnly; }
+            set { inputField.readOnly = value; }
         }
 
         /// <summary>
