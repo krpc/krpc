@@ -1861,6 +1861,7 @@ UI.Button.Visible
 UI.Button.Text
 UI.Button.Clicked
 UI.Button.Interactable
+UI.Button.Color
 UI.Button.Remove
 UI.InputField
 UI.InputField.RectTransform
@@ -1874,6 +1875,7 @@ UI.InputField.CharacterLimit
 UI.InputField.ReadOnly
 UI.InputField.Changed
 UI.InputField.Interactable
+UI.InputField.Color
 UI.InputField.Remove
 UI.InputContentType
 UI.InputContentType.Standard
@@ -1890,6 +1892,7 @@ UI.Toggle.Checked
 UI.Toggle.Group
 UI.Toggle.Changed
 UI.Toggle.Interactable
+UI.Toggle.Color
 UI.Toggle.Remove
 UI.ToggleGroup
 UI.ToggleGroup.RectTransform
@@ -1907,6 +1910,7 @@ UI.Slider.Min
 UI.Slider.Max
 UI.Slider.Changed
 UI.Slider.Interactable
+UI.Slider.Color
 UI.Slider.Remove
 UI.Dropdown
 UI.Dropdown.RectTransform
@@ -1916,6 +1920,7 @@ UI.Dropdown.Options
 UI.Dropdown.SelectedIndex
 UI.Dropdown.Changed
 UI.Dropdown.Interactable
+UI.Dropdown.Color
 UI.Dropdown.Remove
 UI.Image
 UI.Image.RectTransform

@@ -53,6 +53,13 @@ class TestToggle(krpctest.TestCase):
             toggle.remove()
         group.remove()
 
+    def test_color(self):
+        toggle = self.canvas.add_toggle("Foo")
+        self.assertEqual((1, 1, 1, 1), toggle.color)
+        toggle.color = (1, 0, 0, 0.5)
+        self.assertEqual((1, 0, 0, 0.5), toggle.color)
+        toggle.remove()
+
     def test_interactable(self):
         toggle = self.canvas.add_toggle("Foo")
         self.assertTrue(toggle.interactable)

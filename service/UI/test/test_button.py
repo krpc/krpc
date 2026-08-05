@@ -25,6 +25,15 @@ class TestButton(krpctest.TestCase):
         self.assertRaises(RuntimeError, button.text.remove)
         button.remove()
 
+    def test_color(self):
+        # Tinting the control is how a script shows a state of its own, such as an
+        # engaged autopilot, the way the game's own interfaces do.
+        button = self.canvas.add_button("Foo")
+        self.assertEqual((1, 1, 1, 1), button.color)
+        button.color = (0, 1, 0, 1)
+        self.assertEqual((0, 1, 0, 1), button.color)
+        button.remove()
+
     def test_interactable(self):
         button = self.canvas.add_button("Foo")
         self.assertTrue(button.interactable)

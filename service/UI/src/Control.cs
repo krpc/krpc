@@ -1,5 +1,7 @@
 using KRPC.Service.Attributes;
+using KRPC.UI.ExtensionMethods;
 using UnityEngine;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
@@ -32,6 +34,25 @@ namespace KRPC.UI
         public bool Interactable {
             get { return Selectable.interactable; }
             set { Selectable.interactable = value; }
+        }
+
+        /// <summary>
+        /// The color the control is tinted with, as (red, green, blue, alpha). An alpha
+        /// of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+        /// the control drawn as the skin has it.
+        /// </summary>
+        /// <remarks>
+        /// The tint multiplies the sprite the control is drawn with, in every state, so
+        /// a control can show a state of its own, an engaged autopilot for instance, by
+        /// color. It is applied to the part of the control that responds to the user:
+        /// the body of a button, dropdown or input field, the box of a toggle, and the
+        /// handle of a slider. A control's label is tinted through the color of its
+        /// text.
+        /// </remarks>
+        [KRPCProperty]
+        public Tuple4 Color {
+            get { return Selectable.targetGraphic.color.ToRgbaTuple (); }
+            set { Selectable.targetGraphic.color = value.ToColor (); }
         }
     }
 }
