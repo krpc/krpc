@@ -41,6 +41,10 @@ namespace KRPC.UI
             GameObject.AddComponent<KSPGraphicRaycaster> ();
             GameObject.GetComponent<UnityEngine.Canvas> ().renderMode = RenderMode.ScreenSpaceOverlay;
             GameObject.GetComponent<UnityEngine.RectTransform> ().sizeDelta = new Vector2 (Screen.width, Screen.height);
+            // Without this the canvas would ignore the interface scale the player has set,
+            // and the same interface would come out a different size on it than on the
+            // stock canvas.
+            GameObject.AddComponent<CanvasScale> ();
         }
 
         /// <summary>

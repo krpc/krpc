@@ -7,7 +7,18 @@ class TestCanvas(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.ui = cls.connect().ui
+        cls.canvas = cls.ui.stock_canvas
+
+    def test_an_added_canvas_is_scaled_like_the_stock_one(self):
+        # Unity applies the scale of a canvas to its transform, so an interface built on
+        # a canvas a client adds comes out the same size as one on the stock canvas.
+        canvas = self.ui.add_canvas()
+        # The scale factor is applied by Unity in its own update, not when the canvas is
+        # created, so the transform is only scaled from the next frame on.
+        self.wait()
+        self.assertEqual(self.canvas.rect_transform.scale, canvas.rect_transform.scale)
+        canvas.remove()
 
     def test_add_panel(self):
         panel = self.canvas.add_panel()
