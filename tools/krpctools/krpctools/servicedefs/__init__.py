@@ -76,6 +76,7 @@ def servicedefs(ksp, service, assemblies):
         "UnityEngine.AnimationModule.dll",
         "UnityEngine.CoreModule.dll",
         "UnityEngine.IMGUIModule.dll",
+        "UnityEngine.ImageConversionModule.dll",
         "UnityEngine.InputLegacyModule.dll",
         "UnityEngine.ScreenCaptureModule.dll",
         "UnityEngine.SharedInternalsModule.dll",

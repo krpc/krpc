@@ -47,10 +47,12 @@
     <Compile Include="ContentSizeFit.cs" />
     <Compile Include="Control.cs" />
     <Compile Include="DragHandler.cs" />
+    <Compile Include="Dropdown.cs" />
     <Compile Include="ExtensionMethods\LayoutExtensions.cs" />
     <Compile Include="ExtensionMethods\TextExtensions.cs" />
     <Compile Include="FontStyle.cs" />
     <Compile Include="GridConstraint.cs" />
+    <Compile Include="Image.cs" />
     <Compile Include="InputField.cs" />
     <Compile Include="Layout.cs" />
     <Compile Include="LayoutElement.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="RectTransform.cs" />
     <Compile Include="ScrollView.cs" />
     <Compile Include="SizeFitter.cs" />
+    <Compile Include="Slider.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="TextAlignment.cs" />
     <Compile Include="TextAnchor.cs" />

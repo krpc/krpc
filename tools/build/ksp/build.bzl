@@ -7,6 +7,7 @@ ksp_unity_libs = [
     "//tools/build/ksp:UnityEngine.AnimationModule",
     "//tools/build/ksp:UnityEngine.CoreModule",
     "//tools/build/ksp:UnityEngine.IMGUIModule",
+    "//tools/build/ksp:UnityEngine.ImageConversionModule",
     "//tools/build/ksp:UnityEngine.InputLegacyModule",
     "//tools/build/ksp:UnityEngine.PhysicsModule",
     "//tools/build/ksp:UnityEngine.ScreenCaptureModule",

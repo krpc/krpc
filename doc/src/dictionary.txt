@@ -64,6 +64,7 @@ differencing
 dll
 docstring
 doesn
+dropdown
 enum
 ephemeris
 erm
@@ -87,8 +88,8 @@ intra
 javac
 jetpack
 jitter
-kOS
 kN
+kOS
 kRPC
 kRPCs
 kerbal
@@ -182,8 +183,8 @@ undocking
 undocks
 unowned
 unpaused
-unstaged
 unserialize
+unstaged
 vab
 varint
 vcpkg

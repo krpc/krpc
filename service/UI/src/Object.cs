@@ -132,7 +132,8 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Destroy the UI object.
+        /// Destroy the UI object. Overridden by objects that hold something Unity does not
+        /// destroy along with the game object, such as a texture.
         /// </summary>
         /// <remarks>
         /// The teardown itself, with no say in whether it should happen: whether a client
@@ -140,7 +141,7 @@ namespace KRPC.UI
         /// sweeping up after a client or a scene as well, where throwing would abandon
         /// whatever was left in the sweep.
         /// </remarks>
-        public void Destroy ()
+        public virtual void Destroy ()
         {
             UnityEngine.Object.Destroy (GameObject);
             destroyed = true;

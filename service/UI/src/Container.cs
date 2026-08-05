@@ -62,6 +62,36 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Add a slider to this object.
+        /// </summary>
+        /// <param name="visible">Whether the slider is visible.</param>
+        [KRPCMethod]
+        public Slider AddSlider (bool visible = true)
+        {
+            return new Slider (GameObject, visible);
+        }
+
+        /// <summary>
+        /// Add a dropdown to this object.
+        /// </summary>
+        /// <param name="visible">Whether the dropdown is visible.</param>
+        [KRPCMethod]
+        public Dropdown AddDropdown (bool visible = true)
+        {
+            return new Dropdown (GameObject, visible);
+        }
+
+        /// <summary>
+        /// Add an image to this object.
+        /// </summary>
+        /// <param name="visible">Whether the image is visible.</param>
+        [KRPCMethod]
+        public Image AddImage (bool visible = true)
+        {
+            return new Image (GameObject, visible);
+        }
+
+        /// <summary>
         /// Add a scroll view to this object.
         /// </summary>
         /// <param name="visible">Whether the scroll view is visible.</param>

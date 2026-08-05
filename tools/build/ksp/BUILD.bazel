@@ -24,6 +24,11 @@ import_dll(
 )
 
 import_dll(
+    name = "UnityEngine.ImageConversionModule",
+    dll = "@ksp//:KSP_Data/Managed/UnityEngine.ImageConversionModule.dll",
+)
+
+import_dll(
     name = "UnityEngine.InputLegacyModule",
     dll = "@ksp//:KSP_Data/Managed/UnityEngine.InputLegacyModule.dll",
 )
