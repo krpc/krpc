@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -15,6 +16,27 @@ namespace KRPC.UI
     static class Widgets
     {
         static Font font;
+
+        static readonly IDictionary<string, Font> osFonts = new Dictionary<string, Font> ();
+
+        /// <summary>
+        /// The font of the given name, taken from the ones the operating system provides.
+        /// </summary>
+        /// <remarks>
+        /// A dynamic font carries a texture of the characters drawn with it, and is an
+        /// asset in its own right that Unity does not destroy along with whatever draws
+        /// with it. One is therefore made per name and shared by every label asking for it,
+        /// rather than one per label which would be left behind when the label went.
+        /// </remarks>
+        internal static Font OSFont (string name)
+        {
+            Font osFont;
+            if (!osFonts.TryGetValue (name, out osFont) || osFont == null) {
+                osFont = Font.CreateDynamicFontFromOSFont (name, 16);
+                osFonts [name] = osFont;
+            }
+            return osFont;
+        }
 
         /// <summary>
         /// Select a style from the skin the game uses for its own user interface.

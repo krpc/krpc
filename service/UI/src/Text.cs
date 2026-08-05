@@ -52,13 +52,17 @@ namespace KRPC.UI
         /// <summary>
         /// Name of the font
         /// </summary>
+        /// <remarks>
+        /// Empty if the game provided no font to draw the text with, in which case it is
+        /// not drawn. See <see cref="AvailableFonts" /> for the names that can be set.
+        /// </remarks>
         [KRPCProperty]
         public string Font {
-            get { return text.font.name; }
+            get { return text.font == null ? string.Empty : text.font.name; }
             set {
                 if (!AvailableFonts.Contains (value))
                     throw new ArgumentException ("Font does not exist");
-                text.font = UnityEngine.Font.CreateDynamicFontFromOSFont (value, 16);
+                text.font = Widgets.OSFont (value);
             }
         }
 
