@@ -22,10 +22,14 @@ class TestInputField(krpctest.TestCase):
     def test_value(self):
         input_field = self.canvas.add_input_field()
         self.assertEqual("", input_field.value)
+        input_field.value = "Foo"
+        self.assertEqual("Foo", input_field.value)
+        input_field.remove()
+
+    def test_setting_the_value_is_not_a_change_by_the_user(self):
+        input_field = self.canvas.add_input_field()
         self.assertFalse(input_field.changed)
         input_field.value = "Foo"
-        self.assertTrue(input_field.changed)
-        input_field.changed = False
         self.assertFalse(input_field.changed)
         input_field.remove()
 

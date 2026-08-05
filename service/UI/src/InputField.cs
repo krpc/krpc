@@ -55,7 +55,9 @@ namespace KRPC.UI
         [KRPCProperty]
         public string Value {
             get { return inputField.text; }
-            set { inputField.text = value; }
+            // Unity notifies its listeners of a value set by a client just as it does one
+            // typed by the user, so the value is set without notifying them.
+            set { inputField.SetTextWithoutNotify (value); }
         }
 
         /// <summary>
@@ -86,7 +88,8 @@ namespace KRPC.UI
         /// Whether the input field has been changed.
         /// </summary>
         /// <remarks>
-        /// This property is set to true when the user modifies the value of the input field.
+        /// This property is set to true when the user modifies the value of the input field,
+        /// and not when a client sets it.
         /// A client script should reset the property to false in order to detect subsequent changes.
         /// </remarks>
         [KRPCProperty]
