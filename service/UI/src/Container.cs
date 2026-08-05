@@ -56,6 +56,30 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Add a toggle to this object.
+        /// </summary>
+        /// <param name="content">The label for the toggle.</param>
+        /// <param name="visible">Whether the toggle is visible.</param>
+        [KRPCMethod]
+        public Toggle AddToggle (string content, bool visible = true)
+        {
+            return new Toggle (GameObject, content, visible);
+        }
+
+        /// <summary>
+        /// Add a toggle group to this object, to make a set of toggles into radio buttons.
+        /// </summary>
+        /// <remarks>
+        /// The group is not drawn and does not take up any space. The toggles that belong
+        /// to it can be added anywhere.
+        /// </remarks>
+        [KRPCMethod]
+        public ToggleGroup AddToggleGroup ()
+        {
+            return new ToggleGroup (GameObject);
+        }
+
+        /// <summary>
         /// Add a button to this object.
         /// </summary>
         /// <param name="content">The label for the button.</param>

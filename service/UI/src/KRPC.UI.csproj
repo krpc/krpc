@@ -55,6 +55,8 @@
     <Compile Include="Text.cs" />
     <Compile Include="TextAlignment.cs" />
     <Compile Include="TextAnchor.cs" />
+    <Compile Include="Toggle.cs" />
+    <Compile Include="ToggleGroup.cs" />
     <Compile Include="UI.cs" />
     <Compile Include="Widgets.cs" />
   </ItemGroup>

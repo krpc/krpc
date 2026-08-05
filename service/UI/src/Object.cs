@@ -18,6 +18,14 @@ namespace KRPC.UI
         readonly bool removable;
 
         /// <summary>
+        /// Whether the object has been destroyed. Unity carries out a destroy at the end
+        /// of the frame it was asked for in, and the server answers more than one call in
+        /// a frame, so the game object is still there to be asked afterwards and cannot be
+        /// used on its own to tell whether the object is gone.
+        /// </summary>
+        bool destroyed;
+
+        /// <summary>
         /// Unity game object for the UI element.
         /// </summary>
         protected GameObject GameObject { get; private set; }
@@ -67,6 +75,14 @@ namespace KRPC.UI
         }
 
         /// <summary>
+        /// Whether the UI object still exists. False once it has been removed, or once the
+        /// game object behind it has been destroyed by a scene change.
+        /// </summary>
+        internal bool Exists {
+            get { return !destroyed && GameObject != null; }
+        }
+
+        /// <summary>
         /// The rect transform for the UI object.
         /// </summary>
         [KRPCProperty]
@@ -95,6 +111,7 @@ namespace KRPC.UI
         public void Destroy ()
         {
             UnityEngine.Object.Destroy (GameObject);
+            destroyed = true;
         }
 
         /// <summary>

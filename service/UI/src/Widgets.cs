@@ -132,12 +132,25 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Draw the given object using a style's background sprite.
+        /// Draw the given object using the background sprite a style uses when it is in its
+        /// normal state.
         /// </summary>
         internal static UnityEngine.UI.Image AddImage (GameObject obj, UIStyle style)
         {
+            return AddImage (obj, style, s => s.normal);
+        }
+
+        /// <summary>
+        /// Draw the given object using the background sprite a style uses in the state
+        /// picked out by the given selector.
+        /// </summary>
+        internal static UnityEngine.UI.Image AddImage (
+            GameObject obj, UIStyle style, Func<UIStyle, UIStyleState> select)
+        {
+            if (select == null)
+                throw new ArgumentNullException ("select");
             var image = obj.AddComponent<UnityEngine.UI.Image> ();
-            var sprite = Background (style, style == null ? null : style.normal);
+            var sprite = Background (style, style == null ? null : select (style));
             if (sprite != null) {
                 image.sprite = sprite;
                 // The skin's sprites carry borders, so they are stretched by their edges
