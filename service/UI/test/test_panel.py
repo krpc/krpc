@@ -20,6 +20,25 @@ class TestPanel(krpctest.TestCase):
         panel.remove()
         self.assertRaises(ValueError, panel.remove)
 
+    def test_visible_is_the_elements_own_setting(self):
+        # An element is only drawn when everything it is inside is visible as well, so
+        # an interface can be built with its parts visible, inside a panel that is not,
+        # and shown all at once.
+        panel = self.canvas.add_panel()
+        text = panel.add_text("Foo")
+        self.assertTrue(text.visible)
+        panel.visible = False
+        self.assertFalse(panel.visible)
+        self.assertTrue(text.visible)
+        text.visible = False
+        self.assertFalse(text.visible)
+        text.visible = True
+        self.assertTrue(text.visible)
+        panel.visible = True
+        self.assertTrue(panel.visible)
+        self.assertTrue(text.visible)
+        panel.remove()
+
     def test_style(self):
         panel = self.canvas.add_panel()
         panel.style = self.panel_style.box

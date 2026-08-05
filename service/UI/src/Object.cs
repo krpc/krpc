@@ -125,9 +125,15 @@ namespace KRPC.UI
         /// <summary>
         /// Whether the UI object is visible.
         /// </summary>
+        /// <remarks>
+        /// This is the object's own setting, which is what it was last set to. An object is
+        /// only drawn when everything it is inside is visible as well, so an interface can
+        /// be built with its parts visible, inside a panel that is not, and shown all at
+        /// once by making that panel visible.
+        /// </remarks>
         [KRPCProperty]
         public bool Visible {
-            get { return GameObject.activeInHierarchy; }
+            get { return GameObject.activeSelf; }
             set { GameObject.SetActive (value); }
         }
 
