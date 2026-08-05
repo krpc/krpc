@@ -221,6 +221,63 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Terminate the vessel. The vessel and its parts are removed from the game, and its
+        /// crew are lost, as when the vessel is terminated from the tracking station. Nothing
+        /// is recovered: no funds, no science and no crew.
+        /// </summary>
+        /// <remarks>
+        /// The crew are reported missing, and return to the astronaut complex once their
+        /// respawn timer expires, or never if the game is set up so that missing crews do
+        /// not respawn.
+        ///
+        /// The active vessel cannot be terminated, because the vessel being flown cannot be
+        /// taken out of the scene it is being flown in. Switch to another vessel first, or
+        /// use <see cref="Recover"/>, which ends the flight and returns to the space center.
+        ///
+        /// Returns immediately, does not wait for the vessel to be terminated.
+        /// </remarks>
+        [KRPCMethod]
+        public void Terminate ()
+        {
+            var vessel = InternalVessel;
+            if (vessel == FlightGlobals.ActiveVessel)
+                throw new InvalidOperationException ("Cannot terminate the active vessel");
+            vessel.StartCoroutine (TerminateVesselCoroutine (vessel));
+        }
+
+        /// <summary>
+        /// Terminate a vessel at the end of the frame it was asked for, at the same point in
+        /// the frame and for the same reason as <see cref="RecoverVesselCoroutine"/>.
+        /// </summary>
+        static IEnumerator TerminateVesselCoroutine (global::Vessel vessel)
+        {
+            yield return new WaitUntil (() => true);
+            // What the tracking station's terminate button fires, so that contracts and mods
+            // watching for a vessel to be terminated see this the same way.
+            GameEvents.onVesselTerminated.Fire (vessel.protoVessel);
+            // The crew go missing rather than being killed, which is how the game treats the
+            // crew of a vessel terminated from the tracking station. The list an unloaded
+            // vessel returns is the protovessel's own, which the next step edits, so take a
+            // copy of it.
+            var crew = vessel.GetVesselCrew ().ToList ();
+            foreach (var member in crew)
+                member.StartRespawnPeriod ();
+            // Destroying an unloaded vessel kills its crew outright, which would override the
+            // respawn period just started, report the deaths to contracts watching for them,
+            // and drop any tourists aboard from the roster entirely. That reads the crew off
+            // the protovessel, which is going with the vessel, so emptying it leaves nobody
+            // to kill.
+            if (!vessel.loaded)
+                foreach (var member in crew)
+                    vessel.protoVessel.RemoveCrew (member);
+            // The same removal recovery makes, and for the same reason: an entry left in the
+            // flight state still records the vessel as standing where it was.
+            HighLogic.CurrentGame.flightState.protoVessels.RemoveAll (x => x.vesselID == vessel.id);
+            // Takes the vessel out of the game and its parts out of the scene.
+            vessel.Die ();
+        }
+
+        /// <summary>
         /// The mission elapsed time in seconds.
         /// </summary>
         [KRPCProperty]

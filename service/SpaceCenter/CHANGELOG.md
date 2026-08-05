@@ -9,6 +9,9 @@
     raises an exception without launching (#1017)
 
 - Vessels and crew
+  - Add `Vessel.Terminate`, which removes a vessel and its parts from the game without
+    recovering anything, as terminating it from the tracking station does. Its crew are
+    reported missing. The active vessel cannot be terminated (#1034)
   - `Vessel.Recover` now recovers non-active vessels without switching to
      the space center scene, and the mission completion dialog is auto-closed. (#1021)
   - Add `Vessel.OrbitSpeedReferenceFrame`, `Vessel.SurfaceSpeedReferenceFrame` and
