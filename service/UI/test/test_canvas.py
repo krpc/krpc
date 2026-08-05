@@ -12,8 +12,10 @@ class TestCanvas(krpctest.TestCase):
     def test_add_panel(self):
         panel = self.canvas.add_panel()
         self.assertTrue(panel.visible)
+        panel.remove()
         panel = self.canvas.add_panel(False)
         self.assertFalse(panel.visible)
+        panel.remove()
 
     def test_rect_transform(self):
         rect = self.canvas.rect_transform
@@ -29,7 +31,8 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual((0, 0), rect.anchor_min)
         self.assertEqual((0.5, 0.5), rect.pivot)
         self.assertEqual((0, 0, 0, 1), rect.rotation)
-        self.assertEqual((1.0, 1.0, 1.0), rect.scale)
+        # The scale of the stock canvas follows the interface scale the player has set,
+        # so there is no one value to check it against.
 
 
 if __name__ == "__main__":
