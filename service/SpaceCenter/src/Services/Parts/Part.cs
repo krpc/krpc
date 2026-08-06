@@ -21,16 +21,14 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Part : Equatable<Part>
     {
-        readonly uint partFlightId;
+        readonly PartId partId;
 
         /// <summary>
         /// Create a part object for the given KSP part
         /// </summary>
         public Part (global::Part part)
         {
-            if (ReferenceEquals (part, null))
-                throw new ArgumentNullException (nameof (part));
-            partFlightId = part.flightID;
+            partId = new PartId (part);
         }
 
         /// <summary>
@@ -38,7 +36,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Part other)
         {
-            return !ReferenceEquals (other, null) && partFlightId == other.partFlightId;
+            return !ReferenceEquals (other, null) && partId == other.partId;
         }
 
         /// <summary>
@@ -46,14 +44,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return partFlightId.GetHashCode ();
+            return partId.GetHashCode ();
         }
 
         /// <summary>
-        /// The KSP part.
+        /// The KSP part. Looked up by identifier on each use, so the object keeps working
+        /// across a reload that destroys the part and recreates it.
         /// </summary>
         public global::Part InternalPart {
-            get { return FlightGlobals.FindPartByID (partFlightId); }
+            get { return partId.Resolve (); }
         }
 
         /// <summary>
@@ -473,10 +472,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Part> FuelLinesTo {
             get {
                 CheckPartIsNotAFuelLine ();
+                var part = InternalPart;
                 var result = new List<global::Part> ();
-                foreach (var otherPart in InternalPart.vessel.parts) {
+                foreach (var otherPart in part.vessel.parts) {
                     foreach (var target in otherPart.fuelLookupTargets.Select (x => x.parent)) {
-                        if (target.flightID == partFlightId)
+                        if (target.flightID == part.flightID)
                             result.Add (otherPart);
                     }
                 }
