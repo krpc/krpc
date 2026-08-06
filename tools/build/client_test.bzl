@@ -47,7 +47,10 @@ def _impl(ctx):
             'echo "Server port = $SERVER_PORT"',
             'echo "Client port = $CLIENT_PORT"',
         ])
-        server_args = '--type=serialio --port="$SERVER_PORT"'
+
+        # Serial transfers run on background threads whose failures are only visible in the
+        # server's log, so capture the detail needed to diagnose them
+        server_args = '--type=serialio --debug --port="$SERVER_PORT"'
         get_server_settings = [
             # The virtual serial link (server PTY <-> socat <-> client PTY) is not always ready the
             # instant the server reports started, so wait briefly for it to settle before the client
@@ -59,6 +62,11 @@ def _impl(ctx):
 
     sub_commands.extend([
         'echo "" > %s' % stdout,
+        # The server's output goes to a file that never reaches the test log, which leaves a
+        # server-side failure invisible: the client just hangs until the test times out and is
+        # killed. Dump the file when the test fails, and from a trap for the timeout case, since
+        # the harness delivers SIGTERM when it times the test out.
+        'trap \'echo "=== server output ==="; cat %s\' TERM' % stdout,
         # Run the server directly from this test's runfiles tree; its
         # launcher finds the dotnet runtime and assemblies via RUNFILES_DIR,
         # and the dotnet host's relative probing paths resolve the
@@ -71,6 +79,7 @@ def _impl(ctx):
         "(cd test-executable.runfiles/_main/%s.runfiles/_main; %s ../../%s)" % (ctx.executable.test_executable.short_path, test_env, ctx.executable.test_executable.basename),
         "RESULT=$?",
         "kill $SERVER_PID",
+        'if [ $RESULT -ne 0 ]; then echo "=== server output ==="; cat %s; fi' % stdout,
         "exit $RESULT",
     ])
     ctx.actions.write(
