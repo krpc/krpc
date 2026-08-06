@@ -87,8 +87,8 @@ class TestEditorParts(krpctest.TestCase):
         part = self.parts.root
         for name in (
             "vessel",
-            "resources",
             "crew",
+            "available_seats",
             "temperature",
             "skin_temperature",
             "thermal_mass",

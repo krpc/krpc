@@ -397,7 +397,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// A <see cref="Resources"/> object for the part.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty]
         public Resources Resources {
             get { return new Resources (InternalPart); }
         }

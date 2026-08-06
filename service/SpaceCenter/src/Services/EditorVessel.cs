@@ -146,6 +146,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// A <see cref="Resources"/> object for the resources the vessel can hold.
+        /// </summary>
+        [KRPCProperty]
+        public Resources Resources {
+            get { return new Resources (); }
+        }
+
+        /// <summary>
         /// Whether the stock delta-v figures for the vessel have been calculated.
         /// </summary>
         /// <remarks>

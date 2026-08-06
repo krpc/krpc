@@ -1,3 +1,4 @@
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -7,15 +8,15 @@ namespace KRPC.SpaceCenter.Services
     /// An individual resource stored within a part.
     /// Created using methods in the <see cref="Resources"/> class.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight | GameScene.Editor)]
     public class Resource : Equatable<Resource>
     {
-        readonly uint partId;
+        readonly PartId partId;
         readonly int resourceId;
 
         internal Resource (PartResource resource)
         {
-            partId = resource.part.flightID;
+            partId = new PartId (resource.part);
             resourceId = resource.info.id;
         }
 
@@ -39,7 +40,7 @@ namespace KRPC.SpaceCenter.Services
         /// The KSP part.
         /// </summary>
         public Part InternalPart {
-            get { return FlightGlobals.FindPartByID (partId); }
+            get { return partId.Resolve (); }
         }
 
         /// <summary>

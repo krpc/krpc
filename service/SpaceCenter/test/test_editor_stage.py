@@ -69,8 +69,8 @@ class TestEditorStage(krpctest.TestCase):
         self.assertRaises(RuntimeError, getattr, stages[0], "vacuum_delta_v")
         self.assertGreater(len(stages[-1].parts), 0)
 
-    def test_stage_resources_are_flight_only(self):
-        self.assertRaises(RuntimeError, self.ship.stages[0].resources)
+    def test_stage_resources(self):
+        self.assertIsNotNone(self.vessel.stages[0].resources().names)
 
     def burn_stage(self):
         # The stage with the most vacuum delta-v, so there is something to move.

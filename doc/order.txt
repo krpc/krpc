@@ -632,6 +632,7 @@ SpaceCenter.EditorVessel.DryMass
 SpaceCenter.EditorVessel.Cost
 SpaceCenter.EditorVessel.CrewCapacity
 SpaceCenter.EditorVessel.Parts
+SpaceCenter.EditorVessel.Resources
 SpaceCenter.EditorVessel.Stages
 SpaceCenter.EditorVessel.StageAt
 SpaceCenter.EditorVessel.DecoupleStages

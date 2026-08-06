@@ -151,9 +151,11 @@ namespace KRPC.SpaceCenter.Services
         /// Defaults to <c>true</c> so decouple-stage calls match the legacy 
         /// <c>Vessel.ResourcesInDecoupleStage</c> RPC.
         /// </param>
-        [KRPCMethod (GameScene = GameScene.Flight)]
+        [KRPCMethod]
         public Resources Resources (bool cumulative = true)
         {
+            if (editorVessel)
+                return new Resources (stageNumber, cumulative, decoupleStage);
             return new Resources (InternalVessel, stageNumber, cumulative, decoupleStage);
         }
 
@@ -271,7 +273,7 @@ namespace KRPC.SpaceCenter.Services
             if (decoupleStage)
                 throw new InvalidOperationException ("Delta-v information is not available for a decouple stage.");
             var dv = InternalDeltaV;
-            if (dv == null || !dv.IsReady)
+            if (dv == null || !dv.IsReady || (editorVessel && !EditorDeltaV.Ready))
                 throw new InvalidOperationException ("Delta-v has not been calculated for this vessel yet.");
             var stageInfo = dv.GetStage (stageNumber);
             if (stageInfo == null)
