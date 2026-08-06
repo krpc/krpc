@@ -67,12 +67,16 @@
     <Compile Include="Server\ProtocolBuffers\StreamServer.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStream.cs" />
     <Compile Include="Server\ProtocolBuffers\Utils.cs" />
+    <Compile Include="Server\SerialIO\BufferedPort.cs" />
+    <Compile Include="Server\SerialIO\ByteBuffer.cs" />
     <Compile Include="Server\SerialIO\ByteClient.cs" />
     <Compile Include="Server\SerialIO\ByteServer.cs" />
     <Compile Include="Server\SerialIO\ByteStream.cs" />
     <Compile Include="Server\SerialIO\RPCClient.cs" />
     <Compile Include="Server\SerialIO\RPCServer.cs" />
+    <Compile Include="Server\SerialIO\IPort.cs" />
     <Compile Include="Server\SerialIO\RPCStream.cs" />
+    <Compile Include="Server\SerialIO\SerialPortAdapter.cs" />
     <Compile Include="Server\SerialIO\StreamServer.cs" />
     <Compile Include="Server\Server.cs" />
     <Compile Include="Server\ServerEventArgs.cs" />

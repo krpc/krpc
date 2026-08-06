@@ -51,6 +51,8 @@
     <Compile Include="Server\ProtocolBuffers\StreamServerTest.cs" />
     <Compile Include="Server\ProtocolBuffers\StreamStreamTest.cs" />
     <Compile Include="Server\ProtocolBuffers\TestingTools.cs" />
+    <Compile Include="Server\SerialIO\BufferedPortTest.cs" />
+    <Compile Include="Server\SerialIO\ByteBufferTest.cs" />
     <Compile Include="Server\SerialIO\ByteClientTest.cs" />
     <Compile Include="Server\SerialIO\RPCServerTest.cs" />
     <Compile Include="Server\SerialIO\RPCStreamTest.cs" />

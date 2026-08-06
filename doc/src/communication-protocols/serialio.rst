@@ -98,6 +98,10 @@ connection, a client must do the following:
    If the ``status`` field is set to ``ConnectionResponse.OK`` then the connection was successful.
    If not, the ``message`` field contains a description of what went wrong.
 
+   The server waits up to 3 seconds for the complete connection request message to arrive after
+   its first bytes are received. If it does not arrive in time, the server responds with the
+   ``TIMEOUT`` status.
+
 Receiving Stream Updates
 ------------------------
 
@@ -115,6 +119,28 @@ See :doc:`messages`.
 To send a procedure call, wrap the ``Request`` message in a ``MultiplexedRequest`` and set its
 ``request`` field. Receive the result as a ``MultiplexedResponse`` and read the ``Response`` from
 its ``response`` field.
+
+.. _communication-protocol-serialio-buffering:
+
+Buffering and Data Rates
+------------------------
+
+A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
+carries roughly a thousand bytes per second. The server therefore buffers up to a megabyte of data
+in each direction, and the two directions behave differently when their buffer fills:
+
+* Data received from the port is buffered until the game reads it. When the buffer fills, the
+  server stops reading from the port until the game catches up. Nothing is lost, but the client
+  sees the port carry its data more slowly.
+
+* Data written by the game is buffered until the port has sent it. When this buffer fills, which
+  means the game has been producing data faster than the port can send for a sustained period,
+  the server drops the connection and stops. It can be started again from the in-game
+  configuration window. The easiest way to hit this limit is to request streams whose updates add
+  up to more than the port's data rate, as an update to a stream is sent every game update.
+
+To stay within the port's capacity, keep the number and size of streams small relative to the baud
+rate, or configure a higher baud rate.
 
 Examples
 --------

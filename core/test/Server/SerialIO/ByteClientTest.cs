@@ -14,9 +14,9 @@ namespace KRPC.Test.Server.SerialIO
         [Test]
         public void Equality ()
         {
-            var clientA = new ByteClient (new SerialPort ());
+            var clientA = new ByteClient (new BufferedPort (new SerialPortAdapter (new SerialPort ())));
             ByteClient clientA2 = clientA;
-            var clientB = new ByteClient (new SerialPort ());
+            var clientB = new ByteClient (new BufferedPort (new SerialPortAdapter (new SerialPort ())));
             Assert.IsTrue (clientA.Equals (clientA));
             Assert.IsFalse (clientA.Equals (clientB));
             Assert.IsTrue (clientA == clientA2);
@@ -28,7 +28,7 @@ namespace KRPC.Test.Server.SerialIO
         [Test]
         public void NotConnected ()
         {
-            var client = new ByteClient (new SerialPort ());
+            var client = new ByteClient (new BufferedPort (new SerialPortAdapter (new SerialPort ())));
             Assert.IsFalse (client.Connected);
             Assert.AreEqual (client.Guid.ToString (), client.Name);
             Assert.AreEqual (new SerialPort ().PortName, client.Address);
