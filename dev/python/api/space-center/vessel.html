@@ -836,6 +836,24 @@ several vessels keeps control of the rest of them.</p>
 </div>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Vessel.terminate">
+<span class="sig-name descname"><span class="pre">terminate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Vessel.terminate" title="Link to this definition">#</a></dt>
+<dd><p>Terminate the vessel. The vessel and its parts are removed from the game, and its
+crew are lost, as when the vessel is terminated from the tracking station. Nothing
+is recovered: no funds, no science and no crew.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The crew are reported missing, and return to the astronaut complex once their
+respawn timer expires, or never if the game is set up so that missing crews do
+not respawn.</p>
+<p>The active vessel cannot be terminated, because the vessel being flown cannot be
+taken out of the scene it is being flown in. Switch to another vessel first, or
+use <a class="reference internal" href="#SpaceCenter.Vessel.recover" title="SpaceCenter.Vessel.recover"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Vessel.recover()</span></code></a>, which ends the flight and returns to the space center.</p>
+<p>Returns immediately, does not wait for the vessel to be terminated.</p>
+</div>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Vessel.met">
 <span class="sig-name descname"><span class="pre">met</span></span><a class="headerlink" href="#SpaceCenter.Vessel.met" title="Link to this definition">#</a></dt>

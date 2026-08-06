@@ -109,6 +109,27 @@ Vessel
 
          Returns immediately, does not wait for the vessel to be recovered.
 
+   .. function:: krpc_error_t krpc_SpaceCenter_Vessel_Terminate(krpc_connection_t connection)
+
+      Terminate the vessel. The vessel and its parts are removed from the game, and its
+      crew are lost, as when the vessel is terminated from the tracking station. Nothing
+      is recovered: no funds, no science and no crew.
+
+
+   
+
+      .. note::
+
+         The crew are reported missing, and return to the astronaut complex once their
+         respawn timer expires, or never if the game is set up so that missing crews do
+         not respawn.
+
+         The active vessel cannot be terminated, because the vessel being flown cannot be
+         taken out of the scene it is being flown in. Switch to another vessel first, or
+         use :func:`krpc_SpaceCenter_Vessel_Recover`, which ends the flight and returns to the space center.
+
+         Returns immediately, does not wait for the vessel to be terminated.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_MET(krpc_connection_t connection, double * result)
 
       The mission elapsed time in seconds.

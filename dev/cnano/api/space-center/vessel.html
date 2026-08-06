@@ -798,6 +798,24 @@ several vessels keeps control of the rest of them.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Terminate">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_Terminate</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Terminate" title="Link to this definition">#</a><br /></dt>
+<dd><p>Terminate the vessel. The vessel and its parts are removed from the game, and its
+crew are lost, as when the vessel is terminated from the tracking station. Nothing
+is recovered: no funds, no science and no crew.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The crew are reported missing, and return to the astronaut complex once their
+respawn timer expires, or never if the game is set up so that missing crews do
+not respawn.</p>
+<p>The active vessel cannot be terminated, because the vessel being flown cannot be
+taken out of the scene it is being flown in. Switch to another vessel first, or
+use <a class="reference internal" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_Recover" title="krpc_SpaceCenter_Vessel_Recover"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_Recover()</span></code></a>, which ends the flight and returns to the space center.</p>
+<p>Returns immediately, does not wait for the vessel to be terminated.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_MET">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_MET</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Vessel_t.krpc_SpaceCenter_Vessel_MET" title="Link to this definition">#</a><br /></dt>
 <dd><p>The mission elapsed time in seconds.</p>
