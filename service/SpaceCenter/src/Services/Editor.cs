@@ -54,6 +54,91 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+        /// specific impulse figures assume.
+        /// </summary>
+        /// <remarks>
+        /// This and <see cref="DeltaVAltitude"/> are what <see cref="EditorVessel.DeltaV"/>,
+        /// <see cref="Stage.DeltaV"/> and the other current-situation figures are
+        /// computed for. The body sets the gravity the thrust-to-weight ratios are
+        /// against, and, with the altitude, the atmospheric pressure and density the
+        /// specific impulses and thrusts are against.
+        /// This is global game state rather than editor state: the same setting backs
+        /// the game's delta-v readout in flight, and it persists across scene changes.
+        /// Setting it asks the game to re-run the simulation and returns straight away;
+        /// the figures are out of date until <see cref="EditorVessel.DeltaVReady"/> is
+        /// true again.
+        /// </remarks>
+        [KRPCProperty]
+        public CelestialBody DeltaVBody {
+            get {
+                var body = AppValues.body;
+                if (body == null)
+                    throw new InvalidOperationException (
+                        "The game has not chosen a body for its delta-v figures yet.");
+                return new CelestialBody (body);
+            }
+            set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (value));
+                AppValues.body = value.InternalBody;
+                EditorDeltaV.Recalculate ();
+            }
+        }
+
+        /// <summary>
+        /// The altitude above <see cref="DeltaVBody"/>, in meters, that the vessel's
+        /// delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+        /// pressure and density at this altitude are what the figures are computed for,
+        /// so raising it from zero to above the body's atmosphere moves them from the
+        /// vessel's sea-level figures to its vacuum ones.
+        /// Setting it asks the game to re-run the simulation and returns straight away;
+        /// the figures are out of date until <see cref="EditorVessel.DeltaVReady"/> is
+        /// true again.
+        /// </summary>
+        [KRPCProperty]
+        public double DeltaVAltitude {
+            get { return AppValues.altitude; }
+            set {
+                AppValues.altitude = value;
+                EditorDeltaV.Recalculate ();
+            }
+        }
+
+        /// <summary>
+        /// Which situation the game's own delta-v readout shows figures for.
+        /// </summary>
+        /// <remarks>
+        /// This selects which column the game's own delta-v app displays, and nothing
+        /// else. It does not affect anything kRPC reports: the current-situation
+        /// figures follow <see cref="DeltaVBody"/> and <see cref="DeltaVAltitude"/>
+        /// whatever this is set to, and the sea-level and vacuum figures are reported
+        /// directly as <see cref="EditorVessel.SeaLevelDeltaV"/> and
+        /// <see cref="EditorVessel.VacuumDeltaV"/>. It is here for completeness with the
+        /// app.
+        /// </remarks>
+        [KRPCProperty]
+        public DeltaVSituation DeltaVSituation {
+            get { return (DeltaVSituation)AppValues.situation; }
+            set {
+                AppValues.situation = (DeltaVSituationOptions)value;
+            }
+        }
+
+        /// <summary>
+        /// The game-wide settings the delta-v readout works from.
+        /// </summary>
+        static DeltaVAppValues AppValues {
+            get {
+                var values = DeltaVGlobals.DeltaVAppValues;
+                if (values == null)
+                    throw new InvalidOperationException (
+                        "The game's delta-v settings are not available.");
+                return values;
+            }
+        }
+
+        /// <summary>
         /// Load a vessel from a craft file into the editor, replacing the vessel that
         /// is currently being constructed.
         /// </summary>
@@ -64,7 +149,8 @@ namespace KRPC.SpaceCenter.Services
         /// file in the save directory, without the ".craft" file extension.</param>
         /// <remarks>
         /// The vessel is loaded into whichever editor is open, regardless of which
-        /// directory it came from.
+        /// directory it came from. Its delta-v figures are recalculated in the
+        /// background afterwards; see <see cref="EditorVessel.DeltaVReady"/>.
         /// </remarks>
         [KRPCMethod]
         public void LoadVessel (string craftDirectory, string name)

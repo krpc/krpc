@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -142,6 +143,148 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public Parts.Parts Parts {
             get { return new Parts.Parts (); }
+        }
+
+        /// <summary>
+        /// Whether the stock delta-v figures for the vessel have been calculated.
+        /// </summary>
+        /// <remarks>
+        /// The game recalculates them in the background whenever the vessel changes, and
+        /// whenever <see cref="Editor.DeltaVBody"/> or <see cref="Editor.DeltaVAltitude"/>
+        /// is set, and they are out of date until it has finished. Reading
+        /// <see cref="DeltaV"/>, or any delta-v member of a <see cref="Stage"/>, before
+        /// then raises an error rather than returning a stale figure. Poll this after
+        /// changing anything the figures depend on.
+        /// </remarks>
+        [KRPCProperty]
+        public bool DeltaVReady {
+            get { return EditorDeltaV.Ready; }
+        }
+
+        /// <summary>
+        /// Activation (burn) stages for the vessel, in ascending stage order. This does
+        /// not include the -1 stage (parts with no staging icon), as it carries no
+        /// delta-v; use <see cref="StageAt"/> with -1 to get those parts.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Stage> Stages {
+            get {
+                return ActivationStageNumbers ()
+                    .Select (n => new Stage (n, false))
+                    .ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The activation stage with the given number. Pass -1 to get the parts that are
+        /// never activated (those with no staging icon).
+        /// </summary>
+        /// <param name="stage">Get activation stage at this index.</param>
+        [KRPCMethod]
+        public Stage StageAt (int stage)
+        {
+            if (stage != -1 && !ActivationStageNumbers ().Contains (stage))
+                throw new ArgumentException ("Stage not found", nameof (stage));
+            return new Stage (stage, false);
+        }
+
+        /// <summary>
+        /// Decouple stages for the vessel, in ascending stage order. The -1 stage,
+        /// containing the parts that are never decoupled and remain on the vessel, is
+        /// included first when any such parts exist.
+        /// </summary>
+        [KRPCProperty]
+        public IList<Stage> DecoupleStages {
+            get {
+                return DecoupleStageNumbers ()
+                    .Select (n => new Stage (n, true))
+                    .ToList ();
+            }
+        }
+
+        /// <summary>
+        /// The decouple stage with the given number. Pass -1 to get the parts that are
+        /// never decoupled and remain on the vessel after all stages have fired.
+        /// </summary>
+        /// <param name="stage">Get decouple stage at this index.</param>
+        [KRPCMethod]
+        public Stage DecoupleStageAt (int stage)
+        {
+            if (!RawDecoupleStageNumbers ().Contains (stage))
+                throw new ArgumentException ("Decouple stage not found", nameof (stage));
+            return new Stage (stage, true);
+        }
+
+        /// <summary>
+        /// Total delta-v for the vessel in the situation the game's delta-v readout
+        /// assumes, in m/s. See <see cref="Editor.DeltaVBody"/>.
+        /// </summary>
+        [KRPCProperty]
+        public float DeltaV {
+            get { return (float)RequireDeltaV ().TotalDeltaVActual; }
+        }
+
+        /// <summary>
+        /// Total vacuum delta-v for the vessel, in m/s.
+        /// </summary>
+        [KRPCProperty]
+        public float VacuumDeltaV {
+            get { return (float)RequireDeltaV ().TotalDeltaVVac; }
+        }
+
+        /// <summary>
+        /// Total sea-level delta-v for the vessel, in m/s.
+        /// </summary>
+        [KRPCProperty]
+        public float SeaLevelDeltaV {
+            get { return (float)RequireDeltaV ().TotalDeltaVASL; }
+        }
+
+        /// <summary>
+        /// Total burn time for the vessel, in seconds.
+        /// </summary>
+        [KRPCProperty]
+        public float BurnTime {
+            get { return (float)RequireDeltaV ().TotalBurnTime; }
+        }
+
+        VesselDeltaV RequireDeltaV ()
+        {
+            if (!EditorDeltaV.Ready)
+                throw new InvalidOperationException (
+                    "Delta-v has not been calculated for this vessel yet.");
+            return InternalShipConstruct.vesselDeltaV;
+        }
+
+        IList<int> ActivationStageNumbers ()
+        {
+            var construct = InternalShipConstruct;
+            return StagingExtensions.ActivationStageNumbers (construct.vesselDeltaV, construct.Parts);
+        }
+
+        List<int> DecoupleStageNumbers ()
+        {
+            return InternalShipConstruct.Parts
+                .Select (p => p.DecoupledAt ())
+                .Distinct ()
+                .OrderBy (n => n)
+                .ToList ();
+        }
+
+        /// <summary>
+        /// Stage indices valid for decouple-stage queries, matching the vessel's own
+        /// numbering: the -1 stage and every stage number up to the highest in use,
+        /// including those with no decoupling parts.
+        /// </summary>
+        List<int> RawDecoupleStageNumbers ()
+        {
+            var indices = ActivationStageNumbers ()
+                .Concat (DecoupleStageNumbers ())
+                .ToList ();
+            var max = indices.Count == 0 ? 0 : indices.Max ();
+            return new List<int> { -1 }
+                .Concat (Enumerable.Range (0, max + 1))
+                .ToList ();
         }
     }
 }

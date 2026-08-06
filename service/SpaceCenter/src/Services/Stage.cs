@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -24,9 +25,16 @@ namespace KRPC.SpaceCenter.Services
     public class Stage : Equatable<Stage>
     {
         /// <summary>
-        /// The id of the vessel the stage belongs to.
+        /// The id of the vessel the stage belongs to. Unused when the stage belongs to
+        /// the vessel in the editor.
         /// </summary>
         readonly Guid vesselId;
+
+        /// <summary>
+        /// Whether the stage belongs to the vessel under construction in the editor.
+        /// The editor only ever holds one vessel, so it needs no identifier.
+        /// </summary>
+        readonly bool editorVessel;
 
         /// <summary>
         /// The stage number.
@@ -52,12 +60,23 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Initializes a stage object for the vessel under construction in the editor.
+        /// </summary>
+        internal Stage (int number, bool decouple)
+        {
+            editorVessel = true;
+            stageNumber = number;
+            decoupleStage = decouple;
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (Stage other)
         {
             return !ReferenceEquals (other, null) &&
                    vesselId == other.vesselId &&
+                   editorVessel == other.editorVessel &&
                    stageNumber == other.stageNumber &&
                    decoupleStage == other.decoupleStage;
         }
@@ -67,7 +86,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ stageNumber.GetHashCode () ^ decoupleStage.GetHashCode ();
+            return vesselId.GetHashCode () ^ editorVessel.GetHashCode () ^
+                   stageNumber.GetHashCode () ^ decoupleStage.GetHashCode ();
         }
 
         /// <summary>
@@ -75,7 +95,28 @@ namespace KRPC.SpaceCenter.Services
         /// scene reload that destroys the vessel and recreates it under the same id.
         /// </summary>
         public global::Vessel InternalVessel {
-            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
+            get {
+                if (editorVessel)
+                    throw new InvalidOperationException (
+                        "This stage belongs to the vessel in the editor, not to a vessel in flight.");
+                return FlightGlobalsExtensions.GetVesselById (vesselId);
+            }
+        }
+
+        /// <summary>
+        /// The stock delta-v simulation the stage's figures come from, for either the
+        /// vessel in flight or the vessel in the editor.
+        /// </summary>
+        VesselDeltaV InternalDeltaV {
+            get {
+                if (!editorVessel)
+                    return InternalVessel.VesselDeltaV;
+                var logic = EditorLogic.fetch;
+                var construct = logic == null ? null : logic.ship;
+                if (ReferenceEquals (construct, null))
+                    throw new InvalidOperationException ("The editor does not contain a vessel.");
+                return construct.vesselDeltaV;
+            }
         }
 
         /// <summary>
@@ -92,10 +133,10 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                var vesselParts = new Parts.Parts (InternalVessel);
+                var parts = editorVessel ? new Parts.Parts () : new Parts.Parts (InternalVessel);
                 if (decoupleStage)
-                    return vesselParts.All.Where (part => part.DecoupleStage == stageNumber).ToList ();
-                return vesselParts.All.Where (part => part.Stage == stageNumber).ToList ();
+                    return parts.All.Where (part => part.DecoupleStage == stageNumber).ToList ();
+                return parts.All.Where (part => part.Stage == stageNumber).ToList ();
             }
         }
 
@@ -110,7 +151,7 @@ namespace KRPC.SpaceCenter.Services
         /// Defaults to <c>true</c> so decouple-stage calls match the legacy 
         /// <c>Vessel.ResourcesInDecoupleStage</c> RPC.
         /// </param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Resources Resources (bool cumulative = true)
         {
             return new Resources (InternalVessel, stageNumber, cumulative, decoupleStage);
@@ -229,7 +270,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (decoupleStage)
                 throw new InvalidOperationException ("Delta-v information is not available for a decouple stage.");
-            var dv = InternalVessel.VesselDeltaV;
+            var dv = InternalDeltaV;
             if (dv == null || !dv.IsReady)
                 throw new InvalidOperationException ("Delta-v has not been calculated for this vessel yet.");
             var stageInfo = dv.GetStage (stageNumber);
