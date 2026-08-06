@@ -176,6 +176,7 @@ SpaceCenter.Vessel.Packed
 SpaceCenter.Vessel.PhysicsRange
 SpaceCenter.Vessel.Recoverable
 SpaceCenter.Vessel.Recover
+SpaceCenter.Vessel.Terminate
 SpaceCenter.Vessel.MET
 SpaceCenter.Vessel.Biome
 SpaceCenter.Vessel.Flight
