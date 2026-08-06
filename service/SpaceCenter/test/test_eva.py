@@ -1,5 +1,33 @@
+import time
+
 import krpctest
 from krpctest.geometry import angle_between, norm
+
+
+def wait_for(predicate, message, timeout=30):
+    """Wait for predicate to hold. A module-level counterpart to TestCase.wait_until,
+    for the class-level setup that has no test instance to call it on."""
+    deadline = time.time() + timeout
+    while not predicate():
+        if time.time() > deadline:
+            raise AssertionError(
+                "Timed out after %gs waiting for %s" % (timeout, message)
+            )
+        time.sleep(0.1)
+
+
+def send_on_eva(space_center, let_go=True):
+    """Send the active vessel's first crew member outside and wait until it has finished
+    climbing out, which it signals by taking hold of the ladder by the hatch. Unless the
+    test is about the ladder, let go of it again: a kerbal moved while still jointed to
+    the ladder it is holding is torn apart."""
+    vessel = space_center.active_vessel.crew[0].eva()
+    control = vessel.control
+    wait_for(lambda: control.ladder is not None, "the kerbal to climb out")
+    if let_go:
+        control.release_ladder()
+        wait_for(lambda: control.ladder is None, "the kerbal to let go of the ladder")
+    return vessel
 
 
 class TestEVAOnFoot(krpctest.TestCase):
@@ -16,7 +44,7 @@ class TestEVAOnFoot(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.connect().testing_tools.go_eva()
+        send_on_eva(cls.connect().space_center)
         cls.set_landed("Kerbin", cls.LATITUDE, cls.LONGITUDE)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
@@ -122,7 +150,7 @@ class TestEVAJetpack(krpctest.TestCase):
     def setUpClass(cls):
         cls.new_save()
         cls.remove_other_vessels()
-        cls.connect().testing_tools.go_eva()
+        send_on_eva(cls.connect().space_center)
         cls.set_circular_orbit("Kerbin", 100000)
         cls.space_center = cls.connect().space_center
         cls.vessel = cls.space_center.active_vessel
@@ -187,3 +215,87 @@ class TestEVAJetpack(krpctest.TestCase):
                 lambda: self.rotation_rate() < 0.1,
                 message="the kerbal to stop rotating",
             )
+
+
+class TestEVABoarding(krpctest.TestCase):
+    """Sending a kerbal out of a craft, on and off the ladder by the hatch, and back in."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.space_center = cls.connect().space_center
+
+    def setUp(self):
+        # Every test leaves the kerbal somewhere different, so start each from the
+        # craft sitting on the pad with its crew inside.
+        self.new_save(always_load=True)
+        self.remove_other_vessels()
+        self.craft = self.space_center.active_vessel
+        self.kerbal = self.craft.crew[0]
+
+    def test_eva_and_board(self):
+        self.assertIsNone(self.craft.control.airlock)
+        self.assertIsNone(self.craft.control.ladder)
+
+        vessel = send_on_eva(self.space_center, let_go=False)
+        self.assertEqual(self.space_center.VesselType.eva, vessel.type)
+        self.assertEqual(self.kerbal.name, vessel.name)
+        self.assertEqual(vessel, self.space_center.active_vessel)
+        self.assertEqual([], self.craft.crew)
+
+        # The kerbal climbs out at the hatch it came through, so it can go straight
+        # back in again.
+        self.assertEqual(self.kerbal.part.name, "kerbalEVA")
+        self.assertEqual("mk1pod.v2", vessel.control.airlock.name)
+        vessel.control.board()
+        self.assertEqual(self.craft, self.space_center.active_vessel)
+        self.assertEqual([self.kerbal.name], [crew.name for crew in self.craft.crew])
+
+    def test_ladder(self):
+        # A kerbal climbing out takes hold of the ladder by the hatch.
+        control = send_on_eva(self.space_center, let_go=False).control
+        self.assertEqual("mk1pod.v2", control.ladder.name)
+        control.release_ladder()
+        self.wait_until(lambda: control.ladder is None, message="the kerbal to let go")
+
+    def test_grab_ladder(self):
+        # A kerbal that lets go on the ground drops away from the ladder, so take hold
+        # of one again in orbit, where it stays alongside it.
+        self.set_circular_orbit("Kerbin", 100000)
+        control = send_on_eva(self.space_center, let_go=False).control
+        control.release_ladder()
+        self.wait_until(lambda: control.ladder is None, message="the kerbal to let go")
+
+        def take_hold():
+            # The kerbal counts as clear of the ladder for a moment after letting go,
+            # and cannot take hold of it again until it is alongside once more.
+            try:
+                control.grab_ladder()
+                return True
+            except RuntimeError:
+                return False
+
+        self.wait_until(take_hold, message="the kerbal to reach the ladder again")
+        self.wait_until(
+            lambda: control.ladder is not None, message="the kerbal to grab on again"
+        )
+        self.assertEqual("mk1pod.v2", control.ladder.name)
+
+    def test_out_of_reach(self):
+        control = send_on_eva(self.space_center).control
+        control.forward = 1
+        self.wait_until(
+            lambda: control.airlock is None,
+            message="the kerbal to walk clear of the hatch",
+        )
+        control.forward = 0
+        self.assertRaises(RuntimeError, control.board)
+        self.assertRaises(RuntimeError, control.grab_ladder)
+
+    def test_not_a_kerbal(self):
+        self.assertRaises(RuntimeError, self.craft.control.board)
+        self.assertRaises(RuntimeError, self.craft.control.grab_ladder)
+        self.assertRaises(RuntimeError, self.craft.control.release_ladder)
+
+    def test_already_on_eva(self):
+        send_on_eva(self.space_center)
+        self.assertRaises(RuntimeError, self.kerbal.eva)
