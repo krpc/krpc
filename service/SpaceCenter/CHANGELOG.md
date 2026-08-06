@@ -8,6 +8,30 @@
     in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats,
     raises an exception without launching (#1017)
 
+- Editor
+  - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space
+    plane hangar, for inspecting the vessel that is being constructed. `Editor.Vessel`
+    gives its name, description, editor, size, mass, cost and crew capacity, and
+    `Editor.LoadVessel` loads a craft file into the open editor (#1038)
+  - `EditorVessel.Parts` gives the parts tree of the vessel under construction, as
+    `Vessel.Parts` does in flight. The members of `Part` and of the part-type classes that
+    describe the design are available; those that need a vessel in flight or running
+    physics, such as `Part.Position` and the thermal members, remain restricted to the
+    flight scene. `Engine.ThrustLimit` can be read and set from the editor (#1038)
+  - `EditorVessel.Stages`, `EditorVessel.StageAt`, `EditorVessel.DecoupleStages` and
+    `EditorVessel.DecoupleStageAt` give the vessel's stages, with the same stock delta-v,
+    thrust, TWR, specific impulse and mass figures that `Stage` reports in flight, along
+    with `EditorVessel.DeltaV`, `VacuumDeltaV`, `SeaLevelDeltaV` and `BurnTime` for the
+    whole vessel. `Editor.DeltaVBody`, `Editor.DeltaVAltitude` and
+    `Editor.DeltaVSituation` set the situation those figures assume, as the game's own
+    delta-v app does. The figures are recalculated in the background after any change to
+    the vessel or the situation; `EditorVessel.DeltaVReady` reports whether they are
+    current, and reading them before they are raises rather than returning a stale
+    figure (#1038)
+  - `EditorVessel.Resources`, `Part.Resources` and `Stage.Resources` report the resources
+    the vessel under construction can hold, per vessel, per part and per stage, as they do
+    for a vessel in flight (#1038)
+
 - Vessels and crew
   - Add `CrewMember.EVA`, which sends a Kerbal outside through the hatch of the part it is
     in and returns the vessel it becomes (#319)
