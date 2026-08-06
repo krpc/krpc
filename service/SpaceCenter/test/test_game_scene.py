@@ -29,6 +29,18 @@ class TestGameScene(krpctest.TestCase):
         self.set_scene(self.scenes.editor_sph)
         self.set_scene(self.scenes.space_center)
 
+    def test_editor_scoping(self):
+        # The editor RPCs are scoped to the editors, and are not reachable from
+        # any other scene.
+        space_center = self.connect().space_center
+        self.ensure_space_center()
+        self.assertRaises(RuntimeError, getattr, space_center, "editor")
+        self.set_scene(self.scenes.editor_vab)
+        self.assertIsNotNone(space_center.editor)
+        self.set_scene(self.scenes.space_center)
+        self.set_scene(self.scenes.flight)
+        self.assertRaises(RuntimeError, getattr, space_center, "editor")
+
     def test_astronaut_complex(self):
         # The astronaut complex is the only facility available in a sandbox
         # game, which is what the test save uses.

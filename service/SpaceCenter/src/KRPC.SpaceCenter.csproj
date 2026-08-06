@@ -125,7 +125,9 @@
     <Compile Include="Services\CrewMember.cs" />
     <Compile Include="Services\CrewMemberGender.cs" />
     <Compile Include="Services\CrewMemberType.cs" />
+    <Compile Include="Services\Editor.cs" />
     <Compile Include="Services\EditorFacility.cs" />
+    <Compile Include="Services\EditorVessel.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\GameMode.cs" />
     <Compile Include="Services\MapFilterType.cs" />

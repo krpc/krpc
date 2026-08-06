@@ -252,7 +252,15 @@ namespace KRPC.SpaceCenter.Services
             get { return new AlarmManager(); }
         }
 
-        static string GetFullCraftDirectory (string craftDirectory)
+        /// <summary>
+        /// The editor, for inspecting the vessel that is being constructed.
+        /// </summary>
+        [KRPCProperty (GameScene = GameScene.Editor)]
+        public static Editor Editor {
+            get { return new Editor (); }
+        }
+
+        internal static string GetFullCraftDirectory (string craftDirectory)
         {
             return KSPUtil.ApplicationRootPath + "saves/" + HighLogic.SaveFolder + "/Ships/" + craftDirectory;
         }
