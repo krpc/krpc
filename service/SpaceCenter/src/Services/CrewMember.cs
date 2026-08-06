@@ -149,6 +149,17 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty (Nullable = true, GameScene = GameScene.Flight)]
         public Parts.Part Part {
             get {
+                var part = InternalPart;
+                return part == null ? null : new Parts.Part (part);
+            }
+        }
+
+        /// <summary>
+        /// The KSP part the crew member is occupying, or <c>null</c> if it is not in one or
+        /// the vessel containing it is not loaded.
+        /// </summary>
+        global::Part InternalPart {
+            get {
                 var crewMember = InternalCrewMember;
                 if (crewMember == null)
                     return null;
@@ -161,8 +172,52 @@ namespace KRPC.SpaceCenter.Services
                         .SelectMany (vessel => vessel.parts)
                         .FirstOrDefault (candidate => candidate.protoModuleCrew.Contains (crewMember));
                 }
-                return part == null ? null : new Parts.Part (part);
+                return part;
             }
+        }
+
+        /// <summary>
+        /// Send the crew member outside on EVA, through the hatch of the part it is in, and
+        /// return the vessel it becomes. The game switches to that vessel, which can then be
+        /// walked around and flown using its <see cref="Vessel.Control"/>, and brought back
+        /// in with <see cref="Control.Board"/>.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if EVA is disabled for the game, if the crew member is not in
+        /// a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+        /// in is obstructed.
+        /// </remarks>
+        [KRPCMethod (GameScene = GameScene.Flight)]
+        public Vessel EVA ()
+        {
+            if (!HighLogic.CurrentGame.Parameters.Flight.CanEVA)
+                throw new InvalidOperationException ("EVA is disabled for this game");
+            var crewMember = InternalCrewMember;
+            var part = InternalPart;
+            if (part == null)
+                throw new InvalidOperationException ("The crew member is not in a loaded vessel");
+            if (part.vessel.isEVA)
+                throw new InvalidOperationException ("The crew member is already on EVA");
+            var eva = FlightEVA.fetch.spawnEVA (crewMember, part, part.airlock, true);
+            if (eva == null)
+                throw new InvalidOperationException (
+                    "Failed to send " + crewMember.name + " on EVA; every hatch out of " +
+                    part.partInfo.title + " may be obstructed");
+            return WaitForEVA (eva, 0);
+        }
+
+        static Vessel WaitForEVA (KerbalEVA eva, int tick)
+        {
+            // The game brings the kerbal into being over the following frames and then
+            // switches to it, so wait for it to be flyable rather than hand back a vessel
+            // that cannot yet be controlled.
+            if (eva == null || eva.vessel == null)
+                throw new InvalidOperationException ("The kerbal was destroyed while leaving the vessel");
+            if (FlightGlobals.ActiveVessel == eva.vessel && eva.vessel.loaded && !eva.vessel.packed)
+                return new Vessel (eva.vessel);
+            if (tick > 500)
+                throw new InvalidOperationException ("The kerbal failed to leave the vessel");
+            throw new YieldException<Func<Vessel>> (() => WaitForEVA (eva, tick + 1));
         }
 
         /// <summary>

@@ -32,6 +32,10 @@ namespace KRPC.SpaceCenter.Services
     /// holding; it stops and holds its new orientation once the input returns to zero.
     /// <see cref="RCS"/> deploys and stows the jetpack and <see cref="Lights"/>
     /// switches the helmet lamp. The remaining controls do nothing for a kerbal.
+    /// A kerbal is also sent out and brought back in from here: with
+    /// <see cref="CrewMember.EVA"/> and <see cref="Board"/>, and
+    /// <see cref="GrabLadder"/> and <see cref="ReleaseLadder"/> for the ladders it
+    /// passes on the way.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Control : Equatable<Control>
@@ -917,6 +921,158 @@ namespace KRPC.SpaceCenter.Services
             foreach (var node in InternalVessel.patchedConicSolver.maneuverNodes.ToArray ())
                 node.RemoveSelf ();
             // TODO: delete the Node objects
+        }
+
+        /// <summary>
+        /// The ladder the kerbal is holding on to, or <c>null</c> if it is not holding one
+        /// or the vessel is not a kerbal on EVA.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Parts.Part Ladder {
+            get {
+                var eva = InternalVessel.evaController;
+                if (eva == null || !eva.OnALadder)
+                    return null;
+                var part = eva.LadderPart;
+                return part == null ? null : new Parts.Part (part);
+            }
+        }
+
+        /// <summary>
+        /// The part whose hatch the kerbal is standing at, and so the one
+        /// <see cref="Board"/> would put it in. <c>null</c> if it is not at a hatch or the
+        /// vessel is not a kerbal on EVA.
+        /// </summary>
+        [KRPCProperty (Nullable = true)]
+        public Parts.Part Airlock {
+            get {
+                var eva = InternalVessel.evaController;
+                if (eva == null)
+                    return null;
+                var part = eva.CurrentAirlock ();
+                return part == null ? null : new Parts.Part (part);
+            }
+        }
+
+        /// <summary>
+        /// Take hold of the ladder the kerbal is standing at, as pressing the grab key
+        /// in-game does. A kerbal can only take hold of a ladder it is already alongside;
+        /// it does not walk to one. <see cref="Ladder"/> reports the one it ends up
+        /// holding. Does nothing if the kerbal is already holding a ladder.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+        /// within reach, or if the kerbal is doing something it cannot grab a ladder from.
+        /// </remarks>
+        [KRPCMethod]
+        public void GrabLadder ()
+        {
+            var eva = CheckEVA ();
+            if (eva.OnALadder)
+                return;
+            if (!eva.LadderInReach ())
+                throw new InvalidOperationException ("The kerbal is not alongside a ladder");
+            if (!eva.fsm.Started || !eva.fsm.CurrentState.IsValid (eva.On_ladderGrabStart))
+                throw new InvalidOperationException (
+                    "The kerbal must be standing still to take hold of a ladder");
+            eva.fsm.RunEvent (eva.On_ladderGrabStart);
+        }
+
+        /// <summary>
+        /// Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+        /// does. Does nothing if it is not holding one.
+        /// </summary>
+        /// <remarks>
+        /// Throws an exception if the vessel is not a kerbal on EVA.
+        /// </remarks>
+        [KRPCMethod]
+        public void ReleaseLadder ()
+        {
+            var eva = CheckEVA ();
+            if (!eva.OnALadder)
+                return;
+            ReleaseLadderWhenAble (eva, 0);
+        }
+
+        static void ReleaseLadderWhenAble (KerbalEVA eva, int tick)
+        {
+            if (eva == null || eva.vessel == null || !eva.OnALadder)
+                return;
+            // A kerbal that has just taken hold of a ladder is still swinging onto it, and
+            // cannot let go again until it is on, so wait for it rather than refuse.
+            if (!eva.fsm.Started || !eva.fsm.CurrentState.IsValid (eva.On_ladderLetGo)) {
+                if (tick > 200)
+                    throw new InvalidOperationException (
+                        "The kerbal cannot let go of the ladder from what it is currently doing");
+                throw new YieldException<Action> (() => ReleaseLadderWhenAble (eva, tick + 1));
+            }
+            eva.fsm.RunEvent (eva.On_ladderLetGo);
+        }
+
+        /// <summary>
+        /// Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+        /// kerbal takes a seat in that part and its own vessel ceases to exist. If the
+        /// kerbal was the active vessel, the game switches to the vessel it boarded.
+        /// </summary>
+        /// <remarks>
+        /// A kerbal can only board through a hatch it is already at, which
+        /// <see cref="Airlock"/> reports; it does not walk to one. Throws an exception if
+        /// the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+        /// is disabled for the game, if the part has no free seat, or if the kerbal is
+        /// carrying science data that the part cannot store, as the game asks what to do
+        /// with it in that case.
+        /// </remarks>
+        [KRPCMethod]
+        public void Board ()
+        {
+            var eva = CheckEVA ();
+            if (!HighLogic.CurrentGame.Parameters.Flight.CanBoard)
+                throw new InvalidOperationException ("Boarding is disabled for this game");
+            var part = eva.CurrentAirlock ();
+            if (part == null)
+                throw new InvalidOperationException ("The kerbal is not at a hatch it can board through");
+            if (part.protoModuleCrew.Count >= part.CrewCapacity)
+                throw new InvalidOperationException ("The part has no free seat for the kerbal");
+            if (CarryingScienceData (eva.vessel) &&
+                part.FindModuleImplementing<ModuleScienceContainer> () == null)
+                throw new InvalidOperationException (
+                    "The kerbal is carrying science data and the part cannot store it. " +
+                    "Transfer or discard the data before boarding.");
+            var crewMember = eva.vessel.GetVesselCrew () [0];
+            eva.BoardPart (part);
+            throw new YieldException<Action> (() => WaitForBoard (crewMember, part, 0));
+        }
+
+        static bool CarryingScienceData (global::Vessel vessel)
+        {
+            foreach (var part in vessel.parts)
+                foreach (PartModule module in part.Modules) {
+                    var container = module as IScienceDataContainer;
+                    if (container != null && container.GetScienceCount () > 0)
+                        return true;
+                }
+            return false;
+        }
+
+        static void WaitForBoard (ProtoCrewMember crewMember, global::Part part, int tick)
+        {
+            // The kerbal is aboard once it appears in the part's crew; a vessel switch
+            // cannot signal it, as the game only switches when the kerbal was the active
+            // vessel. Waiting for the part's vessel to also be unpacked hands control
+            // back only once that vessel can be flown.
+            if (part != null && part.protoModuleCrew.Contains (crewMember) && !part.vessel.packed)
+                return;
+            if (tick > 200)
+                throw new InvalidOperationException ("The kerbal failed to board the vessel");
+            throw new YieldException<Action> (() => WaitForBoard (crewMember, part, tick + 1));
+        }
+
+        KerbalEVA CheckEVA ()
+        {
+            var eva = InternalVessel.evaController;
+            if (eva == null)
+                throw new InvalidOperationException ("The vessel is not a kerbal on EVA");
+            return eva;
         }
 
         void CheckActiveVessel ()

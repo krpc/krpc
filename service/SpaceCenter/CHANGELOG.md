@@ -59,6 +59,12 @@
     has nothing that can stall; it now reports no stall (#1032)
 
 - Control
+  - A Kerbal on EVA can now be driven through `Vessel.Control`. `Control.Forward` and
+    `Control.Right` walk it about, relative to the direction it is facing, and all three
+    translation inputs fly its jetpack once deployed. `Control.Yaw` steers it as it walks,
+    and the rotation inputs turn its jetpack, at a rate proportional to the input.
+    `Control.RCS` deploys and stows the jetpack, and `Control.Lights` switches the helmet
+    lamp (#319)
   - Setting `Control.StageLock` now leaves the in-game Alt+L shortcut in step with it, so the
     next press of Alt+L locks or unlocks staging rather than being absorbed (#1022)
 
