@@ -4,6 +4,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using Parts = KRPC.SpaceCenter.Services.Parts;
 using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -132,6 +133,15 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public int CrewCapacity {
             get { return InternalShipConstruct.Parts.Sum (part => part.CrewCapacity); }
+        }
+
+        /// <summary>
+        /// A <see cref="Parts.Parts"/> object, that can be used to interact with the parts
+        /// that make up the vessel.
+        /// </summary>
+        [KRPCProperty]
+        public Parts.Parts Parts {
+            get { return new Parts.Parts (); }
         }
     }
 }

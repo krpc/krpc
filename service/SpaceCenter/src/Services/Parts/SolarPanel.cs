@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -8,7 +9,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A solar panel. Obtained by calling <see cref="Part.SolarPanel"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class SolarPanel : Equatable<SolarPanel>
     {
         readonly ModuleDeployableSolarPanel panel;
@@ -45,13 +46,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this solar panel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the solar panel is deployable.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployable {
             get {
                 return

@@ -624,6 +624,7 @@ SpaceCenter.EditorVessel.Mass
 SpaceCenter.EditorVessel.DryMass
 SpaceCenter.EditorVessel.Cost
 SpaceCenter.EditorVessel.CrewCapacity
+SpaceCenter.EditorVessel.Parts
 SpaceCenter.Parts
 SpaceCenter.Parts.All
 SpaceCenter.Parts.Root

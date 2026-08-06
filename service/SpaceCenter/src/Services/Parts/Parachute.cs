@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -9,7 +10,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A parachute. Obtained by calling <see cref="Part.Parachute"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Parachute : Equatable<Parachute>
     {
         readonly ModuleParachute parachute;
@@ -59,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this parachute.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -154,7 +155,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The altitude at which the parachute will full deploy, in meters.
         /// Only applicable to stock parachutes.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float DeployAltitude {
             get {
                 CheckStock();
@@ -170,7 +171,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The minimum pressure at which the parachute will semi-deploy, in atmospheres.
         /// Only applicable to stock parachutes.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float DeployMinPressure {
             get {
                 CheckStock ();

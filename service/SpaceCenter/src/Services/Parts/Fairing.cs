@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -9,7 +10,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A fairing. Obtained by calling <see cref="Part.Fairing"/>.
     /// Supports both stock fairings, and those from the ProceduralFairings mod.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Fairing : Equatable<Fairing>
     {
         readonly Module fairing;
@@ -59,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this fairing.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

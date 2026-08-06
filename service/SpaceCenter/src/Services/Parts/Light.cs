@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -10,7 +11,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A light. Obtained by calling <see cref="Part.Light"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Light : Equatable<Light>
     {
         readonly ModuleLight light;
@@ -47,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this light.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The color of the light, as an RGB triple.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 Color {
             get { return new Tuple3 (light.lightR, light.lightG, light.lightB); }
             set {
@@ -80,7 +81,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether blinking is enabled.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Blink
         {
             get { return light.blinkState; }
@@ -90,7 +91,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The blink rate of the light.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float BlinkRate
         {
             get { return light.blinkRate; }

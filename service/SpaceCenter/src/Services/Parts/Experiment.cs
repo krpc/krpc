@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -12,7 +13,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// Obtained by calling <see cref="Part.Experiment"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Experiment : Equatable<Experiment>
     {
         readonly ModuleScienceExperiment experiment;
@@ -49,7 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this experiment.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
 

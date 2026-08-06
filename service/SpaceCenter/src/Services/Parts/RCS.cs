@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -13,7 +14,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// An RCS block or thruster. Obtained by calling <see cref="Part.RCS"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class RCS : Equatable<RCS>
     {
         readonly ModuleRCS rcs;
@@ -55,7 +56,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this RCS.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thrusters are enabled.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Enabled {
             get { return rcs.rcsEnabled; }
             set { rcs.rcsEnabled = value; }
@@ -90,7 +91,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thruster will fire when pitch control input is given.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool PitchEnabled {
             get { return rcs.enablePitch; }
             set { rcs.enablePitch = value; }
@@ -99,7 +100,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thruster will fire when yaw control input is given.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool YawEnabled {
             get { return rcs.enableYaw; }
             set { rcs.enableYaw = value; }
@@ -108,7 +109,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thruster will fire when roll control input is given.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RollEnabled {
             get { return rcs.enableRoll; }
             set { rcs.enableRoll = value; }
@@ -117,7 +118,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thruster will fire when pitch control input is given.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool ForwardEnabled {
             get { return rcs.enableZ; }
             set { rcs.enableZ = value; }
@@ -126,7 +127,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thruster will fire when yaw control input is given.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool UpEnabled {
             get { return rcs.enableY; }
             set { rcs.enableY = value; }
@@ -135,7 +136,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the RCS thruster will fire when roll control input is given.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RightEnabled {
             get { return rcs.enableX; }
             set { rcs.enableX = value; }
@@ -326,7 +327,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The maximum amount of thrust that can be produced by the RCS thrusters when active
         /// in a vacuum, in Newtons.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float MaxVacuumThrust {
             get { return rcs.thrusterPower * 1000f; }
         }
@@ -334,7 +335,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The thrust limiter of the thruster. A value between 0 and 1.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float ThrustLimit {
             get { return rcs.thrustPercentage / 100f; }
             set { rcs.thrustPercentage = (value * 100f).Clamp (0f, 100f); }
@@ -360,7 +361,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The vacuum specific impulse of the RCS, in seconds.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float VacuumSpecificImpulse {
             get { return rcs.atmosphereCurve.Evaluate (0); }
         }
@@ -368,7 +369,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The specific impulse of the RCS at sea level on Kerbin, in seconds.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float KerbinSeaLevelSpecificImpulse {
             get { return rcs.atmosphereCurve.Evaluate (1); }
         }
@@ -386,7 +387,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The names of resources that the RCS consumes.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public IList<string> Propellants {
             get { return rcs.propellants.Select (x => x.name).ToList (); }
         }

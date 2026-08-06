@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -10,7 +11,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A robotic controller. Obtained by calling <see cref="Part.RoboticController"/>.
     /// </summary>
-    [KRPCClass(Service = "SpaceCenter")]
+    [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class RoboticController : Equatable<RoboticController>
     {
         readonly Expansions.Serenity.ModuleRoboticController controller;
@@ -48,7 +49,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this controller.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -14,7 +15,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A resource drain. Obtained by calling <see cref="Part.ResourceDrain"/>.
     /// </summary>
-    [KRPCClass(Service = "SpaceCenter")]
+    [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class ResourceDrain : Equatable<ResourceDrain>
     {
         readonly ModuleResourceDrain drain;
@@ -52,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this resource drain.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

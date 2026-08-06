@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -11,7 +12,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A reaction wheel. Obtained by calling <see cref="Part.ReactionWheel"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class ReactionWheel : Equatable<ReactionWheel>
     {
         readonly ModuleReactionWheel reactionWheel;
@@ -53,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this reaction wheel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -81,7 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The authority limiter for the reaction wheel, as a percentage of maximum torque.
         /// A value between 0 and 1.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float AuthorityLimiter {
             get { return reactionWheel.authorityLimiter / 100f; }
             set { reactionWheel.authorityLimiter = (value * 100f).Clamp (0f, 100f); }
@@ -103,7 +104,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
         /// These axes correspond to the coordinate axes of the <see cref="Vessel.ReferenceFrame"/>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public TupleT3 MaxTorque {
             get { return MaxTorqueVectors.ToTuple (); }
         }

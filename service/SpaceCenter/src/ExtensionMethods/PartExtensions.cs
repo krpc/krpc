@@ -57,7 +57,13 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static float WetMass (this Part part)
         {
-            return !part.IsMassless () && part.rb != null ? part.rb.mass * 1000f : 0f;
+            if (part.IsMassless ())
+                return 0f;
+            // A part only has a rigidbody once physics is running. In the editor the
+            // part's own mass fields carry the same figures.
+            if (part.rb != null)
+                return part.rb.mass * 1000f;
+            return (part.mass + part.GetResourceMass ()) * 1000f;
         }
 
         /// <summary>
@@ -65,7 +71,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static float DryMass (this Part part)
         {
-            return !part.IsMassless () && part.rb != null ? Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f) : 0f;
+            if (part.IsMassless ())
+                return 0f;
+            if (part.rb != null)
+                return Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f);
+            return Mathf.Max (0f, part.mass * 1000f);
         }
 
         /// <summary>

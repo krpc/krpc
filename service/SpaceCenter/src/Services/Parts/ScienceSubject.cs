@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 
 namespace KRPC.SpaceCenter.Services.Parts
@@ -6,7 +7,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// Obtained by calling <see cref="Experiment.ScienceSubject"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class ScienceSubject
     {
         readonly global::ScienceSubject data;

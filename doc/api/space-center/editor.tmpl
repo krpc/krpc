@@ -8,5 +8,11 @@
 Editor
 ======
 
+{% append services['SpaceCenter'].classes['EditorVessel'].members['Parts'] %}
+.. note:: Only the parts of {{ see('T:SpaceCenter.Part') }} that describe the design are
+          available in the editor. Those that need a vessel in flight or running physics,
+          such as {{ see('M:SpaceCenter.Part.Position') }} and the thermal members, are
+          restricted to the flight scene.
+{% endappend %}
 {{ macros.class(services['SpaceCenter'].classes['Editor']) }}
 {{ macros.class(services['SpaceCenter'].classes['EditorVessel']) }}

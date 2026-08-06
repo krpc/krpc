@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -16,7 +17,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// For example, the S3 KS-25x4 "Mammoth" has four rocket nozzels, and so consists of
     /// four thrusters.
     /// </remarks>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Thruster : Equatable<Thruster>
     {
         readonly Part part;

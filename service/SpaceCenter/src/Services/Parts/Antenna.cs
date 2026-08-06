@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -8,7 +9,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// An antenna. Obtained by calling <see cref="Part.Antenna"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Antenna : Equatable<Antenna>
     {
         readonly ModuleDataTransmitter transmitter;
@@ -48,7 +49,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this antenna.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the antenna is deployable.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployable {
             get { return deployment != null; }
         }
@@ -133,7 +134,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The power of the antenna.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public double Power {
             get { return transmitter.CommPower; }
         }
@@ -142,7 +143,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the antenna can be combined with other antennae on the vessel
         /// to boost the power.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Combinable {
             get { return transmitter.CommCombinable; }
         }
@@ -150,7 +151,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Exponent used to calculate the combined power of multiple antennae on a vessel.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public double CombinableExponent {
             get { return transmitter.CommCombinableExponent; }
         }
@@ -158,7 +159,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Interval between sending packets in seconds.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float PacketInterval {
             get { return transmitter.packetInterval; }
         }
@@ -166,7 +167,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Amount of data sent per packet in Mits.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float PacketSize {
             get { return transmitter.packetSize; }
         }
@@ -174,7 +175,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Units of electric charge consumed per packet sent.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public double PacketResourceCost {
             get { return transmitter.packetResourceCost; }
         }

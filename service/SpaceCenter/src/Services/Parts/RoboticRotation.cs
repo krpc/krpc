@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Expansions.Serenity;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -11,7 +12,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A robotic rotation servo. Obtained by calling <see cref="Part.RoboticRotation"/>.
     /// </summary>
-    [KRPCClass(Service = "SpaceCenter")]
+    [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class RoboticRotation : Equatable<RoboticRotation>
     {
         readonly ModuleRoboticRotationServo servo;
@@ -49,7 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this robotic rotation servo.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

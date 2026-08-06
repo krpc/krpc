@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -9,7 +10,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A landing leg. Obtained by calling <see cref="Part.Leg"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Leg : Equatable<Leg>
     {
         readonly ModuleWheelBase wheel;
@@ -53,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this landing leg.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the leg is deployable.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployable {
             get { return deployment != null; }
         }
