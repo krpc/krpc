@@ -693,6 +693,9 @@ be left blank.</p>
 </div>
 <p>If the <code class="docutils literal notranslate"><span class="pre">status</span></code> field is set to <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> then the connection was successful.
 If not, the <code class="docutils literal notranslate"><span class="pre">message</span></code> field contains a description of what went wrong.</p>
+<p>The server waits up to 3 seconds for the complete connection request message to arrive after
+its first bytes are received. If it does not arrive in time, the server responds with the
+<code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> status.</p>
 </li>
 </ol>
 </section>
@@ -710,6 +713,24 @@ or a <code class="docutils literal notranslate"><span class="pre">stream_update<
 <p>To send a procedure call, wrap the <code class="docutils literal notranslate"><span class="pre">Request</span></code> message in a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> and set its
 <code class="docutils literal notranslate"><span class="pre">request</span></code> field. Receive the result as a <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> and read the <code class="docutils literal notranslate"><span class="pre">Response</span></code> from
 its <code class="docutils literal notranslate"><span class="pre">response</span></code> field.</p>
+</section>
+<section id="buffering-and-data-rates">
+<span id="communication-protocol-serialio-buffering"></span><h2>Buffering and Data Rates<a class="headerlink" href="#buffering-and-data-rates" title="Link to this heading">#</a></h2>
+<p>A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
+carries roughly a thousand bytes per second. The server therefore buffers up to a megabyte of data
+in each direction, and the two directions behave differently when their buffer fills:</p>
+<ul class="simple">
+<li><p>Data received from the port is buffered until the game reads it. When the buffer fills, the
+server stops reading from the port until the game catches up. Nothing is lost, but the client
+sees the port carry its data more slowly.</p></li>
+<li><p>Data written by the game is buffered until the port has sent it. When this buffer fills, which
+means the game has been producing data faster than the port can send for a sustained period,
+the server drops the connection and stops. It can be started again from the in-game
+configuration window. The easiest way to hit this limit is to request streams whose updates add
+up to more than the port’s data rate, as an update to a stream is sent every game update.</p></li>
+</ul>
+<p>To stay within the port’s capacity, keep the number and size of streams small relative to the baud
+rate, or configure a higher baud rate.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
@@ -861,6 +882,7 @@ the server version number from the response.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receiving-stream-updates">Receiving Stream Updates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffering-and-data-rates">Buffering and Data Rates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
   </nav></div>

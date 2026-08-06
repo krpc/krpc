@@ -601,6 +601,7 @@
 <section id="core">
 <h3>Core<a class="headerlink" href="#core" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are now read and written on their own threads rather than on the thread that runs the game. Data waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1035">#1035</a>)</p></li>
 <li><p>Fix one server stopping emptying the object store that every server shares, which invalidated the objects held by clients of the servers still running (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1020">#1020</a>)</p></li>
 <li><p>Support for nullable values across all types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
 <li><p><span class="changelog-marker breaking">Breaking</span> Null values are now signaled by an <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field rather than by an object id of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>

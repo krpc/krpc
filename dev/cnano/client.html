@@ -805,6 +805,15 @@ define <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG
 configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
 done from the in-game server configuration window, which also allows settings such as
 the port name, baud rate and parity settings.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A serial port carries data far more slowly than the game produces it, and the server
+drops a connection that produces more data than the port can carry for a sustained
+period. See <a class="reference internal" href="../communication-protocols/serialio.html#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a> for the limits and how to
+stay within them. The client blocks while waiting for data from the server, with no
+timeout, so a call that is never answered, for example because the connection was
+dropped, never returns.</p>
+</div>
 </section>
 <section id="linking">
 <h3>Linking<a class="headerlink" href="#linking" title="Link to this heading">#</a></h3>

@@ -144,6 +144,13 @@ configured to use the serial port protocol (instead of the default TCP/IP protoc
 done from the in-game server configuration window, which also allows settings such as
 the port name, baud rate and parity settings.
 
+.. note:: A serial port carries data far more slowly than the game produces it, and the server
+          drops a connection that produces more data than the port can carry for a sustained
+          period. See :ref:`communication-protocol-serialio-buffering` for the limits and how to
+          stay within them. The client blocks while waiting for data from the server, with no
+          timeout, so a call that is never answered, for example because the connection was
+          dropped, never returns.
+
 Linking
 ^^^^^^^
 
