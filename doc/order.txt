@@ -1511,6 +1511,7 @@ Drawing.AddDirection
 Drawing.AddDirectionFromCom
 Drawing.AddPolygon
 Drawing.AddText
+Drawing.AddNavballMarker
 Drawing.Clear
 Drawing.Line
 Drawing.Line.Start
@@ -1521,6 +1522,15 @@ Drawing.Line.Color
 Drawing.Line.Material
 Drawing.Line.Thickness
 Drawing.Line.Remove
+Drawing.NavballMarker
+Drawing.NavballMarker.Direction
+Drawing.NavballMarker.ReferenceFrame
+Drawing.NavballMarker.Visible
+Drawing.NavballMarker.Color
+Drawing.NavballMarker.Icon
+Drawing.NavballMarker.AvailableIcons
+Drawing.NavballMarker.Size
+Drawing.NavballMarker.Remove
 Drawing.Polygon
 Drawing.Polygon.Vertices
 Drawing.Polygon.ReferenceFrame

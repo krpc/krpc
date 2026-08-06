@@ -92,6 +92,18 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
+        /// Draw a marker on the navball, pointing in the given direction.
+        /// </summary>
+        /// <param name="direction">Direction that the marker points in.</param>
+        /// <param name="referenceFrame">Reference frame that the direction is in.</param>
+        /// <param name="visible">Whether the marker is visible.</param>
+        [KRPCProcedure]
+        public static NavballMarker AddNavballMarker (Tuple3 direction, ReferenceFrame referenceFrame, bool visible = true)
+        {
+            return new NavballMarker (direction.ToVector (), referenceFrame, visible);
+        }
+
+        /// <summary>
         /// Remove all objects being drawn.
         /// </summary>
         /// <param name="clientOnly">If true, only remove objects created by the calling client.</param>
