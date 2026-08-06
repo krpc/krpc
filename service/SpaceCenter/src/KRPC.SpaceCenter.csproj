@@ -80,6 +80,7 @@
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />
     <Compile Include="CameraAddon.cs" />
+    <Compile Include="EVAAddon.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />

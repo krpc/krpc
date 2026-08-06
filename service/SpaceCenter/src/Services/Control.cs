@@ -21,6 +21,17 @@ namespace KRPC.SpaceCenter.Services
     /// and the custom axes) are zeroed when all clients that have set one or more of
     /// these inputs are no longer connected. The throttle is an exception: it keeps
     /// its value when clients disconnect.
+    ///
+    /// A kerbal on EVA is a vessel, and is driven by these same controls. The
+    /// translation inputs move it: <see cref="Forward"/> and <see cref="Right"/> walk
+    /// it about, relative to the direction it is facing, and all three translate its
+    /// jetpack once that is deployed. Walking is not throttled by the size of the
+    /// input, only started by it. The rotation inputs turn it, at a rate proportional
+    /// to the input: <see cref="Yaw"/> steers it as it walks, and all three turn its
+    /// jetpack. Turning the jetpack releases the kerbal from the orientation it was
+    /// holding; it stops and holds its new orientation once the input returns to zero.
+    /// <see cref="RCS"/> deploys and stows the jetpack and <see cref="Lights"/>
+    /// switches the helmet lamp. The remaining controls do nothing for a kerbal.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Control : Equatable<Control>
@@ -117,10 +128,29 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The state of RCS.
         /// </summary>
+        /// <remarks>
+        /// For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+        /// requires the kerbal to have one and to be the active vessel; otherwise
+        /// setting this does nothing.
+        /// </remarks>
         [KRPCProperty]
         public bool RCS {
-            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)]; }
-            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value); }
+            get {
+                var eva = InternalVessel.evaController;
+                if (eva != null)
+                    return eva.JetpackDeployed;
+                return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)];
+            }
+            set {
+                var vessel = InternalVessel;
+                var eva = vessel.evaController;
+                if (eva != null) {
+                    if (eva.JetpackDeployed != value)
+                        eva.ToggleJetpack ();
+                    return;
+                }
+                vessel.ActionGroups.SetGroup (KSPActionGroup.RCS, value);
+            }
         }
 
         /// <summary>
@@ -243,10 +273,28 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The state of the lights.
         /// </summary>
+        /// <remarks>
+        /// For a kerbal on EVA this is its helmet lamp. Switching it requires the
+        /// kerbal to be the active vessel; otherwise setting this does nothing.
+        /// </remarks>
         [KRPCProperty]
         public bool Lights {
-            get { return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Light)]; }
-            set { InternalVessel.ActionGroups.SetGroup (KSPActionGroup.Light, value); }
+            get {
+                var eva = InternalVessel.evaController;
+                if (eva != null)
+                    return eva.lampOn;
+                return InternalVessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.Light)];
+            }
+            set {
+                var vessel = InternalVessel;
+                var eva = vessel.evaController;
+                if (eva != null) {
+                    if (eva.lampOn != value)
+                        eva.ToggleLamp ();
+                    return;
+                }
+                vessel.ActionGroups.SetGroup (KSPActionGroup.Light, value);
+            }
         }
 
         /// <summary>
