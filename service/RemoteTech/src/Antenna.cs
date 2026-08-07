@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.RemoteTech
 {
@@ -9,13 +10,18 @@ namespace KRPC.RemoteTech
     /// A RemoteTech antenna. Obtained by calling <see cref="Comms.Antennas"/> or <see cref="RemoteTech.Antenna"/>.
     /// </summary>
     [KRPCClass (Service = "RemoteTech")]
-    public class Antenna : Equatable<Antenna>
+    public class Antenna : Equatable<Antenna>, IGameObjectState
     {
+        // The module that makes a part an antenna. An antenna is a part carrying it, so the
+        // part is what identifies the antenna, and the mod's API takes the part rather than
+        // the module.
+        const string moduleName = "ModuleRTAntenna";
+
         readonly SpaceCenter.Services.Parts.Part part;
 
         internal static bool Is (SpaceCenter.Services.Parts.Part innerPart)
         {
-            return innerPart.InternalPart.Modules.Contains ("ModuleRTAntenna");
+            return innerPart.InternalPart.Modules.Contains (moduleName);
         }
 
         internal Antenna (SpaceCenter.Services.Parts.Part innerPart)
@@ -42,6 +48,33 @@ namespace KRPC.RemoteTech
         }
 
         /// <summary>
+        /// What the game holds for the antenna. It belongs to its part, so it is exactly as
+        /// live, dormant or destroyed as the part, and destroyed when a part that is there
+        /// to look at no longer carries the antenna module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var state = part.GameObjectState;
+                if (state != GameObjectState.Live)
+                    return state;
+                return part.InternalPart.Modules.Contains (moduleName)
+                    ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        // The part the antenna is on, checked to still be an antenna. Every member that
+        // reaches the mod goes through this.
+        global::Part InternalPart {
+            get {
+                var innerPart = part.InternalPart;
+                if (!innerPart.Modules.Contains (moduleName))
+                    throw new ObjectDestroyedException (
+                        "The antenna no longer exists, as its part no longer has one.");
+                return innerPart;
+            }
+        }
+
+        /// <summary>
         /// Get the part containing this antenna.
         /// </summary>
         [KRPCProperty]
@@ -54,7 +87,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public bool HasConnection {
-            get { return API.AntennaHasConnection (part.InternalPart); }
+            get { return API.AntennaHasConnection (InternalPart); }
         }
 
         /// <summary>
@@ -66,7 +99,7 @@ namespace KRPC.RemoteTech
         [KRPCProperty]
         public Target Target {
             get {
-                var target = API.GetAntennaTarget (part.InternalPart);
+                var target = API.GetAntennaTarget (InternalPart);
                 if (target == API.GetNoTargetGuid ())
                     return Target.None;
                 if (target == API.GetActiveVesselGuid ())
@@ -79,9 +112,9 @@ namespace KRPC.RemoteTech
             }
             set {
                 if (value == Target.ActiveVessel)
-                    API.SetAntennaTarget (part.InternalPart, API.GetActiveVesselGuid ());
+                    API.SetAntennaTarget (InternalPart, API.GetActiveVesselGuid ());
                 else if (value == Target.None)
-                    API.SetAntennaTarget (part.InternalPart, API.GetNoTargetGuid ());
+                    API.SetAntennaTarget (InternalPart, API.GetNoTargetGuid ());
                 else
                     throw new ArgumentException ("Failed to set target");
             }
@@ -95,10 +128,10 @@ namespace KRPC.RemoteTech
             get {
                 if (Target != Target.CelestialBody)
                     throw new InvalidOperationException ("Antenna is not targetting a celestial body.");
-                return new SpaceCenter.Services.CelestialBody (RemoteTech.CelestialBodyIds [API.GetAntennaTarget (part.InternalPart)]);
+                return new SpaceCenter.Services.CelestialBody (RemoteTech.CelestialBodyIds [API.GetAntennaTarget (InternalPart)]);
             }
             set {
-                API.SetAntennaTarget (part.InternalPart, API.GetCelestialBodyGuid (value.InternalBody));
+                API.SetAntennaTarget (InternalPart, API.GetCelestialBodyGuid (value.InternalBody));
             }
         }
 
@@ -110,12 +143,12 @@ namespace KRPC.RemoteTech
             get {
                 if (Target != Target.GroundStation)
                     throw new InvalidOperationException ("Antenna is not targetting a ground station.");
-                return RemoteTech.GroundStationIds [API.GetAntennaTarget (part.InternalPart)];
+                return RemoteTech.GroundStationIds [API.GetAntennaTarget (InternalPart)];
             }
             set {
                 if (RemoteTech.GroundStationIds.Values.All (x => x != value))
                     throw new ArgumentException ("Ground station does not exist.");
-                API.SetAntennaTarget (part.InternalPart, API.GetGroundStationGuid (value));
+                API.SetAntennaTarget (InternalPart, API.GetGroundStationGuid (value));
             }
         }
 
@@ -127,10 +160,10 @@ namespace KRPC.RemoteTech
             get {
                 if (Target != Target.Vessel)
                     throw new InvalidOperationException ("Antenna is not targetting a vessel.");
-                return new SpaceCenter.Services.Vessel (API.GetAntennaTarget (part.InternalPart));
+                return new SpaceCenter.Services.Vessel (API.GetAntennaTarget (InternalPart));
             }
             set {
-                API.SetAntennaTarget (part.InternalPart, value.InternalVessel.id);
+                API.SetAntennaTarget (InternalPart, value.InternalVessel.id);
             }
         }
     }

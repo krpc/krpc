@@ -10,17 +10,31 @@ namespace KRPC.RemoteTech
     /// Communications for a vessel.
     /// </summary>
     [KRPCClass (Service = "RemoteTech")]
-    public class Comms : Equatable<Comms>
+    public class Comms : Equatable<Comms>, IGameObjectState
     {
         readonly SpaceCenter.Services.Vessel vessel;
-        readonly Guid vesselId;
 
         internal Comms (SpaceCenter.Services.Vessel innerVessel)
         {
             if (!API.IsAvailable)
                 throw new InvalidOperationException ("RemoteTech is not installed");
+            if (ReferenceEquals (innerVessel, null))
+                throw new ArgumentNullException (nameof (innerVessel));
             vessel = innerVessel;
-            vesselId = vessel.InternalVessel.id;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel these communications belong to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return vessel.GameObjectState; }
+        }
+
+        // The id of the vessel, which the mod's API takes, resolved first so that a vessel
+        // the game no longer has says so rather than the mod answering for an id that names
+        // nothing.
+        Guid VesselId {
+            get { return vessel.InternalVessel.id; }
         }
 
         /// <summary>
@@ -52,7 +66,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public bool HasLocalControl {
-            get { return API.HasLocalControl (vesselId); }
+            get { return API.HasLocalControl (VesselId); }
         }
 
         /// <summary>
@@ -60,7 +74,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public bool HasFlightComputer {
-            get { return API.HasFlightComputer (vesselId); }
+            get { return API.HasFlightComputer (VesselId); }
         }
 
         /// <summary>
@@ -68,7 +82,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public bool HasConnection {
-            get { return API.HasAnyConnection (vesselId); }
+            get { return API.HasAnyConnection (VesselId); }
         }
 
         /// <summary>
@@ -76,7 +90,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public bool HasConnectionToGroundStation {
-            get { return API.HasConnectionToKSC (vesselId); }
+            get { return API.HasConnectionToKSC (VesselId); }
         }
 
         /// <summary>
@@ -84,7 +98,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public double SignalDelay {
-            get { return API.GetShortestSignalDelay (vesselId); }
+            get { return API.GetShortestSignalDelay (VesselId); }
         }
 
         /// <summary>
@@ -92,7 +106,7 @@ namespace KRPC.RemoteTech
         /// </summary>
         [KRPCProperty]
         public double SignalDelayToGroundStation {
-            get { return API.GetSignalDelayToKSC (vesselId); }
+            get { return API.GetSignalDelayToKSC (VesselId); }
         }
 
         /// <summary>
@@ -102,7 +116,9 @@ namespace KRPC.RemoteTech
         [KRPCMethod]
         public double SignalDelayToVessel (SpaceCenter.Services.Vessel other)
         {
-            return API.GetSignalDelayToSatellite (vesselId, other.Id);
+            if (ReferenceEquals (other, null))
+                throw new ArgumentNullException (nameof (other));
+            return API.GetSignalDelayToSatellite (VesselId, other.InternalVessel.id);
         }
 
         /// <summary>
