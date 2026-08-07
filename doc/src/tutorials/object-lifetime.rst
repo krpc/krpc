@@ -79,3 +79,29 @@ Anything the game cannot currently answer for reports itself the same way, rathe
 claiming to be gone. A maneuver node of a vessel the game is not computing a flight plan for
 is one case, and a call that arrives while the game is between states, part way through
 loading one, is another.
+
+Objects in the editor
+---------------------
+
+The vessel under construction in the VAB or the SPH follows the same rules, with one
+difference: nothing there has an unloaded form. The editor holds exactly one vessel, so a part
+that is no longer in it is gone for good rather than waiting to be loaded, and using it raises
+``KRPC.ObjectDestroyedException``.
+
+Loading a craft into the editor starts a new vessel, and the parts of the vessel it replaced
+are gone. That is so whether or not the craft loaded is the one the editor already had: a
+part in the editor is named by an identifier that is only unique within one vessel, and a
+craft file saved from another carries those identifiers over, so a part of the old vessel
+cannot be told apart from the part of the new one that answers to the same identifier. Rather
+than hand back a part of a vessel that was never asked for, both raise
+``KRPC.ObjectDestroyedException``.
+
+Undo and redo are not a new vessel. They rebuild the one the editor already has, and the
+parts they rebuild keep the identifiers they had, so objects for the parts an undo leaves
+alone go on working. An object for a part that an undo takes away raises
+``KRPC.ObjectDestroyedException``, as one for any part no longer in the vessel does. An
+object is not expected to survive an undo followed by a redo.
+
+Leaving the editor destroys the vessel it had open, and with it every object reached through
+``SpaceCenter.Editor``: its parts, their part modules, its stages and its resources. A script
+that returns to the editor has to obtain them again.
