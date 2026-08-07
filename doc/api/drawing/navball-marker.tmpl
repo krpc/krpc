@@ -1,0 +1,9 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('Drawing') }}
+{% import domain.macros as macros with context %}
+
+NavballMarker
+=============
+
+{{ macros.class(services['Drawing'].classes['NavballMarker']) }}

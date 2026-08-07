@@ -47,6 +47,7 @@
     <Compile Include="Drawable.cs" />
     <Compile Include="Drawing.cs" />
     <Compile Include="Line.cs" />
+    <Compile Include="NavballMarker.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="IDrawable.cs" />
