@@ -130,6 +130,39 @@ class TestObjectLifetime(krpctest.TestCase):
         # as an object it still has whose part is gone.
         self.assertRaises(self.destroyed, getattr, part, "name")
 
+    def test_the_store_drops_a_force_on_a_destroyed_part(self):
+        # A force is applied by the game's own update rather than by a client call, so
+        # there is nobody to raise an error at when its part goes; it is dropped instead.
+        part = self.a_part("longAntenna")
+        force = part.add_force((1, 2, 3), (0, 0, 0), part.reference_frame)
+        self.assertEqual((1, 2, 3), force.force_vector)
+        before = self.conn.testing_tools.object_store_size
+        self.conn.testing_tools.destroy_part(part)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the force on the destroyed part was not dropped from the store",
+        )
+        self.assertRaises(self.destroyed, getattr, force, "force_vector")
+
+    def test_removing_a_force(self):
+        # The command pod, which nothing here destroys: the tests run in name order and
+        # the thermometer and the strut have both been destroyed by this point.
+        part = self.a_part("mk1-3pod")
+        force = part.add_force((1, 2, 3), (0, 0, 0), part.reference_frame)
+        self.assertEqual((1, 2, 3), force.force_vector)
+        before = self.conn.testing_tools.object_store_size
+        force.remove()
+        # Nothing applies the force again, so the object stands for nothing as soon as
+        # it is taken off the part, rather than once the part itself goes.
+        self.assertRaises(self.destroyed, getattr, force, "force_vector")
+        self.assertRaises(self.destroyed, force.remove)
+        # Taking a force off a part destroys nothing the game raises an event for, so
+        # the removal is what has to get the object out of the store.
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the removed force was not dropped from the object store",
+        )
+
     def test_the_store_drops_dead_objects_on_a_load(self):
         # A maneuver node is what a load definitively kills. The game builds the vessel's
         # parts again under the ids their objects name them by, so those survive a load

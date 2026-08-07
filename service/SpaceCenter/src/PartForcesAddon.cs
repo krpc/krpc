@@ -12,8 +12,10 @@ namespace KRPC.SpaceCenter
     {
         static readonly ClientOwnedObjects<Force> forces =
             new ClientOwnedObjects<Force> ();
+        // An instantaneous force is applied in the update it was added in and is never
+        // handed to the client, so it has no identifier in the object store.
         static readonly ClientOwnedObjects<Force> instantaneousForces =
-            new ClientOwnedObjects<Force> ();
+            new ClientOwnedObjects<Force> (givenToClients: false);
 
         static readonly IClientOwnedCollection[] collections = { forces, instantaneousForces };
 
@@ -50,11 +52,14 @@ namespace KRPC.SpaceCenter
 
         /// <summary>
         /// Apply the forces to the parts, first dropping the forces of any client that
-        /// has disconnected so they are not applied again.
+        /// has disconnected, and those on a part the game has destroyed, so that neither
+        /// is applied again.
         /// </summary>
         public void FixedUpdate ()
         {
             Sweep ();
+            forces.RemoveDestroyed ();
+            instantaneousForces.RemoveDestroyed ();
             foreach (var force in instantaneousForces.Items)
                 force.Update ();
             instantaneousForces.Clear ();
