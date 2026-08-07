@@ -1,3 +1,4 @@
+using System;
 using KRPC.Utils;
 
 namespace KRPC.SpaceCenter
@@ -12,6 +13,18 @@ namespace KRPC.SpaceCenter
                 var logic = EditorLogic.fetch;
                 return ReferenceEquals (logic, null) ? null : logic.ship;
             }
+        }
+
+        /// <summary>
+        /// The vessel the editor has open. Throws if it has none, which is the case
+        /// outside the editor and while the editor is still starting up.
+        /// </summary>
+        public static ShipConstruct GetShip ()
+        {
+            var ship = Ship;
+            if (ReferenceEquals (ship, null))
+                throw new InvalidOperationException ("The editor does not contain a vessel.");
+            return ship;
         }
 
         /// <summary>

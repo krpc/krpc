@@ -21,9 +21,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         internal static VesselDeltaV Simulation {
             get {
-                var logic = EditorLogic.fetch;
-                var construct = logic == null ? null : logic.ship;
-                return ReferenceEquals (construct, null) ? null : construct.vesselDeltaV;
+                var ship = EditorExtensions.Ship;
+                return ReferenceEquals (ship, null) ? null : ship.vesselDeltaV;
             }
         }
 

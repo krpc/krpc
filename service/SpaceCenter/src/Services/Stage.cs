@@ -120,13 +120,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         VesselDeltaV InternalDeltaV {
             get {
-                if (!editorVessel)
-                    return InternalVessel.VesselDeltaV;
-                var logic = EditorLogic.fetch;
-                var construct = logic == null ? null : logic.ship;
-                if (ReferenceEquals (construct, null))
-                    throw new InvalidOperationException ("The editor does not contain a vessel.");
-                return construct.vesselDeltaV;
+                return editorVessel
+                    ? EditorExtensions.GetShip ().vesselDeltaV
+                    : InternalVessel.VesselDeltaV;
             }
         }
 

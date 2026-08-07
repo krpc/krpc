@@ -44,11 +44,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public ShipConstruct InternalShipConstruct {
             get {
-                var logic = EditorLogic.fetch;
-                var construct = ReferenceEquals (logic, null) ? null : logic.ship;
-                if (ReferenceEquals (construct, null))
-                    throw new InvalidOperationException ("The editor does not contain a vessel.");
-                return construct;
+                return EditorExtensions.GetShip ();
             }
         }
 

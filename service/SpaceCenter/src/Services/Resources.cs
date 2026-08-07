@@ -119,13 +119,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         IShipconstruct InternalShipConstruct {
             get {
-                if (!editorVessel)
-                    return InternalVessel;
-                var logic = EditorLogic.fetch;
-                var construct = ReferenceEquals (logic, null) ? null : logic.ship;
-                if (ReferenceEquals (construct, null))
-                    throw new InvalidOperationException ("The editor does not contain a vessel.");
-                return construct;
+                return editorVessel ? (IShipconstruct)EditorExtensions.GetShip () : InternalVessel;
             }
         }
 
@@ -136,9 +130,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         VesselDeltaV InternalDeltaV {
             get {
-                if (!editorVessel)
-                    return InternalVessel.VesselDeltaV;
-                return ((ShipConstruct)InternalShipConstruct).vesselDeltaV;
+                return editorVessel
+                    ? EditorExtensions.GetShip ().vesselDeltaV
+                    : InternalVessel.VesselDeltaV;
             }
         }
 
