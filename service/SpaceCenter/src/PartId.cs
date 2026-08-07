@@ -11,11 +11,15 @@ namespace KRPC.SpaceCenter
     /// reference was made in, and which kind of identifier that is: a part is not given
     /// a flight id until the vessel it belongs to is launched, and the id it is given
     /// in the editor is only unique within one vessel, so neither works in both scenes.
+    /// A reference made in the editor also holds which loaded vessel it was made in,
+    /// as a craft id says nothing on its own about which vessel it belongs to; see
+    /// <see cref="EditorExtensions.ShipGeneration" />.
     /// </summary>
     struct PartId : IEquatable<PartId>
     {
         readonly uint id;
         readonly bool inEditor;
+        readonly uint generation;
 
         internal PartId (Part part)
         {
@@ -23,6 +27,7 @@ namespace KRPC.SpaceCenter
                 throw new ArgumentNullException (nameof (part));
             inEditor = HighLogic.LoadedSceneIsEditor;
             id = inEditor ? part.craftID : part.flightID;
+            generation = inEditor ? EditorExtensions.ShipGeneration : 0;
         }
 
         /// <summary>
@@ -33,6 +38,16 @@ namespace KRPC.SpaceCenter
         {
             inEditor = false;
             id = flightId;
+            generation = 0;
+        }
+
+        /// <summary>
+        /// Whether the reference names a part of the vessel the editor has open now. A
+        /// craft id belongs to the vessel it was read from, so one from a vessel the
+        /// editor has since loaded over names nothing, however many parts answer to it.
+        /// </summary>
+        bool OfLoadedShip {
+            get { return !inEditor || generation == EditorExtensions.ShipGeneration; }
         }
 
         /// <summary>
@@ -49,6 +64,8 @@ namespace KRPC.SpaceCenter
         {
             if (!inEditor)
                 return FlightGlobals.FindPartByID (id);
+            if (!OfLoadedShip)
+                return null;
             var editorId = id;
             var construct = EditorExtensions.Ship;
             return ReferenceEquals (construct, null)
@@ -84,8 +101,11 @@ namespace KRPC.SpaceCenter
                 if (Find () != null)
                     return GameObjectState.Live;
                 // The editor holds nothing that is not in the vessel it has open, so a
-                // part it does not have is gone as soon as it is known to have one.
+                // part it does not have is gone as soon as it is known to have one, and a
+                // part of a vessel it has loaded over is gone whatever it has open now.
                 if (inEditor) {
+                    if (!OfLoadedShip)
+                        return GameObjectState.Destroyed;
                     var ship = EditorExtensions.ShipState;
                     return ship == GameObjectState.Live ? GameObjectState.Destroyed : ship;
                 }
@@ -115,6 +135,11 @@ namespace KRPC.SpaceCenter
                       "The part can be used again once the editor has it open."
                     : "The part is not loaded, as the vessel carrying it is unloaded. " +
                       "It can be used again once the game loads that vessel.");
+            if (!OfLoadedShip)
+                return new ObjectDestroyedException (
+                    "The part belongs to a vessel that the editor has loaded another " +
+                    "vessel over. Parts of the vessel the editor has open now have to " +
+                    "be obtained again, as a part is only named within its own vessel.");
             return new ObjectDestroyedException (
                 inEditor
                 ? "The part is no longer in the vessel in the editor. It was removed " +
@@ -128,7 +153,8 @@ namespace KRPC.SpaceCenter
         /// </summary>
         public bool Equals (PartId other)
         {
-            return id == other.id && inEditor == other.inEditor;
+            return id == other.id && inEditor == other.inEditor &&
+                   generation == other.generation;
         }
 
         /// <summary>
@@ -144,7 +170,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         public override int GetHashCode ()
         {
-            return id.GetHashCode () ^ inEditor.GetHashCode ();
+            return id.GetHashCode () ^ inEditor.GetHashCode () ^ generation.GetHashCode ();
         }
 
         /// <summary>
