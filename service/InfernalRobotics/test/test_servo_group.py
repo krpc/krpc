@@ -73,7 +73,24 @@ class TestServoGroup(krpctest.TestCase):
         self._roundtrip(group, "ik_active", True)
         self._roundtrip(group, "forward_key", "n")
         self._roundtrip(group, "reverse_key", "m")
-        self._roundtrip(group, "name", "Renamed")
+
+    def test_renaming_a_group_leaves_its_object_gone(self):
+        # A group is named by its vessel and the group's name, so renaming it leaves every
+        # object for it standing for a group the vessel no longer has, the object the
+        # rename was made through included. An object under the new name has to be
+        # obtained to go on driving the group.
+        destroyed = self.connect().krpc.ObjectDestroyedException
+        group = self.ir.servo_group_with_name(self.vessel, "Group1")
+        group.name = "Renamed"
+        self.wait()
+        try:
+            self.assertRaises(destroyed, getattr, group, "name")
+            renamed = self.ir.servo_group_with_name(self.vessel, "Renamed")
+            self.assertEqual("Renamed", renamed.name)
+            self.assertNotEqual(group, renamed)
+        finally:
+            self.ir.servo_group_with_name(self.vessel, "Renamed").name = "Group1"
+            self.wait()
 
     def test_move(self):
         group = self.ir.servo_group_with_name(self.vessel, "Group2")

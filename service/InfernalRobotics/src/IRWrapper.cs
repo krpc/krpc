@@ -869,6 +869,31 @@ namespace KRPC.InfernalRobotics
 			return APIReady;
 		}
 
+		// The module that makes a part a servo. IServo.UID is the part's craft id, so the mod
+		// names a servo by its part, and a part carries at most one.
+		internal const string ServoModuleName = "ModuleIRServo_v3";
+
+		// The servo on a given part, or null if it has none. This is what an object standing
+		// for a servo resolves through, so that it finds the servo the game has now rather
+		// than holding the one it was built from, which belongs to a part and a game state
+		// that the game can replace.
+		internal static IServo ServoOnPart (Part part)
+		{
+			if(part == null)
+				return null;
+			EnsureReady ();
+			if(!isWrapped)
+				return null;
+			var modules = part.Modules;
+			for(int i = 0; i < modules.Count; i++)
+			{
+				var module = modules [i];
+				if(module != null && module.moduleName == ServoModuleName)
+					return new IRServo (module);
+			}
+			return null;
+		}
+
 		// Servos for a given vessel. IR's Controller only tracks the active vessel, so prefer
 		// its data (full fidelity) when it holds the requested vessel, and otherwise fall back
 		// to enumerating the vessel's servo modules directly - which works for any loaded,

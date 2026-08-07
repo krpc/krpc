@@ -32,6 +32,20 @@ class TestServo(krpctest.TestCase):
         finally:
             setattr(obj, attr, original)
 
+    def test_a_servo_read_twice_is_one_object(self):
+        # A servo is named by the part it is on, and a group by its vessel and its name,
+        # so reading either twice gives the same object rather than one per call. The
+        # servo is picked by a name only one of them has: the group has two servos called
+        # "Rotatron - Basic", which are two servos and not one.
+        group = self.ir.servo_group_with_name(self.vessel, "Group1")
+        self.assertEqual(group, self.ir.servo_group_with_name(self.vessel, "Group1"))
+        servo = group.servo_with_name("Joint Pivotron - Basic")
+        self.assertEqual(servo, group.servo_with_name("Joint Pivotron - Basic"))
+        self.assertEqual(
+            servo, self.ir.servo_with_name(self.vessel, "Joint Pivotron - Basic")
+        )
+        self.assertEqual(group.servos, group.servos)
+
     def test_rotatron(self):
         servo = self.ir.servo_with_name(self.vessel, "Rotatron - Basic")
         self.assertEqual("Rotatron - Basic", servo.name)

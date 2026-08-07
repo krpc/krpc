@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.InfernalRobotics
 {
@@ -11,13 +13,24 @@ namespace KRPC.InfernalRobotics
     /// in the InfernalRobotics UI.
     /// </summary>
     [KRPCClass (Service = "InfernalRobotics")]
-    public class ServoGroup : Equatable<ServoGroup>
+    public class ServoGroup : Equatable<ServoGroup>, IGameObjectState
     {
-        readonly IRWrapper.IServoGroup servoGroup;
+        // The vessel the group belongs to and the name that picks it out among that
+        // vessel's groups, which is what the mod itself groups servos by. Both are fixed for
+        // the object's lifetime: the object store compares and hashes the objects it holds,
+        // so a name that moved would leave two objects naming one group, and the store
+        // unable to tell which entry belongs to which. The group object the mod hands out is
+        // built afresh every time the groups are listed, so holding one would instead leave
+        // two objects for one group comparing unequal.
+        readonly SpaceCenter.Services.Vessel vessel;
+        readonly string name;
 
-        internal ServoGroup (IRWrapper.IServoGroup innerServoGroup)
+        internal ServoGroup (SpaceCenter.Services.Vessel groupVessel, string groupName)
         {
-            servoGroup = innerServoGroup;
+            if (ReferenceEquals (groupVessel, null))
+                throw new ArgumentNullException (nameof (groupVessel));
+            vessel = groupVessel;
+            name = groupName;
         }
 
         /// <summary>
@@ -25,7 +38,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         public override bool Equals (ServoGroup other)
         {
-            return !ReferenceEquals (other, null) && servoGroup == other.servoGroup;
+            return !ReferenceEquals (other, null) && vessel == other.vessel && name == other.name;
         }
 
         /// <summary>
@@ -33,16 +46,75 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         public override int GetHashCode ()
         {
-            return servoGroup.GetHashCode ();
+            // A group the mod names with nothing at all still has to hash, as the object
+            // store hashes every object it holds.
+            return vessel.GetHashCode () ^ (name == null ? 0 : name.GetHashCode ());
+        }
+
+        /// <summary>
+        /// What the game holds for the group. It belongs to its vessel, so it is exactly as
+        /// live, dormant or destroyed as the vessel, and destroyed when a vessel that the
+        /// mod can be asked about has no group of the name. The mod not being ready says
+        /// nothing about any group: its controller only ever tracks the active vessel.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var state = vessel.GameObjectState;
+                if (state != GameObjectState.Live)
+                    return state;
+                if (!IRWrapper.AssemblyExists)
+                    return GameObjectState.Dormant;
+                return Find () != null ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        // The group the mod has on the vessel under the name, or null if it has none.
+        IRWrapper.IServoGroup Find ()
+        {
+            var groups = IRWrapper.ServoGroupsForVessel (vessel.InternalVessel);
+            for (var i = 0; i < groups.Count; i++) {
+                if (groups [i].Name == name)
+                    return groups [i];
+            }
+            return null;
+        }
+
+        // The group the mod has on the vessel now. Every member reaches the mod through
+        // this, so a group taken before a game state was replaced drives the servos that
+        // stand in its place rather than the ones it was built from.
+        IRWrapper.IServoGroup Internal {
+            get {
+                var group = Find ();
+                if (group == null)
+                    throw NotResolvable ();
+                return group;
+            }
+        }
+
+        Exception NotResolvable ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                return new ObjectDestroyedException (
+                    "The servo group no longer exists, as its vessel no longer has a group " +
+                    "of its name.");
+            return new InvalidOperationException (
+                "The servo group is not available, as Infernal Robotics is not installed.");
         }
 
         /// <summary>
         /// The name of the group.
         /// </summary>
+        /// <remarks>
+        /// Renaming a group renames it for every servo in it. The name is what this object
+        /// names the group by, and is fixed for its lifetime, so every object for the group
+        /// stands for one the vessel no longer has once it is renamed, the object the rename
+        /// was made through included. An object for the group has to be obtained again under
+        /// the new name.
+        /// </remarks>
         [KRPCProperty]
         public string Name {
-            get { return servoGroup.Name; }
-            set { servoGroup.Name = value; }
+            get { return Internal.Name; }
+            set { Internal.Name = value; }
         }
 
         /// <summary>
@@ -50,8 +122,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public string ForwardKey {
-            get { return servoGroup.ForwardKey; }
-            set { servoGroup.ForwardKey = value; }
+            get { return Internal.ForwardKey; }
+            set { Internal.ForwardKey = value; }
         }
 
         /// <summary>
@@ -59,8 +131,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public string ReverseKey {
-            get { return servoGroup.ReverseKey; }
-            set { servoGroup.ReverseKey = value; }
+            get { return Internal.ReverseKey; }
+            set { Internal.ReverseKey = value; }
         }
 
         /// <summary>
@@ -68,8 +140,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Speed {
-            get { return servoGroup.GroupSpeedFactor; }
-            set { servoGroup.GroupSpeedFactor = value; }
+            get { return Internal.GroupSpeedFactor; }
+            set { Internal.GroupSpeedFactor = value; }
         }
 
         /// <summary>
@@ -77,19 +149,16 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool Expanded {
-            get { return servoGroup.Expanded; }
-            set { servoGroup.Expanded = value; }
+            get { return Internal.Expanded; }
+            set { Internal.Expanded = value; }
         }
 
         /// <summary>
-        /// The vessel the group belongs to, or <c>null</c> if it is not available.
+        /// The vessel the group belongs to.
         /// </summary>
-        [KRPCProperty (Nullable = true)]
+        [KRPCProperty]
         public SpaceCenter.Services.Vessel Vessel {
-            get {
-                var vessel = servoGroup.Vessel;
-                return vessel != null ? new SpaceCenter.Services.Vessel (vessel) : null;
-            }
+            get { return vessel; }
         }
 
         /// <summary>
@@ -98,7 +167,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public int MovingDirection {
-            get { return servoGroup.MovingDirection; }
+            get { return Internal.MovingDirection; }
         }
 
         /// <summary>
@@ -106,8 +175,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool AdvancedMode {
-            get { return servoGroup.AdvancedMode; }
-            set { servoGroup.AdvancedMode = value; }
+            get { return Internal.AdvancedMode; }
+            set { Internal.AdvancedMode = value; }
         }
 
         /// <summary>
@@ -116,7 +185,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float ElectricChargeRequired {
-            get { return servoGroup.TotalElectricChargeRequirement; }
+            get { return Internal.TotalElectricChargeRequirement; }
         }
 
         /// <summary>
@@ -124,8 +193,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool BuildAid {
-            get { return servoGroup.BuildAid; }
-            set { servoGroup.BuildAid = value; }
+            get { return Internal.BuildAid; }
+            set { Internal.BuildAid = value; }
         }
 
         /// <summary>
@@ -133,8 +202,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IKActive {
-            get { return servoGroup.IKActive; }
-            set { servoGroup.IKActive = value; }
+            get { return Internal.IKActive; }
+            set { Internal.IKActive = value; }
         }
 
         /// <summary>
@@ -142,7 +211,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public IList<Servo> Servos {
-            get { return servoGroup.Servos.Select (x => new Servo (x)).ToList (); }
+            get { return Internal.Servos.Select (x => new Servo (x)).ToList (); }
         }
 
         /// <summary>
@@ -153,7 +222,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod (Nullable = true)]
         public Servo ServoWithName (string name)
         {
-            var servo = servoGroup.Servos.FirstOrDefault (x => x.Name == name);
+            var servo = Internal.Servos.FirstOrDefault (x => x.Name == name);
             return servo != null ? new Servo (servo) : null;
         }
 
@@ -162,7 +231,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public IList<SpaceCenter.Services.Parts.Part> Parts {
-            get { return servoGroup.Servos.Select (x => new SpaceCenter.Services.Parts.Part (x.HostPart)).ToList (); }
+            get { return Internal.Servos.Select (x => new SpaceCenter.Services.Parts.Part (x.HostPart)).ToList (); }
         }
 
         /// <summary>
@@ -171,7 +240,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveRight ()
         {
-            servoGroup.MoveRight ();
+            Internal.MoveRight ();
         }
 
         /// <summary>
@@ -180,7 +249,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveLeft ()
         {
-            servoGroup.MoveLeft ();
+            Internal.MoveLeft ();
         }
 
         /// <summary>
@@ -189,7 +258,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveCenter ()
         {
-            servoGroup.MoveCenter ();
+            Internal.MoveCenter ();
         }
 
         /// <summary>
@@ -198,7 +267,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveNextPreset ()
         {
-            servoGroup.MoveNextPreset ();
+            Internal.MoveNextPreset ();
         }
 
         /// <summary>
@@ -207,7 +276,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MovePrevPreset ()
         {
-            servoGroup.MovePrevPreset ();
+            Internal.MovePrevPreset ();
         }
 
         /// <summary>
@@ -216,7 +285,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void Stop ()
         {
-            servoGroup.Stop ();
+            Internal.Stop ();
         }
     }
 }
