@@ -57,10 +57,35 @@ namespace KRPC.SpaceCenter
                 if (!ReferenceEquals (ship, null) &&
                     (lastShip == null || !ReferenceEquals (lastShip.Target, ship))) {
                     lastShip = new WeakReference (ship);
-                    shipGeneration++;
+                    // An undo or a redo hands back a vessel object of its own, built from
+                    // the game's backup, so the object changing is not on its own a new
+                    // vessel. The parts it builds carry the craft ids they had, so what
+                    // a part object names is unchanged; one whose part the undo took away
+                    // is simply no longer there to be found.
+                    var wasRestored = restoredShip != null &&
+                                      ReferenceEquals (restoredShip.Target, ship);
+                    restoredShip = null;
+                    if (!wasRestored)
+                        shipGeneration++;
                 }
                 return shipGeneration;
             }
+        }
+
+        // The vessel the editor last restored from its own backup, held weakly. Set from
+        // EditorShipAddon, which hears the game say so. It is the vessel rather than the
+        // fact that one was restored, because a vessel is only adopted once and nothing
+        // says when that has happened: a flag would still be set when the next craft was
+        // loaded, and would take that craft for the vessel the editor already had.
+        static WeakReference restoredShip;
+
+        /// <summary>
+        /// Called when the editor restores the vessel it had open from its own backup,
+        /// which is what an undo and a redo are.
+        /// </summary>
+        public static void ShipRestored (ShipConstruct ship)
+        {
+            restoredShip = ReferenceEquals (ship, null) ? null : new WeakReference (ship);
         }
 
         /// <summary>
