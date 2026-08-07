@@ -80,6 +80,18 @@ Drawing
 
       :Game Scenes: Flight
 
+   .. method:: NavballMarker AddNavballMarker(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, bool visible = true)
+
+      Draw a marker on the navball, pointing in the given direction.
+
+      :parameters:
+
+       * **direction** -- Direction that the marker points in.
+       * **referenceFrame** -- Reference frame that the direction is in.
+       * **visible** -- Whether the marker is visible.
+
+      :Game Scenes: Flight
+
    .. method:: void Clear(bool clientOnly = false)
 
       Remove all objects being drawn.

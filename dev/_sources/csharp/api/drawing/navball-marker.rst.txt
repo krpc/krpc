@@ -1,0 +1,67 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.Drawing
+
+NavballMarker
+=============
+
+
+.. class:: NavballMarker
+
+   A marker drawn on the navball. Created using :meth:`Drawing.AddNavballMarker <Drawing.Drawing.AddNavballMarker>`.
+
+   .. property:: System.Tuple<double,double,double> Direction { get; set; }
+
+      Direction that the marker is drawn at.
+
+      :Game Scenes: Flight
+
+   .. property:: SpaceCenter.ReferenceFrame ReferenceFrame { get; set; }
+
+      Reference frame that the direction of the marker is in.
+
+      :Game Scenes: Flight
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. property:: System.Tuple<double,double,double> Color { get; set; }
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. property:: string Icon { get; set; }
+
+      The icon that the marker is drawn with.
+      See :meth:`NavballMarker.AvailableIcons` for the icons that can be used.
+
+      :Game Scenes: Flight
+
+   .. method:: static System.Collections.Generic.IList<string> AvailableIcons(IConnection connection, )
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+
+      :Game Scenes: Flight
+
+   .. property:: float Size { get; set; }
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Game Scenes: Flight
+
+   .. method:: void Remove()
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight

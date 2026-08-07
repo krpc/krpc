@@ -1,0 +1,73 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::Drawing
+
+NavballMarker
+=============
+
+
+.. class:: NavballMarker
+
+   A marker drawn on the navball. Created using :func:`add_navball_marker`.
+
+   .. function:: std::tuple<double, double, double> direction()
+   .. function:: void set_direction(std::tuple<double, double, double> value)
+
+      Direction that the marker is drawn at.
+
+      :Game Scenes: Flight
+
+   .. function:: SpaceCenter::ReferenceFrame reference_frame()
+   .. function:: void set_reference_frame(SpaceCenter::ReferenceFrame value)
+
+      Reference frame that the direction of the marker is in.
+
+      :Game Scenes: Flight
+
+   .. function:: bool visible()
+   .. function:: void set_visible(bool value)
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. function:: std::tuple<double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double> value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. function:: std::string icon()
+   .. function:: void set_icon(std::string value)
+
+      The icon that the marker is drawn with.
+      See :func:`NavballMarker::available_icons` for the icons that can be used.
+
+      :Game Scenes: Flight
+
+   .. function:: static std::vector<std::string> available_icons(Client& connection)
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+
+      :Game Scenes: Flight
+
+   .. function:: float size()
+   .. function:: void set_size(float value)
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Game Scenes: Flight
+
+   .. function:: void remove()
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight

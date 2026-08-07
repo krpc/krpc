@@ -1,0 +1,78 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: Drawing
+
+NavballMarker
+=============
+
+
+.. class:: NavballMarker
+
+   A marker drawn on the navball. Created using :meth:`add_navball_marker`.
+
+   .. attribute:: direction
+
+      Direction that the marker is drawn at.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: reference_frame
+
+      Reference frame that the direction of the marker is in.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.ReferenceFrame`
+      :Game Scenes: Flight
+
+   .. attribute:: visible
+
+      Whether the marker is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. attribute:: color
+
+      Set the color
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Flight
+
+   .. attribute:: icon
+
+      The icon that the marker is drawn with.
+      See :meth:`NavballMarker.available_icons` for the icons that can be used.
+
+      :Attribute: Can be read or written
+      :rtype: str
+      :Game Scenes: Flight
+
+   .. staticmethod:: available_icons()
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+      :rtype: list(str)
+      :Game Scenes: Flight
+
+   .. attribute:: size
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Attribute: Can be read or written
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. method:: remove()
+
+      Remove the marker.
+
+      :Game Scenes: Flight

@@ -571,6 +571,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Drawing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="navball-marker.html">NavballMarker</a></li>
 <li class="toctree-l2"><a class="reference internal" href="polygon.html">Polygon</a></li>
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 </ul>
@@ -780,6 +781,24 @@ Objects drawn by a client are removed when that client disconnects.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="text.html#Drawing.Text" title="Drawing.Text"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.Text</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua staticmethod">
+<dt class="sig sig-object lua" id="Drawing.add_navball_marker">
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">add_navball_marker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">direction</span></em>, <em class="sig-param"><span class="pre">reference_frame</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">visible</span> <span class="pre">=</span> <span class="pre">True</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#Drawing.add_navball_marker" title="Link to this definition">#</a></dt>
+<dd><p>Draw a marker on the navball, pointing in the given direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>direction</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – Direction that the marker points in.</p></li>
+<li><p><strong>reference_frame</strong> (<span><a class="reference internal" href="../space-center/reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.ReferenceFrame</span></code></a></span>) – Reference frame that the direction is in.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the marker is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="navball-marker.html#Drawing.NavballMarker" title="Drawing.NavballMarker"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Drawing.NavballMarker</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

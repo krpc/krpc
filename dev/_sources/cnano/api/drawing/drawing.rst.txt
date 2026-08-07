@@ -100,6 +100,22 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
+.. function:: krpc_error_t krpc_Drawing_AddNavballMarker(krpc_connection_t connection, krpc_Drawing_NavballMarker_t * result, const krpc_tuple_double_double_double_t * direction, krpc_SpaceCenter_ReferenceFrame_t referenceFrame, bool visible)
+
+   Draw a marker on the navball, pointing in the given direction.
+
+   :Parameters:
+
+    * **direction** -- Direction that the marker points in.
+    * **referenceFrame** -- Reference frame that the direction is in.
+    * **visible** -- Whether the marker is visible.
+
+   :Game Scenes: Flight
+
+
+
+
+
 .. function:: krpc_error_t krpc_Drawing_Clear(krpc_connection_t connection, bool clientOnly)
 
    Remove all objects being drawn.

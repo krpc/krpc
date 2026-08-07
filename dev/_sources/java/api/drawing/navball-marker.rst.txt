@@ -1,0 +1,77 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.Drawing
+
+NavballMarker
+=============
+
+
+.. type:: public class NavballMarker
+
+   A marker drawn on the navball. Created using :meth:`addNavballMarker(org.javatuples.Triplet<Double,Double,Double>, SpaceCenter.ReferenceFrame, boolean)`.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getDirection()
+
+   .. method:: void setDirection(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Direction that the marker is drawn at.
+
+      :Game Scenes: Flight
+
+   .. method:: SpaceCenter.ReferenceFrame getReferenceFrame()
+
+   .. method:: void setReferenceFrame(SpaceCenter.ReferenceFrame value)
+
+      Reference frame that the direction of the marker is in.
+
+      :Game Scenes: Flight
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+
+   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. method:: String getIcon()
+
+   .. method:: void setIcon(String value)
+
+      The icon that the marker is drawn with.
+      See :meth:`NavballMarker.availableIcons()` for the icons that can be used.
+
+      :Game Scenes: Flight
+
+   .. method:: static java.util.List<String> availableIcons(Connection connection)
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+      :Game Scenes: Flight
+
+   .. method:: float getSize()
+
+   .. method:: void setSize(float value)
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Game Scenes: Flight
+
+   .. method:: void remove()
+
+      Remove the marker.
+
+      :Game Scenes: Flight

@@ -82,6 +82,18 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
+.. staticmethod:: add_navball_marker(direction, reference_frame, [visible = True])
+
+   Draw a marker on the navball, pointing in the given direction.
+
+   :param Tuple direction: Direction that the marker points in.
+   :param SpaceCenter.ReferenceFrame reference_frame: Reference frame that the direction is in.
+   :param boolean visible: Whether the marker is visible.
+   :rtype: :class:`Drawing.NavballMarker`
+
+
+
+
 .. staticmethod:: clear([client_only = False])
 
    Remove all objects being drawn.

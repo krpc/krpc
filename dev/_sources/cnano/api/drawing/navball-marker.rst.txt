@@ -1,0 +1,73 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+NavballMarker
+=============
+
+
+.. type:: krpc_Drawing_NavballMarker_t
+
+   A marker drawn on the navball. Created using :func:`krpc_Drawing_AddNavballMarker`.
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_NavballMarker_set_Direction(const krpc_tuple_double_double_double_t * value)
+
+      Direction that the marker is drawn at.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
+   .. function:: void krpc_Drawing_NavballMarker_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
+
+      Reference frame that the direction of the marker is in.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_Drawing_NavballMarker_set_Visible(bool value)
+
+      Whether the marker is visible.
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A visible marker is still hidden while it is on the far side of the navball.
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+   .. function:: void krpc_Drawing_NavballMarker_set_Color(const krpc_tuple_double_double_double_t * value)
+
+      Set the color
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Icon(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_Drawing_NavballMarker_set_Icon(const char * value)
+
+      The icon that the marker is drawn with.
+      See :func:`krpc_Drawing_NavballMarker_AvailableIcons` for the icons that can be used.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_AvailableIcons(krpc_connection_t connection, krpc_list_string_t * result)
+
+      A list of all available icons, taken from "GameData/Squad/Contracts/Icons/".
+
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Size(krpc_connection_t connection, float * result)
+   .. function:: void krpc_Drawing_NavballMarker_set_Size(float value)
+
+      Size of the marker, relative to the size of the navball's own markers.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_Drawing_NavballMarker_Remove(krpc_connection_t connection)
+
+      Remove the marker.
+
+
+      :Game Scenes: Flight

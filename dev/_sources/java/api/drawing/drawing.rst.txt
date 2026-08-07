@@ -65,6 +65,15 @@ Drawing
       :param boolean visible: Whether the text is visible.
       :Game Scenes: Flight
 
+   .. method:: NavballMarker addNavballMarker(org.javatuples.Triplet<Double,Double,Double> direction, SpaceCenter.ReferenceFrame referenceFrame, boolean visible)
+
+      Draw a marker on the navball, pointing in the given direction.
+
+      :param org.javatuples.Triplet<Double,Double,Double> direction: Direction that the marker points in.
+      :param SpaceCenter.ReferenceFrame referenceFrame: Reference frame that the direction is in.
+      :param boolean visible: Whether the marker is visible.
+      :Game Scenes: Flight
+
    .. method:: void clear(boolean clientOnly)
 
       Remove all objects being drawn.

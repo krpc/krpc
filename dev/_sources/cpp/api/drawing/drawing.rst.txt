@@ -85,6 +85,18 @@ Drawing
 
       :Game Scenes: Flight
 
+   .. function:: NavballMarker add_navball_marker(std::tuple<double, double, double> direction, SpaceCenter::ReferenceFrame reference_frame, bool visible = true)
+
+      Draw a marker on the navball, pointing in the given direction.
+
+      :Parameters:
+
+       * **direction** -- Direction that the marker points in.
+       * **reference_frame** -- Reference frame that the direction is in.
+       * **visible** -- Whether the marker is visible.
+
+      :Game Scenes: Flight
+
    .. function:: void clear(bool client_only = false)
 
       Remove all objects being drawn.

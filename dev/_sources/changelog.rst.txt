@@ -77,6 +77,12 @@ SpaceCenter service
 
 
 
+Drawing service
+^^^^^^^^^^^^^^^
+
+* Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction, for example to show a script's target attitude while the player flies the vessel. The marker's icon, color and size can be changed, and it hides and fades as the navball's own markers do (:issue:`1037`)
+
+
 Debug service
 ^^^^^^^^^^^^^
 

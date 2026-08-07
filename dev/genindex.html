@@ -704,6 +704,8 @@
 </li>
       <li><a href="lua/api/space-center/alarms.html#SpaceCenter.AlarmManager.add_maneuver_node_alarm">add_maneuver_node_alarm() (AlarmManager static method)</a>, <a href="python/api/space-center/alarms.html#SpaceCenter.AlarmManager.add_maneuver_node_alarm">[1]</a>
 </li>
+      <li><a href="lua/api/drawing/drawing.html#Drawing.add_navball_marker">add_navball_marker() (in module Drawing)</a>, <a href="python/api/drawing/drawing.html#Drawing.add_navball_marker">[1]</a>
+</li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.add_node">add_node() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.add_node">[1]</a>
 </li>
       <li><a href="lua/api/ui/canvas.html#UI.Canvas.add_panel">add_panel() (Canvas method)</a>, <a href="python/api/ui/canvas.html#UI.Canvas.add_panel">[1]</a>
@@ -769,6 +771,8 @@
       <li><a href="java/api/drawing/drawing.html#krpc.client.services.Drawing.Drawing.addLine(org.javatuples.Triplet, org.javatuples.Triplet, SpaceCenter.ReferenceFrame, boolean)">addLine(org.javatuples.Triplet, org.javatuples.Triplet, SpaceCenter.ReferenceFrame, boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.AlarmManager.addManeuverNodeAlarm(Connection, Vessel, Node, double, boolean, String, String)">addManeuverNodeAlarm(Connection, Vessel, Node, double, boolean, String, String) (Java method)</a>
+</li>
+      <li><a href="java/api/drawing/drawing.html#krpc.client.services.Drawing.Drawing.addNavballMarker(org.javatuples.Triplet, SpaceCenter.ReferenceFrame, boolean)">addNavballMarker(org.javatuples.Triplet, SpaceCenter.ReferenceFrame, boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.addNode(double, float, float, float)">addNode(double, float, float, float) (Java method)</a>
 </li>
@@ -1236,6 +1240,8 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.RCS.available_force">available_force (RCS attribute)</a>
 </li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.NavballMarker.available_icons">available_icons() (NavballMarker static method)</a>, <a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.available_icons">[1]</a>
+</li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.available_other_angular_acceleration">available_other_angular_acceleration (Vessel attribute)</a>
 </li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.available_other_torque">available_other_torque (Vessel attribute)</a>
@@ -1285,6 +1291,8 @@
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.availableAccelerationAt(double)">availableAccelerationAt(double) (Java method)</a>
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.availableFonts(Connection)">availableFonts(Connection) (Java method)</a>
+</li>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.availableIcons(Connection)">availableIcons(Connection) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.availableThrustAt(double)">availableThrustAt(double) (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.availableThrustAt(double)">[1]</a>
 </li>
@@ -1638,6 +1646,8 @@
       <ul>
         <li><a href="python/api/drawing/line.html#Drawing.Line.color">(Line attribute)</a>
 </li>
+        <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.color">(NavballMarker attribute)</a>
+</li>
         <li><a href="python/api/drawing/polygon.html#Drawing.Polygon.color">(Polygon attribute)</a>
 </li>
         <li><a href="python/api/drawing/text.html#Drawing.Text.color">(Text attribute)</a>, <a href="python/api/ui/text.html#UI.Text.color">[1]</a>
@@ -1729,10 +1739,10 @@
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_bool">constant_bool() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_bool">[1]</a>
 </li>
-      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_double">constant_double() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_double">[1]</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_double">constant_double() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_double">[1]</a>
+</li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_float">constant_float() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_float">[1]</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Expression.constant_int">constant_int() (Expression static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Expression.constant_int">[1]</a>
@@ -2250,16 +2260,20 @@
         <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.description">(Contract attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/alarms.html#SpaceCenter.Alarm.destination_body">destination_body (Alarm attribute)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.diagnostic_log">diagnostic_log (AutoPilot attribute)</a>
 </li>
       <li><a href="python/api/space-center/auto-pilot.html#SpaceCenter.AutoPilot.diagnostic_logging">diagnostic_logging (AutoPilot attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.direction">direction (Flight attribute)</a>
+
+      <ul>
+        <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.direction">(NavballMarker attribute)</a>
 </li>
+      </ul></li>
       <li><a href="lua/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.direction">direction() (CelestialBody method)</a>, <a href="python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.direction">[1]</a>
 
       <ul>
@@ -2407,6 +2421,18 @@
       <li><a href="lua/api/drawing/line.html#Drawing.Drawing.Line.thickness">Drawing.Drawing.Line.thickness (attribute)</a>
 </li>
       <li><a href="lua/api/drawing/line.html#Drawing.Drawing.Line.visible">Drawing.Drawing.Line.visible (attribute)</a>
+</li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.Drawing.NavballMarker.color">Drawing.Drawing.NavballMarker.color (attribute)</a>
+</li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.Drawing.NavballMarker.direction">Drawing.Drawing.NavballMarker.direction (attribute)</a>
+</li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.Drawing.NavballMarker.icon">Drawing.Drawing.NavballMarker.icon (attribute)</a>
+</li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.Drawing.NavballMarker.reference_frame">Drawing.Drawing.NavballMarker.reference_frame (attribute)</a>
+</li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.Drawing.NavballMarker.size">Drawing.Drawing.NavballMarker.size (attribute)</a>
+</li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.Drawing.NavballMarker.visible">Drawing.Drawing.NavballMarker.visible (attribute)</a>
 </li>
       <li><a href="lua/api/drawing/polygon.html#Drawing.Drawing.Polygon.color">Drawing.Drawing.Polygon.color (attribute)</a>
 </li>
@@ -3152,7 +3178,7 @@
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getClustered()">getClustered() (Java method)</a>
 </li>
-      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getColor()">getColor() (Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getColor()">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getColor()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getColor()">[3]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getColor()">[4]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getColor()">[5]</a>
+      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getColor()">getColor() (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getColor()">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getColor()">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getColor()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.getColor()">[4]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getColor()">[5]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getColor()">[6]</a>
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.WaypointManager.getColors()">getColors() (Java method)</a>
 </li>
@@ -3312,7 +3338,7 @@
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getDiagnosticLogging()">getDiagnosticLogging() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getDirection()">getDirection() (Java method)</a>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getDirection()">getDirection() (Java method)</a>, <a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getDirection()">[1]</a>
 </li>
       <li><a href="java/api/space-center/camera.html#krpc.client.services.SpaceCenter.Camera.getDistance()">getDistance() (Java method)</a>, <a href="java/api/space-center/closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getDistance()">[1]</a>
 </li>
@@ -3538,7 +3564,7 @@
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getHorizontalSpeed()">getHorizontalSpeed() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getIcon()">getIcon() (Java method)</a>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getIcon()">getIcon() (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getIcon()">[1]</a>
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.WaypointManager.getIcons()">getIcons() (Java method)</a>
 </li>
@@ -3964,7 +3990,7 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getReengageDistance()">getReengageDistance() (Java method)</a>
 </li>
-      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getReferenceFrame()">getReferenceFrame() (Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getReferenceFrame()">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getReferenceFrame()">[2]</a>, <a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()">[3]</a>, <a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getReferenceFrame()">[4]</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.getReferenceFrame()">[5]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getReferenceFrame()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.getReferenceFrame()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getReferenceFrame()">[8]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()">[9]</a>
+      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getReferenceFrame()">getReferenceFrame() (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getReferenceFrame()">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getReferenceFrame()">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getReferenceFrame()">[3]</a>, <a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.getReferenceFrame()">[4]</a>, <a href="java/api/space-center/celestial-body.html#krpc.client.services.SpaceCenter.CelestialBody.getReferenceFrame()">[5]</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.getReferenceFrame()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.getReferenceFrame()">[7]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.getReferenceFrame()">[8]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getReferenceFrame()">[9]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getReferenceFrame()">[10]</a>
 </li>
       <li><a href="java/api/space-center/closest-approach.html#krpc.client.services.SpaceCenter.ClosestApproach.getRelativeSpeed()">getRelativeSpeed() (Java method)</a>
 </li>
@@ -4138,7 +4164,7 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getSituation()">getSituation() (Java method)</a>
 </li>
-      <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getSize()">getSize() (Java method)</a>, <a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getSize()">[1]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getSize()">[2]</a>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getSize()">getSize() (Java method)</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getSize()">[1]</a>, <a href="java/api/ui/rect-transform.html#krpc.client.services.UI.RectTransform.getSize()">[2]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getSize()">[3]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getSkinTemperature()">getSkinTemperature() (Java method)</a>
 </li>
@@ -4424,7 +4450,7 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.getVeteran()">getVeteran() (Java method)</a>
 </li>
-      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getVisible()">getVisible() (Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getVisible()">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getVisible()">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartEvent.getVisible()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.getVisible()">[4]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.getVisible()">[5]</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.getVisible()">[6]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.getVisible()">[7]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.getVisible()">[8]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getVisible()">[9]</a>
+      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.getVisible()">getVisible() (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.getVisible()">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.getVisible()">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.getVisible()">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartEvent.getVisible()">[4]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.PartField.getVisible()">[5]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.getVisible()">[6]</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.getVisible()">[7]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.getVisible()">[8]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.getVisible()">[9]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.getVisible()">[10]</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.getWarpAction()">getWarpAction() (Java method)</a>
 </li>
@@ -4630,8 +4656,12 @@
 <h2 id="I">I</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.icon">icon (Waypoint attribute)</a>
+      <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.icon">icon (NavballMarker attribute)</a>
+
+      <ul>
+        <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.icon">(Waypoint attribute)</a>
 </li>
+      </ul></li>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.WaypointManager.icons">icons (WaypointManager attribute)</a>
 </li>
       <li><a href="python/api/space-center/control.html#SpaceCenter.ActionGroupAction.id">id (ActionGroupAction attribute)</a>
@@ -5043,7 +5073,7 @@
 </li>
       <li><a href="java/api/docking-camera/camera.html#package-krpc.client.services.DockingCamera">krpc.client.services.DockingCamera (package)</a>, <a href="java/api/docking-camera/docking-camera.html#package-krpc.client.services.DockingCamera">[1]</a>
 </li>
-      <li><a href="java/api/drawing/drawing.html#package-krpc.client.services.Drawing">krpc.client.services.Drawing (package)</a>, <a href="java/api/drawing/line.html#package-krpc.client.services.Drawing">[1]</a>, <a href="java/api/drawing/polygon.html#package-krpc.client.services.Drawing">[2]</a>, <a href="java/api/drawing/text.html#package-krpc.client.services.Drawing">[3]</a>
+      <li><a href="java/api/drawing/drawing.html#package-krpc.client.services.Drawing">krpc.client.services.Drawing (package)</a>, <a href="java/api/drawing/line.html#package-krpc.client.services.Drawing">[1]</a>, <a href="java/api/drawing/navball-marker.html#package-krpc.client.services.Drawing">[2]</a>, <a href="java/api/drawing/polygon.html#package-krpc.client.services.Drawing">[3]</a>, <a href="java/api/drawing/text.html#package-krpc.client.services.Drawing">[4]</a>
 </li>
       <li><a href="java/api/infernal-robotics/infernal-robotics.html#package-krpc.client.services.InfernalRobotics">krpc.client.services.InfernalRobotics (package)</a>, <a href="java/api/infernal-robotics/servo-group.html#package-krpc.client.services.InfernalRobotics">[1]</a>, <a href="java/api/infernal-robotics/servo.html#package-krpc.client.services.InfernalRobotics">[2]</a>
 </li>
@@ -5252,6 +5282,8 @@
 </li>
       <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing8add_lineENSt5tupleIdddEENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEb">krpc::services::Drawing::add_line (C++ function)</a>
 </li>
+      <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing18add_navball_markerENSt5tupleIdddEEN11SpaceCenter14ReferenceFrameEb">krpc::services::Drawing::add_navball_marker (C++ function)</a>
+</li>
       <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing11add_polygonENSt6vectorINSt5tupleIdddEEEEN11SpaceCenter14ReferenceFrameEb">krpc::services::Drawing::add_polygon (C++ function)</a>
 </li>
       <li><a href="cpp/api/drawing/drawing.html#_CPPv4N4krpc8services7Drawing8add_textENSt6stringEN11SpaceCenter14ReferenceFrameENSt5tupleIdddEENSt5tupleIddddEEb">krpc::services::Drawing::add_text (C++ function)</a>
@@ -5291,6 +5323,36 @@
       <li><a href="cpp/api/drawing/line.html#_CPPv4N4krpc8services7Drawing4Line9thicknessEv">krpc::services::Drawing::Line::thickness (C++ function)</a>
 </li>
       <li><a href="cpp/api/drawing/line.html#_CPPv4N4krpc8services7Drawing4Line7visibleEv">krpc::services::Drawing::Line::visible (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarkerE">krpc::services::Drawing::NavballMarker (C++ class)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker15available_iconsER6Client">krpc::services::Drawing::NavballMarker::available_icons (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker5colorEv">krpc::services::Drawing::NavballMarker::color (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker9directionEv">krpc::services::Drawing::NavballMarker::direction (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker4iconEv">krpc::services::Drawing::NavballMarker::icon (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker15reference_frameEv">krpc::services::Drawing::NavballMarker::reference_frame (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker6removeEv">krpc::services::Drawing::NavballMarker::remove (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker9set_colorENSt5tupleIdddEE">krpc::services::Drawing::NavballMarker::set_color (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker13set_directionENSt5tupleIdddEE">krpc::services::Drawing::NavballMarker::set_direction (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker8set_iconENSt6stringE">krpc::services::Drawing::NavballMarker::set_icon (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker19set_reference_frameEN11SpaceCenter14ReferenceFrameE">krpc::services::Drawing::NavballMarker::set_reference_frame (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker8set_sizeEf">krpc::services::Drawing::NavballMarker::set_size (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker11set_visibleEb">krpc::services::Drawing::NavballMarker::set_visible (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker4sizeEv">krpc::services::Drawing::NavballMarker::size (C++ function)</a>
+</li>
+      <li><a href="cpp/api/drawing/navball-marker.html#_CPPv4N4krpc8services7Drawing13NavballMarker7visibleEv">krpc::services::Drawing::NavballMarker::visible (C++ function)</a>
 </li>
       <li><a href="cpp/api/drawing/polygon.html#_CPPv4N4krpc8services7Drawing7PolygonE">krpc::services::Drawing::Polygon (C++ class)</a>
 </li>
@@ -9664,6 +9726,8 @@
 </li>
       <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddLine">krpc_Drawing_AddLine (C function)</a>
 </li>
+      <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddNavballMarker">krpc_Drawing_AddNavballMarker (C function)</a>
+</li>
       <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddPolygon">krpc_Drawing_AddPolygon (C function)</a>
 </li>
       <li><a href="cnano/api/drawing/drawing.html#c.krpc_Drawing_AddText">krpc_Drawing_AddText (C function)</a>
@@ -9701,6 +9765,36 @@
       <li><a href="cnano/api/drawing/line.html#c.krpc_Drawing_Line_t.krpc_Drawing_Line_Thickness">krpc_Drawing_Line_t.krpc_Drawing_Line_Thickness (C function)</a>
 </li>
       <li><a href="cnano/api/drawing/line.html#c.krpc_Drawing_Line_t.krpc_Drawing_Line_Visible">krpc_Drawing_Line_t.krpc_Drawing_Line_Visible (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t">krpc_Drawing_NavballMarker_t (C type)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_AvailableIcons">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_AvailableIcons (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Color">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Color (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Direction">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Direction (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Icon">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Icon (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_ReferenceFrame">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_ReferenceFrame (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Remove">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Remove (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Color">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Color (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Direction">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Direction (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Icon">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Icon (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_ReferenceFrame">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_ReferenceFrame (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Size">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Size (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Visible">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_set_Visible (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Size">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Size (C function)</a>
+</li>
+      <li><a href="cnano/api/drawing/navball-marker.html#c.krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Visible">krpc_Drawing_NavballMarker_t.krpc_Drawing_NavballMarker_Visible (C function)</a>
 </li>
       <li><a href="cnano/api/drawing/polygon.html#c.krpc_Drawing_Polygon_t">krpc_Drawing_Polygon_t (C type)</a>
 </li>
@@ -14604,6 +14698,12 @@
 </li>
       <li><a href="python/api/space-center/space-center.html#SpaceCenter.navball">navball (in module SpaceCenter)</a>
 </li>
+      <li><a href="lua/api/drawing/navball-marker.html#Drawing.NavballMarker">NavballMarker (class in Drawing)</a>, <a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker">[1]</a>
+
+      <ul>
+        <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker">(Java class)</a>
+</li>
+      </ul></li>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.near_surface">near_surface (Waypoint attribute)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance()">newInstance() (Java method)</a>
@@ -14616,10 +14716,10 @@
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String)">newInstance(String, String) (Java method)</a>
 </li>
-      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int)">newInstance(String, String, int, int) (Java method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int)">newInstance(String, String, int, int) (Java method)</a>
+</li>
       <li><a href="lua/api/space-center/camera.html#SpaceCenter.Camera.next_camera">next_camera() (Camera method)</a>, <a href="python/api/space-center/camera.html#SpaceCenter.Camera.next_camera">[1]</a>
 </li>
       <li><a href="lua/api/space-center/orbit.html#SpaceCenter.Orbit.next_closest_approach">next_closest_approach() (Orbit method)</a>, <a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.next_closest_approach">[1]</a>
@@ -15321,6 +15421,8 @@
 </li>
         <li><a href="python/api/drawing/line.html#Drawing.Line.reference_frame">(Line attribute)</a>
 </li>
+        <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.reference_frame">(NavballMarker attribute)</a>
+</li>
         <li><a href="python/api/space-center/node.html#SpaceCenter.Node.reference_frame">(Node attribute)</a>
 </li>
         <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.reference_frame">(Part attribute)</a>
@@ -15438,13 +15540,15 @@
 </li>
         <li><a href="lua/api/ui/input-field.html#UI.InputField.remove">(InputField method)</a>, <a href="python/api/ui/input-field.html#UI.InputField.remove">[1]</a>
 </li>
-        <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.remove()">(Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.remove()">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.remove()">[2]</a>, <a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.remove()">[3]</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.remove()">[4]</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.remove()">[5]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.remove()">[6]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.remove()">[7]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.remove()">[8]</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.remove()">[9]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.remove()">[10]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.remove()">[11]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.remove()">[12]</a>, <a href="java/client.html#krpc.client.Event.remove()">[13]</a>, <a href="java/client.html#krpc.client.Stream.remove()">[14]</a>
+        <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.remove()">(Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.remove()">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.remove()">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.remove()">[3]</a>, <a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.remove()">[4]</a>, <a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.remove()">[5]</a>, <a href="java/api/space-center/node.html#krpc.client.services.SpaceCenter.Node.remove()">[6]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.remove()">[7]</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.remove()">[8]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.remove()">[9]</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.remove()">[10]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.remove()">[11]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.remove()">[12]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.remove()">[13]</a>, <a href="java/client.html#krpc.client.Event.remove()">[14]</a>, <a href="java/client.html#krpc.client.Stream.remove()">[15]</a>
 </li>
         <li><a href="python/client.html#krpc.event.Event.remove">(krpc.event.Event method)</a>
 </li>
         <li><a href="python/client.html#krpc.stream.Stream.remove">(krpc.stream.Stream method)</a>
 </li>
         <li><a href="lua/api/drawing/line.html#Drawing.Line.remove">(Line method)</a>, <a href="python/api/drawing/line.html#Drawing.Line.remove">[1]</a>
+</li>
+        <li><a href="lua/api/drawing/navball-marker.html#Drawing.NavballMarker.remove">(NavballMarker method)</a>, <a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.remove">[1]</a>
 </li>
         <li><a href="lua/api/space-center/node.html#SpaceCenter.Node.remove">(Node method)</a>, <a href="python/api/space-center/node.html#SpaceCenter.Node.remove">[1]</a>
 </li>
@@ -15479,10 +15583,10 @@
 </li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat">repeat (Alarm attribute)</a>
 </li>
-      <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat_period">repeat_period (Alarm attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat_period">repeat_period (Alarm attribute)</a>
+</li>
       <li><a href="python/api/debug/debug.html#Debug.reputation">reputation (in module Debug)</a>
 
       <ul>
@@ -16121,7 +16225,7 @@
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.setColor(int)">setColor(int) (Java method)</a>
 </li>
-      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.setColor(org.javatuples.Triplet)">setColor(org.javatuples.Triplet) (Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setColor(org.javatuples.Triplet)">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setColor(org.javatuples.Triplet)">[2]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.setColor(org.javatuples.Triplet)">[3]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.setColor(org.javatuples.Triplet)">[4]</a>
+      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.setColor(org.javatuples.Triplet)">setColor(org.javatuples.Triplet) (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.setColor(org.javatuples.Triplet)">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setColor(org.javatuples.Triplet)">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setColor(org.javatuples.Triplet)">[3]</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Light.setColor(org.javatuples.Triplet)">[4]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.setColor(org.javatuples.Triplet)">[5]</a>
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setContent(String)">setContent(String) (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.setContent(String)">[1]</a>
 </li>
@@ -16160,6 +16264,8 @@
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.setDestinationBody(CelestialBody)">setDestinationBody(CelestialBody) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setDiagnosticLogging(boolean)">setDiagnosticLogging(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.setDirection(org.javatuples.Triplet)">setDirection(org.javatuples.Triplet) (Java method)</a>
 </li>
       <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setDirection(org.javatuples.Triplet, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel)">setDirection(org.javatuples.Triplet, double, SpaceCenter.ReferenceFrame, SpaceCenter.Vessel) (Java method)</a>
 </li>
@@ -16257,7 +16363,7 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.setHighlighted(boolean)">setHighlighted(boolean) (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.setIcon(String)">setIcon(String) (Java method)</a>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.setIcon(String)">setIcon(String) (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.setIcon(String)">[1]</a>
 </li>
       <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.setIgnoreAgencyMindsetOnContracts(boolean)">setIgnoreAgencyMindsetOnContracts(boolean) (Java method)</a>
 </li>
@@ -16433,7 +16539,7 @@
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setReferenceFrame(ReferenceFrame)">setReferenceFrame(ReferenceFrame) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Force.setReferenceFrame(ReferenceFrame)">[1]</a>
 </li>
-      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.setReferenceFrame(SpaceCenter.ReferenceFrame)">setReferenceFrame(SpaceCenter.ReferenceFrame) (Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setReferenceFrame(SpaceCenter.ReferenceFrame)">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setReferenceFrame(SpaceCenter.ReferenceFrame)">[2]</a>
+      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.setReferenceFrame(SpaceCenter.ReferenceFrame)">setReferenceFrame(SpaceCenter.ReferenceFrame) (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.setReferenceFrame(SpaceCenter.ReferenceFrame)">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setReferenceFrame(SpaceCenter.ReferenceFrame)">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setReferenceFrame(SpaceCenter.ReferenceFrame)">[3]</a>
 </li>
       <li><a href="java/api/kerbal-alarm-clock/alarm.html#krpc.client.services.KerbalAlarmClock.Alarm.setRepeat(boolean)">setRepeat(boolean) (Java method)</a>
 </li>
@@ -16492,6 +16598,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.DockingPort.setShielded(boolean)">setShielded(boolean) (Java method)</a>
 </li>
       <li><a href="java/api/space-center/auto-pilot.html#krpc.client.services.SpaceCenter.AutoPilot.setShowInfoUI(boolean)">setShowInfoUI(boolean) (Java method)</a>
+</li>
+      <li><a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.setSize(float)">setSize(float) (Java method)</a>
 </li>
       <li><a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setSize(int)">setSize(int) (Java method)</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.setSize(int)">[1]</a>
 </li>
@@ -16619,7 +16727,7 @@
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.setVeteran(boolean)">setVeteran(boolean) (Java method)</a>
 </li>
-      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.setVisible(boolean)">setVisible(boolean) (Java method)</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setVisible(boolean)">[1]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setVisible(boolean)">[2]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.setVisible(boolean)">[3]</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.setVisible(boolean)">[4]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.setVisible(boolean)">[5]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.setVisible(boolean)">[6]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.setVisible(boolean)">[7]</a>
+      <li><a href="java/api/drawing/line.html#krpc.client.services.Drawing.Line.setVisible(boolean)">setVisible(boolean) (Java method)</a>, <a href="java/api/drawing/navball-marker.html#krpc.client.services.Drawing.NavballMarker.setVisible(boolean)">[1]</a>, <a href="java/api/drawing/polygon.html#krpc.client.services.Drawing.Polygon.setVisible(boolean)">[2]</a>, <a href="java/api/drawing/text.html#krpc.client.services.Drawing.Text.setVisible(boolean)">[3]</a>, <a href="java/api/ui/button.html#krpc.client.services.UI.Button.setVisible(boolean)">[4]</a>, <a href="java/api/ui/canvas.html#krpc.client.services.UI.Canvas.setVisible(boolean)">[5]</a>, <a href="java/api/ui/input-field.html#krpc.client.services.UI.InputField.setVisible(boolean)">[6]</a>, <a href="java/api/ui/panel.html#krpc.client.services.UI.Panel.setVisible(boolean)">[7]</a>, <a href="java/api/ui/text.html#krpc.client.services.UI.Text.setVisible(boolean)">[8]</a>
 </li>
       <li><a href="java/api/space-center/alarms.html#krpc.client.services.SpaceCenter.Alarm.setWarpAction(AlarmWarpAction)">setWarpAction(AlarmWarpAction) (Java method)</a>
 </li>
@@ -16687,9 +16795,11 @@
 </li>
       <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.situation">situation (Vessel attribute)</a>
 </li>
-      <li><a href="python/api/ui/rect-transform.html#UI.RectTransform.size">size (RectTransform attribute)</a>
+      <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.size">size (NavballMarker attribute)</a>
 
       <ul>
+        <li><a href="python/api/ui/rect-transform.html#UI.RectTransform.size">(RectTransform attribute)</a>
+</li>
         <li><a href="python/api/drawing/text.html#Drawing.Text.size">(Text attribute)</a>, <a href="python/api/ui/text.html#UI.Text.size">[1]</a>
 </li>
       </ul></li>
@@ -17332,12 +17442,12 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.maximum_rotation">SpaceCenter.SpaceCenter.DockingPort.maximum_rotation (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.minimum_rotation">SpaceCenter.SpaceCenter.DockingPort.minimum_rotation (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.part">SpaceCenter.SpaceCenter.DockingPort.part (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reengage_distance">SpaceCenter.SpaceCenter.DockingPort.reengage_distance (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reference_frame">SpaceCenter.SpaceCenter.DockingPort.reference_frame (attribute)</a>
@@ -19489,10 +19599,10 @@
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.escaping">VesselSituation.escaping (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.escaping">[1]</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.flying">VesselSituation.flying (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.flying">[1]</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.landed">VesselSituation.landed (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.landed">[1]</a>
 </li>
       <li><a href="lua/api/space-center/vessel.html#SpaceCenter.VesselSituation.orbiting">VesselSituation.orbiting (in module SpaceCenter)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.VesselSituation.orbiting">[1]</a>
@@ -19555,6 +19665,8 @@
         <li><a href="python/api/ui/input-field.html#UI.InputField.visible">(InputField attribute)</a>
 </li>
         <li><a href="python/api/drawing/line.html#Drawing.Line.visible">(Line attribute)</a>
+</li>
+        <li><a href="python/api/drawing/navball-marker.html#Drawing.NavballMarker.visible">(NavballMarker attribute)</a>
 </li>
         <li><a href="python/api/ui/panel.html#UI.Panel.visible">(Panel attribute)</a>
 </li>

@@ -10,5 +10,6 @@ Drawing API
 
    drawing/drawing
    drawing/line
+   drawing/navball-marker
    drawing/polygon
    drawing/text
