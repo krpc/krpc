@@ -20,6 +20,21 @@ Control
       these inputs are no longer connected. The throttle is an exception: it keeps
       its value when clients disconnect.
 
+      A kerbal on EVA is a vessel, and is driven by these same controls. The
+      translation inputs move it: :func:`krpc_SpaceCenter_Control_Forward` and :func:`krpc_SpaceCenter_Control_Right` walk
+      it about, relative to the direction it is facing, and all three translate its
+      jetpack once that is deployed. Walking is not throttled by the size of the
+      input, only started by it. The rotation inputs turn it, at a rate proportional
+      to the input: :func:`krpc_SpaceCenter_Control_Yaw` steers it as it walks, and all three turn its
+      jetpack. Turning the jetpack releases the kerbal from the orientation it was
+      holding; it stops and holds its new orientation once the input returns to zero.
+      :func:`krpc_SpaceCenter_Control_RCS` deploys and stows the jetpack and :func:`krpc_SpaceCenter_Control_Lights`
+      switches the helmet lamp. The remaining controls do nothing for a kerbal.
+      A kerbal is also sent out and brought back in from here: with
+      :func:`krpc_SpaceCenter_CrewMember_EVA` and :func:`krpc_SpaceCenter_Control_Board`, and
+      :func:`krpc_SpaceCenter_Control_GrabLadder` and :func:`krpc_SpaceCenter_Control_ReleaseLadder` for the ladders it
+      passes on the way.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Source(krpc_connection_t connection, krpc_SpaceCenter_ControlSource_t * result)
 
       The source of the vessels control, for example by a kerbal or a probe core.
@@ -105,6 +120,13 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+         requires the kerbal to have one and to be the active vessel; otherwise
+         setting this does nothing.
+
    .. function:: krpc_error_t krpc_SpaceCenter_Control_ReactionWheels(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Control_set_ReactionWheels(bool value)
 
@@ -147,6 +169,12 @@ Control
       The state of the lights.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         For a kerbal on EVA this is its helmet lamp. Switching it requires the
+         kerbal to be the active vessel; otherwise setting this does nothing.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Control_Brakes(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Control_set_Brakes(bool value)
@@ -585,6 +613,69 @@ Control
 
 
       :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Airlock(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The part whose hatch the kerbal is standing at, and so the one
+      :func:`krpc_SpaceCenter_Control_Board` would put it in. ``nullptr`` if it is not at a hatch or the
+      vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Board(krpc_connection_t connection)
+
+      Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+      kerbal takes a seat in that part and its own vessel ceases to exist. If the
+      kerbal was the active vessel, the game switches to the vessel it boarded.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A kerbal can only board through a hatch it is already at, which
+         :func:`krpc_SpaceCenter_Control_Airlock` reports; it does not walk to one. Throws an exception if
+         the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+         is disabled for the game, if the part has no free seat, or if the kerbal is
+         carrying science data that the part cannot store, as the game asks what to do
+         with it in that case.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_Ladder(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
+
+      The ladder the kerbal is holding on to, or ``nullptr`` if it is not holding one
+      or the vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_GrabLadder(krpc_connection_t connection)
+
+      Take hold of the ladder the kerbal is standing at, as pressing the grab key
+      in-game does. A kerbal can only take hold of a ladder it is already alongside;
+      it does not walk to one. :func:`krpc_SpaceCenter_Control_Ladder` reports the one it ends up
+      holding. Does nothing if the kerbal is already holding a ladder.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+         within reach, or if the kerbal is doing something it cannot grab a ladder from.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Control_ReleaseLadder(krpc_connection_t connection)
+
+      Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+      does. Does nothing if it is not holding one.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA.
 
 
 

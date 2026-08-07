@@ -822,6 +822,8 @@
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.AltimeterMode.AGL">AGL (Java field)</a>
 </li>
+      <li><a href="python/api/space-center/control.html#SpaceCenter.Control.airlock">airlock (Control attribute)</a>
+</li>
       <li><a href="lua/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm">Alarm (class in KerbalAlarmClock)</a>, <a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm">[1]</a>
 
       <ul>
@@ -1348,6 +1350,12 @@
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Light.blink_rate">blink_rate (Light attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.board">board() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.board">[1]</a>
+
+      <ul>
+        <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.board()">(Java method)</a>
+</li>
+      </ul></li>
       <li><a href="python/api/space-center/space-center.html#SpaceCenter.bodies">bodies (in module SpaceCenter)</a>
 </li>
       <li><a href="python/api/space-center/closest-approach.html#SpaceCenter.ClosestApproach.body">body (ClosestApproach attribute)</a>
@@ -2538,10 +2546,10 @@
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.engine">engine (Part attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/control.html#SpaceCenter.Control.engine_gimbals">engine_gimbals (Control attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Parts.engines">engines (Parts attribute)</a>
 </li>
       <li><a href="python/api/space-center/orbit.html#SpaceCenter.Orbit.epoch">epoch (Orbit attribute)</a>
@@ -2561,6 +2569,10 @@
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.MapFilterType.EV_AS">EV_AS (Java field)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.EVA">EVA (Java field)</a>
+</li>
+      <li><a href="lua/api/space-center/vessel.html#SpaceCenter.CrewMember.eva">eva() (CrewMember method)</a>, <a href="python/api/space-center/vessel.html#SpaceCenter.CrewMember.eva">[1]</a>
+</li>
+      <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.CrewMember.eVA()">eVA() (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Event">Event (Java class)</a>
 </li>
@@ -2935,6 +2947,8 @@
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getAerodynamicTorque()">getAerodynamicTorque() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getAeroSurfaces()">getAeroSurfaces() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getAirlock()">getAirlock() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/space-center.html#krpc.client.services.SpaceCenter.SpaceCenter.getAlarmManager()">getAlarmManager() (Java method)</a>
 </li>
@@ -3621,6 +3635,8 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Engine.getKerbinSeaLevelSpecificImpulse()">getKerbinSeaLevelSpecificImpulse() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.RCS.getKerbinSeaLevelSpecificImpulse()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getKerbinSeaLevelSpecificImpulse()">[2]</a>
 </li>
       <li><a href="java/api/space-center/contracts.html#krpc.client.services.SpaceCenter.Contract.getKeywords()">getKeywords() (Java method)</a>
+</li>
+      <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.getLadder()">getLadder() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/flight.html#krpc.client.services.SpaceCenter.Flight.getLatitude()">getLatitude() (Java method)</a>, <a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getLatitude()">[1]</a>
 </li>
@@ -4465,6 +4481,10 @@
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Thruster.gimbalPosition(ReferenceFrame)">gimbalPosition(ReferenceFrame) (Java method)</a>
 </li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.glow">glow (Part attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.grab_ladder">grab_ladder() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.grab_ladder">[1]</a>
+</li>
+      <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.grabLadder()">grabLadder() (Java method)</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.AutoStrutMode.GRANDPARENT">GRANDPARENT (Java field)</a>
 </li>
@@ -6738,7 +6758,11 @@
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control13aero_surfacesEv">krpc::services::SpaceCenter::Control::aero_surfaces (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control7airlockEv">krpc::services::SpaceCenter::Control::airlock (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control8antennasEv">krpc::services::SpaceCenter::Control::antennas (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv">krpc::services::SpaceCenter::Control::board (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control6brakesEv">krpc::services::SpaceCenter::Control::brakes (C++ function)</a>
 </li>
@@ -6764,9 +6788,13 @@
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control24get_action_group_actionsE8uint32_t">krpc::services::SpaceCenter::Control::get_action_group_actions (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control11grab_ladderEv">krpc::services::SpaceCenter::Control::grab_ladder (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control10input_modeEv">krpc::services::SpaceCenter::Control::input_mode (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control7intakesEv">krpc::services::SpaceCenter::Control::intakes (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control6ladderEv">krpc::services::SpaceCenter::Control::ladder (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control4legsEv">krpc::services::SpaceCenter::Control::legs (C++ function)</a>
 </li>
@@ -6785,6 +6813,8 @@
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control3rcsEv">krpc::services::SpaceCenter::Control::rcs (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control15reaction_wheelsEv">krpc::services::SpaceCenter::Control::reaction_wheels (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control14release_ladderEv">krpc::services::SpaceCenter::Control::release_ladder (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/control.html#_CPPv4N4krpc8services11SpaceCenter7Control12remove_nodesEv">krpc::services::SpaceCenter::Control::remove_nodes (C++ function)</a>
 </li>
@@ -6987,6 +7017,8 @@
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember16career_log_typesEv">krpc::services::SpaceCenter::CrewMember::career_log_types (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember7courageEv">krpc::services::SpaceCenter::CrewMember::courage (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember3evaEv">krpc::services::SpaceCenter::CrewMember::eva (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember10experienceEv">krpc::services::SpaceCenter::CrewMember::experience (C++ function)</a>
 </li>
@@ -11130,7 +11162,11 @@
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_AeroSurfaces">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_AeroSurfaces (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Airlock">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Airlock (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Antennas">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Antennas (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Board">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Board (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Brakes">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Brakes (C function)</a>
 </li>
@@ -11156,9 +11192,13 @@
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GetActionGroupActions">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GetActionGroupActions (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GrabLadder">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_GrabLadder (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_InputMode">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_InputMode (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Intakes">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Intakes (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Ladder">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Ladder (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Legs">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_Legs (C function)</a>
 </li>
@@ -11177,6 +11217,8 @@
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_RCS">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_RCS (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_ReactionWheels">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_ReactionWheels (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_ReleaseLadder">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_ReleaseLadder (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/control.html#c.krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_RemoveNodes">krpc_SpaceCenter_Control_t.krpc_SpaceCenter_Control_RemoveNodes (C function)</a>
 </li>
@@ -11379,6 +11421,8 @@
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_CareerLogTypes">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_CareerLogTypes (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Courage">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Courage (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_EVA">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_EVA (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/vessel.html#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Experience">krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_Experience (C function)</a>
 </li>
@@ -13876,6 +13920,8 @@
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="python/api/space-center/control.html#SpaceCenter.Control.ladder">ladder (Control attribute)</a>
+</li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselSituation.LANDED">LANDED (Java field)</a>
 </li>
       <li><a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.VesselType.LANDER">LANDER (Java field)</a>
@@ -15322,6 +15368,10 @@
         <li><a href="lua/api/space-center/parts.html#SpaceCenter.LaunchClamp.release">(LaunchClamp method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.LaunchClamp.release">[1]</a>
 </li>
       </ul></li>
+      <li><a href="lua/api/space-center/control.html#SpaceCenter.Control.release_ladder">release_ladder() (Control method)</a>, <a href="python/api/space-center/control.html#SpaceCenter.Control.release_ladder">[1]</a>
+</li>
+      <li><a href="java/api/space-center/control.html#krpc.client.services.SpaceCenter.Control.releaseLadder()">releaseLadder() (Java method)</a>
+</li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.remaining">remaining (Alarm attribute)</a>
 </li>
       <li><a href="lua/api/space-center/node.html#SpaceCenter.Node.remaining_burn_vector">remaining_burn_vector() (Node method)</a>, <a href="python/api/space-center/node.html#SpaceCenter.Node.remaining_burn_vector">[1]</a>
@@ -15431,14 +15481,14 @@
 </li>
       <li><a href="python/api/kerbal-alarm-clock/alarm.html#KerbalAlarmClock.Alarm.repeat_period">repeat_period (Alarm attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/debug/debug.html#Debug.reputation">reputation (in module Debug)</a>
 
       <ul>
         <li><a href="python/api/space-center/space-center.html#SpaceCenter.reputation">(in module SpaceCenter)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="python/api/space-center/contracts.html#SpaceCenter.Contract.reputation_completion">reputation_completion (Contract attribute)</a>
 
       <ul>
@@ -17120,6 +17170,8 @@
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.aero_surfaces">SpaceCenter.SpaceCenter.Control.aero_surfaces (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.airlock">SpaceCenter.SpaceCenter.Control.airlock (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.antennas">SpaceCenter.SpaceCenter.Control.antennas (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.brakes">SpaceCenter.SpaceCenter.Control.brakes (attribute)</a>
@@ -17145,6 +17197,8 @@
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.input_mode">SpaceCenter.SpaceCenter.Control.input_mode (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.intakes">SpaceCenter.SpaceCenter.Control.intakes (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.ladder">SpaceCenter.SpaceCenter.Control.ladder (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/control.html#SpaceCenter.SpaceCenter.Control.legs">SpaceCenter.SpaceCenter.Control.legs (attribute)</a>
 </li>
@@ -17282,10 +17336,10 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.part">SpaceCenter.SpaceCenter.DockingPort.part (attribute)</a>
 </li>
-      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reengage_distance">SpaceCenter.SpaceCenter.DockingPort.reengage_distance (attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reengage_distance">SpaceCenter.SpaceCenter.DockingPort.reengage_distance (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.reference_frame">SpaceCenter.SpaceCenter.DockingPort.reference_frame (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.rotation_locked">SpaceCenter.SpaceCenter.DockingPort.rotation_locked (attribute)</a>

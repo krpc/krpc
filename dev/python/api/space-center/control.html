@@ -696,6 +696,20 @@ Obtained by calling <a class="reference internal" href="vessel.html#SpaceCenter.
 and the custom axes) are zeroed when all clients that have set one or more of
 these inputs are no longer connected. The throttle is an exception: it keeps
 its value when clients disconnect.</p>
+<p>A kerbal on EVA is a vessel, and is driven by these same controls. The
+translation inputs move it: <a class="reference internal" href="#SpaceCenter.Control.forward" title="SpaceCenter.Control.forward"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.forward</span></code></a> and <a class="reference internal" href="#SpaceCenter.Control.right" title="SpaceCenter.Control.right"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.right</span></code></a> walk
+it about, relative to the direction it is facing, and all three translate its
+jetpack once that is deployed. Walking is not throttled by the size of the
+input, only started by it. The rotation inputs turn it, at a rate proportional
+to the input: <a class="reference internal" href="#SpaceCenter.Control.yaw" title="SpaceCenter.Control.yaw"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.yaw</span></code></a> steers it as it walks, and all three turn its
+jetpack. Turning the jetpack releases the kerbal from the orientation it was
+holding; it stops and holds its new orientation once the input returns to zero.
+<a class="reference internal" href="#SpaceCenter.Control.rcs" title="SpaceCenter.Control.rcs"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.rcs</span></code></a> deploys and stows the jetpack and <a class="reference internal" href="#SpaceCenter.Control.lights" title="SpaceCenter.Control.lights"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.lights</span></code></a>
+switches the helmet lamp. The remaining controls do nothing for a kerbal.
+A kerbal is also sent out and brought back in from here: with
+<a class="reference internal" href="vessel.html#SpaceCenter.CrewMember.eva" title="SpaceCenter.CrewMember.eva"><code class="xref py py-meth docutils literal notranslate"><span class="pre">CrewMember.eva()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Control.board()</span></code></a>, and
+<a class="reference internal" href="#SpaceCenter.Control.grab_ladder" title="SpaceCenter.Control.grab_ladder"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Control.grab_ladder()</span></code></a> and <a class="reference internal" href="#SpaceCenter.Control.release_ladder" title="SpaceCenter.Control.release_ladder"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Control.release_ladder()</span></code></a> for the ladders it
+passes on the way.</p>
 </div>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.Control.source">
@@ -870,6 +884,12 @@ See <a class="reference internal" href="parts.html#SpaceCenter.ControlSurface.pi
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+requires the kerbal to have one and to be the active vessel; otherwise
+setting this does nothing.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -963,6 +983,11 @@ See <a class="reference internal" href="parts.html#SpaceCenter.Wheel.deployed" t
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a kerbal on EVA this is its helmet lamp. Switching it requires the
+kerbal to be the active vessel; otherwise setting this does nothing.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1740,6 +1765,100 @@ in the prograde, normal and radial directions.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Control.airlock">
+<span class="sig-name descname"><span class="pre">airlock</span></span><a class="headerlink" href="#SpaceCenter.Control.airlock" title="Link to this definition">#</a></dt>
+<dd><p>The part whose hatch the kerbal is standing at, and so the one
+<a class="reference internal" href="#SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Control.board()</span></code></a> would put it in. <code class="docutils literal notranslate"><span class="pre">None</span></code> if it is not at a hatch or the
+vessel is not a kerbal on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Control.board">
+<span class="sig-name descname"><span class="pre">board</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.board" title="Link to this definition">#</a></dt>
+<dd><p>Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+kerbal takes a seat in that part and its own vessel ceases to exist. If the
+kerbal was the active vessel, the game switches to the vessel it boarded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A kerbal can only board through a hatch it is already at, which
+<a class="reference internal" href="#SpaceCenter.Control.airlock" title="SpaceCenter.Control.airlock"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.airlock</span></code></a> reports; it does not walk to one. Throws an exception if
+the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+is disabled for the game, if the part has no free seat, or if the kerbal is
+carrying science data that the part cannot store, as the game asks what to do
+with it in that case.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Control.ladder">
+<span class="sig-name descname"><span class="pre">ladder</span></span><a class="headerlink" href="#SpaceCenter.Control.ladder" title="Link to this definition">#</a></dt>
+<dd><p>The ladder the kerbal is holding on to, or <code class="docutils literal notranslate"><span class="pre">None</span></code> if it is not holding one
+or the vessel is not a kerbal on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Control.grab_ladder">
+<span class="sig-name descname"><span class="pre">grab_ladder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.grab_ladder" title="Link to this definition">#</a></dt>
+<dd><p>Take hold of the ladder the kerbal is standing at, as pressing the grab key
+in-game does. A kerbal can only take hold of a ladder it is already alongside;
+it does not walk to one. <a class="reference internal" href="#SpaceCenter.Control.ladder" title="SpaceCenter.Control.ladder"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Control.ladder</span></code></a> reports the one it ends up
+holding. Does nothing if the kerbal is already holding a ladder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+within reach, or if the kerbal is doing something it cannot grab a ladder from.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Control.release_ladder">
+<span class="sig-name descname"><span class="pre">release_ladder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Control.release_ladder" title="Link to this definition">#</a></dt>
+<dd><p>Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+does. Does nothing if it is not holding one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vessel is not a kerbal on EVA.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

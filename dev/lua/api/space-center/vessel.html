@@ -2435,6 +2435,26 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 </dl>
 </dd></dl>
 
+<dl class="lua method">
+<dt class="sig sig-object lua" id="SpaceCenter.CrewMember.eva">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">eva</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.CrewMember.eva" title="Link to this definition">#</a></dt>
+<dd><p>Send the crew member outside on EVA, through the hatch of the part it is in, and
+return the vessel it becomes. The game switches to that vessel, which can then be
+walked around and flown using its <a class="reference internal" href="#SpaceCenter.SpaceCenter.Vessel.control" title="SpaceCenter.SpaceCenter.Vessel.control"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">SpaceCenter.Vessel.control</span></code></a>, and brought back
+in with <a class="reference internal" href="control.html#SpaceCenter.Control.board" title="SpaceCenter.Control.board"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Control.board()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#SpaceCenter.Vessel" title="SpaceCenter.Vessel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Vessel</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if EVA is disabled for the game, if the crew member is not in
+a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+in is obstructed.</p>
+</div>
+</dd></dl>
+
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.CrewMember.suit_type">
 <span class="sig-name descname"><span class="pre">suit_type</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.SuitType</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.CrewMember.suit_type" title="Link to this definition">#</a></dt>

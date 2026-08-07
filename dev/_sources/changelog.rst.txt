@@ -31,6 +31,7 @@ SpaceCenter service
 
 * Vessels and crew
 
+  * Add ``CrewMember.EVA``, which sends a Kerbal outside through the hatch of the part it is in and returns the vessel it becomes (:issue:`319`)
   * Add ``Vessel.Terminate``, which removes a vessel and its parts from the game without recovering anything, as terminating it from the tracking station does. Its crew are reported missing. The active vessel cannot be terminated (:issue:`1034`)
   * ``Vessel.Recover`` now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (:issue:`1021`)
   * Add ``Vessel.OrbitSpeedReferenceFrame``, ``Vessel.SurfaceSpeedReferenceFrame`` and ``Vessel.TargetSpeedReferenceFrame``, one per navball speed mode. The velocity of the vessel in one of these frames is the velocity the navball shows in that mode, and its magnitude the speed displayed. Each frame is oriented with the prograde/normal/radial directions the navball marks in that mode, arranged as in ``Vessel.OrbitalReferenceFrame``, so a direction of (0,1,0) in the frame is prograde (:issue:`1029`)
@@ -55,6 +56,8 @@ SpaceCenter service
 
 * Control
 
+  * A Kerbal on EVA can now be driven through ``Vessel.Control``. ``Control.Forward`` and ``Control.Right`` walk it about, relative to the direction it is facing, and all three translation inputs fly its jetpack once deployed. ``Control.Yaw`` steers it as it walks, and the rotation inputs turn its jetpack, at a rate proportional to the input. ``Control.RCS`` deploys and stows the jetpack, and ``Control.Lights`` switches the helmet lamp (:issue:`319`)
+  * Add ``Control.Board``, which climbs a Kerbal on EVA into the part whose hatch it is standing at, and ``Control.Airlock``, which reports that part. Add ``Control.GrabLadder`` and ``Control.ReleaseLadder`` for the ladder it is alongside, and ``Control.Ladder``, which reports the ladder it is holding (:issue:`319`)
   * Setting ``Control.StageLock`` now leaves the in-game Alt+L shortcut in step with it, so the next press of Alt+L locks or unlocks staging rather than being absorbed (:issue:`1022`)
 
 * Parts

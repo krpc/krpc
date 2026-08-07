@@ -2173,6 +2173,26 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_EVA">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CrewMember_EVA</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_Vessel_t" title="krpc_SpaceCenter_Vessel_t"><span class="n"><span class="pre">krpc_SpaceCenter_Vessel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_EVA" title="Link to this definition">#</a><br /></dt>
+<dd><p>Send the crew member outside on EVA, through the hatch of the part it is in, and
+return the vessel it becomes. The game switches to that vessel, which can then be
+walked around and flown using its <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_Control()</span></code>, and brought back
+in with <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Control_Board()</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if EVA is disabled for the game, if the crew member is not in
+a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+in is obstructed.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_SuitType">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_CrewMember_SuitType</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_SuitType_t" title="krpc_SpaceCenter_SuitType_t"><span class="n"><span class="pre">krpc_SpaceCenter_SuitType_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_CrewMember_t.krpc_SpaceCenter_CrewMember_SuitType" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>

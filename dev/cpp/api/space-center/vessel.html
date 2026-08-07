@@ -2173,6 +2173,26 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember3evaEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember3evaEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember3evaEv"></span><span id="krpc::services::SpaceCenter::CrewMember::eva"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">eva</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember3evaEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Send the crew member outside on EVA, through the hatch of the part it is in, and
+return the vessel it becomes. The game switches to that vessel, which can then be
+walked around and flown using its <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter6Vessel7controlEv" title="krpc::services::SpaceCenter::Vessel::control"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::control()</span></code></a>, and brought back
+in with <a class="reference internal" href="control.html#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv" title="krpc::services::SpaceCenter::Control::board"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::board()</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if EVA is disabled for the game, if the crew member is not in
+a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+in is obstructed.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter10CrewMember9suit_typeEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter10CrewMember9suit_typeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter10CrewMember9suit_typeEv"></span><span id="krpc::services::SpaceCenter::CrewMember::suit_type"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8SuitTypeE" title="krpc::services::SpaceCenter::SuitType"><span class="n"><span class="pre">SuitType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">suit_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter10CrewMember9suit_typeEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>

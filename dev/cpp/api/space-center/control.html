@@ -696,6 +696,20 @@ Obtained by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc
 and the custom axes) are zeroed when all clients that have set one or more of
 these inputs are no longer connected. The throttle is an exception: it keeps
 its value when clients disconnect.</p>
+<p>A kerbal on EVA is a vessel, and is driven by these same controls. The
+translation inputs move it: <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control7forwardEv" title="krpc::services::SpaceCenter::Control::forward"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::forward()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control5rightEv" title="krpc::services::SpaceCenter::Control::right"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::right()</span></code></a> walk
+it about, relative to the direction it is facing, and all three translate its
+jetpack once that is deployed. Walking is not throttled by the size of the
+input, only started by it. The rotation inputs turn it, at a rate proportional
+to the input: <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control3yawEv" title="krpc::services::SpaceCenter::Control::yaw"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::yaw()</span></code></a> steers it as it walks, and all three turn its
+jetpack. Turning the jetpack releases the kerbal from the orientation it was
+holding; it stops and holds its new orientation once the input returns to zero.
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control3rcsEv" title="krpc::services::SpaceCenter::Control::rcs"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::rcs()</span></code></a> deploys and stows the jetpack and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control6lightsEv" title="krpc::services::SpaceCenter::Control::lights"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::lights()</span></code></a>
+switches the helmet lamp. The remaining controls do nothing for a kerbal.
+A kerbal is also sent out and brought back in from here: with
+<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter10CrewMember3evaEv" title="krpc::services::SpaceCenter::CrewMember::eva"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CrewMember::eva()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv" title="krpc::services::SpaceCenter::Control::board"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::board()</span></code></a>, and
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control11grab_ladderEv" title="krpc::services::SpaceCenter::Control::grab_ladder"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::grab_ladder()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control14release_ladderEv" title="krpc::services::SpaceCenter::Control::release_ladder"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::release_ladder()</span></code></a> for the ladders it
+passes on the way.</p>
 </div>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6sourceEv">
@@ -851,6 +865,12 @@ See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceC
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+requires the kerbal to have one and to be the active vessel; otherwise
+setting this does nothing.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -939,6 +959,11 @@ See <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceC
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a kerbal on EVA this is its helmet lamp. Switching it requires the
+kerbal to be the active vessel; otherwise setting this does nothing.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -1666,6 +1691,88 @@ in the prograde, normal and radial directions.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control7airlockEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control7airlockEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control7airlockEv"></span><span id="krpc::services::SpaceCenter::Control::airlock"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">airlock</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control7airlockEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The part whose hatch the kerbal is standing at, and so the one
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv" title="krpc::services::SpaceCenter::Control::board"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::board()</span></code></a> would put it in. <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it is not at a hatch or the
+vessel is not a kerbal on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control5boardEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control5boardEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control5boardEv"></span><span id="krpc::services::SpaceCenter::Control::board"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">board</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control5boardEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+kerbal takes a seat in that part and its own vessel ceases to exist. If the
+kerbal was the active vessel, the game switches to the vessel it boarded.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A kerbal can only board through a hatch it is already at, which
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control7airlockEv" title="krpc::services::SpaceCenter::Control::airlock"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::airlock()</span></code></a> reports; it does not walk to one. Throws an exception if
+the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+is disabled for the game, if the part has no free seat, or if the kerbal is
+carrying science data that the part cannot store, as the game asks what to do
+with it in that case.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control6ladderEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control6ladderEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control6ladderEv"></span><span id="krpc::services::SpaceCenter::Control::ladder"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">ladder</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control6ladderEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The ladder the kerbal is holding on to, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it is not holding one
+or the vessel is not a kerbal on EVA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control11grab_ladderEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control11grab_ladderEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control11grab_ladderEv"></span><span id="krpc::services::SpaceCenter::Control::grab_ladder"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">grab_ladder</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control11grab_ladderEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Take hold of the ladder the kerbal is standing at, as pressing the grab key
+in-game does. A kerbal can only take hold of a ladder it is already alongside;
+it does not walk to one. <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter7Control6ladderEv" title="krpc::services::SpaceCenter::Control::ladder"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Control::ladder()</span></code></a> reports the one it ends up
+holding. Does nothing if the kerbal is already holding a ladder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+within reach, or if the kerbal is doing something it cannot grab a ladder from.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter7Control14release_ladderEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter7Control14release_ladderEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter7Control14release_ladderEv"></span><span id="krpc::services::SpaceCenter::Control::release_ladder"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">release_ladder</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter7Control14release_ladderEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+does. Does nothing if it is not holding one.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if the vessel is not a kerbal on EVA.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

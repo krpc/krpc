@@ -1091,6 +1091,23 @@ Vessel
 
       :Game Scenes: Flight
 
+   .. function:: Vessel eva()
+
+      Send the crew member outside on EVA, through the hatch of the part it is in, and
+      return the vessel it becomes. The game switches to that vessel, which can then be
+      walked around and flown using its :func:`Vessel::control`, and brought back
+      in with :func:`Control::board`.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if EVA is disabled for the game, if the crew member is not in
+         a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+         in is obstructed.
+
    .. function:: SuitType suit_type()
    .. function:: void set_suit_type(SuitType value)
 

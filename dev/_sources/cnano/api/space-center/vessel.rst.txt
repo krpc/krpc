@@ -1089,6 +1089,23 @@ Vessel
 
       :Game Scenes: Flight
 
+   .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_EVA(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
+
+      Send the crew member outside on EVA, through the hatch of the part it is in, and
+      return the vessel it becomes. The game switches to that vessel, which can then be
+      walked around and flown using its :func:`krpc_SpaceCenter_Vessel_Control`, and brought back
+      in with :func:`krpc_SpaceCenter_Control_Board`.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if EVA is disabled for the game, if the crew member is not in
+         a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+         in is obstructed.
+
    .. function:: krpc_error_t krpc_SpaceCenter_CrewMember_SuitType(krpc_connection_t connection, krpc_SpaceCenter_SuitType_t * result)
    .. function:: void krpc_SpaceCenter_CrewMember_set_SuitType(krpc_SpaceCenter_SuitType_t value)
 

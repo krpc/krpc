@@ -20,6 +20,21 @@ Control
       these inputs are no longer connected. The throttle is an exception: it keeps
       its value when clients disconnect.
 
+      A kerbal on EVA is a vessel, and is driven by these same controls. The
+      translation inputs move it: :prop:`Control.Forward` and :prop:`Control.Right` walk
+      it about, relative to the direction it is facing, and all three translate its
+      jetpack once that is deployed. Walking is not throttled by the size of the
+      input, only started by it. The rotation inputs turn it, at a rate proportional
+      to the input: :prop:`Control.Yaw` steers it as it walks, and all three turn its
+      jetpack. Turning the jetpack releases the kerbal from the orientation it was
+      holding; it stops and holds its new orientation once the input returns to zero.
+      :prop:`Control.RCS` deploys and stows the jetpack and :prop:`Control.Lights`
+      switches the helmet lamp. The remaining controls do nothing for a kerbal.
+      A kerbal is also sent out and brought back in from here: with
+      :meth:`CrewMember.EVA` and :meth:`Control.Board`, and
+      :meth:`Control.GrabLadder` and :meth:`Control.ReleaseLadder` for the ladders it
+      passes on the way.
+
    .. property:: ControlSource Source { get; }
 
       The source of the vessels control, for example by a kerbal or a probe core.
@@ -98,6 +113,13 @@ Control
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         For a kerbal on EVA this is whether its jetpack is deployed. Deploying it
+         requires the kerbal to have one and to be the active vessel; otherwise
+         setting this does nothing.
+
    .. property:: bool ReactionWheels { get; set; }
 
       Returns whether all reactive wheels on the vessel are active,
@@ -135,6 +157,12 @@ Control
       The state of the lights.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         For a kerbal on EVA this is its helmet lamp. Switching it requires the
+         kerbal to be the active vessel; otherwise setting this does nothing.
 
    .. property:: bool Brakes { get; set; }
 
@@ -545,6 +573,69 @@ Control
 
 
       :Game Scenes: Flight
+
+   .. property:: Part Airlock { get; }
+
+      The part whose hatch the kerbal is standing at, and so the one
+      :meth:`Control.Board` would put it in. ``null`` if it is not at a hatch or the
+      vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. method:: void Board()
+
+      Climb into the part whose hatch the kerbal is standing at, ending the EVA. The
+      kerbal takes a seat in that part and its own vessel ceases to exist. If the
+      kerbal was the active vessel, the game switches to the vessel it boarded.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         A kerbal can only board through a hatch it is already at, which
+         :prop:`Control.Airlock` reports; it does not walk to one. Throws an exception if
+         the vessel is not a kerbal on EVA, if the kerbal is not at a hatch, if boarding
+         is disabled for the game, if the part has no free seat, or if the kerbal is
+         carrying science data that the part cannot store, as the game asks what to do
+         with it in that case.
+
+   .. property:: Part Ladder { get; }
+
+      The ladder the kerbal is holding on to, or ``null`` if it is not holding one
+      or the vessel is not a kerbal on EVA.
+
+      :Game Scenes: Flight
+
+   .. method:: void GrabLadder()
+
+      Take hold of the ladder the kerbal is standing at, as pressing the grab key
+      in-game does. A kerbal can only take hold of a ladder it is already alongside;
+      it does not walk to one. :prop:`Control.Ladder` reports the one it ends up
+      holding. Does nothing if the kerbal is already holding a ladder.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA, if there is no ladder
+         within reach, or if the kerbal is doing something it cannot grab a ladder from.
+
+   .. method:: void ReleaseLadder()
+
+      Let go of the ladder the kerbal is holding, as pressing the jump key in-game
+      does. Does nothing if it is not holding one.
+
+
+      :Game Scenes: Flight
+
+
+      .. note::
+
+         Throws an exception if the vessel is not a kerbal on EVA.
 
 
 

@@ -2257,6 +2257,26 @@ occupying a part, or the vessel containing the part is not loaded.</p>
 </dl>
 </dd></dl>
 
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.CrewMember.EVA">
+<a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Vessel" title="KRPC.Client.Services.SpaceCenter.Vessel class"><span class="pre">Vessel</span></a> <span class="sig-name descname"><span class="pre">EVA</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.CrewMember.EVA" title="Link to this definition">#</a></dt>
+<dd><p>Send the crew member outside on EVA, through the hatch of the part it is in, and
+return the vessel it becomes. The game switches to that vessel, which can then be
+walked around and flown using its <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Vessel.Control" title="KRPC.Client.Services.SpaceCenter.Vessel.Control property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.Control</span></code></a>, and brought back
+in with <a class="reference internal" href="control.html#method-KRPC.Client.Services.SpaceCenter.Control.Board" title="KRPC.Client.Services.SpaceCenter.Control.Board method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Control.Board</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Throws an exception if EVA is disabled for the game, if the crew member is not in
+a loaded vessel, if it is already on EVA, or if every hatch out of the part it is
+in is obstructed.</p>
+</div>
+</dd></dl>
+
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.CrewMember.SuitType">
 <a class="reference internal" href="#enum-KRPC.Client.Services.SpaceCenter.SuitType" title="KRPC.Client.Services.SpaceCenter.SuitType enum"><span class="pre">SuitType</span></a> <span class="sig-name descname"><span class="pre">SuitType</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.CrewMember.SuitType" title="Link to this definition">#</a></dt>
