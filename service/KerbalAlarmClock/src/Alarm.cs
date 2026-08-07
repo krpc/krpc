@@ -3,6 +3,7 @@ using System.Linq;
 using KRPC.KerbalAlarmClock.ExtensionMethods;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.KerbalAlarmClock
 {
@@ -13,14 +14,18 @@ namespace KRPC.KerbalAlarmClock
     /// <see cref="KerbalAlarmClock.AlarmsWithType"/>.
     /// </summary>
     [KRPCClass (Service = "KerbalAlarmClock")]
-    public class Alarm : Equatable<Alarm>
+    public class Alarm : Equatable<Alarm>, IGameObjectState
     {
+        // The identifier the mod knows the alarm by, which is what it creates and deletes
+        // alarms with. The alarm object the mod hands out is built afresh every time the
+        // alarms are listed, and belongs to the game state it was listed in, so holding one
+        // would leave this reading an alarm the mod no longer has.
         readonly string id;
-        KACWrapper.KACAPI.KACAlarm alarm;
 
         internal Alarm (KACWrapper.KACAPI.KACAlarm innerAlarm)
         {
-            alarm = innerAlarm;
+            if (innerAlarm == null)
+                throw new ArgumentNullException (nameof (innerAlarm));
             id = innerAlarm.ID;
         }
 
@@ -41,10 +46,62 @@ namespace KRPC.KerbalAlarmClock
             return id.GetHashCode ();
         }
 
-        void CheckExists ()
+        /// <summary>
+        /// What the game holds for the alarm. It is live while Kerbal Alarm Clock lists an
+        /// alarm with the identifier, and destroyed once the mod is there to ask and lists
+        /// none, as an alarm that is removed is gone for good. The mod not being ready says
+        /// nothing about any alarm.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                if (!KACWrapper.APIReady)
+                    return GameObjectState.Dormant;
+                return Find () != null ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        /// <summary>
+        /// The alarm the mod has under the identifier, or null if it has none.
+        /// </summary>
+        KACWrapper.KACAPI.KACAlarm Find ()
         {
-            if (alarm == null)
-                throw new InvalidOperationException ("Alarm does not exist");
+            if (!KACWrapper.APIReady)
+                return null;
+            var alarms = KACWrapper.KAC.Alarms;
+            for (var i = 0; i < alarms.Count; i++) {
+                if (alarms [i].ID == id)
+                    return alarms [i];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The alarm the mod has now. Every member reaches the mod through this, so an
+        /// alarm rebuilt by a game being loaded is read in place of the one this was built
+        /// from.
+        /// </summary>
+        KACWrapper.KACAPI.KACAlarm Internal {
+            get {
+                var found = Find ();
+                if (found == null)
+                    throw NotResolvable ();
+                return found;
+            }
+        }
+
+        /// <summary>
+        /// The error to raise when the mod has no alarm with the identifier, which
+        /// <see cref="GameObjectState" /> decides between.
+        /// </summary>
+        Exception NotResolvable ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                return new ObjectDestroyedException (
+                    "The alarm no longer exists, as Kerbal Alarm Clock no longer has an " +
+                    "alarm with its id.");
+            return new InvalidOperationException (
+                "The alarm is not available, as Kerbal Alarm Clock is not ready. " +
+                "It can be used again once it is.");
         }
 
         /// <summary>
@@ -52,8 +109,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public AlarmAction Action {
-            get { CheckExists (); return alarm.AlarmAction.ToAlarmAction (); }
-            set { CheckExists (); alarm.AlarmAction = value.FromAlarmAction (); }
+            get { return Internal.AlarmAction.ToAlarmAction (); }
+            set { Internal.AlarmAction = value.FromAlarmAction (); }
         }
 
         /// <summary>
@@ -61,8 +118,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double Margin {
-            get { CheckExists (); return alarm.AlarmMargin; }
-            set { CheckExists (); alarm.AlarmMargin = value; }
+            get { return Internal.AlarmMargin; }
+            set { Internal.AlarmMargin = value; }
         }
 
         /// <summary>
@@ -70,8 +127,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double Time {
-            get { CheckExists (); return alarm.AlarmTime; }
-            set { CheckExists (); alarm.AlarmTime = value; }
+            get { return Internal.AlarmTime; }
+            set { Internal.AlarmTime = value; }
         }
 
         /// <summary>
@@ -79,7 +136,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public AlarmType Type {
-            get { CheckExists (); return alarm.AlarmType.ToAlarmType (); }
+            get { return Internal.AlarmType.ToAlarmType (); }
         }
 
         /// <summary>
@@ -87,7 +144,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public string ID {
-            get { CheckExists (); return alarm.ID; }
+            get { return Internal.ID; }
         }
 
         /// <summary>
@@ -95,8 +152,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { CheckExists (); return alarm.Name; }
-            set { CheckExists (); alarm.Name = value; }
+            get { return Internal.Name; }
+            set { Internal.Name = value; }
         }
 
         /// <summary>
@@ -104,8 +161,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public string Notes {
-            get { CheckExists (); return alarm.Notes; }
-            set { CheckExists (); alarm.Notes = value; }
+            get { return Internal.Notes; }
+            set { Internal.Notes = value; }
         }
 
         /// <summary>
@@ -116,7 +173,7 @@ namespace KRPC.KerbalAlarmClock
             // Computed from the alarm time rather than read through the wrapper:
             // the mod stores its remaining time as a KSPTimeSpan object, which the
             // wrapper cannot unbox to a double.
-            get { CheckExists (); return alarm.AlarmTime - Planetarium.GetUniversalTime (); }
+            get { return Internal.AlarmTime - Planetarium.GetUniversalTime (); }
         }
 
         /// <summary>
@@ -124,8 +181,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool Enabled {
-            get { CheckExists (); return alarm.Enabled; }
-            set { CheckExists (); alarm.Enabled = value; }
+            get { return Internal.Enabled; }
+            set { Internal.Enabled = value; }
         }
 
         /// <summary>
@@ -133,8 +190,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool PlaySound {
-            get { CheckExists (); return alarm.PlaySound; }
-            set { CheckExists (); alarm.PlaySound = value; }
+            get { return Internal.PlaySound; }
+            set { Internal.PlaySound = value; }
         }
 
         /// <summary>
@@ -144,7 +201,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool Triggered {
-            get { CheckExists (); return alarm.Triggered; }
+            get { return Internal.Triggered; }
         }
 
         /// <summary>
@@ -154,8 +211,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool Repeat {
-            get { CheckExists (); return alarm.RepeatAlarm; }
-            set { CheckExists (); alarm.RepeatAlarm = value; }
+            get { return Internal.RepeatAlarm; }
+            set { Internal.RepeatAlarm = value; }
         }
 
         /// <summary>
@@ -164,7 +221,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool SupportsRepeat {
-            get { CheckExists (); return alarm.SupportsRepeat; }
+            get { return Internal.SupportsRepeat; }
         }
 
         /// <summary>
@@ -174,8 +231,8 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public double RepeatPeriod {
-            get { CheckExists (); return alarm.RepeatAlarmPeriod; }
-            set { CheckExists (); alarm.RepeatAlarmPeriod = value; }
+            get { return Internal.RepeatAlarmPeriod; }
+            set { Internal.RepeatAlarmPeriod = value; }
         }
 
         /// <summary>
@@ -184,7 +241,7 @@ namespace KRPC.KerbalAlarmClock
         /// </summary>
         [KRPCProperty]
         public bool SupportsRepeatPeriod {
-            get { CheckExists (); return alarm.SupportsRepeatPeriod; }
+            get { return Internal.SupportsRepeatPeriod; }
         }
 
         /// <summary>
@@ -193,13 +250,12 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public SpaceCenter.Services.Vessel Vessel {
             get {
-                CheckExists ();
-                var vessel = FlightGlobals.Vessels.First (x => x.id.ToString () == alarm.VesselID);
+                var vesselId = Internal.VesselID;
+                var vessel = FlightGlobals.Vessels.First (x => x.id.ToString () == vesselId);
                 return new SpaceCenter.Services.Vessel (vessel);
             }
             set {
-                CheckExists ();
-                alarm.VesselID = value.Id.ToString ();
+                Internal.VesselID = value.Id.ToString ();
             }
         }
 
@@ -209,13 +265,12 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public SpaceCenter.Services.CelestialBody XferOriginBody {
             get {
-                CheckExists ();
-                var body = FlightGlobals.Bodies.First (x => alarm.XferOriginBodyName == x.bodyName);
+                var bodyName = Internal.XferOriginBodyName;
+                var body = FlightGlobals.Bodies.First (x => bodyName == x.bodyName);
                 return new SpaceCenter.Services.CelestialBody (body);
             }
             set {
-                CheckExists ();
-                alarm.XferOriginBodyName = value.InternalBody.bodyName;
+                Internal.XferOriginBodyName = value.InternalBody.bodyName;
             }
         }
 
@@ -225,25 +280,25 @@ namespace KRPC.KerbalAlarmClock
         [KRPCProperty]
         public SpaceCenter.Services.CelestialBody XferTargetBody {
             get {
-                CheckExists ();
-                var body = FlightGlobals.Bodies.First (x => alarm.XferTargetBodyName == x.bodyName);
+                var bodyName = Internal.XferTargetBodyName;
+                var body = FlightGlobals.Bodies.First (x => bodyName == x.bodyName);
                 return new SpaceCenter.Services.CelestialBody (body);
             }
             set {
-                CheckExists ();
-                alarm.XferTargetBodyName = value.InternalBody.bodyName;
+                Internal.XferTargetBodyName = value.InternalBody.bodyName;
             }
         }
 
         /// <summary>
         /// Removes the alarm. Any further use of this object throws an exception.
         /// </summary>
+        /// <remarks>
+        /// Any further use of this object throws an exception.
+        /// </remarks>
         [KRPCMethod]
         public void Remove ()
         {
-            CheckExists ();
-            KACWrapper.KAC.DeleteAlarm (alarm.ID);
-            alarm = null;
+            KACWrapper.KAC.DeleteAlarm (Internal.ID);
         }
     }
 }

@@ -102,6 +102,10 @@ namespace KRPC.KerbalAlarmClock
                 .SelectMany(t => t)
                 .FirstOrDefault(t => t.FullName == "KerbalAlarmClock.KACAlarm");
 
+            // The alarm wrapper binds the mod's fields once and keeps them for the
+            // assembly, so anything bound against the type of a previous run is dropped.
+            KACAPI.KACAlarm.Unbind();
+
             if (KACAlarmType == null)
             {
                 return false;
@@ -382,6 +386,29 @@ namespace KRPC.KerbalAlarmClock
                 internal KACAlarm(Object a)
                 {
                     actualAlarm = a;
+                    EnsureBound();
+                }
+
+                // The lookups below depend on the mod's alarm type alone, so they are made
+                // once for the assembly rather than for each alarm wrapped. An alarm is
+                // wrapped every time the alarms are listed, and there are twenty of them.
+                private static bool bound;
+
+                internal static void Unbind()
+                {
+                    bound = false;
+                }
+
+                private static void EnsureBound()
+                {
+                    if (bound)
+                        return;
+                    Bind();
+                    bound = true;
+                }
+
+                private static void Bind()
+                {
                     VesselIDField = KACAlarmType.GetField("VesselID");
                     IDField = KACAlarmType.GetField("ID");
                     NameField = KACAlarmType.GetField("Name");
@@ -420,7 +447,7 @@ namespace KRPC.KerbalAlarmClock
                 }
                 private Object actualAlarm;
 
-                private FieldInfo VesselIDField;
+                private static FieldInfo VesselIDField;
                 /// <summary>
                 /// Unique Identifier of the Vessel that the alarm is attached to
                 /// </summary>
@@ -430,7 +457,7 @@ namespace KRPC.KerbalAlarmClock
                     set { VesselIDField.SetValue(actualAlarm, value); }
                 }
 
-                private FieldInfo IDField;
+                private static FieldInfo IDField;
                 /// <summary>
                 /// Unique Identifier of this alarm
                 /// </summary>
@@ -439,7 +466,7 @@ namespace KRPC.KerbalAlarmClock
                     get { return (String)IDField.GetValue(actualAlarm); }
                 }
 
-                private FieldInfo NameField;
+                private static FieldInfo NameField;
                 /// <summary>
                 /// Short Text Name for the Alarm
                 /// </summary>
@@ -449,7 +476,7 @@ namespace KRPC.KerbalAlarmClock
                     set { NameField.SetValue(actualAlarm, value); }
                 }
 
-                private FieldInfo NotesField;
+                private static FieldInfo NotesField;
                 /// <summary>
                 /// Longer Text Description for the Alarm
                 /// </summary>
@@ -459,7 +486,7 @@ namespace KRPC.KerbalAlarmClock
                     set { NotesField.SetValue(actualAlarm, value); }
                 }
 
-                private FieldInfo XferOriginBodyNameField;
+                private static FieldInfo XferOriginBodyNameField;
                 /// <summary>
                 /// Name of the origin body for a transfer
                 /// </summary>
@@ -469,7 +496,7 @@ namespace KRPC.KerbalAlarmClock
                     set { XferOriginBodyNameField.SetValue(actualAlarm, value); }
                 }
 
-                private FieldInfo XferTargetBodyNameField;
+                private static FieldInfo XferTargetBodyNameField;
                 /// <summary>
                 /// Name of the destination body for a transfer
                 /// </summary>
@@ -479,13 +506,13 @@ namespace KRPC.KerbalAlarmClock
                     set { XferTargetBodyNameField.SetValue(actualAlarm, value); }
                 }
                 
-                private FieldInfo AlarmTypeField;
+                private static FieldInfo AlarmTypeField;
                 /// <summary>
                 /// What type of Alarm is this - affects icon displayed and some calc options
                 /// </summary>
                 public AlarmTypeEnum AlarmType { get { return (AlarmTypeEnum)AlarmTypeField.GetValue(actualAlarm); } }
 
-                private PropertyInfo AlarmTimeProperty;
+                private static PropertyInfo AlarmTimeProperty;
                 /// <summary>
                 /// In game UT value of the alarm
                 /// </summary>
@@ -495,7 +522,7 @@ namespace KRPC.KerbalAlarmClock
                     set { AlarmTimeProperty.SetValue(actualAlarm, value, null); }
                 }
 
-                private FieldInfo AlarmMarginField;
+                private static FieldInfo AlarmMarginField;
                 /// <summary>
                 /// In game seconds the alarm will fire before the event it is for
                 /// </summary>
@@ -505,7 +532,7 @@ namespace KRPC.KerbalAlarmClock
                     set { AlarmMarginField.SetValue(actualAlarm, value); }
                 }
 
-                private FieldInfo AlarmActionField;
+                private static FieldInfo AlarmActionField;
                 /// <summary>
                 /// What should the Alarm Clock do when the alarm fires
                 /// </summary>
@@ -522,18 +549,18 @@ namespace KRPC.KerbalAlarmClock
                     get { return (AlarmActionEnum)ActionActionProperty.GetValue(actualAlarm); }
                     set { ActionActionProperty.SetValue(actualAlarm, (Int32)value); }
                 }
-                private PropertyInfo ActionActionProperty;
+                private static PropertyInfo ActionActionProperty;
 
 
 
-                private FieldInfo RemainingField;
+                private static FieldInfo RemainingField;
                 /// <summary>
                 /// How much Game time is left before the alarm fires
                 /// </summary>
                 public Double Remaining { get { return (Double)RemainingField.GetValue(actualAlarm); } }
 
 
-                private FieldInfo RepeatAlarmField;
+                private static FieldInfo RepeatAlarmField;
                 /// <summary>
                 /// Whether the alarm will be repeated after it fires
                 /// </summary>
@@ -542,7 +569,7 @@ namespace KRPC.KerbalAlarmClock
                     get { return (Boolean)RepeatAlarmField.GetValue(actualAlarm); }
                     set { RepeatAlarmField.SetValue(actualAlarm, value); }
                 }
-                private PropertyInfo RepeatAlarmPeriodProperty;
+                private static PropertyInfo RepeatAlarmPeriodProperty;
                 /// <summary>
                 /// Value in Seconds after which the alarm will repeat
                 /// </summary>
@@ -555,7 +582,7 @@ namespace KRPC.KerbalAlarmClock
                     }
                     set { RepeatAlarmPeriodProperty.SetValue(actualAlarm, value, null); }
                 }
-                private PropertyInfo SupportsRepeatProperty;
+                private static PropertyInfo SupportsRepeatProperty;
                 /// <summary>
                 /// Whether this alarm's type supports repeating
                 /// </summary>
@@ -563,7 +590,7 @@ namespace KRPC.KerbalAlarmClock
                 {
                     get { return (Boolean)SupportsRepeatProperty.GetValue(actualAlarm, null); }
                 }
-                private PropertyInfo SupportsRepeatPeriodProperty;
+                private static PropertyInfo SupportsRepeatPeriodProperty;
                 /// <summary>
                 /// Whether this alarm's type supports a repeat period
                 /// </summary>
@@ -571,7 +598,7 @@ namespace KRPC.KerbalAlarmClock
                 {
                     get { return (Boolean)SupportsRepeatPeriodProperty.GetValue(actualAlarm, null); }
                 }
-                private FieldInfo EnabledField;
+                private static FieldInfo EnabledField;
                 /// <summary>
                 /// Whether the alarm is enabled
                 /// </summary>
@@ -580,7 +607,7 @@ namespace KRPC.KerbalAlarmClock
                     get { return (Boolean)EnabledField.GetValue(actualAlarm); }
                     set { EnabledField.SetValue(actualAlarm, value); }
                 }
-                private FieldInfo PlaySoundField;
+                private static FieldInfo PlaySoundField;
                 /// <summary>
                 /// Whether the alarm plays a sound when it fires
                 /// </summary>
@@ -589,7 +616,7 @@ namespace KRPC.KerbalAlarmClock
                     get { return (Boolean)PlaySoundField.GetValue(actualAlarm); }
                     set { PlaySoundField.SetValue(actualAlarm, value); }
                 }
-                private FieldInfo TriggeredField;
+                private static FieldInfo TriggeredField;
                 /// <summary>
                 /// Whether the alarm has been triggered (the field is internal to the mod)
                 /// </summary>
