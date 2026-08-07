@@ -146,7 +146,7 @@ namespace KRPC.SpaceCenter.Services
             get {
                 if (!InNetwork)
                     return new List<CommLink> ();
-                return InternalComms.ControlPath.Select (x => new CommLink (x)).ToList ();
+                return InternalComms.ControlPath.Select (x => new CommLink (VesselId, x)).ToList ();
             }
         }
     }
