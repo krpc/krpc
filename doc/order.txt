@@ -496,6 +496,11 @@ SpaceCenter.Control.GetActionGroupActions
 SpaceCenter.Control.AddNode
 SpaceCenter.Control.Nodes
 SpaceCenter.Control.RemoveNodes
+SpaceCenter.Control.Airlock
+SpaceCenter.Control.Board
+SpaceCenter.Control.Ladder
+SpaceCenter.Control.GrabLadder
+SpaceCenter.Control.ReleaseLadder
 SpaceCenter.ActionGroupAction
 SpaceCenter.ActionGroupAction.Part
 SpaceCenter.ActionGroupAction.Module
@@ -562,6 +567,7 @@ SpaceCenter.CrewMember.Trait
 SpaceCenter.CrewMember.Gender
 SpaceCenter.CrewMember.RosterStatus
 SpaceCenter.CrewMember.Part
+SpaceCenter.CrewMember.EVA
 SpaceCenter.CrewMember.SuitType
 SpaceCenter.CrewMember.CareerLogFlights
 SpaceCenter.CrewMember.CareerLogTypes

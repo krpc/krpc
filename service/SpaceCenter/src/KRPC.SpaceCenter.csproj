@@ -62,6 +62,7 @@
     <Compile Include="ExtensionMethods\HopTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\InternalCameraExtensions.cs" />
     <Compile Include="ExtensionMethods\ITorqueProviderExtensions.cs" />
+    <Compile Include="ExtensionMethods\KerbalEVAExtensions.cs" />
     <Compile Include="ExtensionMethods\KerbalTypeExtensions.cs" />
     <Compile Include="ExtensionMethods\ModuleWheelDeploymentExtensions.cs" />
     <Compile Include="ExtensionMethods\MotorStateExtensions.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />
     <Compile Include="CameraAddon.cs" />
+    <Compile Include="EVAAddon.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />

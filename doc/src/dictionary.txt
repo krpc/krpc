@@ -84,6 +84,7 @@ integration
 internet
 intra
 javac
+jetpack
 jitter
 kOS
 kN

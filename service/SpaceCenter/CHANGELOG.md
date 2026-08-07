@@ -9,6 +9,8 @@
     raises an exception without launching (#1017)
 
 - Vessels and crew
+  - Add `CrewMember.EVA`, which sends a Kerbal outside through the hatch of the part it is
+    in and returns the vessel it becomes (#319)
   - Add `Vessel.Terminate`, which removes a vessel and its parts from the game without
     recovering anything, as terminating it from the tracking station does. Its crew are
     reported missing. The active vessel cannot be terminated (#1034)
@@ -59,6 +61,16 @@
     has nothing that can stall; it now reports no stall (#1032)
 
 - Control
+  - A Kerbal on EVA can now be driven through `Vessel.Control`. `Control.Forward` and
+    `Control.Right` walk it about, relative to the direction it is facing, and all three
+    translation inputs fly its jetpack once deployed. `Control.Yaw` steers it as it walks,
+    and the rotation inputs turn its jetpack, at a rate proportional to the input.
+    `Control.RCS` deploys and stows the jetpack, and `Control.Lights` switches the helmet
+    lamp (#319)
+  - Add `Control.Board`, which climbs a Kerbal on EVA into the part whose hatch it is
+    standing at, and `Control.Airlock`, which reports that part. Add `Control.GrabLadder`
+    and `Control.ReleaseLadder` for the ladder it is alongside, and `Control.Ladder`, which
+    reports the ladder it is holding (#319)
   - Setting `Control.StageLock` now leaves the in-game Alt+L shortcut in step with it, so the
     next press of Alt+L locks or unlocks staging rather than being absorbed (#1022)
 
