@@ -105,3 +105,39 @@ object is not expected to survive an undo followed by a redo.
 Leaving the editor destroys the vessel it had open, and with it every object reached through
 ``SpaceCenter.Editor``: its parts, their part modules, its stages and its resources. A script
 that returns to the editor has to obtain them again.
+
+Objects in other services
+-------------------------
+
+The same rules hold for every service, not only ``SpaceCenter``.
+
+An object a client makes itself follows what the game does with it. A line or a marker from
+the ``Drawing`` service, a panel or a button from ``UI``, and a force from ``Part.AddForce``
+are all gone once they are removed, once the service's ``Clear`` is called, or once the scene
+changes, and using one then raises ``KRPC.ObjectDestroyedException``. The server also removes
+what a client made when that client disconnects. A force is applied to a part, so it also
+stops, and is gone, once that part is destroyed.
+
+An object that stands for something on a part or a vessel is exactly as alive as the part or
+the vessel. A RemoteTech antenna, an Infernal Robotics servo, a LaserDist laser and a docking
+camera all raise the exception once their part is destroyed, or once the part no longer
+carries the module that made it one of those things. An Infernal Robotics servo group is named
+by its vessel and the group's name, so renaming a group leaves every object for it standing
+for a group the vessel no longer has, exactly as renaming a kerbal does, and an object for the
+group has to be obtained again under the new name.
+
+An object that stands for a record the game keeps finds that record again on every call, so it
+goes on working when the game rebuilds it and raises the exception once the game no longer has
+it. An alarm, a contract and its parameters, and a Kerbal Alarm Clock alarm all keep working
+across a load; removing an alarm or a waypoint leaves the object for it gone. A waypoint a
+client creates is not written into the save, so it does not outlive the game state it was
+created in.
+
+A comm link is a hop in a vessel's control path, and reports that path as it is now rather
+than as it was when the object was obtained. A path that no longer takes the hop has lost
+contact rather than destroyed anything, so the link reports itself as not currently connected,
+which is the not-loaded case above, and works again if the path takes it again.
+
+Where a mod is not installed, or is not ready to be asked, its objects report themselves as
+unavailable rather than gone, for the same reason a part that is not loaded does: nothing that
+can be asked has said the thing is not there.
