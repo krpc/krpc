@@ -7,9 +7,24 @@ class TestWaypoints(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.space_center = cls.connect().space_center
+        cls.conn = cls.connect()
+        cls.space_center = cls.conn.space_center
         cls.wpm = cls.space_center.waypoint_manager
         cls.body = cls.space_center.bodies["Kerbin"]
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+
+    def test_access_after_remove_raises(self):
+        waypoint = self.wpm.add_waypoint(0, 0, self.body, "test_access_after_remove")
+        self.assertEqual("test_access_after_remove", waypoint.name)
+        waypoint.remove()
+        # The game no longer has the waypoint, so reading or writing it says so rather
+        # than changing a waypoint that is not in the game.
+        with self.assertRaises(self.destroyed):
+            _ = waypoint.name
+        with self.assertRaises(self.destroyed):
+            waypoint.latitude = 10
+        with self.assertRaises(self.destroyed):
+            waypoint.remove()
 
     def test_manager(self):
         # On a fresh save KSP creates a waypoint for each launch site. The three
