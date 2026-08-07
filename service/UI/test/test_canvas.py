@@ -54,6 +54,11 @@ class TestCanvas(krpctest.TestCase):
         self.assertFalse(panel.visible)
         panel.remove()
 
+    def test_rect_transform_is_one_object(self):
+        # A rect transform is named by the one the game holds, so reading it twice gives
+        # the same object rather than adding another to the server's object store.
+        self.assertEqual(self.canvas.rect_transform, self.canvas.rect_transform)
+
     def test_rect_transform(self):
         rect = self.canvas.rect_transform
         width, height = rect.size

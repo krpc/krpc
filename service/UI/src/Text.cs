@@ -31,6 +31,14 @@ namespace KRPC.UI
             text = obj.GetComponent<UnityEngine.UI.Text> ();
         }
 
+        // The game's text component, checked to still exist.
+        UnityEngine.UI.Text Internal {
+            get {
+                CheckExists ();
+                return text;
+            }
+        }
+
         /// <summary>
         /// A list of all available fonts.
         /// </summary>
@@ -44,8 +52,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public string Content {
-            get { return text.text; }
-            set { text.text = value; }
+            get { return Internal.text; }
+            set { Internal.text = value; }
         }
 
         /// <summary>
@@ -57,11 +65,14 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public string Font {
-            get { return text.font == null ? string.Empty : text.font.name; }
+            get {
+                var font = Internal.font;
+                return font == null ? string.Empty : font.name;
+            }
             set {
                 if (!AvailableFonts.Contains (value))
                     throw new ArgumentException ("Font does not exist");
-                text.font = Widgets.OSFont (value);
+                Internal.font = Widgets.OSFont (value);
             }
         }
 
@@ -70,8 +81,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public int Size {
-            get { return text.fontSize; }
-            set { text.fontSize = value; }
+            get { return Internal.fontSize; }
+            set { Internal.fontSize = value; }
         }
 
         /// <summary>
@@ -79,8 +90,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public FontStyle Style {
-            get { return text.fontStyle.ToFontStyle (); }
-            set { text.fontStyle = value.FromFontStyle (); }
+            get { return Internal.fontStyle.ToFontStyle (); }
+            set { Internal.fontStyle = value.FromFontStyle (); }
         }
 
         /// <summary>
@@ -88,8 +99,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public TextAnchor Alignment {
-            get { return text.alignment.ToTextAnchor (); }
-            set { text.alignment = value.FromTextAnchor (); }
+            get { return Internal.alignment.ToTextAnchor (); }
+            set { Internal.alignment = value.FromTextAnchor (); }
         }
 
         /// <summary>
@@ -97,8 +108,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public float LineSpacing {
-            get { return text.lineSpacing; }
-            set { text.lineSpacing = value; }
+            get { return Internal.lineSpacing; }
+            set { Internal.lineSpacing = value; }
         }
 
         /// <summary>
@@ -109,9 +120,9 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public bool WordWrap {
-            get { return text.horizontalOverflow == HorizontalWrapMode.Wrap; }
+            get { return Internal.horizontalOverflow == HorizontalWrapMode.Wrap; }
             set {
-                text.horizontalOverflow = value
+                Internal.horizontalOverflow = value
                     ? HorizontalWrapMode.Wrap : HorizontalWrapMode.Overflow;
             }
         }
@@ -122,8 +133,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple4 Color {
-            get { return text.color.ToRgbaTuple (); }
-            set { text.color = value.ToColor (); }
+            get { return Internal.color.ToRgbaTuple (); }
+            set { Internal.color = value.ToColor (); }
         }
     }
 }

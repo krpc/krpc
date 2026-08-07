@@ -7,7 +7,9 @@ class TestScrollView(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        ui = cls.connect().ui
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        ui = cls.conn.ui
         cls.canvas = ui.stock_canvas
         cls.constraint = ui.GridConstraint
         cls.fit = ui.ContentSizeFit
@@ -20,7 +22,7 @@ class TestScrollView(krpctest.TestCase):
         self.assertTrue(view.horizontal)
         self.assertTrue(view.vertical)
         view.remove()
-        self.assertRaises(ValueError, view.remove)
+        self.assertRaises(self.destroyed, view.remove)
 
     def test_directions(self):
         view = self.canvas.add_scroll_view()

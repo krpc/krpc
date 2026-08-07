@@ -14,7 +14,9 @@ class TestImage(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        cls.canvas = cls.conn.ui.stock_canvas
 
     def test_image(self):
         image = self.canvas.add_image()
@@ -22,7 +24,7 @@ class TestImage(krpctest.TestCase):
         self.assertTrue(image.visible)
         self.assertEqual(b"", image.content)
         image.remove()
-        self.assertRaises(ValueError, image.remove)
+        self.assertRaises(self.destroyed, image.remove)
 
     def test_color(self):
         image = self.canvas.add_image()

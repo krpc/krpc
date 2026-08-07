@@ -37,7 +37,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Panel AddPanel (bool visible = true)
         {
-            return new Panel (GameObject, visible);
+            return new Panel (CheckedGameObject, visible);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Text AddText (string content, bool visible = true)
         {
-            return new Text (GameObject, content, visible);
+            return new Text (CheckedGameObject, content, visible);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public InputField AddInputField (bool visible = true)
         {
-            return new InputField (GameObject, visible);
+            return new InputField (CheckedGameObject, visible);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Slider AddSlider (bool vertical = false, bool visible = true)
         {
-            return new Slider (GameObject, vertical, visible);
+            return new Slider (CheckedGameObject, vertical, visible);
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Dropdown AddDropdown (bool visible = true)
         {
-            return new Dropdown (GameObject, visible);
+            return new Dropdown (CheckedGameObject, visible);
         }
 
         /// <summary>
@@ -91,7 +91,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Image AddImage (bool visible = true)
         {
-            return new Image (GameObject, visible);
+            return new Image (CheckedGameObject, visible);
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public ScrollView AddScrollView (bool visible = true)
         {
-            return new ScrollView (GameObject, visible);
+            return new ScrollView (CheckedGameObject, visible);
         }
 
         /// <summary>
@@ -112,7 +112,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Toggle AddToggle (string content, bool visible = true)
         {
-            return new Toggle (GameObject, content, visible);
+            return new Toggle (CheckedGameObject, content, visible);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public ToggleGroup AddToggleGroup ()
         {
-            return new ToggleGroup (GameObject);
+            return new ToggleGroup (CheckedGameObject);
         }
 
         /// <summary>
@@ -136,7 +136,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public Button AddButton (string content, bool visible = true)
         {
-            return new Button (GameObject, content, visible);
+            return new Button (CheckedGameObject, content, visible);
         }
     }
 }

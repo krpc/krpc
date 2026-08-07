@@ -7,7 +7,9 @@ class TestDropdown(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        cls.canvas = cls.conn.ui.stock_canvas
 
     def test_dropdown(self):
         dropdown = self.canvas.add_dropdown()
@@ -17,7 +19,7 @@ class TestDropdown(krpctest.TestCase):
         self.assertEqual(0, dropdown.selected_index)
         self.assertFalse(dropdown.changed)
         dropdown.remove()
-        self.assertRaises(ValueError, dropdown.remove)
+        self.assertRaises(self.destroyed, dropdown.remove)
 
     def test_options(self):
         dropdown = self.canvas.add_dropdown()

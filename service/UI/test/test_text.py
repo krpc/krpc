@@ -7,6 +7,8 @@ class TestText(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
         ui = cls.connect().ui
         cls.canvas = ui.stock_canvas
         cls.style = ui.FontStyle
@@ -27,7 +29,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.anchor.upper_left, text.alignment)
         self.assertEqual(1, text.line_spacing)
         text.remove()
-        self.assertRaises(ValueError, text.remove)
+        self.assertRaises(self.destroyed, text.remove)
 
     def test_properties(self):
         text = self.canvas.add_text("Jebediah Kerman")
@@ -45,6 +47,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(self.anchor.upper_right, text.alignment)
         self.assertEqual(2, text.line_spacing)
         text.remove()
+        self.assertRaises(self.destroyed, text.remove)
 
     def test_word_wrap(self):
         text = self.canvas.add_text("Jebediah Kerman")
@@ -56,7 +59,7 @@ class TestText(krpctest.TestCase):
         text.word_wrap = True
         self.assertTrue(text.word_wrap)
         text.remove()
-        self.assertRaises(ValueError, text.remove)
+        self.assertRaises(self.destroyed, text.remove)
 
 
 if __name__ == "__main__":

@@ -7,7 +7,9 @@ class TestToggle(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        cls.canvas = cls.conn.ui.stock_canvas
 
     def test_toggle(self):
         toggle = self.canvas.add_toggle("Foo")
@@ -19,7 +21,7 @@ class TestToggle(krpctest.TestCase):
         self.assertFalse(toggle.changed)
         self.assertIsNone(toggle.group)
         toggle.remove()
-        self.assertRaises(ValueError, toggle.remove)
+        self.assertRaises(self.destroyed, toggle.remove)
 
     def test_checked(self):
         toggle = self.canvas.add_toggle("Foo")

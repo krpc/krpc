@@ -51,15 +51,23 @@ namespace KRPC.UI
             get { return inputField; }
         }
 
+        // The game's input field, checked to still exist.
+        UnityEngine.UI.InputField Internal {
+            get {
+                CheckExists ();
+                return inputField;
+            }
+        }
+
         /// <summary>
         /// The value of the input field.
         /// </summary>
         [KRPCProperty]
         public string Value {
-            get { return inputField.text; }
+            get { return Internal.text; }
             // Unity notifies its listeners of a value set by a client just as it does one
             // typed by the user, so the value is set without notifying them.
-            set { inputField.SetTextWithoutNotify (value); }
+            set { Internal.SetTextWithoutNotify (value); }
         }
 
         /// <summary>
@@ -97,8 +105,8 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public InputContentType ContentType {
-            get { return inputField.contentType.ToInputContentType (); }
-            set { inputField.contentType = value.FromInputContentType (); }
+            get { return Internal.contentType.ToInputContentType (); }
+            set { Internal.contentType = value.FromInputContentType (); }
         }
 
         /// <summary>
@@ -106,12 +114,12 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public int CharacterLimit {
-            get { return inputField.characterLimit; }
+            get { return Internal.characterLimit; }
             set {
                 if (value < 0)
                     throw new ArgumentOutOfRangeException (
                         nameof (value), "The character limit must not be negative");
-                inputField.characterLimit = value;
+                Internal.characterLimit = value;
             }
         }
 
@@ -125,8 +133,8 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool ReadOnly {
-            get { return inputField.readOnly; }
-            set { inputField.readOnly = value; }
+            get { return Internal.readOnly; }
+            set { Internal.readOnly = value; }
         }
 
         /// <summary>

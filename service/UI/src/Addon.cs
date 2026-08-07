@@ -46,11 +46,13 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Update the addon: destroy the objects of clients that have disconnected.
+        /// Update the addon: destroy the objects of clients that have disconnected, and
+        /// drop the ones the game no longer has.
         /// </summary>
         public void Update ()
         {
             Sweep ();
+            objects.RemoveDestroyed ();
         }
     }
 }
