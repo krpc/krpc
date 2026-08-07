@@ -41,9 +41,21 @@ namespace KRPC.Drawing
         /// </summary>
         public override void Update ()
         {
+            if (!CanBeDrawn) {
+                renderer.enabled = false;
+                return;
+            }
             renderer.enabled = Visible;
             renderer.SetPosition (0, ReferenceFrame.PositionToWorldSpace (start));
             renderer.SetPosition (1, ReferenceFrame.PositionToWorldSpace (end));
+        }
+
+        // The line renderer, checked to still exist.
+        LineRenderer LineRenderer {
+            get {
+                CheckExists ();
+                return renderer;
+            }
         }
 
         /// <summary>
@@ -74,7 +86,7 @@ namespace KRPC.Drawing
                 color = value;
                 var rgbColor = color.ToColor ();
                 #pragma warning disable 618
-                renderer.SetColors (rgbColor, rgbColor);
+                LineRenderer.SetColors (rgbColor, rgbColor);
                 #pragma warning restore
             }
         }
@@ -88,7 +100,7 @@ namespace KRPC.Drawing
             set {
                 thickness = value;
                 #pragma warning disable 618
-                renderer.SetWidth (thickness, thickness);
+                LineRenderer.SetWidth (thickness, thickness);
                 #pragma warning restore
             }
         }

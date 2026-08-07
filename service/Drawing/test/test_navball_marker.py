@@ -7,6 +7,8 @@ class TestNavballMarker(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
         cls.drawing = cls.connect().drawing
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ref = cls.vessel.reference_frame
@@ -23,7 +25,7 @@ class TestNavballMarker(krpctest.TestCase):
         self.assertEqual("default", marker.icon)
         self.assertAlmostEqual(1, marker.size)
         marker.remove()
-        self.assertRaises(ValueError, marker.remove)
+        self.assertRaises(self.destroyed, marker.remove)
 
     def test_direction(self):
         marker = self.add_marker()
@@ -66,7 +68,7 @@ class TestNavballMarker(krpctest.TestCase):
     def test_clear(self):
         marker = self.add_marker()
         self.drawing.clear()
-        self.assertRaises(ValueError, marker.remove)
+        self.assertRaises(self.destroyed, marker.remove)
 
 
 if __name__ == "__main__":

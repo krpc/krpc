@@ -45,12 +45,13 @@ namespace KRPC.Drawing
         }
 
         /// <summary>
-        /// Update the addon: destroy the objects of clients that have disconnected,
-        /// and update the rest.
+        /// Update the addon: destroy the objects of clients that have disconnected, drop
+        /// the ones the game no longer has, and update the rest.
         /// </summary>
         public void Update ()
         {
             Sweep ();
+            objects.RemoveDestroyed ();
             foreach (var obj in objects.Items)
                 obj.Update ();
         }

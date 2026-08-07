@@ -7,6 +7,8 @@ class TestText(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
         cls.drawing = cls.connect().drawing
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ref = cls.vessel.reference_frame
@@ -37,7 +39,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(1, text.line_spacing)
         self.assertEqual(self.anchor.upper_left, text.anchor)
         text.remove()
-        self.assertRaises(ValueError, text.remove)
+        self.assertRaises(self.destroyed, text.remove)
 
     def test_text_properties(self):
         text = self.add_text()
@@ -59,7 +61,7 @@ class TestText(krpctest.TestCase):
         self.assertEqual(2, text.line_spacing)
         self.assertEqual(self.anchor.upper_right, text.anchor)
         text.remove()
-        self.assertRaises(ValueError, text.remove)
+        self.assertRaises(self.destroyed, text.remove)
 
 
 if __name__ == "__main__":

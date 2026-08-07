@@ -4,7 +4,9 @@ using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using UnityEngine;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.Drawing
@@ -30,6 +32,10 @@ namespace KRPC.Drawing
         readonly UnityEngine.Material material;
         // The scale at which the game draws the navball's own markers, which a size of 1 matches.
         readonly Vector3 stockScale;
+        // Whether the marker has been taken out of the scene. The game tears a game object
+        // down at the end of the frame, so this records that it is on its way out, and a
+        // marker removed and read again in the same frame reports it gone.
+        bool removed;
         Vector3d direction;
         Tuple3 color;
         string icon;
@@ -82,6 +88,14 @@ namespace KRPC.Drawing
         /// </summary>
         public void Update ()
         {
+            // A marker is left where it is, rather than removed, when the frame its
+            // direction is measured in is defined against something the game has
+            // destroyed: the client can point it at another frame.
+            if (GameObjectState != GameObjectState.Live ||
+                ReferenceFrame.GameObjectState != GameObjectState.Live) {
+                GameObject.SetActive (false);
+                return;
+            }
             Vector3 worldDirection = ReferenceFrame.DirectionToWorldSpace (direction).normalized;
             var position = navBall.attitudeGymbal * (worldDirection * navBall.VectorUnitScale);
             GameObject.transform.localPosition = position;
@@ -99,6 +113,7 @@ namespace KRPC.Drawing
         /// </summary>
         public void Destroy ()
         {
+            removed = true;
             UnityEngine.Object.Destroy (material);
             UnityEngine.Object.Destroy (GameObject);
         }
@@ -109,11 +124,41 @@ namespace KRPC.Drawing
         public GameObject GameObject { get; private set; }
 
         /// <summary>
+        /// What the game holds for the marker. The marker is the game object it was made
+        /// with, so it is live while the game still has that object, and destroyed once it
+        /// does not, which is what removing it, clearing the drawing objects, disconnecting
+        /// the client that made it and leaving the scene all do.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return removed || GameObject == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        // The marker's own material, checked to still exist. Every member that reaches into
+        // the game goes through this or through the checked game object.
+        UnityEngine.Material Material {
+            get {
+                CheckExists ();
+                return material;
+            }
+        }
+
+        void CheckExists ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                throw new ObjectDestroyedException (
+                    "The navball marker no longer exists, as it has been removed.");
+        }
+
+        /// <summary>
         /// Remove the marker.
         /// </summary>
         [KRPCMethod]
         public void Remove ()
         {
+            CheckExists ();
             Addon.RemoveObject (this);
         }
 
@@ -149,7 +194,7 @@ namespace KRPC.Drawing
             get { return color; }
             set {
                 color = value;
-                material.SetColor ("_TintColor", color.ToColor ());
+                Material.SetColor ("_TintColor", color.ToColor ());
             }
         }
 
@@ -164,7 +209,7 @@ namespace KRPC.Drawing
                 if (!AvailableIcons ().Contains (value))
                     throw new ArgumentException ("Icon does not exist");
                 icon = value;
-                material.SetTexture ("_MainTexture", GameDatabase.Instance.GetTexture (iconDirectory + icon, false));
+                Material.SetTexture ("_MainTexture", GameDatabase.Instance.GetTexture (iconDirectory + icon, false));
             }
         }
 
@@ -176,6 +221,7 @@ namespace KRPC.Drawing
             get { return size; }
             set {
                 size = value;
+                CheckExists ();
                 GameObject.transform.localScale = stockScale * size;
             }
         }

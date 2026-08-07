@@ -1,7 +1,9 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using UnityEngine;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.Drawing
 {
@@ -10,13 +12,19 @@ namespace KRPC.Drawing
     /// </summary>
     public abstract class Drawable<T> : IDrawable
     {
+        readonly Renderer renderer;
+        // Whether the drawable has been taken out of the scene. The game tears a game
+        // object down at the end of the frame, so this records that it is on its way out,
+        // and an object removed and read again in the same frame reports it gone.
+        bool removed;
+
         /// <summary>
         /// Create a drawable and register it with the draw addon.
         /// </summary>
         protected Drawable (Type rendererType)
         {
             GameObject = new GameObject ("KRPC.Drawing." + typeof(T).Name);
-            Renderer = (Renderer)GameObject.AddComponent (rendererType);
+            renderer = (Renderer)GameObject.AddComponent (rendererType);
             Material = "Legacy Shaders/Particles/Additive";
             Addon.AddObject (this);
         }
@@ -31,7 +39,8 @@ namespace KRPC.Drawing
         /// </summary>
         public virtual void Destroy ()
         {
-            UnityEngine.Object.Destroy (Renderer);
+            removed = true;
+            UnityEngine.Object.Destroy (renderer);
             UnityEngine.Object.Destroy (GameObject);
         }
 
@@ -41,9 +50,52 @@ namespace KRPC.Drawing
         public GameObject GameObject { get; private set; }
 
         /// <summary>
-        /// The renderer object for the drawable.
+        /// What the game holds for the drawable. The drawable is the game object it was
+        /// made with, so it is live while the game still has that object, and destroyed
+        /// once it does not, which is what removing it, clearing the drawing objects,
+        /// disconnecting the client that made it and leaving the scene all do. Nothing
+        /// builds a client's drawing again, so there is no dormant state.
         /// </summary>
-        protected Renderer Renderer { get; private set; }
+        public GameObjectState GameObjectState {
+            get {
+                return removed || GameObject == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        /// <summary>
+        /// The renderer object for the drawable, checked to still exist. Every member that
+        /// reaches into the game goes through this, so that a drawable the game no longer
+        /// has says so rather than failing on a torn down object.
+        /// </summary>
+        protected Renderer Renderer {
+            get {
+                CheckExists ();
+                return renderer;
+            }
+        }
+
+        /// <summary>
+        /// Raise if the game no longer has the drawable.
+        /// </summary>
+        protected void CheckExists ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                throw new ObjectDestroyedException (
+                    "The drawing object no longer exists, as it has been removed.");
+        }
+
+        /// <summary>
+        /// Whether the drawable can be drawn where it is asked to be. A reference frame is
+        /// defined against things the game can destroy, and a drawable is left where it is
+        /// rather than removed when that happens, as it can be given another frame.
+        /// </summary>
+        protected bool CanBeDrawn {
+            get {
+                return GameObjectState == GameObjectState.Live &&
+                ReferenceFrame.GameObjectState == GameObjectState.Live;
+            }
+        }
 
         /// <summary>
         /// Remove the object.
@@ -51,6 +103,7 @@ namespace KRPC.Drawing
         [KRPCMethod]
         public void Remove ()
         {
+            CheckExists ();
             Addon.RemoveObject (this);
         }
 
