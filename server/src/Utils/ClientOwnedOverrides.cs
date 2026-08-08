@@ -116,6 +116,16 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Release all overrides, whoever owns them.
+        /// </summary>
+        public void Clear ()
+        {
+            foreach (var entry in entries)
+                release (entry.Key, entry.Value);
+            entries.Clear ();
+        }
+
+        /// <summary>
         /// Take every override out of the collection, to be released by a later call to
         /// <see cref="ReleaseDetached" />.
         /// </summary>
