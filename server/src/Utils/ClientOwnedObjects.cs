@@ -27,11 +27,14 @@ namespace KRPC.Utils
         /// Create a collection. The release action, if any, is invoked on each object
         /// released by <see cref="Sweep" /> and <see cref="Clear()" /> (but not on
         /// objects removed with <see cref="Remove" />, whose callers do their own
-        /// teardown).
+        /// teardown). The collection adds itself to <see cref="ClientOwnedState" />, so
+        /// that its state is released along with everything else when there is no game
+        /// left to hold it.
         /// </summary>
         public ClientOwnedObjects (Action<T> release = null)
         {
             this.release = release;
+            ClientOwnedState.Register (this);
         }
 
         /// <summary>

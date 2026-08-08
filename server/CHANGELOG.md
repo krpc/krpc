@@ -1,4 +1,9 @@
 ## [v0.7.0] - unreleased
+- The server is stopped whenever no game is loaded, so a client is disconnected when the player
+  quits to the main menu rather than being left waiting on a call that never returns. It starts
+  again with the next game if it is set to start automatically. State held for clients is released
+  at the same time, so user interface elements no longer stay on the screen for the whole of the
+  main menu (#1041)
 - Fix setting `KRPC.GameScene` from one editor straight to the other leaving the flight camera
   unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is
   being constructed now, as the game's own switch editor button does (#1038)
