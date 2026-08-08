@@ -1080,6 +1080,14 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Whether <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*">RealFuels</a> is installed.
+        /// </summary>
+        [KRPCProperty]
+        public static bool RealFuelsAvailable {
+            get { return ExternalAPI.RealFuels.IsAvailable; }
+        }
+
+        /// <summary>
         /// Creates a Kerbal.
         /// </summary>
         /// <param name="name"></param>

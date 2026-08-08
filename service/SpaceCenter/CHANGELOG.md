@@ -108,6 +108,15 @@
     model. The boxes no longer take in the models of physicsless child parts, nor any object
     another mod has attached to a part, which could stretch a box to an arbitrary size (#1024)
   - Computing a bounding box no longer duplicates the meshes of every part it measures (#1024)
+  - Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*).
+    `SpaceCenter.RealFuelsAvailable` reports whether it is installed. On an engine it manages
+    (`Engine.HasRealFuels`), `Engine.Ignitions` and `Engine.IgnitionResources` give the
+    ignitions left and what each one consumes; `Engine.HasUllage`,
+    `Engine.PropellantStability` and `Engine.PropellantReliability` give how settled the
+    propellant is; and `Engine.PressureFed` and `Engine.HasFeedPressure` give whether the
+    engine needs tank pressure and whether it has it. On a tank it manages
+    (`Part.HasRealFuelsTank`), `Part.HighlyPressurized` and `Part.BoiloffRate` give the tank's
+    pressurization and how fast its cryogenic contents are boiling off (#1039)
 
 - Resources
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes; no more of the

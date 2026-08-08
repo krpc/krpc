@@ -567,3 +567,61 @@ http_archive(
     sha256 = "e916b6907e8310e08baa49532d04f92068864cb38b93afd664bf712b190197f1",
     url = "https://github.com/linuxgurugamer/SpaceTuxLibrary/releases/download/0.0.9/SpaceTuxLibrary-1.12.0-0.0.9.zip",
 )
+
+# RealFuels, which replaces the stock fuels with real propellants and gives engines limited
+# ignitions, ullage and pressure feeding. The SpaceCenter Engine and Part classes read that
+# state, so the tests need it installed to exercise that path.
+http_archive(
+    name = "realfuels",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/RealFuels/**']), visibility = ['//visibility:public'])",
+    sha256 = "8f1e5b5f081a084839682a4757b0df10a08d0b34ffd30b45fa80e2f61c8361d5",
+    url = "https://github.com/KSP-RO/RealFuels/releases/download/v15.15.0.0/RealFuels_v15.15.0.0.zip",
+)
+
+# RealFuels' engine configs for stock parts. RealFuels itself only patches fuel tanks; without
+# these no stock engine becomes a ModuleEnginesRF, so none of the engine-side state exists.
+# Frozen in CKAN, so this pin does not track an upstream that still moves.
+http_archive(
+    name = "realfuels_stock",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/RealFuels-Stock/**']), visibility = ['//visibility:public'])",
+    sha256 = "5ad5dde73fa84dcd1681e03385d9a4f9c6e65ea62248329c29e1038102412fac",
+    url = "https://github.com/ValentinBischof/RealFuels-Stock/releases/download/v5.1.0/RealFuels-Stock-v5.1.0.zip",
+)
+
+# RealFuels' two assembly dependencies, declared as KSPAssemblyDependency in RealFuels.dll:
+# SolverEngines supplies the ModuleEnginesSolver base class its engine module derives from, and
+# ROUtils its shared utility library. KSP does not load RealFuels without either of them.
+# Installed only alongside RealFuels, never requested on their own.
+#
+# ROUtils in turn declares KSPCommunityFixes as a dependency, so KSP refuses to load ROUtils
+# without it, and RealFuels then fails to resolve ROUtils when compiling its engine parts.
+# KSPCommunityFixes needs Harmony, installed alongside it and shared with RealChute and AGExt.
+http_archive(
+    name = "solver_engines",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/SolverEngines/**']), visibility = ['//visibility:public'])",
+    sha256 = "360ab293f3de1974ec7ce99f5fd8e4a3e348b5b9a40877c0cab67c5ec45e83a3",
+    url = "https://github.com/KSP-RO/SolverEngines/releases/download/v3.14.0/SolverEngines_v3.14.0.zip",
+)
+
+http_archive(
+    name = "routils",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/ROUtils/**']), visibility = ['//visibility:public'])",
+    sha256 = "28421577470ef3f1f8af0d4ecfbace88acea01f3848455bb2672573bf6911f18",
+    url = "https://github.com/KSP-RO/ROUtils/releases/download/v1.1.1.0/ROUtils-v1.1.1.0.zip",
+)
+
+http_archive(
+    name = "kspcommunityfixes",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/KSPCommunityFixes/**']), visibility = ['//visibility:public'])",
+    sha256 = "3b63c37d7da9ec0c93063374df1c7a365b02fa66ad6b033c7a2b6ae6ff18215e",
+    url = "https://github.com/KSPModdingLibs/KSPCommunityFixes/releases/download/1.41.1/KSPCommunityFixes_1.41.1.zip",
+)
+
+# The resource definitions RealFuels' tank and engine configs are written against. Installed
+# only alongside RealFuels, never requested on its own.
+http_archive(
+    name = "community_resource_pack",
+    build_file_content = "filegroup(name = 'gamedata', srcs = glob(['GameData/CommunityResourcePack/**']), visibility = ['//visibility:public'])",
+    sha256 = "e6c264137c391bd96b2cdd996b163ec4d7f200eccee0b2555edaf8bae19db2ed",
+    url = "https://github.com/UmbraSpaceIndustries/CommunityResourcePack/releases/download/v112.0.1/CommunityResourcePack_112.0.1.zip",
+)

@@ -55,6 +55,15 @@ MODS = {
         ("kspburst", "000_KSPBurst"),
         ("harmony", "000_Harmony"),
     ],
+    "RealFuels": [
+        ("realfuels", "RealFuels"),
+        ("realfuels_stock", "RealFuels-Stock"),
+        ("solver_engines", "SolverEngines"),
+        ("routils", "ROUtils"),
+        ("kspcommunityfixes", "KSPCommunityFixes"),
+        ("harmony", "000_Harmony"),
+        ("community_resource_pack", "CommunityResourcePack"),
+    ],
 }
 
 # All managed GameData subdirs, every one a candidate for removal during reconcile.

@@ -21,6 +21,10 @@
 #   FAR               -> GameData/FerramAerospaceResearch
 #                        + GameData/ModularFlightIntegrator, GameData/000_KSPBurst (deps),
 #                          GameData/000_Harmony (dep, shared with RealChute and AGExt)
+#   RealFuels         -> GameData/RealFuels, GameData/RealFuels-Stock
+#                        + GameData/SolverEngines, GameData/ROUtils,
+#                          GameData/CommunityResourcePack, GameData/KSPCommunityFixes (deps),
+#                          GameData/000_Harmony (dep, shared with RealChute, AGExt and FAR)
 # tools/krpctest mirrors this registry on the Python side.
 
 filegroup(
@@ -113,5 +117,49 @@ filegroup(
 filegroup(
     name = "spacetuxlibrary",
     srcs = ["@spacetuxlibrary//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# RealFuels. Installing it replaces the stock fuels throughout the part catalog, so it is only
+# ever requested by the tests that check the Engine and Part classes against RealFuels.
+filegroup(
+    name = "realfuels",
+    srcs = ["@realfuels//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# RealFuels' engine configs for stock parts. RealFuels itself patches only tanks, so without
+# these no stock engine becomes a RealFuels engine and the engine-side state does not exist.
+filegroup(
+    name = "realfuels_stock",
+    srcs = ["@realfuels_stock//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+# The four dependencies that follow are installed alongside RealFuels and never requested on
+# their own. SolverEngines and ROUtils are assembly dependencies KSP will not load RealFuels
+# without; KSPCommunityFixes is in turn one of ROUtils'; and CommunityResourcePack supplies
+# the resource definitions the RealFuels tank and engine configs are written against.
+filegroup(
+    name = "solver_engines",
+    srcs = ["@solver_engines//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "routils",
+    srcs = ["@routils//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "kspcommunityfixes",
+    srcs = ["@kspcommunityfixes//:gamedata"],
+    visibility = ["//visibility:public"],
+)
+
+filegroup(
+    name = "community_resource_pack",
+    srcs = ["@community_resource_pack//:gamedata"],
     visibility = ["//visibility:public"],
 )

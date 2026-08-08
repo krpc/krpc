@@ -20,4 +20,13 @@ freshly-installed mod (overwriting on conflict).
 * `001_ToolbarControl/PluginData/ToolbarControl.cfg` — `showWindowAtStartup = False`
   suppresses ToolbarControl's first-run intro window.
 
-Both are RealChute dependencies; RealChute itself needs no overlay.
+Both of those are RealChute dependencies; RealChute itself needs no overlay.
+
+* `KSPCommunityFixes/PluginData/PNGTextureCache.cfg` — the record of the answer to the
+  texture-caching question KSPCommunityFixes asks on first load. Its loader only puts the
+  dialog up while `userOptInChoiceDone` is unset, so seeding the file skips it. Caching is
+  declined: the cache is written inside the mod's own directory, which is replaced on every
+  install, so it would be rebuilt each time and never pay for itself.
+
+  KSPCommunityFixes is a RealFuels dependency (by way of ROUtils); neither of those, nor
+  RealFuels itself, needs an overlay.

@@ -1052,5 +1052,53 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get { return (AutoStrutMode)InternalPart.autoStrutMode; }
         }
+
+        /// <summary>
+        /// The part's RealFuels tank, resolved afresh on each access as the part itself is.
+        /// Throws if the part is not one, so that callers get the same error whichever member
+        /// they reached for.
+        /// </summary>
+        RealFuelsTank RealFuelsTankModule {
+            get {
+                var tank = RealFuelsTank.Create (InternalPart);
+                if (tank == null)
+                    throw new InvalidOperationException ("Part is not a RealFuels fuel tank");
+                return tank;
+            }
+        }
+
+        /// <summary>
+        /// Whether the part is a fuel tank managed by
+        /// <a href="https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*">RealFuels</a>.
+        /// The remaining properties in this section are only available when it is.
+        /// </summary>
+        [KRPCProperty]
+        public bool HasRealFuelsTank {
+            get { return RealFuelsTank.Is (InternalPart); }
+        }
+
+        /// <summary>
+        /// Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+        /// draw from (see <see cref="Engine.PressureFed"/>). Raises an exception if the part is
+        /// not a RealFuels fuel tank (see <see cref="HasRealFuelsTank"/>).
+        /// </summary>
+        [KRPCProperty]
+        public bool HighlyPressurized {
+            get { return RealFuelsTankModule.HighlyPressurized; }
+        }
+
+        /// <summary>
+        /// The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+        /// second of in-game time, measured over the last update RealFuels computed it in.
+        /// The contents keep boiling off under time warp, where that update covers a much
+        /// longer span of in-game time than a physics frame does. The rate is zero for a
+        /// tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+        /// temperature RealFuels holds down instead, and in the editor. Raises an exception
+        /// if the part is not a RealFuels fuel tank (see <see cref="HasRealFuelsTank"/>).
+        /// </summary>
+        [KRPCProperty]
+        public double BoiloffRate {
+            get { return RealFuelsTankModule.BoiloffRate; }
+        }
     }
 }

@@ -86,6 +86,7 @@
     <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
+    <Compile Include="ExternalAPI\RealFuels.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
     <Compile Include="NameTag\Career.cs" />
     <Compile Include="NameTag\NameTag.cs" />
@@ -173,6 +174,8 @@
     <Compile Include="Services\Parts\RCS.cs" />
     <Compile Include="Services\Parts\Radiator.cs" />
     <Compile Include="Services\Parts\ReactionWheel.cs" />
+    <Compile Include="Services\Parts\RealFuelsEngine.cs" />
+    <Compile Include="Services\Parts\RealFuelsTank.cs" />
     <Compile Include="Services\Parts\ResourceConverter.cs" />
     <Compile Include="Services\Parts\ResourceConverterState.cs" />
     <Compile Include="Services\Parts\ResourceDrain.cs" />
