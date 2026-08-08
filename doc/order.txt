@@ -615,6 +615,7 @@ SpaceCenter.Stage.FuelMass
 SpaceCenter.Editor.Facility
 SpaceCenter.Editor.Vessel
 SpaceCenter.Editor.LoadVessel
+SpaceCenter.Editor.LaunchVessel
 SpaceCenter.Editor.DeltaVBody
 SpaceCenter.Editor.DeltaVAltitude
 SpaceCenter.Editor.DeltaVSituation

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using KRPC.Service;
 using KRPC.Service.Attributes;
@@ -159,6 +160,40 @@ namespace KRPC.SpaceCenter.Services
             if (!File.Exists (path))
                 throw new ArgumentException ("Craft file not found: " + path, nameof (name));
             throw new YieldException<Action> (() => StartVesselLoad (path, 0));
+        }
+
+        /// <summary>
+        /// Launch the vessel that is being constructed, from the given launch site.
+        /// </summary>
+        /// <param name="launchSite">Name of the launch site. For example <c>"LaunchPad"</c> or
+        /// <c>"Runway"</c>.</param>
+        /// <param name="crew">The Kerbals to place in the vessel, by name. Controls how the
+        /// vessel is crewed, as described in the remarks.</param>
+        /// <param name="recover">If true and there is a vessel on the launch site,
+        /// recover it before launching.</param>
+        /// <param name="flagUrl">If not <c>null</c>, the asset URL of the mission flag to use for
+        /// the launch.</param>
+        /// <remarks>
+        /// The vessel being constructed is not a craft file, so it is written to the editor's
+        /// auto-saved craft file and that is launched, as the game's own launch button does.
+        /// The vessel's own craft file, if it was loaded from one, is left alone.
+        /// The <paramref name="crew"/> parameter works as it does for
+        /// <see cref="SpaceCenter.LaunchVessel"/>, and takes precedence over the crew assigned
+        /// in the editor.
+        /// Throws an exception if any of the games pre-flight checks fail.
+        /// </remarks>
+        [KRPCMethod]
+        public void LaunchVessel (
+            string launchSite, IList<string> crew = null, bool recover = true, string flagUrl = "")
+        {
+            var ship = EditorLogic.fetch == null ? null : EditorLogic.fetch.ship;
+            if (ReferenceEquals (ship, null) || ship.Count == 0)
+                throw new InvalidOperationException (
+                    "There is no vessel in the editor to launch.");
+            var craftDirectory = Facility == EditorFacility.SPH ? "SPH" : "VAB";
+            var name = KSPUtil.SanitizeString (EditorLogic.autoShipName, '_', true);
+            ShipConstruction.SaveShip (ship, name);
+            SpaceCenter.LaunchVessel (craftDirectory, name, launchSite, crew, recover, flagUrl);
         }
 
         /// <summary>

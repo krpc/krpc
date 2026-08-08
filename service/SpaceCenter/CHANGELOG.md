@@ -13,6 +13,11 @@
     plane hangar, for inspecting the vessel that is being constructed. `Editor.Vessel`
     gives its name, description, editor, size, mass, cost and crew capacity, and
     `Editor.LoadVessel` loads a craft file into the open editor (#1038)
+  - `Editor.LaunchVessel` launches the vessel that is being constructed, from a given launch
+    site and with the same crew, recovery and mission flag options as
+    `SpaceCenter.LaunchVessel`. The vessel is written to the editor's auto-saved craft file
+    and launched from there, as the game's own launch button does, leaving the craft file it
+    was loaded from alone (#1038)
   - `EditorVessel.Parts` gives the parts tree of the vessel under construction, as
     `Vessel.Parts` does in flight. The members of `Part` and of the part-type classes that
     describe the design are available; those that need a vessel in flight or running
