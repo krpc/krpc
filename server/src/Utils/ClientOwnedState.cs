@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace KRPC.Utils
@@ -31,11 +32,30 @@ namespace KRPC.Utils
         /// first sweep leaves the previous scene's state waiting for a sweep that will
         /// not come.
         /// </summary>
+        /// <remarks>
+        /// One collection failing to release must not leave the rest holding their state,
+        /// so each is released on its own and a failure is logged and stepped over. The
+        /// collections belong to different services, and the order they are released in
+        /// is the order they happened to be created in, so without this the state a
+        /// failure strands would be whatever came after it.
+        /// </remarks>
         public static void ReleaseAll ()
         {
             foreach (var collection in collections) {
-                collection.Clear ();
-                collection.ReleaseDetached ();
+                Release (collection.Clear);
+                Release (collection.ReleaseDetached);
+            }
+        }
+
+        static void Release (Action release)
+        {
+            try {
+                release ();
+            } catch (Exception exn) {
+                // Anything at all, as the release actions are supplied by the services and
+                // run here against state whose subject the game may already have destroyed.
+                Logger.WriteLine (
+                    "Failed to release client-owned state; " + exn, Logger.Severity.Error);
             }
         }
     }
