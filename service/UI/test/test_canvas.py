@@ -7,13 +7,52 @@ class TestCanvas(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.ui = cls.connect().ui
+        cls.canvas = cls.ui.stock_canvas
+
+    def test_same_element_is_the_same_object(self):
+        # An element is the same object however it is reached, so that a client can
+        # compare the objects it is given and hold on to them.
+        self.assertEqual(self.canvas, self.ui.stock_canvas)
+        panel = self.canvas.add_panel()
+        self.assertEqual(panel.rect_transform, panel.rect_transform)
+        self.assertEqual(panel.size_fitter, panel.size_fitter)
+        self.assertEqual(panel.layout_element, panel.layout_element)
+        other = self.canvas.add_panel()
+        self.assertNotEqual(panel, other)
+        other.remove()
+        panel.remove()
+
+    def test_an_added_canvas_is_scaled_like_the_stock_one(self):
+        # Unity applies the scale of a canvas to its transform, so an interface built on
+        # a canvas a client adds comes out the same size as one on the stock canvas.
+        canvas = self.ui.add_canvas()
+        # The scale factor is applied by Unity in its own update, not when the canvas is
+        # created, so the transform is only scaled from the next frame on.
+        self.wait()
+        self.assertEqual(self.canvas.rect_transform.scale, canvas.rect_transform.scale)
+        canvas.remove()
+
+    def test_a_canvas_has_no_layout_element(self):
+        # A layout element is added to an object the first time it is asked for, and a
+        # canvas is not inside anything that would lay it out. The stock canvas is the
+        # game's own object, which kRPC would never take the component back off.
+        self.assertRaises(RuntimeError, getattr, self.canvas, "layout_element")
+        canvas = self.ui.add_canvas()
+        self.assertRaises(RuntimeError, getattr, canvas, "layout_element")
+        canvas.remove()
+
+    def test_the_stock_canvas_cannot_be_removed(self):
+        # It belongs to the game, not to the client that reached it.
+        self.assertRaises(RuntimeError, self.canvas.remove)
 
     def test_add_panel(self):
         panel = self.canvas.add_panel()
         self.assertTrue(panel.visible)
+        panel.remove()
         panel = self.canvas.add_panel(False)
         self.assertFalse(panel.visible)
+        panel.remove()
 
     def test_rect_transform(self):
         rect = self.canvas.rect_transform
@@ -29,7 +68,8 @@ class TestCanvas(krpctest.TestCase):
         self.assertEqual((0, 0), rect.anchor_min)
         self.assertEqual((0.5, 0.5), rect.pivot)
         self.assertEqual((0, 0, 0, 1), rect.rotation)
-        self.assertEqual((1.0, 1.0, 1.0), rect.scale)
+        # The scale of the stock canvas follows the interface scale the player has set,
+        # so there is no one value to check it against.
 
 
 if __name__ == "__main__":

@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
-using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
 using UnityEngine;
-using Tuple3 = System.Tuple<double, double, double>;
+using Tuple4 = System.Tuple<double, double, double, double>;
 
 namespace KRPC.UI
 {
     /// <summary>
-    /// A text label. See <see cref="Panel.AddText" />.
+    /// A text label.
+    /// Added to a <see cref="Canvas" /> or a <see cref="Panel" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
     public class Text : Object
@@ -18,9 +18,10 @@ namespace KRPC.UI
         readonly UnityEngine.UI.Text text;
 
         internal Text (GameObject parent, string content, bool visible)
-            : base (Addon.Instantiate (parent, "Text"), visible)
+            : base (Widgets.Create (parent, "krpc.text", 160, 30), visible)
         {
-            text = GameObject.GetComponent<UnityEngine.UI.Text> ();
+            text = Widgets.AddText (
+                GameObject, Widgets.Style (skin => skin.label), UnityEngine.TextAnchor.UpperLeft);
             Content = content;
         }
 
@@ -28,14 +29,6 @@ namespace KRPC.UI
             : base (obj, true, false)
         {
             text = obj.GetComponent<UnityEngine.UI.Text> ();
-        }
-
-        /// <summary>
-        /// The rect transform for the text.
-        /// </summary>
-        [KRPCProperty]
-        public RectTransform RectTransform {
-            get{ return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
         }
 
         /// <summary>
@@ -58,13 +51,17 @@ namespace KRPC.UI
         /// <summary>
         /// Name of the font
         /// </summary>
+        /// <remarks>
+        /// Empty if the game provided no font to draw the text with, in which case it is
+        /// not drawn. See <see cref="AvailableFonts" /> for the names that can be set.
+        /// </remarks>
         [KRPCProperty]
         public string Font {
-            get { return text.font.name; }
+            get { return text.font == null ? string.Empty : text.font.name; }
             set {
                 if (!AvailableFonts.Contains (value))
                     throw new ArgumentException ("Font does not exist");
-                text.font = UnityEngine.Font.CreateDynamicFontFromOSFont (value, 16);
+                text.font = Widgets.OSFont (value);
             }
         }
 
@@ -105,11 +102,27 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Set the color
+        /// Whether the text wraps onto further lines when it is wider than the space it
+        /// has. When wrapping is off, the text carries on past the edge instead, and a
+        /// label asked for its preferred size asks for a single line, so a value that
+        /// changes does not reflow a layout.
         /// </summary>
         [KRPCProperty]
-        public Tuple3 Color {
-            get { return text.color.ToTuple (); }
+        public bool WordWrap {
+            get { return text.horizontalOverflow == HorizontalWrapMode.Wrap; }
+            set {
+                text.horizontalOverflow = value
+                    ? HorizontalWrapMode.Wrap : HorizontalWrapMode.Overflow;
+            }
+        }
+
+        /// <summary>
+        /// The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+        /// fully transparent and 1 is fully opaque.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple4 Color {
+            get { return text.color.ToRgbaTuple (); }
             set { text.color = value.ToColor (); }
         }
     }

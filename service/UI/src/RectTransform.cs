@@ -1,5 +1,7 @@
+using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
+using KRPC.Utils;
 using Tuple2 = System.Tuple<double, double>;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
@@ -11,13 +13,29 @@ namespace KRPC.UI
     /// See the <a href="https://docs.unity3d.com/Manual/class-RectTransform.html">Unity manual</a> for more details.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class RectTransform
+    public class RectTransform : Equatable<RectTransform>
     {
         readonly UnityEngine.RectTransform rectTransform;
 
         internal RectTransform (UnityEngine.RectTransform innerRectTransform)
         {
             rectTransform = innerRectTransform;
+        }
+
+        /// <summary>
+        /// Returns true if the objects are equal.
+        /// </summary>
+        public override bool Equals (RectTransform other)
+        {
+            return !ReferenceEquals (other, null) && rectTransform == other.rectTransform;
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return rectTransform.GetHashCode ();
         }
 
         /// <summary>

@@ -14,6 +14,7 @@ class TestUI(krpctest.TestCase):
         self.ui.message("One")
         self.ui.message("Two", 5)
         self.ui.message("Three", 1, self.message_position.top_right)
+        self.ui.message("Four", 1, self.message_position.top_center, (1, 0, 0, 0.5))
 
 
 if __name__ == "__main__":

@@ -9,35 +9,9 @@ namespace KRPC.UI
     /// <summary>
     /// Addon for managing the UI
     /// </summary>
-    [KSPAddon (KSPAddon.Startup.Flight, false)]
+    [KSPAddon (KSPAddon.Startup.AllGameScenes, false)]
     public sealed class Addon : ClientCleanupAddon
     {
-        static AssetBundle prefabs;
-
-        /// <summary>
-        /// Load and instantiate the named prefab, and set its parent game object.
-        /// </summary>
-        internal static GameObject Instantiate (GameObject parent, string prefabName)
-        {
-            if (prefabs == null) {
-                var dir = System.IO.Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
-                var path = System.IO.Path.Combine (dir, "KRPC.UI.ksp");
-                
-                // Disable warning as replacement is a UnityAsyncOperation
-                // and this works fine.
-#pragma warning disable 618
-                using (var www = new WWW("file://" + path))
-#pragma warning restore 618
-                {
-                    prefabs = www.assetBundle;
-                }
-            }
-            var prefab = prefabs.LoadAsset<GameObject> (prefabName);
-            var obj = Instantiate (prefab);
-            obj.transform.SetParent (parent.transform, false);
-            return obj;
-        }
-
         static readonly ClientOwnedObjects<Object> objects =
             new ClientOwnedObjects<Object> (obj => obj.Destroy ());
 

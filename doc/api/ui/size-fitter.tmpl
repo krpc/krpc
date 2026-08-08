@@ -1,0 +1,10 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('UI') }}
+{% import domain.macros as macros with context %}
+
+Size Fitter
+===========
+
+{{ macros.class(services['UI'].classes['SizeFitter']) }}
+{{ macros.enumeration(services['UI'].enumerations['ContentSizeFit']) }}

@@ -1,5 +1,6 @@
 using System;
 using KRPC.Service.Attributes;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.UI
@@ -7,9 +8,22 @@ namespace KRPC.UI
     /// <summary>
     /// Abstract base class for all UI objects.
     /// </summary>
-    public abstract class Object
+    public abstract class Object : Equatable<Object>
     {
+        /// <summary>
+        /// Whether a client can remove the object. Only the objects a client owns can be
+        /// removed; the stock canvas and the parts a control is built from live and die
+        /// with what they belong to.
+        /// </summary>
         readonly bool removable;
+
+        /// <summary>
+        /// Whether the object has been destroyed. Unity carries out a destroy at the end
+        /// of the frame it was asked for in, and the server answers more than one call in
+        /// a frame, so the game object is still there to be asked afterwards and cannot be
+        /// used on its own to tell whether the object is gone.
+        /// </summary>
+        bool destroyed;
 
         /// <summary>
         /// Unity game object for the UI element.
@@ -25,7 +39,7 @@ namespace KRPC.UI
             gameObject.SetActive (visible);
             if (register)
                 Addon.Add (this);
-            removable = true;
+            removable = register;
         }
 
         /// <summary>
@@ -37,21 +51,106 @@ namespace KRPC.UI
         }
 
         /// <summary>
-        /// Whether the UI object is visible.
+        /// Returns true if the objects are equal.
+        /// </summary>
+        /// <remarks>
+        /// Two objects are equal when they refer to the same user interface element, so
+        /// that a client is handed the same object identifier however it reaches the
+        /// element, and asking for the same element repeatedly does not accumulate
+        /// identifiers.
+        /// </remarks>
+        public override bool Equals (Object other)
+        {
+            return !ReferenceEquals (other, null) &&
+                GetType () == other.GetType () &&
+                GameObject == other.GameObject;
+        }
+
+        /// <summary>
+        /// Hash code for the object.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return GameObject.GetHashCode ();
+        }
+
+        /// <summary>
+        /// Whether the UI object still exists. False once it has been removed, or once the
+        /// game object behind it has been destroyed by a scene change.
+        /// </summary>
+        internal bool Exists {
+            get { return !destroyed && GameObject != null; }
+        }
+
+        /// <summary>
+        /// The rect transform for the UI object.
         /// </summary>
         [KRPCProperty]
+        public RectTransform RectTransform {
+            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
+        }
+
+        /// <summary>
+        /// Whether the object is one that can be given a layout element. False for a
+        /// canvas, which is not inside anything that could lay it out.
+        /// </summary>
+        internal virtual bool CanHaveLayoutElement {
+            get { return true; }
+        }
+
+        /// <summary>
+        /// How much space the UI object asks a layout for.
+        /// </summary>
+        /// <remarks>
+        /// Only has an effect when the object is in a panel that has a layout. A canvas is
+        /// not inside a layout and does not have one.
+        /// </remarks>
+        [KRPCProperty]
+        public LayoutElement LayoutElement {
+            get {
+                // The component is added the first time it is asked for, so asking must be
+                // refused for an object that would keep it for good. The stock canvas is
+                // the game's own, and kRPC never destroys it, so a component added to it
+                // would be left there for the rest of the session.
+                if (!CanHaveLayoutElement)
+                    throw new InvalidOperationException (
+                        "A canvas is not inside a layout, so it has no layout element");
+                var element = GameObject.GetComponent<UnityEngine.UI.LayoutElement> ();
+                if (element == null)
+                    element = GameObject.AddComponent<UnityEngine.UI.LayoutElement> ();
+                return new LayoutElement (element);
+            }
+        }
+
+        /// <summary>
+        /// Whether the UI object is visible.
+        /// </summary>
+        /// <remarks>
+        /// This is the object's own setting, which is what it was last set to. An object is
+        /// only drawn when everything it is inside is visible as well, so an interface can
+        /// be built with its parts visible, inside a panel that is not, and shown all at
+        /// once by making that panel visible.
+        /// </remarks>
+        [KRPCProperty]
         public bool Visible {
-            get { return GameObject.activeInHierarchy; }
+            get { return GameObject.activeSelf; }
             set { GameObject.SetActive (value); }
         }
 
         /// <summary>
-        /// Destroy the UI object.
+        /// Destroy the UI object. Overridden by objects that hold something Unity does not
+        /// destroy along with the game object, such as a texture.
         /// </summary>
-        public void Destroy ()
+        /// <remarks>
+        /// The teardown itself, with no say in whether it should happen: whether a client
+        /// may ask for it is <see cref="Remove" />'s to decide. This runs from the addon
+        /// sweeping up after a client or a scene as well, where throwing would abandon
+        /// whatever was left in the sweep.
+        /// </remarks>
+        public virtual void Destroy ()
         {
-            CheckNotRemovable ();
             UnityEngine.Object.Destroy (GameObject);
+            destroyed = true;
         }
 
         /// <summary>
@@ -60,14 +159,9 @@ namespace KRPC.UI
         [KRPCMethod]
         public void Remove ()
         {
-            CheckNotRemovable ();
-            Addon.Remove (this);
-        }
-
-        void CheckNotRemovable ()
-        {
             if (!removable)
                 throw new InvalidOperationException ("UI object is not removable");
+            Addon.Remove (this);
         }
     }
 }

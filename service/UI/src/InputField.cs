@@ -1,31 +1,54 @@
+using System;
 using KRPC.Service.Attributes;
+using KRPC.UI.ExtensionMethods;
 using UnityEngine;
 
 namespace KRPC.UI
 {
     /// <summary>
-    /// An input field. See <see cref="Panel.AddInputField" />.
+    /// An input field.
+    /// Added to a <see cref="Canvas" /> or a <see cref="Panel" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class InputField : Object
+    public class InputField : Control
     {
         readonly UnityEngine.UI.InputField inputField;
+        readonly Text text;
+        readonly Text placeholder;
 
         internal InputField (GameObject parent, bool visible)
-            : base (Addon.Instantiate (parent, "InputField"), visible)
+            : base (Widgets.Create (parent, "krpc.inputField", 160, 30), visible)
         {
-            inputField = GameObject.GetComponent<UnityEngine.UI.InputField> ();
+            var style = Widgets.Style (skin => skin.textField);
+            var background = Widgets.AddImage (GameObject, style);
+            // The text is inset so that it does not run into the border drawn by the background.
+            var content = Widgets.CreateFilling (GameObject, "krpc.inputField.text", 6);
+            var contentText = Widgets.AddText (content, style, UnityEngine.TextAnchor.MiddleLeft);
+            // An input field edits its text a character at a time, which rich text markup
+            // cannot survive, and Unity requires it to be off.
+            contentText.supportRichText = false;
+            // The placeholder is shown while the field is empty. It is drawn faded so that a
+            // hint does not read as a value the user has typed.
+            var hint = Widgets.CreateFilling (GameObject, "krpc.inputField.placeholder", 6);
+            var hintText = Widgets.AddText (hint, style, UnityEngine.TextAnchor.MiddleLeft);
+            var hintColor = hintText.color;
+            hintColor.a *= 0.5f;
+            hintText.color = hintColor;
+            inputField = GameObject.AddComponent<UnityEngine.UI.InputField> ();
+            inputField.targetGraphic = background;
+            inputField.textComponent = contentText;
+            inputField.placeholder = hintText;
+            Widgets.AddTransition (inputField, style);
+            text = new Text (content);
+            placeholder = new Text (hint);
             inputField.onValueChanged.AddListener (x => {
                 Changed = true;
             });
         }
 
-        /// <summary>
-        /// The rect transform for the input field.
-        /// </summary>
-        [KRPCProperty]
-        public RectTransform RectTransform {
-            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
+        /// <inheritdoc />
+        protected override UnityEngine.UI.Selectable Selectable {
+            get { return inputField; }
         }
 
         /// <summary>
@@ -34,7 +57,9 @@ namespace KRPC.UI
         [KRPCProperty]
         public string Value {
             get { return inputField.text; }
-            set { inputField.text = value; }
+            // Unity notifies its listeners of a value set by a client just as it does one
+            // typed by the user, so the value is set without notifying them.
+            set { inputField.SetTextWithoutNotify (value); }
         }
 
         /// <summary>
@@ -46,14 +71,70 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public Text Text {
-            get { return new Text (GameObject); }
+            get { return text; }
+        }
+
+        /// <summary>
+        /// The placeholder text component of the input field.
+        /// </summary>
+        /// <remarks>
+        /// Set its <see cref="Text.Content"/> to the hint to show while the field is empty.
+        /// The hint is hidden as soon as the field has a value.
+        /// </remarks>
+        [KRPCProperty]
+        public Text Placeholder {
+            get { return placeholder; }
+        }
+
+        /// <summary>
+        /// What the field lets the user type into it. Keystrokes that do not fit are
+        /// ignored as they are typed, so a numeric field never shows text a client would
+        /// have to reject.
+        /// </summary>
+        /// <remarks>
+        /// Only what the user types is filtered. A value set by a client is shown as it
+        /// is given.
+        /// </remarks>
+        [KRPCProperty]
+        public InputContentType ContentType {
+            get { return inputField.contentType.ToInputContentType (); }
+            set { inputField.contentType = value.FromInputContentType (); }
+        }
+
+        /// <summary>
+        /// The most characters the user can type into the field, or 0 for no limit.
+        /// </summary>
+        [KRPCProperty]
+        public int CharacterLimit {
+            get { return inputField.characterLimit; }
+            set {
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException (
+                        nameof (value), "The character limit must not be negative");
+                inputField.characterLimit = value;
+            }
+        }
+
+        /// <summary>
+        /// Whether the user is stopped from editing the field. The value can still be
+        /// selected and copied, and a client can still set it.
+        /// </summary>
+        /// <remarks>
+        /// A read-only field is drawn as normal. Make the field not interactable instead
+        /// to gray it out and stop the user selecting it.
+        /// </remarks>
+        [KRPCProperty]
+        public bool ReadOnly {
+            get { return inputField.readOnly; }
+            set { inputField.readOnly = value; }
         }
 
         /// <summary>
         /// Whether the input field has been changed.
         /// </summary>
         /// <remarks>
-        /// This property is set to true when the user modifies the value of the input field.
+        /// This property is set to true when the user modifies the value of the input field,
+        /// and not when a client sets it.
         /// A client script should reset the property to false in order to detect subsequent changes.
         /// </remarks>
         [KRPCProperty]

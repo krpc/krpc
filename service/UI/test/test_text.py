@@ -19,9 +19,11 @@ class TestText(krpctest.TestCase):
         self.assertEqual("Jebediah Kerman", text.content)
         self.assertEqual("Arial", text.font)
         self.assertGreater(len(text.available_fonts), 0)
-        self.assertEqual(14, text.size)
+        # The size and color a label starts out with are taken from the skin the game
+        # draws its own interface in, so they are not fixed values.
+        self.assertGreater(text.size, 0)
+        self.assertEqual(4, len(text.color))
         self.assertEqual(self.style.normal, text.style)
-        self.assertAlmostEqual((0.196, 0.196, 0.196), text.color, places=3)
         self.assertEqual(self.anchor.upper_left, text.alignment)
         self.assertEqual(1, text.line_spacing)
         text.remove()
@@ -33,15 +35,26 @@ class TestText(krpctest.TestCase):
         text.font = font
         text.size = 20
         text.style = self.style.bold
-        text.color = (1, 0, 0)
+        text.color = (1, 0, 0, 0.5)
         text.alignment = self.anchor.upper_right
         text.line_spacing = 2
         self.assertEqual(font, text.font)
         self.assertEqual(20, text.size)
         self.assertEqual(self.style.bold, text.style)
-        self.assertEqual((1, 0, 0), text.color)
+        self.assertEqual((1, 0, 0, 0.5), text.color)
         self.assertEqual(self.anchor.upper_right, text.alignment)
         self.assertEqual(2, text.line_spacing)
+        text.remove()
+
+    def test_word_wrap(self):
+        text = self.canvas.add_text("Jebediah Kerman")
+        self.assertTrue(text.word_wrap)
+        # Turned off for a value label, so that the label asks a layout for one line
+        # and a changing value does not reflow the interface.
+        text.word_wrap = False
+        self.assertFalse(text.word_wrap)
+        text.word_wrap = True
+        self.assertTrue(text.word_wrap)
         text.remove()
         self.assertRaises(ValueError, text.remove)
 

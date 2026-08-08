@@ -20,6 +20,7 @@ namespace KRPC.Utils
         }
 
         readonly List<Entry> entries = new List<Entry> ();
+        readonly List<Entry> detached = new List<Entry> ();
         readonly Action<T> release;
 
         /// <summary>
@@ -119,6 +120,28 @@ namespace KRPC.Utils
         {
             var released = entries.ToList ();
             entries.Clear ();
+            if (release != null)
+                foreach (var entry in released)
+                    release (entry.Object);
+        }
+
+        /// <summary>
+        /// Take every object out of the collection, to be released by a later call to
+        /// <see cref="ReleaseDetached" />.
+        /// </summary>
+        public void Detach ()
+        {
+            detached.AddRange (entries);
+            entries.Clear ();
+        }
+
+        /// <summary>
+        /// Release the objects taken out by <see cref="Detach" />.
+        /// </summary>
+        public void ReleaseDetached ()
+        {
+            var released = detached.ToList ();
+            detached.Clear ();
             if (release != null)
                 foreach (var entry in released)
                     release (entry.Object);
