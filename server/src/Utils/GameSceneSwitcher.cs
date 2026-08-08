@@ -32,14 +32,10 @@ namespace KRPC.Utils
                 HighLogic.LoadScene (GameScenes.TRACKSTATION);
                 break;
             case PublicGameScene.EditorVAB:
-                if ((current & GameScene.EditorVAB) != 0)
-                    break;
-                EditorDriver.StartEditor (EditorFacility.VAB);
+                StartEditor (current, GameScene.EditorVAB, EditorFacility.VAB);
                 break;
             case PublicGameScene.EditorSPH:
-                if ((current & GameScene.EditorSPH) != 0)
-                    break;
-                EditorDriver.StartEditor (EditorFacility.SPH);
+                StartEditor (current, GameScene.EditorSPH, EditorFacility.SPH);
                 break;
             case PublicGameScene.AstronautComplex:
                 OpenFacility (current, GameScene.AstronautComplex,
@@ -69,6 +65,32 @@ namespace KRPC.Utils
             default:
                 throw new ArgumentException ("Unknown game scene");
             }
+        }
+
+        /// <summary>
+        /// Opens the given editor. Moving between the two editors keeps the vessel that
+        /// is being constructed, as the game's own switch button does.
+        /// </summary>
+        static void StartEditor (GameScene current, GameScene editor, EditorFacility facility)
+        {
+            if ((current & editor) != 0)
+                return;
+            if ((current & GameScene.Editor) == 0) {
+                EditorDriver.StartEditor (facility);
+                return;
+            }
+            // Loading the editor scene while it is already the loaded scene leaves the
+            // flight camera unable to target a vessel for the rest of the session, as it
+            // does not expect a scene load to be requested from the editor. The game's
+            // own switch button restarts the editor in place instead, which also carries
+            // the vessel being constructed across. There are only two editors, so a
+            // switch always lands on the one asked for.
+            var driver = EditorDriver.fetch;
+            var logic = EditorLogic.fetch;
+            if (driver == null || logic == null || driver.restartingEditor)
+                throw new InvalidOperationException (
+                    "The editor is still starting up and cannot be switched yet");
+            logic.SwitchEditor ();
         }
 
         static void ResumeFlight ()

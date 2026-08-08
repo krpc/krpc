@@ -147,7 +147,10 @@ namespace KRPC.Service.KRPC
         /// Scene changes happen asynchronously: setting this property returns
         /// immediately, and clients should poll it until it reports the requested
         /// scene. Setting it to <see cref="GameScene.Flight"/> resumes the save's
-        /// active vessel, and fails if there is none.
+        /// active vessel, and fails if there is none. Moving between
+        /// <see cref="GameScene.EditorVAB"/> and <see cref="GameScene.EditorSPH"/>
+        /// keeps the vessel that is being constructed, as the game's own switch
+        /// editor button does.
         /// </summary>
         [KRPCProperty]
         public static GameScene GameScene {

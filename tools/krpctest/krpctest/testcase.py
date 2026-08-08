@@ -211,24 +211,31 @@ class TestCase(AssertionsMixin):
         conn = cls.connect()
         scenes = conn.krpc.GameScene
         target = scenes.editor_vab if facility == "VAB" else scenes.editor_sph
-        # The editors are entered from the space center, as they are in-game. Going
-        # straight from one editor to the other is not a move the game offers.
+        # Go via the space center, so the editor starts out empty whatever was being
+        # constructed beforehand. Switching straight from the other editor would carry
+        # that vessel across.
         if conn.krpc.game_scene != target:
             cls._set_game_scene(scenes.space_center)
         cls._set_game_scene(target)
-        # The scene reports itself as an editor before the editor has finished starting
-        # up; reading the vessel is the first thing that works once it has.
-        deadline = time.time() + 60
+        cls.wait_for_editor()
+        if craft is not None:
+            conn.space_center.editor.load_vessel(facility, craft)
+
+    @classmethod
+    def wait_for_editor(cls, timeout=60):
+        """Wait for the open editor to finish starting up. The scene reports itself as
+        an editor some way before that; reading the vessel is the first thing that
+        works once it has."""
+        conn = cls.connect()
+        deadline = time.time() + timeout
         while True:
             try:
                 _ = conn.space_center.editor.vessel.name
-                break
+                return
             except RuntimeError:
                 if time.time() > deadline:
                     raise
                 time.sleep(0.1)
-        if craft is not None:
-            conn.space_center.editor.load_vessel(facility, craft)
 
     @classmethod
     def leave_editor(cls):
