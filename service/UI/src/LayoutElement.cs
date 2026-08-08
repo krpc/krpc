@@ -1,7 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using Tuple2 = System.Tuple<double, double>;
 
 namespace KRPC.UI
@@ -15,8 +17,11 @@ namespace KRPC.UI
     /// shared between the elements with a flexible size, in proportion to it.
     /// </remarks>
     [KRPCClass (Service = "UI")]
-    public class LayoutElement : Equatable<LayoutElement>
+    public class LayoutElement : Equatable<LayoutElement>, IGameObjectState
     {
+        // The game's layout element, which is what this stands for: it belongs to the
+        // interface element it was taken from and lives exactly as long as that element,
+        // and the game gives it nothing else to be named by.
         readonly UnityEngine.UI.LayoutElement element;
 
         internal LayoutElement (UnityEngine.UI.LayoutElement innerElement)
@@ -29,7 +34,8 @@ namespace KRPC.UI
         /// </summary>
         public override bool Equals (LayoutElement other)
         {
-            return !ReferenceEquals (other, null) && element == other.element;
+            return !ReferenceEquals (other, null) &&
+            ReferenceEquals (element, other.element);
         }
 
         /// <summary>
@@ -37,7 +43,32 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            return element.GetHashCode ();
+            // The element's identity hash rather than its own, so that nothing the game
+            // does to it can change it while a client holds this object.
+            return RuntimeHelpers.GetHashCode (element);
+        }
+
+        /// <summary>
+        /// What the game holds for the layout element. It belongs to the interface element
+        /// it was taken from, and the game destroys it with that element, which nothing
+        /// builds again.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return element == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        // The game's layout element, checked to still exist.
+        UnityEngine.UI.LayoutElement Internal {
+            get {
+                if (GameObjectState == GameObjectState.Destroyed)
+                    throw new ObjectDestroyedException (
+                        "The layout element no longer exists, as the user interface object " +
+                        "it belongs to has been removed.");
+                return element;
+            }
         }
 
         /// <summary>
@@ -46,11 +77,11 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 MinSize {
-            get { return new Tuple2 (element.minWidth, element.minHeight); }
+            get { return new Tuple2 (Internal.minWidth, Internal.minHeight); }
             set {
                 var size = value.ToVector ();
-                element.minWidth = size.x;
-                element.minHeight = size.y;
+                Internal.minWidth = size.x;
+                Internal.minHeight = size.y;
             }
         }
 
@@ -60,11 +91,11 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 PreferredSize {
-            get { return new Tuple2 (element.preferredWidth, element.preferredHeight); }
+            get { return new Tuple2 (Internal.preferredWidth, Internal.preferredHeight); }
             set {
                 var size = value.ToVector ();
-                element.preferredWidth = size.x;
-                element.preferredHeight = size.y;
+                Internal.preferredWidth = size.x;
+                Internal.preferredHeight = size.y;
             }
         }
 
@@ -74,11 +105,11 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 FlexibleSize {
-            get { return new Tuple2 (element.flexibleWidth, element.flexibleHeight); }
+            get { return new Tuple2 (Internal.flexibleWidth, Internal.flexibleHeight); }
             set {
                 var size = value.ToVector ();
-                element.flexibleWidth = size.x;
-                element.flexibleHeight = size.y;
+                Internal.flexibleWidth = size.x;
+                Internal.flexibleHeight = size.y;
             }
         }
 
@@ -87,8 +118,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public bool IgnoreLayout {
-            get { return element.ignoreLayout; }
-            set { element.ignoreLayout = value; }
+            get { return Internal.ignoreLayout; }
+            set { Internal.ignoreLayout = value; }
         }
     }
 }

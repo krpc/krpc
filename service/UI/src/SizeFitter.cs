@@ -1,7 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.UI.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.UI
 {
@@ -10,8 +12,11 @@ namespace KRPC.UI
     /// See <see cref="Panel.SizeFitter" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class SizeFitter : Equatable<SizeFitter>
+    public class SizeFitter : Equatable<SizeFitter>, IGameObjectState
     {
+        // The game's size fitter, which is what this stands for: it belongs to the
+        // interface element it was taken from and lives exactly as long as that
+        // element, and the game gives it nothing else to be named by.
         readonly UnityEngine.UI.ContentSizeFitter fitter;
 
         internal SizeFitter (UnityEngine.UI.ContentSizeFitter innerFitter)
@@ -24,7 +29,8 @@ namespace KRPC.UI
         /// </summary>
         public override bool Equals (SizeFitter other)
         {
-            return !ReferenceEquals (other, null) && fitter == other.fitter;
+            return !ReferenceEquals (other, null) &&
+            ReferenceEquals (fitter, other.fitter);
         }
 
         /// <summary>
@@ -32,7 +38,32 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            return fitter.GetHashCode ();
+            // The size fitter's identity hash rather than its own, so that nothing the game
+            // does to it can change it while a client holds this object.
+            return RuntimeHelpers.GetHashCode (fitter);
+        }
+
+        /// <summary>
+        /// What the game holds for the size fitter. It belongs to the interface element it was
+        /// taken from, and the game destroys it with that element, which nothing builds
+        /// again.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return fitter == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        // The game's size fitter, checked to still exist.
+        UnityEngine.UI.ContentSizeFitter Internal {
+            get {
+                if (GameObjectState == GameObjectState.Destroyed)
+                    throw new ObjectDestroyedException (
+                        "The size fitter no longer exists, as the user interface object " +
+                        "it belongs to has been removed.");
+                return fitter;
+            }
         }
 
         /// <summary>
@@ -40,8 +71,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public ContentSizeFit HorizontalFit {
-            get { return fitter.horizontalFit.ToContentSizeFit (); }
-            set { fitter.horizontalFit = value.FromContentSizeFit (); }
+            get { return Internal.horizontalFit.ToContentSizeFit (); }
+            set { Internal.horizontalFit = value.FromContentSizeFit (); }
         }
 
         /// <summary>
@@ -49,8 +80,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public ContentSizeFit VerticalFit {
-            get { return fitter.verticalFit.ToContentSizeFit (); }
-            set { fitter.verticalFit = value.FromContentSizeFit (); }
+            get { return Internal.verticalFit.ToContentSizeFit (); }
+            set { Internal.verticalFit = value.FromContentSizeFit (); }
         }
     }
 }
