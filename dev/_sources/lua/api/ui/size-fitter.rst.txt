@@ -1,0 +1,47 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+Size Fitter
+===========
+
+
+.. class:: SizeFitter
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :attr:`UI.Panel.size_fitter`.
+
+   .. attribute:: horizontal_fit: UI.ContentSizeFit
+
+      How the width of the panel is chosen.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.ContentSizeFit`
+
+   .. attribute:: vertical_fit: UI.ContentSizeFit
+
+      How the height of the panel is chosen.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.ContentSizeFit`
+
+
+
+.. class:: ContentSizeFit
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. data:: unconstrained
+
+      Leave the size alone.
+
+
+   .. data:: min_size
+
+      Use the smallest size the contents will fit in.
+
+
+   .. data:: preferred_size
+
+      Use the size the contents ask for.

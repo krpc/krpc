@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/lua/api/ui/input-field.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Rect Transform" href="rect-transform.html" />
+    <link rel="next" title="Toggle" href="toggle.html" />
     <link rel="prev" title="Button" href="button.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,12 @@
 <dl class="lua class">
 <dt class="sig sig-object lua" id="UI.InputField">
 <span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">InputField</span></span><a class="headerlink" href="#UI.InputField" title="Link to this definition">#</a></dt>
-<dd><p>An input field. See <a class="reference internal" href="panel.html#UI.Panel.add_input_field" title="UI.Panel.add_input_field"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Panel.add_input_field()</span></code></a>.</p>
+<dd><p>An input field.
+Added to a <a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.InputField.rect_transform">
 <span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.InputField.rect_transform" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the input field.</p>
+<dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -701,6 +711,25 @@
 <dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.InputField.layout_element" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -715,6 +744,13 @@
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -751,6 +787,80 @@ This object can be used to alter the style of the input field’s text.</p>
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.placeholder">
+<span class="sig-name descname"><span class="pre">placeholder</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.Text</span><a class="headerlink" href="#UI.UI.InputField.placeholder" title="Link to this definition">#</a></dt>
+<dd><p>The placeholder text component of the input field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="text.html#UI.Text" title="UI.Text"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Text</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Set its <a class="reference internal" href="text.html#UI.UI.Text.content" title="UI.UI.Text.content"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Text.content</span></code></a> to the hint to show while the field is empty.
+The hint is hidden as soon as the field has a value.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.content_type">
+<span class="sig-name descname"><span class="pre">content_type</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.InputContentType</span><a class="headerlink" href="#UI.UI.InputField.content_type" title="Link to this definition">#</a></dt>
+<dd><p>What the field lets the user type into it. Keystrokes that do not fit are
+ignored as they are typed, so a numeric field never shows text a client would
+have to reject.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#UI.InputContentType" title="UI.InputContentType"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.InputContentType</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only what the user types is filtered. A value set by a client is shown as it
+is given.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.character_limit">
+<span class="sig-name descname"><span class="pre">character_limit</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">number</span><a class="headerlink" href="#UI.UI.InputField.character_limit" title="Link to this definition">#</a></dt>
+<dd><p>The most characters the user can type into the field, or 0 for no limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.read_only">
+<span class="sig-name descname"><span class="pre">read_only</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.InputField.read_only" title="Link to this definition">#</a></dt>
+<dd><p>Whether the user is stopped from editing the field. The value can still be
+selected and copied, and a client can still set it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A read-only field is drawn as normal. Make the field not interactable instead
+to gray it out and stop the user selecting it.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.InputField.changed">
 <span class="sig-name descname"><span class="pre">changed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.InputField.changed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the input field has been changed.</p>
@@ -764,15 +874,111 @@ This object can be used to alter the style of the input field’s text.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This property is set to true when the user modifies the value of the input field.
+<p>This property is set to true when the user modifies the value of the input field,
+and not when a client sets it.
 A client script should reset the property to false in order to detect subsequent changes.</p>
 </div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.interactable">
+<span class="sig-name descname"><span class="pre">interactable</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.InputField.interactable" title="Link to this definition">#</a></dt>
+<dd><p>Whether the control responds to the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#UI.UI.InputField.color" title="Link to this definition">#</a></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.InputField.tooltip">
+<span class="sig-name descname"><span class="pre">tooltip</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#UI.UI.InputField.tooltip" title="Link to this definition">#</a></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="lua method">
 <dt class="sig sig-object lua" id="UI.InputField.remove">
 <span class="property"> </span><span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.InputField.remove" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="lua class">
+<dt class="sig sig-object lua" id="UI.InputContentType">
+<span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">InputContentType</span></span><a class="headerlink" href="#UI.InputContentType" title="Link to this definition">#</a></dt>
+<dd><p>What an input field lets the user type into it.</p>
+<dl class="lua data">
+<dt class="sig sig-object lua" id="UI.InputContentType.standard">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">standard</span></span><a class="headerlink" href="#UI.InputContentType.standard" title="Link to this definition">#</a></dt>
+<dd><p>Any text.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="UI.InputContentType.integer">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">integer</span></span><a class="headerlink" href="#UI.InputContentType.integer" title="Link to this definition">#</a></dt>
+<dd><p>A whole number: digits, with a leading minus sign.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="UI.InputContentType.decimal">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">decimal</span></span><a class="headerlink" href="#UI.InputContentType.decimal" title="Link to this definition">#</a></dt>
+<dd><p>A number: digits, with a decimal separator and a leading minus sign.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="UI.InputContentType.alphanumeric">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">alphanumeric</span></span><a class="headerlink" href="#UI.InputContentType.alphanumeric" title="Link to this definition">#</a></dt>
+<dd><p>Letters and digits.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="UI.InputContentType.password">
+<span class="property"> </span><span class="sig-name descname"><span class="pre">password</span></span><a class="headerlink" href="#UI.InputContentType.password" title="Link to this definition">#</a></dt>
+<dd><p>Any text, drawn as asterisks so that it cannot be read off the screen.</p>
 </dd></dl>
 
 </dd></dl>
@@ -799,11 +1005,11 @@ A client script should reset the property to false in order to detect subsequent
       </div>
     </a>
     <a class="right-next"
-       href="rect-transform.html"
+       href="toggle.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Rect Transform</p>
+        <p class="prev-next-title">Toggle</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

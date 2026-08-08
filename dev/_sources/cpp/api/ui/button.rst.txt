@@ -8,13 +8,25 @@ Button
 
 .. class:: Button
 
-   A text label. See :func:`Panel::add_button`.
+   A button that the user can click.
+   Added to a :class:`Canvas` or a :class:`Panel`.
 
    .. function:: RectTransform rect_transform()
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
    
+
+   .. function:: LayoutElement layout_element()
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. function:: bool visible()
    .. function:: void set_visible(bool value)
@@ -22,6 +34,13 @@ Button
       Whether the UI object is visible.
 
    
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
 
    .. function:: Text text()
 
@@ -40,6 +59,57 @@ Button
 
          This property is set to true when the user clicks the button.
          A client script should reset the property to false in order to detect subsequent button presses.
+
+   .. function:: bool pressed()
+
+      Whether the user is holding the button down right now.
+
+   
+
+      .. note::
+
+         True from the button being pressed until the pointer is released, however far
+         it has moved by then. Polling this repeats an action for as long as the
+         button is held, for nudging a value; :func:`Button::clicked` reports each
+         completed click instead.
+
+   .. function:: bool interactable()
+   .. function:: void set_interactable(bool value)
+
+      Whether the control responds to the user.
+
+   
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. function:: std::tuple<double, double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double, double> value)
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+   
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. function:: std::string tooltip()
+   .. function:: void set_tooltip(std::string value)
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+   
 
    .. function:: void remove()
 

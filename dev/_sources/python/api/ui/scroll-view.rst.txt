@@ -1,0 +1,83 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: UI
+
+Scroll View
+===========
+
+
+.. class:: ScrollView
+
+   A view onto a panel that is larger than the space available for it, with scroll bars
+   to move around it.
+   Added to a :class:`Canvas` or a :class:`Panel`.
+
+   .. note::
+
+      Add the elements to :attr:`ScrollView.content`, not to the scroll view itself. Giving
+      the content a layout and setting its size fitter to the preferred size is the
+      simplest way to have it grow to hold what is put in it.
+
+   .. attribute:: rect_transform
+
+      The rect transform for the UI object.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RectTransform`
+   
+
+   .. attribute:: layout_element
+
+      How much space the UI object asks a layout for.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. attribute:: visible
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. attribute:: content
+
+      The panel that is scrolled, which the elements to show are added to.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Panel`
+   
+
+   .. attribute:: horizontal
+
+      Whether the view can be scrolled from side to side.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. attribute:: vertical
+
+      Whether the view can be scrolled up and down.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+   .. method:: remove()
+
+      Remove the UI object.

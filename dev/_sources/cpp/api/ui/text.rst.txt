@@ -8,13 +8,25 @@ Text
 
 .. class:: Text
 
-   A text label. See :func:`Panel::add_text`.
+   A text label.
+   Added to a :class:`Canvas` or a :class:`Panel`.
 
    .. function:: RectTransform rect_transform()
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
    
+
+   .. function:: LayoutElement layout_element()
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. function:: bool visible()
    .. function:: void set_visible(bool value)
@@ -23,10 +35,27 @@ Text
 
    
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. function:: std::string content()
    .. function:: void set_content(std::string value)
 
       The text string
+
+   
+
+   .. function:: bool word_wrap()
+   .. function:: void set_word_wrap(bool value)
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. When wrapping is off, the text carries on past the edge instead, and a
+      label asked for its preferred size asks for a single line, so a value that
+      changes does not reflow a layout.
 
    
 
@@ -36,6 +65,11 @@ Text
       Name of the font
 
    
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :func:`Text::available_fonts` for the names that can be set.
 
    .. function:: std::vector<std::string> available_fonts()
 
@@ -57,10 +91,11 @@ Text
 
    
 
-   .. function:: std::tuple<double, double, double> color()
-   .. function:: void set_color(std::tuple<double, double, double> value)
+   .. function:: std::tuple<double, double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double, double> value)
 
-      Set the color
+      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+      fully transparent and 1 is fully opaque.
 
    
 

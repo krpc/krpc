@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -693,7 +702,8 @@
 <p class="admonition-title">Note</p>
 <p>For drawing 3D objects in the flight scene, see the Drawing service.
 User interface elements created by a client are removed when that client
-disconnects.</p>
+disconnects, and when the game scene changes. A client that needs its
+interface in more than one scene must create it again in each of them.</p>
 </div>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.UI.StockCanvas">
@@ -723,7 +733,7 @@ disconnects.</p>
 
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.UI.UI.Message">
-<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Message</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">content</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">duration</span></em><em> <span class="pre">=</span> <span class="pre">1.0f</span></em>, <a class="reference internal" href="#enum-KRPC.Client.Services.UI.MessagePosition" title="KRPC.Client.Services.UI.MessagePosition enum"><span class="pre">MessagePosition</span></a> <em><span class="pre">position</span></em><em> <span class="pre">=</span> <span class="pre">1</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">color</span></em><em> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">1.0,</span> <span class="pre">0.92,</span> <span class="pre">0.016</span> <span class="pre">}</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">size</span></em><em> <span class="pre">=</span> <span class="pre">20.0f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.UI.UI.Message" title="Link to this definition">#</a></dt>
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Message</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">content</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">duration</span></em><em> <span class="pre">=</span> <span class="pre">1.0f</span></em>, <a class="reference internal" href="#enum-KRPC.Client.Services.UI.MessagePosition" title="KRPC.Client.Services.UI.MessagePosition enum"><span class="pre">MessagePosition</span></a> <em><span class="pre">position</span></em><em> <span class="pre">=</span> <span class="pre">1</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">color</span></em><em> <span class="pre">=</span> <span class="pre">{</span> <span class="pre">1.0,</span> <span class="pre">0.92,</span> <span class="pre">0.016,</span> <span class="pre">1.0</span> <span class="pre">}</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.single" title="System.Single"><span class="pre">Single</span></a> <em><span class="pre">size</span></em><em> <span class="pre">=</span> <span class="pre">20.0f</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.UI.UI.Message" title="Link to this definition">#</a></dt>
 <dd><p>Display a message on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -731,7 +741,7 @@ disconnects.</p>
 <li><p><strong>content</strong> – Message content.</p></li>
 <li><p><strong>duration</strong> – Duration before the message disappears, in seconds.</p></li>
 <li><p><strong>position</strong> – Position to display the message.</p></li>
-<li><p><strong>color</strong> – The color of the message.</p></li>
+<li><p><strong>color</strong> – The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.</p></li>
 <li><p><strong>size</strong> – Size of the message, differs per position.</p></li>
 </ul>
 </dd>

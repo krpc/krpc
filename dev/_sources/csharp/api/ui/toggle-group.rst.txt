@@ -1,0 +1,78 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Toggle Group
+============
+
+
+.. class:: ToggleGroup
+
+   A set of toggles of which only one can be checked at a time, which is what turns
+   a set of :type:`Toggle` controls into radio buttons.
+   Added to a :type:`Canvas` or a :type:`Panel`.
+
+   .. note::
+
+      A group does not contain its toggles, it only refers to them, so toggles can be
+      grouped independently of how they are laid out. A column of radio buttons in a grid
+      of them is one group, even though each row is laid out separately.
+
+   .. property:: RectTransform RectTransform { get; }
+
+      The rect transform for the UI object.
+
+      :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the UI object is visible.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. property:: Toggle Selected { get; }
+
+      The toggle in the group that is checked, or ``null`` if none of them are.
+
+      :Game Scenes: All
+
+   .. property:: bool AllowSwitchOff { get; set; }
+
+      Whether all of the toggles in the group are allowed to be unchecked at once.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         When this is false, the user cannot clear the checked toggle, they can only
+         check a different one. It does not stop a client setting
+         :prop:`Toggle.Checked`, which is obeyed either way.
+         A group starts out with no toggle checked either way.
+
+   .. method:: void Remove()
+
+      Remove the UI object.
+
+
+      :Game Scenes: All

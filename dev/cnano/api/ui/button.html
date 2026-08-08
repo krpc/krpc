@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,23 @@
 <dl class="c type">
 <dt class="sig sig-object c" id="c.krpc_UI_Button_t">
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_t</span></span></span><a class="headerlink" href="#c.krpc_UI_Button_t" title="Link to this definition">#</a><br /></dt>
-<dd><p>A text label. See <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Panel_AddButton()</span></code>.</p>
+<dd><p>A button that the user can click.
+Added to a <a class="reference internal" href="canvas.html#c.krpc_UI_Canvas_t" title="krpc_UI_Canvas_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_UI_Canvas_t</span></code></a> or a <a class="reference internal" href="panel.html#c.krpc_UI_Panel_t" title="krpc_UI_Panel_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_UI_Panel_t</span></code></a>.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_RectTransform">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_RectTransform</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="rect-transform.html#c.krpc_UI_RectTransform_t" title="krpc_UI_RectTransform_t"><span class="n"><span class="pre">krpc_UI_RectTransform_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_RectTransform" title="Link to this definition">#</a><br /></dt>
-<dd><p>The rect transform for the text.</p>
+<dd><p>The rect transform for the UI object.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_LayoutElement">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_LayoutElement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="layout-element.html#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_LayoutElement" title="Link to this definition">#</a><br /></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -704,6 +725,13 @@
 <dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_set_Visible">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_set_Visible</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_set_Visible" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the UI object is visible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -726,6 +754,69 @@
 <p>This property is set to true when the user clicks the button.
 A client script should reset the property to false in order to detect subsequent button presses.</p>
 </div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_Pressed">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_Pressed</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_Pressed" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the user is holding the button down right now.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>True from the button being pressed until the pointer is released, however far
+it has moved by then. Polling this repeats an action for as long as the
+button is held, for nudging a value; <a class="reference internal" href="#c.krpc_UI_Button_t.krpc_UI_Button_Clicked" title="krpc_UI_Button_Clicked"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_UI_Button_Clicked()</span></code></a> reports each
+completed click instead.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_Interactable">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_Interactable</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_Interactable" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_set_Interactable">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_set_Interactable</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_set_Interactable" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the control responds to the user.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_Color">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_Color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_Color" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_set_Color">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_set_Color</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">krpc_tuple_double_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_set_Color" title="Link to this definition">#</a><br /></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_Tooltip">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_Tooltip</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_Tooltip" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Button_t.krpc_UI_Button_set_Tooltip">
+<span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Button_set_Tooltip</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Button_t.krpc_UI_Button_set_Tooltip" title="Link to this definition">#</a><br /></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
 </dd></dl>
 
 <dl class="c function">

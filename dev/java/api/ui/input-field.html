@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/java/api/ui/input-field.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Rect Transform" href="rect-transform.html" />
+    <link rel="next" title="Toggle" href="toggle.html" />
     <link rel="prev" title="Button" href="button.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,23 @@
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.UI.InputField">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">InputField</span></span><a class="headerlink" href="#krpc.client.services.UI.InputField" title="Link to this definition">#</a></dt>
-<dd><p>An input field. See <a class="reference internal" href="panel.html#krpc.client.services.UI.Panel.addInputField(boolean)" title="krpc.client.services.UI.Panel.addInputField(boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Panel.addInputField(boolean)</span></code></a>.</p>
+<dd><p>An input field.
+Added to a <a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><code class="xref java java-type docutils literal notranslate"><span class="pre">Canvas</span></code></a> or a <a class="reference internal" href="panel.html#krpc.client.services.UI.Panel" title="krpc.client.services.UI.Panel"><code class="xref java java-type docutils literal notranslate"><span class="pre">Panel</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getRectTransform()">
  <a class="reference internal" href="rect-transform.html#krpc.client.services.UI.RectTransform" title="krpc.client.services.UI.RectTransform"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">getRectTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getRectTransform()" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the input field.</p>
+<dd><p>The rect transform for the UI object.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getLayoutElement()">
+ <a class="reference internal" href="layout-element.html#krpc.client.services.UI.LayoutElement" title="krpc.client.services.UI.LayoutElement"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">getLayoutElement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getLayoutElement()" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -704,6 +725,13 @@
 <dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setVisible(boolean)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setVisible(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -729,6 +757,63 @@ This object can be used to alter the style of the input field’s text.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getPlaceholder()">
+ <a class="reference internal" href="text.html#krpc.client.services.UI.Text" title="krpc.client.services.UI.Text"><span class="pre">Text</span></a> <span class="sig-name descname"><span class="pre">getPlaceholder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getPlaceholder()" title="Link to this definition">#</a></dt>
+<dd><p>The placeholder text component of the input field.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Set its <a class="reference internal" href="text.html#krpc.client.services.UI.Text.getContent()" title="krpc.client.services.UI.Text.getContent()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Text.getContent()</span></code></a> to the hint to show while the field is empty.
+The hint is hidden as soon as the field has a value.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getContentType()">
+ <a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">getContentType</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getContentType()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setContentType(InputContentType)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setContentType</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setContentType(InputContentType)" title="Link to this definition">#</a></dt>
+<dd><p>What the field lets the user type into it. Keystrokes that do not fit are
+ignored as they are typed, so a numeric field never shows text a client would
+have to reject.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only what the user types is filtered. A value set by a client is shown as it
+is given.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getCharacterLimit()">
+ <span class="pre">int</span> <span class="sig-name descname"><span class="pre">getCharacterLimit</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getCharacterLimit()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setCharacterLimit(int)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setCharacterLimit</span></span><span class="sig-paren">(</span><span class="pre">int</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setCharacterLimit(int)" title="Link to this definition">#</a></dt>
+<dd><p>The most characters the user can type into the field, or 0 for no limit.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getReadOnly()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getReadOnly</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getReadOnly()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setReadOnly(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setReadOnly</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setReadOnly(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the user is stopped from editing the field. The value can still be
+selected and copied, and a client can still set it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A read-only field is drawn as normal. Make the field not interactable instead
+to gray it out and stop the user selecting it.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getChanged()">
  <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getChanged</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getChanged()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -739,15 +824,102 @@ This object can be used to alter the style of the input field’s text.</p>
 <dd><p>Whether the input field has been changed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This property is set to true when the user modifies the value of the input field.
+<p>This property is set to true when the user modifies the value of the input field,
+and not when a client sets it.
 A client script should reset the property to false in order to detect subsequent changes.</p>
 </div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getInteractable()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getInteractable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getInteractable()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setInteractable(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setInteractable</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setInteractable(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the control responds to the user.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getColor()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getColor()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setColor(org.javatuples.Quartet)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setColor(org.javatuples.Quartet)" title="Link to this definition">#</a></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.getTooltip()">
+ <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getTooltip</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.getTooltip()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputField.setTooltip(String)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setTooltip</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.setTooltip(String)" title="Link to this definition">#</a></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.InputField.remove()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.InputField.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputContentType">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">InputContentType</span></span><a class="headerlink" href="#krpc.client.services.UI.InputContentType" title="Link to this definition">#</a></dt>
+<dd><p>What an input field lets the user type into it.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputContentType.STANDARD">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">STANDARD</span></span><a class="headerlink" href="#krpc.client.services.UI.InputContentType.STANDARD" title="Link to this definition">#</a></dt>
+<dd><p>Any text.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputContentType.INTEGER">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">INTEGER</span></span><a class="headerlink" href="#krpc.client.services.UI.InputContentType.INTEGER" title="Link to this definition">#</a></dt>
+<dd><p>A whole number: digits, with a leading minus sign.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputContentType.DECIMAL">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">DECIMAL</span></span><a class="headerlink" href="#krpc.client.services.UI.InputContentType.DECIMAL" title="Link to this definition">#</a></dt>
+<dd><p>A number: digits, with a decimal separator and a leading minus sign.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputContentType.ALPHANUMERIC">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">ALPHANUMERIC</span></span><a class="headerlink" href="#krpc.client.services.UI.InputContentType.ALPHANUMERIC" title="Link to this definition">#</a></dt>
+<dd><p>Letters and digits.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.InputContentType.PASSWORD">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.InputContentType" title="krpc.client.services.UI.InputContentType"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">PASSWORD</span></span><a class="headerlink" href="#krpc.client.services.UI.InputContentType.PASSWORD" title="Link to this definition">#</a></dt>
+<dd><p>Any text, drawn as asterisks so that it cannot be read off the screen.</p>
 </dd></dl>
 
 </dd></dl>
@@ -774,11 +946,11 @@ A client script should reset the property to false in order to detect subsequent
       </div>
     </a>
     <a class="right-next"
-       href="rect-transform.html"
+       href="toggle.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Rect Transform</p>
+        <p class="prev-next-title">Toggle</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

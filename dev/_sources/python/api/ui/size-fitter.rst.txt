@@ -1,0 +1,49 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: UI
+
+Size Fitter
+===========
+
+
+.. class:: SizeFitter
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :attr:`Panel.size_fitter`.
+
+   .. attribute:: horizontal_fit
+
+      How the width of the panel is chosen.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ContentSizeFit`
+   
+
+   .. attribute:: vertical_fit
+
+      How the height of the panel is chosen.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`ContentSizeFit`
+   
+
+
+
+.. class:: ContentSizeFit
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. data:: unconstrained
+
+      Leave the size alone.
+
+
+   .. data:: min_size
+
+      Use the smallest size the contents will fit in.
+
+
+   .. data:: preferred_size
+
+      Use the size the contents ask for.

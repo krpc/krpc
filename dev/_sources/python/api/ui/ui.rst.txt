@@ -14,7 +14,8 @@ Provides functionality for drawing and interacting with in-game user interface e
 
    For drawing 3D objects in the flight scene, see the Drawing service.
    User interface elements created by a client are removed when that client
-   disconnects.
+   disconnects, and when the game scene changes. A client that needs its
+   interface in more than one scene must create it again in each of them.
 
 
 
@@ -43,14 +44,14 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. staticmethod:: message(content, [duration = 1.0], [position = MessagePosition(1)], [color = (1.0, 0.92, 0.016)], [size = 20.0])
+.. staticmethod:: message(content, [duration = 1.0], [position = MessagePosition(1)], [color = (1.0, 0.92, 0.016, 1.0)], [size = 20.0])
 
    Display a message on the screen.
 
    :param str content: Message content.
    :param float duration: Duration before the message disappears, in seconds.
    :param MessagePosition position: Position to display the message.
-   :param tuple color: The color of the message.
+   :param tuple color: The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
    :param float size: Size of the message, differs per position.
    
 

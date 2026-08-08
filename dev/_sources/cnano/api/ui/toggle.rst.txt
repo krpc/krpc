@@ -1,0 +1,135 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Toggle
+======
+
+
+.. type:: krpc_UI_Toggle_t
+
+   A control that is either checked or not.
+   Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
+
+   .. note::
+
+      On its own a toggle is a check box. Put several of them in the same
+      :type:`krpc_UI_ToggleGroup_t` and they become radio buttons, as only one toggle in a
+      group can be checked at a time.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+
+      The rect transform for the UI object.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Toggle_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Toggle_set_Visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Text(krpc_connection_t connection, krpc_UI_Text_t * result)
+
+      The text for the toggle.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Checked(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Toggle_set_Checked(bool value)
+
+      Whether the toggle is checked.
+
+   
+
+      .. note::
+
+         Checking a toggle that belongs to a :type:`krpc_UI_ToggleGroup_t` unchecks the rest
+         of that group, whether or not it is on the screen.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Group(krpc_connection_t connection, krpc_UI_ToggleGroup_t * result)
+   .. function:: void krpc_UI_Toggle_set_Group(krpc_UI_ToggleGroup_t value)
+
+      The group that the toggle belongs to, or ``nullptr`` if it does not belong to one.
+
+   
+
+      .. note::
+
+         Only one toggle in a group can be checked at a time, so a group turns a set of
+         toggles into radio buttons. A group does not have to contain the toggles, so
+         they can be grouped independently of how they are laid out.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Changed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Toggle_set_Changed(bool value)
+
+      Whether the toggle has been changed.
+
+   
+
+      .. note::
+
+         This property is set to true when the user changes the toggle, and not when a
+         client checks or unchecks it.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Interactable(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Toggle_set_Interactable(bool value)
+
+      Whether the control responds to the user.
+
+   
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_UI_Toggle_set_Color(const krpc_tuple_double_double_double_double_t * value)
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+   
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Tooltip(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_UI_Toggle_set_Tooltip(const char * value)
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Toggle_Remove(krpc_connection_t connection)
+
+      Remove the UI object.

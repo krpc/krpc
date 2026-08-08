@@ -584,6 +584,15 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,23 @@
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Text</span></span><a class="headerlink" href="#krpc.client.services.UI.Text" title="Link to this definition">#</a></dt>
-<dd><p>A text label. See <a class="reference internal" href="panel.html#krpc.client.services.UI.Panel.addText(String, boolean)" title="krpc.client.services.UI.Panel.addText(String, boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Panel.addText(String,</span> <span class="pre">boolean)</span></code></a>.</p>
+<dd><p>A text label.
+Added to a <a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><code class="xref java java-type docutils literal notranslate"><span class="pre">Canvas</span></code></a> or a <a class="reference internal" href="panel.html#krpc.client.services.UI.Panel" title="krpc.client.services.UI.Panel"><code class="xref java java-type docutils literal notranslate"><span class="pre">Panel</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text.getRectTransform()">
  <a class="reference internal" href="rect-transform.html#krpc.client.services.UI.RectTransform" title="krpc.client.services.UI.RectTransform"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">getRectTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.getRectTransform()" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the text.</p>
+<dd><p>The rect transform for the UI object.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Text.getLayoutElement()">
+ <a class="reference internal" href="layout-element.html#krpc.client.services.UI.LayoutElement" title="krpc.client.services.UI.LayoutElement"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">getLayoutElement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.getLayoutElement()" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -704,6 +725,13 @@
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text.setVisible(boolean)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.setVisible(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -718,6 +746,20 @@
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Text.getWordWrap()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getWordWrap</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.getWordWrap()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Text.setWordWrap(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setWordWrap</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.setWordWrap(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the text wraps onto further lines when it is wider than the space it
+has. When wrapping is off, the text carries on past the edge instead, and a
+label asked for its preferred size asks for a single line, so a value that
+changes does not reflow a layout.</p>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text.getFont()">
  <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getFont</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.getFont()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
@@ -726,6 +768,11 @@
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text.setFont(String)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setFont</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.setFont(String)" title="Link to this definition">#</a></dt>
 <dd><p>Name of the font</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Empty if the game provided no font to draw the text with, in which case it is
+not drawn. See <a class="reference internal" href="#krpc.client.services.UI.Text.getAvailableFonts()" title="krpc.client.services.UI.Text.getAvailableFonts()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Text.getAvailableFonts()</span></code></a> for the names that can be set.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -758,13 +805,14 @@
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Text.getColor()">
- <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.getColor()" title="Link to this definition">#</a></dt>
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.getColor()" title="Link to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="java method">
-<dt class="sig sig-object java" id="krpc.client.services.UI.Text.setColor(org.javatuples.Triplet)">
- <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.setColor(org.javatuples.Triplet)" title="Link to this definition">#</a></dt>
-<dd><p>Set the color</p>
+<dt class="sig sig-object java" id="krpc.client.services.UI.Text.setColor(org.javatuples.Quartet)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Text.setColor(org.javatuples.Quartet)" title="Link to this definition">#</a></dt>
+<dd><p>The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+fully transparent and 1 is fully opaque.</p>
 </dd></dl>
 
 <dl class="java method">

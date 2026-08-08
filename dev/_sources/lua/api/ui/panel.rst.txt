@@ -8,14 +8,65 @@ Panel
 
 .. class:: Panel
 
-   A container for user interface elements. See :meth:`UI.Canvas.add_panel`.
+   A container for user interface elements.
+   Added to a :class:`UI.Canvas` or another panel.
 
    .. attribute:: rect_transform: UI.RectTransform
 
-      The rect transform for the panel.
+      The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: layout_element: UI.LayoutElement
+
+      How much space the UI object asks a layout for.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. attribute:: style: UI.PanelStyle
+
+      How the background of the panel is drawn. A box is the frame to group related
+      controls in, and is how a group box is made.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.PanelStyle`
+
+   .. attribute:: color: Tuple
+
+      The color the background of the panel is tinted with, as
+      (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully
+      opaque.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+      .. note::
+
+         Has no effect while the style of the panel is :attr:`UI.PanelStyle.none`,
+         as the panel is then not drawn at all.
+
+   .. attribute:: draggable: boolean
+
+      Whether the user can move the panel by dragging it.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         Dragging anywhere on the panel moves it, including over the elements it
+         contains, unless one of them takes the pointer for itself. Give a panel a title
+         bar of its own if only part of it should move it.
+         A panel whose style is :attr:`UI.PanelStyle.none` is not drawn, so it takes
+         no pointer events of its own and can only be dragged by the elements it
+         contains.
 
    .. attribute:: visible: boolean
 
@@ -24,16 +75,23 @@ Panel
       :Attribute: Can be read or written
       :rtype: boolean
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. method:: add_panel([visible = True])
 
-      Create a panel within this panel.
+      Create a panel within this object.
 
       :param boolean visible: Whether the new panel is visible.
       :rtype: :class:`UI.Panel`
 
    .. method:: add_text(content, [visible = True])
 
-      Add text to the panel.
+      Add text to this object.
 
       :param string content: The text.
       :param boolean visible: Whether the text is visible.
@@ -41,19 +99,143 @@ Panel
 
    .. method:: add_input_field([visible = True])
 
-      Add an input field to the panel.
+      Add an input field to this object.
 
       :param boolean visible: Whether the input field is visible.
       :rtype: :class:`UI.InputField`
 
    .. method:: add_button(content, [visible = True])
 
-      Add a button to the panel.
+      Add a button to this object.
 
       :param string content: The label for the button.
       :param boolean visible: Whether the button is visible.
       :rtype: :class:`UI.Button`
 
+   .. method:: add_toggle(content, [visible = True])
+
+      Add a toggle to this object.
+
+      :param string content: The label for the toggle.
+      :param boolean visible: Whether the toggle is visible.
+      :rtype: :class:`UI.Toggle`
+
+   .. method:: add_toggle_group()
+
+      Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+      :rtype: :class:`UI.ToggleGroup`
+
+      .. note::
+
+         The group is not drawn and does not take up any space. The toggles that belong
+         to it can be added anywhere.
+
+   .. method:: add_slider([vertical = False], [visible = True])
+
+      Add a slider to this object.
+
+      :param boolean vertical: Whether the slider runs from bottom to top, rather than from left to right.
+      :param boolean visible: Whether the slider is visible.
+      :rtype: :class:`UI.Slider`
+
+   .. method:: add_dropdown([visible = True])
+
+      Add a dropdown to this object.
+
+      :param boolean visible: Whether the dropdown is visible.
+      :rtype: :class:`UI.Dropdown`
+
+   .. method:: add_image([visible = True])
+
+      Add an image to this object.
+
+      :param boolean visible: Whether the image is visible.
+      :rtype: :class:`UI.Image`
+
+   .. method:: add_scroll_view([visible = True])
+
+      Add a scroll view to this object.
+
+      :param boolean visible: Whether the scroll view is visible.
+      :rtype: :class:`UI.ScrollView`
+
+   .. attribute:: layout: UI.Layout
+
+      The layout that arranges the elements of the panel, or ``nil`` if they are
+      positioned by hand.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.Layout`
+
+   .. method:: add_horizontal_layout()
+
+      Arrange the elements of the panel in a row.
+
+      :rtype: :class:`UI.Layout`
+
+   .. method:: add_vertical_layout()
+
+      Arrange the elements of the panel in a column.
+
+      :rtype: :class:`UI.Layout`
+
+   .. method:: add_grid_layout()
+
+      Arrange the elements of the panel in a grid of equally sized cells.
+
+      :rtype: :class:`UI.Layout`
+
+      .. note::
+
+         The number of columns follows from the size of the panel and the size of a cell.
+         Use :attr:`UI.Layout.constraint` to fix it instead.
+
+   .. attribute:: size_fitter: UI.SizeFitter
+
+      Sizes the panel to fit what it contains.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.SizeFitter`
+
+      .. note::
+
+         Both directions start out unconstrained, which leaves the size of the panel
+         alone.
+
+   .. method:: bring_to_front()
+
+      Draw the panel in front of the other elements beside it. Elements are drawn
+      in the order they were added, so of two overlapping panels the newer hides
+      part of the older until the older is brought to the front.
+
+
+      .. note::
+
+         A draggable panel also brings itself to the front when the user starts
+         dragging it, the way a window comes to the front when it is clicked.
+
    .. method:: remove()
 
       Remove the UI object.
+
+
+
+.. class:: PanelStyle
+
+   How the background of a panel is drawn.
+
+
+   .. data:: window
+
+      As a window, the heavier of the two frames the game uses.
+
+
+   .. data:: box
+
+      As a box, the lighter frame the game groups related controls in.
+
+
+   .. data:: none
+
+      Not drawn at all, leaving whatever is behind the panel showing through.

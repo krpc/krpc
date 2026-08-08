@@ -8,14 +8,27 @@ Text
 
 .. class:: Text
 
-   A text label. See :meth:`UI.Panel.add_text`.
+   A text label.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
 
    .. attribute:: rect_transform: UI.RectTransform
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: layout_element: UI.LayoutElement
+
+      How much space the UI object asks a layout for.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. attribute:: visible: boolean
 
@@ -24,6 +37,13 @@ Text
       :Attribute: Can be read or written
       :rtype: boolean
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. attribute:: content: string
 
       The text string
@@ -31,12 +51,27 @@ Text
       :Attribute: Can be read or written
       :rtype: string
 
+   .. attribute:: word_wrap: boolean
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. When wrapping is off, the text carries on past the edge instead, and a
+      label asked for its preferred size asks for a single line, so a value that
+      changes does not reflow a layout.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
    .. attribute:: font: string
 
       Name of the font
 
       :Attribute: Can be read or written
       :rtype: string
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :attr:`UI.Text.available_fonts` for the names that can be set.
 
    .. attribute:: available_fonts: List
 
@@ -61,7 +96,8 @@ Text
 
    .. attribute:: color: Tuple
 
-      Set the color
+      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+      fully transparent and 1 is fully opaque.
 
       :Attribute: Can be read or written
       :rtype: Tuple

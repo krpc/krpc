@@ -8,14 +8,27 @@ InputField
 
 .. class:: InputField
 
-   An input field. See :meth:`UI.Panel.add_input_field`.
+   An input field.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
 
    .. attribute:: rect_transform: UI.RectTransform
 
-      The rect transform for the input field.
+      The rect transform for the UI object.
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: layout_element: UI.LayoutElement
+
+      How much space the UI object asks a layout for.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. attribute:: visible: boolean
 
@@ -23,6 +36,13 @@ InputField
 
       :Attribute: Can be read or written
       :rtype: boolean
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
 
    .. attribute:: value: string
 
@@ -43,6 +63,52 @@ InputField
          Use :attr:`UI.InputField.value` to get and set the value in the field.
          This object can be used to alter the style of the input field's text.
 
+   .. attribute:: placeholder: UI.Text
+
+      The placeholder text component of the input field.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.Text`
+
+      .. note::
+
+         Set its :attr:`UI.Text.content` to the hint to show while the field is empty.
+         The hint is hidden as soon as the field has a value.
+
+   .. attribute:: content_type: UI.InputContentType
+
+      What the field lets the user type into it. Keystrokes that do not fit are
+      ignored as they are typed, so a numeric field never shows text a client would
+      have to reject.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`UI.InputContentType`
+
+      .. note::
+
+         Only what the user types is filtered. A value set by a client is shown as it
+         is given.
+
+   .. attribute:: character_limit: number
+
+      The most characters the user can type into the field, or 0 for no limit.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: read_only: boolean
+
+      Whether the user is stopped from editing the field. The value can still be
+      selected and copied, and a client can still set it.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         A read-only field is drawn as normal. Make the field not interactable instead
+         to gray it out and stop the user selecting it.
+
    .. attribute:: changed: boolean
 
       Whether the input field has been changed.
@@ -52,9 +118,79 @@ InputField
 
       .. note::
 
-         This property is set to true when the user modifies the value of the input field.
+         This property is set to true when the user modifies the value of the input field,
+         and not when a client sets it.
          A client script should reset the property to false in order to detect subsequent changes.
+
+   .. attribute:: interactable: boolean
+
+      Whether the control responds to the user.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. attribute:: color: Tuple
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. attribute:: tooltip: string
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+      :Attribute: Can be read or written
+      :rtype: string
 
    .. method:: remove()
 
       Remove the UI object.
+
+
+
+.. class:: InputContentType
+
+   What an input field lets the user type into it.
+
+
+   .. data:: standard
+
+      Any text.
+
+
+   .. data:: integer
+
+      A whole number: digits, with a leading minus sign.
+
+
+   .. data:: decimal
+
+      A number: digits, with a decimal separator and a leading minus sign.
+
+
+   .. data:: alphanumeric
+
+      Letters and digits.
+
+
+   .. data:: password
+
+      Any text, drawn as asterisks so that it cannot be read off the screen.

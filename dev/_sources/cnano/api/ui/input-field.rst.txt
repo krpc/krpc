@@ -8,13 +8,25 @@ InputField
 
 .. type:: krpc_UI_InputField_t
 
-   An input field. See :func:`krpc_UI_Panel_AddInputField`.
+   An input field.
+   Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
    .. function:: krpc_error_t krpc_UI_InputField_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
 
-      The rect transform for the input field.
+      The rect transform for the UI object.
 
    
+
+   .. function:: krpc_error_t krpc_UI_InputField_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. function:: krpc_error_t krpc_UI_InputField_Visible(krpc_connection_t connection, bool * result)
    .. function:: void krpc_UI_InputField_set_Visible(bool value)
@@ -22,6 +34,13 @@ InputField
       Whether the UI object is visible.
 
    
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
 
    .. function:: krpc_error_t krpc_UI_InputField_Value(krpc_connection_t connection, char * * result)
    .. function:: void krpc_UI_InputField_set_Value(const char * value)
@@ -41,6 +60,51 @@ InputField
          Use :func:`krpc_UI_InputField_Value` to get and set the value in the field.
          This object can be used to alter the style of the input field's text.
 
+   .. function:: krpc_error_t krpc_UI_InputField_Placeholder(krpc_connection_t connection, krpc_UI_Text_t * result)
+
+      The placeholder text component of the input field.
+
+   
+
+      .. note::
+
+         Set its :func:`krpc_UI_Text_Content` to the hint to show while the field is empty.
+         The hint is hidden as soon as the field has a value.
+
+   .. function:: krpc_error_t krpc_UI_InputField_ContentType(krpc_connection_t connection, krpc_UI_InputContentType_t * result)
+   .. function:: void krpc_UI_InputField_set_ContentType(krpc_UI_InputContentType_t value)
+
+      What the field lets the user type into it. Keystrokes that do not fit are
+      ignored as they are typed, so a numeric field never shows text a client would
+      have to reject.
+
+   
+
+      .. note::
+
+         Only what the user types is filtered. A value set by a client is shown as it
+         is given.
+
+   .. function:: krpc_error_t krpc_UI_InputField_CharacterLimit(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_UI_InputField_set_CharacterLimit(int32_t value)
+
+      The most characters the user can type into the field, or 0 for no limit.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_InputField_ReadOnly(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_InputField_set_ReadOnly(bool value)
+
+      Whether the user is stopped from editing the field. The value can still be
+      selected and copied, and a client can still set it.
+
+   
+
+      .. note::
+
+         A read-only field is drawn as normal. Make the field not interactable instead
+         to gray it out and stop the user selecting it.
+
    .. function:: krpc_error_t krpc_UI_InputField_Changed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_UI_InputField_set_Changed(bool value)
 
@@ -50,9 +114,82 @@ InputField
 
       .. note::
 
-         This property is set to true when the user modifies the value of the input field.
+         This property is set to true when the user modifies the value of the input field,
+         and not when a client sets it.
          A client script should reset the property to false in order to detect subsequent changes.
+
+   .. function:: krpc_error_t krpc_UI_InputField_Interactable(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_InputField_set_Interactable(bool value)
+
+      Whether the control responds to the user.
+
+   
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. function:: krpc_error_t krpc_UI_InputField_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_UI_InputField_set_Color(const krpc_tuple_double_double_double_double_t * value)
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+   
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. function:: krpc_error_t krpc_UI_InputField_Tooltip(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_UI_InputField_set_Tooltip(const char * value)
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+   
 
    .. function:: krpc_error_t krpc_UI_InputField_Remove(krpc_connection_t connection)
 
       Remove the UI object.
+
+
+   
+
+
+
+.. type:: krpc_UI_InputContentType_t
+
+   What an input field lets the user type into it.
+
+
+   .. macro:: KRPC_UI_INPUTCONTENTTYPE_STANDARD
+
+      Any text.
+
+
+   .. macro:: KRPC_UI_INPUTCONTENTTYPE_INTEGER
+
+      A whole number: digits, with a leading minus sign.
+
+
+   .. macro:: KRPC_UI_INPUTCONTENTTYPE_DECIMAL
+
+      A number: digits, with a decimal separator and a leading minus sign.
+
+
+   .. macro:: KRPC_UI_INPUTCONTENTTYPE_ALPHANUMERIC
+
+      Letters and digits.
+
+
+   .. macro:: KRPC_UI_INPUTCONTENTTYPE_PASSWORD
+
+      Any text, drawn as asterisks so that it cannot be read off the screen.

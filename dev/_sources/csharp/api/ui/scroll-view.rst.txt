@@ -1,0 +1,76 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Scroll View
+===========
+
+
+.. class:: ScrollView
+
+   A view onto a panel that is larger than the space available for it, with scroll bars
+   to move around it.
+   Added to a :type:`Canvas` or a :type:`Panel`.
+
+   .. note::
+
+      Add the elements to :prop:`ScrollView.Content`, not to the scroll view itself. Giving
+      the content a layout and setting its size fitter to the preferred size is the
+      simplest way to have it grow to hold what is put in it.
+
+   .. property:: RectTransform RectTransform { get; }
+
+      The rect transform for the UI object.
+
+      :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the UI object is visible.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. property:: Panel Content { get; }
+
+      The panel that is scrolled, which the elements to show are added to.
+
+      :Game Scenes: All
+
+   .. property:: bool Horizontal { get; set; }
+
+      Whether the view can be scrolled from side to side.
+
+      :Game Scenes: All
+
+   .. property:: bool Vertical { get; set; }
+
+      Whether the view can be scrolled up and down.
+
+      :Game Scenes: All
+
+   .. method:: void Remove()
+
+      Remove the UI object.
+
+
+      :Game Scenes: All

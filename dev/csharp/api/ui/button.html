@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,16 +697,33 @@
 <dl class="csharp class">
 <dt class="sig sig-object csharp" id="class-KRPC.Client.Services.UI.Button">
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">Button</span></span><a class="headerlink" href="#class-KRPC.Client.Services.UI.Button" title="Link to this definition">#</a></dt>
-<dd><p>A text label. See <a class="reference internal" href="panel.html#method-KRPC.Client.Services.UI.Panel.AddButton" title="KRPC.Client.Services.UI.Panel.AddButton method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Panel.AddButton</span></code></a>.</p>
+<dd><p>A button that the user can click.
+Added to a <a class="reference internal" href="canvas.html#class-KRPC.Client.Services.UI.Canvas" title="KRPC.Client.Services.UI.Canvas class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Canvas</span></code></a> or a <a class="reference internal" href="panel.html#class-KRPC.Client.Services.UI.Panel" title="KRPC.Client.Services.UI.Panel class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Panel</span></code></a>.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.Button.RectTransform">
 <a class="reference internal" href="rect-transform.html#class-KRPC.Client.Services.UI.RectTransform" title="KRPC.Client.Services.UI.RectTransform class"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">RectTransform</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.Button.RectTransform" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the text.</p>
+<dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.Button.LayoutElement">
+<a class="reference internal" href="layout-element.html#class-KRPC.Client.Services.UI.LayoutElement" title="KRPC.Client.Services.UI.LayoutElement class"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">LayoutElement</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.Button.LayoutElement" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -709,6 +735,13 @@
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -736,6 +769,74 @@
 <p>This property is set to true when the user clicks the button.
 A client script should reset the property to false in order to detect subsequent button presses.</p>
 </div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.Button.Pressed">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Pressed</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.Button.Pressed" title="Link to this definition">#</a></dt>
+<dd><p>Whether the user is holding the button down right now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>True from the button being pressed until the pointer is released, however far
+it has moved by then. Polling this repeats an action for as long as the
+button is held, for nudging a value; <a class="reference internal" href="#property-KRPC.Client.Services.UI.Button.Clicked" title="KRPC.Client.Services.UI.Button.Clicked property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Button.Clicked</span></code></a> reports each
+completed click instead.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.Button.Interactable">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Interactable</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.Button.Interactable" title="Link to this definition">#</a></dt>
+<dd><p>Whether the control responds to the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.Button.Color">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Color</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.Button.Color" title="Link to this definition">#</a></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.Button.Tooltip">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">Tooltip</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.Button.Tooltip" title="Link to this definition">#</a></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="csharp method">

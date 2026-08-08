@@ -14,4 +14,13 @@ User Interface API
    ui/text
    ui/button
    ui/input-field
+   ui/toggle
+   ui/toggle-group
+   ui/slider
+   ui/dropdown
+   ui/image
+   ui/scroll-view
+   ui/layout
+   ui/layout-element
+   ui/size-fitter
    ui/rect-transform

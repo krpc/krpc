@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -692,7 +701,18 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_RectTransform">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_RectTransform</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="rect-transform.html#c.krpc_UI_RectTransform_t" title="krpc_UI_RectTransform_t"><span class="n"><span class="pre">krpc_UI_RectTransform_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_RectTransform" title="Link to this definition">#</a><br /></dt>
-<dd><p>The rect transform for the canvas.</p>
+<dd><p>The rect transform for the UI object.</p>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_LayoutElement">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_LayoutElement</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="layout-element.html#c.krpc_UI_LayoutElement_t" title="krpc_UI_LayoutElement_t"><span class="n"><span class="pre">krpc_UI_LayoutElement_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_LayoutElement" title="Link to this definition">#</a><br /></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
@@ -704,16 +724,23 @@
 <dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_set_Visible">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_set_Visible</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_set_Visible" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the UI object is visible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddPanel">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddPanel</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="panel.html#c.krpc_UI_Panel_t" title="krpc_UI_Panel_t"><span class="n"><span class="pre">krpc_UI_Panel_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddPanel" title="Link to this definition">#</a><br /></dt>
-<dd><p>Create a new container for user interface elements.</p>
+<dd><p>Create a panel within this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>visible</strong> – Whether the panel is visible.</p></li>
+<li><p><strong>visible</strong> – Whether the new panel is visible.</p></li>
 </ul>
 </dd>
 </dl>
@@ -722,7 +749,7 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddText">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddText</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="text.html#c.krpc_UI_Text_t" title="krpc_UI_Text_t"><span class="n"><span class="pre">krpc_UI_Text_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">content</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddText" title="Link to this definition">#</a><br /></dt>
-<dd><p>Add text to the canvas.</p>
+<dd><p>Add text to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -736,7 +763,7 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddInputField">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddInputField</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="input-field.html#c.krpc_UI_InputField_t" title="krpc_UI_InputField_t"><span class="n"><span class="pre">krpc_UI_InputField_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddInputField" title="Link to this definition">#</a><br /></dt>
-<dd><p>Add an input field to the canvas.</p>
+<dd><p>Add an input field to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -749,12 +776,90 @@
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddButton">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddButton</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="button.html#c.krpc_UI_Button_t" title="krpc_UI_Button_t"><span class="n"><span class="pre">krpc_UI_Button_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">content</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddButton" title="Link to this definition">#</a><br /></dt>
-<dd><p>Add a button to the canvas.</p>
+<dd><p>Add a button to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>content</strong> – The label for the button.</p></li>
 <li><p><strong>visible</strong> – Whether the button is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddToggle">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddToggle</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="toggle.html#c.krpc_UI_Toggle_t" title="krpc_UI_Toggle_t"><span class="n"><span class="pre">krpc_UI_Toggle_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">content</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddToggle" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a toggle to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> – The label for the toggle.</p></li>
+<li><p><strong>visible</strong> – Whether the toggle is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddToggleGroup">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddToggleGroup</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="toggle-group.html#c.krpc_UI_ToggleGroup_t" title="krpc_UI_ToggleGroup_t"><span class="n"><span class="pre">krpc_UI_ToggleGroup_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddToggleGroup" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a toggle group to this object, to make a set of toggles into radio buttons.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The group is not drawn and does not take up any space. The toggles that belong
+to it can be added anywhere.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddSlider">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddSlider</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="slider.html#c.krpc_UI_Slider_t" title="krpc_UI_Slider_t"><span class="n"><span class="pre">krpc_UI_Slider_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">vertical</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddSlider" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a slider to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertical</strong> – Whether the slider runs from bottom to top, rather than from left to right.</p></li>
+<li><p><strong>visible</strong> – Whether the slider is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddDropdown">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddDropdown</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="dropdown.html#c.krpc_UI_Dropdown_t" title="krpc_UI_Dropdown_t"><span class="n"><span class="pre">krpc_UI_Dropdown_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddDropdown" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a dropdown to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> – Whether the dropdown is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddImage">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddImage</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="image.html#c.krpc_UI_Image_t" title="krpc_UI_Image_t"><span class="n"><span class="pre">krpc_UI_Image_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddImage" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add an image to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> – Whether the image is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddScrollView">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_UI_Canvas_AddScrollView</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="scroll-view.html#c.krpc_UI_ScrollView_t" title="krpc_UI_ScrollView_t"><span class="n"><span class="pre">krpc_UI_ScrollView_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">visible</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_UI_Canvas_t.krpc_UI_Canvas_AddScrollView" title="Link to this definition">#</a><br /></dt>
+<dd><p>Add a scroll view to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> – Whether the scroll view is visible.</p></li>
 </ul>
 </dd>
 </dl>

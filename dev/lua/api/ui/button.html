@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,12 @@
 <dl class="lua class">
 <dt class="sig sig-object lua" id="UI.Button">
 <span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Button</span></span><a class="headerlink" href="#UI.Button" title="Link to this definition">#</a></dt>
-<dd><p>A text label. See <a class="reference internal" href="panel.html#UI.Panel.add_button" title="UI.Panel.add_button"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Panel.add_button()</span></code></a>.</p>
+<dd><p>A button that the user can click.
+Added to a <a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.Button.rect_transform">
 <span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.Button.rect_transform" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the text.</p>
+<dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -701,6 +711,25 @@
 <dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Button.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.Button.layout_element" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -715,6 +744,13 @@
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -748,6 +784,86 @@
 <p>This property is set to true when the user clicks the button.
 A client script should reset the property to false in order to detect subsequent button presses.</p>
 </div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Button.pressed">
+<span class="sig-name descname"><span class="pre">pressed</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Button.pressed" title="Link to this definition">#</a></dt>
+<dd><p>Whether the user is holding the button down right now.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>True from the button being pressed until the pointer is released, however far
+it has moved by then. Polling this repeats an action for as long as the
+button is held, for nudging a value; <a class="reference internal" href="#UI.UI.Button.clicked" title="UI.UI.Button.clicked"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Button.clicked</span></code></a> reports each
+completed click instead.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Button.interactable">
+<span class="sig-name descname"><span class="pre">interactable</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Button.interactable" title="Link to this definition">#</a></dt>
+<dd><p>Whether the control responds to the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Button.color">
+<span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#UI.UI.Button.color" title="Link to this definition">#</a></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Button.tooltip">
+<span class="sig-name descname"><span class="pre">tooltip</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#UI.UI.Button.tooltip" title="Link to this definition">#</a></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="lua method">

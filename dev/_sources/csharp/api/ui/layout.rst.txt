@@ -1,0 +1,89 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Layout
+======
+
+
+.. class:: Layout
+
+   Arranges the elements of a panel automatically, so that they do not have to be
+   positioned one by one. See :meth:`Panel.AddHorizontalLayout`,
+   :meth:`Panel.AddVerticalLayout` and :meth:`Panel.AddGridLayout`.
+
+   .. property:: float Spacing { get; set; }
+
+      The gap left between the elements, in pixels. A grid layout uses it in both
+      directions.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<int,int,int,int> Padding { get; set; }
+
+      The gap left inside the edges of the panel, in whole pixels, as
+      (left, right, top, bottom).
+
+      :Game Scenes: All
+
+   .. property:: TextAnchor ChildAlignment { get; set; }
+
+      Where the elements are placed within the space the layout has to fill.
+
+      :Game Scenes: All
+
+   .. property:: System.Tuple<double,double> CellSize { get; set; }
+
+      The size of each cell of a grid layout, in pixels.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts, whose
+         elements are sized individually using their layout elements.
+
+   .. property:: GridConstraint Constraint { get; set; }
+
+      What fixes the shape of a grid layout.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+   .. property:: int ConstraintCount { get; set; }
+
+      The number of columns or rows that :prop:`Layout.Constraint` fixes, ignored when
+      the constraint is :enum:`GridConstraint.Flexible`.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+
+.. enum:: GridConstraint
+
+   What fixes the shape of a grid layout.
+
+
+   .. value:: Flexible
+
+      Fit as many columns and rows as the size of the panel allows.
+
+
+   .. value:: FixedColumnCount
+
+      Use a fixed number of columns, and as many rows as are needed.
+
+
+   .. value:: FixedRowCount
+
+      Use a fixed number of rows, and as many columns as are needed.

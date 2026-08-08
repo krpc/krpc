@@ -13,9 +13,21 @@ Canvas
    .. method:: RectTransform getRectTransform()
 
 
-      The rect transform for the canvas.
+      The rect transform for the UI object.
 
    
+
+   .. method:: LayoutElement getLayoutElement()
+
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. method:: boolean getVisible()
 
@@ -25,16 +37,23 @@ Canvas
 
    
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. method:: Panel addPanel(boolean visible)
 
-      Create a new container for user interface elements.
+      Create a panel within this object.
 
-      :param boolean visible: Whether the panel is visible.
+      :param boolean visible: Whether the new panel is visible.
    
 
    .. method:: Text addText(String content, boolean visible)
 
-      Add text to the canvas.
+      Add text to this object.
 
       :param String content: The text.
       :param boolean visible: Whether the text is visible.
@@ -42,17 +61,65 @@ Canvas
 
    .. method:: InputField addInputField(boolean visible)
 
-      Add an input field to the canvas.
+      Add an input field to this object.
 
       :param boolean visible: Whether the input field is visible.
    
 
    .. method:: Button addButton(String content, boolean visible)
 
-      Add a button to the canvas.
+      Add a button to this object.
 
       :param String content: The label for the button.
       :param boolean visible: Whether the button is visible.
+   
+
+   .. method:: Toggle addToggle(String content, boolean visible)
+
+      Add a toggle to this object.
+
+      :param String content: The label for the toggle.
+      :param boolean visible: Whether the toggle is visible.
+   
+
+   .. method:: ToggleGroup addToggleGroup()
+
+      Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+   
+
+      .. note::
+
+         The group is not drawn and does not take up any space. The toggles that belong
+         to it can be added anywhere.
+
+   .. method:: Slider addSlider(boolean vertical, boolean visible)
+
+      Add a slider to this object.
+
+      :param boolean vertical: Whether the slider runs from bottom to top, rather than from left to right.
+      :param boolean visible: Whether the slider is visible.
+   
+
+   .. method:: Dropdown addDropdown(boolean visible)
+
+      Add a dropdown to this object.
+
+      :param boolean visible: Whether the dropdown is visible.
+   
+
+   .. method:: Image addImage(boolean visible)
+
+      Add an image to this object.
+
+      :param boolean visible: Whether the image is visible.
+   
+
+   .. method:: ScrollView addScrollView(boolean visible)
+
+      Add a scroll view to this object.
+
+      :param boolean visible: Whether the scroll view is visible.
    
 
    .. method:: void remove()

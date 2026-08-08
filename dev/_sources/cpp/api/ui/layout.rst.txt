@@ -1,0 +1,93 @@
+.. default-domain:: cpp
+.. highlight:: cpp
+.. namespace:: krpc::services::UI
+
+Layout
+======
+
+
+.. class:: Layout
+
+   Arranges the elements of a panel automatically, so that they do not have to be
+   positioned one by one. See :func:`Panel::add_horizontal_layout`,
+   :func:`Panel::add_vertical_layout` and :func:`Panel::add_grid_layout`.
+
+   .. function:: float spacing()
+   .. function:: void set_spacing(float value)
+
+      The gap left between the elements, in pixels. A grid layout uses it in both
+      directions.
+
+   
+
+   .. function:: std::tuple<int32_t, int32_t, int32_t, int32_t> padding()
+   .. function:: void set_padding(std::tuple<int32_t, int32_t, int32_t, int32_t> value)
+
+      The gap left inside the edges of the panel, in whole pixels, as
+      (left, right, top, bottom).
+
+   
+
+   .. function:: TextAnchor child_alignment()
+   .. function:: void set_child_alignment(TextAnchor value)
+
+      Where the elements are placed within the space the layout has to fill.
+
+   
+
+   .. function:: std::tuple<double, double> cell_size()
+   .. function:: void set_cell_size(std::tuple<double, double> value)
+
+      The size of each cell of a grid layout, in pixels.
+
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts, whose
+         elements are sized individually using their layout elements.
+
+   .. function:: GridConstraint constraint()
+   .. function:: void set_constraint(GridConstraint value)
+
+      What fixes the shape of a grid layout.
+
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+   .. function:: int32_t constraint_count()
+   .. function:: void set_constraint_count(int32_t value)
+
+      The number of columns or rows that :func:`Layout::constraint` fixes, ignored when
+      the constraint is :enumerator:`GridConstraint::flexible`.
+
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: GridConstraint
+
+   What fixes the shape of a grid layout.
+
+
+   .. enumerator:: flexible
+
+      Fit as many columns and rows as the size of the panel allows.
+
+
+   .. enumerator:: fixed_column_count
+
+      Use a fixed number of columns, and as many rows as are needed.
+
+
+   .. enumerator:: fixed_row_count
+
+      Use a fixed number of rows, and as many columns as are needed.

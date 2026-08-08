@@ -8,13 +8,63 @@ Panel
 
 .. class:: Panel
 
-   A container for user interface elements. See :func:`Canvas::add_panel`.
+   A container for user interface elements.
+   Added to a :class:`Canvas` or another panel.
 
    .. function:: RectTransform rect_transform()
 
-      The rect transform for the panel.
+      The rect transform for the UI object.
 
    
+
+   .. function:: LayoutElement layout_element()
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. function:: PanelStyle style()
+   .. function:: void set_style(PanelStyle value)
+
+      How the background of the panel is drawn. A box is the frame to group related
+      controls in, and is how a group box is made.
+
+   
+
+   .. function:: std::tuple<double, double, double, double> color()
+   .. function:: void set_color(std::tuple<double, double, double, double> value)
+
+      The color the background of the panel is tinted with, as
+      (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully
+      opaque.
+
+   
+
+      .. note::
+
+         Has no effect while the style of the panel is :enumerator:`PanelStyle::none`,
+         as the panel is then not drawn at all.
+
+   .. function:: bool draggable()
+   .. function:: void set_draggable(bool value)
+
+      Whether the user can move the panel by dragging it.
+
+   
+
+      .. note::
+
+         Dragging anywhere on the panel moves it, including over the elements it
+         contains, unless one of them takes the pointer for itself. Give a panel a title
+         bar of its own if only part of it should move it.
+         A panel whose style is :enumerator:`PanelStyle::none` is not drawn, so it takes
+         no pointer events of its own and can only be dragged by the elements it
+         contains.
 
    .. function:: bool visible()
    .. function:: void set_visible(bool value)
@@ -23,9 +73,16 @@ Panel
 
    
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. function:: Panel add_panel(bool visible = true)
 
-      Create a panel within this panel.
+      Create a panel within this object.
 
       :Parameters:
 
@@ -35,7 +92,7 @@ Panel
 
    .. function:: Text add_text(std::string content, bool visible = true)
 
-      Add text to the panel.
+      Add text to this object.
 
       :Parameters:
 
@@ -46,7 +103,7 @@ Panel
 
    .. function:: InputField add_input_field(bool visible = true)
 
-      Add an input field to the panel.
+      Add an input field to this object.
 
       :Parameters:
 
@@ -56,7 +113,7 @@ Panel
 
    .. function:: Button add_button(std::string content, bool visible = true)
 
-      Add a button to the panel.
+      Add a button to this object.
 
       :Parameters:
 
@@ -65,6 +122,153 @@ Panel
 
    
 
+   .. function:: Toggle add_toggle(std::string content, bool visible = true)
+
+      Add a toggle to this object.
+
+      :Parameters:
+
+       * **content** -- The label for the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+   
+
+   .. function:: ToggleGroup add_toggle_group()
+
+      Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+
+   
+
+      .. note::
+
+         The group is not drawn and does not take up any space. The toggles that belong
+         to it can be added anywhere.
+
+   .. function:: Slider add_slider(bool vertical = false, bool visible = true)
+
+      Add a slider to this object.
+
+      :Parameters:
+
+       * **vertical** -- Whether the slider runs from bottom to top, rather than from left to right.
+       * **visible** -- Whether the slider is visible.
+
+   
+
+   .. function:: Dropdown add_dropdown(bool visible = true)
+
+      Add a dropdown to this object.
+
+      :Parameters:
+
+       * **visible** -- Whether the dropdown is visible.
+
+   
+
+   .. function:: Image add_image(bool visible = true)
+
+      Add an image to this object.
+
+      :Parameters:
+
+       * **visible** -- Whether the image is visible.
+
+   
+
+   .. function:: ScrollView add_scroll_view(bool visible = true)
+
+      Add a scroll view to this object.
+
+      :Parameters:
+
+       * **visible** -- Whether the scroll view is visible.
+
+   
+
+   .. function:: Layout layout()
+
+      The layout that arranges the elements of the panel, or ``NULL`` if they are
+      positioned by hand.
+
+   
+
+   .. function:: Layout add_horizontal_layout()
+
+      Arrange the elements of the panel in a row.
+
+
+   
+
+   .. function:: Layout add_vertical_layout()
+
+      Arrange the elements of the panel in a column.
+
+
+   
+
+   .. function:: Layout add_grid_layout()
+
+      Arrange the elements of the panel in a grid of equally sized cells.
+
+
+   
+
+      .. note::
+
+         The number of columns follows from the size of the panel and the size of a cell.
+         Use :func:`Layout::constraint` to fix it instead.
+
+   .. function:: SizeFitter size_fitter()
+
+      Sizes the panel to fit what it contains.
+
+   
+
+      .. note::
+
+         Both directions start out unconstrained, which leaves the size of the panel
+         alone.
+
+   .. function:: void bring_to_front()
+
+      Draw the panel in front of the other elements beside it. Elements are drawn
+      in the order they were added, so of two overlapping panels the newer hides
+      part of the older until the older is brought to the front.
+
+
+   
+
+      .. note::
+
+         A draggable panel also brings itself to the front when the user starts
+         dragging it, the way a window comes to the front when it is clicked.
+
    .. function:: void remove()
 
       Remove the UI object.
+
+
+   
+
+
+
+.. namespace:: krpc::services::UI
+.. enum-struct:: PanelStyle
+
+   How the background of a panel is drawn.
+
+
+   .. enumerator:: window
+
+      As a window, the heavier of the two frames the game uses.
+
+
+   .. enumerator:: box
+
+      As a box, the lighter frame the game groups related controls in.
+
+
+   .. enumerator:: none
+
+      Not drawn at all, leaving whatever is behind the panel showing through.

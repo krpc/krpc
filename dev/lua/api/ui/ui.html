@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -690,7 +699,8 @@
 <p class="admonition-title">Note</p>
 <p>For drawing 3D objects in the flight scene, see the Drawing service.
 User interface elements created by a client are removed when that client
-disconnects.</p>
+disconnects, and when the game scene changes. A client that needs its
+interface in more than one scene must create it again in each of them.</p>
 </div>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.stock_canvas">
@@ -723,7 +733,7 @@ disconnects.</p>
 
 <dl class="lua staticmethod">
 <dt class="sig sig-object lua" id="UI.message">
-<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">content</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">duration</span> <span class="pre">=</span> <span class="pre">1.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">position</span> <span class="pre">=</span> <span class="pre">1</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">color</span> <span class="pre">=</span> <span class="pre">(1.0</span></em>, <em class="sig-param"><span class="pre">0.92</span></em>, <em class="sig-param"><span class="pre">0.016)</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">size</span> <span class="pre">=</span> <span class="pre">20.0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.message" title="Link to this definition">#</a></dt>
+<span class="property"><span class="pre">static</span> </span><span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">content</span></em><span class="optional">[</span>, <em class="sig-param"><span class="pre">duration</span> <span class="pre">=</span> <span class="pre">1.0</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">position</span> <span class="pre">=</span> <span class="pre">1</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">color</span> <span class="pre">=</span> <span class="pre">(1.0</span></em>, <em class="sig-param"><span class="pre">0.92</span></em>, <em class="sig-param"><span class="pre">0.016</span></em>, <em class="sig-param"><span class="pre">1.0)</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">size</span> <span class="pre">=</span> <span class="pre">20.0</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.message" title="Link to this definition">#</a></dt>
 <dd><p>Display a message on the screen.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -731,7 +741,7 @@ disconnects.</p>
 <li><p><strong>content</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – Message content.</p></li>
 <li><p><strong>duration</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Duration before the message disappears, in seconds.</p></li>
 <li><p><strong>position</strong> (<span><a class="reference internal" href="#UI.MessagePosition" title="UI.MessagePosition"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.MessagePosition</span></code></a></span>) – Position to display the message.</p></li>
-<li><p><strong>color</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The color of the message.</p></li>
+<li><p><strong>color</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Tuple</span></code></span>) – The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.</p></li>
 <li><p><strong>size</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">number</span></code></span>) – Size of the message, differs per position.</p></li>
 </ul>
 </dd>

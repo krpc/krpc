@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/csharp/api/ui/input-field.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Rect Transform" href="rect-transform.html" />
+    <link rel="next" title="Toggle" href="toggle.html" />
     <link rel="prev" title="Button" href="button.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,16 +697,33 @@
 <dl class="csharp class">
 <dt class="sig sig-object csharp" id="class-KRPC.Client.Services.UI.InputField">
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">InputField</span></span><a class="headerlink" href="#class-KRPC.Client.Services.UI.InputField" title="Link to this definition">#</a></dt>
-<dd><p>An input field. See <a class="reference internal" href="panel.html#method-KRPC.Client.Services.UI.Panel.AddInputField" title="KRPC.Client.Services.UI.Panel.AddInputField method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Panel.AddInputField</span></code></a>.</p>
+<dd><p>An input field.
+Added to a <a class="reference internal" href="canvas.html#class-KRPC.Client.Services.UI.Canvas" title="KRPC.Client.Services.UI.Canvas class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Canvas</span></code></a> or a <a class="reference internal" href="panel.html#class-KRPC.Client.Services.UI.Panel" title="KRPC.Client.Services.UI.Panel class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Panel</span></code></a>.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.RectTransform">
 <a class="reference internal" href="rect-transform.html#class-KRPC.Client.Services.UI.RectTransform" title="KRPC.Client.Services.UI.RectTransform class"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">RectTransform</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.RectTransform" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the input field.</p>
+<dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.LayoutElement">
+<a class="reference internal" href="layout-element.html#class-KRPC.Client.Services.UI.LayoutElement" title="KRPC.Client.Services.UI.LayoutElement class"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">LayoutElement</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.LayoutElement" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -709,6 +735,13 @@
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -739,6 +772,68 @@ This object can be used to alter the style of the input field’s text.</p>
 </dd></dl>
 
 <dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.Placeholder">
+<a class="reference internal" href="text.html#class-KRPC.Client.Services.UI.Text" title="KRPC.Client.Services.UI.Text class"><span class="pre">Text</span></a> <span class="sig-name descname"><span class="pre">Placeholder</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.Placeholder" title="Link to this definition">#</a></dt>
+<dd><p>The placeholder text component of the input field.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Set its <a class="reference internal" href="text.html#property-KRPC.Client.Services.UI.Text.Content" title="KRPC.Client.Services.UI.Text.Content property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Text.Content</span></code></a> to the hint to show while the field is empty.
+The hint is hidden as soon as the field has a value.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.ContentType">
+<a class="reference internal" href="#enum-KRPC.Client.Services.UI.InputContentType" title="KRPC.Client.Services.UI.InputContentType enum"><span class="pre">InputContentType</span></a> <span class="sig-name descname"><span class="pre">ContentType</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.ContentType" title="Link to this definition">#</a></dt>
+<dd><p>What the field lets the user type into it. Keystrokes that do not fit are
+ignored as they are typed, so a numeric field never shows text a client would
+have to reject.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only what the user types is filtered. A value set by a client is shown as it
+is given.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.CharacterLimit">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <span class="sig-name descname"><span class="pre">CharacterLimit</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.CharacterLimit" title="Link to this definition">#</a></dt>
+<dd><p>The most characters the user can type into the field, or 0 for no limit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.ReadOnly">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">ReadOnly</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.ReadOnly" title="Link to this definition">#</a></dt>
+<dd><p>Whether the user is stopped from editing the field. The value can still be
+selected and copied, and a client can still set it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A read-only field is drawn as normal. Make the field not interactable instead
+to gray it out and stop the user selecting it.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.Changed">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Changed</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.Changed" title="Link to this definition">#</a></dt>
 <dd><p>Whether the input field has been changed.</p>
@@ -749,9 +844,60 @@ This object can be used to alter the style of the input field’s text.</p>
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This property is set to true when the user modifies the value of the input field.
+<p>This property is set to true when the user modifies the value of the input field,
+and not when a client sets it.
 A client script should reset the property to false in order to detect subsequent changes.</p>
 </div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.Interactable">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.boolean" title="System.Boolean"><span class="pre">Boolean</span></a> <span class="sig-name descname"><span class="pre">Interactable</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.Interactable" title="Link to this definition">#</a></dt>
+<dd><p>Whether the control responds to the user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.Color">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">Color</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.Color" title="Link to this definition">#</a></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.UI.InputField.Tooltip">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">Tooltip</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span> <span class="pre">set;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.UI.InputField.Tooltip" title="Link to this definition">#</a></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="csharp method">
@@ -763,6 +909,42 @@ A client script should reset the property to false in order to detect subsequent
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="csharp enum">
+<dt class="sig sig-object csharp" id="enum-KRPC.Client.Services.UI.InputContentType">
+<span class="sig-name descname"><span class="pre">enum</span> <span class="pre">InputContentType</span></span><a class="headerlink" href="#enum-KRPC.Client.Services.UI.InputContentType" title="Link to this definition">#</a></dt>
+<dd><p>What an input field lets the user type into it.</p>
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.InputContentType.Standard">
+<span class="sig-name descname"><span class="pre">Standard</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.InputContentType.Standard" title="Link to this definition">#</a></dt>
+<dd><p>Any text.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.InputContentType.Integer">
+<span class="sig-name descname"><span class="pre">Integer</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.InputContentType.Integer" title="Link to this definition">#</a></dt>
+<dd><p>A whole number: digits, with a leading minus sign.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.InputContentType.Decimal">
+<span class="sig-name descname"><span class="pre">Decimal</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.InputContentType.Decimal" title="Link to this definition">#</a></dt>
+<dd><p>A number: digits, with a decimal separator and a leading minus sign.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.InputContentType.Alphanumeric">
+<span class="sig-name descname"><span class="pre">Alphanumeric</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.InputContentType.Alphanumeric" title="Link to this definition">#</a></dt>
+<dd><p>Letters and digits.</p>
+</dd></dl>
+
+<dl class="csharp value">
+<dt class="sig sig-object csharp" id="value-KRPC.Client.Services.UI.InputContentType.Password">
+<span class="sig-name descname"><span class="pre">Password</span></span><a class="headerlink" href="#value-KRPC.Client.Services.UI.InputContentType.Password" title="Link to this definition">#</a></dt>
+<dd><p>Any text, drawn as asterisks so that it cannot be read off the screen.</p>
 </dd></dl>
 
 </dd></dl>
@@ -789,11 +971,11 @@ A client script should reset the property to false in order to detect subsequent
       </div>
     </a>
     <a class="right-next"
-       href="rect-transform.html"
+       href="toggle.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Rect Transform</p>
+        <p class="prev-next-title">Toggle</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

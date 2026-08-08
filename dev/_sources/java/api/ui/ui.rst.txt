@@ -14,7 +14,8 @@ UI
 
       For drawing 3D objects in the flight scene, see the Drawing service.
       User interface elements created by a client are removed when that client
-      disconnects.
+      disconnects, and when the game scene changes. A client that needs its
+      interface in more than one scene must create it again in each of them.
 
    .. method:: Canvas getStockCanvas()
 
@@ -33,14 +34,14 @@ UI
 
          If you want to add UI elements to KSPs stock UI canvas, use :meth:`getStockCanvas()`.
 
-   .. method:: void message(String content, float duration, MessagePosition position, org.javatuples.Triplet<Double,Double,Double> color, float size)
+   .. method:: void message(String content, float duration, MessagePosition position, org.javatuples.Quartet<Double,Double,Double,Double> color, float size)
 
       Display a message on the screen.
 
       :param String content: Message content.
       :param float duration: Duration before the message disappears, in seconds.
       :param MessagePosition position: Position to display the message.
-      :param org.javatuples.Triplet<Double,Double,Double> color: The color of the message.
+      :param org.javatuples.Quartet<Double,Double,Double,Double> color: The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
       :param float size: Size of the message, differs per position.
    
 

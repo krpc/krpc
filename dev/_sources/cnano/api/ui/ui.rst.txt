@@ -12,7 +12,8 @@ Provides functionality for drawing and interacting with in-game user interface e
 
    For drawing 3D objects in the flight scene, see the Drawing service.
    User interface elements created by a client are removed when that client
-   disconnects.
+   disconnects, and when the game scene changes. A client that needs its
+   interface in more than one scene must create it again in each of them.
 
 
 
@@ -39,7 +40,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. function:: krpc_error_t krpc_UI_Message(krpc_connection_t connection, const char * content, float duration, krpc_UI_MessagePosition_t position, const krpc_tuple_double_double_double_t * color, float size)
+.. function:: krpc_error_t krpc_UI_Message(krpc_connection_t connection, const char * content, float duration, krpc_UI_MessagePosition_t position, const krpc_tuple_double_double_double_double_t * color, float size)
 
    Display a message on the screen.
 
@@ -48,7 +49,7 @@ Provides functionality for drawing and interacting with in-game user interface e
     * **content** -- Message content.
     * **duration** -- Duration before the message disappears, in seconds.
     * **position** -- Position to display the message.
-    * **color** -- The color of the message.
+    * **color** -- The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
     * **size** -- Size of the message, differs per position.
 
    

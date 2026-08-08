@@ -15,7 +15,8 @@ UI
 
       For drawing 3D objects in the flight scene, see the Drawing service.
       User interface elements created by a client are removed when that client
-      disconnects.
+      disconnects, and when the game scene changes. A client that needs its
+      interface in more than one scene must create it again in each of them.
 
    .. function:: UI(krpc::Client* client)
 
@@ -38,7 +39,7 @@ UI
 
          If you want to add UI elements to KSPs stock UI canvas, use :func:`stock_canvas`.
 
-   .. function:: void message(std::string content, float duration = 1.0, MessagePosition position = static_cast<MessagePosition>(1), std::tuple<double, double, double> color = std::tuple<double, double, double>(1.0, 0.92, 0.016), float size = 20.0)
+   .. function:: void message(std::string content, float duration = 1.0, MessagePosition position = static_cast<MessagePosition>(1), std::tuple<double, double, double, double> color = std::tuple<double, double, double, double>(1.0, 0.92, 0.016, 1.0), float size = 20.0)
 
       Display a message on the screen.
 
@@ -47,7 +48,7 @@ UI
        * **content** -- Message content.
        * **duration** -- Duration before the message disappears, in seconds.
        * **position** -- Position to display the message.
-       * **color** -- The color of the message.
+       * **color** -- The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
        * **size** -- Size of the message, differs per position.
 
    

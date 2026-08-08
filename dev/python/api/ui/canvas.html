@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -692,7 +701,7 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="UI.Canvas.rect_transform">
 <span class="sig-name descname"><span class="pre">rect_transform</span></span><a class="headerlink" href="#UI.Canvas.rect_transform" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the canvas.</p>
+<dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -701,6 +710,25 @@
 <dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref py py-class docutils literal notranslate"><span class="pre">RectTransform</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="UI.Canvas.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><a class="headerlink" href="#UI.Canvas.layout_element" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">LayoutElement</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -715,15 +743,22 @@
 <dd class="field-even"><p>bool</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Canvas.add_panel">
 <span class="sig-name descname"><span class="pre">add_panel</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_panel" title="Link to this definition">#</a></dt>
-<dd><p>Create a new container for user interface elements.</p>
+<dd><p>Create a panel within this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – Whether the panel is visible.</p>
+<dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – Whether the new panel is visible.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref py py-class docutils literal notranslate"><span class="pre">Panel</span></code></a></p>
@@ -734,7 +769,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Canvas.add_text">
 <span class="sig-name descname"><span class="pre">add_text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_text" title="Link to this definition">#</a></dt>
-<dd><p>Add text to the canvas.</p>
+<dd><p>Add text to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -751,7 +786,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Canvas.add_input_field">
 <span class="sig-name descname"><span class="pre">add_input_field</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_input_field" title="Link to this definition">#</a></dt>
-<dd><p>Add an input field to the canvas.</p>
+<dd><p>Add an input field to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – Whether the input field is visible.</p>
@@ -765,7 +800,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="UI.Canvas.add_button">
 <span class="sig-name descname"><span class="pre">add_button</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_button" title="Link to this definition">#</a></dt>
-<dd><p>Add a button to the canvas.</p>
+<dd><p>Add a button to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -775,6 +810,98 @@
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="button.html#UI.Button" title="UI.Button"><code class="xref py py-class docutils literal notranslate"><span class="pre">Button</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Canvas.add_toggle">
+<span class="sig-name descname"><span class="pre">add_toggle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_toggle" title="Link to this definition">#</a></dt>
+<dd><p>Add a toggle to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<em>str</em>) – The label for the toggle.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the toggle is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="toggle.html#UI.Toggle" title="UI.Toggle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Toggle</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Canvas.add_toggle_group">
+<span class="sig-name descname"><span class="pre">add_toggle_group</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_toggle_group" title="Link to this definition">#</a></dt>
+<dd><p>Add a toggle group to this object, to make a set of toggles into radio buttons.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="toggle-group.html#UI.ToggleGroup" title="UI.ToggleGroup"><code class="xref py py-class docutils literal notranslate"><span class="pre">ToggleGroup</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The group is not drawn and does not take up any space. The toggles that belong
+to it can be added anywhere.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Canvas.add_slider">
+<span class="sig-name descname"><span class="pre">add_slider</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">vertical</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_slider" title="Link to this definition">#</a></dt>
+<dd><p>Add a slider to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertical</strong> (<em>bool</em>) – Whether the slider runs from bottom to top, rather than from left to right.</p></li>
+<li><p><strong>visible</strong> (<em>bool</em>) – Whether the slider is visible.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="slider.html#UI.Slider" title="UI.Slider"><code class="xref py py-class docutils literal notranslate"><span class="pre">Slider</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Canvas.add_dropdown">
+<span class="sig-name descname"><span class="pre">add_dropdown</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_dropdown" title="Link to this definition">#</a></dt>
+<dd><p>Add a dropdown to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – Whether the dropdown is visible.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="dropdown.html#UI.Dropdown" title="UI.Dropdown"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dropdown</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Canvas.add_image">
+<span class="sig-name descname"><span class="pre">add_image</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_image" title="Link to this definition">#</a></dt>
+<dd><p>Add an image to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – Whether the image is visible.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="image.html#UI.Image" title="UI.Image"><code class="xref py py-class docutils literal notranslate"><span class="pre">Image</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="UI.Canvas.add_scroll_view">
+<span class="sig-name descname"><span class="pre">add_scroll_view</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">visible</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#UI.Canvas.add_scroll_view" title="Link to this definition">#</a></dt>
+<dd><p>Add a scroll view to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>visible</strong> (<em>bool</em>) – Whether the scroll view is visible.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="scroll-view.html#UI.ScrollView" title="UI.ScrollView"><code class="xref py py-class docutils literal notranslate"><span class="pre">ScrollView</span></code></a></p>
 </dd>
 </dl>
 </dd></dl>

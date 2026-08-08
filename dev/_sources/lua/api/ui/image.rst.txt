@@ -1,0 +1,108 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: UI
+
+Image
+=====
+
+
+.. class:: Image
+
+   A picture, or a plain colored rectangle.
+   Added to a :class:`UI.Canvas` or a :class:`UI.Panel`.
+
+   .. attribute:: rect_transform: UI.RectTransform
+
+      The rect transform for the UI object.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.RectTransform`
+
+   .. attribute:: layout_element: UI.LayoutElement
+
+      How much space the UI object asks a layout for.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`UI.LayoutElement`
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. attribute:: visible: boolean
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: boolean
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. attribute:: content: string
+
+      The picture to show, as the contents of a PNG or JPEG file. Set it to an empty
+      array to show a plain rectangle instead.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+      .. note::
+
+         Reading this returns what was last set, not what is on the screen, and returns
+         an empty array if no picture has been set. A picture drawn with
+         :meth:`UI.Image.set_pixels` is not returned here either.
+
+   .. method:: set_pixels(data, width, height)
+
+      Draw the picture from raw pixels rather than a file, so that a client can
+      draw whatever it likes, a graph for instance, and redraw it as often as it
+      likes.
+
+      :param string data: The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.
+      :param number width: How many pixels wide the picture is.
+      :param number height: How many pixels tall the picture is.
+
+      .. note::
+
+         Redrawing at an unchanged size draws into the picture already there, so a
+         picture redrawn every update does not build a new one each time.
+
+   .. method:: update_pixels(data, x, y, width, height)
+
+      Redraw part of a picture drawn with :meth:`UI.Image.set_pixels`: a block of the
+      given size, with its top left corner x pixels in from the left edge and y
+      pixels down from the top. The rest of the picture is left as it is, so a
+      change to a small part of a large picture, one new column of a scrolling
+      graph for instance, only sends the part that changed.
+
+      :param string data: The pixels of the block, laid out as for :meth:`UI.Image.set_pixels`: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.
+      :param number x: How many pixels the block sits in from the left edge.
+      :param number y: How many pixels the block sits down from the top.
+      :param number width: How many pixels wide the block is.
+      :param number height: How many pixels tall the block is.
+
+      .. note::
+
+         The image must already be showing a picture drawn from raw pixels, which is
+         what sets the size, and the block must fit inside it. A picture loaded from
+         a file cannot be redrawn this way: the file contents a client reads back
+         would no longer be what is on the screen.
+
+   .. attribute:: color: Tuple
+
+      The color the image is tinted with, or the color of the rectangle when no
+      picture is set, as (red, green, blue, alpha). An alpha of 0 is fully
+      transparent and 1 is fully opaque.
+
+      :Attribute: Can be read or written
+      :rtype: Tuple
+
+   .. method:: remove()
+
+      Remove the UI object.

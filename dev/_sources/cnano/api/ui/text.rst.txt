@@ -8,13 +8,25 @@ Text
 
 .. type:: krpc_UI_Text_t
 
-   A text label. See :func:`krpc_UI_Panel_AddText`.
+   A text label.
+   Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
 
    .. function:: krpc_error_t krpc_UI_Text_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
    
+
+   .. function:: krpc_error_t krpc_UI_Text_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. function:: krpc_error_t krpc_UI_Text_Visible(krpc_connection_t connection, bool * result)
    .. function:: void krpc_UI_Text_set_Visible(bool value)
@@ -23,10 +35,27 @@ Text
 
    
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. function:: krpc_error_t krpc_UI_Text_Content(krpc_connection_t connection, char * * result)
    .. function:: void krpc_UI_Text_set_Content(const char * value)
 
       The text string
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Text_WordWrap(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Text_set_WordWrap(bool value)
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. When wrapping is off, the text carries on past the edge instead, and a
+      label asked for its preferred size asks for a single line, so a value that
+      changes does not reflow a layout.
 
    
 
@@ -36,6 +65,11 @@ Text
       Name of the font
 
    
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :func:`krpc_UI_Text_AvailableFonts` for the names that can be set.
 
    .. function:: krpc_error_t krpc_UI_Text_AvailableFonts(krpc_connection_t connection, krpc_list_string_t * result)
 
@@ -57,10 +91,11 @@ Text
 
    
 
-   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
-   .. function:: void krpc_UI_Text_set_Color(const krpc_tuple_double_double_double_t * value)
+   .. function:: krpc_error_t krpc_UI_Text_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_UI_Text_set_Color(const krpc_tuple_double_double_double_double_t * value)
 
-      Set the color
+      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+      fully transparent and 1 is fully opaque.
 
    
 

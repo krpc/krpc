@@ -1,0 +1,46 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Layout Element
+==============
+
+
+.. type:: krpc_UI_LayoutElement_t
+
+   How much space a user interface element asks a :type:`krpc_UI_Layout_t` for.
+
+   .. note::
+
+      A layout gives every element its minimum size first. Any space left over is shared
+      out to bring elements up to their preferred size, and anything still left over is
+      shared between the elements with a flexible size, in proportion to it.
+
+   .. function:: krpc_error_t krpc_UI_LayoutElement_MinSize(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_LayoutElement_set_MinSize(const krpc_tuple_double_double_t * value)
+
+      The smallest size the element can be given, in pixels. A negative value in either
+      direction leaves that direction unconstrained.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_LayoutElement_PreferredSize(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_LayoutElement_set_PreferredSize(const krpc_tuple_double_double_t * value)
+
+      The size the element asks for, in pixels. A negative value in either direction
+      leaves that direction unconstrained.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_LayoutElement_FlexibleSize(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_LayoutElement_set_FlexibleSize(const krpc_tuple_double_double_t * value)
+
+      The share the element takes of the space left over once every element has its
+      preferred size. A negative value in either direction takes no share.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_LayoutElement_IgnoreLayout(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_LayoutElement_set_IgnoreLayout(bool value)
+
+      Whether the layout leaves the element out and lets it be positioned by hand.

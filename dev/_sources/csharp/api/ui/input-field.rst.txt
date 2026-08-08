@@ -8,19 +8,40 @@ InputField
 
 .. class:: InputField
 
-   An input field. See :meth:`Panel.AddInputField`.
+   An input field.
+   Added to a :type:`Canvas` or a :type:`Panel`.
 
    .. property:: RectTransform RectTransform { get; }
 
-      The rect transform for the input field.
+      The rect transform for the UI object.
 
       :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. property:: bool Visible { get; set; }
 
       Whether the UI object is visible.
 
       :Game Scenes: All
+
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
 
    .. property:: string Value { get; set; }
 
@@ -40,6 +61,51 @@ InputField
          Use :prop:`InputField.Value` to get and set the value in the field.
          This object can be used to alter the style of the input field's text.
 
+   .. property:: Text Placeholder { get; }
+
+      The placeholder text component of the input field.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Set its :prop:`Text.Content` to the hint to show while the field is empty.
+         The hint is hidden as soon as the field has a value.
+
+   .. property:: InputContentType ContentType { get; set; }
+
+      What the field lets the user type into it. Keystrokes that do not fit are
+      ignored as they are typed, so a numeric field never shows text a client would
+      have to reject.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only what the user types is filtered. A value set by a client is shown as it
+         is given.
+
+   .. property:: int CharacterLimit { get; set; }
+
+      The most characters the user can type into the field, or 0 for no limit.
+
+      :Game Scenes: All
+
+   .. property:: bool ReadOnly { get; set; }
+
+      Whether the user is stopped from editing the field. The value can still be
+      selected and copied, and a client can still set it.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A read-only field is drawn as normal. Make the field not interactable instead
+         to gray it out and stop the user selecting it.
+
    .. property:: bool Changed { get; set; }
 
       Whether the input field has been changed.
@@ -49,8 +115,46 @@ InputField
 
       .. note::
 
-         This property is set to true when the user modifies the value of the input field.
+         This property is set to true when the user modifies the value of the input field,
+         and not when a client sets it.
          A client script should reset the property to false in order to detect subsequent changes.
+
+   .. property:: bool Interactable { get; set; }
+
+      Whether the control responds to the user.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. property:: System.Tuple<double,double,double,double> Color { get; set; }
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. property:: string Tooltip { get; set; }
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+      :Game Scenes: All
 
    .. method:: void Remove()
 
@@ -58,3 +162,34 @@ InputField
 
 
       :Game Scenes: All
+
+
+
+.. enum:: InputContentType
+
+   What an input field lets the user type into it.
+
+
+   .. value:: Standard
+
+      Any text.
+
+
+   .. value:: Integer
+
+      A whole number: digits, with a leading minus sign.
+
+
+   .. value:: Decimal
+
+      A number: digits, with a decimal separator and a leading minus sign.
+
+
+   .. value:: Alphanumeric
+
+      Letters and digits.
+
+
+   .. value:: Password
+
+      Any text, drawn as asterisks so that it cannot be read off the screen.

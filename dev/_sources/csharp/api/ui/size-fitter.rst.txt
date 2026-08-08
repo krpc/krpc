@@ -1,0 +1,45 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Size Fitter
+===========
+
+
+.. class:: SizeFitter
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :prop:`Panel.SizeFitter`.
+
+   .. property:: ContentSizeFit HorizontalFit { get; set; }
+
+      How the width of the panel is chosen.
+
+      :Game Scenes: All
+
+   .. property:: ContentSizeFit VerticalFit { get; set; }
+
+      How the height of the panel is chosen.
+
+      :Game Scenes: All
+
+
+
+.. enum:: ContentSizeFit
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. value:: Unconstrained
+
+      Leave the size alone.
+
+
+   .. value:: MinSize
+
+      Use the smallest size the contents will fit in.
+
+
+   .. value:: PreferredSize
+
+      Use the size the contents ask for.

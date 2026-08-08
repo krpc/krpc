@@ -1,0 +1,92 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Layout
+======
+
+
+.. type:: krpc_UI_Layout_t
+
+   Arranges the elements of a panel automatically, so that they do not have to be
+   positioned one by one. See :func:`krpc_UI_Panel_AddHorizontalLayout`,
+   :func:`krpc_UI_Panel_AddVerticalLayout` and :func:`krpc_UI_Panel_AddGridLayout`.
+
+   .. function:: krpc_error_t krpc_UI_Layout_Spacing(krpc_connection_t connection, float * result)
+   .. function:: void krpc_UI_Layout_set_Spacing(float value)
+
+      The gap left between the elements, in pixels. A grid layout uses it in both
+      directions.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Layout_Padding(krpc_connection_t connection, krpc_tuple_int32_int32_int32_int32_t * result)
+   .. function:: void krpc_UI_Layout_set_Padding(const krpc_tuple_int32_int32_int32_int32_t * value)
+
+      The gap left inside the edges of the panel, in whole pixels, as
+      (left, right, top, bottom).
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Layout_ChildAlignment(krpc_connection_t connection, krpc_UI_TextAnchor_t * result)
+   .. function:: void krpc_UI_Layout_set_ChildAlignment(krpc_UI_TextAnchor_t value)
+
+      Where the elements are placed within the space the layout has to fill.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Layout_CellSize(krpc_connection_t connection, krpc_tuple_double_double_t * result)
+   .. function:: void krpc_UI_Layout_set_CellSize(const krpc_tuple_double_double_t * value)
+
+      The size of each cell of a grid layout, in pixels.
+
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts, whose
+         elements are sized individually using their layout elements.
+
+   .. function:: krpc_error_t krpc_UI_Layout_Constraint(krpc_connection_t connection, krpc_UI_GridConstraint_t * result)
+   .. function:: void krpc_UI_Layout_set_Constraint(krpc_UI_GridConstraint_t value)
+
+      What fixes the shape of a grid layout.
+
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+   .. function:: krpc_error_t krpc_UI_Layout_ConstraintCount(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_UI_Layout_set_ConstraintCount(int32_t value)
+
+      The number of columns or rows that :func:`krpc_UI_Layout_Constraint` fixes, ignored when
+      the constraint is :macro:`KRPC_UI_GRIDCONSTRAINT_FLEXIBLE`.
+
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+
+.. type:: krpc_UI_GridConstraint_t
+
+   What fixes the shape of a grid layout.
+
+
+   .. macro:: KRPC_UI_GRIDCONSTRAINT_FLEXIBLE
+
+      Fit as many columns and rows as the size of the panel allows.
+
+
+   .. macro:: KRPC_UI_GRIDCONSTRAINT_FIXEDCOLUMNCOUNT
+
+      Use a fixed number of columns, and as many rows as are needed.
+
+
+   .. macro:: KRPC_UI_GRIDCONSTRAINT_FIXEDROWCOUNT
+
+      Use a fixed number of rows, and as many columns as are needed.

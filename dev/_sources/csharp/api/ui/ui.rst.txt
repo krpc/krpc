@@ -14,7 +14,8 @@ UI
 
       For drawing 3D objects in the flight scene, see the Drawing service.
       User interface elements created by a client are removed when that client
-      disconnects.
+      disconnects, and when the game scene changes. A client that needs its
+      interface in more than one scene must create it again in each of them.
 
    .. property:: Canvas StockCanvas { get; }
 
@@ -34,7 +35,7 @@ UI
 
          If you want to add UI elements to KSPs stock UI canvas, use :prop:`UI.StockCanvas <UI.UI.StockCanvas>`.
 
-   .. method:: void Message(string content, float duration = 1.0f, MessagePosition position = 1, System.Tuple<double,double,double> color = { 1.0, 0.92, 0.016 }, float size = 20.0f)
+   .. method:: void Message(string content, float duration = 1.0f, MessagePosition position = 1, System.Tuple<double,double,double,double> color = { 1.0, 0.92, 0.016, 1.0 }, float size = 20.0f)
 
       Display a message on the screen.
 
@@ -43,7 +44,7 @@ UI
        * **content** -- Message content.
        * **duration** -- Duration before the message disappears, in seconds.
        * **position** -- Position to display the message.
-       * **color** -- The color of the message.
+       * **color** -- The color of the message, as (red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully opaque.
        * **size** -- Size of the message, differs per position.
 
       :Game Scenes: All

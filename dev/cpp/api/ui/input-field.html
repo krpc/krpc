@@ -57,7 +57,7 @@
     <link rel="canonical" href="https://krpc.github.io/krpc/dev/cpp/api/ui/input-field.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Rect Transform" href="rect-transform.html" />
+    <link rel="next" title="Toggle" href="toggle.html" />
     <link rel="prev" title="Button" href="button.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,23 @@
 <dl class="cpp class">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputFieldE">
 <span id="_CPPv3N4krpc8services2UI10InputFieldE"></span><span id="_CPPv2N4krpc8services2UI10InputFieldE"></span><span id="krpc::services::UI::InputField"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputField</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputFieldE" title="Link to this definition">#</a><br /></dt>
-<dd><p>An input field. See <a class="reference internal" href="panel.html#_CPPv4N4krpc8services2UI5Panel15add_input_fieldEb" title="krpc::services::UI::Panel::add_input_field"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Panel::add_input_field()</span></code></a>.</p>
+<dd><p>An input field.
+Added to a <a class="reference internal" href="canvas.html#_CPPv4N4krpc8services2UI6CanvasE" title="krpc::services::UI::Canvas"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Canvas</span></code></a> or a <a class="reference internal" href="panel.html#_CPPv4N4krpc8services2UI5PanelE" title="krpc::services::UI::Panel"><code class="xref cpp cpp-class docutils literal notranslate"><span class="pre">Panel</span></code></a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField14rect_transformEv">
 <span id="_CPPv3N4krpc8services2UI10InputField14rect_transformEv"></span><span id="_CPPv2N4krpc8services2UI10InputField14rect_transformEv"></span><span id="krpc::services::UI::InputField::rect_transform"></span><a class="reference internal" href="rect-transform.html#_CPPv4N4krpc8services2UI13RectTransformE" title="krpc::services::UI::RectTransform"><span class="n"><span class="pre">RectTransform</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">rect_transform</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField14rect_transformEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The rect transform for the input field.</p>
+<dd><p>The rect transform for the UI object.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField14layout_elementEv">
+<span id="_CPPv3N4krpc8services2UI10InputField14layout_elementEv"></span><span id="_CPPv2N4krpc8services2UI10InputField14layout_elementEv"></span><span id="krpc::services::UI::InputField::layout_element"></span><a class="reference internal" href="layout-element.html#_CPPv4N4krpc8services2UI13LayoutElementE" title="krpc::services::UI::LayoutElement"><span class="n"><span class="pre">LayoutElement</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">layout_element</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField14layout_elementEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -704,6 +725,13 @@
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField11set_visibleEb">
 <span id="_CPPv3N4krpc8services2UI10InputField11set_visibleEb"></span><span id="_CPPv2N4krpc8services2UI10InputField11set_visibleEb"></span><span id="krpc::services::UI::InputField::set_visible__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_visible</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField11set_visibleEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether the UI object is visible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -729,6 +757,63 @@ This object can be used to alter the style of the input field’s text.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField11placeholderEv">
+<span id="_CPPv3N4krpc8services2UI10InputField11placeholderEv"></span><span id="_CPPv2N4krpc8services2UI10InputField11placeholderEv"></span><span id="krpc::services::UI::InputField::placeholder"></span><a class="reference internal" href="text.html#_CPPv4N4krpc8services2UI4TextE" title="krpc::services::UI::Text"><span class="n"><span class="pre">Text</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">placeholder</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField11placeholderEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The placeholder text component of the input field.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Set its <a class="reference internal" href="text.html#_CPPv4N4krpc8services2UI4Text7contentEv" title="krpc::services::UI::Text::content"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Text::content()</span></code></a> to the hint to show while the field is empty.
+The hint is hidden as soon as the field has a value.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField12content_typeEv">
+<span id="_CPPv3N4krpc8services2UI10InputField12content_typeEv"></span><span id="_CPPv2N4krpc8services2UI10InputField12content_typeEv"></span><span id="krpc::services::UI::InputField::content_type"></span><a class="reference internal" href="#_CPPv4N4krpc8services2UI16InputContentTypeE" title="krpc::services::UI::InputContentType"><span class="n"><span class="pre">InputContentType</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">content_type</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField12content_typeEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField16set_content_typeE16InputContentType">
+<span id="_CPPv3N4krpc8services2UI10InputField16set_content_typeE16InputContentType"></span><span id="_CPPv2N4krpc8services2UI10InputField16set_content_typeE16InputContentType"></span><span id="krpc::services::UI::InputField::set_content_type__InputContentType"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_content_type</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services2UI16InputContentTypeE" title="krpc::services::UI::InputContentType"><span class="n"><span class="pre">InputContentType</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField16set_content_typeE16InputContentType" title="Link to this definition">#</a><br /></dt>
+<dd><p>What the field lets the user type into it. Keystrokes that do not fit are
+ignored as they are typed, so a numeric field never shows text a client would
+have to reject.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only what the user types is filtered. A value set by a client is shown as it
+is given.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField15character_limitEv">
+<span id="_CPPv3N4krpc8services2UI10InputField15character_limitEv"></span><span id="_CPPv2N4krpc8services2UI10InputField15character_limitEv"></span><span id="krpc::services::UI::InputField::character_limit"></span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">character_limit</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField15character_limitEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField19set_character_limitE7int32_t">
+<span id="_CPPv3N4krpc8services2UI10InputField19set_character_limitE7int32_t"></span><span id="_CPPv2N4krpc8services2UI10InputField19set_character_limitE7int32_t"></span><span id="krpc::services::UI::InputField::set_character_limit__int32_t"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_character_limit</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">int32_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField19set_character_limitE7int32_t" title="Link to this definition">#</a><br /></dt>
+<dd><p>The most characters the user can type into the field, or 0 for no limit.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField9read_onlyEv">
+<span id="_CPPv3N4krpc8services2UI10InputField9read_onlyEv"></span><span id="_CPPv2N4krpc8services2UI10InputField9read_onlyEv"></span><span id="krpc::services::UI::InputField::read_only"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">read_only</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField9read_onlyEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField13set_read_onlyEb">
+<span id="_CPPv3N4krpc8services2UI10InputField13set_read_onlyEb"></span><span id="_CPPv2N4krpc8services2UI10InputField13set_read_onlyEb"></span><span id="krpc::services::UI::InputField::set_read_only__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_read_only</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField13set_read_onlyEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the user is stopped from editing the field. The value can still be
+selected and copied, and a client can still set it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A read-only field is drawn as normal. Make the field not interactable instead
+to gray it out and stop the user selecting it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField7changedEv">
 <span id="_CPPv3N4krpc8services2UI10InputField7changedEv"></span><span id="_CPPv2N4krpc8services2UI10InputField7changedEv"></span><span id="krpc::services::UI::InputField::changed"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">changed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField7changedEv" title="Link to this definition">#</a><br /></dt>
 <dd></dd></dl>
@@ -739,15 +824,102 @@ This object can be used to alter the style of the input field’s text.</p>
 <dd><p>Whether the input field has been changed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This property is set to true when the user modifies the value of the input field.
+<p>This property is set to true when the user modifies the value of the input field,
+and not when a client sets it.
 A client script should reset the property to false in order to detect subsequent changes.</p>
 </div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField12interactableEv">
+<span id="_CPPv3N4krpc8services2UI10InputField12interactableEv"></span><span id="_CPPv2N4krpc8services2UI10InputField12interactableEv"></span><span id="krpc::services::UI::InputField::interactable"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">interactable</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField12interactableEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField16set_interactableEb">
+<span id="_CPPv3N4krpc8services2UI10InputField16set_interactableEb"></span><span id="_CPPv2N4krpc8services2UI10InputField16set_interactableEb"></span><span id="krpc::services::UI::InputField::set_interactable__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_interactable</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField16set_interactableEb" title="Link to this definition">#</a><br /></dt>
+<dd><p>Whether the control responds to the user.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A control that is not interactable is drawn grayed out and ignores the user,
+but is still visible. Set its visibility to false to hide it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField5colorEv">
+<span id="_CPPv3N4krpc8services2UI10InputField5colorEv"></span><span id="_CPPv2N4krpc8services2UI10InputField5colorEv"></span><span id="krpc::services::UI::InputField::color"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">color</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField5colorEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField9set_colorENSt5tupleIddddEE">
+<span id="_CPPv3N4krpc8services2UI10InputField9set_colorENSt5tupleIddddEE"></span><span id="_CPPv2N4krpc8services2UI10InputField9set_colorENSt5tupleIddddEE"></span><span id="krpc::services::UI::InputField::set_color__std::tuple:double.double.double.double:"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_color</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField9set_colorENSt5tupleIddddEE" title="Link to this definition">#</a><br /></dt>
+<dd><p>The color the control is tinted with, as (red, green, blue, alpha). An alpha
+of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+the control drawn as the skin has it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The tint multiplies the sprite the control is drawn with, in every state, so
+a control can show a state of its own, an engaged autopilot for instance, by
+color. It is applied to the part of the control that responds to the user:
+the body of a button, dropdown or input field, the box of a toggle, and the
+handle of a slider. A control’s label is tinted through the color of its
+text.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField7tooltipEv">
+<span id="_CPPv3N4krpc8services2UI10InputField7tooltipEv"></span><span id="_CPPv2N4krpc8services2UI10InputField7tooltipEv"></span><span id="krpc::services::UI::InputField::tooltip"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">tooltip</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField7tooltipEv" title="Link to this definition">#</a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField11set_tooltipENSt6stringE">
+<span id="_CPPv3N4krpc8services2UI10InputField11set_tooltipENSt6stringE"></span><span id="_CPPv2N4krpc8services2UI10InputField11set_tooltipENSt6stringE"></span><span id="krpc::services::UI::InputField::set_tooltip__ss"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_tooltip</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField11set_tooltipENSt6stringE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A short piece of text shown beside the pointer while it rests on the
+control. Empty, the default, shows nothing.</p>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI10InputField6removeEv">
 <span id="_CPPv3N4krpc8services2UI10InputField6removeEv"></span><span id="_CPPv2N4krpc8services2UI10InputField6removeEv"></span><span id="krpc::services::UI::InputField::remove"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services2UI10InputField6removeEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>Remove the UI object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="cpp enum-struct">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI16InputContentTypeE">
+<span id="_CPPv3N4krpc8services2UI16InputContentTypeE"></span><span id="_CPPv2N4krpc8services2UI16InputContentTypeE"></span><span class="k"><span class="pre">enum</span></span><span class="w"> </span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">InputContentType</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI16InputContentTypeE" title="Link to this definition">#</a><br /></dt>
+<dd><p>What an input field lets the user type into it.</p>
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI16InputContentType8standardE">
+<span id="_CPPv3N4krpc8services2UI16InputContentType8standardE"></span><span id="_CPPv2N4krpc8services2UI16InputContentType8standardE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">standard</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI16InputContentType8standardE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Any text.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI16InputContentType7integerE">
+<span id="_CPPv3N4krpc8services2UI16InputContentType7integerE"></span><span id="_CPPv2N4krpc8services2UI16InputContentType7integerE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">integer</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI16InputContentType7integerE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A whole number: digits, with a leading minus sign.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI16InputContentType7decimalE">
+<span id="_CPPv3N4krpc8services2UI16InputContentType7decimalE"></span><span id="_CPPv2N4krpc8services2UI16InputContentType7decimalE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">decimal</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI16InputContentType7decimalE" title="Link to this definition">#</a><br /></dt>
+<dd><p>A number: digits, with a decimal separator and a leading minus sign.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI16InputContentType12alphanumericE">
+<span id="_CPPv3N4krpc8services2UI16InputContentType12alphanumericE"></span><span id="_CPPv2N4krpc8services2UI16InputContentType12alphanumericE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">alphanumeric</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI16InputContentType12alphanumericE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Letters and digits.</p>
+</dd></dl>
+
+<dl class="cpp enumerator">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services2UI16InputContentType8passwordE">
+<span id="_CPPv3N4krpc8services2UI16InputContentType8passwordE"></span><span id="_CPPv2N4krpc8services2UI16InputContentType8passwordE"></span><span class="k"><span class="pre">enumerator</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">password</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services2UI16InputContentType8passwordE" title="Link to this definition">#</a><br /></dt>
+<dd><p>Any text, drawn as asterisks so that it cannot be read off the screen.</p>
 </dd></dl>
 
 </dd></dl>
@@ -774,11 +946,11 @@ A client script should reset the property to false in order to detect subsequent
       </div>
     </a>
     <a class="right-next"
-       href="rect-transform.html"
+       href="toggle.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Rect Transform</p>
+        <p class="prev-next-title">Toggle</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -584,6 +584,15 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,12 @@
 <dl class="lua class">
 <dt class="sig sig-object lua" id="UI.Text">
 <span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">UI.</span></span><span class="sig-name descname"><span class="pre">Text</span></span><a class="headerlink" href="#UI.Text" title="Link to this definition">#</a></dt>
-<dd><p>A text label. See <a class="reference internal" href="panel.html#UI.Panel.add_text" title="UI.Panel.add_text"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">UI.Panel.add_text()</span></code></a>.</p>
+<dd><p>A text label.
+Added to a <a class="reference internal" href="canvas.html#UI.Canvas" title="UI.Canvas"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Canvas</span></code></a> or a <a class="reference internal" href="panel.html#UI.Panel" title="UI.Panel"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.Panel</span></code></a>.</p>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.Text.rect_transform">
 <span class="sig-name descname"><span class="pre">rect_transform</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.RectTransform</span><a class="headerlink" href="#UI.UI.Text.rect_transform" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the text.</p>
+<dd><p>The rect transform for the UI object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>
@@ -701,6 +711,25 @@
 <dd class="field-even"><p><a class="reference internal" href="rect-transform.html#UI.RectTransform" title="UI.RectTransform"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.RectTransform</span></code></a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Text.layout_element">
+<span class="sig-name descname"><span class="pre">layout_element</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">UI.LayoutElement</span><a class="headerlink" href="#UI.UI.Text.layout_element" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="layout-element.html#UI.LayoutElement" title="UI.LayoutElement"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">UI.LayoutElement</span></code></a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -715,6 +744,13 @@
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -732,6 +768,23 @@
 </dd></dl>
 
 <dl class="lua attribute">
+<dt class="sig sig-object lua" id="UI.UI.Text.word_wrap">
+<span class="sig-name descname"><span class="pre">word_wrap</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">boolean</span><a class="headerlink" href="#UI.UI.Text.word_wrap" title="Link to this definition">#</a></dt>
+<dd><p>Whether the text wraps onto further lines when it is wider than the space it
+has. When wrapping is off, the text carries on past the edge instead, and a
+label asked for its preferred size asks for a single line, so a value that
+changes does not reflow a layout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">boolean</span></code></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.Text.font">
 <span class="sig-name descname"><span class="pre">font</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">string</span><a class="headerlink" href="#UI.UI.Text.font" title="Link to this definition">#</a></dt>
 <dd><p>Name of the font</p>
@@ -743,6 +796,11 @@
 <dd class="field-even"><p><span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Empty if the game provided no font to draw the text with, in which case it is
+not drawn. See <a class="reference internal" href="#UI.UI.Text.available_fonts" title="UI.UI.Text.available_fonts"><code class="xref lua lua-attr docutils literal notranslate"><span class="pre">UI.Text.available_fonts</span></code></a> for the names that can be set.</p>
+</div>
 </dd></dl>
 
 <dl class="lua attribute">
@@ -790,7 +848,8 @@
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="UI.UI.Text.color">
 <span class="sig-name descname"><span class="pre">color</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">Tuple</span><a class="headerlink" href="#UI.UI.Text.color" title="Link to this definition">#</a></dt>
-<dd><p>Set the color</p>
+<dd><p>The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+fully transparent and 1 is fully opaque.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>

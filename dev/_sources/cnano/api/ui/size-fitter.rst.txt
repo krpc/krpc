@@ -1,0 +1,47 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Size Fitter
+===========
+
+
+.. type:: krpc_UI_SizeFitter_t
+
+   Sizes a panel to fit what it contains, rather than the other way round.
+   See :func:`krpc_UI_Panel_SizeFitter`.
+
+   .. function:: krpc_error_t krpc_UI_SizeFitter_HorizontalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * result)
+   .. function:: void krpc_UI_SizeFitter_set_HorizontalFit(krpc_UI_ContentSizeFit_t value)
+
+      How the width of the panel is chosen.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_SizeFitter_VerticalFit(krpc_connection_t connection, krpc_UI_ContentSizeFit_t * result)
+   .. function:: void krpc_UI_SizeFitter_set_VerticalFit(krpc_UI_ContentSizeFit_t value)
+
+      How the height of the panel is chosen.
+
+   
+
+
+
+.. type:: krpc_UI_ContentSizeFit_t
+
+   How a size fitter sizes a panel along one direction.
+
+
+   .. macro:: KRPC_UI_CONTENTSIZEFIT_UNCONSTRAINED
+
+      Leave the size alone.
+
+
+   .. macro:: KRPC_UI_CONTENTSIZEFIT_MINSIZE
+
+      Use the smallest size the contents will fit in.
+
+
+   .. macro:: KRPC_UI_CONTENTSIZEFIT_PREFERREDSIZE
+
+      Use the size the contents ask for.

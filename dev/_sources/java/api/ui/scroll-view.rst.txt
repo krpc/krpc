@@ -1,0 +1,80 @@
+.. default-domain:: java
+.. highlight:: java
+.. package:: krpc.client.services.UI
+
+Scroll View
+===========
+
+
+.. type:: public class ScrollView
+
+   A view onto a panel that is larger than the space available for it, with scroll bars
+   to move around it.
+   Added to a :type:`Canvas` or a :type:`Panel`.
+
+   .. note::
+
+      Add the elements to :meth:`ScrollView.getContent()`, not to the scroll view itself. Giving
+      the content a layout and setting its size fitter to the preferred size is the
+      simplest way to have it grow to hold what is put in it.
+
+   .. method:: RectTransform getRectTransform()
+
+
+      The rect transform for the UI object.
+
+   
+
+   .. method:: LayoutElement getLayoutElement()
+
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. method:: boolean getVisible()
+
+   .. method:: void setVisible(boolean value)
+
+      Whether the UI object is visible.
+
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. method:: Panel getContent()
+
+
+      The panel that is scrolled, which the elements to show are added to.
+
+   
+
+   .. method:: boolean getHorizontal()
+
+   .. method:: void setHorizontal(boolean value)
+
+      Whether the view can be scrolled from side to side.
+
+   
+
+   .. method:: boolean getVertical()
+
+   .. method:: void setVertical(boolean value)
+
+      Whether the view can be scrolled up and down.
+
+   
+
+   .. method:: void remove()
+
+      Remove the UI object.

@@ -1,0 +1,138 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.UI
+
+Toggle
+======
+
+
+.. class:: Toggle
+
+   A control that is either checked or not.
+   Added to a :type:`Canvas` or a :type:`Panel`.
+
+   .. note::
+
+      On its own a toggle is a check box. Put several of them in the same
+      :type:`ToggleGroup` and they become radio buttons, as only one toggle in a
+      group can be checked at a time.
+
+   .. property:: RectTransform RectTransform { get; }
+
+      The rect transform for the UI object.
+
+      :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. property:: bool Visible { get; set; }
+
+      Whether the UI object is visible.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. property:: Text Text { get; }
+
+      The text for the toggle.
+
+      :Game Scenes: All
+
+   .. property:: bool Checked { get; set; }
+
+      Whether the toggle is checked.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Checking a toggle that belongs to a :type:`ToggleGroup` unchecks the rest
+         of that group, whether or not it is on the screen.
+
+   .. property:: ToggleGroup Group { get; set; }
+
+      The group that the toggle belongs to, or ``null`` if it does not belong to one.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only one toggle in a group can be checked at a time, so a group turns a set of
+         toggles into radio buttons. A group does not have to contain the toggles, so
+         they can be grouped independently of how they are laid out.
+
+   .. property:: bool Changed { get; set; }
+
+      Whether the toggle has been changed.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         This property is set to true when the user changes the toggle, and not when a
+         client checks or unchecks it.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. property:: bool Interactable { get; set; }
+
+      Whether the control responds to the user.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. property:: System.Tuple<double,double,double,double> Color { get; set; }
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. property:: string Tooltip { get; set; }
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+      :Game Scenes: All
+
+   .. method:: void Remove()
+
+      Remove the UI object.
+
+
+      :Game Scenes: All

@@ -1,0 +1,114 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Image
+=====
+
+
+.. type:: krpc_UI_Image_t
+
+   A picture, or a plain colored rectangle.
+   Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
+
+   .. function:: krpc_error_t krpc_UI_Image_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+
+      The rect transform for the UI object.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Image_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. function:: krpc_error_t krpc_UI_Image_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Image_set_Visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. function:: krpc_error_t krpc_UI_Image_Content(krpc_connection_t connection, krpc_bytes_t * result)
+   .. function:: void krpc_UI_Image_set_Content(krpc_bytes_t value)
+
+      The picture to show, as the contents of a PNG or JPEG file. Set it to an empty
+      array to show a plain rectangle instead.
+
+   
+
+      .. note::
+
+         Reading this returns what was last set, not what is on the screen, and returns
+         an empty array if no picture has been set. A picture drawn with
+         :func:`krpc_UI_Image_SetPixels` is not returned here either.
+
+   .. function:: krpc_error_t krpc_UI_Image_SetPixels(krpc_connection_t connection, krpc_bytes_t data, int32_t width, int32_t height)
+
+      Draw the picture from raw pixels rather than a file, so that a client can
+      draw whatever it likes, a graph for instance, and redraw it as often as it
+      likes.
+
+      :Parameters:
+
+       * **data** -- The pixels, 4 bytes per pixel: red, green, blue and alpha, each 0 to 255. Pixels run left to right and rows run top to bottom, the way image files store them, so the array must hold width times height times 4 bytes.
+       * **width** -- How many pixels wide the picture is.
+       * **height** -- How many pixels tall the picture is.
+
+   
+
+      .. note::
+
+         Redrawing at an unchanged size draws into the picture already there, so a
+         picture redrawn every update does not build a new one each time.
+
+   .. function:: krpc_error_t krpc_UI_Image_UpdatePixels(krpc_connection_t connection, krpc_bytes_t data, int32_t x, int32_t y, int32_t width, int32_t height)
+
+      Redraw part of a picture drawn with :func:`krpc_UI_Image_SetPixels`: a block of the
+      given size, with its top left corner x pixels in from the left edge and y
+      pixels down from the top. The rest of the picture is left as it is, so a
+      change to a small part of a large picture, one new column of a scrolling
+      graph for instance, only sends the part that changed.
+
+      :Parameters:
+
+       * **data** -- The pixels of the block, laid out as for :func:`krpc_UI_Image_SetPixels`: 4 bytes per pixel, rows top to bottom, width times height times 4 bytes in all.
+       * **x** -- How many pixels the block sits in from the left edge.
+       * **y** -- How many pixels the block sits down from the top.
+       * **width** -- How many pixels wide the block is.
+       * **height** -- How many pixels tall the block is.
+
+   
+
+      .. note::
+
+         The image must already be showing a picture drawn from raw pixels, which is
+         what sets the size, and the block must fit inside it. A picture loaded from
+         a file cannot be redrawn this way: the file contents a client reads back
+         would no longer be what is on the screen.
+
+   .. function:: krpc_error_t krpc_UI_Image_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_UI_Image_set_Color(const krpc_tuple_double_double_double_double_t * value)
+
+      The color the image is tinted with, or the color of the rectangle when no
+      picture is set, as (red, green, blue, alpha). An alpha of 0 is fully
+      transparent and 1 is fully opaque.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Image_Remove(krpc_connection_t connection)
+
+      Remove the UI object.

@@ -1,0 +1,121 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+Dropdown
+========
+
+
+.. type:: krpc_UI_Dropdown_t
+
+   A control for choosing one of a list of options, which are shown when it is clicked.
+   Added to a :type:`krpc_UI_Canvas_t` or a :type:`krpc_UI_Panel_t`.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
+
+      The rect transform for the UI object.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Visible(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Dropdown_set_Visible(bool value)
+
+      Whether the UI object is visible.
+
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Options(krpc_connection_t connection, krpc_list_string_t * result)
+   .. function:: void krpc_UI_Dropdown_set_Options(const krpc_list_string_t * value)
+
+      The options that the dropdown offers.
+
+   
+
+      .. note::
+
+         Setting the options resets the selection to the first of them, or to nothing
+         when the list is empty.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_SelectedIndex(krpc_connection_t connection, int32_t * result)
+   .. function:: void krpc_UI_Dropdown_set_SelectedIndex(int32_t value)
+
+      The position in :func:`krpc_UI_Dropdown_Options` of the option that is chosen.
+
+   
+
+      .. note::
+
+         Zero while the dropdown has no options, as there is nothing to choose.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Changed(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Dropdown_set_Changed(bool value)
+
+      Whether the chosen option has been changed.
+
+   
+
+      .. note::
+
+         This property is set to true when the user chooses an option, and not when a
+         client chooses one.
+         A client script should reset the property to false in order to detect subsequent changes.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Interactable(krpc_connection_t connection, bool * result)
+   .. function:: void krpc_UI_Dropdown_set_Interactable(bool value)
+
+      Whether the control responds to the user.
+
+   
+
+      .. note::
+
+         A control that is not interactable is drawn grayed out and ignores the user,
+         but is still visible. Set its visibility to false to hide it instead.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Color(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result)
+   .. function:: void krpc_UI_Dropdown_set_Color(const krpc_tuple_double_double_double_double_t * value)
+
+      The color the control is tinted with, as (red, green, blue, alpha). An alpha
+      of 0 is fully transparent and 1 is fully opaque. White, the default, leaves
+      the control drawn as the skin has it.
+
+   
+
+      .. note::
+
+         The tint multiplies the sprite the control is drawn with, in every state, so
+         a control can show a state of its own, an engaged autopilot for instance, by
+         color. It is applied to the part of the control that responds to the user:
+         the body of a button, dropdown or input field, the box of a toggle, and the
+         handle of a slider. A control's label is tinted through the color of its
+         text.
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Tooltip(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_UI_Dropdown_set_Tooltip(const char * value)
+
+      A short piece of text shown beside the pointer while it rests on the
+      control. Empty, the default, shows nothing.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Dropdown_Remove(krpc_connection_t connection)
+
+      Remove the UI object.

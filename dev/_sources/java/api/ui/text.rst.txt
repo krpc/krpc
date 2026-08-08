@@ -8,14 +8,27 @@ Text
 
 .. type:: public class Text
 
-   A text label. See :meth:`Panel.addText(String, boolean)`.
+   A text label.
+   Added to a :type:`Canvas` or a :type:`Panel`.
 
    .. method:: RectTransform getRectTransform()
 
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
    
+
+   .. method:: LayoutElement getLayoutElement()
+
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. method:: boolean getVisible()
 
@@ -25,11 +38,29 @@ Text
 
    
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. method:: String getContent()
 
    .. method:: void setContent(String value)
 
       The text string
+
+   
+
+   .. method:: boolean getWordWrap()
+
+   .. method:: void setWordWrap(boolean value)
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. When wrapping is off, the text carries on past the edge instead, and a
+      label asked for its preferred size asks for a single line, so a value that
+      changes does not reflow a layout.
 
    
 
@@ -40,6 +71,11 @@ Text
       Name of the font
 
    
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :meth:`Text.getAvailableFonts()` for the names that can be set.
 
    .. method:: java.util.List<String> getAvailableFonts()
 
@@ -64,11 +100,12 @@ Text
 
    
 
-   .. method:: org.javatuples.Triplet<Double,Double,Double> getColor()
+   .. method:: org.javatuples.Quartet<Double,Double,Double,Double> getColor()
 
-   .. method:: void setColor(org.javatuples.Triplet<Double,Double,Double> value)
+   .. method:: void setColor(org.javatuples.Quartet<Double,Double,Double,Double> value)
 
-      Set the color
+      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+      fully transparent and 1 is fully opaque.
 
    
 

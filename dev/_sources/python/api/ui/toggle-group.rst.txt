@@ -1,0 +1,82 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: UI
+
+Toggle Group
+============
+
+
+.. class:: ToggleGroup
+
+   A set of toggles of which only one can be checked at a time, which is what turns
+   a set of :class:`Toggle` controls into radio buttons.
+   Added to a :class:`Canvas` or a :class:`Panel`.
+
+   .. note::
+
+      A group does not contain its toggles, it only refers to them, so toggles can be
+      grouped independently of how they are laid out. A column of radio buttons in a grid
+      of them is one group, even though each row is laid out separately.
+
+   .. attribute:: rect_transform
+
+      The rect transform for the UI object.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`RectTransform`
+   
+
+   .. attribute:: layout_element
+
+      How much space the UI object asks a layout for.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`LayoutElement`
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
+
+   .. attribute:: visible
+
+      Whether the UI object is visible.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
+   .. attribute:: selected
+
+      The toggle in the group that is checked, or ``None`` if none of them are.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`Toggle`
+   
+
+   .. attribute:: allow_switch_off
+
+      Whether all of the toggles in the group are allowed to be unchecked at once.
+
+      :Attribute: Can be read or written
+      :rtype: bool
+   
+
+      .. note::
+
+         When this is false, the user cannot clear the checked toggle, they can only
+         check a different one. It does not stop a client setting
+         :attr:`Toggle.checked`, which is obeyed either way.
+         A group starts out with no toggle checked either way.
+
+   .. method:: remove()
+
+      Remove the UI object.

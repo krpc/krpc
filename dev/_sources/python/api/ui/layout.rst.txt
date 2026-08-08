@@ -1,0 +1,98 @@
+.. default-domain:: py
+.. highlight:: py
+.. currentmodule:: UI
+
+Layout
+======
+
+
+.. class:: Layout
+
+   Arranges the elements of a panel automatically, so that they do not have to be
+   positioned one by one. See :meth:`Panel.add_horizontal_layout`,
+   :meth:`Panel.add_vertical_layout` and :meth:`Panel.add_grid_layout`.
+
+   .. attribute:: spacing
+
+      The gap left between the elements, in pixels. A grid layout uses it in both
+      directions.
+
+      :Attribute: Can be read or written
+      :rtype: float
+   
+
+   .. attribute:: padding
+
+      The gap left inside the edges of the panel, in whole pixels, as
+      (left, right, top, bottom).
+
+      :Attribute: Can be read or written
+      :rtype: tuple(int, int, int, int)
+   
+
+   .. attribute:: child_alignment
+
+      Where the elements are placed within the space the layout has to fill.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`TextAnchor`
+   
+
+   .. attribute:: cell_size
+
+      The size of each cell of a grid layout, in pixels.
+
+      :Attribute: Can be read or written
+      :rtype: tuple(float, float)
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts, whose
+         elements are sized individually using their layout elements.
+
+   .. attribute:: constraint
+
+      What fixes the shape of a grid layout.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`GridConstraint`
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+   .. attribute:: constraint_count
+
+      The number of columns or rows that :attr:`Layout.constraint` fixes, ignored when
+      the constraint is :attr:`GridConstraint.flexible`.
+
+      :Attribute: Can be read or written
+      :rtype: int
+   
+
+      .. note::
+
+         Only applies to a grid layout. Throws an exception for the other layouts.
+
+
+
+.. class:: GridConstraint
+
+   What fixes the shape of a grid layout.
+
+
+   .. data:: flexible
+
+      Fit as many columns and rows as the size of the panel allows.
+
+
+   .. data:: fixed_column_count
+
+      Use a fixed number of columns, and as many rows as are needed.
+
+
+   .. data:: fixed_row_count
+
+      Use a fixed number of rows, and as many columns as are needed.

@@ -12,9 +12,20 @@ Canvas
 
    .. function:: krpc_error_t krpc_UI_Canvas_RectTransform(krpc_connection_t connection, krpc_UI_RectTransform_t * result)
 
-      The rect transform for the canvas.
+      The rect transform for the UI object.
 
    
+
+   .. function:: krpc_error_t krpc_UI_Canvas_LayoutElement(krpc_connection_t connection, krpc_UI_LayoutElement_t * result)
+
+      How much space the UI object asks a layout for.
+
+   
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. function:: krpc_error_t krpc_UI_Canvas_Visible(krpc_connection_t connection, bool * result)
    .. function:: void krpc_UI_Canvas_set_Visible(bool value)
@@ -23,19 +34,26 @@ Canvas
 
    
 
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. function:: krpc_error_t krpc_UI_Canvas_AddPanel(krpc_connection_t connection, krpc_UI_Panel_t * result, bool visible)
 
-      Create a new container for user interface elements.
+      Create a panel within this object.
 
       :Parameters:
 
-       * **visible** -- Whether the panel is visible.
+       * **visible** -- Whether the new panel is visible.
 
    
 
    .. function:: krpc_error_t krpc_UI_Canvas_AddText(krpc_connection_t connection, krpc_UI_Text_t * result, const char * content, bool visible)
 
-      Add text to the canvas.
+      Add text to this object.
 
       :Parameters:
 
@@ -46,7 +64,7 @@ Canvas
 
    .. function:: krpc_error_t krpc_UI_Canvas_AddInputField(krpc_connection_t connection, krpc_UI_InputField_t * result, bool visible)
 
-      Add an input field to the canvas.
+      Add an input field to this object.
 
       :Parameters:
 
@@ -56,12 +74,76 @@ Canvas
 
    .. function:: krpc_error_t krpc_UI_Canvas_AddButton(krpc_connection_t connection, krpc_UI_Button_t * result, const char * content, bool visible)
 
-      Add a button to the canvas.
+      Add a button to this object.
 
       :Parameters:
 
        * **content** -- The label for the button.
        * **visible** -- Whether the button is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Canvas_AddToggle(krpc_connection_t connection, krpc_UI_Toggle_t * result, const char * content, bool visible)
+
+      Add a toggle to this object.
+
+      :Parameters:
+
+       * **content** -- The label for the toggle.
+       * **visible** -- Whether the toggle is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Canvas_AddToggleGroup(krpc_connection_t connection, krpc_UI_ToggleGroup_t * result)
+
+      Add a toggle group to this object, to make a set of toggles into radio buttons.
+
+
+   
+
+      .. note::
+
+         The group is not drawn and does not take up any space. The toggles that belong
+         to it can be added anywhere.
+
+   .. function:: krpc_error_t krpc_UI_Canvas_AddSlider(krpc_connection_t connection, krpc_UI_Slider_t * result, bool vertical, bool visible)
+
+      Add a slider to this object.
+
+      :Parameters:
+
+       * **vertical** -- Whether the slider runs from bottom to top, rather than from left to right.
+       * **visible** -- Whether the slider is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Canvas_AddDropdown(krpc_connection_t connection, krpc_UI_Dropdown_t * result, bool visible)
+
+      Add a dropdown to this object.
+
+      :Parameters:
+
+       * **visible** -- Whether the dropdown is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Canvas_AddImage(krpc_connection_t connection, krpc_UI_Image_t * result, bool visible)
+
+      Add an image to this object.
+
+      :Parameters:
+
+       * **visible** -- Whether the image is visible.
+
+   
+
+   .. function:: krpc_error_t krpc_UI_Canvas_AddScrollView(krpc_connection_t connection, krpc_UI_ScrollView_t * result, bool visible)
+
+      Add a scroll view to this object.
+
+      :Parameters:
+
+       * **visible** -- Whether the scroll view is visible.
 
    
 

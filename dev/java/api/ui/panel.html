@@ -584,6 +584,15 @@
 <li class="toctree-l2"><a class="reference internal" href="text.html">Text</a></li>
 <li class="toctree-l2"><a class="reference internal" href="button.html">Button</a></li>
 <li class="toctree-l2"><a class="reference internal" href="input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle.html">Toggle</a></li>
+<li class="toctree-l2"><a class="reference internal" href="toggle-group.html">Toggle Group</a></li>
+<li class="toctree-l2"><a class="reference internal" href="slider.html">Slider</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dropdown.html">Dropdown</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="scroll-view.html">Scroll View</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout.html">Layout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="layout-element.html">Layout Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="size-fitter.html">Size Fitter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="rect-transform.html">Rect Transform</a></li>
 </ul>
 </details></li>
@@ -688,11 +697,73 @@
 <dl class="java type">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel">
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Panel</span></span><a class="headerlink" href="#krpc.client.services.UI.Panel" title="Link to this definition">#</a></dt>
-<dd><p>A container for user interface elements. See <a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas.addPanel(boolean)" title="krpc.client.services.UI.Canvas.addPanel(boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Canvas.addPanel(boolean)</span></code></a>.</p>
+<dd><p>A container for user interface elements.
+Added to a <a class="reference internal" href="canvas.html#krpc.client.services.UI.Canvas" title="krpc.client.services.UI.Canvas"><code class="xref java java-type docutils literal notranslate"><span class="pre">Canvas</span></code></a> or another panel.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getRectTransform()">
  <a class="reference internal" href="rect-transform.html#krpc.client.services.UI.RectTransform" title="krpc.client.services.UI.RectTransform"><span class="pre">RectTransform</span></a> <span class="sig-name descname"><span class="pre">getRectTransform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getRectTransform()" title="Link to this definition">#</a></dt>
-<dd><p>The rect transform for the panel.</p>
+<dd><p>The rect transform for the UI object.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getLayoutElement()">
+ <a class="reference internal" href="layout-element.html#krpc.client.services.UI.LayoutElement" title="krpc.client.services.UI.LayoutElement"><span class="pre">LayoutElement</span></a> <span class="sig-name descname"><span class="pre">getLayoutElement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getLayoutElement()" title="Link to this definition">#</a></dt>
+<dd><p>How much space the UI object asks a layout for.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only has an effect when the object is in a panel that has a layout. A canvas is
+not inside a layout and does not have one.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getStyle()">
+ <a class="reference internal" href="#krpc.client.services.UI.PanelStyle" title="krpc.client.services.UI.PanelStyle"><span class="pre">PanelStyle</span></a> <span class="sig-name descname"><span class="pre">getStyle</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getStyle()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.setStyle(PanelStyle)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setStyle</span></span><span class="sig-paren">(</span><a class="reference internal" href="#krpc.client.services.UI.PanelStyle" title="krpc.client.services.UI.PanelStyle"><span class="pre">PanelStyle</span></a><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.setStyle(PanelStyle)" title="Link to this definition">#</a></dt>
+<dd><p>How the background of the panel is drawn. A box is the frame to group related
+controls in, and is how a group box is made.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getColor()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getColor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getColor()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.setColor(org.javatuples.Quartet)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setColor</span></span><span class="sig-paren">(</span><span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Quartet.html" title="org.javatuples.Quartet"><span class="pre">Quartet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.setColor(org.javatuples.Quartet)" title="Link to this definition">#</a></dt>
+<dd><p>The color the background of the panel is tinted with, as
+(red, green, blue, alpha). An alpha of 0 is fully transparent and 1 is fully
+opaque.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Has no effect while the style of the panel is <a class="reference internal" href="#krpc.client.services.UI.PanelStyle.NONE" title="krpc.client.services.UI.PanelStyle.NONE"><code class="xref java java-meth docutils literal notranslate"><span class="pre">PanelStyle.NONE</span></code></a>,
+as the panel is then not drawn at all.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getDraggable()">
+ <span class="pre">boolean</span> <span class="sig-name descname"><span class="pre">getDraggable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getDraggable()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.setDraggable(boolean)">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setDraggable</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.setDraggable(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Whether the user can move the panel by dragging it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Dragging anywhere on the panel moves it, including over the elements it
+contains, unless one of them takes the pointer for itself. Give a panel a title
+bar of its own if only part of it should move it.
+A panel whose style is <a class="reference internal" href="#krpc.client.services.UI.PanelStyle.NONE" title="krpc.client.services.UI.PanelStyle.NONE"><code class="xref java java-meth docutils literal notranslate"><span class="pre">PanelStyle.NONE</span></code></a> is not drawn, so it takes
+no pointer events of its own and can only be dragged by the elements it
+contains.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -704,12 +775,19 @@
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.setVisible(boolean)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setVisible</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.setVisible(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether the UI object is visible.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the object’s own setting, which is what it was last set to. An object is
+only drawn when everything it is inside is visible as well, so an interface can
+be built with its parts visible, inside a panel that is not, and shown all at
+once by making that panel visible.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addPanel(boolean)">
  <a class="reference internal" href="#krpc.client.services.UI.Panel" title="krpc.client.services.UI.Panel"><span class="pre">Panel</span></a> <span class="sig-name descname"><span class="pre">addPanel</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addPanel(boolean)" title="Link to this definition">#</a></dt>
-<dd><p>Create a panel within this panel.</p>
+<dd><p>Create a panel within this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -722,7 +800,7 @@
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addText(String, boolean)">
  <a class="reference internal" href="text.html#krpc.client.services.UI.Text" title="krpc.client.services.UI.Text"><span class="pre">Text</span></a> <span class="sig-name descname"><span class="pre">addText</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addText(String, boolean)" title="Link to this definition">#</a></dt>
-<dd><p>Add text to the panel.</p>
+<dd><p>Add text to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -736,7 +814,7 @@
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addInputField(boolean)">
  <a class="reference internal" href="input-field.html#krpc.client.services.UI.InputField" title="krpc.client.services.UI.InputField"><span class="pre">InputField</span></a> <span class="sig-name descname"><span class="pre">addInputField</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addInputField(boolean)" title="Link to this definition">#</a></dt>
-<dd><p>Add an input field to the panel.</p>
+<dd><p>Add an input field to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -749,7 +827,7 @@
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addButton(String, boolean)">
  <a class="reference internal" href="button.html#krpc.client.services.UI.Button" title="krpc.client.services.UI.Button"><span class="pre">Button</span></a> <span class="sig-name descname"><span class="pre">addButton</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addButton(String, boolean)" title="Link to this definition">#</a></dt>
-<dd><p>Add a button to the panel.</p>
+<dd><p>Add a button to this object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -761,9 +839,165 @@
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addToggle(String, boolean)">
+ <a class="reference internal" href="toggle.html#krpc.client.services.UI.Toggle" title="krpc.client.services.UI.Toggle"><span class="pre">Toggle</span></a> <span class="sig-name descname"><span class="pre">addToggle</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">content</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addToggle(String, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a toggle to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>content</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The label for the toggle.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the toggle is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addToggleGroup()">
+ <a class="reference internal" href="toggle-group.html#krpc.client.services.UI.ToggleGroup" title="krpc.client.services.UI.ToggleGroup"><span class="pre">ToggleGroup</span></a> <span class="sig-name descname"><span class="pre">addToggleGroup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addToggleGroup()" title="Link to this definition">#</a></dt>
+<dd><p>Add a toggle group to this object, to make a set of toggles into radio buttons.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The group is not drawn and does not take up any space. The toggles that belong
+to it can be added anywhere.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addSlider(boolean, boolean)">
+ <a class="reference internal" href="slider.html#krpc.client.services.UI.Slider" title="krpc.client.services.UI.Slider"><span class="pre">Slider</span></a> <span class="sig-name descname"><span class="pre">addSlider</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">vertical</span></em>, <span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addSlider(boolean, boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a slider to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vertical</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the slider runs from bottom to top, rather than from left to right.</p></li>
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the slider is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addDropdown(boolean)">
+ <a class="reference internal" href="dropdown.html#krpc.client.services.UI.Dropdown" title="krpc.client.services.UI.Dropdown"><span class="pre">Dropdown</span></a> <span class="sig-name descname"><span class="pre">addDropdown</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addDropdown(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a dropdown to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the dropdown is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addImage(boolean)">
+ <a class="reference internal" href="image.html#krpc.client.services.UI.Image" title="krpc.client.services.UI.Image"><span class="pre">Image</span></a> <span class="sig-name descname"><span class="pre">addImage</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addImage(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add an image to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the image is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addScrollView(boolean)">
+ <a class="reference internal" href="scroll-view.html#krpc.client.services.UI.ScrollView" title="krpc.client.services.UI.ScrollView"><span class="pre">ScrollView</span></a> <span class="sig-name descname"><span class="pre">addScrollView</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">visible</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addScrollView(boolean)" title="Link to this definition">#</a></dt>
+<dd><p>Add a scroll view to this object.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>visible</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">boolean</span></code></span>) – Whether the scroll view is visible.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getLayout()">
+ <a class="reference internal" href="layout.html#krpc.client.services.UI.Layout" title="krpc.client.services.UI.Layout"><span class="pre">Layout</span></a> <span class="sig-name descname"><span class="pre">getLayout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getLayout()" title="Link to this definition">#</a></dt>
+<dd><p>The layout that arranges the elements of the panel, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if they are
+positioned by hand.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addHorizontalLayout()">
+ <a class="reference internal" href="layout.html#krpc.client.services.UI.Layout" title="krpc.client.services.UI.Layout"><span class="pre">Layout</span></a> <span class="sig-name descname"><span class="pre">addHorizontalLayout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addHorizontalLayout()" title="Link to this definition">#</a></dt>
+<dd><p>Arrange the elements of the panel in a row.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addVerticalLayout()">
+ <a class="reference internal" href="layout.html#krpc.client.services.UI.Layout" title="krpc.client.services.UI.Layout"><span class="pre">Layout</span></a> <span class="sig-name descname"><span class="pre">addVerticalLayout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addVerticalLayout()" title="Link to this definition">#</a></dt>
+<dd><p>Arrange the elements of the panel in a column.</p>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.addGridLayout()">
+ <a class="reference internal" href="layout.html#krpc.client.services.UI.Layout" title="krpc.client.services.UI.Layout"><span class="pre">Layout</span></a> <span class="sig-name descname"><span class="pre">addGridLayout</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.addGridLayout()" title="Link to this definition">#</a></dt>
+<dd><p>Arrange the elements of the panel in a grid of equally sized cells.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The number of columns follows from the size of the panel and the size of a cell.
+Use <a class="reference internal" href="layout.html#krpc.client.services.UI.Layout.getConstraint()" title="krpc.client.services.UI.Layout.getConstraint()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Layout.getConstraint()</span></code></a> to fix it instead.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.getSizeFitter()">
+ <a class="reference internal" href="size-fitter.html#krpc.client.services.UI.SizeFitter" title="krpc.client.services.UI.SizeFitter"><span class="pre">SizeFitter</span></a> <span class="sig-name descname"><span class="pre">getSizeFitter</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.getSizeFitter()" title="Link to this definition">#</a></dt>
+<dd><p>Sizes the panel to fit what it contains.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Both directions start out unconstrained, which leaves the size of the panel
+alone.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.UI.Panel.bringToFront()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">bringToFront</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.bringToFront()" title="Link to this definition">#</a></dt>
+<dd><p>Draw the panel in front of the other elements beside it. Elements are drawn
+in the order they were added, so of two overlapping panels the newer hides
+part of the older until the older is brought to the front.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A draggable panel also brings itself to the front when the user starts
+dragging it, the way a window comes to the front when it is clicked.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.UI.Panel.remove()">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.UI.Panel.remove()" title="Link to this definition">#</a></dt>
 <dd><p>Remove the UI object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="java type">
+<dt class="sig sig-object java" id="krpc.client.services.UI.PanelStyle">
+<span class="pre">public</span> <span class="pre">enum</span> <span class="sig-name descname"><span class="pre">PanelStyle</span></span><a class="headerlink" href="#krpc.client.services.UI.PanelStyle" title="Link to this definition">#</a></dt>
+<dd><p>How the background of a panel is drawn.</p>
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.PanelStyle.WINDOW">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.PanelStyle" title="krpc.client.services.UI.PanelStyle"><span class="pre">PanelStyle</span></a> <span class="sig-name descname"><span class="pre">WINDOW</span></span><a class="headerlink" href="#krpc.client.services.UI.PanelStyle.WINDOW" title="Link to this definition">#</a></dt>
+<dd><p>As a window, the heavier of the two frames the game uses.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.PanelStyle.BOX">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.PanelStyle" title="krpc.client.services.UI.PanelStyle"><span class="pre">PanelStyle</span></a> <span class="sig-name descname"><span class="pre">BOX</span></span><a class="headerlink" href="#krpc.client.services.UI.PanelStyle.BOX" title="Link to this definition">#</a></dt>
+<dd><p>As a box, the lighter frame the game groups related controls in.</p>
+</dd></dl>
+
+<dl class="java field">
+<dt class="sig sig-object java" id="krpc.client.services.UI.PanelStyle.NONE">
+<span class="pre">public</span> <a class="reference internal" href="#krpc.client.services.UI.PanelStyle" title="krpc.client.services.UI.PanelStyle"><span class="pre">PanelStyle</span></a> <span class="sig-name descname"><span class="pre">NONE</span></span><a class="headerlink" href="#krpc.client.services.UI.PanelStyle.NONE" title="Link to this definition">#</a></dt>
+<dd><p>Not drawn at all, leaving whatever is behind the panel showing through.</p>
 </dd></dl>
 
 </dd></dl>

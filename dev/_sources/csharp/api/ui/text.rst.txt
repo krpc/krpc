@@ -8,13 +8,26 @@ Text
 
 .. class:: Text
 
-   A text label. See :meth:`Panel.AddText`.
+   A text label.
+   Added to a :type:`Canvas` or a :type:`Panel`.
 
    .. property:: RectTransform RectTransform { get; }
 
-      The rect transform for the text.
+      The rect transform for the UI object.
 
       :Game Scenes: All
+
+   .. property:: LayoutElement LayoutElement { get; }
+
+      How much space the UI object asks a layout for.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Only has an effect when the object is in a panel that has a layout. A canvas is
+         not inside a layout and does not have one.
 
    .. property:: bool Visible { get; set; }
 
@@ -22,9 +35,26 @@ Text
 
       :Game Scenes: All
 
+
+      .. note::
+
+         This is the object's own setting, which is what it was last set to. An object is
+         only drawn when everything it is inside is visible as well, so an interface can
+         be built with its parts visible, inside a panel that is not, and shown all at
+         once by making that panel visible.
+
    .. property:: string Content { get; set; }
 
       The text string
+
+      :Game Scenes: All
+
+   .. property:: bool WordWrap { get; set; }
+
+      Whether the text wraps onto further lines when it is wider than the space it
+      has. When wrapping is off, the text carries on past the edge instead, and a
+      label asked for its preferred size asks for a single line, so a value that
+      changes does not reflow a layout.
 
       :Game Scenes: All
 
@@ -33,6 +63,12 @@ Text
       Name of the font
 
       :Game Scenes: All
+
+
+      .. note::
+
+         Empty if the game provided no font to draw the text with, in which case it is
+         not drawn. See :prop:`Text.AvailableFonts` for the names that can be set.
 
    .. property:: System.Collections.Generic.IList<string> AvailableFonts { get; }
 
@@ -52,9 +88,10 @@ Text
 
       :Game Scenes: All
 
-   .. property:: System.Tuple<double,double,double> Color { get; set; }
+   .. property:: System.Tuple<double,double,double,double> Color { get; set; }
 
-      Set the color
+      The color the text is drawn in, as (red, green, blue, alpha). An alpha of 0 is
+      fully transparent and 1 is fully opaque.
 
       :Game Scenes: All
 
