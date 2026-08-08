@@ -68,8 +68,10 @@ namespace KRPC
         }
 
         /// <summary>
-        /// Called whenever a scene change occurs. Ensures the server has been initialized,
-        /// (re)creates the UI, and shuts down the server in the main menu.
+        /// Called whenever a scene change occurs. Ensures the server has been initialized
+        /// and (re)creates the UI. The addon is declared for the scenes a game is loaded
+        /// in, so it is only ever entered with a game to serve; shutting kRPC down while
+        /// there is none is <see cref="NoGameAddon" />'s to do.
         /// </summary>
         public void Awake ()
         {
@@ -82,12 +84,6 @@ namespace KRPC
             var gameScene = GameScenesExtensions.CurrentGameScene();
             Service.CallContext.GameScene = gameScene;
             Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
-
-            // If a game is not loaded, ensure the server is stopped and then exit
-            if (gameScene == Service.GameScene.None) {
-                core.StopAll ();
-                return;
-            }
 
             // Auto-start the server, if required
             if (config.Configuration.AutoStartServers) {

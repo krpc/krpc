@@ -34,6 +34,7 @@
     <Compile Include="Addon.cs" />
     <Compile Include="ConfigurationFile.cs" />
     <Compile Include="Properties\AssemblyKSPVersion.cs" />
+    <Compile Include="NoGameAddon.cs" />
     <Compile Include="ServicesChecker.cs" />
     <Compile Include="UI\ClientConnectingDialog.cs" />
     <Compile Include="UI\ClientDisconnectDialog.cs" />
