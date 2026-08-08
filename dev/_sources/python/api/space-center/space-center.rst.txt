@@ -223,6 +223,18 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: editor
+
+   The editor, for inspecting the vessel that is being constructed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`Editor`
+   :Game Scenes: Editor Vab, Editor Sph
+
+
+
+
+
 .. staticmethod:: save(name)
 
    Save the game with a given name.

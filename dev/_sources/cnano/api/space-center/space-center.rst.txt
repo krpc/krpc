@@ -215,6 +215,16 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_Editor(krpc_connection_t connection, krpc_SpaceCenter_Editor_t * result)
+
+   The editor, for inspecting the vessel that is being constructed.
+
+   :Game Scenes: Editor Vab, Editor Sph
+
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_Save(krpc_connection_t connection, const char * name)
 
    Save the game with a given name.

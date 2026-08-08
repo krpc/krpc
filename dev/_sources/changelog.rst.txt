@@ -22,12 +22,26 @@ Core
 * Fix a request that names an object the server no longer has leaving the connection stuck, with every later call failing; the failure is now reported to the client as the error it is (:issue:`1019`)
 
 
+Server
+^^^^^^
+
+* Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is being constructed now, as the game's own switch editor button does (:issue:`1038`)
+
+
 SpaceCenter service
 ^^^^^^^^^^^^^^^^^^^
 
 * Space center
 
   * :breaking:`Breaking` ``SpaceCenter.LaunchVessel`` takes its ``crew`` parameter as an exact instruction, and the parameter is optional again. A ``null`` crew (the default) uses the craft's default crew assignments; an empty list, which previously also used the default assignments, launches with no crew; and a populated list seats exactly the named Kerbals, in the order given. An unknown or unavailable Kerbal name, or a craft with too few seats, raises an exception without launching (:issue:`1017`)
+
+* Editor
+
+  * Add ``SpaceCenter.Editor``, available in the vehicle assembly building and the space plane hangar, for inspecting the vessel that is being constructed. ``Editor.Vessel`` gives its name, description, editor, size, mass, cost and crew capacity, and ``Editor.LoadVessel`` loads a craft file into the open editor (:issue:`1038`)
+  * ``Editor.LaunchVessel`` launches the vessel that is being constructed, from a given launch site and with the same crew, recovery and mission flag options as ``SpaceCenter.LaunchVessel``. The vessel is written to the editor's auto-saved craft file and launched from there, as the game's own launch button does, leaving the craft file it was loaded from alone (:issue:`1038`)
+  * ``EditorVessel.Parts`` gives the parts tree of the vessel under construction, as ``Vessel.Parts`` does in flight. The members of ``Part`` and of the part-type classes that describe the design are available; those that need a vessel in flight or running physics, such as ``Part.Position`` and the thermal members, remain restricted to the flight scene. ``Engine.ThrustLimit`` can be read and set from the editor (:issue:`1038`)
+  * ``EditorVessel.Stages``, ``EditorVessel.StageAt``, ``EditorVessel.DecoupleStages`` and ``EditorVessel.DecoupleStageAt`` give the vessel's stages, with the same stock delta-v, thrust, TWR, specific impulse and mass figures that ``Stage`` reports in flight, along with ``EditorVessel.DeltaV``, ``VacuumDeltaV``, ``SeaLevelDeltaV`` and ``BurnTime`` for the whole vessel. ``Editor.DeltaVBody``, ``Editor.DeltaVAltitude`` and ``Editor.DeltaVSituation`` set the situation those figures assume, as the game's own delta-v app does. The figures are recalculated in the background after any change to the vessel or the situation; ``EditorVessel.DeltaVReady`` reports whether they are current, and reading them before they are raises rather than returning a stale figure (:issue:`1038`)
+  * ``EditorVessel.Resources``, ``Part.Resources`` and ``Stage.Resources`` report the resources the vessel under construction can hold, per vessel, per part and per stage, as they do for a vessel in flight (:issue:`1038`)
 
 * Vessels and crew
 

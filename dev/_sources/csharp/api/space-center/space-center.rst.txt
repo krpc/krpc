@@ -163,6 +163,12 @@ SpaceCenter
          set to "SPH" and the launch site set to "Runway".
          Throws an exception if any of the games pre-flight checks fail.
 
+   .. property:: Editor Editor { get; }
+
+      The editor, for inspecting the vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
    .. method:: void Save(string name)
 
       Save the game with a given name.

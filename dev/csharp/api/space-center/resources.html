@@ -551,6 +551,7 @@
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -690,15 +691,15 @@
 <span class="sig-name descname"><span class="pre">class</span> <span class="pre">Resources</span></span><a class="headerlink" href="#class-KRPC.Client.Services.SpaceCenter.Resources" title="Link to this definition">#</a></dt>
 <dd><p>Represents the collection of resources stored in a vessel, stage or part.
 Created by calling <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.Resources" title="KRPC.Client.Services.SpaceCenter.Vessel.Resources property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.Resources</span></code></a>,
-<a class="reference internal" href="vessel.html#method-KRPC.Client.Services.SpaceCenter.Vessel.ResourcesInDecoupleStage" title="KRPC.Client.Services.SpaceCenter.Vessel.ResourcesInDecoupleStage method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Vessel.ResourcesInDecoupleStage</span></code></a> or
-<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.Resources" title="KRPC.Client.Services.SpaceCenter.Part.Resources property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.Resources</span></code></a>.</p>
+<a class="reference internal" href="vessel.html#method-KRPC.Client.Services.SpaceCenter.Vessel.ResourcesInDecoupleStage" title="KRPC.Client.Services.SpaceCenter.Vessel.ResourcesInDecoupleStage method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Vessel.ResourcesInDecoupleStage</span></code></a>, <a class="reference internal" href="editor.html#property-KRPC.Client.Services.SpaceCenter.EditorVessel.Resources" title="KRPC.Client.Services.SpaceCenter.EditorVessel.Resources property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">EditorVessel.Resources</span></code></a>
+or <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.Resources" title="KRPC.Client.Services.SpaceCenter.Part.Resources property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.Resources</span></code></a>.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Resources.All">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.ilist-1" title="System.Collections.Generic.IList"><span class="pre">IList</span></a><span class="pre">&lt;</span><a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Resource" title="KRPC.Client.Services.SpaceCenter.Resource class"><span class="pre">Resource</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">All</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Resources.All" title="Link to this definition">#</a></dt>
 <dd><p>All the individual resources that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -711,7 +712,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,7 +723,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 <dd><p>A list of resource names that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,7 +739,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -754,7 +755,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -770,7 +771,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -786,7 +787,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -802,7 +803,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -813,7 +814,7 @@ Created by calling <a class="reference internal" href="vessel.html#property-KRPC
 <dd><p>Whether use of all the resources are enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -836,7 +837,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>The name of the resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -847,7 +848,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>The part containing the resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -858,7 +859,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>The amount of the resource that is currently stored in the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -869,7 +870,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>The total amount of the resource that can be stored in the part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -880,7 +881,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>The density of the resource, in <span class="math notranslate nohighlight">\(kg/l\)</span>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -891,7 +892,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>The flow mode of the resource.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -902,7 +903,7 @@ Created using methods in the <a class="reference internal" href="#class-KRPC.Cli
 <dd><p>Whether use of this resource is enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>All</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>

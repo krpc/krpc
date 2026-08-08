@@ -551,6 +551,7 @@
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -690,15 +691,15 @@
 <span class="k"><span class="pre">type</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resources_t</span></span></span><a class="headerlink" href="#c.krpc_SpaceCenter_Resources_t" title="Link to this definition">#</a><br /></dt>
 <dd><p>Represents the collection of resources stored in a vessel, stage or part.
 Created by calling <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_Resources()</span></code>,
-<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage()</span></code> or
-<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Resources()</span></code>.</p>
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Vessel_ResourcesInDecoupleStage()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_EditorVessel_Resources()</span></code>
+or <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Resources()</span></code>.</p>
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resources_t.krpc_SpaceCenter_Resources_All">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resources_All</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_object_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resources_t.krpc_SpaceCenter_Resources_All" title="Link to this definition">#</a><br /></dt>
 <dd><p>All the individual resources that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -711,7 +712,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,7 +723,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 <dd><p>A list of resource names that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,7 +739,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -754,7 +755,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -770,7 +771,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -786,7 +787,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -802,7 +803,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -818,7 +819,7 @@ Created by calling <code class="xref c c-func docutils literal notranslate"><spa
 <dd><p>Whether use of all the resources are enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -839,36 +840,66 @@ Created using methods in the <a class="reference internal" href="#c.krpc_SpaceCe
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Name">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_Name</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Name" title="Link to this definition">#</a><br /></dt>
 <dd><p>The name of the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Part">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_Part</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><span class="n"><span class="pre">krpc_SpaceCenter_Part_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Part" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part containing the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Amount">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_Amount</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Amount" title="Link to this definition">#</a><br /></dt>
 <dd><p>The amount of the resource that is currently stored in the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Max">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_Max</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Max" title="Link to this definition">#</a><br /></dt>
 <dd><p>The total amount of the resource that can be stored in the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Density">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_Density</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_Density" title="Link to this definition">#</a><br /></dt>
 <dd><p>The density of the resource, in <span class="math notranslate nohighlight">\(kg/l\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_FlowMode">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_FlowMode</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <a class="reference internal" href="#c.krpc_SpaceCenter_ResourceFlowMode_t" title="krpc_SpaceCenter_ResourceFlowMode_t"><span class="n"><span class="pre">krpc_SpaceCenter_ResourceFlowMode_t</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_FlowMode" title="Link to this definition">#</a><br /></dt>
 <dd><p>The flow mode of the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="c function">
@@ -880,6 +911,11 @@ Created using methods in the <a class="reference internal" href="#c.krpc_SpaceCe
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_set_Enabled">
 <span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Resource_set_Enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Resource_t.krpc_SpaceCenter_Resource_set_Enabled" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether use of this resource is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

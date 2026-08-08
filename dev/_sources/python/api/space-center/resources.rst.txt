@@ -10,8 +10,8 @@ Resources
 
    Represents the collection of resources stored in a vessel, stage or part.
    Created by calling :attr:`Vessel.resources`,
-   :meth:`Vessel.resources_in_decouple_stage` or
-   :attr:`Part.resources`.
+   :meth:`Vessel.resources_in_decouple_stage`, :attr:`EditorVessel.resources`
+   or :attr:`Part.resources`.
 
    .. attribute:: all
 
@@ -19,7 +19,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: list(:class:`Resource`)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: with_resource(name)
 
@@ -27,7 +27,7 @@ Resources
 
       :param str name:
       :rtype: list(:class:`Resource`)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: names
 
@@ -35,7 +35,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: list(str)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: has_resource(name)
 
@@ -43,7 +43,7 @@ Resources
 
       :param str name: The name of the resource.
       :rtype: bool
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: amount(name)
 
@@ -51,7 +51,7 @@ Resources
 
       :param str name: The name of the resource.
       :rtype: float
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: max(name)
 
@@ -59,7 +59,7 @@ Resources
 
       :param str name: The name of the resource.
       :rtype: float
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. staticmethod:: density(name)
 
@@ -67,7 +67,7 @@ Resources
 
       :param str name: The name of the resource.
       :rtype: float
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. staticmethod:: flow_mode(name)
 
@@ -75,7 +75,7 @@ Resources
 
       :param str name: The name of the resource.
       :rtype: :class:`ResourceFlowMode`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: enabled
 
@@ -83,7 +83,7 @@ Resources
 
       :Attribute: Can be read or written
       :rtype: bool
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -104,7 +104,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: str
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: part
 
@@ -112,7 +112,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`Part`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: amount
 
@@ -120,7 +120,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: max
 
@@ -128,7 +128,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: density
 
@@ -136,7 +136,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: float
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: flow_mode
 
@@ -144,7 +144,7 @@ Resources
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ResourceFlowMode`
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: enabled
 
@@ -152,7 +152,7 @@ Resources
 
       :Attribute: Can be read or written
       :rtype: bool
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 

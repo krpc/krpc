@@ -550,6 +550,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../space-center/space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../space-center/editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../space-center/orbit.html">Orbit</a></li>
@@ -754,7 +755,10 @@ scene, or opens/closes the corresponding facility for the pseudo-scenes.
 Scene changes happen asynchronously: setting this property returns
 immediately, and clients should poll it until it reports the requested
 scene. Setting it to <a class="reference internal" href="#KRPC.GameScene.flight" title="KRPC.GameScene.flight"><code class="xref py py-attr docutils literal notranslate"><span class="pre">GameScene.flight</span></code></a> resumes the save’s
-active vessel, and fails if there is none.</p>
+active vessel, and fails if there is none. Moving between
+<a class="reference internal" href="#KRPC.GameScene.editor_vab" title="KRPC.GameScene.editor_vab"><code class="xref py py-attr docutils literal notranslate"><span class="pre">GameScene.editor_vab</span></code></a> and <a class="reference internal" href="#KRPC.GameScene.editor_sph" title="KRPC.GameScene.editor_sph"><code class="xref py py-attr docutils literal notranslate"><span class="pre">GameScene.editor_sph</span></code></a>
+keeps the vessel that is being constructed, as the game’s own switch
+editor button does.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>

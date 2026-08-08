@@ -203,6 +203,16 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: editor: SpaceCenter.Editor
+
+   The editor, for inspecting the vessel that is being constructed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: :class:`SpaceCenter.Editor`
+
+
+
+
 .. staticmethod:: save(name)
 
    Save the game with a given name.

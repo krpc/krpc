@@ -45,7 +45,7 @@ Parts
 
       The part from which the vessel is controlled.
 
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.List<Part> withName(String name)
 
@@ -377,7 +377,8 @@ Part
 
       Whether the part is highlighted.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -389,7 +390,7 @@ Part
 
       The color used to highlight the part, as an RGB triple.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getCost()
 
@@ -403,7 +404,7 @@ Part
 
       The vessel that contains this part.
 
-   
+      :Game Scenes: Flight
 
    .. method:: Part getParent()
 
@@ -496,14 +497,14 @@ Part
 
       Whether the part is shielded from the exterior of the vessel, for example by a fairing.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDynamicPressure()
 
 
       The dynamic pressure acting on the part, in Pascals.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getImpactTolerance()
 
@@ -517,14 +518,14 @@ Part
 
       Temperature of the part, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getSkinTemperature()
 
 
       Temperature of the skin of the part, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getMaxTemperature()
 
@@ -546,7 +547,7 @@ Part
       A measure of how much energy it takes to increase the internal temperature of the part,
       in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalSkinMass()
 
@@ -554,7 +555,7 @@ Part
       A measure of how much energy it takes to increase the skin temperature of the part,
       in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalResourceMass()
 
@@ -562,7 +563,7 @@ Part
       A measure of how much energy it takes to increase the temperature of the resources
       contained in the part, in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalConductionFlux()
 
@@ -572,7 +573,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalConvectionFlux()
 
@@ -582,7 +583,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalRadiationFlux()
 
@@ -592,7 +593,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalInternalFlux()
 
@@ -603,7 +604,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is losing
       heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalSkinToInternalFlux()
 
@@ -613,7 +614,7 @@ Part
       A positive value means the part's internals are gaining heat energy,
       and negative means its skin is gaining heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. method:: int getCrewCapacity()
 
@@ -627,14 +628,14 @@ Part
 
       The crew members occupying the part.
 
-   
+      :Game Scenes: Flight
 
    .. method:: int getAvailableSeats()
 
 
       How many open seats the part has.
 
-   
+      :Game Scenes: Flight
 
    .. method:: Resources getResources()
 
@@ -663,7 +664,8 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is into this part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`java-api-parts-fuel-lines`.
 
@@ -673,7 +675,8 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is out of this part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`java-api-parts-fuel-lines`.
 
@@ -907,7 +910,8 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -922,7 +926,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> boundingBox(ReferenceFrame referenceFrame)
 
@@ -930,7 +934,8 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vectors are in.
       :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -945,7 +950,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> velocity(ReferenceFrame referenceFrame)
 
@@ -953,7 +958,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned velocity vector is in.
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
 
@@ -961,7 +966,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> lift(ReferenceFrame referenceFrame)
 
@@ -970,7 +975,8 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned vector is in.
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -983,7 +989,8 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned vector is in.
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -995,7 +1002,7 @@ Part
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
       in the parts reference frame (:meth:`Part.getReferenceFrame()`).
 
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.List<Double> getInertiaTensor()
 
@@ -1004,7 +1011,7 @@ Part
       (:meth:`Part.getReferenceFrame()`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight
 
    .. method:: ReferenceFrame getReferenceFrame()
 
@@ -1017,7 +1024,8 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1041,7 +1049,8 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1057,7 +1066,8 @@ Part
       :param org.javatuples.Triplet<Double,Double,Double> position: The position at which the force acts, as a vector.
       :param ReferenceFrame referenceFrame: The reference frame that the force and position are in.
       :returns: An object that can be used to remove or modify the force.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1070,7 +1080,8 @@ Part
       :param org.javatuples.Triplet<Double,Double,Double> force: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
       :param org.javatuples.Triplet<Double,Double,Double> position: The position at which the force acts, as a vector.
       :param ReferenceFrame referenceFrame: The reference frame that the force and position are in.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1080,7 +1091,7 @@ Part
 
       Whether the part is glowing.
 
-   
+      :Game Scenes: Flight
 
    .. method:: AutoStrutMode getAutoStrutMode()
 
@@ -1141,7 +1152,7 @@ Part
 
       The part that this force is applied to.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getForceVector()
 
@@ -1150,7 +1161,7 @@ Part
       The force vector, in Newtons.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getPosition()
 
@@ -1159,7 +1170,7 @@ Part
       The position at which the force acts, in reference frame :meth:`Force.getReferenceFrame()`.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. method:: ReferenceFrame getReferenceFrame()
 
@@ -1167,13 +1178,13 @@ Part
 
       The reference frame of the force vector and position.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void remove()
 
       Remove the force.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -1878,21 +1889,21 @@ Antenna
 
       The part object for this antenna.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: DeployableState getState()
 
 
       The current state of the antenna.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getDeployable()
 
 
       Whether the antenna is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployed()
 
@@ -1900,7 +1911,8 @@ Antenna
 
       Whether the antenna is deployed.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1912,19 +1924,19 @@ Antenna
 
       Whether data can be transmitted by this antenna.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void transmit()
 
       Transmit data.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void cancel()
 
       Cancel current transmission of data.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getAllowPartial()
 
@@ -1932,14 +1944,14 @@ Antenna
 
       Whether partial data transmission is permitted.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getPower()
 
 
       The power of the antenna.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getCombinable()
 
@@ -1947,35 +1959,35 @@ Antenna
       Whether the antenna can be combined with other antennae on the vessel
       to boost the power.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: double getCombinableExponent()
 
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getPacketInterval()
 
 
       Interval between sending packets in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getPacketSize()
 
 
       Amount of data sent per packet in Mits.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: double getPacketResourceCost()
 
 
       Units of electric charge consumed per packet sent.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -1992,14 +2004,15 @@ Cargo Bay
 
       The part object for this cargo bay.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: DeployableState getState()
 
 
       The state of the cargo bay.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2016,7 +2029,7 @@ Cargo Bay
 
       Whether the cargo bay is open.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2033,7 +2046,7 @@ Control Surface
 
       The part object for this control surface.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getPitchEnabled()
 
@@ -2041,7 +2054,7 @@ Control Surface
 
       Whether the control surface has pitch control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getYawEnabled()
 
@@ -2049,7 +2062,7 @@ Control Surface
 
       Whether the control surface has yaw control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getRollEnabled()
 
@@ -2057,7 +2070,7 @@ Control Surface
 
       Whether the control surface has roll control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getAuthorityLimiter()
 
@@ -2066,7 +2079,7 @@ Control Surface
       The authority limiter for the control surface, which controls how far the
       control surface will move.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getInverted()
 
@@ -2074,7 +2087,7 @@ Control Surface
 
       Whether the control surface movement is inverted.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployed()
 
@@ -2082,7 +2095,7 @@ Control Surface
 
       Whether the control surface has been fully deployed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeflectionOverride()
 
@@ -2094,7 +2107,7 @@ Control Surface
       The prior state is restored when the override is released, when the
       controlling client disconnects, or when the vessel changes.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDeflection()
 
@@ -2103,14 +2116,14 @@ Control Surface
       The deflection command applied when :meth:`ControlSurface.getDeflectionOverride()` is enabled, as a
       value between -1 and 1, mapped onto the surface's deploy angle range.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getSurfaceArea()
 
 
       Surface area of the control surface in :math:`m^2`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
 
@@ -2119,7 +2132,7 @@ Control Surface
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2136,14 +2149,15 @@ Decoupler
 
       The part object for this decoupler.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: Vessel decouple()
 
       Fires the decoupler. Returns the new vessel created when the decoupler fires.
       Throws an exception if the decoupler has already fired.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2156,35 +2170,35 @@ Decoupler
 
       Whether the decoupler has fired.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getStaged()
 
 
       Whether the decoupler is enabled in the staging sequence.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getImpulse()
 
 
       The impulse that the decoupler imparts when it is fired, in Newton seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getIsOmniDecoupler()
 
 
       Whether the decoupler is an omni-decoupler (e.g. stack separator)
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: Part getAttachedPart()
 
 
       The part attached to this decoupler's explosive node.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -2246,14 +2260,14 @@ Docking Port
 
       The part object for this docking port.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: DockingPortState getState()
 
 
       The current state of the docking port.
 
-   
+      :Game Scenes: Flight
 
    .. method:: Part getDockedPart()
 
@@ -2261,7 +2275,7 @@ Docking Port
       The part that this docking port is docked to. Returns ``null`` if this
       docking port is not docked to anything.
 
-   
+      :Game Scenes: Flight
 
    .. method:: Vessel undock()
 
@@ -2269,7 +2283,8 @@ Docking Port
       This method can be called for either docking port in a docked pair.
       Throws an exception if the docking port is not docked to anything.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2283,14 +2298,14 @@ Docking Port
       The distance a docking port must move away when it undocks before it
       becomes ready to dock with another port, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getHasShield()
 
 
       Whether the docking port has a shield.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getShielded()
 
@@ -2303,28 +2318,28 @@ Docking Port
       closed, and when set to ``false`` the shield is opened. If the docking
       port does not have a shield, setting this attribute has no effect.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getCanRotate()
 
 
       Whether the docking port can be commanded to rotate while docked.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaximumRotation()
 
 
       Maximum rotation angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMinimumRotation()
 
 
       Minimum rotation angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getRotationTarget()
 
@@ -2332,7 +2347,7 @@ Docking Port
 
       Rotation target angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getRotationLocked()
 
@@ -2340,7 +2355,7 @@ Docking Port
 
       Lock rotation. When locked, allows auto-strut to work across the joint.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> position(ReferenceFrame referenceFrame)
 
@@ -2348,7 +2363,7 @@ Docking Port
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> direction(ReferenceFrame referenceFrame)
 
@@ -2356,7 +2371,7 @@ Docking Port
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Quartet<Double,Double,Double,Double> rotation(ReferenceFrame referenceFrame)
 
@@ -2364,7 +2379,7 @@ Docking Port
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned rotation is in.
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-   
+      :Game Scenes: Flight
 
    .. method:: ReferenceFrame getReferenceFrame()
 
@@ -2378,7 +2393,8 @@ Docking Port
       * The y-axis points in the direction the docking port is facing.
       * The z-axis points out of the bottom off the docking port.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2456,7 +2472,7 @@ Engine
 
       The part object for this engine.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getActive()
 
@@ -2465,14 +2481,14 @@ Engine
       Whether the engine is active. Setting this attribute may have no effect,
       depending on :meth:`Engine.getCanShutdown()` and :meth:`Engine.getCanRestart()`.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThrust()
 
 
       The current amount of thrust being produced by the engine, in Newtons.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getAvailableThrust()
 
@@ -2483,7 +2499,7 @@ Engine
       Takes the engine's current :meth:`Engine.getThrustLimit()` and atmospheric conditions
       into account.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float availableThrustAt(double pressure)
 
@@ -2493,7 +2509,7 @@ Engine
       Takes the given pressure into account.
 
       :param double pressure: Atmospheric pressure in atmospheres
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxThrust()
 
@@ -2501,7 +2517,7 @@ Engine
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and fueled, with its throttle and throttle limiter set to 100%.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float maxThrustAt(double pressure)
 
@@ -2510,7 +2526,7 @@ Engine
       Takes the given pressure into account.
 
       :param double pressure: Atmospheric pressure in atmospheres
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getMaxVacuumThrust()
 
@@ -2520,7 +2536,7 @@ Engine
       when activated, :meth:`Engine.getThrustLimit()` is set to 100%, the main
       vessel's throttle is set to 100% and the engine is in a vacuum.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getThrustLimit()
 
@@ -2530,14 +2546,15 @@ Engine
       attribute may have no effect, for example the thrust limit for a solid
       rocket booster cannot be changed in flight.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.List<Thruster> getThrusters()
 
 
       The components of the engine that generate thrust.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2552,7 +2569,7 @@ Engine
       The current specific impulse of the engine, in seconds. Returns zero
       if the engine is not active.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float specificImpulseAt(double pressure)
 
@@ -2560,28 +2577,28 @@ Engine
       if the engine is not active.
 
       :param double pressure: Atmospheric pressure in atmospheres
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getVacuumSpecificImpulse()
 
 
       The vacuum specific impulse of the engine, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getKerbinSeaLevelSpecificImpulse()
 
 
       The specific impulse of the engine at sea level on Kerbin, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.List<String> getPropellantNames()
 
 
       The names of the propellants that the engine consumes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.Map<String,Float> getPropellantRatios()
 
@@ -2589,7 +2606,8 @@ Engine
       The ratio of resources that the engine consumes. A dictionary mapping resource names
       to the ratio at which they are consumed by the engine.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2601,14 +2619,14 @@ Engine
 
       The propellants that the engine consumes.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getHasFuel()
 
 
       Whether the engine has any fuel available.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getFlameout()
 
@@ -2619,7 +2637,7 @@ Engine
       vessel with drop tanks or asparagus staging some engines can flame out
       while others keep burning.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThrottle()
 
@@ -2633,7 +2651,7 @@ Engine
       When the engine's independent throttle is enabled
       (see :meth:`Engine.getIndependentThrottle()`), can be used to set the throttle percentage.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getThrottleLocked()
 
@@ -2642,7 +2660,7 @@ Engine
       this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
       boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getIndependentThrottle()
 
@@ -2650,7 +2668,7 @@ Engine
 
       Whether the independent throttle is enabled for the engine.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getCanRestart()
 
@@ -2659,7 +2677,7 @@ Engine
       returns ``false``. For example, this is ``true`` for liquid fueled rockets
       and ``false`` for solid rocket boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getCanShutdown()
 
@@ -2667,14 +2685,14 @@ Engine
       Whether the engine can be shutdown once activated. For example, this is
       ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getHasModes()
 
 
       Whether the engine has multiple modes of operation.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: String getMode()
 
@@ -2682,7 +2700,7 @@ Engine
 
       The name of the current engine mode.
 
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.Map<String,Engine> getModes()
 
@@ -2690,13 +2708,13 @@ Engine
       The available modes for the engine.
       A dictionary mapping mode names to :type:`Engine` objects.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void toggleMode()
 
       Toggle the current engine mode.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getAutoModeSwitch()
 
@@ -2704,14 +2722,14 @@ Engine
 
       Whether the engine will automatically switch modes.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getGimballed()
 
 
       Whether the engine is gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getGimbalRange()
 
@@ -2719,7 +2737,7 @@ Engine
       The range over which the gimbal can move, in degrees.
       Returns 0 if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getGimbalLocked()
 
@@ -2728,7 +2746,7 @@ Engine
       Whether the engines gimbal is locked in place. Setting this attribute has
       no effect if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getGimbalLimit()
 
@@ -2737,7 +2755,7 @@ Engine
       The gimbal limiter of the engine. A value between 0 and 1.
       Returns 0 if the gimbal is locked.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getGimbalOverride()
 
@@ -2749,7 +2767,7 @@ Engine
       The override is automatically released if the controlling client disconnects or the
       vessel changes. Has no effect if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getGimbalActuation()
 
@@ -2761,7 +2779,7 @@ Engine
       and :meth:`Engine.getGimbalLimit()`. When the gimbal is not being overridden,
       returns the current actuation.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
 
@@ -2771,7 +2789,7 @@ Engine
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if the engine is inactive, or not gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getCanReverseThrust()
 
@@ -2782,7 +2800,7 @@ Engine
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getThrustReversed()
 
@@ -2795,14 +2813,14 @@ Engine
       Raises an exception if the engine does not have a thrust reverser
       (see :meth:`Engine.getCanReverseThrust()`).
 
-   
+      :Game Scenes: Flight
 
    .. method:: void toggleThrustReversal()
 
       Toggle the engine's thrust reverser. Raises an exception if the engine
       does not have a thrust reverser (see :meth:`Engine.getCanReverseThrust()`).
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2815,21 +2833,21 @@ Engine
 
       The name of the propellant.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getCurrentAmount()
 
 
       The current amount of propellant consumed in the current physics update.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getCurrentRequirement()
 
 
       The required amount of propellant for the current physics update.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getTotalResourceAvailable()
 
@@ -2837,7 +2855,7 @@ Engine
       The total amount of the underlying resource currently reachable given
       resource flow rules.
 
-   
+      :Game Scenes: Flight
 
    .. method:: double getTotalResourceCapacity()
 
@@ -2845,7 +2863,7 @@ Engine
       The total vehicle capacity for the underlying propellant resource,
       restricted by resource flow rules.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIgnoreForIsp()
 
@@ -2853,35 +2871,35 @@ Engine
       If this propellant should be ignored when calculating required mass flow
       given specific impulse.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIgnoreForThrustCurve()
 
 
       If this propellant should be ignored for thrust curve calculations.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getDrawStackGauge()
 
 
       If this propellant has a stack gauge or not.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIsDeprived()
 
 
       If this propellant is deprived.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getRatio()
 
 
       The propellant ratio.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2898,7 +2916,7 @@ Experiment
 
       The part object for this experiment.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: String getName()
 
@@ -2906,87 +2924,87 @@ Experiment
       Internal name of the experiment, as used in
       `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
 
-   
+      :Game Scenes: Flight
 
    .. method:: String getTitle()
 
 
       Title of the experiment, as shown on the in-game UI.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void run()
 
       Run the experiment.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void transmit()
 
       Transmit all experimental data contained by this part.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void dump()
 
       Dump the experimental data contained by the experiment.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void reset()
 
       Reset the experiment.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getDeployed()
 
 
       Whether the experiment has been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getRerunnable()
 
 
       Whether the experiment can be re-run.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getInoperable()
 
 
       Whether the experiment is inoperable.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getHasData()
 
 
       Whether the experiment contains data.
 
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.List<ScienceData> getData()
 
 
       The data contained in this experiment.
 
-   
+      :Game Scenes: Flight
 
    .. method:: String getBiome()
 
 
       The name of the biome the experiment is currently in.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getAvailable()
 
 
       Determines if the experiment is available given the current conditions.
 
-   
+      :Game Scenes: Flight
 
    .. method:: ScienceSubject getScienceSubject()
 
@@ -2994,7 +3012,7 @@ Experiment
       Containing information on the corresponding specific science result for the current
       conditions. Returns ``null`` if the experiment is unavailable.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3007,21 +3025,21 @@ Experiment
 
       Data amount.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getScienceValue()
 
 
       Science value.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getTransmitValue()
 
 
       Transmit value.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3034,7 +3052,7 @@ Experiment
 
       Title of science subject, displayed in science archives
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIsComplete()
 
@@ -3046,7 +3064,7 @@ Experiment
       has produced data, and how valuable it is, use :meth:`Experiment.getHasData()` and
       :meth:`ScienceData.getTransmitValue()`.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getScience()
 
@@ -3054,28 +3072,28 @@ Experiment
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getScienceCap()
 
 
       Total science allowable for this subject.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDataScale()
 
 
       Multiply science value by this to determine data amount in mits.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getSubjectValue()
 
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getScientificValue()
 
@@ -3083,7 +3101,7 @@ Experiment
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3101,20 +3119,20 @@ Fairing
 
       The part object for this fairing.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: void jettison()
 
       Jettison the fairing. Has no effect if it has already been jettisoned.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getJettisoned()
 
 
       Whether the fairing has been jettisoned.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3131,7 +3149,7 @@ Intake
 
       The part object for this intake.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getOpen()
 
@@ -3139,28 +3157,28 @@ Intake
 
       Whether the intake is open.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getSpeed()
 
 
       Speed of the flow into the intake, in :math:`m/s`.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getFlow()
 
 
       The rate of flow into the intake, in units of resource per second.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getArea()
 
 
       The area of the intake's opening, in square meters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3177,21 +3195,21 @@ Leg
 
       The part object for this landing leg.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: DeployableState getState()
 
 
       The current state of the landing leg.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getDeployable()
 
 
       Whether the leg is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployed()
 
@@ -3199,7 +3217,8 @@ Leg
 
       Whether the landing leg is deployed.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3211,7 +3230,7 @@ Leg
 
       Returns whether the leg is touching the ground.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3228,13 +3247,13 @@ Launch Clamp
 
       The part object for this launch clamp.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: void release()
 
       Releases the docking clamp. Has no effect if the clamp has already been released.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3251,7 +3270,7 @@ Light
 
       The part object for this light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getActive()
 
@@ -3259,7 +3278,7 @@ Light
 
       Whether the light is switched on.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Float,Float,Float> getColor()
 
@@ -3267,7 +3286,7 @@ Light
 
       The color of the light, as an RGB triple.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getBlink()
 
@@ -3275,7 +3294,7 @@ Light
 
       Whether blinking is enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getBlinkRate()
 
@@ -3283,14 +3302,14 @@ Light
 
       The blink rate of the light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getPowerUsage()
 
 
       The current power usage, in units of charge per second.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3307,48 +3326,48 @@ Parachute
 
       The part object for this parachute.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: void deploy()
 
       Deploys the parachute. This has no effect if the parachute has already
       been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getDeployed()
 
 
       Whether the parachute has been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void arm()
 
       Deploys the parachute. This has no effect if the parachute has already
       been armed or deployed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getArmed()
 
 
       Whether the parachute has been armed or deployed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void cut()
 
       Cuts the parachute.
 
-   
+      :Game Scenes: Flight
 
    .. method:: ParachuteState getState()
 
 
       The current state of the parachute.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDeployAltitude()
 
@@ -3357,7 +3376,7 @@ Parachute
       The altitude at which the parachute will full deploy, in meters.
       Only applicable to stock parachutes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getDeployMinPressure()
 
@@ -3366,7 +3385,7 @@ Parachute
       The minimum pressure at which the parachute will semi-deploy, in atmospheres.
       Only applicable to stock parachutes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: ParachuteSafeState getSafeState()
 
@@ -3377,7 +3396,7 @@ Parachute
       Note that KSP reports :meth:`ParachuteSafeState.UNSAFE` for the first
       second after the vessel unpacks, before its thermal data is valid.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3453,14 +3472,14 @@ Radiator
 
       The part object for this radiator.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployable()
 
 
       Whether the radiator is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployed()
 
@@ -3469,14 +3488,15 @@ Radiator
       For a deployable radiator, ``true`` if the radiator is extended.
       If the radiator is not deployable, this is always ``true``.
 
-   
+      :Game Scenes: Flight
 
    .. method:: DeployableState getState()
 
 
       The current state of the radiator.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3497,49 +3517,49 @@ Resource Converter
 
       The part object for this converter.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: int getCount()
 
 
       The number of converters in the part.
 
-   
+      :Game Scenes: Flight
 
    .. method:: String name(int index)
 
       The name of the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: boolean active(int index)
 
       True if the specified converter is active.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: void start(int index)
 
       Start the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: void stop(int index)
 
       Stop the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: ResourceConverterState state(int index)
 
       The state of the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: String statusInfo(int index)
 
@@ -3547,42 +3567,42 @@ Resource Converter
       This is the full status message shown in the in-game UI.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.List<String> inputs(int index)
 
       List of the names of resources consumed by the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.List<String> outputs(int index)
 
       List of the names of resources produced by the specified converter.
 
       :param int index: Index of the converter.
-   
+      :Game Scenes: Flight
 
    .. method:: float getOptimumCoreTemperature()
 
 
       The core temperature at which the converter will operate with peak efficiency, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getCoreTemperature()
 
 
       The core temperature of the converter, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalEfficiency()
 
 
       The thermal efficiency of the converter, as a percentage of its maximum.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3636,7 +3656,7 @@ Resource Harvester
 
       The part object for this harvester.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: DeployableState getState()
 
@@ -3644,7 +3664,8 @@ Resource Harvester
       The deployment state of the harvester. Whether it is drilling is
       reported separately by :meth:`ResourceHarvester.getActive()`.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3657,7 +3678,7 @@ Resource Harvester
 
       Whether the harvester is deployed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getActive()
 
@@ -3665,7 +3686,8 @@ Resource Harvester
 
       Whether the harvester is actively drilling.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3680,28 +3702,28 @@ Resource Harvester
 
       The rate at which the drill is extracting ore, in units per second.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getThermalEfficiency()
 
 
       The thermal efficiency of the drill, as a percentage of its maximum.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getCoreTemperature()
 
 
       The core temperature of the drill, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getOptimumCoreTemperature()
 
 
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3718,7 +3740,7 @@ Reaction Wheel
 
       The part object for this reaction wheel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getActive()
 
@@ -3726,14 +3748,14 @@ Reaction Wheel
 
       Whether the reaction wheel is active.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getBroken()
 
 
       Whether the reaction wheel is broken.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
 
@@ -3743,7 +3765,7 @@ Reaction Wheel
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if the reaction wheel is inactive or broken.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getMaxTorque()
 
@@ -3752,7 +3774,7 @@ Reaction Wheel
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getAuthorityLimiter()
 
@@ -3761,7 +3783,7 @@ Reaction Wheel
       The authority limiter for the reaction wheel, as a percentage of maximum torque.
       A value between 0 and 1.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3778,14 +3800,14 @@ Resource Drain
 
       The part object for this resource drain.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.List<Resource> getAvailableResources()
 
 
       List of available resources.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void setResource(Resource resource, boolean enabled)
 
@@ -3793,14 +3815,14 @@ Resource Drain
 
       :param Resource resource:
       :param boolean enabled:
-   
+      :Game Scenes: Flight
 
    .. method:: boolean checkResource(Resource resource)
 
       Whether the provided resource is enabled for draining.
 
       :param Resource resource:
-   
+      :Game Scenes: Flight
 
    .. method:: DrainMode getDrainMode()
 
@@ -3808,21 +3830,21 @@ Resource Drain
 
       The drain mode.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMinRate()
 
 
       Minimum possible drain rate
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxRate()
 
 
       Maximum possible drain rate.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getRate()
 
@@ -3830,19 +3852,19 @@ Resource Drain
 
       Current drain rate.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void start()
 
       Activates resource draining for all enabled parts.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void stop()
 
       Turns off resource draining.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3876,7 +3898,7 @@ Robotic Controller
 
       The part object for this controller.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getEnabled()
 
@@ -3884,14 +3906,14 @@ Robotic Controller
 
       Whether the controller is enabled.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getPlaying()
 
 
       Whether the controller's sequence is currently playing.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getPosition()
 
@@ -3899,46 +3921,46 @@ Robotic Controller
 
       The current position along the sequence, in seconds.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getLength()
 
 
       The length of the sequence, in seconds.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getPlaySpeed()
 
 
       The speed at which the sequence is played back, as a multiple of normal speed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void play()
 
       Start playing the controller's sequence.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void stop()
 
       Stop playing the controller's sequence.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean hasPart(Part part)
 
       Whether the controller has a part.
 
       :param Part part:
-   
+      :Game Scenes: Flight
 
    .. method:: java.util.List<java.util.List<String>> axes()
 
       The axes for the controller.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean addAxis(Module module, String fieldName)
 
@@ -3947,7 +3969,7 @@ Robotic Controller
       :param Module module: The part module that the axis belongs to.
       :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
       :returns: Returns ``true`` if the axis is added successfully.
-   
+      :Game Scenes: Flight
 
    .. method:: boolean addKeyFrame(Module module, String fieldName, float time, float value)
 
@@ -3958,7 +3980,7 @@ Robotic Controller
       :param float time: The time of the key frame.
       :param float value: The value of the key frame.
       :returns: Returns ``true`` if the key frame is added successfully.
-   
+      :Game Scenes: Flight
 
    .. method:: boolean clearAxis(Module module, String fieldName)
 
@@ -3967,7 +3989,7 @@ Robotic Controller
       :param Module module: The part module that the axis belongs to.
       :param String fieldName: The name of the axis field, as returned by :meth:`RoboticController.axes()`.
       :returns: Returns ``true`` if the axis is cleared successfully.
-   
+      :Game Scenes: Flight
 
 
 
@@ -3984,7 +4006,7 @@ Robotic Hinge
 
       The part object for this robotic hinge.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getTargetAngle()
 
@@ -3992,14 +4014,14 @@ Robotic Hinge
 
       Target angle.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getCurrentAngle()
 
 
       Current angle.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMinAngle()
 
@@ -4007,7 +4029,7 @@ Robotic Hinge
 
       The minimum angle the hinge can move to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxAngle()
 
@@ -4015,7 +4037,7 @@ Robotic Hinge
 
       The maximum angle the hinge can move to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getRate()
 
@@ -4023,7 +4045,7 @@ Robotic Hinge
 
       Target movement rate in degrees per second.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDamping()
 
@@ -4031,7 +4053,7 @@ Robotic Hinge
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getLocked()
 
@@ -4039,7 +4061,7 @@ Robotic Hinge
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getMotorEngaged()
 
@@ -4047,20 +4069,20 @@ Robotic Hinge
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIsMoving()
 
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void moveHome()
 
       Move hinge to its built position.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4077,7 +4099,7 @@ Robotic Piston
 
       The part object for this robotic piston.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getTargetExtension()
 
@@ -4085,14 +4107,14 @@ Robotic Piston
 
       Target extension of the piston.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getCurrentExtension()
 
 
       Current extension of the piston.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMinExtension()
 
@@ -4100,7 +4122,7 @@ Robotic Piston
 
       The minimum extension of the piston, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxExtension()
 
@@ -4108,7 +4130,7 @@ Robotic Piston
 
       The maximum extension of the piston, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getRate()
 
@@ -4116,7 +4138,7 @@ Robotic Piston
 
       Target movement rate in meters per second.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDamping()
 
@@ -4124,7 +4146,7 @@ Robotic Piston
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getLocked()
 
@@ -4132,7 +4154,7 @@ Robotic Piston
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getMotorEngaged()
 
@@ -4140,20 +4162,20 @@ Robotic Piston
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIsMoving()
 
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void moveHome()
 
       Move piston to its built position.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4170,7 +4192,7 @@ Robotic Rotation
 
       The part object for this robotic rotation servo.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getTargetAngle()
 
@@ -4178,14 +4200,14 @@ Robotic Rotation
 
       Target angle.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getCurrentAngle()
 
 
       Current angle.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMinAngle()
 
@@ -4193,7 +4215,7 @@ Robotic Rotation
 
       The minimum angle the servo can rotate to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxAngle()
 
@@ -4201,7 +4223,7 @@ Robotic Rotation
 
       The maximum angle the servo can rotate to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getAllowFullRotation()
 
@@ -4210,7 +4232,7 @@ Robotic Rotation
       Whether the servo is allowed to rotate freely through a full revolution,
       ignoring the angle limits.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getRate()
 
@@ -4218,7 +4240,7 @@ Robotic Rotation
 
       Target movement rate in degrees per second.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getDamping()
 
@@ -4226,7 +4248,7 @@ Robotic Rotation
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getLocked()
 
@@ -4234,7 +4256,7 @@ Robotic Rotation
 
       Lock Movement
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getMotorEngaged()
 
@@ -4242,20 +4264,20 @@ Robotic Rotation
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIsMoving()
 
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. method:: void moveHome()
 
       Move rotation servo to its built position.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4272,7 +4294,7 @@ Robotic Rotor
 
       The part object for this robotic rotor.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getTargetRPM()
 
@@ -4280,14 +4302,14 @@ Robotic Rotor
 
       Target RPM.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getCurrentRPM()
 
 
       Current RPM.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getInverted()
 
@@ -4295,7 +4317,7 @@ Robotic Rotor
 
       Whether the rotor direction is inverted.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getTorqueLimit()
 
@@ -4303,7 +4325,7 @@ Robotic Rotor
 
       Torque limit percentage.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxTorque()
 
@@ -4311,7 +4333,7 @@ Robotic Rotor
 
       The maximum torque the rotor can generate, in kilonewtons.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getBrakePercentage()
 
@@ -4319,7 +4341,7 @@ Robotic Rotor
 
       The percentage of braking force applied to the rotor.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getLocked()
 
@@ -4327,7 +4349,7 @@ Robotic Rotor
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getMotorEngaged()
 
@@ -4335,14 +4357,14 @@ Robotic Rotor
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getIsMoving()
 
 
       Whether the rotor is currently moving.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4359,7 +4381,7 @@ RCS
 
       The part object for this RCS.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getActive()
 
@@ -4370,7 +4392,7 @@ RCS
       (:meth:`RCS.getEnabled()`), or it is covered by a fairing
       (:meth:`Part.getShielded()`) and cannot thrust while shielded.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getEnabled()
 
@@ -4378,7 +4400,7 @@ RCS
 
       Whether the RCS thrusters are enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getPitchEnabled()
 
@@ -4386,7 +4408,7 @@ RCS
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getYawEnabled()
 
@@ -4394,7 +4416,7 @@ RCS
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getRollEnabled()
 
@@ -4402,7 +4424,7 @@ RCS
 
       Whether the RCS thruster will fire when roll control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getForwardEnabled()
 
@@ -4410,7 +4432,7 @@ RCS
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getUpEnabled()
 
@@ -4418,7 +4440,7 @@ RCS
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getRightEnabled()
 
@@ -4426,7 +4448,7 @@ RCS
 
       Whether the RCS thruster will fire when roll control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getInputOverride()
 
@@ -4438,7 +4460,7 @@ RCS
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getRotationOverride()
 
@@ -4447,7 +4469,7 @@ RCS
       The rotation demand applied when :meth:`RCS.getInputOverride()` is enabled, in the pitch,
       roll and yaw axes. Each component is a normalized control input between -1 and 1.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getTranslationOverride()
 
@@ -4457,7 +4479,7 @@ RCS
       right, up and forward axes. Each component is a normalized control input between -1
       and 1.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
 
@@ -4467,7 +4489,7 @@ RCS
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if RCS is disable.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableForce()
 
@@ -4477,7 +4499,7 @@ RCS
       correspond to the coordinate axes of the :meth:`Vessel.getReferenceFrame()`.
       Returns zero if RCS is disabled.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getAvailableThrust()
 
@@ -4487,7 +4509,7 @@ RCS
       Takes the thrusters current :meth:`RCS.getThrustLimit()` and atmospheric conditions
       into account.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxThrust()
 
@@ -4496,7 +4518,7 @@ RCS
       in Newtons, with the :meth:`RCS.getThrustLimit()` set to 100%.
       Takes atmospheric conditions into account.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getMaxVacuumThrust()
 
@@ -4504,7 +4526,7 @@ RCS
       The maximum amount of thrust that can be produced by the RCS thrusters when active
       in a vacuum, in Newtons.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getThrustLimit()
 
@@ -4512,14 +4534,14 @@ RCS
 
       The thrust limiter of the thruster. A value between 0 and 1.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.List<Thruster> getThrusters()
 
 
       A list of thrusters, one of each nozzel in the RCS part.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getSpecificImpulse()
 
@@ -4527,28 +4549,28 @@ RCS
       The current specific impulse of the RCS, in seconds. Returns zero
       if the RCS is not active.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getVacuumSpecificImpulse()
 
 
       The vacuum specific impulse of the RCS, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: float getKerbinSeaLevelSpecificImpulse()
 
 
       The specific impulse of the RCS at sea level on Kerbin, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.List<String> getPropellants()
 
 
       The names of resources that the RCS consumes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: java.util.Map<String,Float> getPropellantRatios()
 
@@ -4556,14 +4578,14 @@ RCS
       The ratios of resources that the RCS consumes. A dictionary mapping resource names
       to the ratios at which they are consumed by the RCS.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getHasFuel()
 
 
       Whether the RCS has fuel available.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4580,7 +4602,7 @@ Sensor
 
       The part object for this sensor.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getActive()
 
@@ -4588,14 +4610,15 @@ Sensor
 
       Whether the sensor is active.
 
-   
+      :Game Scenes: Flight
 
    .. method:: String getValue()
 
 
       The current value of the sensor.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4623,14 +4646,14 @@ Solar Panel
 
       The part object for this solar panel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployable()
 
 
       Whether the solar panel is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: boolean getDeployed()
 
@@ -4638,14 +4661,14 @@ Solar Panel
 
       Whether the solar panel is extended.
 
-   
+      :Game Scenes: Flight
 
    .. method:: DeployableState getState()
 
 
       The current state of the solar panel.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getEnergyFlow()
 
@@ -4653,7 +4676,7 @@ Solar Panel
       The current amount of energy being generated by the solar panel, in
       units of charge per second.
 
-   
+      :Game Scenes: Flight
 
    .. method:: float getSunExposure()
 
@@ -4661,7 +4684,7 @@ Solar Panel
       The current amount of sunlight that is incident on the solar panel,
       as a percentage. A value between 0 and 1.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4685,7 +4708,7 @@ Thruster
 
       The :meth:`Thruster.getPart()` that contains this thruster.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> thrustPosition(ReferenceFrame referenceFrame)
 
@@ -4694,7 +4717,7 @@ Thruster
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> thrustDirection(ReferenceFrame referenceFrame)
 
@@ -4704,7 +4727,7 @@ Thruster
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. method:: ReferenceFrame getThrustReferenceFrame()
 
@@ -4720,14 +4743,14 @@ Thruster
       * The y-axis points along the thrust direction.
       * The x-axis and z-axis are perpendicular to the thrust direction.
 
-   
+      :Game Scenes: Flight
 
    .. method:: boolean getGimballed()
 
 
       Whether the thruster is gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> gimbalPosition(ReferenceFrame referenceFrame)
 
@@ -4735,14 +4758,14 @@ Thruster
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> getGimbalAngle()
 
 
       The current gimbal angle in the pitch, roll and yaw axes, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Triplet<Double,Double,Double> initialThrustPosition(ReferenceFrame referenceFrame)
 
@@ -4751,7 +4774,8 @@ Thruster
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4766,7 +4790,7 @@ Thruster
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned direction is in.
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
 
 

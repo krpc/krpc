@@ -1,0 +1,313 @@
+.. default-domain:: csharp
+.. highlight:: csharp
+.. namespace:: KRPC.Client.Services.SpaceCenter
+
+.. _csharp-api-editor:
+
+Editor
+======
+
+
+.. class:: Editor
+
+   Provides access to the vehicle assembly building and space plane hangar.
+   Obtained by calling :prop:`SpaceCenter.Editor <SpaceCenter.SpaceCenter.Editor>`.
+
+   .. property:: EditorFacility Facility { get; }
+
+      The editor that is currently open.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: EditorVessel Vessel { get; }
+
+      The vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An editor that has not had a vessel loaded into it holds an empty vessel, with
+         no parts, rather than nothing at all.
+
+   .. method:: void LoadVessel(string craftDirectory, string name)
+
+      Load a vessel from a craft file into the editor, replacing the vessel that
+      is currently being constructed.
+
+      :parameters:
+
+       * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+       * **name** -- Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The vessel is loaded into whichever editor is open, regardless of which
+         directory it came from. Its delta-v figures are recalculated in the
+         background afterwards; see :prop:`EditorVessel.DeltaVReady`.
+
+   .. method:: void LaunchVessel(string launchSite, System.Collections.Generic.IList<string> crew, bool recover = true, string flagUrl = "")
+
+      Launch the vessel that is being constructed, from the given launch site.
+
+      :parameters:
+
+       * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+       * **crew** -- The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.
+       * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **flagUrl** -- If not ``null``, the asset URL of the mission flag to use for the launch.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The vessel being constructed is not a craft file, so it is written to the editor's
+         auto-saved craft file and that is launched, as the game's own launch button does.
+         The vessel's own craft file, if it was loaded from one, is left alone.
+         The *crew* parameter works as it does for
+         :meth:`SpaceCenter.LaunchVessel <SpaceCenter.SpaceCenter.LaunchVessel>`, and takes precedence over the crew assigned
+         in the editor.
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. property:: CelestialBody DeltaVBody { get; set; }
+
+      The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+      specific impulse figures assume.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This and :prop:`Editor.DeltaVAltitude` are what :prop:`EditorVessel.DeltaV`,
+         :prop:`Stage.DeltaV` and the other current-situation figures are
+         computed for. The body sets the gravity the thrust-to-weight ratios are
+         against, and, with the altitude, the atmospheric pressure and density the
+         specific impulses and thrusts are against.
+         This is global game state rather than editor state: the same setting backs
+         the game's delta-v readout in flight, and it persists across scene changes.
+         Setting it asks the game to re-run the simulation and returns straight away;
+         the figures are out of date until :prop:`EditorVessel.DeltaVReady` is
+         true again.
+
+   .. property:: double DeltaVAltitude { get; set; }
+
+      The altitude above :prop:`Editor.DeltaVBody`, in meters, that the vessel's
+      delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+      pressure and density at this altitude are what the figures are computed for,
+      so raising it from zero to above the body's atmosphere moves them from the
+      vessel's sea-level figures to its vacuum ones.
+      Setting it asks the game to re-run the simulation and returns straight away;
+      the figures are out of date until :prop:`EditorVessel.DeltaVReady` is
+      true again.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: DeltaVSituation DeltaVSituation { get; set; }
+
+      Which situation the game's own delta-v readout shows figures for.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This selects which column the game's own delta-v app displays, and nothing
+         else. It does not affect anything kRPC reports: the current-situation
+         figures follow :prop:`Editor.DeltaVBody` and :prop:`Editor.DeltaVAltitude`
+         whatever this is set to, and the sea-level and vacuum figures are reported
+         directly as :prop:`EditorVessel.SeaLevelDeltaV` and
+         :prop:`EditorVessel.VacuumDeltaV`. It is here for completeness with the
+         app.
+
+
+
+.. enum:: DeltaVSituation
+
+   The situation the game's own delta-v readout shows figures for.
+   See :prop:`Editor.DeltaVSituation`.
+
+
+   .. value:: SeaLevel
+
+      At sea level on the selected body.
+
+
+   .. value:: Altitude
+
+      At the selected altitude on the selected body.
+
+
+   .. value:: Vacuum
+
+      In vacuum.
+
+
+
+.. class:: EditorVessel
+
+   The vessel that is being constructed in the editor.
+   Obtained by calling :prop:`Editor.Vessel`.
+
+   .. property:: string Name { get; set; }
+
+      The name of the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: string Description { get; set; }
+
+      The description of the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: EditorFacility Facility { get; }
+
+      The editor the vessel is in.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the editor the vessel is currently loaded into, not the one it was
+         designed in. A vessel moved from the vehicle assembly building to the space
+         plane hangar reports the space plane hangar.
+
+   .. property:: System.Tuple<double,double,double> Size { get; }
+
+      The dimensions of the vessel's bounding box, in meters.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float Mass { get; }
+
+      The total mass of the vessel, including resources and crew, in kg.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float DryMass { get; }
+
+      The total mass of the vessel, excluding resources, in kg.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float Cost { get; }
+
+      The total cost of the vessel, including resources, in funds.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: int CrewCapacity { get; }
+
+      The total number of crew that the vessel can hold.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: Parts Parts { get; }
+
+      A :type:`Parts` object, that can be used to interact with the parts
+      that make up the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note:: Only the parts of :type:`Part` that describe the design are
+                available in the editor. Those that need a vessel in flight or running physics,
+                such as :meth:`Part.Position` and the thermal members, are
+                restricted to the flight scene.
+
+   .. property:: Resources Resources { get; }
+
+      A :prop:`EditorVessel.Resources` object for the resources the vessel can hold.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note:: This is a view of what the vessel can hold as designed. The flow-state
+                members work, as they are part of the design, but nothing here reports how
+                a resource would be drawn on in flight.
+
+   .. property:: System.Collections.Generic.IList<Stage> Stages { get; }
+
+      Activation (burn) stages for the vessel, in ascending stage order. This does
+      not include the -1 stage (parts with no staging icon), as it carries no
+      delta-v; use :meth:`EditorVessel.StageAt` with -1 to get those parts.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: Stage StageAt(int stage)
+
+      The activation stage with the given number. Pass -1 to get the parts that are
+      never activated (those with no staging icon).
+
+      :parameters:
+
+       * **stage** -- Get activation stage at this index.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: System.Collections.Generic.IList<Stage> DecoupleStages { get; }
+
+      Decouple stages for the vessel, in ascending stage order. The -1 stage,
+      containing the parts that are never decoupled and remain on the vessel, is
+      included first when any such parts exist.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. method:: Stage DecoupleStageAt(int stage)
+
+      The decouple stage with the given number. Pass -1 to get the parts that are
+      never decoupled and remain on the vessel after all stages have fired.
+
+      :parameters:
+
+       * **stage** -- Get decouple stage at this index.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: bool DeltaVReady { get; }
+
+      Whether the stock delta-v figures for the vessel have been calculated.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game recalculates them in the background whenever the vessel changes, and
+         whenever :prop:`Editor.DeltaVBody` or :prop:`Editor.DeltaVAltitude`
+         is set, and they are out of date until it has finished. Reading
+         :prop:`EditorVessel.DeltaV`, or any delta-v member of a :type:`Stage`, before
+         then raises an error rather than returning a stale figure. Poll this after
+         changing anything the figures depend on.
+
+   .. property:: float DeltaV { get; }
+
+      Total delta-v for the vessel in the situation the game's delta-v readout
+      assumes, in m/s. See :prop:`Editor.DeltaVBody`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float VacuumDeltaV { get; }
+
+      Total vacuum delta-v for the vessel, in m/s.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float SeaLevelDeltaV { get; }
+
+      Total sea-level delta-v for the vessel, in m/s.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: float BurnTime { get; }
+
+      Total burn time for the vessel, in seconds.
+
+      :Game Scenes: Editor Vab, Editor Sph

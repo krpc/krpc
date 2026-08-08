@@ -1,0 +1,318 @@
+.. default-domain:: c
+.. highlight:: c
+
+
+.. _cnano-api-editor:
+
+Editor
+======
+
+
+.. type:: krpc_SpaceCenter_Editor_t
+
+   Provides access to the vehicle assembly building and space plane hangar.
+   Obtained by calling :func:`krpc_SpaceCenter_Editor`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * result)
+
+      The editor that is currently open.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_Vessel(krpc_connection_t connection, krpc_SpaceCenter_EditorVessel_t * result)
+
+      The vessel that is being constructed.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         An editor that has not had a vessel loaded into it holds an empty vessel, with
+         no parts, rather than nothing at all.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_LoadVessel(krpc_connection_t connection, const char * craftDirectory, const char * name)
+
+      Load a vessel from a craft file into the editor, replacing the vessel that
+      is currently being constructed.
+
+      :Parameters:
+
+       * **craftDirectory** -- Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+       * **name** -- Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The vessel is loaded into whichever editor is open, regardless of which
+         directory it came from. Its delta-v figures are recalculated in the
+         background afterwards; see :func:`krpc_SpaceCenter_EditorVessel_DeltaVReady`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_LaunchVessel(krpc_connection_t connection, const char * launchSite, const krpc_list_string_t * crew, bool recover, const char * flagUrl)
+
+      Launch the vessel that is being constructed, from the given launch site.
+
+      :Parameters:
+
+       * **launchSite** -- Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+       * **crew** -- The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.
+       * **recover** -- If true and there is a vessel on the launch site, recover it before launching.
+       * **flagUrl** -- If not ``nullptr``, the asset URL of the mission flag to use for the launch.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The vessel being constructed is not a craft file, so it is written to the editor's
+         auto-saved craft file and that is launched, as the game's own launch button does.
+         The vessel's own craft file, if it was loaded from one, is left alone.
+         The *crew* parameter works as it does for
+         :func:`krpc_SpaceCenter_LaunchVessel`, and takes precedence over the crew assigned
+         in the editor.
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVBody(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
+   .. function:: void krpc_SpaceCenter_Editor_set_DeltaVBody(krpc_SpaceCenter_CelestialBody_t value)
+
+      The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+      specific impulse figures assume.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This and :func:`krpc_SpaceCenter_Editor_DeltaVAltitude` are what :func:`krpc_SpaceCenter_EditorVessel_DeltaV`,
+         :func:`krpc_SpaceCenter_Stage_DeltaV` and the other current-situation figures are
+         computed for. The body sets the gravity the thrust-to-weight ratios are
+         against, and, with the altitude, the atmospheric pressure and density the
+         specific impulses and thrusts are against.
+         This is global game state rather than editor state: the same setting backs
+         the game's delta-v readout in flight, and it persists across scene changes.
+         Setting it asks the game to re-run the simulation and returns straight away;
+         the figures are out of date until :func:`krpc_SpaceCenter_EditorVessel_DeltaVReady` is
+         true again.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVAltitude(krpc_connection_t connection, double * result)
+   .. function:: void krpc_SpaceCenter_Editor_set_DeltaVAltitude(double value)
+
+      The altitude above :func:`krpc_SpaceCenter_Editor_DeltaVBody`, in meters, that the vessel's
+      delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+      pressure and density at this altitude are what the figures are computed for,
+      so raising it from zero to above the body's atmosphere moves them from the
+      vessel's sea-level figures to its vacuum ones.
+      Setting it asks the game to re-run the simulation and returns straight away;
+      the figures are out of date until :func:`krpc_SpaceCenter_EditorVessel_DeltaVReady` is
+      true again.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Editor_DeltaVSituation(krpc_connection_t connection, krpc_SpaceCenter_DeltaVSituation_t * result)
+   .. function:: void krpc_SpaceCenter_Editor_set_DeltaVSituation(krpc_SpaceCenter_DeltaVSituation_t value)
+
+      Which situation the game's own delta-v readout shows figures for.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This selects which column the game's own delta-v app displays, and nothing
+         else. It does not affect anything kRPC reports: the current-situation
+         figures follow :func:`krpc_SpaceCenter_Editor_DeltaVBody` and :func:`krpc_SpaceCenter_Editor_DeltaVAltitude`
+         whatever this is set to, and the sea-level and vacuum figures are reported
+         directly as :func:`krpc_SpaceCenter_EditorVessel_SeaLevelDeltaV` and
+         :func:`krpc_SpaceCenter_EditorVessel_VacuumDeltaV`. It is here for completeness with the
+         app.
+
+
+
+.. type:: krpc_SpaceCenter_DeltaVSituation_t
+
+   The situation the game's own delta-v readout shows figures for.
+   See :func:`krpc_SpaceCenter_Editor_DeltaVSituation`.
+
+
+   .. macro:: KRPC_SPACECENTER_DELTAVSITUATION_SEALEVEL
+
+      At sea level on the selected body.
+
+
+   .. macro:: KRPC_SPACECENTER_DELTAVSITUATION_ALTITUDE
+
+      At the selected altitude on the selected body.
+
+
+   .. macro:: KRPC_SPACECENTER_DELTAVSITUATION_VACUUM
+
+      In vacuum.
+
+
+
+.. type:: krpc_SpaceCenter_EditorVessel_t
+
+   The vessel that is being constructed in the editor.
+   Obtained by calling :func:`krpc_SpaceCenter_Editor_Vessel`.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Name(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_EditorVessel_set_Name(const char * value)
+
+      The name of the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Description(krpc_connection_t connection, char * * result)
+   .. function:: void krpc_SpaceCenter_EditorVessel_set_Description(const char * value)
+
+      The description of the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Facility(krpc_connection_t connection, krpc_SpaceCenter_EditorFacility_t * result)
+
+      The editor the vessel is in.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the editor the vessel is currently loaded into, not the one it was
+         designed in. A vessel moved from the vehicle assembly building to the space
+         plane hangar reports the space plane hangar.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Size(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The dimensions of the vessel's bounding box, in meters.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Mass(krpc_connection_t connection, float * result)
+
+      The total mass of the vessel, including resources and crew, in kg.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DryMass(krpc_connection_t connection, float * result)
+
+      The total mass of the vessel, excluding resources, in kg.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Cost(krpc_connection_t connection, float * result)
+
+      The total cost of the vessel, including resources, in funds.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CrewCapacity(krpc_connection_t connection, int32_t * result)
+
+      The total number of crew that the vessel can hold.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Parts(krpc_connection_t connection, krpc_SpaceCenter_Parts_t * result)
+
+      A :type:`krpc_SpaceCenter_Parts_t` object, that can be used to interact with the parts
+      that make up the vessel.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note:: Only the parts of :type:`krpc_SpaceCenter_Part_t` that describe the design are
+                available in the editor. Those that need a vessel in flight or running physics,
+                such as :func:`krpc_SpaceCenter_Part_Position` and the thermal members, are
+                restricted to the flight scene.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
+
+      A :func:`krpc_SpaceCenter_EditorVessel_Resources` object for the resources the vessel can hold.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note:: This is a view of what the vessel can hold as designed. The flow-state
+                members work, as they are part of the design, but nothing here reports how
+                a resource would be drawn on in flight.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Stages(krpc_connection_t connection, krpc_list_object_t * result)
+
+      Activation (burn) stages for the vessel, in ascending stage order. This does
+      not include the -1 stage (parts with no staging icon), as it carries no
+      delta-v; use :func:`krpc_SpaceCenter_EditorVessel_StageAt` with -1 to get those parts.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_StageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * result, int32_t stage)
+
+      The activation stage with the given number. Pass -1 to get the parts that are
+      never activated (those with no staging icon).
+
+      :Parameters:
+
+       * **stage** -- Get activation stage at this index.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DecoupleStages(krpc_connection_t connection, krpc_list_object_t * result)
+
+      Decouple stages for the vessel, in ascending stage order. The -1 stage,
+      containing the parts that are never decoupled and remain on the vessel, is
+      included first when any such parts exist.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DecoupleStageAt(krpc_connection_t connection, krpc_SpaceCenter_Stage_t * result, int32_t stage)
+
+      The decouple stage with the given number. Pass -1 to get the parts that are
+      never decoupled and remain on the vessel after all stages have fired.
+
+      :Parameters:
+
+       * **stage** -- Get decouple stage at this index.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DeltaVReady(krpc_connection_t connection, bool * result)
+
+      Whether the stock delta-v figures for the vessel have been calculated.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         The game recalculates them in the background whenever the vessel changes, and
+         whenever :func:`krpc_SpaceCenter_Editor_DeltaVBody` or :func:`krpc_SpaceCenter_Editor_DeltaVAltitude`
+         is set, and they are out of date until it has finished. Reading
+         :func:`krpc_SpaceCenter_EditorVessel_DeltaV`, or any delta-v member of a :type:`krpc_SpaceCenter_Stage_t`, before
+         then raises an error rather than returning a stale figure. Poll this after
+         changing anything the figures depend on.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_DeltaV(krpc_connection_t connection, float * result)
+
+      Total delta-v for the vessel in the situation the game's delta-v readout
+      assumes, in m/s. See :func:`krpc_SpaceCenter_Editor_DeltaVBody`.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_VacuumDeltaV(krpc_connection_t connection, float * result)
+
+      Total vacuum delta-v for the vessel, in m/s.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_SeaLevelDeltaV(krpc_connection_t connection, float * result)
+
+      Total sea-level delta-v for the vessel, in m/s.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_BurnTime(krpc_connection_t connection, float * result)
+
+      Total burn time for the vessel, in seconds.
+
+      :Game Scenes: Editor Vab, Editor Sph

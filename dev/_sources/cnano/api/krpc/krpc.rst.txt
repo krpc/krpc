@@ -80,7 +80,10 @@ Main kRPC service, used by clients to interact with basic server functionality.
    Scene changes happen asynchronously: setting this property returns
    immediately, and clients should poll it until it reports the requested
    scene. Setting it to :macro:`KRPC_KRPC_GAMESCENE_FLIGHT` resumes the save's
-   active vessel, and fails if there is none.
+   active vessel, and fails if there is none. Moving between
+   :macro:`KRPC_KRPC_GAMESCENE_EDITORVAB` and :macro:`KRPC_KRPC_GAMESCENE_EDITORSPH`
+   keeps the vessel that is being constructed, as the game's own switch
+   editor button does.
 
    
 

@@ -551,6 +551,7 @@
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -690,15 +691,15 @@
 <span id="_CPPv3N4krpc8services11SpaceCenter9ResourcesE"></span><span id="_CPPv2N4krpc8services11SpaceCenter9ResourcesE"></span><span id="krpc::services::SpaceCenter::Resources"></span><span class="k"><span class="pre">class</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Resources</span></span></span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9ResourcesE" title="Link to this definition">#</a><br /></dt>
 <dd><p>Represents the collection of resources stored in a vessel, stage or part.
 Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel9resourcesEv" title="krpc::services::SpaceCenter::Vessel::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::resources()</span></code></a>,
-<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb" title="krpc::services::SpaceCenter::Vessel::resources_in_decouple_stage"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::resources_in_decouple_stage()</span></code></a> or
-<a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4Part9resourcesEv" title="krpc::services::SpaceCenter::Part::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::resources()</span></code></a>.</p>
+<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel27resources_in_decouple_stageE7int32_tb" title="krpc::services::SpaceCenter::Vessel::resources_in_decouple_stage"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::resources_in_decouple_stage()</span></code></a>, <a class="reference internal" href="editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel9resourcesEv" title="krpc::services::SpaceCenter::EditorVessel::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">EditorVessel::resources()</span></code></a>
+or <a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4Part9resourcesEv" title="krpc::services::SpaceCenter::Part::resources"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Part::resources()</span></code></a>.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter9Resources3allEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter9Resources3allEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter9Resources3allEv"></span><span id="krpc::services::SpaceCenter::Resources::all"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter8ResourceE" title="krpc::services::SpaceCenter::Resource"><span class="n"><span class="pre">Resource</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">all</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter9Resources3allEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>All the individual resources that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -711,7 +712,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -722,7 +723,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 <dd><p>A list of resource names that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -738,7 +739,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -754,7 +755,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -770,7 +771,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -786,7 +787,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -802,7 +803,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -818,7 +819,7 @@ Created by calling <a class="reference internal" href="vessel.html#_CPPv4N4krpc8
 <dd><p>Whether use of all the resources are enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -839,36 +840,66 @@ Created using methods in the <a class="reference internal" href="#_CPPv4N4krpc8s
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource4nameEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource4nameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource4nameEv"></span><span id="krpc::services::SpaceCenter::Resource::name"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">name</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource4nameEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The name of the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource4partEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource4partEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource4partEv"></span><span id="krpc::services::SpaceCenter::Resource::part"></span><a class="reference internal" href="parts.html#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">part</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource4partEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The part containing the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource6amountEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource6amountEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource6amountEv"></span><span id="krpc::services::SpaceCenter::Resource::amount"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">amount</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource6amountEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The amount of the resource that is currently stored in the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource3maxEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource3maxEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource3maxEv"></span><span id="krpc::services::SpaceCenter::Resource::max"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource3maxEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The total amount of the resource that can be stored in the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource7densityEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource7densityEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource7densityEv"></span><span id="krpc::services::SpaceCenter::Resource::density"></span><span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">density</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource7densityEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The density of the resource, in <span class="math notranslate nohighlight">\(kg/l\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource9flow_modeEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource9flow_modeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource9flow_modeEv"></span><span id="krpc::services::SpaceCenter::Resource::flow_mode"></span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter16ResourceFlowModeE" title="krpc::services::SpaceCenter::ResourceFlowMode"><span class="n"><span class="pre">ResourceFlowMode</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">flow_mode</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource9flow_modeEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The flow mode of the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="cpp function">
@@ -880,6 +911,11 @@ Created using methods in the <a class="reference internal" href="#_CPPv4N4krpc8s
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter8Resource11set_enabledEb">
 <span id="_CPPv3N4krpc8services11SpaceCenter8Resource11set_enabledEb"></span><span id="_CPPv2N4krpc8services11SpaceCenter8Resource11set_enabledEb"></span><span id="krpc::services::SpaceCenter::Resource::set_enabled__b"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_enabled</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter8Resource11set_enabledEb" title="Link to this definition">#</a><br /></dt>
 <dd><p>Whether use of this resource is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

@@ -1,0 +1,1374 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Editor &#8212; kRPC vdev documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e540dda1" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+
+    <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'python/api/space-center/editor';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner =
+            true;
+        </script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../../_static/external-links.js?v=e8892020"></script>
+    <script src="../../../_static/build-info.js?v=19ceb065"></script>
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/python/api/space-center/editor.html" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="CelestialBody" href="celestial-body.html" />
+    <link rel="prev" title="Stage" href="stage.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="dev" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">kRPC Documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-2"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-2"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-2"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-2">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../getting-started.html">
+    Getting Started
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../tutorials.html">
+    Tutorials and Examples
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cnano.html">
+    C-nano
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../csharp.html">
+    C#
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../cpp.html">
+    C++
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../java.html">
+    Java
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../lua.html">
+    Lua
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../../python.html">
+    Python
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../third-party.html">
+    Other Clients, Services and Scripts
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../compiling.html">
+    Compiling kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../extending.html">
+    Extending kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../communication-protocols.html">
+    Communication Protocols
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../internals.html">
+    Internals of kRPC
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<div class="version-switcher__container dropdown pst-js-only">
+  <button id="pst-version-switcher-button-3"
+    type="button"
+    class="version-switcher__button btn btn-sm dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="listbox"
+    aria-controls="pst-version-switcher-list-3"
+    aria-label="Version switcher list"
+  >
+    Choose version  <!-- this text may get changed later by javascript -->
+    <span class="caret"></span>
+  </button>
+  <div id="pst-version-switcher-list-3"
+    class="version-switcher__menu dropdown-menu list-group-flush py-0"
+    role="listbox" aria-labelledby="pst-version-switcher-button-3">
+    <!-- dropdown will be populated by javascript on page load -->
+  </div>
+</div></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/krpc/krpc" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../client.html">Python Client</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../krpc.html">KRPC API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/krpc.html">KRPC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../krpc/expressions.html">Expressions</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../space-center.html">SpaceCenter API</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Editor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
+<li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="closest-approach.html">Closest Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="control.html">Control</a></li>
+<li class="toctree-l2"><a class="reference internal" href="comms.html">Communications</a></li>
+<li class="toctree-l2"><a class="reference internal" href="parts.html">Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="resources.html">Resources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reference-frame.html">ReferenceFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="auto-pilot.html">AutoPilot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="camera.html">Camera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="waypoints.html">Waypoints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="contracts.html">Contracts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="geometry-types.html">Geometry Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="alarms.html">Alarms</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../drawing.html">Drawing API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/drawing.html">Drawing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/line.html">Line</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/navball-marker.html">NavballMarker</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/polygon.html">Polygon</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../drawing/text.html">Text</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../ui.html">User Interface API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../ui/ui.html">UI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/canvas.html">Canvas</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/panel.html">Panel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/text.html">Text</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/button.html">Button</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/input-field.html">InputField</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../ui/rect-transform.html">Rect Transform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../infernal-robotics.html">InfernalRobotics API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/infernal-robotics.html">InfernalRobotics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo-group.html">ServoGroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../infernal-robotics/servo.html">Servo</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../kerbal-alarm-clock.html">Kerbal Alarm Clock API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/kerbal-alarm-clock.html">KerbalAlarmClock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm.html">Alarm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-type.html">AlarmType</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../kerbal-alarm-clock/alarm-action.html">AlarmAction</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../remote-tech.html">RemoteTech API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/remote-tech.html">RemoteTech</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/comms.html">Comms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../remote-tech/antenna.html">Antenna</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../lidar.html">LiDAR API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/lidar.html">LiDAR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../lidar/laser.html">Laser</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../docking-camera.html">Docking Camera API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/docking-camera.html">DockingCamera</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../docking-camera/camera.html">Camera</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../debug.html">Debug API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../debug/debug.html">Debug</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../../../python.html" class="nav-link">Python</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="../space-center.html" class="nav-link">SpaceCenter API</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Editor</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="editor">
+<span id="python-api-editor"></span><h1>Editor<a class="headerlink" href="#editor" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.Editor">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Editor</span></span><a class="headerlink" href="#SpaceCenter.Editor" title="Link to this definition">#</a></dt>
+<dd><p>Provides access to the vehicle assembly building and space plane hangar.
+Obtained by calling <a class="reference internal" href="space-center.html#SpaceCenter.editor" title="SpaceCenter.editor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">editor</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.facility">
+<span class="sig-name descname"><span class="pre">facility</span></span><a class="headerlink" href="#SpaceCenter.Editor.facility" title="Link to this definition">#</a></dt>
+<dd><p>The editor that is currently open.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="space-center.html#SpaceCenter.EditorFacility" title="SpaceCenter.EditorFacility"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorFacility</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.vessel">
+<span class="sig-name descname"><span class="pre">vessel</span></span><a class="headerlink" href="#SpaceCenter.Editor.vessel" title="Link to this definition">#</a></dt>
+<dd><p>The vessel that is being constructed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.EditorVessel" title="SpaceCenter.EditorVessel"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorVessel</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An editor that has not had a vessel loaded into it holds an empty vessel, with
+no parts, rather than nothing at all.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.load_vessel">
+<span class="sig-name descname"><span class="pre">load_vessel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">craft_directory</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Editor.load_vessel" title="Link to this definition">#</a></dt>
+<dd><p>Load a vessel from a craft file into the editor, replacing the vessel that
+is currently being constructed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>craft_directory</strong> (<em>str</em>) – Name of the directory in the current saves “Ships” directory, that contains the craft file. For example <code class="docutils literal notranslate"><span class="pre">&quot;VAB&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;SPH&quot;</span></code>.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – Name of the vessel to load. This is the name of the “.craft” file in the save directory, without the “.craft” file extension.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The vessel is loaded into whichever editor is open, regardless of which
+directory it came from. Its delta-v figures are recalculated in the
+background afterwards; see <a class="reference internal" href="#SpaceCenter.EditorVessel.delta_v_ready" title="SpaceCenter.EditorVessel.delta_v_ready"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.delta_v_ready</span></code></a>.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.launch_vessel">
+<span class="sig-name descname"><span class="pre">launch_vessel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">launch_site</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crew</span></span></em><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">recover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">flag_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Editor.launch_vessel" title="Link to this definition">#</a></dt>
+<dd><p>Launch the vessel that is being constructed, from the given launch site.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>launch_site</strong> (<em>str</em>) – Name of the launch site. For example <code class="docutils literal notranslate"><span class="pre">&quot;LaunchPad&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;Runway&quot;</span></code>.</p></li>
+<li><p><strong>crew</strong> (<em>list</em>) – The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.</p></li>
+<li><p><strong>recover</strong> (<em>bool</em>) – If true and there is a vessel on the launch site, recover it before launching.</p></li>
+<li><p><strong>flag_url</strong> (<em>str</em>) – If not <code class="docutils literal notranslate"><span class="pre">None</span></code>, the asset URL of the mission flag to use for the launch.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The vessel being constructed is not a craft file, so it is written to the editor’s
+auto-saved craft file and that is launched, as the game’s own launch button does.
+The vessel’s own craft file, if it was loaded from one, is left alone.
+The <em>crew</em> parameter works as it does for
+<a class="reference internal" href="space-center.html#SpaceCenter.launch_vessel" title="SpaceCenter.launch_vessel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">launch_vessel()</span></code></a>, and takes precedence over the crew assigned
+in the editor.
+Throws an exception if any of the games pre-flight checks fail.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.delta_v_body">
+<span class="sig-name descname"><span class="pre">delta_v_body</span></span><a class="headerlink" href="#SpaceCenter.Editor.delta_v_body" title="Link to this definition">#</a></dt>
+<dd><p>The body whose gravity and atmosphere the vessel’s delta-v, thrust, TWR and
+specific impulse figures assume.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="celestial-body.html#SpaceCenter.CelestialBody" title="SpaceCenter.CelestialBody"><code class="xref py py-class docutils literal notranslate"><span class="pre">CelestialBody</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This and <a class="reference internal" href="#SpaceCenter.Editor.delta_v_altitude" title="SpaceCenter.Editor.delta_v_altitude"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_altitude</span></code></a> are what <a class="reference internal" href="#SpaceCenter.EditorVessel.delta_v" title="SpaceCenter.EditorVessel.delta_v"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.delta_v</span></code></a>,
+<a class="reference internal" href="stage.html#SpaceCenter.Stage.delta_v" title="SpaceCenter.Stage.delta_v"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Stage.delta_v</span></code></a> and the other current-situation figures are
+computed for. The body sets the gravity the thrust-to-weight ratios are
+against, and, with the altitude, the atmospheric pressure and density the
+specific impulses and thrusts are against.
+This is global game state rather than editor state: the same setting backs
+the game’s delta-v readout in flight, and it persists across scene changes.
+Setting it asks the game to re-run the simulation and returns straight away;
+the figures are out of date until <a class="reference internal" href="#SpaceCenter.EditorVessel.delta_v_ready" title="SpaceCenter.EditorVessel.delta_v_ready"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.delta_v_ready</span></code></a> is
+true again.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.delta_v_altitude">
+<span class="sig-name descname"><span class="pre">delta_v_altitude</span></span><a class="headerlink" href="#SpaceCenter.Editor.delta_v_altitude" title="Link to this definition">#</a></dt>
+<dd><p>The altitude above <a class="reference internal" href="#SpaceCenter.Editor.delta_v_body" title="SpaceCenter.Editor.delta_v_body"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_body</span></code></a>, in meters, that the vessel’s
+delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+pressure and density at this altitude are what the figures are computed for,
+so raising it from zero to above the body’s atmosphere moves them from the
+vessel’s sea-level figures to its vacuum ones.
+Setting it asks the game to re-run the simulation and returns straight away;
+the figures are out of date until <a class="reference internal" href="#SpaceCenter.EditorVessel.delta_v_ready" title="SpaceCenter.EditorVessel.delta_v_ready"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.delta_v_ready</span></code></a> is
+true again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.Editor.delta_v_situation">
+<span class="sig-name descname"><span class="pre">delta_v_situation</span></span><a class="headerlink" href="#SpaceCenter.Editor.delta_v_situation" title="Link to this definition">#</a></dt>
+<dd><p>Which situation the game’s own delta-v readout shows figures for.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.DeltaVSituation" title="SpaceCenter.DeltaVSituation"><code class="xref py py-class docutils literal notranslate"><span class="pre">DeltaVSituation</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This selects which column the game’s own delta-v app displays, and nothing
+else. It does not affect anything kRPC reports: the current-situation
+figures follow <a class="reference internal" href="#SpaceCenter.Editor.delta_v_body" title="SpaceCenter.Editor.delta_v_body"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_body</span></code></a> and <a class="reference internal" href="#SpaceCenter.Editor.delta_v_altitude" title="SpaceCenter.Editor.delta_v_altitude"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_altitude</span></code></a>
+whatever this is set to, and the sea-level and vacuum figures are reported
+directly as <a class="reference internal" href="#SpaceCenter.EditorVessel.sea_level_delta_v" title="SpaceCenter.EditorVessel.sea_level_delta_v"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.sea_level_delta_v</span></code></a> and
+<a class="reference internal" href="#SpaceCenter.EditorVessel.vacuum_delta_v" title="SpaceCenter.EditorVessel.vacuum_delta_v"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.vacuum_delta_v</span></code></a>. It is here for completeness with the
+app.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.DeltaVSituation">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DeltaVSituation</span></span><a class="headerlink" href="#SpaceCenter.DeltaVSituation" title="Link to this definition">#</a></dt>
+<dd><p>The situation the game’s own delta-v readout shows figures for.
+See <a class="reference internal" href="#SpaceCenter.Editor.delta_v_situation" title="SpaceCenter.Editor.delta_v_situation"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_situation</span></code></a>.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.DeltaVSituation.sea_level">
+<span class="sig-name descname"><span class="pre">sea_level</span></span><a class="headerlink" href="#SpaceCenter.DeltaVSituation.sea_level" title="Link to this definition">#</a></dt>
+<dd><p>At sea level on the selected body.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.DeltaVSituation.altitude">
+<span class="sig-name descname"><span class="pre">altitude</span></span><a class="headerlink" href="#SpaceCenter.DeltaVSituation.altitude" title="Link to this definition">#</a></dt>
+<dd><p>At the selected altitude on the selected body.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="SpaceCenter.DeltaVSituation.vacuum">
+<span class="sig-name descname"><span class="pre">vacuum</span></span><a class="headerlink" href="#SpaceCenter.DeltaVSituation.vacuum" title="Link to this definition">#</a></dt>
+<dd><p>In vacuum.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">EditorVessel</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel" title="Link to this definition">#</a></dt>
+<dd><p>The vessel that is being constructed in the editor.
+Obtained by calling <a class="reference internal" href="#SpaceCenter.Editor.vessel" title="SpaceCenter.Editor.vessel"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.vessel</span></code></a>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.name" title="Link to this definition">#</a></dt>
+<dd><p>The name of the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.description">
+<span class="sig-name descname"><span class="pre">description</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.description" title="Link to this definition">#</a></dt>
+<dd><p>The description of the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Can be read or written</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.facility">
+<span class="sig-name descname"><span class="pre">facility</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.facility" title="Link to this definition">#</a></dt>
+<dd><p>The editor the vessel is in.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="space-center.html#SpaceCenter.EditorFacility" title="SpaceCenter.EditorFacility"><code class="xref py py-class docutils literal notranslate"><span class="pre">EditorFacility</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the editor the vessel is currently loaded into, not the one it was
+designed in. A vessel moved from the vehicle assembly building to the space
+plane hangar reports the space plane hangar.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.size">
+<span class="sig-name descname"><span class="pre">size</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.size" title="Link to this definition">#</a></dt>
+<dd><p>The dimensions of the vessel’s bounding box, in meters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.mass">
+<span class="sig-name descname"><span class="pre">mass</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.mass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the vessel, including resources and crew, in kg.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.dry_mass">
+<span class="sig-name descname"><span class="pre">dry_mass</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.dry_mass" title="Link to this definition">#</a></dt>
+<dd><p>The total mass of the vessel, excluding resources, in kg.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.cost">
+<span class="sig-name descname"><span class="pre">cost</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.cost" title="Link to this definition">#</a></dt>
+<dd><p>The total cost of the vessel, including resources, in funds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.crew_capacity">
+<span class="sig-name descname"><span class="pre">crew_capacity</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.crew_capacity" title="Link to this definition">#</a></dt>
+<dd><p>The total number of crew that the vessel can hold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.parts">
+<span class="sig-name descname"><span class="pre">parts</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.parts" title="Link to this definition">#</a></dt>
+<dd><p>A <a class="reference internal" href="parts.html#SpaceCenter.Parts" title="SpaceCenter.Parts"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parts</span></code></a> object, that can be used to interact with the parts
+that make up the vessel.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="parts.html#SpaceCenter.Parts" title="SpaceCenter.Parts"><code class="xref py py-class docutils literal notranslate"><span class="pre">Parts</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only the parts of <a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code></a> that describe the design are
+available in the editor. Those that need a vessel in flight or running physics,
+such as <a class="reference internal" href="parts.html#SpaceCenter.Part.position" title="SpaceCenter.Part.position"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Part.position()</span></code></a> and the thermal members, are
+restricted to the flight scene.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.resources">
+<span class="sig-name descname"><span class="pre">resources</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.resources" title="Link to this definition">#</a></dt>
+<dd><p>A <a class="reference internal" href="#SpaceCenter.EditorVessel.resources" title="SpaceCenter.EditorVessel.resources"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.resources</span></code></a> object for the resources the vessel can hold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="resources.html#SpaceCenter.Resources" title="SpaceCenter.Resources"><code class="xref py py-class docutils literal notranslate"><span class="pre">Resources</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is a view of what the vessel can hold as designed. The flow-state
+members work, as they are part of the design, but nothing here reports how
+a resource would be drawn on in flight.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.stages">
+<span class="sig-name descname"><span class="pre">stages</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.stages" title="Link to this definition">#</a></dt>
+<dd><p>Activation (burn) stages for the vessel, in ascending stage order. This does
+not include the -1 stage (parts with no staging icon), as it carries no
+delta-v; use <a class="reference internal" href="#SpaceCenter.EditorVessel.stage_at" title="SpaceCenter.EditorVessel.stage_at"><code class="xref py py-meth docutils literal notranslate"><span class="pre">EditorVessel.stage_at()</span></code></a> with -1 to get those parts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(<a class="reference internal" href="stage.html#SpaceCenter.Stage" title="SpaceCenter.Stage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stage</span></code></a>)</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.stage_at">
+<span class="sig-name descname"><span class="pre">stage_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.EditorVessel.stage_at" title="Link to this definition">#</a></dt>
+<dd><p>The activation stage with the given number. Pass -1 to get the parts that are
+never activated (those with no staging icon).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage</strong> (<em>int</em>) – Get activation stage at this index.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="stage.html#SpaceCenter.Stage" title="SpaceCenter.Stage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stage</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.decouple_stages">
+<span class="sig-name descname"><span class="pre">decouple_stages</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.decouple_stages" title="Link to this definition">#</a></dt>
+<dd><p>Decouple stages for the vessel, in ascending stage order. The -1 stage,
+containing the parts that are never decoupled and remain on the vessel, is
+included first when any such parts exist.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(<a class="reference internal" href="stage.html#SpaceCenter.Stage" title="SpaceCenter.Stage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stage</span></code></a>)</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.decouple_stage_at">
+<span class="sig-name descname"><span class="pre">decouple_stage_at</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stage</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.EditorVessel.decouple_stage_at" title="Link to this definition">#</a></dt>
+<dd><p>The decouple stage with the given number. Pass -1 to get the parts that are
+never decoupled and remain on the vessel after all stages have fired.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage</strong> (<em>int</em>) – Get decouple stage at this index.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="stage.html#SpaceCenter.Stage" title="SpaceCenter.Stage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stage</span></code></a></p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.delta_v_ready">
+<span class="sig-name descname"><span class="pre">delta_v_ready</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.delta_v_ready" title="Link to this definition">#</a></dt>
+<dd><p>Whether the stock delta-v figures for the vessel have been calculated.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The game recalculates them in the background whenever the vessel changes, and
+whenever <a class="reference internal" href="#SpaceCenter.Editor.delta_v_body" title="SpaceCenter.Editor.delta_v_body"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_body</span></code></a> or <a class="reference internal" href="#SpaceCenter.Editor.delta_v_altitude" title="SpaceCenter.Editor.delta_v_altitude"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_altitude</span></code></a>
+is set, and they are out of date until it has finished. Reading
+<a class="reference internal" href="#SpaceCenter.EditorVessel.delta_v" title="SpaceCenter.EditorVessel.delta_v"><code class="xref py py-attr docutils literal notranslate"><span class="pre">EditorVessel.delta_v</span></code></a>, or any delta-v member of a <a class="reference internal" href="stage.html#SpaceCenter.Stage" title="SpaceCenter.Stage"><code class="xref py py-class docutils literal notranslate"><span class="pre">Stage</span></code></a>, before
+then raises an error rather than returning a stale figure. Poll this after
+changing anything the figures depend on.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.delta_v">
+<span class="sig-name descname"><span class="pre">delta_v</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.delta_v" title="Link to this definition">#</a></dt>
+<dd><p>Total delta-v for the vessel in the situation the game’s delta-v readout
+assumes, in m/s. See <a class="reference internal" href="#SpaceCenter.Editor.delta_v_body" title="SpaceCenter.Editor.delta_v_body"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Editor.delta_v_body</span></code></a>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.vacuum_delta_v">
+<span class="sig-name descname"><span class="pre">vacuum_delta_v</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.vacuum_delta_v" title="Link to this definition">#</a></dt>
+<dd><p>Total vacuum delta-v for the vessel, in m/s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.sea_level_delta_v">
+<span class="sig-name descname"><span class="pre">sea_level_delta_v</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.sea_level_delta_v" title="Link to this definition">#</a></dt>
+<dd><p>Total sea-level delta-v for the vessel, in m/s.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.burn_time">
+<span class="sig-name descname"><span class="pre">burn_time</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.burn_time" title="Link to this definition">#</a></dt>
+<dd><p>Total burn time for the vessel, in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>float</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="stage.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Stage</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="celestial-body.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">CelestialBody</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../../_sources/python/api/space-center/editor.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2015-2026, kRPC Org.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+    <div class="footer-items__center">
+      
+        <div class="footer-item">
+<p class="build-info" data-build-info-url="../../../build-info.json"></p></div>
+      
+    </div>
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

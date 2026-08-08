@@ -1,0 +1,312 @@
+.. default-domain:: lua
+.. highlight:: lua
+.. currentmodule:: SpaceCenter
+
+.. _lua-api-editor:
+
+Editor
+======
+
+
+.. class:: Editor
+
+   Provides access to the vehicle assembly building and space plane hangar.
+   Obtained by calling :attr:`SpaceCenter.editor <SpaceCenter.SpaceCenter.editor>`.
+
+   .. attribute:: facility: SpaceCenter.EditorFacility
+
+      The editor that is currently open.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.EditorFacility`
+
+   .. attribute:: vessel: SpaceCenter.EditorVessel
+
+      The vessel that is being constructed.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.EditorVessel`
+
+      .. note::
+
+         An editor that has not had a vessel loaded into it holds an empty vessel, with
+         no parts, rather than nothing at all.
+
+   .. method:: load_vessel(craft_directory, name)
+
+      Load a vessel from a craft file into the editor, replacing the vessel that
+      is currently being constructed.
+
+      :param string craft_directory: Name of the directory in the current saves "Ships" directory, that contains the craft file. For example ``"VAB"`` or ``"SPH"``.
+      :param string name: Name of the vessel to load. This is the name of the ".craft" file in the save directory, without the ".craft" file extension.
+
+      .. note::
+
+         The vessel is loaded into whichever editor is open, regardless of which
+         directory it came from. Its delta-v figures are recalculated in the
+         background afterwards; see :attr:`SpaceCenter.EditorVessel.delta_v_ready`.
+
+   .. method:: launch_vessel(launch_site, crew, [recover = True], [flag_url = ''])
+
+      Launch the vessel that is being constructed, from the given launch site.
+
+      :param string launch_site: Name of the launch site. For example ``"LaunchPad"`` or ``"Runway"``.
+      :param List crew: The Kerbals to place in the vessel, by name. Controls how the vessel is crewed, as described in the remarks.
+      :param boolean recover: If true and there is a vessel on the launch site, recover it before launching.
+      :param string flag_url: If not ``nil``, the asset URL of the mission flag to use for the launch.
+
+      .. note::
+
+         The vessel being constructed is not a craft file, so it is written to the editor's
+         auto-saved craft file and that is launched, as the game's own launch button does.
+         The vessel's own craft file, if it was loaded from one, is left alone.
+         The *crew* parameter works as it does for
+         :meth:`SpaceCenter.launch_vessel`, and takes precedence over the crew assigned
+         in the editor.
+         Throws an exception if any of the games pre-flight checks fail.
+
+   .. attribute:: delta_v_body: SpaceCenter.CelestialBody
+
+      The body whose gravity and atmosphere the vessel's delta-v, thrust, TWR and
+      specific impulse figures assume.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.CelestialBody`
+
+      .. note::
+
+         This and :attr:`SpaceCenter.Editor.delta_v_altitude` are what :attr:`SpaceCenter.EditorVessel.delta_v`,
+         :attr:`SpaceCenter.Stage.delta_v` and the other current-situation figures are
+         computed for. The body sets the gravity the thrust-to-weight ratios are
+         against, and, with the altitude, the atmospheric pressure and density the
+         specific impulses and thrusts are against.
+         This is global game state rather than editor state: the same setting backs
+         the game's delta-v readout in flight, and it persists across scene changes.
+         Setting it asks the game to re-run the simulation and returns straight away;
+         the figures are out of date until :attr:`SpaceCenter.EditorVessel.delta_v_ready` is
+         true again.
+
+   .. attribute:: delta_v_altitude: number
+
+      The altitude above :attr:`SpaceCenter.Editor.delta_v_body`, in meters, that the vessel's
+      delta-v, thrust, TWR and specific impulse figures assume. The atmospheric
+      pressure and density at this altitude are what the figures are computed for,
+      so raising it from zero to above the body's atmosphere moves them from the
+      vessel's sea-level figures to its vacuum ones.
+      Setting it asks the game to re-run the simulation and returns straight away;
+      the figures are out of date until :attr:`SpaceCenter.EditorVessel.delta_v_ready` is
+      true again.
+
+      :Attribute: Can be read or written
+      :rtype: number
+
+   .. attribute:: delta_v_situation: SpaceCenter.DeltaVSituation
+
+      Which situation the game's own delta-v readout shows figures for.
+
+      :Attribute: Can be read or written
+      :rtype: :class:`SpaceCenter.DeltaVSituation`
+
+      .. note::
+
+         This selects which column the game's own delta-v app displays, and nothing
+         else. It does not affect anything kRPC reports: the current-situation
+         figures follow :attr:`SpaceCenter.Editor.delta_v_body` and :attr:`SpaceCenter.Editor.delta_v_altitude`
+         whatever this is set to, and the sea-level and vacuum figures are reported
+         directly as :attr:`SpaceCenter.EditorVessel.sea_level_delta_v` and
+         :attr:`SpaceCenter.EditorVessel.vacuum_delta_v`. It is here for completeness with the
+         app.
+
+
+
+.. class:: DeltaVSituation
+
+   The situation the game's own delta-v readout shows figures for.
+   See :attr:`SpaceCenter.Editor.delta_v_situation`.
+
+
+   .. data:: sea_level
+
+      At sea level on the selected body.
+
+
+   .. data:: altitude
+
+      At the selected altitude on the selected body.
+
+
+   .. data:: vacuum
+
+      In vacuum.
+
+
+
+.. class:: EditorVessel
+
+   The vessel that is being constructed in the editor.
+   Obtained by calling :attr:`SpaceCenter.Editor.vessel`.
+
+   .. attribute:: name: string
+
+      The name of the vessel.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: description: string
+
+      The description of the vessel.
+
+      :Attribute: Can be read or written
+      :rtype: string
+
+   .. attribute:: facility: SpaceCenter.EditorFacility
+
+      The editor the vessel is in.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.EditorFacility`
+
+      .. note::
+
+         This is the editor the vessel is currently loaded into, not the one it was
+         designed in. A vessel moved from the vehicle assembly building to the space
+         plane hangar reports the space plane hangar.
+
+   .. attribute:: size: Tuple
+
+      The dimensions of the vessel's bounding box, in meters.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: Tuple
+
+   .. attribute:: mass: number
+
+      The total mass of the vessel, including resources and crew, in kg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: dry_mass: number
+
+      The total mass of the vessel, excluding resources, in kg.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: cost: number
+
+      The total cost of the vessel, including resources, in funds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: crew_capacity: number
+
+      The total number of crew that the vessel can hold.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: parts: SpaceCenter.Parts
+
+      A :class:`SpaceCenter.Parts` object, that can be used to interact with the parts
+      that make up the vessel.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Parts`
+
+      .. note:: Only the parts of :class:`SpaceCenter.Part` that describe the design are
+                available in the editor. Those that need a vessel in flight or running physics,
+                such as :meth:`SpaceCenter.Part.position` and the thermal members, are
+                restricted to the flight scene.
+
+   .. attribute:: resources: SpaceCenter.Resources
+
+      A :attr:`SpaceCenter.EditorVessel.resources` object for the resources the vessel can hold.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: :class:`SpaceCenter.Resources`
+
+      .. note:: This is a view of what the vessel can hold as designed. The flow-state
+                members work, as they are part of the design, but nothing here reports how
+                a resource would be drawn on in flight.
+
+   .. attribute:: stages: List
+
+      Activation (burn) stages for the vessel, in ascending stage order. This does
+      not include the -1 stage (parts with no staging icon), as it carries no
+      delta-v; use :meth:`SpaceCenter.EditorVessel.stage_at` with -1 to get those parts.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: stage_at(stage)
+
+      The activation stage with the given number. Pass -1 to get the parts that are
+      never activated (those with no staging icon).
+
+      :param number stage: Get activation stage at this index.
+      :rtype: :class:`SpaceCenter.Stage`
+
+   .. attribute:: decouple_stages: List
+
+      Decouple stages for the vessel, in ascending stage order. The -1 stage,
+      containing the parts that are never decoupled and remain on the vessel, is
+      included first when any such parts exist.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: List
+
+   .. method:: decouple_stage_at(stage)
+
+      The decouple stage with the given number. Pass -1 to get the parts that are
+      never decoupled and remain on the vessel after all stages have fired.
+
+      :param number stage: Get decouple stage at this index.
+      :rtype: :class:`SpaceCenter.Stage`
+
+   .. attribute:: delta_v_ready: boolean
+
+      Whether the stock delta-v figures for the vessel have been calculated.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+      .. note::
+
+         The game recalculates them in the background whenever the vessel changes, and
+         whenever :attr:`SpaceCenter.Editor.delta_v_body` or :attr:`SpaceCenter.Editor.delta_v_altitude`
+         is set, and they are out of date until it has finished. Reading
+         :attr:`SpaceCenter.EditorVessel.delta_v`, or any delta-v member of a :class:`SpaceCenter.Stage`, before
+         then raises an error rather than returning a stale figure. Poll this after
+         changing anything the figures depend on.
+
+   .. attribute:: delta_v: number
+
+      Total delta-v for the vessel in the situation the game's delta-v readout
+      assumes, in m/s. See :attr:`SpaceCenter.Editor.delta_v_body`.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: vacuum_delta_v: number
+
+      Total vacuum delta-v for the vessel, in m/s.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: sea_level_delta_v: number
+
+      Total sea-level delta-v for the vessel, in m/s.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: burn_time: number
+
+      Total burn time for the vessel, in seconds.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number

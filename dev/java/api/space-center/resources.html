@@ -551,6 +551,7 @@
 <li class="toctree-l2"><a class="reference internal" href="space-center.html">SpaceCenter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vessel.html">Vessel</a></li>
 <li class="toctree-l2"><a class="reference internal" href="stage.html">Stage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="editor.html">Editor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="celestial-body.html">CelestialBody</a></li>
 <li class="toctree-l2"><a class="reference internal" href="flight.html">Flight</a></li>
 <li class="toctree-l2"><a class="reference internal" href="orbit.html">Orbit</a></li>
@@ -690,15 +691,15 @@
 <span class="pre">public</span> <span class="pre">class</span> <span class="sig-name descname"><span class="pre">Resources</span></span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resources" title="Link to this definition">#</a></dt>
 <dd><p>Represents the collection of resources stored in a vessel, stage or part.
 Created by calling <a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.getResources()" title="krpc.client.services.SpaceCenter.Vessel.getResources()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.getResources()</span></code></a>,
-<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.resourcesInDecoupleStage(int, boolean)" title="krpc.client.services.SpaceCenter.Vessel.resourcesInDecoupleStage(int, boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.resourcesInDecoupleStage(int,</span> <span class="pre">boolean)</span></code></a> or
-<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getResources()" title="krpc.client.services.SpaceCenter.Part.getResources()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getResources()</span></code></a>.</p>
+<a class="reference internal" href="vessel.html#krpc.client.services.SpaceCenter.Vessel.resourcesInDecoupleStage(int, boolean)" title="krpc.client.services.SpaceCenter.Vessel.resourcesInDecoupleStage(int, boolean)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Vessel.resourcesInDecoupleStage(int,</span> <span class="pre">boolean)</span></code></a>, <a class="reference internal" href="editor.html#krpc.client.services.SpaceCenter.EditorVessel.getResources()" title="krpc.client.services.SpaceCenter.EditorVessel.getResources()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">EditorVessel.getResources()</span></code></a>
+or <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getResources()" title="krpc.client.services.SpaceCenter.Part.getResources()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getResources()</span></code></a>.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resources.getAll()">
  <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference internal" href="#krpc.client.services.SpaceCenter.Resource" title="krpc.client.services.SpaceCenter.Resource"><span class="pre">Resource</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resources.getAll()" title="Link to this definition">#</a></dt>
 <dd><p>All the individual resources that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -714,7 +715,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -725,7 +726,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 <dd><p>A list of resource names that can be stored.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -741,7 +742,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -757,7 +758,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -773,7 +774,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -789,7 +790,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -805,7 +806,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 </ul>
 </dd>
 <dt class="field-even">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-even"><p>Flight</p>
+<dd class="field-even"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 </dd></dl>
@@ -821,7 +822,7 @@ Created by calling <a class="reference internal" href="vessel.html#krpc.client.s
 <dd><p>Whether use of all the resources are enabled.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Flight</p>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
 </dd>
 </dl>
 <div class="admonition note">
@@ -842,36 +843,66 @@ Created using methods in the <a class="reference internal" href="#krpc.client.se
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.getName()">
  <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a> <span class="sig-name descname"><span class="pre">getName</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.getName()" title="Link to this definition">#</a></dt>
 <dd><p>The name of the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.getPart()">
  <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><span class="pre">Part</span></a> <span class="sig-name descname"><span class="pre">getPart</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.getPart()" title="Link to this definition">#</a></dt>
 <dd><p>The part containing the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.getAmount()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getAmount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.getAmount()" title="Link to this definition">#</a></dt>
 <dd><p>The amount of the resource that is currently stored in the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.getMax()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getMax</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.getMax()" title="Link to this definition">#</a></dt>
 <dd><p>The total amount of the resource that can be stored in the part.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.getDensity()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getDensity</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.getDensity()" title="Link to this definition">#</a></dt>
 <dd><p>The density of the resource, in <span class="math notranslate nohighlight">\(kg/l\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.getFlowMode()">
  <a class="reference internal" href="#krpc.client.services.SpaceCenter.ResourceFlowMode" title="krpc.client.services.SpaceCenter.ResourceFlowMode"><span class="pre">ResourceFlowMode</span></a> <span class="sig-name descname"><span class="pre">getFlowMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.getFlowMode()" title="Link to this definition">#</a></dt>
 <dd><p>The flow mode of the resource.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="java method">
@@ -883,6 +914,11 @@ Created using methods in the <a class="reference internal" href="#krpc.client.se
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Resource.setEnabled(boolean)">
  <span class="pre">void</span> <span class="sig-name descname"><span class="pre">setEnabled</span></span><span class="sig-paren">(</span><span class="pre">boolean</span><em> <span class="pre">value</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Resource.setEnabled(boolean)" title="Link to this definition">#</a></dt>
 <dd><p>Whether use of this resource is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flight, Editor Vab, Editor Sph</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

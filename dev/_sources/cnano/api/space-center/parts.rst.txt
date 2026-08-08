@@ -42,7 +42,7 @@ Parts
 
       The part from which the vessel is controlled.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parts_WithName(krpc_connection_t connection, krpc_list_object_t * result, const char * name)
 
@@ -362,7 +362,8 @@ Part
 
       Whether the part is highlighted.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -373,7 +374,7 @@ Part
 
       The color used to highlight the part, as an RGB triple.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Cost(krpc_connection_t connection, double * result)
 
@@ -385,7 +386,7 @@ Part
 
       The vessel that contains this part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Parent(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
 
@@ -468,13 +469,13 @@ Part
 
       Whether the part is shielded from the exterior of the vessel, for example by a fairing.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_DynamicPressure(krpc_connection_t connection, float * result)
 
       The dynamic pressure acting on the part, in Pascals.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ImpactTolerance(krpc_connection_t connection, double * result)
 
@@ -486,13 +487,13 @@ Part
 
       Temperature of the part, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_SkinTemperature(krpc_connection_t connection, double * result)
 
       Temperature of the skin of the part, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_MaxTemperature(krpc_connection_t connection, double * result)
 
@@ -511,21 +512,21 @@ Part
       A measure of how much energy it takes to increase the internal temperature of the part,
       in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalSkinMass(krpc_connection_t connection, float * result)
 
       A measure of how much energy it takes to increase the skin temperature of the part,
       in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalResourceMass(krpc_connection_t connection, float * result)
 
       A measure of how much energy it takes to increase the temperature of the resources
       contained in the part, in Joules per Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalConductionFlux(krpc_connection_t connection, float * result)
 
@@ -534,7 +535,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalConvectionFlux(krpc_connection_t connection, float * result)
 
@@ -543,7 +544,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalRadiationFlux(krpc_connection_t connection, float * result)
 
@@ -552,7 +553,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is
       losing heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalInternalFlux(krpc_connection_t connection, float * result)
 
@@ -562,7 +563,7 @@ Part
       A positive value means the part is gaining heat energy, and negative means it is losing
       heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ThermalSkinToInternalFlux(krpc_connection_t connection, float * result)
 
@@ -571,7 +572,7 @@ Part
       A positive value means the part's internals are gaining heat energy,
       and negative means its skin is gaining heat energy.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_CrewCapacity(krpc_connection_t connection, int32_t * result)
 
@@ -583,13 +584,13 @@ Part
 
       The crew members occupying the part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_AvailableSeats(krpc_connection_t connection, uint32_t * result)
 
       How many open seats the part has.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
 
@@ -614,7 +615,8 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is into this part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`cnano-api-parts-fuel-lines`.
 
@@ -623,7 +625,8 @@ Part
       The parts that are connected to this part via fuel lines, where the direction of the
       fuel line is out of this part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note:: See the discussion on :rst:ref:`cnano-api-parts-fuel-lines`.
 
@@ -831,7 +834,8 @@ Part
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -849,7 +853,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_BoundingBox(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -860,7 +864,8 @@ Part
        * **referenceFrame** -- The reference frame that the returned position vectors are in.
 
       :returns: The positions of the minimum and maximum vertices of the box, as position vectors.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -878,7 +883,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Velocity(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -889,7 +894,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned velocity vector is in.
 
       :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed of the body in meters per second.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -900,7 +905,7 @@ Part
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_Lift(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -912,7 +917,8 @@ Part
        * **referenceFrame** -- The reference frame that the returned vector is in.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -928,7 +934,8 @@ Part
        * **referenceFrame** -- The reference frame that the returned vector is in.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -939,7 +946,7 @@ Part
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
       in the parts reference frame (:func:`krpc_SpaceCenter_Part_ReferenceFrame`).
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * result)
 
@@ -947,7 +954,7 @@ Part
       (:func:`krpc_SpaceCenter_Part_ReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
 
@@ -959,7 +966,8 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -982,7 +990,8 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1001,7 +1010,8 @@ Part
        * **referenceFrame** -- The reference frame that the force and position are in.
 
       :returns: An object that can be used to remove or modify the force.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1017,7 +1027,8 @@ Part
        * **position** -- The position at which the force acts, as a vector.
        * **referenceFrame** -- The reference frame that the force and position are in.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1027,7 +1038,7 @@ Part
 
       Whether the part is glowing.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Part_AutoStrutMode(krpc_connection_t connection, krpc_SpaceCenter_AutoStrutMode_t * result)
 
@@ -1086,7 +1097,7 @@ Part
 
       The part that this force is applied to.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Force_ForceVector(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_SpaceCenter_Force_set_ForceVector(const krpc_tuple_double_double_double_t * value)
@@ -1094,7 +1105,7 @@ Part
       The force vector, in Newtons.
 
       :returns: A vector pointing in the direction that the force acts, with its magnitude equal to the strength of the force in Newtons.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Force_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_SpaceCenter_Force_set_Position(const krpc_tuple_double_double_double_t * value)
@@ -1102,21 +1113,21 @@ Part
       The position at which the force acts, in reference frame :func:`krpc_SpaceCenter_Force_ReferenceFrame`.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Force_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
    .. function:: void krpc_SpaceCenter_Force_set_ReferenceFrame(krpc_SpaceCenter_ReferenceFrame_t value)
 
       The reference frame of the force vector and position.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Force_Remove(krpc_connection_t connection)
 
       Remove the force.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -1873,26 +1884,27 @@ Antenna
 
       The part object for this antenna.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the antenna.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Deployable(krpc_connection_t connection, bool * result)
 
       Whether the antenna is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Antenna_set_Deployed(bool value)
 
       Whether the antenna is deployed.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1903,65 +1915,65 @@ Antenna
 
       Whether data can be transmitted by this antenna.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Transmit(krpc_connection_t connection)
 
       Transmit data.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Cancel(krpc_connection_t connection)
 
       Cancel current transmission of data.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_AllowPartial(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Antenna_set_AllowPartial(bool value)
 
       Whether partial data transmission is permitted.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Power(krpc_connection_t connection, double * result)
 
       The power of the antenna.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_Combinable(krpc_connection_t connection, bool * result)
 
       Whether the antenna can be combined with other antennae on the vessel
       to boost the power.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_CombinableExponent(krpc_connection_t connection, double * result)
 
       Exponent used to calculate the combined power of multiple antennae on a vessel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketInterval(krpc_connection_t connection, float * result)
 
       Interval between sending packets in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketSize(krpc_connection_t connection, float * result)
 
       Amount of data sent per packet in Mits.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Antenna_PacketResourceCost(krpc_connection_t connection, double * result)
 
       Units of electric charge consumed per packet sent.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -1977,13 +1989,14 @@ Cargo Bay
 
       The part object for this cargo bay.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_CargoBay_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The state of the cargo bay.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -1999,7 +2012,7 @@ Cargo Bay
 
       Whether the cargo bay is open.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2015,28 +2028,28 @@ Control Surface
 
       The part object for this control surface.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_PitchEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_PitchEnabled(bool value)
 
       Whether the control surface has pitch control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_YawEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_YawEnabled(bool value)
 
       Whether the control surface has yaw control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_RollEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_RollEnabled(bool value)
 
       Whether the control surface has roll control enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_AuthorityLimiter(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_AuthorityLimiter(float value)
@@ -2044,21 +2057,21 @@ Control Surface
       The authority limiter for the control surface, which controls how far the
       control surface will move.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Inverted(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_Inverted(bool value)
 
       Whether the control surface movement is inverted.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_Deployed(bool value)
 
       Whether the control surface has been fully deployed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_DeflectionOverride(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_DeflectionOverride(bool value)
@@ -2069,7 +2082,7 @@ Control Surface
       The prior state is restored when the override is released, when the
       controlling client disconnects, or when the vessel changes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_Deflection(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_ControlSurface_set_Deflection(float value)
@@ -2077,13 +2090,13 @@ Control Surface
       The deflection command applied when :func:`krpc_SpaceCenter_ControlSurface_DeflectionOverride` is enabled, as a
       value between -1 and 1, mapped onto the surface's deploy angle range.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_SurfaceArea(krpc_connection_t connection, float * result)
 
       Surface area of the control surface in :math:`m^2`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ControlSurface_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
@@ -2091,7 +2104,7 @@ Control Surface
       in the positive and negative pitch, roll and yaw axes of the vessel. These axes
       correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2107,7 +2120,7 @@ Decoupler
 
       The part object for this decoupler.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Decouple(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
 
@@ -2115,7 +2128,8 @@ Decoupler
       Throws an exception if the decoupler has already fired.
 
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2127,31 +2141,31 @@ Decoupler
 
       Whether the decoupler has fired.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Staged(krpc_connection_t connection, bool * result)
 
       Whether the decoupler is enabled in the staging sequence.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_Impulse(krpc_connection_t connection, float * result)
 
       The impulse that the decoupler imparts when it is fired, in Newton seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_IsOmniDecoupler(krpc_connection_t connection, bool * result)
 
       Whether the decoupler is an omni-decoupler (e.g. stack separator)
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Decoupler_AttachedPart(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
 
       The part attached to this decoupler's explosive node.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -2212,20 +2226,20 @@ Docking Port
 
       The part object for this docking port.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_State(krpc_connection_t connection, krpc_SpaceCenter_DockingPortState_t * result)
 
       The current state of the docking port.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_DockedPart(krpc_connection_t connection, krpc_SpaceCenter_Part_t * result)
 
       The part that this docking port is docked to. Returns ``nullptr`` if this
       docking port is not docked to anything.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Undock(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
 
@@ -2234,7 +2248,8 @@ Docking Port
       Throws an exception if the docking port is not docked to anything.
 
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2247,13 +2262,13 @@ Docking Port
       The distance a docking port must move away when it undocks before it
       becomes ready to dock with another port, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_HasShield(krpc_connection_t connection, bool * result)
 
       Whether the docking port has a shield.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Shielded(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_DockingPort_set_Shielded(bool value)
@@ -2265,39 +2280,39 @@ Docking Port
       closed, and when set to ``false`` the shield is opened. If the docking
       port does not have a shield, setting this attribute has no effect.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_CanRotate(krpc_connection_t connection, bool * result)
 
       Whether the docking port can be commanded to rotate while docked.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_MaximumRotation(krpc_connection_t connection, float * result)
 
       Maximum rotation angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_MinimumRotation(krpc_connection_t connection, float * result)
 
       Minimum rotation angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_RotationTarget(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_DockingPort_set_RotationTarget(float value)
 
       Rotation target angle in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_RotationLocked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_DockingPort_set_RotationLocked(bool value)
 
       Lock rotation. When locked, allows auto-strut to work across the joint.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Position(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -2308,7 +2323,7 @@ Docking Port
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Direction(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -2319,7 +2334,7 @@ Docking Port
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_Rotation(krpc_connection_t connection, krpc_tuple_double_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -2330,7 +2345,7 @@ Docking Port
        * **referenceFrame** -- The reference frame that the returned rotation is in.
 
       :returns: The rotation as a quaternion of the form :math:`(x, y, z, w)`.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_DockingPort_ReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
 
@@ -2343,7 +2358,8 @@ Docking Port
       * The y-axis points in the direction the docking port is facing.
       * The z-axis points out of the bottom off the docking port.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2420,7 +2436,7 @@ Engine
 
       The part object for this engine.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Active(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Engine_set_Active(bool value)
@@ -2428,13 +2444,13 @@ Engine
       Whether the engine is active. Setting this attribute may have no effect,
       depending on :func:`krpc_SpaceCenter_Engine_CanShutdown` and :func:`krpc_SpaceCenter_Engine_CanRestart`.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Thrust(krpc_connection_t connection, float * result)
 
       The current amount of thrust being produced by the engine, in Newtons.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_AvailableThrust(krpc_connection_t connection, float * result)
 
@@ -2444,7 +2460,7 @@ Engine
       Takes the engine's current :func:`krpc_SpaceCenter_Engine_ThrustLimit` and atmospheric conditions
       into account.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_AvailableThrustAt(krpc_connection_t connection, float * result, double pressure)
 
@@ -2457,14 +2473,14 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_MaxThrust(krpc_connection_t connection, float * result)
 
       The amount of thrust, in Newtons, that would be produced by the engine
       when activated and fueled, with its throttle and throttle limiter set to 100%.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_MaxThrustAt(krpc_connection_t connection, float * result, double pressure)
 
@@ -2476,7 +2492,7 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_MaxVacuumThrust(krpc_connection_t connection, float * result)
 
@@ -2485,7 +2501,7 @@ Engine
       when activated, :func:`krpc_SpaceCenter_Engine_ThrustLimit` is set to 100%, the main
       vessel's throttle is set to 100% and the engine is in a vacuum.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_ThrustLimit(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Engine_set_ThrustLimit(float value)
@@ -2494,13 +2510,14 @@ Engine
       attribute may have no effect, for example the thrust limit for a solid
       rocket booster cannot be changed in flight.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Thrusters(krpc_connection_t connection, krpc_list_object_t * result)
 
       The components of the engine that generate thrust.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2514,7 +2531,7 @@ Engine
       The current specific impulse of the engine, in seconds. Returns zero
       if the engine is not active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_SpecificImpulseAt(krpc_connection_t connection, float * result, double pressure)
 
@@ -2525,32 +2542,33 @@ Engine
 
        * **pressure** -- Atmospheric pressure in atmospheres
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_VacuumSpecificImpulse(krpc_connection_t connection, float * result)
 
       The vacuum specific impulse of the engine, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_KerbinSeaLevelSpecificImpulse(krpc_connection_t connection, float * result)
 
       The specific impulse of the engine at sea level on Kerbin, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_PropellantNames(krpc_connection_t connection, krpc_list_string_t * result)
 
       The names of the propellants that the engine consumes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_PropellantRatios(krpc_connection_t connection, krpc_dictionary_string_float_t * result)
 
       The ratio of resources that the engine consumes. A dictionary mapping resource names
       to the ratio at which they are consumed by the engine.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -2561,13 +2579,13 @@ Engine
 
       The propellants that the engine consumes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasFuel(krpc_connection_t connection, bool * result)
 
       Whether the engine has any fuel available.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Flameout(krpc_connection_t connection, bool * result)
 
@@ -2577,7 +2595,7 @@ Engine
       vessel with drop tanks or asparagus staging some engines can flame out
       while others keep burning.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Throttle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Engine_set_Throttle(float value)
@@ -2590,7 +2608,7 @@ Engine
       When the engine's independent throttle is enabled
       (see :func:`krpc_SpaceCenter_Engine_IndependentThrottle`), can be used to set the throttle percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_ThrottleLocked(krpc_connection_t connection, bool * result)
 
@@ -2598,14 +2616,14 @@ Engine
       this is ``true`` for liquid fueled rockets, and ``false`` for solid rocket
       boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_IndependentThrottle(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Engine_set_IndependentThrottle(bool value)
 
       Whether the independent throttle is enabled for the engine.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_CanRestart(krpc_connection_t connection, bool * result)
 
@@ -2613,61 +2631,61 @@ Engine
       returns ``false``. For example, this is ``true`` for liquid fueled rockets
       and ``false`` for solid rocket boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_CanShutdown(krpc_connection_t connection, bool * result)
 
       Whether the engine can be shutdown once activated. For example, this is
       ``true`` for liquid fueled rockets and ``false`` for solid rocket boosters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_HasModes(krpc_connection_t connection, bool * result)
 
       Whether the engine has multiple modes of operation.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Mode(krpc_connection_t connection, char * * result)
    .. function:: void krpc_SpaceCenter_Engine_set_Mode(const char * value)
 
       The name of the current engine mode.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Modes(krpc_connection_t connection, krpc_dictionary_string_object_t * result)
 
       The available modes for the engine.
       A dictionary mapping mode names to :type:`krpc_SpaceCenter_Engine_t` objects.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_ToggleMode(krpc_connection_t connection)
 
       Toggle the current engine mode.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_AutoModeSwitch(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Engine_set_AutoModeSwitch(bool value)
 
       Whether the engine will automatically switch modes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_Gimballed(krpc_connection_t connection, bool * result)
 
       Whether the engine is gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalRange(krpc_connection_t connection, float * result)
 
       The range over which the gimbal can move, in degrees.
       Returns 0 if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalLocked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Engine_set_GimbalLocked(bool value)
@@ -2675,7 +2693,7 @@ Engine
       Whether the engines gimbal is locked in place. Setting this attribute has
       no effect if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalLimit(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Engine_set_GimbalLimit(float value)
@@ -2683,7 +2701,7 @@ Engine
       The gimbal limiter of the engine. A value between 0 and 1.
       Returns 0 if the gimbal is locked.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalOverride(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Engine_set_GimbalOverride(bool value)
@@ -2694,7 +2712,7 @@ Engine
       The override is automatically released if the controlling client disconnects or the
       vessel changes. Has no effect if the engine is not gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_GimbalActuation(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_SpaceCenter_Engine_set_GimbalActuation(const krpc_tuple_double_double_double_t * value)
@@ -2705,7 +2723,7 @@ Engine
       and :func:`krpc_SpaceCenter_Engine_GimbalLimit`. When the gimbal is not being overridden,
       returns the current actuation.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
@@ -2714,7 +2732,7 @@ Engine
       correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
       Returns zero if the engine is inactive, or not gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_CanReverseThrust(krpc_connection_t connection, bool * result)
 
@@ -2724,7 +2742,7 @@ Engine
       ``false`` for engines whose reverser is not recognized, as KSP provides no
       standard way to detect one.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_ThrustReversed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Engine_set_ThrustReversed(bool value)
@@ -2736,7 +2754,7 @@ Engine
       Raises an exception if the engine does not have a thrust reverser
       (see :func:`krpc_SpaceCenter_Engine_CanReverseThrust`).
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Engine_ToggleThrustReversal(krpc_connection_t connection)
 
@@ -2744,7 +2762,7 @@ Engine
       does not have a thrust reverser (see :func:`krpc_SpaceCenter_Engine_CanReverseThrust`).
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2756,64 +2774,64 @@ Engine
 
       The name of the propellant.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_CurrentAmount(krpc_connection_t connection, double * result)
 
       The current amount of propellant consumed in the current physics update.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_CurrentRequirement(krpc_connection_t connection, double * result)
 
       The required amount of propellant for the current physics update.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_TotalResourceAvailable(krpc_connection_t connection, double * result)
 
       The total amount of the underlying resource currently reachable given
       resource flow rules.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_TotalResourceCapacity(krpc_connection_t connection, double * result)
 
       The total vehicle capacity for the underlying propellant resource,
       restricted by resource flow rules.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_IgnoreForIsp(krpc_connection_t connection, bool * result)
 
       If this propellant should be ignored when calculating required mass flow
       given specific impulse.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_IgnoreForThrustCurve(krpc_connection_t connection, bool * result)
 
       If this propellant should be ignored for thrust curve calculations.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_DrawStackGauge(krpc_connection_t connection, bool * result)
 
       If this propellant has a stack gauge or not.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_IsDeprived(krpc_connection_t connection, bool * result)
 
       If this propellant is deprived.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Propellant_Ratio(krpc_connection_t connection, float * result)
 
       The propellant ratio.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2829,97 +2847,97 @@ Experiment
 
       The part object for this experiment.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Name(krpc_connection_t connection, char * * result)
 
       Internal name of the experiment, as used in
       `part cfg files <https://wiki.kerbalspaceprogram.com/wiki/CFG_File_Documentation>`_.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Title(krpc_connection_t connection, char * * result)
 
       Title of the experiment, as shown on the in-game UI.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Run(krpc_connection_t connection)
 
       Run the experiment.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Transmit(krpc_connection_t connection)
 
       Transmit all experimental data contained by this part.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Dump(krpc_connection_t connection)
 
       Dump the experimental data contained by the experiment.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Reset(krpc_connection_t connection)
 
       Reset the experiment.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Deployed(krpc_connection_t connection, bool * result)
 
       Whether the experiment has been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Rerunnable(krpc_connection_t connection, bool * result)
 
       Whether the experiment can be re-run.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Inoperable(krpc_connection_t connection, bool * result)
 
       Whether the experiment is inoperable.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_HasData(krpc_connection_t connection, bool * result)
 
       Whether the experiment contains data.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Data(krpc_connection_t connection, krpc_list_object_t * result)
 
       The data contained in this experiment.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Biome(krpc_connection_t connection, char * * result)
 
       The name of the biome the experiment is currently in.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_Available(krpc_connection_t connection, bool * result)
 
       Determines if the experiment is available given the current conditions.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Experiment_ScienceSubject(krpc_connection_t connection, krpc_SpaceCenter_ScienceSubject_t * result)
 
       Containing information on the corresponding specific science result for the current
       conditions. Returns ``nullptr`` if the experiment is unavailable.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2931,19 +2949,19 @@ Experiment
 
       Data amount.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceData_ScienceValue(krpc_connection_t connection, float * result)
 
       Science value.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceData_TransmitValue(krpc_connection_t connection, float * result)
 
       Transmit value.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -2955,7 +2973,7 @@ Experiment
 
       Title of science subject, displayed in science archives
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_IsComplete(krpc_connection_t connection, bool * result)
 
@@ -2966,39 +2984,39 @@ Experiment
       has produced data, and how valuable it is, use :func:`krpc_SpaceCenter_Experiment_HasData` and
       :func:`krpc_SpaceCenter_ScienceData_TransmitValue`.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_Science(krpc_connection_t connection, float * result)
 
       Amount of science already earned from this subject, not updated until after
       transmission/recovery.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_ScienceCap(krpc_connection_t connection, float * result)
 
       Total science allowable for this subject.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_DataScale(krpc_connection_t connection, float * result)
 
       Multiply science value by this to determine data amount in mits.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_SubjectValue(krpc_connection_t connection, float * result)
 
       Multiplier for specific Celestial Body/Experiment Situation combination.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ScienceSubject_ScientificValue(krpc_connection_t connection, float * result)
 
       Diminishing value multiplier for decreasing the science value returned from repeated
       experiments.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3015,20 +3033,20 @@ Fairing
 
       The part object for this fairing.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Jettison(krpc_connection_t connection)
 
       Jettison the fairing. Has no effect if it has already been jettisoned.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Fairing_Jettisoned(krpc_connection_t connection, bool * result)
 
       Whether the fairing has been jettisoned.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3044,32 +3062,32 @@ Intake
 
       The part object for this intake.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Intake_Open(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Intake_set_Open(bool value)
 
       Whether the intake is open.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Intake_Speed(krpc_connection_t connection, float * result)
 
       Speed of the flow into the intake, in :math:`m/s`.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Intake_Flow(krpc_connection_t connection, float * result)
 
       The rate of flow into the intake, in units of resource per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Intake_Area(krpc_connection_t connection, float * result)
 
       The area of the intake's opening, in square meters.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3085,26 +3103,27 @@ Leg
 
       The part object for this landing leg.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Leg_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the landing leg.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Leg_Deployable(krpc_connection_t connection, bool * result)
 
       Whether the leg is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Leg_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Leg_set_Deployed(bool value)
 
       Whether the landing leg is deployed.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3115,7 +3134,7 @@ Leg
 
       Returns whether the leg is touching the ground.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3131,14 +3150,14 @@ Launch Clamp
 
       The part object for this launch clamp.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_LaunchClamp_Release(krpc_connection_t connection)
 
       Releases the docking clamp. Has no effect if the clamp has already been released.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3154,41 +3173,41 @@ Light
 
       The part object for this light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Light_Active(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Light_set_Active(bool value)
 
       Whether the light is switched on.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Light_Color(krpc_connection_t connection, krpc_tuple_float_float_float_t * result)
    .. function:: void krpc_SpaceCenter_Light_set_Color(const krpc_tuple_float_float_float_t * value)
 
       The color of the light, as an RGB triple.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Light_Blink(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Light_set_Blink(bool value)
 
       Whether blinking is enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Light_BlinkRate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Light_set_BlinkRate(float value)
 
       The blink rate of the light.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Light_PowerUsage(krpc_connection_t connection, float * result)
 
       The current power usage, in units of charge per second.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3204,7 +3223,7 @@ Parachute
 
       The part object for this parachute.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Deploy(krpc_connection_t connection)
 
@@ -3212,13 +3231,13 @@ Parachute
       been deployed.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Deployed(krpc_connection_t connection, bool * result)
 
       Whether the parachute has been deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Arm(krpc_connection_t connection)
 
@@ -3226,26 +3245,26 @@ Parachute
       been armed or deployed.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Armed(krpc_connection_t connection, bool * result)
 
       Whether the parachute has been armed or deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_Cut(krpc_connection_t connection)
 
       Cuts the parachute.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_State(krpc_connection_t connection, krpc_SpaceCenter_ParachuteState_t * result)
 
       The current state of the parachute.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_DeployAltitude(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Parachute_set_DeployAltitude(float value)
@@ -3253,7 +3272,7 @@ Parachute
       The altitude at which the parachute will full deploy, in meters.
       Only applicable to stock parachutes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_DeployMinPressure(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_Parachute_set_DeployMinPressure(float value)
@@ -3261,7 +3280,7 @@ Parachute
       The minimum pressure at which the parachute will semi-deploy, in atmospheres.
       Only applicable to stock parachutes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Parachute_SafeState(krpc_connection_t connection, krpc_SpaceCenter_ParachuteSafeState_t * result)
 
@@ -3271,7 +3290,7 @@ Parachute
       Note that KSP reports :macro:`KRPC_SPACECENTER_PARACHUTESAFESTATE_UNSAFE` for the first
       second after the vessel unpacks, before its thermal data is valid.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3346,13 +3365,13 @@ Radiator
 
       The part object for this radiator.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Radiator_Deployable(krpc_connection_t connection, bool * result)
 
       Whether the radiator is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Radiator_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Radiator_set_Deployed(bool value)
@@ -3360,13 +3379,14 @@ Radiator
       For a deployable radiator, ``true`` if the radiator is extended.
       If the radiator is not deployable, this is always ``true``.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Radiator_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the radiator.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3386,13 +3406,13 @@ Resource Converter
 
       The part object for this converter.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Count(krpc_connection_t connection, int32_t * result)
 
       The number of converters in the part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Name(krpc_connection_t connection, char * * result, int32_t index)
 
@@ -3402,7 +3422,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Active(krpc_connection_t connection, bool * result, int32_t index)
 
@@ -3412,7 +3432,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Start(krpc_connection_t connection, int32_t index)
 
@@ -3422,7 +3442,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Stop(krpc_connection_t connection, int32_t index)
 
@@ -3432,7 +3452,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_State(krpc_connection_t connection, krpc_SpaceCenter_ResourceConverterState_t * result, int32_t index)
 
@@ -3442,7 +3462,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_StatusInfo(krpc_connection_t connection, char * * result, int32_t index)
 
@@ -3453,7 +3473,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Inputs(krpc_connection_t connection, krpc_list_string_t * result, int32_t index)
 
@@ -3463,7 +3483,7 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_Outputs(krpc_connection_t connection, krpc_list_string_t * result, int32_t index)
 
@@ -3473,25 +3493,25 @@ Resource Converter
 
        * **index** -- Index of the converter.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_OptimumCoreTemperature(krpc_connection_t connection, float * result)
 
       The core temperature at which the converter will operate with peak efficiency, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_CoreTemperature(krpc_connection_t connection, float * result)
 
       The core temperature of the converter, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceConverter_ThermalEfficiency(krpc_connection_t connection, float * result)
 
       The thermal efficiency of the converter, as a percentage of its maximum.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3544,14 +3564,15 @@ Resource Harvester
 
       The part object for this harvester.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The deployment state of the harvester. Whether it is drilling is
       reported separately by :func:`krpc_SpaceCenter_ResourceHarvester_Active`.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3563,14 +3584,15 @@ Resource Harvester
 
       Whether the harvester is deployed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_Active(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ResourceHarvester_set_Active(bool value)
 
       Whether the harvester is actively drilling.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -3584,25 +3606,25 @@ Resource Harvester
 
       The rate at which the drill is extracting ore, in units per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_ThermalEfficiency(krpc_connection_t connection, float * result)
 
       The thermal efficiency of the drill, as a percentage of its maximum.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_CoreTemperature(krpc_connection_t connection, float * result)
 
       The core temperature of the drill, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceHarvester_OptimumCoreTemperature(krpc_connection_t connection, float * result)
 
       The core temperature at which the drill will operate with peak efficiency, in Kelvin.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3618,20 +3640,20 @@ Reaction Wheel
 
       The part object for this reaction wheel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_Active(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_ReactionWheel_set_Active(bool value)
 
       Whether the reaction wheel is active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_Broken(krpc_connection_t connection, bool * result)
 
       Whether the reaction wheel is broken.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
@@ -3640,7 +3662,7 @@ Reaction Wheel
       correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
       Returns zero if the reaction wheel is inactive or broken.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_MaxTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
@@ -3648,7 +3670,7 @@ Reaction Wheel
       when it is active, in the positive and negative pitch, roll and yaw axes of the vessel.
       These axes correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ReactionWheel_AuthorityLimiter(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_ReactionWheel_set_AuthorityLimiter(float value)
@@ -3656,7 +3678,7 @@ Reaction Wheel
       The authority limiter for the reaction wheel, as a percentage of maximum torque.
       A value between 0 and 1.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
 
@@ -3672,13 +3694,13 @@ Resource Drain
 
       The part object for this resource drain.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_AvailableResources(krpc_connection_t connection, krpc_list_object_t * result)
 
       List of available resources.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_SetResource(krpc_connection_t connection, krpc_SpaceCenter_Resource_t resource, bool enabled)
 
@@ -3689,7 +3711,7 @@ Resource Drain
 
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_CheckResource(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Resource_t resource)
 
@@ -3699,47 +3721,47 @@ Resource Drain
 
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_DrainMode(krpc_connection_t connection, krpc_SpaceCenter_DrainMode_t * result)
    .. function:: void krpc_SpaceCenter_ResourceDrain_set_DrainMode(krpc_SpaceCenter_DrainMode_t value)
 
       The drain mode.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_MinRate(krpc_connection_t connection, float * result)
 
       Minimum possible drain rate
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_MaxRate(krpc_connection_t connection, float * result)
 
       Maximum possible drain rate.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_ResourceDrain_set_Rate(float value)
 
       Current drain rate.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Start(krpc_connection_t connection)
 
       Activates resource draining for all enabled parts.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceDrain_Stop(krpc_connection_t connection)
 
       Turns off resource draining.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3772,53 +3794,53 @@ Robotic Controller
 
       The part object for this controller.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Enabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticController_set_Enabled(bool value)
 
       Whether the controller is enabled.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Playing(krpc_connection_t connection, bool * result)
 
       Whether the controller's sequence is currently playing.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Position(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticController_set_Position(float value)
 
       The current position along the sequence, in seconds.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Length(krpc_connection_t connection, float * result)
 
       The length of the sequence, in seconds.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_PlaySpeed(krpc_connection_t connection, float * result)
 
       The speed at which the sequence is played back, as a multiple of normal speed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Play(krpc_connection_t connection)
 
       Start playing the controller's sequence.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Stop(krpc_connection_t connection)
 
       Stop playing the controller's sequence.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_HasPart(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Part_t part)
 
@@ -3828,14 +3850,14 @@ Robotic Controller
 
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_Axes(krpc_connection_t connection, krpc_list_list_string_t * result)
 
       The axes for the controller.
 
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_AddAxis(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Module_t module, const char * fieldName)
 
@@ -3847,7 +3869,7 @@ Robotic Controller
        * **fieldName** -- The name of the axis field, as returned by :func:`krpc_SpaceCenter_RoboticController_Axes`.
 
       :returns: Returns ``true`` if the axis is added successfully.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_AddKeyFrame(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Module_t module, const char * fieldName, float time, float value)
 
@@ -3861,7 +3883,7 @@ Robotic Controller
        * **value** -- The value of the key frame.
 
       :returns: Returns ``true`` if the key frame is added successfully.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticController_ClearAxis(krpc_connection_t connection, bool * result, krpc_SpaceCenter_Module_t module, const char * fieldName)
 
@@ -3873,7 +3895,7 @@ Robotic Controller
        * **fieldName** -- The name of the axis field, as returned by :func:`krpc_SpaceCenter_RoboticController_Axes`.
 
       :returns: Returns ``true`` if the axis is cleared successfully.
-   
+      :Game Scenes: Flight
 
 
 
@@ -3889,75 +3911,75 @@ Robotic Hinge
 
       The part object for this robotic hinge.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_TargetAngle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_TargetAngle(float value)
 
       Target angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_CurrentAngle(krpc_connection_t connection, float * result)
 
       Current angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MinAngle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_MinAngle(float value)
 
       The minimum angle the hinge can move to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MaxAngle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_MaxAngle(float value)
 
       The maximum angle the hinge can move to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_Rate(float value)
 
       Target movement rate in degrees per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Damping(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_Damping(float value)
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_Locked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_Locked(bool value)
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MotorEngaged(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticHinge_set_MotorEngaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_IsMoving(krpc_connection_t connection, bool * result)
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticHinge_MoveHome(krpc_connection_t connection)
 
       Move hinge to its built position.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -3973,75 +3995,75 @@ Robotic Piston
 
       The part object for this robotic piston.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_TargetExtension(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_TargetExtension(float value)
 
       Target extension of the piston.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_CurrentExtension(krpc_connection_t connection, float * result)
 
       Current extension of the piston.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MinExtension(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_MinExtension(float value)
 
       The minimum extension of the piston, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MaxExtension(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_MaxExtension(float value)
 
       The maximum extension of the piston, in meters.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_Rate(float value)
 
       Target movement rate in meters per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Damping(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_Damping(float value)
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_Locked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_Locked(bool value)
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MotorEngaged(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticPiston_set_MotorEngaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_IsMoving(krpc_connection_t connection, bool * result)
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticPiston_MoveHome(krpc_connection_t connection)
 
       Move piston to its built position.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4057,34 +4079,34 @@ Robotic Rotation
 
       The part object for this robotic rotation servo.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_TargetAngle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_TargetAngle(float value)
 
       Target angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_CurrentAngle(krpc_connection_t connection, float * result)
 
       Current angle.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MinAngle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_MinAngle(float value)
 
       The minimum angle the servo can rotate to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MaxAngle(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_MaxAngle(float value)
 
       The maximum angle the servo can rotate to, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_AllowFullRotation(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_AllowFullRotation(bool value)
@@ -4092,48 +4114,48 @@ Robotic Rotation
       Whether the servo is allowed to rotate freely through a full revolution,
       ignoring the angle limits.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Rate(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_Rate(float value)
 
       Target movement rate in degrees per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Damping(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_Damping(float value)
 
       Damping percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_Locked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_Locked(bool value)
 
       Lock Movement
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MotorEngaged(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotation_set_MotorEngaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_IsMoving(krpc_connection_t connection, bool * result)
 
       Whether the servo is currently moving.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotation_MoveHome(krpc_connection_t connection)
 
       Move rotation servo to its built position.
 
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4149,68 +4171,68 @@ Robotic Rotor
 
       The part object for this robotic rotor.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_TargetRPM(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_TargetRPM(float value)
 
       Target RPM.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_CurrentRPM(krpc_connection_t connection, float * result)
 
       Current RPM.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Inverted(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_Inverted(bool value)
 
       Whether the rotor direction is inverted.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_TorqueLimit(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_TorqueLimit(float value)
 
       Torque limit percentage.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_MaxTorque(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_MaxTorque(float value)
 
       The maximum torque the rotor can generate, in kilonewtons.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_BrakePercentage(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_BrakePercentage(float value)
 
       The percentage of braking force applied to the rotor.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_Locked(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_Locked(bool value)
 
       Lock movement.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_MotorEngaged(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RoboticRotor_set_MotorEngaged(bool value)
 
       Whether the motor is engaged.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RoboticRotor_IsMoving(krpc_connection_t connection, bool * result)
 
       Whether the rotor is currently moving.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4226,7 +4248,7 @@ RCS
 
       The part object for this RCS.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_Active(krpc_connection_t connection, bool * result)
 
@@ -4236,56 +4258,56 @@ RCS
       (:func:`krpc_SpaceCenter_RCS_Enabled`), or it is covered by a fairing
       (:func:`krpc_SpaceCenter_Part_Shielded`) and cannot thrust while shielded.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_Enabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_Enabled(bool value)
 
       Whether the RCS thrusters are enabled.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_PitchEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_PitchEnabled(bool value)
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_YawEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_YawEnabled(bool value)
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_RollEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_RollEnabled(bool value)
 
       Whether the RCS thruster will fire when roll control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_ForwardEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_ForwardEnabled(bool value)
 
       Whether the RCS thruster will fire when pitch control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_UpEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_UpEnabled(bool value)
 
       Whether the RCS thruster will fire when yaw control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_RightEnabled(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_RightEnabled(bool value)
 
       Whether the RCS thruster will fire when roll control input is given.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_InputOverride(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_RCS_set_InputOverride(bool value)
@@ -4296,7 +4318,7 @@ RCS
       normal control inputs. The override is automatically released if the
       controlling client disconnects or the vessel changes.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_RotationOverride(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_SpaceCenter_RCS_set_RotationOverride(const krpc_tuple_double_double_double_t * value)
@@ -4304,7 +4326,7 @@ RCS
       The rotation demand applied when :func:`krpc_SpaceCenter_RCS_InputOverride` is enabled, in the pitch,
       roll and yaw axes. Each component is a normalized control input between -1 and 1.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_TranslationOverride(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
    .. function:: void krpc_SpaceCenter_RCS_set_TranslationOverride(const krpc_tuple_double_double_double_t * value)
@@ -4313,7 +4335,7 @@ RCS
       right, up and forward axes. Each component is a normalized control input between -1
       and 1.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
@@ -4322,7 +4344,7 @@ RCS
       correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
       Returns zero if RCS is disable.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableForce(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
@@ -4331,7 +4353,7 @@ RCS
       correspond to the coordinate axes of the :func:`krpc_SpaceCenter_Vessel_ReferenceFrame`.
       Returns zero if RCS is disabled.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_AvailableThrust(krpc_connection_t connection, float * result)
 
@@ -4340,7 +4362,7 @@ RCS
       Takes the thrusters current :func:`krpc_SpaceCenter_RCS_ThrustLimit` and atmospheric conditions
       into account.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_MaxThrust(krpc_connection_t connection, float * result)
 
@@ -4348,65 +4370,65 @@ RCS
       in Newtons, with the :func:`krpc_SpaceCenter_RCS_ThrustLimit` set to 100%.
       Takes atmospheric conditions into account.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_MaxVacuumThrust(krpc_connection_t connection, float * result)
 
       The maximum amount of thrust that can be produced by the RCS thrusters when active
       in a vacuum, in Newtons.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_ThrustLimit(krpc_connection_t connection, float * result)
    .. function:: void krpc_SpaceCenter_RCS_set_ThrustLimit(float value)
 
       The thrust limiter of the thruster. A value between 0 and 1.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_Thrusters(krpc_connection_t connection, krpc_list_object_t * result)
 
       A list of thrusters, one of each nozzel in the RCS part.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_SpecificImpulse(krpc_connection_t connection, float * result)
 
       The current specific impulse of the RCS, in seconds. Returns zero
       if the RCS is not active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_VacuumSpecificImpulse(krpc_connection_t connection, float * result)
 
       The vacuum specific impulse of the RCS, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_KerbinSeaLevelSpecificImpulse(krpc_connection_t connection, float * result)
 
       The specific impulse of the RCS at sea level on Kerbin, in seconds.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_Propellants(krpc_connection_t connection, krpc_list_string_t * result)
 
       The names of resources that the RCS consumes.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_PropellantRatios(krpc_connection_t connection, krpc_dictionary_string_float_t * result)
 
       The ratios of resources that the RCS consumes. A dictionary mapping resource names
       to the ratios at which they are consumed by the RCS.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_RCS_HasFuel(krpc_connection_t connection, bool * result)
 
       Whether the RCS has fuel available.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4422,20 +4444,21 @@ Sensor
 
       The part object for this sensor.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_Sensor_Active(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_Sensor_set_Active(bool value)
 
       Whether the sensor is active.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Sensor_Value(krpc_connection_t connection, char * * result)
 
       The current value of the sensor.
 
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4462,40 +4485,40 @@ Solar Panel
 
       The part object for this solar panel.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Deployable(krpc_connection_t connection, bool * result)
 
       Whether the solar panel is deployable.
 
-   
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_Deployed(krpc_connection_t connection, bool * result)
    .. function:: void krpc_SpaceCenter_SolarPanel_set_Deployed(bool value)
 
       Whether the solar panel is extended.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_State(krpc_connection_t connection, krpc_SpaceCenter_DeployableState_t * result)
 
       The current state of the solar panel.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_EnergyFlow(krpc_connection_t connection, float * result)
 
       The current amount of energy being generated by the solar panel, in
       units of charge per second.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_SolarPanel_SunExposure(krpc_connection_t connection, float * result)
 
       The current amount of sunlight that is incident on the solar panel,
       as a percentage. A value between 0 and 1.
 
-   
+      :Game Scenes: Flight
 
 
 
@@ -4518,7 +4541,7 @@ Thruster
 
       The :func:`krpc_SpaceCenter_Thruster_Part` that contains this thruster.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_ThrustPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -4530,7 +4553,7 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_ThrustDirection(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -4543,7 +4566,7 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_ThrustReferenceFrame(krpc_connection_t connection, krpc_SpaceCenter_ReferenceFrame_t * result)
 
@@ -4558,13 +4581,13 @@ Thruster
       * The y-axis points along the thrust direction.
       * The x-axis and z-axis are perpendicular to the thrust direction.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_Gimballed(krpc_connection_t connection, bool * result)
 
       Whether the thruster is gimballed.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_GimbalPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -4575,13 +4598,13 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_GimbalAngle(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 
       The current gimbal angle in the pitch, roll and yaw axes, in degrees.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Thruster_InitialThrustPosition(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
 
@@ -4593,7 +4616,8 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-   
+      :Game Scenes: Flight
+
 
       .. note::
 
@@ -4611,7 +4635,7 @@ Thruster
        * **referenceFrame** -- The reference frame that the returned direction is in.
 
       :returns: The direction as a unit vector.
-   
+      :Game Scenes: Flight
 
 
 
