@@ -2,6 +2,11 @@
 - Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are
   now read and written on their own threads rather than on the thread that runs the game. Data
   waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (#1035)
+- Add `KRPC.ObjectDestroyedException`, raised when the game object that an object refers to
+  no longer exists (#1051)
+- Objects whose game objects the game no longer has are removed from the object store when a
+  game state is loaded, and using an object that has been removed raises
+  `KRPC.ObjectDestroyedException` rather than an argument error (#1051)
 - Fix one server stopping emptying the object store that every server shares, which invalidated
   the objects held by clients of the servers still running (#1020)
 - Support for nullable values across all types (#1017)

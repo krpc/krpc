@@ -59,6 +59,16 @@
 - Fix `Text.Font` making a font of its own every time it is set, and leaving it behind when
   the label went. A font of a given name is made once and shared by the labels using it
   (#1040)
+- A user interface object raises `KRPC.ObjectDestroyedException` once the element it
+  stands for is gone, which removing it, `UI.Clear`, the client that made it disconnecting
+  and changing scene all do. They previously failed on a destroyed game object, and were
+  kept for the rest of the session (#1051)
+- `RectTransform`, `Layout`, `LayoutElement` and `SizeFitter` do the same once the element
+  they were taken from is gone, and are dropped with it rather than being kept for the rest
+  of the session (#1051)
+- Fix `RectTransform` objects accumulating for the rest of the session, one for every read
+  of any object's `RectTransform`. Reading the same one twice now gives the same object
+  (#1051)
 
 ## [v0.6.0]
 - Fix locale issues with `UI.Message` (#993)
