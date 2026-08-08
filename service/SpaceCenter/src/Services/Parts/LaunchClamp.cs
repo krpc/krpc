@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -8,7 +9,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A launch clamp. Obtained by calling <see cref="Part.LaunchClamp"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class LaunchClamp : Equatable<LaunchClamp>
     {
         readonly global::LaunchClamp launchClamp;
@@ -45,7 +46,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this launch clamp.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

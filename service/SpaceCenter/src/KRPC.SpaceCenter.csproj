@@ -72,6 +72,7 @@
     <Compile Include="ExtensionMethods\PartModuleExtensions.cs" />
     <Compile Include="ExtensionMethods\ResourceFlowModeExtensions.cs" />
     <Compile Include="ExtensionMethods\SpeedDisplayModesExtensions.cs" />
+    <Compile Include="ExtensionMethods\StagingExtensions.cs" />
     <Compile Include="ExtensionMethods\StockAerodynamics.cs" />
     <Compile Include="ExtensionMethods\StockAeroReadout.cs" />
     <Compile Include="ExtensionMethods\TargetableExtensions.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="NameTag\Utils.cs" />
     <Compile Include="NameTag\Window.cs" />
     <Compile Include="PartForcesAddon.cs" />
+    <Compile Include="PartId.cs" />
     <Compile Include="PartHighlightAddon.cs" />
     <Compile Include="AutoPilotInfoAddon.cs" />
     <Compile Include="AutoPilotInfoWindow.cs" />
@@ -125,7 +127,11 @@
     <Compile Include="Services\CrewMember.cs" />
     <Compile Include="Services\CrewMemberGender.cs" />
     <Compile Include="Services\CrewMemberType.cs" />
+    <Compile Include="Services\DeltaVSituation.cs" />
+    <Compile Include="Services\Editor.cs" />
+    <Compile Include="Services\EditorDeltaV.cs" />
     <Compile Include="Services\EditorFacility.cs" />
+    <Compile Include="Services\EditorVessel.cs" />
     <Compile Include="Services\Flight.cs" />
     <Compile Include="Services\GameMode.cs" />
     <Compile Include="Services\MapFilterType.cs" />

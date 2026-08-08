@@ -1,5 +1,6 @@
 ﻿using System;
 using Expansions.Serenity;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -11,7 +12,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A robotic piston part. Obtained by calling <see cref="Part.RoboticPiston"/>.
     /// </summary>
-    [KRPCClass(Service = "SpaceCenter")]
+    [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class RoboticPiston : Equatable<RoboticPiston>
     {
         readonly ModuleRoboticServoPiston servo;
@@ -49,7 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this robotic piston.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

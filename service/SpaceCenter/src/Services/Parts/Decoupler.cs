@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -9,7 +10,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A decoupler. Obtained by calling <see cref="Part.Decoupler"/>
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Decoupler : Equatable<Decoupler>
     {
         readonly Compatibility.ModuleDecoupler decoupler;
@@ -52,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this decoupler.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the decoupler is enabled in the staging sequence.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Staged {
             get { return decoupler.StagingEnabled; }
         }
@@ -99,7 +100,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The impulse that the decoupler imparts when it is fired, in Newton seconds.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float Impulse {
             get { return decoupler.EjectionForce * 10f; }
         }
@@ -107,7 +108,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the decoupler is an omni-decoupler (e.g. stack separator)
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool IsOmniDecoupler
         {
             get { return decoupler.IsOmniDecoupler; }
@@ -116,7 +117,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part attached to this decoupler's explosive node.
         /// </summary>
-        [KRPCProperty(Nullable = true)]
+        [KRPCProperty (Nullable = true, GameScene = GameScene.Flight | GameScene.Editor)]
         public Part AttachedPart
         {
             get

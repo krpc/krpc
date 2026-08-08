@@ -1,3 +1,4 @@
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// Obtained by calling <see cref="Part.AddForce"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public sealed class Force
     {
         Vector3 force;

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -12,7 +13,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A docking port. Obtained by calling <see cref="Part.DockingPort"/>
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class DockingPort : Equatable<DockingPort>
     {
         readonly ModuleDockingNode port;
@@ -66,7 +67,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this docking port.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>

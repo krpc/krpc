@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -19,7 +20,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <remarks>
     /// For RCS thrusters <see cref="Part.RCS"/>.
     /// </remarks>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Engine : Equatable<Engine>
     {
         readonly IList<ModuleEngines> engines;
@@ -114,7 +115,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this engine.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
@@ -230,7 +231,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Takes the given pressure into account.
         /// </summary>
         /// <param name="pressure">Atmospheric pressure in atmospheres</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public float MaxThrustAt (double pressure)
         {
             return GetThrust (1f, pressure);
@@ -242,7 +243,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// when activated, <see cref="ThrustLimit"/> is set to 100%, the main
         /// vessel's throttle is set to 100% and the engine is in a vacuum.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float MaxVacuumThrust {
             get { return CurrentEngine.maxThrust * 1000f; }
         }
@@ -252,7 +253,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// attribute may have no effect, for example the thrust limit for a solid
         /// rocket booster cannot be changed in flight.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float ThrustLimit {
             get { return CurrentEngine.thrustPercentage / 100f; }
             set { CurrentEngine.thrustPercentage = (value * 100f).Clamp (0f, 100f); }
@@ -299,7 +300,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// if the engine is not active.
         /// </summary>
         /// <param name="pressure">Atmospheric pressure in atmospheres</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public float SpecificImpulseAt (double pressure)
         {
             return CurrentEngine.atmosphereCurve.Evaluate ((float)pressure);
@@ -308,7 +309,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The vacuum specific impulse of the engine, in seconds.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float VacuumSpecificImpulse {
             get { return CurrentEngine.atmosphereCurve.Evaluate (0); }
         }
@@ -316,7 +317,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The specific impulse of the engine at sea level on Kerbin, in seconds.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float KerbinSeaLevelSpecificImpulse {
             get { return CurrentEngine.atmosphereCurve.Evaluate (1); }
         }
@@ -324,7 +325,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The names of the propellants that the engine consumes.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public IList<string> PropellantNames {
             get { return CurrentEngine.propellants.Select (x => x.name).ToList (); }
         }
@@ -406,7 +407,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// this is <c>true</c> for liquid fueled rockets, and <c>false</c> for solid rocket
         /// boosters.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool ThrottleLocked {
             get { return CurrentEngine.throttleLocked; }
         }
@@ -425,7 +426,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// returns <c>false</c>. For example, this is <c>true</c> for liquid fueled rockets
         /// and <c>false</c> for solid rocket boosters.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool CanRestart {
             get { return CanShutdown && CurrentEngine.allowRestart; }
         }
@@ -434,7 +435,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the engine can be shutdown once activated. For example, this is
         /// <c>true</c> for liquid fueled rockets and <c>false</c> for solid rocket boosters.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool CanShutdown {
             get { return CurrentEngine.allowShutdown; }
         }
@@ -455,7 +456,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the engine has multiple modes of operation.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool HasModes {
             get { return multiModeEngine != null; }
         }
@@ -539,7 +540,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the engine is gimballed.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Gimballed {
             get { return gimbal != null; }
         }
@@ -548,7 +549,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The range over which the gimbal can move, in degrees.
         /// Returns 0 if the engine is not gimballed.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float GimbalRange {
             get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalRange : 0f; }
         }
@@ -557,7 +558,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Whether the engines gimbal is locked in place. Setting this attribute has
         /// no effect if the engine is not gimballed.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool GimbalLocked {
             get {
                 CheckGimballed ();
@@ -577,7 +578,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The gimbal limiter of the engine. A value between 0 and 1.
         /// Returns 0 if the gimbal is locked.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float GimbalLimit {
             get {
                 CheckGimballed ();
@@ -658,7 +659,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <c>false</c> for engines whose reverser is not recognized, as KSP provides no
         /// standard way to detect one.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool CanReverseThrust {
             get { return thrustReverser != null; }
         }

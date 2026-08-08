@@ -1,0 +1,24 @@
+.. default-domain:: {{ domain.sphinxname }}
+.. highlight:: {{ domain.highlight }}
+{{ domain.currentmodule('SpaceCenter') }}
+{% import domain.macros as macros with context %}
+
+.. _{{ domain.name }}-api-editor:
+
+Editor
+======
+
+{% append services['SpaceCenter'].classes['EditorVessel'].members['Parts'] %}
+.. note:: Only the parts of {{ see('T:SpaceCenter.Part') }} that describe the design are
+          available in the editor. Those that need a vessel in flight or running physics,
+          such as {{ see('M:SpaceCenter.Part.Position') }} and the thermal members, are
+          restricted to the flight scene.
+{% endappend %}
+{% append services['SpaceCenter'].classes['EditorVessel'].members['Resources'] %}
+.. note:: This is a view of what the vessel can hold as designed. The flow-state
+          members work, as they are part of the design, but nothing here reports how
+          a resource would be drawn on in flight.
+{% endappend %}
+{{ macros.class(services['SpaceCenter'].classes['Editor']) }}
+{{ macros.enumeration(services['SpaceCenter'].enumerations['DeltaVSituation']) }}
+{{ macros.class(services['SpaceCenter'].classes['EditorVessel']) }}

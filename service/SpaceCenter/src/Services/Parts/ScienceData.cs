@@ -1,3 +1,4 @@
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -6,7 +7,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// Obtained by calling <see cref="Experiment.Data"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class ScienceData : Equatable<ScienceData>
     {
         readonly ModuleScienceExperiment experiment;

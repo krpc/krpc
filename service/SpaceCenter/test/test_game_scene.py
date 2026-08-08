@@ -29,6 +29,38 @@ class TestGameScene(krpctest.TestCase):
         self.set_scene(self.scenes.editor_sph)
         self.set_scene(self.scenes.space_center)
 
+    def test_switch_between_editors(self):
+        # Moving straight from one editor to the other keeps the vessel that is
+        # being constructed, as the game's own switch editor button does.
+        space_center = self.connect().space_center
+        self.enter_editor("VAB", craft="Staging")
+        try:
+            parts = len(space_center.editor.vessel.parts.all)
+            self.assertGreater(parts, 0)
+            for scene, facility in (
+                (self.scenes.editor_sph, space_center.EditorFacility.sph),
+                (self.scenes.editor_vab, space_center.EditorFacility.vab),
+            ):
+                self.set_scene(scene)
+                self.wait_for_editor()
+                self.assertEqual(facility, space_center.editor.facility)
+                self.assertEqual("Staging", space_center.editor.vessel.name)
+                self.assertEqual(parts, len(space_center.editor.vessel.parts.all))
+        finally:
+            self.leave_editor()
+
+    def test_editor_scoping(self):
+        # The editor RPCs are scoped to the editors, and are not reachable from
+        # any other scene.
+        space_center = self.connect().space_center
+        self.ensure_space_center()
+        self.assertRaises(RuntimeError, getattr, space_center, "editor")
+        self.set_scene(self.scenes.editor_vab)
+        self.assertIsNotNone(space_center.editor)
+        self.set_scene(self.scenes.space_center)
+        self.set_scene(self.scenes.flight)
+        self.assertRaises(RuntimeError, getattr, space_center, "editor")
+
     def test_astronaut_complex(self):
         # The astronaut complex is the only facility available in a sandbox
         # game, which is what the test save uses.

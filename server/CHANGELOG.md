@@ -1,3 +1,8 @@
+## [v0.7.0] - unreleased
+- Fix setting `KRPC.GameScene` from one editor straight to the other leaving the flight camera
+  unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is
+  being constructed now, as the game's own switch editor button does (#1038)
+
 ## [v0.6.0]
 - Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`) (#848)
 - Fix Logger to write to both `KSP.log` and `Player.log` (#780)

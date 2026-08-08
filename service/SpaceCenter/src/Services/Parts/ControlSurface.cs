@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -11,7 +12,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// An aerodynamic control surface. Obtained by calling <see cref="Part.ControlSurface"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class ControlSurface : Equatable<ControlSurface>
     {
         readonly ModuleControlSurface controlSurface;
@@ -53,13 +54,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The part object for this control surface.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Part Part { get; private set; }
 
         /// <summary>
         /// Whether the control surface has pitch control enabled.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool PitchEnabled {
             get { return !controlSurface.ignorePitch; }
             set { controlSurface.ignorePitch = !value; }
@@ -68,7 +69,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the control surface has yaw control enabled.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool YawEnabled {
             get { return !controlSurface.ignoreYaw; }
             set { controlSurface.ignoreYaw = !value; }
@@ -77,7 +78,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the control surface has roll control enabled.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RollEnabled {
             get { return !controlSurface.ignoreRoll; }
             set { controlSurface.ignoreRoll = !value; }
@@ -87,7 +88,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The authority limiter for the control surface, which controls how far the
         /// control surface will move.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float AuthorityLimiter {
             get { return controlSurface.authorityLimiter; }
             set { controlSurface.authorityLimiter = value; }
@@ -96,7 +97,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the control surface movement is inverted.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Inverted {
             get { return controlSurface.deployInvert; }
             set { controlSurface.deployInvert = value; }
@@ -105,7 +106,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the control surface has been fully deployed.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployed {
             get { return controlSurface.deploy; }
             set { controlSurface.deploy = value; }
@@ -137,7 +138,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Surface area of the control surface in <math>m^2</math>.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float SurfaceArea {
             get { return controlSurface.ctrlSurfaceArea; }
         }

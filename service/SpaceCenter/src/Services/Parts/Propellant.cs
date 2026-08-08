@@ -1,4 +1,5 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -7,7 +8,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// <summary>
     /// A propellant for an engine. Obtains by calling <see cref="Engine.Propellants"/>.
     /// </summary>
-    [KRPCClass (Service = "SpaceCenter")]
+    [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Propellant : Equatable<Propellant>
     {
         readonly int resourceId;

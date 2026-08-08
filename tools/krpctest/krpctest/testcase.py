@@ -182,6 +182,67 @@ class TestCase(AssertionsMixin):
         cls.set_crew_to_pilot()
 
     @classmethod
+    def _set_game_scene(cls, scene, timeout=120):
+        # Switch the game to the given krpc.GameScene and wait for it to arrive.
+        # Scene changes are asynchronous, so the property has to be polled.
+        conn = cls.connect()
+        if conn.krpc.game_scene == scene:
+            return
+        conn.krpc.game_scene = scene
+        deadline = time.time() + timeout
+        while conn.krpc.game_scene != scene:
+            if time.time() > deadline:
+                raise RuntimeError(
+                    "Timed out after %gs waiting for the %s game scene"
+                    % (timeout, scene)
+                )
+            time.sleep(0.1)
+
+    @classmethod
+    def enter_editor(cls, facility="VAB", craft=None, directory=None):
+        """Open the given editor ("VAB" or "SPH") and, when craft is given, load that
+        vessel into it. The craft file is staged into the current save's Ships
+        directory first, taken from the test's craft directory, else the given
+        directory, else KSP's stock craft for that editor."""
+        if facility not in ("VAB", "SPH"):
+            raise ValueError("facility must be VAB or SPH, got %r" % facility)
+        if craft is not None:
+            cls._stage_craft(craft, facility, directory)
+        conn = cls.connect()
+        scenes = conn.krpc.GameScene
+        target = scenes.editor_vab if facility == "VAB" else scenes.editor_sph
+        # Go via the space center, so the editor starts out empty whatever was being
+        # constructed beforehand. Switching straight from the other editor would carry
+        # that vessel across.
+        if conn.krpc.game_scene != target:
+            cls._set_game_scene(scenes.space_center)
+        cls._set_game_scene(target)
+        cls.wait_for_editor()
+        if craft is not None:
+            conn.space_center.editor.load_vessel(facility, craft)
+
+    @classmethod
+    def wait_for_editor(cls, timeout=60):
+        """Wait for the open editor to finish starting up. The scene reports itself as
+        an editor some way before that; reading the vessel is the first thing that
+        works once it has."""
+        conn = cls.connect()
+        deadline = time.time() + timeout
+        while True:
+            try:
+                _ = conn.space_center.editor.vessel.name
+                return
+            except RuntimeError:
+                if time.time() > deadline:
+                    raise
+                time.sleep(0.1)
+
+    @classmethod
+    def leave_editor(cls):
+        """Return to the space center from the editor."""
+        cls._set_game_scene(cls.connect().krpc.GameScene.space_center)
+
+    @classmethod
     def set_orbit(
         cls,
         body,

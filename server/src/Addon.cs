@@ -205,6 +205,7 @@ namespace KRPC
             IsPaused = false;
             GameEvents.onGamePause.Add(OnGamePause);
             GameEvents.onGameUnpause.Add(OnGameUnpause);
+            GameEvents.onEditorRestart.Add(OnEditorRestart);
             GameEvents.onGUIAstronautComplexSpawn.Add(OnAstronautComplexSpawn);
             GameEvents.onGUIAstronautComplexDespawn.Add(OnAstronautComplexDespawn);
             GameEvents.onGUIMissionControlSpawn.Add(OnMissionControlSpawn);
@@ -249,6 +250,16 @@ namespace KRPC
         void OnGameUnpause()
         {
             IsPaused = false;
+        }
+
+        void OnEditorRestart()
+        {
+            // Moving from one editor to the other restarts the editor in place rather
+            // than loading a scene, so Awake does not run to pick the change up. The
+            // editor being started is already the current one by the time this fires.
+            var gameScene = GameScenesExtensions.CurrentGameScene();
+            Service.CallContext.GameScene = gameScene;
+            Utils.Logger.WriteLine("Game scene switched to " + gameScene);
         }
 
         void OnAstronautComplexSpawn()
@@ -316,6 +327,7 @@ namespace KRPC
         {
             GameEvents.onGamePause.Remove(OnGamePause);
             GameEvents.onGameUnpause.Remove(OnGameUnpause);
+            GameEvents.onEditorRestart.Remove(OnEditorRestart);
             GameEvents.onGUIAstronautComplexSpawn.Remove(OnAstronautComplexSpawn);
             GameEvents.onGUIAstronautComplexDespawn.Remove(OnAstronautComplexDespawn);
             GameEvents.onGUIMissionControlSpawn.Remove(OnMissionControlSpawn);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CompoundParts;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.ExternalAPI;
@@ -21,16 +22,14 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Part : Equatable<Part>
     {
-        readonly uint partFlightId;
+        readonly PartId partId;
 
         /// <summary>
         /// Create a part object for the given KSP part
         /// </summary>
         public Part (global::Part part)
         {
-            if (ReferenceEquals (part, null))
-                throw new ArgumentNullException (nameof (part));
-            partFlightId = part.flightID;
+            partId = new PartId (part);
         }
 
         /// <summary>
@@ -38,7 +37,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Part other)
         {
-            return !ReferenceEquals (other, null) && partFlightId == other.partFlightId;
+            return !ReferenceEquals (other, null) && partId == other.partId;
         }
 
         /// <summary>
@@ -46,14 +45,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return partFlightId.GetHashCode ();
+            return partId.GetHashCode ();
         }
 
         /// <summary>
-        /// The KSP part.
+        /// The KSP part. Looked up by identifier on each use, so the object keeps working
+        /// across a reload that destroys the part and recreates it.
         /// </summary>
         public global::Part InternalPart {
-            get { return FlightGlobals.FindPartByID (partFlightId); }
+            get { return partId.Resolve (); }
         }
 
         /// <summary>
@@ -128,7 +128,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// The highlighting is removed when the client that enabled it disconnects.
         /// </remarks>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public bool Highlighted {
             get { return InternalPart.HighlightActive; }
             set {
@@ -143,7 +143,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The color used to highlight the part, as an RGB triple.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple3 HighlightColor {
             get { return InternalPart.highlightColor.ToTuple (); }
             set { InternalPart.highlightColor = value.ToColor (); }
@@ -160,7 +160,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The vessel that contains this part.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Vessel Vessel {
             get { return new Vessel (InternalPart.vessel); }
         }
@@ -258,7 +258,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the part is shielded from the exterior of the vessel, for example by a fairing.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public bool Shielded {
             get { return InternalPart.ShieldedFromAirstream; }
         }
@@ -266,7 +266,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The dynamic pressure acting on the part, in Pascals.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float DynamicPressure {
             get { return (float)InternalPart.dynamicPressurekPa * 1000f; }
         }
@@ -282,7 +282,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Temperature of the part, in Kelvin.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public double Temperature {
             get { return InternalPart.temperature; }
         }
@@ -290,7 +290,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Temperature of the skin of the part, in Kelvin.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public double SkinTemperature {
             get { return InternalPart.skinTemperature; }
         }
@@ -315,7 +315,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A measure of how much energy it takes to increase the internal temperature of the part,
         /// in Joules per Kelvin.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalMass {
             get { return (float)InternalPart.thermalMass / 1000f; }
         }
@@ -324,7 +324,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A measure of how much energy it takes to increase the skin temperature of the part,
         /// in Joules per Kelvin.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalSkinMass {
             get { return (float)InternalPart.skinThermalMass / 1000f; }
         }
@@ -333,7 +333,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A measure of how much energy it takes to increase the temperature of the resources
         /// contained in the part, in Joules per Kelvin.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalResourceMass {
             get { return (float)InternalPart.resourceThermalMass / 1000f; }
         }
@@ -345,7 +345,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A positive value means the part is gaining heat energy, and negative means it is losing
         /// heat energy.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalInternalFlux {
             get { return (float)InternalPart.thermalInternalFluxPrevious / 1000f; }
         }
@@ -356,7 +356,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A positive value means the part is gaining heat energy, and negative means it is
         /// losing heat energy.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalConductionFlux {
             get { return (float)InternalPart.thermalConductionFlux / 1000f; }
         }
@@ -367,7 +367,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A positive value means the part is gaining heat energy, and negative means it is
         /// losing heat energy.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalConvectionFlux {
             get { return (float)InternalPart.thermalConvectionFlux / 1000f; }
         }
@@ -378,7 +378,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A positive value means the part is gaining heat energy, and negative means it is
         /// losing heat energy.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalRadiationFlux {
             get { return (float)InternalPart.thermalRadiationFlux / 1000f; }
         }
@@ -389,7 +389,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// A positive value means the part's internals are gaining heat energy,
         /// and negative means its skin is gaining heat energy.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public float ThermalSkinToInternalFlux {
             get { return (float)InternalPart.skinToInternalFlux / 1000f; }
         }
@@ -413,7 +413,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// The crew members occupying the part.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<CrewMember> Crew {
             get { return InternalPart.protoModuleCrew.Select (x => new CrewMember (x)).ToList (); }
         }
@@ -421,7 +421,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// How many open seats the part has.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public uint AvailableSeats
         {
             get
@@ -457,7 +457,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The parts that are connected to this part via fuel lines, where the direction of the
         /// fuel line is into this part.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<Part> FuelLinesFrom {
             get {
                 CheckPartIsNotAFuelLine ();
@@ -469,14 +469,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The parts that are connected to this part via fuel lines, where the direction of the
         /// fuel line is out of this part.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<Part> FuelLinesTo {
             get {
                 CheckPartIsNotAFuelLine ();
+                var part = InternalPart;
                 var result = new List<global::Part> ();
-                foreach (var otherPart in InternalPart.vessel.parts) {
+                foreach (var otherPart in part.vessel.parts) {
                     foreach (var target in otherPart.fuelLookupTargets.Select (x => x.parent)) {
-                        if (target.flightID == partFlightId)
+                        if (target.flightID == part.flightID)
                             result.Add (otherPart);
                     }
                 }
@@ -769,7 +770,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// It s not necessarily the same as the parts center of mass.
         /// Use <see cref="CenterOfMass"/> to get the parts center of mass.
         /// </remarks>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
@@ -782,7 +783,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <returns>The position as a vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vector is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
@@ -801,7 +802,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// If the part has no visible model, the box has zero volume and is centered on
         /// the <see cref="CenterOfMass"/> of the part.
         /// </remarks>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public TupleT3 BoundingBox (ReferenceFrame referenceFrame)
         {
             return InternalPart.GetBounds (referenceFrame).ToTuples ();
@@ -813,7 +814,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <returns>The direction as a unit vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// direction is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
             return referenceFrame.DirectionFromWorldSpace (InternalPart.transform.up).ToTuple ();
@@ -826,7 +827,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// and its magnitude is the speed of the body in meters per second.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// velocity vector is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Velocity (ReferenceFrame referenceFrame)
         {
             var part = InternalPart;
@@ -839,7 +840,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <returns>The rotation as a quaternion of the form <math>(x, y, z, w)</math>.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// rotation is in.</param>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
             return referenceFrame.RotationFromWorldSpace (InternalPart.transform.rotation).ToTuple ();
@@ -856,7 +857,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// Not available when the Ferram Aerospace Research mod is installed.
         /// </remarks>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Lift (ReferenceFrame referenceFrame)
         {
             CheckNoFAR ();
@@ -874,7 +875,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// Not available when the Ferram Aerospace Research mod is installed.
         /// </remarks>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Tuple3 Drag (ReferenceFrame referenceFrame)
         {
             CheckNoFAR ();
@@ -909,7 +910,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// The moment of inertia of the part in <math>kg.m^2</math> around its center of mass
         /// in the parts reference frame (<see cref="ReferenceFrame"/>).
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Tuple3 MomentOfInertia {
             get { return ComputeInertiaTensor ().Diagonal ().ToTuple (); }
         }
@@ -919,7 +920,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// (<see cref="ReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<double> InertiaTensor {
             get { return ComputeInertiaTensor ().ToList (); }
         }
@@ -962,7 +963,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// reference frame for the docking port, returned by
         /// <see cref="DockingPort.ReferenceFrame"/>.
         /// </remarks>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalPart); }
         }
@@ -983,7 +984,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// reference frame for the docking port, returned by
         /// <see cref="DockingPort.ReferenceFrame"/>.
         /// </remarks>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public ReferenceFrame CenterOfMassReferenceFrame {
             get { return ReferenceFrame.ObjectCenterOfMass (InternalPart); }
         }
@@ -1000,7 +1001,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <remarks>
         /// The force is removed when the client that added it disconnects.
         /// </remarks>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public Force AddForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
             var obj = new Force (this, force, position, referenceFrame);
@@ -1017,7 +1018,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <param name="referenceFrame">The reference frame that the
         /// force and position are in.</param>
         /// <remarks>The force is applied instantaneously in a single physics update.</remarks>
-        [KRPCMethod]
+        [KRPCMethod (GameScene = GameScene.Flight)]
         public void InstantaneousForce (Tuple3 force, Tuple3 position, ReferenceFrame referenceFrame)
         {
             PartForcesAddon.AddInstantaneous (new Force (this, force, position, referenceFrame));
@@ -1026,7 +1027,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// <summary>
         /// Whether the part is glowing.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public bool Glow
         {
             set

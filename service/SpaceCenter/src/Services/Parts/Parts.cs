@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
@@ -14,11 +15,26 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter")]
     public class Parts : Equatable<Parts>
     {
+        /// <summary>
+        /// The id of the vessel the parts belong to. Unused when the parts belong to the
+        /// vessel in the editor.
+        /// </summary>
         readonly Guid vesselId;
+
+        /// <summary>
+        /// Whether these are the parts of the vessel under construction in the editor.
+        /// The editor only ever holds one vessel, so it needs no identifier.
+        /// </summary>
+        readonly bool editorVessel;
 
         internal Parts (global::Vessel vessel)
         {
             vesselId = vessel.id;
+        }
+
+        internal Parts ()
+        {
+            editorVessel = true;
         }
 
         /// <summary>
@@ -26,7 +42,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Parts other)
         {
-            return !ReferenceEquals (other, null) && vesselId == other.vesselId;
+            return !ReferenceEquals (other, null) &&
+                   vesselId == other.vesselId && editorVessel == other.editorVessel;
         }
 
         /// <summary>
@@ -34,14 +51,36 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode ();
+            return vesselId.GetHashCode () ^ editorVessel.GetHashCode ();
+        }
+
+        /// <summary>
+        /// The KSP vessel in flight, or ship construct in the editor, that the parts
+        /// belong to. Both provide their list of parts through this interface, which is
+        /// all the parts tree needs.
+        /// </summary>
+        public IShipconstruct InternalShipConstruct {
+            get {
+                if (!editorVessel)
+                    return InternalVessel;
+                var logic = EditorLogic.fetch;
+                var construct = ReferenceEquals (logic, null) ? null : logic.ship;
+                if (ReferenceEquals (construct, null))
+                    throw new InvalidOperationException ("The editor does not contain a vessel.");
+                return construct;
+            }
         }
 
         /// <summary>
         /// The KSP vessel.
         /// </summary>
         public global::Vessel InternalVessel {
-            get { return FlightGlobalsExtensions.GetVesselById (vesselId); }
+            get {
+                if (editorVessel)
+                    throw new InvalidOperationException (
+                        "These parts belong to the vessel in the editor, not to a vessel in flight.");
+                return FlightGlobalsExtensions.GetVesselById (vesselId);
+            }
         }
 
         /// <summary>
@@ -49,7 +88,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Part> All {
-            get { return InternalVessel.parts.Select (x => new Part (x)).ToList (); }
+            get { return InternalShipConstruct.Parts.Select (x => new Part (x)).ToList (); }
         }
 
         /// <summary>
@@ -57,13 +96,23 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Part Root {
-            get { return new Part (InternalVessel.rootPart); }
+            get {
+                // Walk up the parent links rather than reading the vessel's root part, as
+                // a vessel in the editor has no equivalent of it.
+                var parts = InternalShipConstruct.Parts;
+                if (parts.Count == 0)
+                    throw new InvalidOperationException ("The vessel has no parts.");
+                var part = parts [0];
+                while (!ReferenceEquals (part.parent, null))
+                    part = part.parent;
+                return new Part (part);
+            }
         }
 
         /// <summary>
         /// The part from which the vessel is controlled.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public Part Controlling {
             get {
                 var vessel = InternalVessel;
