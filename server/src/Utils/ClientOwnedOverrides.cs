@@ -40,12 +40,15 @@ namespace KRPC.Utils
         /// <summary>
         /// Create a set of overrides, installed and released by the given delegates.
         /// The release delegate should restore any state saved by the install
-        /// delegate, and must handle its key having been destroyed.
+        /// delegate, and must handle its key having been destroyed. The set adds itself
+        /// to <see cref="ClientOwnedState" />, so that its overrides are released along
+        /// with everything else when there is no game left to hold them.
         /// </summary>
         public ClientOwnedOverrides (Func<TKey, TEntry> install, Action<TKey, TEntry> release)
         {
             this.install = install;
             this.release = release;
+            ClientOwnedState.Register (this);
         }
 
         /// <summary>
