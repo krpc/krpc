@@ -66,7 +66,10 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool Pressed {
-            get { return press.Pressed; }
+            get {
+                CheckExists ();
+                return press.Pressed;
+            }
         }
     }
 }

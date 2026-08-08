@@ -109,6 +109,14 @@ namespace KRPC.UI
             get { return dropdown; }
         }
 
+        // The game's dropdown, checked to still exist.
+        UnityEngine.UI.Dropdown Internal {
+            get {
+                CheckExists ();
+                return dropdown;
+            }
+        }
+
         /// <summary>
         /// The options that the dropdown offers.
         /// </summary>
@@ -118,15 +126,15 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public IList<string> Options {
-            get { return dropdown.options.Select (option => option.text).ToList (); }
+            get { return Internal.options.Select (option => option.text).ToList (); }
             set {
                 // The selection is reset while the old options are still in place, as Unity
                 // ignores a selection made when there is nothing to select.
-                dropdown.SetValueWithoutNotify (0);
-                dropdown.ClearOptions ();
+                Internal.SetValueWithoutNotify (0);
+                Internal.ClearOptions ();
                 if (value != null)
-                    dropdown.AddOptions (value.ToList ());
-                dropdown.RefreshShownValue ();
+                    Internal.AddOptions (value.ToList ());
+                Internal.RefreshShownValue ();
             }
         }
 
@@ -138,17 +146,17 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public int SelectedIndex {
-            get { return dropdown.value; }
+            get { return Internal.value; }
             set {
                 // Unity moves a position outside the list to the nearest one that is in
                 // it, so a client that asked for the wrong one would be left reading back
                 // a value it did not set and no way to tell that it had happened.
-                if (value < 0 || value >= dropdown.options.Count)
+                if (value < 0 || value >= Internal.options.Count)
                     throw new ArgumentOutOfRangeException (
                         nameof (value), "The dropdown does not have that option");
                 // Unity notifies its listeners of an option chosen by a client just as it
                 // does one chosen by the user, so the option is chosen without notifying them.
-                dropdown.SetValueWithoutNotify (value);
+                Internal.SetValueWithoutNotify (value);
             }
         }
 

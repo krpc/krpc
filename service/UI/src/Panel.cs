@@ -37,7 +37,7 @@ namespace KRPC.UI
         /// </summary>
         UnityEngine.UI.Image Background {
             get {
-                var image = GameObject.GetComponent<UnityEngine.UI.Image> ();
+                var image = CheckedGameObject.GetComponent<UnityEngine.UI.Image> ();
                 if (image == null) {
                     image = Widgets.AddImage (GameObject, null);
                     // It has no sprite yet, and Unity draws an image that has no sprite
@@ -105,15 +105,16 @@ namespace KRPC.UI
         [KRPCProperty]
         public bool Draggable {
             get {
-                var handler = GameObject.GetComponent<DragHandler> ();
+                var handler = CheckedGameObject.GetComponent<DragHandler> ();
                 return handler != null && handler.enabled;
             }
             set {
-                var handler = GameObject.GetComponent<DragHandler> ();
+                var gameObject = CheckedGameObject;
+                var handler = gameObject.GetComponent<DragHandler> ();
                 if (handler == null) {
                     if (!value)
                         return;
-                    handler = GameObject.AddComponent<DragHandler> ();
+                    handler = gameObject.AddComponent<DragHandler> ();
                 }
                 handler.enabled = value;
             }
@@ -126,7 +127,7 @@ namespace KRPC.UI
         [KRPCProperty (Nullable = true)]
         public Layout Layout {
             get {
-                var layout = GameObject.GetComponent<UnityEngine.UI.LayoutGroup> ();
+                var layout = CheckedGameObject.GetComponent<UnityEngine.UI.LayoutGroup> ();
                 return layout == null ? null : new Layout (layout);
             }
         }
@@ -166,9 +167,10 @@ namespace KRPC.UI
         {
             // Unity applies every layout group on an object, and two of them fight over
             // where the elements go, so a panel is allowed only one.
-            if (GameObject.GetComponent<UnityEngine.UI.LayoutGroup> () != null)
+            var gameObject = CheckedGameObject;
+            if (gameObject.GetComponent<UnityEngine.UI.LayoutGroup> () != null)
                 throw new InvalidOperationException ("The panel already has a layout");
-            return new Layout (GameObject.AddComponent<T> ());
+            return new Layout (gameObject.AddComponent<T> ());
         }
 
         /// <summary>
@@ -183,7 +185,7 @@ namespace KRPC.UI
         [KRPCMethod]
         public void BringToFront ()
         {
-            GameObject.transform.SetAsLastSibling ();
+            CheckedGameObject.transform.SetAsLastSibling ();
         }
 
         /// <summary>
@@ -196,9 +198,10 @@ namespace KRPC.UI
         [KRPCProperty]
         public SizeFitter SizeFitter {
             get {
-                var fitter = GameObject.GetComponent<UnityEngine.UI.ContentSizeFitter> ();
+                var gameObject = CheckedGameObject;
+                var fitter = gameObject.GetComponent<UnityEngine.UI.ContentSizeFitter> ();
                 if (fitter == null)
-                    fitter = GameObject.AddComponent<UnityEngine.UI.ContentSizeFitter> ();
+                    fitter = gameObject.AddComponent<UnityEngine.UI.ContentSizeFitter> ();
                 return new SizeFitter (fitter);
             }
         }

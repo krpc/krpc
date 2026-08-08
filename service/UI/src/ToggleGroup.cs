@@ -31,7 +31,17 @@ namespace KRPC.UI
         }
 
         internal UnityEngine.UI.ToggleGroup InnerGroup {
-            get { return group; }
+            // Checked, so that a toggle joining a group the game no longer has says so
+            // rather than being tied to a torn down one.
+            get { return Internal; }
+        }
+
+        // The game's toggle group, checked to still exist.
+        UnityEngine.UI.ToggleGroup Internal {
+            get {
+                CheckExists ();
+                return group;
+            }
         }
 
         internal void AddMember (Toggle toggle)
@@ -77,8 +87,8 @@ namespace KRPC.UI
             // Unity refuses to uncheck the last checked toggle of a group that does not
             // allow being switched off. That rule is for the user, who can only check a
             // different toggle; a client saying what a toggle is set to is obeyed.
-            var switchOff = group.allowSwitchOff;
-            group.allowSwitchOff = true;
+            var switchOff = Internal.allowSwitchOff;
+            Internal.allowSwitchOff = true;
             try {
                 toggle.SetChecked (value);
                 if (!value)
@@ -88,7 +98,7 @@ namespace KRPC.UI
                         member.SetChecked (false);
                 }
             } finally {
-                group.allowSwitchOff = switchOff;
+                Internal.allowSwitchOff = switchOff;
             }
         }
 
@@ -117,8 +127,8 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool AllowSwitchOff {
-            get { return group.allowSwitchOff; }
-            set { group.allowSwitchOff = value; }
+            get { return Internal.allowSwitchOff; }
+            set { Internal.allowSwitchOff = value; }
         }
     }
 }

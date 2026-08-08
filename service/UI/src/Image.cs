@@ -31,6 +31,14 @@ namespace KRPC.UI
             image = Widgets.AddImage (GameObject, null);
         }
 
+        // The game's image, checked to still exist.
+        UnityEngine.UI.Image Internal {
+            get {
+                CheckExists ();
+                return image;
+            }
+        }
+
         /// <summary>
         /// The picture to show, as the contents of a PNG or JPEG file. Set it to an empty
         /// array to show a plain rectangle instead.
@@ -45,7 +53,7 @@ namespace KRPC.UI
             get { return content; }
             set {
                 if (value == null || value.Length == 0) {
-                    image.sprite = null;
+                    Internal.sprite = null;
                     DestroyContent ();
                     return;
                 }
@@ -61,8 +69,8 @@ namespace KRPC.UI
                     new Vector2 (0.5f, 0.5f));
                 // The image is pointed at the new picture before the old one is freed, so
                 // that it is never left drawing something that has been destroyed.
-                image.sprite = loadedSprite;
-                image.type = UnityEngine.UI.Image.Type.Simple;
+                Internal.sprite = loadedSprite;
+                Internal.type = UnityEngine.UI.Image.Type.Simple;
                 DestroyContent ();
                 content = value;
                 texture = loaded;
@@ -112,8 +120,8 @@ namespace KRPC.UI
                 loaded, new Rect (0, 0, width, height), new Vector2 (0.5f, 0.5f));
             // The image is pointed at the new picture before the old one is freed, so
             // that it is never left drawing something that has been destroyed.
-            image.sprite = loadedSprite;
-            image.type = UnityEngine.UI.Image.Type.Simple;
+            Internal.sprite = loadedSprite;
+            Internal.type = UnityEngine.UI.Image.Type.Simple;
             DestroyContent ();
             texture = loaded;
             sprite = loadedSprite;
@@ -151,6 +159,10 @@ namespace KRPC.UI
             if (data.LongLength != (long)width * height * 4)
                 throw new ArgumentException (
                     "The block needs width * height * 4 bytes, 4 bytes per pixel");
+            // The block is drawn into the texture rather than through the image component,
+            // so the check that the other members get from Internal is made here, before
+            // anything is concluded from what an image the game no longer has is holding.
+            CheckExists ();
             if (!rawPixels || texture == null)
                 throw new InvalidOperationException (
                     "The image is not showing a picture drawn from raw pixels");
@@ -244,8 +256,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple4 Color {
-            get { return image.color.ToRgbaTuple (); }
-            set { image.color = value.ToColor (); }
+            get { return Internal.color.ToRgbaTuple (); }
+            set { Internal.color = value.ToColor (); }
         }
     }
 }

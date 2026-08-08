@@ -76,23 +76,31 @@ namespace KRPC.UI
             get { return slider; }
         }
 
+        // The game's slider, checked to still exist.
+        UnityEngine.UI.Slider Internal {
+            get {
+                CheckExists ();
+                return slider;
+            }
+        }
+
         /// <summary>
         /// The value of the slider, between <see cref="Min" /> and <see cref="Max" />.
         /// Setting a value outside the range is refused.
         /// </summary>
         [KRPCProperty]
         public float Value {
-            get { return slider.value; }
+            get { return Internal.value; }
             set {
                 // Unity moves a value outside the range to the nearest end of it, so a
                 // client that set the wrong value would be left reading back one it did
                 // not set and no way to tell that it had happened.
-                if (value < slider.minValue || value > slider.maxValue)
+                if (value < Internal.minValue || value > Internal.maxValue)
                     throw new ArgumentOutOfRangeException (
                         nameof (value), "The value is outside the range of the slider");
                 // Unity notifies its listeners of a value set by a client just as it does
                 // one the user chose, so the value is set without notifying them.
-                slider.SetValueWithoutNotify (value);
+                Internal.SetValueWithoutNotify (value);
             }
         }
 
@@ -102,8 +110,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public float Min {
-            get { return slider.minValue; }
-            set { SetRange (value, slider.maxValue); }
+            get { return Internal.minValue; }
+            set { SetRange (value, Internal.maxValue); }
         }
 
         /// <summary>
@@ -112,8 +120,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public float Max {
-            get { return slider.maxValue; }
-            set { SetRange (slider.minValue, value); }
+            get { return Internal.maxValue; }
+            set { SetRange (Internal.minValue, value); }
         }
 
         /// <summary>
@@ -130,8 +138,8 @@ namespace KRPC.UI
                     "The minimum of the range must not be greater than the maximum");
             settingRange = true;
             try {
-                slider.minValue = min;
-                slider.maxValue = max;
+                Internal.minValue = min;
+                Internal.maxValue = max;
             } finally {
                 settingRange = false;
             }
