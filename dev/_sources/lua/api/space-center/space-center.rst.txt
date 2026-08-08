@@ -528,6 +528,16 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. attribute:: real_fuels_available: boolean
+
+   Whether `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_ is installed.
+
+   :Attribute: Read-only, cannot be set
+   :rtype: boolean
+
+
+
+
 .. staticmethod:: create_kerbal(name, job, male)
 
    Creates a Kerbal.

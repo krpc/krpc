@@ -441,6 +441,12 @@ SpaceCenter
 
       :Game Scenes: All
 
+   .. property:: bool RealFuelsAvailable { get; }
+
+      Whether `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_ is installed.
+
+      :Game Scenes: All
+
    .. method:: void CreateKerbal(string name, string job, bool male)
 
       Creates a Kerbal.

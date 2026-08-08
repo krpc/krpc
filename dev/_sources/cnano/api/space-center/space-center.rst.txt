@@ -590,6 +590,15 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
+.. function:: krpc_error_t krpc_SpaceCenter_RealFuelsAvailable(krpc_connection_t connection, bool * result)
+
+   Whether `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_ is installed.
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_SpaceCenter_CreateKerbal(krpc_connection_t connection, const char * name, const char * job, bool male)
 
    Creates a Kerbal.

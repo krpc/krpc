@@ -450,6 +450,12 @@ SpaceCenter
 
    
 
+   .. function:: bool real_fuels_available()
+
+      Whether `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_ is installed.
+
+   
+
    .. function:: void create_kerbal(std::string name, std::string job, bool male)
 
       Creates a Kerbal.

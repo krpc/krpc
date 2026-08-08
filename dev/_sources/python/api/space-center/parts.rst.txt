@@ -1218,6 +1218,40 @@ Part
       :rtype: :class:`AutoStrutMode`
    
 
+   .. attribute:: has_real_fuels_tank
+
+      Whether the part is a fuel tank managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: highly_pressurized
+
+      Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+      draw from (see :attr:`Engine.pressure_fed`). Raises an exception if the part is
+      not a RealFuels fuel tank (see :attr:`Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+   
+
+   .. attribute:: boiloff_rate
+
+      The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+      second of in-game time, measured over the last update RealFuels computed it in.
+      The contents keep boiling off under time warp, where that update covers a much
+      longer span of in-game time than a physics frame does. The rate is zero for a
+      tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+      temperature RealFuels holds down instead, and in the editor. Raises an exception
+      if the part is not a RealFuels fuel tank (see :attr:`Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+   
+
 
 
 .. class:: AutoStrutMode
@@ -3044,6 +3078,90 @@ Engine
       Toggle the engine's thrust reverser. Raises an exception if the engine
       does not have a thrust reverser (see :attr:`Engine.can_reverse_thrust`).
 
+      :Game Scenes: Flight
+
+   .. attribute:: has_real_fuels
+
+      Whether the engine is managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: ignitions
+
+      The number of times the engine can still be ignited, or -1 if it can be ignited an
+      unlimited number of times. Raises an exception if the engine is not managed by
+      RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: int
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: ignition_resources
+
+      The resources the engine consumes each time it ignites, keyed by resource name, with
+      the amount of each that is required. The engine uses up an ignition and fails to
+      light if they are not available. Raises an exception if the engine is not managed by
+      RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: dict(str, float)
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: has_ullage
+
+      Whether the engine's propellant is subject to ullage, so that it must be settled
+      before the engine will run reliably. Raises an exception if the engine is not
+      managed by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: propellant_stability
+
+      How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
+      (fully settled). Acceleration along the engine's thrust axis settles it, and
+      coasting and rotation unsettle it. Raises an exception if the engine is not managed
+      by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: propellant_reliability
+
+      The probability that the propellant feeding the engine behaves normally, from 0 to 1.
+      This is :attr:`Engine.propellant_stability` scaled by the game's ullage difficulty
+      setting, and is the value RealFuels itself tests against when deciding whether the
+      engine runs. Raises an exception if the engine is not managed by RealFuels
+      (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: float
+      :Game Scenes: Flight
+
+   .. attribute:: pressure_fed
+
+      Whether the engine is fed by tank pressure rather than by a pump, and so needs to
+      draw from a highly pressurized tank. Raises an exception if the engine is not
+      managed by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
+      :Game Scenes: Flight, Editor Vab, Editor Sph
+
+   .. attribute:: has_feed_pressure
+
+      Whether the tanks feeding the engine supply the pressure it needs. Always
+      ``True`` for an engine that is not pressure fed. Raises an exception if the
+      engine is not managed by RealFuels (see :attr:`Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: bool
       :Game Scenes: Flight
 
 

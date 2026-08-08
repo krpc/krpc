@@ -1084,6 +1084,37 @@ Part
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.AutoStrutMode`
 
+   .. attribute:: has_real_fuels_tank: boolean
+
+      Whether the part is a fuel tank managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: highly_pressurized: boolean
+
+      Whether the tank is highly pressurized, which is what a pressure-fed engine needs to
+      draw from (see :attr:`SpaceCenter.Engine.pressure_fed`). Raises an exception if the part is
+      not a RealFuels fuel tank (see :attr:`SpaceCenter.Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: boiloff_rate: number
+
+      The rate at which the tank's cryogenic contents are boiling off, in kilograms per
+      second of in-game time, measured over the last update RealFuels computed it in.
+      The contents keep boiling off under time warp, where that update covers a much
+      longer span of in-game time than a physics frame does. The rate is zero for a
+      tank holding nothing cryogenic, for one still being fed by a launch clamp, whose
+      temperature RealFuels holds down instead, and in the editor. Raises an exception
+      if the part is not a RealFuels fuel tank (see :attr:`SpaceCenter.Part.has_real_fuels_tank`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
 
 
 .. class:: AutoStrutMode
@@ -2739,6 +2770,82 @@ Engine
 
       Toggle the engine's thrust reverser. Raises an exception if the engine
       does not have a thrust reverser (see :attr:`SpaceCenter.Engine.can_reverse_thrust`).
+
+   .. attribute:: has_real_fuels: boolean
+
+      Whether the engine is managed by
+      `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_.
+      The remaining properties in this section are only available when it is.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: ignitions: number
+
+      The number of times the engine can still be ignited, or -1 if it can be ignited an
+      unlimited number of times. Raises an exception if the engine is not managed by
+      RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: ignition_resources: Map
+
+      The resources the engine consumes each time it ignites, keyed by resource name, with
+      the amount of each that is required. The engine uses up an ignition and fails to
+      light if they are not available. Raises an exception if the engine is not managed by
+      RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: Map
+
+   .. attribute:: has_ullage: boolean
+
+      Whether the engine's propellant is subject to ullage, so that it must be settled
+      before the engine will run reliably. Raises an exception if the engine is not
+      managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: propellant_stability: number
+
+      How settled the propellant feeding the engine is, from 0 (fully unsettled) to 1
+      (fully settled). Acceleration along the engine's thrust axis settles it, and
+      coasting and rotation unsettle it. Raises an exception if the engine is not managed
+      by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: propellant_reliability: number
+
+      The probability that the propellant feeding the engine behaves normally, from 0 to 1.
+      This is :attr:`SpaceCenter.Engine.propellant_stability` scaled by the game's ullage difficulty
+      setting, and is the value RealFuels itself tests against when deciding whether the
+      engine runs. Raises an exception if the engine is not managed by RealFuels
+      (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: number
+
+   .. attribute:: pressure_fed: boolean
+
+      Whether the engine is fed by tank pressure rather than by a pump, and so needs to
+      draw from a highly pressurized tank. Raises an exception if the engine is not
+      managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
+
+   .. attribute:: has_feed_pressure: boolean
+
+      Whether the tanks feeding the engine supply the pressure it needs. Always
+      ``True`` for an engine that is not pressure fed. Raises an exception if the
+      engine is not managed by RealFuels (see :attr:`SpaceCenter.Engine.has_real_fuels`).
+
+      :Attribute: Read-only, cannot be set
+      :rtype: boolean
 
 
 

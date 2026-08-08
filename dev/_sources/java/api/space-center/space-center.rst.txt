@@ -418,6 +418,13 @@ SpaceCenter
 
    
 
+   .. method:: boolean getRealFuelsAvailable()
+
+
+      Whether `RealFuels <https://forum.kerbalspaceprogram.com/index.php?/topic/58236-*>`_ is installed.
+
+   
+
    .. method:: void createKerbal(String name, String job, boolean male)
 
       Creates a Kerbal.
