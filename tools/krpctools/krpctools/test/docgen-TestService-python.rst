@@ -207,7 +207,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: enum_default_arg([x = TestEnum(2)])
+.. staticmethod:: enum_default_arg([x = TestEnum.value_c])
 
 
 

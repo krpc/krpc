@@ -232,7 +232,7 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg")]
-        public global::KRPC.Client.Services.TestService.TestEnum EnumDefaultArg (global::KRPC.Client.Services.TestService.TestEnum x = (global::KRPC.Client.Services.TestService.TestEnum)2)
+        public global::KRPC.Client.Services.TestService.TestEnum EnumDefaultArg (global::KRPC.Client.Services.TestService.TestEnum x = global::KRPC.Client.Services.TestService.TestEnum.ValueC)
         {
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestEnum))

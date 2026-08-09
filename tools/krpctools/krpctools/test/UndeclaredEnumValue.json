@@ -1,0 +1,42 @@
+{
+  "BadService": {
+    "id": 1,
+    "documentation": "",
+    "procedures": {
+      "Frob": {
+        "id": 1,
+        "parameters": [
+          {
+            "name": "mode",
+            "type": {
+              "code": "ENUMERATION",
+              "service": "BadService",
+              "name": "Mode"
+            },
+            "default_value": "Dg=="
+          }
+        ],
+        "documentation": ""
+      }
+    },
+    "classes": {},
+    "enumerations": {
+      "Mode": {
+        "documentation": "",
+        "values": [
+          {
+            "name": "Slow",
+            "value": 0,
+            "documentation": ""
+          },
+          {
+            "name": "Fast",
+            "value": 1,
+            "documentation": ""
+          }
+        ]
+      }
+    },
+    "exceptions": {}
+  }
+}

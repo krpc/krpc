@@ -59,7 +59,35 @@ class PythonLanguage(Language):
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
         if isinstance(typ, EnumerationType):
-            return self.parse_type(typ) + "(%d)" % value
+            return "%s.%s" % (
+                self.parse_type(typ),
+                self.parse_enum_value_name(value.name),
+            )
+        if isinstance(typ, TupleType):
+            values = [
+                self.parse_default_value(x, typ.value_types[i])
+                for i, x in enumerate(value)
+            ]
+            # A tuple of one value needs the trailing comma to be a tuple at all
+            return "(%s%s)" % (", ".join(values), "," if len(values) == 1 else "")
+        if isinstance(typ, ListType):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return "[%s]" % ", ".join(values)
+        if isinstance(typ, SetType):
+            if not value:
+                return "set()"
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return "{%s}" % ", ".join(values)
+        if isinstance(typ, DictionaryType):
+            entries = (
+                "%s: %s"
+                % (
+                    self.parse_default_value(k, typ.key_type),
+                    self.parse_default_value(v, typ.value_type),
+                )
+                for k, v in value.items()
+            )
+            return "{%s}" % ", ".join(entries)
         return str(value)
 
     def shorten_ref(self, name):

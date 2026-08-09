@@ -120,7 +120,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: dictionary_default([x = {1: False, 2: True}])
+.. staticmethod:: dictionary_default([x = {[1] = false, [2] = true}])
 
 
 
@@ -180,7 +180,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: empty_list_default([x = []])
+.. staticmethod:: empty_list_default([x = {}])
 
 
 
@@ -190,7 +190,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: enum_default_arg([x = 2])
+.. staticmethod:: enum_default_arg([x = TestService.TestEnum.value_c])
 
 
 
@@ -299,7 +299,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: list_default([x = [1, 2, 3]])
+.. staticmethod:: list_default([x = {1, 2, 3}])
 
 
 
@@ -513,7 +513,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: tuple_default([x = (1, False)])
+.. staticmethod:: tuple_default([x = {1, false}])
 
 
 

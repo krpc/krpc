@@ -157,7 +157,14 @@ class Class(Appendable):
 class Parameter(Appendable):
     # pylint: disable=redefined-builtin
     def __init__(
-        self, name, type, documentation, types, default_value=None, nullable=False
+        self,
+        name,
+        type,
+        documentation,
+        types,
+        procedure,
+        default_value=None,
+        nullable=False,
     ):
         super().__init__()
         self.types = types
@@ -165,7 +172,8 @@ class Parameter(Appendable):
         self.type = as_type(self.types, type)
         self.has_default_value = default_value is not None
         if default_value is not None:
-            default_value = decode_default_value(default_value, self.type)
+            location = "%s parameter %s" % (procedure, name)
+            default_value = decode_default_value(default_value, self.type, location)
         self.default_value = default_value
         self.nullable = nullable
         self.documentation = documentation
@@ -198,7 +206,12 @@ class Procedure(Appendable):
             self.return_type = None
         self.return_is_nullable = return_is_nullable
         self.parameters = [
-            Parameter(documentation=documentation, types=types, **info)
+            Parameter(
+                documentation=documentation,
+                types=types,
+                procedure=self.fullname,
+                **info
+            )
             for info in parameters
         ]
         self.game_scenes = game_scenes
@@ -264,7 +277,12 @@ class ClassMethod(Appendable):
             self.return_type = None
         self.return_is_nullable = return_is_nullable
         self.parameters = [
-            Parameter(documentation=documentation, types=types, **info)
+            Parameter(
+                documentation=documentation,
+                types=types,
+                procedure=self.fullname,
+                **info
+            )
             for info in parameters
         ]
         self.game_scenes = game_scenes
@@ -305,7 +323,12 @@ class ClassStaticMethod(Appendable):
             self.return_type = None
         self.return_is_nullable = return_is_nullable
         self.parameters = [
-            Parameter(documentation=documentation, types=types, **info)
+            Parameter(
+                documentation=documentation,
+                types=types,
+                procedure=self.fullname,
+                **info
+            )
             for info in parameters
         ]
         self.game_scenes = game_scenes

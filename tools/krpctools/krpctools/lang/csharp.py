@@ -167,10 +167,9 @@ class CsharpLanguage(Language):
         if isinstance(typ, ClassType) and value is None:
             return "null"
         if isinstance(typ, EnumerationType):
-            return "(global::KRPC.Client.Services.%s.%s)%s" % (
-                typ.protobuf_type.service,
-                typ.protobuf_type.name,
-                value,
+            return "%s.%s" % (
+                self.parse_type(typ),
+                self.parse_enum_value_name(value.name),
             )
         if value is None:
             return "null"

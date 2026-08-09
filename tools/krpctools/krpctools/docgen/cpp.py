@@ -107,35 +107,3 @@ class CppDomain(Domain):
     @staticmethod
     def paramref(name):
         return Domain.paramref(snake_case(name))
-
-    def default_value(self, value, typ):
-        if isinstance(typ, TupleType):
-            if value is None:
-                value = tuple()
-            values = (
-                self.default_value(x, typ.value_types[i]) for i, x in enumerate(value)
-            )
-            return "%s(%s)" % (self.language.parse_type(typ), ", ".join(values))
-        if isinstance(typ, ListType):
-            if value is None:
-                value = []
-            values = (self.default_value(x, typ.value_type) for x in value)
-            return "%s(%s)" % (self.language.parse_type(typ), ", ".join(values))
-        if isinstance(typ, SetType):
-            if value is None:
-                value = set()
-            values = (self.default_value(x, typ.value_type) for x in value)
-            return "%s(%s)" % (self.language.parse_type(typ), ", ".join(values))
-        if isinstance(typ, DictionaryType):
-            if value is None:
-                value = {}
-            entries = (
-                "{%s, %s}"
-                % (
-                    self.default_value(k, typ.key_type),
-                    self.default_value(v, typ.value_type),
-                )
-                for k, v in value.items()
-            )
-            return "%s(%s)" % (self.language.parse_type(typ), ", ".join(entries))
-        return self.language.parse_default_value(value, typ)

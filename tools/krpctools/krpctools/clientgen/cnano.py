@@ -169,8 +169,8 @@ class CnanoGenerator(Generator):
             return typ.protobuf_type.code != Type.STRING
         return False
 
-    def generate_context_parameters(self, procedure):
-        parameters = super().generate_context_parameters(procedure)
+    def generate_context_parameters(self, name, procedure):
+        parameters = super().generate_context_parameters(name, procedure)
         for i, parameter in enumerate(parameters):
             if not parameter["nullable"]:
                 continue
@@ -232,7 +232,7 @@ class CnanoGenerator(Generator):
                 properties["set_" + name] = {
                     "remote_id": info["setter"]["remote_id"],
                     "parameters": self.generate_context_parameters(
-                        info["setter"]["procedure"]
+                        info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": {"ctype": "void", "cvtype": None, "name": None},
                     "documentation": info["documentation"],
@@ -259,7 +259,8 @@ class CnanoGenerator(Generator):
                         "remote_id": info["setter"]["remote_id"],
                         "parameters": [
                             self.generate_context_parameters(
-                                info["setter"]["procedure"]
+                                info["setter"]["remote_name"],
+                                info["setter"]["procedure"],
                             )[1]
                         ],
                         "return_type": {"ctype": "void", "cvtype": None, "name": None},

@@ -69,7 +69,7 @@ class Generator:
         language-specific names."""
         return flatten_deprecation_reason(reason, self.parse_plain_cref)
 
-    def generate_context_parameters(self, procedure):
+    def generate_context_parameters(self, name, procedure):
         parameters = []
         for parameter in procedure["parameters"]:
             typ = as_type(self.types, parameter["type"])
@@ -78,7 +78,12 @@ class Generator:
                 "type": self.parse_parameter_type(typ),
             }
             if "default_value" in parameter:
-                value = decode_default_value(parameter["default_value"], typ)
+                location = "%s.%s parameter %s" % (
+                    self._service,
+                    name,
+                    parameter["name"],
+                )
+                value = decode_default_value(parameter["default_value"], typ, location)
                 info["default_value"] = self.parse_default_value(value, typ)
             info["nullable"] = parameter.get("nullable", False)
             parameters.append(info)
@@ -149,7 +154,7 @@ class Generator:
                     "procedure": procedure,
                     "remote_name": name,
                     "remote_id": procedure["id"],
-                    "parameters": self.generate_context_parameters(procedure),
+                    "parameters": self.generate_context_parameters(name, procedure),
                     "return_type": self.parse_return_type(
                         self.get_return_type(procedure)
                     ),
@@ -185,7 +190,7 @@ class Generator:
 
             elif Attributes.is_a_property_setter(name):
                 property_name = self.parse_name(Attributes.get_property_name(name))
-                params = self.generate_context_parameters(procedure)
+                params = self.generate_context_parameters(name, procedure)
                 if property_name not in context["properties"]:
                     context["properties"][property_name] = {
                         "type": params[0]["type"],
@@ -208,7 +213,7 @@ class Generator:
             elif Attributes.is_a_class_method(name):
                 class_name = Attributes.get_class_name(name)
                 method_name = self.parse_name(Attributes.get_class_member_name(name))
-                params = self.generate_context_parameters(procedure)
+                params = self.generate_context_parameters(name, procedure)
                 context["classes"][class_name]["methods"][method_name] = {
                     "procedure": procedure,
                     "remote_name": name,
@@ -234,7 +239,7 @@ class Generator:
                     "procedure": procedure,
                     "remote_name": name,
                     "remote_id": procedure["id"],
-                    "parameters": self.generate_context_parameters(procedure),
+                    "parameters": self.generate_context_parameters(name, procedure),
                     "return_type": self.parse_return_type(
                         self.get_return_type(procedure)
                     ),
@@ -275,7 +280,7 @@ class Generator:
                 cls = context["classes"][class_name]
                 property_name = self.parse_name(Attributes.get_class_member_name(name))
                 if property_name not in cls["properties"]:
-                    params = self.generate_context_parameters(procedure)
+                    params = self.generate_context_parameters(name, procedure)
                     cls["properties"][property_name] = {
                         "type": params[1]["type"],
                         "getter": None,

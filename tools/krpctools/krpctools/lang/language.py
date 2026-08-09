@@ -7,6 +7,10 @@ class Language:
             return "%s_" % name
         return name
 
+    def parse_enum_value_name(self, name):
+        """The name of a value of an enumeration, as the enumeration declares it"""
+        return self.parse_name(name)
+
     def parse_type(self, typ):  # pylint: disable=unused-argument
         raise NotImplementedError
 

@@ -185,7 +185,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestEnum EnumDefaultArg(TestEnum x = 2)
+   .. method:: TestEnum EnumDefaultArg(TestEnum x = TestEnum.ValueC)
 
 
 

@@ -763,7 +763,7 @@ inline std::vector<std::string> TestService::empty_list_default(std::vector<std:
   return _result;
 }
 
-inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   auto _data = this->_client->invoke("TestService", "EnumDefaultArg", _args);
@@ -1202,7 +1202,7 @@ inline ::krpc::Stream<std::vector<std::string>> TestService::empty_list_default_
   return ::krpc::Stream<std::vector<std::string>>(this->_client, this->_client->build_call("TestService", "EmptyListDefault", _args));
 }
 
-inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefaultArg", _args));
@@ -1475,7 +1475,7 @@ inline ::krpc::schema::ProcedureCall TestService::empty_list_default_call(std::v
   return this->_client->build_call("TestService", "EmptyListDefault", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return this->_client->build_call("TestService", "EnumDefaultArg", _args);

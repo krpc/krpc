@@ -18,11 +18,30 @@ from ..lang.python import PythonLanguage
 from ..utils import as_type
 
 
+class StubLanguage(PythonLanguage):
+    """How a generated stub module names the types it uses: another service's through the module
+    its stubs are imported from, and its own service's directly."""
+
+    def __init__(self, service):
+        super().__init__()
+        self.module = service
+
+    def parse_type(self, typ):
+        if isinstance(typ, (ClassType, EnumerationType)):
+            name = typ.protobuf_type.name
+            if typ.protobuf_type.service != self.module:
+                name = typ.protobuf_type.service.lower() + "." + name
+            return name
+        return super().parse_type(typ)
+
+
 class PythonGenerator(Generator):
 
-    language = PythonLanguage()
-
     parse_plain_cref_member = staticmethod(snake_case)
+
+    def __init__(self, macro_template, service, definitions):
+        super().__init__(macro_template, service, definitions)
+        self.language = StubLanguage(service)
 
     def parse_python_type(self, typ):
         if typ is None:
@@ -82,9 +101,7 @@ class PythonGenerator(Generator):
             else:
                 return "KRPC_pb2.%s" % typ.python_type.__name__
         elif isinstance(typ, (ClassType, EnumerationType)):
-            spec = typ.protobuf_type.name
-            if typ.protobuf_type.service != self.service_name:
-                spec = typ.protobuf_type.service.lower() + "." + spec
+            spec = self.language.parse_type(typ)
         elif isinstance(typ, TupleType):
             spec = "Tuple[%s]" % ",".join(
                 self.parse_type_specification(t) for t in typ.value_types
@@ -126,7 +143,7 @@ class PythonGenerator(Generator):
                     "procedure": info["setter"]["procedure"],
                     "remote_name": info["setter"]["remote_name"],
                     "parameters": self.generate_context_parameters(
-                        info["setter"]["procedure"]
+                        info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "None",
                     "documentation": info["documentation"],
@@ -157,7 +174,8 @@ class PythonGenerator(Generator):
                         "remote_name": info["setter"]["remote_name"],
                         "parameters": [
                             self.generate_context_parameters(
-                                info["setter"]["procedure"]
+                                info["setter"]["remote_name"],
+                                info["setter"]["procedure"],
                             )[1]
                         ],
                         "return_type": "None",
@@ -330,14 +348,6 @@ class PythonGenerator(Generator):
             info["documentation"] = '"""\n' + line + "\n\n" + body + '\n"""'
         else:
             info["documentation"] = '"""\n' + line + '\n"""'
-
-    def parse_default_value(self, value, typ):
-        result = super().parse_default_value(value, typ)
-        # Fix references to types within the same service
-        prefix = self.service_name + "."
-        if result.startswith(prefix):
-            result = result[len(prefix) :]
-        return result
 
     @staticmethod
     def parse_documentation(documentation):
