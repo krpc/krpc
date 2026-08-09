@@ -1,5 +1,6 @@
 import json
 from importlib.resources import files
+from ..definitions import Definitions
 
 
 class ClientGenTestCase:
@@ -12,7 +13,7 @@ class ClientGenTestCase:
         defs = json.loads(
             files("krpctools.test").joinpath(name + ".json").read_text(encoding="utf-8")
         )
-        g = self.generator(macro_template, service_name, defs[service_name])
+        g = self.generator(macro_template, service_name, Definitions(defs))
         actual = g.generate()
 
         # with open('/home/alex/workspaces/krpc/krpc/' +

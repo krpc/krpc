@@ -1,7 +1,6 @@
 import collections
 import jinja2
 from krpc.attributes import Attributes
-from krpc.types import Types
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line, as_type, decode_default_value
 from .docparser import flatten_deprecation_reason
@@ -12,13 +11,15 @@ class Generator:
     def __init__(self, macro_template, service, definitions):
         self._macro_template = macro_template
         self._service = service
-        self._defs = definitions
+        self._definitions = definitions
+        self._defs = definitions.services[service]
+        # The registry every service in the definitions was registered in, so that a type
+        # another service defines resolves to what that service defines it as
+        self.types = definitions.types
 
     @property
     def service_name(self):
         return self._service
-
-    types = Types()
 
     def generate_file(self, path):
         content = self.generate()

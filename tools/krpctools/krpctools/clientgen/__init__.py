@@ -10,6 +10,7 @@ from .cpp import CppGenerator
 from .java import JavaGenerator
 from .cnano import CnanoGenerator
 from .python import PythonGenerator
+from ..definitions import Definitions
 from ..version import __version__
 from ..servicedefs import servicedefs
 
@@ -125,8 +126,9 @@ def main():
             # Generator defined in a python module
             generator, macro_template = load_generator(args.language)
 
-        # Run the generator
-        g = generator(macro_template, args.service, defs[args.service])
+        # Run the generator, over all of the definitions that were loaded: the requested
+        # service is the one generated, but the types it refers to may be defined by any of them
+        g = generator(macro_template, args.service, Definitions(defs))
         if args.output:
             g.generate_file(args.output)
         else:

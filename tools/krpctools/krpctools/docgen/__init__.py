@@ -6,8 +6,8 @@ from io import open
 import sys
 from importlib.resources import files
 import jinja2
-from krpc.types import Types
 from krpc.utils import snake_case
+from ..definitions import Definitions
 from ..utils import lower_camel_case, indent, single_line
 from .utils import lookup_cref
 from .cnano import CnanoDomain
@@ -107,8 +107,14 @@ def main():
         del info["id"]
         return info
 
+    # Register everything the services define before building any documentation node, as a node
+    # for a procedure's default value is built from the type the value decodes through
+    definitions = Definitions(services_info)
+
     services = {
-        name: Service(name, sort=sort, **parse_service_info(info))
+        name: Service(
+            name, sort=sort, types=definitions.types, **parse_service_info(info)
+        )
         for name, info in services_info.items()
     }
 

@@ -1,6 +1,7 @@
 import json
 import tempfile
 from importlib.resources import files
+from ..definitions import Definitions
 from ..docgen.nodes import Service
 from ..docgen import process_file
 
@@ -32,8 +33,12 @@ class DocGenTestCase:
                     info[key] = value
             return info
 
+        definitions = Definitions(defs)
+
         services = {
-            name: Service(name, sort=sort, **parse_service_info(info))
+            name: Service(
+                name, sort=sort, types=definitions.types, **parse_service_info(info)
+            )
             for name, info in defs.items()
         }
 
