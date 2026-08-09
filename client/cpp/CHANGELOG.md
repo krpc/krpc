@@ -1,6 +1,8 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Support null for any nullable type; nullable non-class values use
   `std::optional`, changing generated signatures (#1017)
+- Fix a service with a collection of enumerations in a procedure signature failing to
+  compile (#1044)
 
 ## [v0.6.0]
 - Update to protobuf v35.1 (#850)

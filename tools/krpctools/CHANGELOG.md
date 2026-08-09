@@ -1,5 +1,20 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** A generator module given to `krpc-clientgen` by path is constructed with
+  the definitions of every service that was loaded, rather than with those of the single
+  service it generates (#1044)
 - Support for nullable values across all types (#1017)
+- Generate an enumeration default value as the member it names, instead of a cast of its
+  integer value (#1044)
+- Fix generating a default value whose type contains an enumeration, such as a list of
+  them, failing (#1044)
+- Fix Lua documentation writing default values in Python's syntax rather than Lua's
+  (#1044)
+- Fix C++ documentation writing a collection default value as a constructor call rather
+  than a braced initializer list, so `std::vector<int32_t>(1, 2, 3)` named a constructor
+  that builds something else entirely (#1044)
+- A default value naming an undeclared enumeration value, or one whose enumeration no
+  supplied service defines, is now reported naming the service, procedure and parameter
+  it came from (#1044)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+

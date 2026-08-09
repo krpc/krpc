@@ -1,5 +1,7 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Support `None` for any nullable type (#1017)
+- Fix a service failing to load when one of its procedures defaults to a member of an
+  enumeration defined by a service that had not been loaded yet (#1044)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)
