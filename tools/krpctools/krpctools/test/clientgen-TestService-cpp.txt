@@ -579,6 +579,38 @@ namespace decoder {
 
 }  // namespace decoder
 
+// The encoder and decoder for a collection call encode and decode on the type it
+// contains without qualifying them, so the ones above, which are declared after those
+// templates, are only reachable through argument dependent lookup. That searches the
+// namespace enclosing the enumeration, which is this one, so the collection encoder and
+// decoder find an enumeration through these.
+namespace services {
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  inline std::string encode(const TestService::DeprecatedEnum& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::DeprecatedEnum& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+  inline std::string encode(const TestService::TestEnum& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::TestEnum& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+
+}  // namespace services
+
 namespace services {
 
 inline TestService::TestService(Client* client):
