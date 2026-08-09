@@ -104,22 +104,32 @@ function ServiceBase:_parse_procedure(procedure)
   return param_names, param_types, param_required, param_default, return_type
 end
 
+--- Register the types that a service defines in the given type registry
+function service.register_definitions(types, svc)
+  for _,cls in ipairs(svc.classes) do
+    types:class_type(svc.name, cls.name)
+  end
+  for _,enum in ipairs(svc.enumerations) do
+    local values = {}
+    for _,value in ipairs(enum.values) do
+      values[service.to_snake_case(value.name)] = value.value
+    end
+    types:enumeration_type(svc.name, enum.name):set_values(values)
+  end
+end
+
+-- The types a service defines are registered from its definitions, before any service is
+-- created, so the following two take the types they were registered as and make them members
+-- of the service
+
 --- Add a class type
 function ServiceBase:_add_service_class(cls)
-  local class_type = self._client._types:class_type(self._name, cls.name)
-  self[cls.name] = class_type.lua_type
+  self[cls.name] = self._client._types:class_type(self._name, cls.name).lua_type
 end
 
 --- Add an enumeration type
 function ServiceBase:_add_service_enumeration(enum)
-  local name = enum.name
-  local enum_type = self._client._types:enumeration_type(self._name, name)
-  local values = {}
-  for _,x in ipairs(enum.values) do
-    values[service.to_snake_case(x.name)] = x.value
-  end
-  enum_type:set_values(values)
-  self[name] = enum_type.lua_type
+  self[enum.name] = self._client._types:enumeration_type(self._name, enum.name).lua_type
 end
 
 --- Add a procedure
