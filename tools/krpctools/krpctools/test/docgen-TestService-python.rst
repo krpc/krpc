@@ -229,6 +229,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: enum_list_default([x = [TestEnum.value_b, TestEnum.value_c]])
+
+
+
+   :param list x:
+   :rtype: list(:class:`TestEnum`)
+   
+
+
+
+
 .. staticmethod:: enum_return()
 
 

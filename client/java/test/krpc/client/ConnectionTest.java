@@ -209,6 +209,9 @@ public class ConnectionTest {
     assertEquals(TestService.TestEnum.VALUE_A, testService.enumEcho(TestService.TestEnum.VALUE_A));
     assertEquals(TestService.TestEnum.VALUE_B, testService.enumEcho(TestService.TestEnum.VALUE_B));
     assertEquals(TestService.TestEnum.VALUE_C, testService.enumEcho(TestService.TestEnum.VALUE_C));
+    List<TestService.TestEnum> enums =
+        Arrays.asList(TestService.TestEnum.VALUE_A, TestService.TestEnum.VALUE_B);
+    assertEquals(enums, testService.enumListDefault(enums));
   }
 
   @Test

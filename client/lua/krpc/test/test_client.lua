@@ -214,6 +214,10 @@ function TestClient:test_enumerations()
   luaunit.assertEquals(enum.value_a, self.conn.test_service.enum_default_arg(enum.value_a))
   luaunit.assertEquals(enum.value_c, self.conn.test_service.enum_default_arg())
   luaunit.assertEquals(enum.value_b, self.conn.test_service.enum_default_arg(enum.value_b))
+
+  luaunit.assertEquals(List{enum.value_b, enum.value_c}, self.conn.test_service.enum_list_default())
+  luaunit.assertEquals(List{enum.value_a, enum.value_b},
+                       self.conn.test_service.enum_list_default(List{enum.value_a, enum.value_b}))
 end
 
 function TestClient:test_invalid_enum()
@@ -377,6 +381,7 @@ function TestClient:test_test_service_service_members()
      'empty_list_default',
      'enum_default_arg',
      'enum_echo',
+     'enum_list_default',
      'enum_return',
      'float_to_string',
      'get_deprecated_property',

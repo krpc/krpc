@@ -259,6 +259,12 @@ namespace KRPC.Client.Test
             Assert.AreEqual (TestEnum.ValueA, Connection.TestService ().EnumDefaultArg (TestEnum.ValueA));
             Assert.AreEqual (TestEnum.ValueC, Connection.TestService ().EnumDefaultArg ());
             Assert.AreEqual (TestEnum.ValueB, Connection.TestService ().EnumDefaultArg (TestEnum.ValueB));
+            CollectionAssert.AreEqual (
+                new [] { TestEnum.ValueB, TestEnum.ValueC },
+                Connection.TestService ().EnumListDefault ());
+            CollectionAssert.AreEqual (
+                new [] { TestEnum.ValueA, TestEnum.ValueB },
+                Connection.TestService ().EnumListDefault (new [] { TestEnum.ValueA, TestEnum.ValueB }));
         }
 
         [TestCase (new int[] { }, new int[] { })]

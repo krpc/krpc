@@ -1048,6 +1048,29 @@ class TestService:
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
+    def enum_list_default(self, x: List[TestEnum] = [TestEnum.value_b, TestEnum.value_c]) -> List[TestEnum]:
+        return self._client._invoke(
+            "TestService",
+            "EnumListDefault",
+            [x],
+            ["x"],
+            [self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))],
+            self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
+        )
+
+    def _return_type_enum_list_default(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
+
+    def _build_call_enum_list_default(self, x: List[TestEnum] = [TestEnum.value_b, TestEnum.value_c]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "EnumListDefault",
+            [x],
+            ["x"],
+            [self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))],
+            self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
+        )
+
     def enum_return(self) -> TestEnum:
         return self._client._invoke(
             "TestService",

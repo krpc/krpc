@@ -262,6 +262,19 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_EnumListDefault(krpc_connection_t connection, krpc_list_enum_t * result, const krpc_list_enum_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EnumReturn(krpc_connection_t connection, krpc_TestService_TestEnum_t * result)
 
 

@@ -211,6 +211,16 @@
 
    
 
+   .. function:: std::vector<TestEnum> enum_list_default(std::vector<TestEnum> x = std::vector<TestEnum>{TestEnum::value_b, TestEnum::value_c})
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: TestEnum enum_return()
 
 

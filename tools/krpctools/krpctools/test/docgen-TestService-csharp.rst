@@ -205,6 +205,16 @@
 
       :Game Scenes: All
 
+   .. method:: System.Collections.Generic.IList<TestEnum> EnumListDefault(System.Collections.Generic.IList<TestEnum> x = { TestEnum.ValueB, TestEnum.ValueC })
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: TestEnum EnumReturn()
 
 
