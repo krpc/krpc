@@ -76,7 +76,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // Fire the decoupler
             decoupler.Decouple();
 
-            return PartSeparation.NewVessel (preVesselIds, () => Decoupled);
+            return PartSeparation.NewVessel (Part, preVesselIds, () => Decoupled);
         }
 
         /// <summary>

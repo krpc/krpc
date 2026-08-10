@@ -24,15 +24,31 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Yields until the separation has completed (<paramref name="separated"/> returns true) and
         /// the settle margin has elapsed, then returns the vessel that <c>FlightGlobals.Vessels</c>
         /// gained relative to <paramref name="preVesselIds"/> — the snapshot of vessel ids taken
-        /// before the separation was triggered. A single separation produces exactly one new vessel.
+        /// before the separation was triggered.
+        ///
+        /// A separation usually produces one new vessel, but an omni-decoupler detaches at every
+        /// node at once: it separates the vessel beyond it and is itself left on a vessel of its
+        /// own, so two appear. The one to return is the vessel that was separated, which is the one
+        /// <paramref name="part"/> — the decoupler or docking port that was fired — did not end up
+        /// on. It is looked up once the wait is over, and by identifier, so that it resolves to
+        /// the right object however the separation rearranged the parts in the meantime.
         /// </summary>
-        internal static Vessel NewVessel (IList<Guid> preVesselIds, Func<bool> separated, int wait = 0)
+        internal static Vessel NewVessel (Part part, IList<Guid> preVesselIds, Func<bool> separated, int wait = 0)
         {
             if (wait < SettleFrames || !separated ())
                 throw new YieldException<Func<Vessel>> (
-                    () => NewVessel (preVesselIds, separated, wait + 1));
-            return new Vessel (
-                FlightGlobals.Vessels.Select (v => v.id).Except (preVesselIds).Single ());
+                    () => NewVessel (part, preVesselIds, separated, wait + 1));
+            var newVessels = FlightGlobals.Vessels
+                .Where (vessel => !preVesselIds.Contains (vessel.id)).ToList ();
+            if (newVessels.Count == 1)
+                return new Vessel (newVessels [0].id);
+            var partVessel = part.InternalPart.vessel;
+            var separatedVessels = newVessels.Where (vessel => vessel != partVessel).ToList ();
+            if (separatedVessels.Count != 1)
+                throw new InvalidOperationException (
+                    "The separation produced " + newVessels.Count + " new vessels, and which of " +
+                    "them was separated is ambiguous");
+            return new Vessel (separatedVessels [0].id);
         }
     }
 }

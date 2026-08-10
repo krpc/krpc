@@ -136,7 +136,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // that docked in flight; a given port only ever offers one of them.
             if (port.InvokeEvent ("Decouple") || port.InvokeEvent ("Undock") ||
                 (dockedPort != null && (dockedPort.InvokeEvent ("Decouple") || dockedPort.InvokeEvent ("Undock")))) {
-                return PartSeparation.NewVessel (preVesselIds, () => State != DockingPortState.Docked);
+                return PartSeparation.NewVessel (Part, preVesselIds, () => State != DockingPortState.Docked);
             }
 
             // Failed to undock
