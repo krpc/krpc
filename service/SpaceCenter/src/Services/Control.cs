@@ -77,7 +77,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ControlState State {
-            get { return InternalVessel.Connection.ControlState.ToControlState (); }
+            get {
+                var connection = InternalVessel.Connection;
+                return connection == null
+                    ? ControlState.None : connection.ControlState.ToControlState ();
+            }
         }
 
         /// <summary>
@@ -85,7 +89,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public ControlSource Source {
-            get { return InternalVessel.Connection.ControlState.ToControlSource (); }
+            get {
+                var connection = InternalVessel.Connection;
+                return connection == null
+                    ? ControlSource.None : connection.ControlState.ToControlSource ();
+            }
         }
 
         /// <summary>
