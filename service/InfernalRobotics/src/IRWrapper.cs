@@ -361,9 +361,15 @@ namespace KRPC.InfernalRobotics
 					return listToReturn;
 
 				try {
-					//iterate each "value" in the dictionary
-					foreach(var item in (IList)actualServos)
-						listToReturn.Add(new IRServo (item));
+					// Infernal Robotics can add the same servo to a group more than once when
+					// its groupName has picked up duplicate membership tokens; wrap each
+					// underlying servo at most once so the group lists it a single time.
+					var seen = new HashSet<IServo> ();
+					foreach(var item in (IList)actualServos) {
+						var servo = new IRServo (item);
+						if (seen.Add (servo))
+							listToReturn.Add(servo);
+					}
 				} catch (Exception ex) {
 					LogFormatted("Error extracting from actualServos: {0}", ex.Message);
 				}
@@ -835,10 +841,12 @@ namespace KRPC.InfernalRobotics
 		{
 			if (EnsureReady ()) {
 				var fromController = new List<IServo> ();
+				var seen = new HashSet<IServo> ();
 				foreach (var group in IRController.ServoGroups)
 					if (group.Vessel != null && group.Vessel.id == vessel.id)
 						foreach (var servo in group.Servos)
-							fromController.Add (servo);
+							if (seen.Add (servo))
+								fromController.Add (servo);
 				if (fromController.Count > 0)
 					return fromController;
 			}
@@ -892,9 +900,16 @@ namespace KRPC.InfernalRobotics
 				var raw = GroupNameField != null ? GroupNameField.GetValue (servo) as string : null;
 				if (string.IsNullOrEmpty (raw))
 					continue;
+				// Infernal Robotics can write the same group into a servo's groupName more
+				// than once (its flight rebuild re-appends a servo's membership on every
+				// vessel activation without clearing the old one), so keep only the first
+				// membership per group to ensure the servo appears once in each group.
+				var servoGroups = new HashSet<string> ();
 				foreach (var membership in raw.Split ('|')) {
 					var parts = membership.Split (';');
 					var name = parts [0];
+					if (!servoGroups.Add (name))
+						continue;
 					int index;
 					if (parts.Length < 2 || !int.TryParse (parts [1], out index))
 						index = int.MaxValue;

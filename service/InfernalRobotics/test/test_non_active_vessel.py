@@ -32,18 +32,47 @@ class TestNonActiveVessel(krpctest.TestCase):
         # command pod (one part). Switch to the pod so the servo vehicle becomes non-active.
         vessels = sc.vessels
         cls.vessel = max(vessels, key=lambda v: len(v.parts.all))
-        pod = min(vessels, key=lambda v: len(v.parts.all))
-        sc.active_vessel = pod
-        for _ in range(300):
-            if sc.active_vessel == pod:
-                break
-            cls.wait()
+        cls.pod = min(vessels, key=lambda v: len(v.parts.all))
+        cls._make_active(cls.pod)
         if sc.active_vessel == cls.vessel:
             raise RuntimeError("failed to make the servo vehicle non-active")
+
+    @classmethod
+    def _make_active(cls, vessel):
+        sc = cls.connect().space_center
+        sc.active_vessel = vessel
+        for _ in range(300):
+            if sc.active_vessel == vessel:
+                return
+            cls.wait()
+        raise RuntimeError("failed to switch active vessel")
 
     def test_vessel_is_non_active(self):
         active = self.connect().space_center.active_vessel
         self.assertNotEqual(active, self.vessel)
+
+    def test_servo_count_stable_across_switches(self):
+        # Infernal Robotics appends a duplicate group membership to each servo every time
+        # its vessel is activated, so repeatedly switching to the servo vehicle and away
+        # again would otherwise make the same servo appear many times in its group. The
+        # reported servos must stay unique regardless of how often the vessel is activated.
+        def servo_names():
+            group = self.ir.servo_group_with_name(self.vessel, "Group1")
+            return sorted(x.name for x in group.servos)
+
+        expected = ["Joint Pivotron - Basic", "Rotatron - Basic", "Rotatron - Basic"]
+        self.assertEqual(expected, servo_names())
+        try:
+            for _ in range(3):
+                self._make_active(self.vessel)
+                # Active vessel: served from Infernal Robotics' own controller.
+                self.assertEqual(expected, servo_names())
+                self._make_active(self.pod)
+                self.wait(0.5)
+                # Non-active vessel: synthesized from the servo modules directly.
+                self.assertEqual(expected, servo_names())
+        finally:
+            self._make_active(self.pod)
 
     def test_servo_groups(self):
         groups = self.ir.servo_groups(self.vessel)

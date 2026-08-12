@@ -1,3 +1,7 @@
+## [v0.7.0] - unreleased
+- Fix servos being reported multiple times in a `ServoGroup` after switching to and from their
+  vessel repeatedly (#1014)
+
 ## [v0.6.0]
 - Add to `Servo`: `UID`, `Mode` (with a new `ServoMode` enum), `TargetPosition`, `TargetSpeed`,
   `CommandedPosition`, `DefaultPosition`, `ForceLimit`, `MaxForce`, `MaxAcceleration`, `MaxSpeed`,
