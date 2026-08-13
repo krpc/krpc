@@ -62,9 +62,21 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The KSP vessel communication object.
+        /// Null for a vessel that is not part of the network, see <see cref="InNetwork"/>.
         /// </summary>
         public CommNet.CommNetVessel InternalComms {
             get { return InternalVessel.Connection; }
+        }
+
+        /// <summary>
+        /// Whether the vessel is part of the communication network at all, and so has anything
+        /// to report about its communications. KSP gives no network node to a vessel whose type
+        /// is debris, a space object, unknown, a flag or a deployed science part. Debris is the
+        /// type it gives a vessel that is left with no command module, by a decoupler firing for
+        /// example.
+        /// </summary>
+        bool InNetwork {
+            get { return InternalComms != null; }
         }
 
         /// <summary>
@@ -72,7 +84,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool CanCommunicate {
-            get { return InternalComms.CanComm; }
+            get { return InNetwork && InternalComms.CanComm; }
         }
 
         /// <summary>
@@ -80,7 +92,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public bool CanTransmitScience {
-            get { return InternalComms.CanScience; }
+            get { return InNetwork && InternalComms.CanScience; }
         }
 
         /// <summary>
@@ -88,7 +100,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SignalStrength {
-            get { return InternalComms.SignalStrength; }
+            get { return InNetwork ? InternalComms.SignalStrength : 0; }
         }
 
         /// <summary>
@@ -96,7 +108,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double SignalDelay {
-            get { return InternalComms.SignalDelay; }
+            get { return InNetwork ? InternalComms.SignalDelay : 0; }
         }
 
         /// <summary>
@@ -106,9 +118,14 @@ namespace KRPC.SpaceCenter.Services
         public double Power {
             get {
                 var antennas = new Vessel (VesselId).Parts.Antennas;
-                var powers = antennas.Select (x => x.Power);
-                var maxPower = powers.Max ();
+                var powers = antennas.Select (x => x.Power).ToList ();
                 var totalPower = powers.Sum ();
+                // The combination below divides by the total power, and by the largest of the
+                // powers, so both have to be above zero. The total is zero for a vessel that
+                // carries no antennae, and for one whose antennae all supply no power.
+                if (totalPower <= 0)
+                    return 0;
+                var maxPower = powers.Max ();
                 var averageWeightedExponent = antennas.Select (x => x.Power * x.CombinableExponent).Sum () / totalPower;
                 return maxPower * Math.Pow (totalPower / maxPower, averageWeightedExponent);
             }
@@ -119,7 +136,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public IList<CommLink> ControlPath {
-            get { return InternalComms.ControlPath.Select (x => new CommLink (x)).ToList (); }
+            get {
+                if (!InNetwork)
+                    return new List<CommLink> ();
+                return InternalComms.ControlPath.Select (x => new CommLink (x)).ToList ();
+            }
         }
     }
 }

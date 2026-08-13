@@ -54,5 +54,47 @@ class TestPartsDecoupler(krpctest.TestCase):
         self.assertFalse(self.disabled_decoupler.staged)
 
 
+class TestPartsOmniDecoupler(krpctest.TestCase):
+    """An omni-decoupler detaches at every node at once, so firing it produces two new
+    vessels: the stack it separated, and the decoupler left on its own. Decouple returns
+    the vessel that was separated. This needs a class of its own because firing the
+    separator takes the rest of the craft with it."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("PartsDecoupler")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 250000)
+        cls.vessel = cls.connect().space_center.active_vessel
+        cls.separator = cls.vessel.parts.with_name("Separator.1")[0].decoupler
+
+    def test_decouple_returns_the_separated_vessel(self):
+        self.assertTrue(self.separator.is_omni_decoupler)
+        new_vessel = self.separator.decouple()
+        self.assertTrue(self.separator.decoupled)
+
+        # The separator is left on a vessel of its own, which is not the one returned.
+        self.assertNotEqual(new_vessel, self.separator.part.vessel)
+        self.assertEqual(
+            ["Separator.1"],
+            [part.name for part in self.separator.part.vessel.parts.all],
+        )
+
+        # The vessel returned is the stack that was separated, below the separator.
+        self.assertNotEqual(self.vessel, new_vessel)
+        self.assertCountEqual(
+            [
+                "fuelTank",
+                "radialDecoupler2",
+                "fuelTank",
+                "fuelTank",
+                "Decoupler.1",
+                "fuelTank",
+            ],
+            [part.name for part in new_vessel.parts.all],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

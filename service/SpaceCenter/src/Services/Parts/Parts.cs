@@ -111,14 +111,24 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The part from which the vessel is controlled.
+        /// Returns <c>null</c> if the vessel has no control point, in which case it is
+        /// oriented by its root part.
         /// </summary>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        /// <remarks>
+        /// A vessel gets no control point when it is created by a decoupler or an undocking
+        /// and none of its parts is a command module with crew aboard. A probe core does not
+        /// give it one either. Assign this property to choose the control point, which is
+        /// equivalent to "Control From Here" in game.
+        /// </remarks>
+        [KRPCProperty (Nullable = true, GameScene = GameScene.Flight)]
         public Part Controlling {
             get {
-                var vessel = InternalVessel;
-                return new Part (vessel.GetReferenceTransformPart () ?? vessel.rootPart);
+                var part = InternalVessel.GetReferenceTransformPart ();
+                return part == null ? null : new Part (part);
             }
             set {
+                if (ReferenceEquals (value, null))
+                    throw new ArgumentNullException (nameof (Controlling));
                 var part = value.InternalPart;
                 if (part.HasModule <ModuleCommand> ()) {
                     part.Module<ModuleCommand> ().MakeReference ();
