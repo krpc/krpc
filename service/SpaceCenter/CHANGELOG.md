@@ -117,6 +117,9 @@
     engine needs tank pressure and whether it has it. On a tank it manages
     (`Part.HasRealFuelsTank`), `Part.HighlyPressurized` and `Part.BoiloffRate` give the tank's
     pressurization and how fast its cryogenic contents are boiling off (#1039)
+  - Fix `ReactionWheel.AvailableTorque`, and the vessel level torque properties that include
+    it, being scaled by the square of the wheel's authority limiter when KSPCommunityFixes is
+    installed (#1042)
 
 - Resources
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes; no more of the
