@@ -776,12 +776,21 @@ An instance can be obtained by calling <a class="reference internal" href="vesse
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Parts15set_controllingE4Part">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Parts15set_controllingE4Part"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Parts15set_controllingE4Part"></span><span id="krpc::services::SpaceCenter::Parts::set_controlling__Part"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">set_controlling</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter4PartE" title="krpc::services::SpaceCenter::Part"><span class="n"><span class="pre">Part</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">value</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Parts15set_controllingE4Part" title="Link to this definition">#</a><br /></dt>
-<dd><p>The part from which the vessel is controlled.</p>
+<dd><p>The part from which the vessel is controlled.
+Returns <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if the vessel has no control point, in which case it is
+oriented by its root part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A vessel gets no control point when it is created by a decoupler or an undocking
+and none of its parts is a command module with crew aboard. A probe core does not
+give it one either. Assign this property to choose the control point, which is
+equivalent to “Control From Here” in game.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">

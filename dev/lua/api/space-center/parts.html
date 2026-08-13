@@ -787,7 +787,9 @@ An instance can be obtained by calling <a class="reference internal" href="vesse
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.Parts.controlling">
 <span class="sig-name descname"><span class="pre">controlling</span></span><span class="property"><span class="pre">:</span> </span><span class="pre">SpaceCenter.Part</span><a class="headerlink" href="#SpaceCenter.SpaceCenter.Parts.controlling" title="Link to this definition">#</a></dt>
-<dd><p>The part from which the vessel is controlled.</p>
+<dd><p>The part from which the vessel is controlled.
+Returns <code class="docutils literal notranslate"><span class="pre">nil</span></code> if the vessel has no control point, in which case it is
+oriented by its root part.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Can be read or written</p>
@@ -796,6 +798,13 @@ An instance can be obtained by calling <a class="reference internal" href="vesse
 <dd class="field-even"><p><a class="reference internal" href="#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">SpaceCenter.Part</span></code></a></p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A vessel gets no control point when it is created by a decoupler or an undocking
+and none of its parts is a command module with crew aboard. A probe core does not
+give it one either. Assign this property to choose the control point, which is
+equivalent to “Control From Here” in game.</p>
+</div>
 </dd></dl>
 
 <dl class="lua method">

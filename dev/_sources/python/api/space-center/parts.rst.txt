@@ -44,10 +44,20 @@ Parts
    .. attribute:: controlling
 
       The part from which the vessel is controlled.
+      Returns ``None`` if the vessel has no control point, in which case it is
+      oriented by its root part.
 
       :Attribute: Can be read or written
       :rtype: :class:`Part`
       :Game Scenes: Flight
+
+
+      .. note::
+
+         A vessel gets no control point when it is created by a decoupler or an undocking
+         and none of its parts is a command module with crew aboard. A probe core does not
+         give it one either. Assign this property to choose the control point, which is
+         equivalent to "Control From Here" in game.
 
    .. method:: with_name(name)
 
