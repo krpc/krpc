@@ -269,6 +269,16 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "EnumListDefault", types = _Types.class)
+    public java.util.List<krpc.client.services.TestService.TestEnum> enumListDefault(java.util.List<krpc.client.services.TestService.TestEnum> x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumListDefault", _args);
+        return (java.util.List<krpc.client.services.TestService.TestEnum>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "EnumReturn", types = _Types.class)
     public krpc.client.services.TestService.TestEnum enumReturn() throws RPCException {
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "EnumReturn");
@@ -970,6 +980,8 @@ public class TestService {
             PARAMETER_TYPES.put("EnumDefaultArg", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
             RETURN_TYPES.put("EnumEcho", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EnumEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("TestService", "TestEnum") });
+            RETURN_TYPES.put("EnumListDefault", krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")));
+            PARAMETER_TYPES.put("EnumListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")) });
             RETURN_TYPES.put("EnumReturn", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EnumReturn", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -1032,11 +1044,11 @@ public class TestService {
             PARAMETER_TYPES.put("get_NullableObject", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_NullableObject", null);
             PARAMETER_TYPES.put("set_NullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
-            RETURN_TYPES.put("get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
-            PARAMETER_TYPES.put("get_ObjectProperty", new krpc.schema.KRPC.Type[] {  });
         }
 
         private static void initTypes1() {
+            RETURN_TYPES.put("get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
+            PARAMETER_TYPES.put("get_ObjectProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_ObjectProperty", null);
             PARAMETER_TYPES.put("set_ObjectProperty", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("get_StringProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));

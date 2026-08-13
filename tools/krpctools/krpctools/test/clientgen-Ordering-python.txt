@@ -1,0 +1,108 @@
+# pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
+from __future__ import annotations
+import warnings
+from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
+import krpc.schema
+from krpc.schema import KRPC_pb2
+from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum, StaticMethod
+from krpc.event import Event
+if TYPE_CHECKING:
+    from krpc.services import Client
+from krpc.services import serviceb
+
+
+class ServiceA:
+    """
+    A service whose procedures use another service's enumeration.
+    """
+
+    def __init__(self, client: Client) -> None:
+        self._client = client
+
+    def __getattribute__(self, name):
+        # Intercepts calls to obtain classes from the service,
+        # to inject the client instance so that it can be used
+        # for static method calls
+        classes = object.__getattribute__(self, "_classes")
+        if name in classes:
+            client = object.__getattribute__(self, "_client")
+            return WrappedClass(client, classes[name])
+
+        # Intercept calls to obtain enumeration types
+        enumerations = object.__getattribute__(self, "_enumerations")
+        if name in enumerations:
+           return enumerations[name]
+
+        # Intercept calls to obtain exception types
+        exceptions = object.__getattribute__(self, "_exceptions")
+        if name in exceptions:
+           return exceptions[name]
+
+        # Fall back to default behaviour
+        return object.__getattribute__(self, name)
+
+    def __dir__(self):
+        result = object.__dir__(self)
+        result.extend(object.__getattribute__(self, "_classes").keys())
+        result.extend(object.__getattribute__(self, "_enumerations").keys())
+        result.extend(object.__getattribute__(self, "_exceptions").keys())
+        return result
+
+    _classes = {
+    }
+    _enumerations = {
+    }
+    _exceptions = {
+    }
+
+    def frob(self, mode: serviceb.Mode = serviceb.Mode.fast) -> None:
+        """
+        Defaults to a member of another service's enumeration.
+        """
+        return self._client._invoke(
+            "ServiceA",
+            "Frob",
+            [mode],
+            ["mode"],
+            [self._client._types.enumeration_type("ServiceB", "Mode")],
+            None
+        )
+
+    def _return_type_frob(self) -> TypeBase:
+        return None
+
+    def _build_call_frob(self, mode: serviceb.Mode = serviceb.Mode.fast) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "ServiceA",
+            "Frob",
+            [mode],
+            ["mode"],
+            [self._client._types.enumeration_type("ServiceB", "Mode")],
+            None
+        )
+
+    def frob_all(self, modes: List[serviceb.Mode] = [serviceb.Mode.fast]) -> None:
+        """
+        Defaults to a collection containing a member of another service's enumeration.
+        """
+        return self._client._invoke(
+            "ServiceA",
+            "FrobAll",
+            [modes],
+            ["modes"],
+            [self._client._types.list_type(self._client._types.enumeration_type("ServiceB", "Mode"))],
+            None
+        )
+
+    def _return_type_frob_all(self) -> TypeBase:
+        return None
+
+    def _build_call_frob_all(self, modes: List[serviceb.Mode] = [serviceb.Mode.fast]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "ServiceA",
+            "FrobAll",
+            [modes],
+            ["modes"],
+            [self._client._types.list_type(self._client._types.enumeration_type("ServiceB", "Mode"))],
+            None
+        )

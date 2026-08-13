@@ -1,9 +1,11 @@
 from __future__ import annotations
 from typing import (
     cast,
+    Any,
     Callable,
     DefaultDict,
     Iterable,
+    Iterator,
     List,
     Optional,
     Tuple,
@@ -13,8 +15,14 @@ import keyword
 import warnings
 from collections import defaultdict
 from xml.etree import ElementTree
+from krpc.definitions import (
+    CLASS,
+    ENUMERATION,
+    EXCEPTION,
+    Definition,
+    decode_default_value,
+)
 from krpc.types import Types, TypeBase, DynamicType, DynamicClassBase, DefaultArgument
-from krpc.decoder import Decoder
 from krpc.utils import snake_case
 from krpc.attributes import Attributes
 import krpc.schema.KRPC_pb2 as KRPC
@@ -242,6 +250,64 @@ def _parse_documentation(xml: str) -> str:
     return "\n\n".join(x for x in (summary, params_str, returns, note) if x != "")
 
 
+def _documentation(member: Any, service_name: str) -> str:
+    """The documentation of a service member, including a notice when it is deprecated"""
+    doc = _parse_documentation(member.documentation)
+    if member.deprecated:
+        doc = _deprecated_doc(doc, member.deprecated_reason, service_name)
+    return doc
+
+
+def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
+    """The types a service defines, as records that can be registered in a type registry.
+
+    A service's procedures are built from types that this or any other service defines, so
+    every service's definitions are registered before any service is created."""
+    name = service.name
+
+    def register_class(cls: KRPC.Class) -> Callable[[Types], None]:
+        doc = _documentation(cls, name)
+
+        def register(types: Types) -> None:
+            types.class_type(name, cls.name, doc)
+
+        return register
+
+    def register_enumeration(enumeration: KRPC.Enumeration) -> Callable[[Types], None]:
+        doc = _documentation(enumeration, name)
+        values = dict(
+            (
+                str(snake_case(value.name)),
+                {"value": value.value, "doc": _documentation(value, name)},
+            )
+            for value in enumeration.values
+        )
+
+        def register(types: Types) -> None:
+            types.enumeration_type(name, enumeration.name, doc).set_values(values)
+
+        return register
+
+    def register_exception(exception: KRPC.Exception) -> Callable[[Types], None]:
+        doc = _documentation(exception, name)
+
+        def register(types: Types) -> None:
+            types.exception_type(name, exception.name, doc)
+
+        return register
+
+    for cls in service.classes:
+        yield Definition(CLASS, name, cls.name, [], register_class(cls))
+    for enumeration in service.enumerations:
+        yield Definition(
+            ENUMERATION, name, enumeration.name, [], register_enumeration(enumeration)
+        )
+    for exception in service.exceptions:
+        yield Definition(
+            EXCEPTION, name, exception.name, [], register_exception(exception)
+        )
+
+
 def create_service(client: Client, service: KRPC.Service) -> object:
     """Create a new service type"""
     doc = _parse_documentation(service.documentation)
@@ -333,51 +399,29 @@ class ServiceBase(DynamicType):
     _client: Client
     _name: str
 
+    # The types a service defines are registered from its definitions, before any service is
+    # created, so the following take the types they were registered as and make them members of
+    # the service
+
     @classmethod
     def _add_service_class(cls, remote_cls: KRPC.Class) -> None:
         """Add a class type"""
-        name = remote_cls.name
-        doc = _parse_documentation(remote_cls.documentation)
-        if remote_cls.deprecated:
-            doc = _deprecated_doc(doc, remote_cls.deprecated_reason, cls._name)
-        class_type = cls._client._types.class_type(cls._name, name, doc)
-        setattr(cls, name, class_type.python_type)
+        class_type = cls._client._types.class_type(cls._name, remote_cls.name)
+        setattr(cls, remote_cls.name, class_type.python_type)
 
     @classmethod
     def _add_service_enumeration(cls, enumeration: KRPC.Enumeration) -> None:
         """Add an enum type"""
-        name = enumeration.name
-        doc = _parse_documentation(enumeration.documentation)
-        if enumeration.deprecated:
-            doc = _deprecated_doc(doc, enumeration.deprecated_reason, cls._name)
-        enumeration_type = cls._client._types.enumeration_type(cls._name, name, doc)
-
-        def value_doc(value: KRPC.EnumerationValue) -> str:
-            vdoc = _parse_documentation(value.documentation)
-            if value.deprecated:
-                vdoc = _deprecated_doc(vdoc, value.deprecated_reason, cls._name)
-            return vdoc
-
-        enumeration_type.set_values(
-            dict(
-                (
-                    str(snake_case(x.name)),
-                    {"value": x.value, "doc": value_doc(x)},
-                )
-                for x in enumeration.values
-            )
+        enumeration_type = cls._client._types.enumeration_type(
+            cls._name, enumeration.name
         )
-        setattr(cls, name, enumeration_type.python_type)
+        setattr(cls, enumeration.name, enumeration_type.python_type)
 
     @classmethod
     def _add_service_exception(cls, exception: KRPC.Exception) -> None:
         """Add an exception type"""
-        name = exception.name
-        doc = _parse_documentation(exception.documentation)
-        if exception.deprecated:
-            doc = _deprecated_doc(doc, exception.deprecated_reason, cls._name)
-        exception_type = cls._client._types.exception_type(cls._name, name, doc)
-        setattr(cls, name, exception_type)
+        exception_type = cls._client._types.exception_type(cls._name, exception.name)
+        setattr(cls, exception.name, exception_type)
 
     @classmethod
     def _parse_procedure(cls, procedure: KRPC.Procedure) -> Tuple[
@@ -395,8 +439,15 @@ class ServiceBase(DynamicType):
         param_default: List[Optional[object]] = []
         for param, typ in zip(procedure.parameters, param_types):
             if param.has_default_value and not param.default_value_is_null:
+                location = "%s.%s parameter %s" % (
+                    cls._name,
+                    procedure.name,
+                    snake_case(param.name),
+                )
                 param_default.append(
-                    Decoder.decode(cls._client, param.default_value, typ)
+                    decode_default_value(
+                        cls._client, param.default_value, typ, location
+                    )
                 )
             else:
                 param_default.append(None)

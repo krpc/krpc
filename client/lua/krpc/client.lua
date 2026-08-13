@@ -9,6 +9,7 @@ local decoder = require 'krpc.decoder'
 local service = require 'krpc.service'
 local to_snake_case = service.to_snake_case
 local create_service = service.create_service
+local register_definitions = service.register_definitions
 
 local Client = class()
 
@@ -18,6 +19,13 @@ function Client:_init(rpc_connection)
 
   -- Set up the main KRPC service
   local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, self._types:services_type()).services
+
+  -- Register the types of every service before creating any of them: a service's procedures
+  -- are built from types that any service may define, and a default value cannot be decoded
+  -- before the values of the enumeration it belongs to are known
+  for _, service in ipairs(services) do
+    register_definitions(self._types, service)
+  end
 
   -- Set up services
   for _, service in ipairs(services) do

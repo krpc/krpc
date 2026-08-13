@@ -121,7 +121,7 @@
 
    
 
-   .. function:: std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x = std::map<int32_t, bool>({1, false}, {2, true}))
+   .. function:: std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x = std::map<int32_t, bool>{{1, false}, {2, true}})
 
 
 
@@ -181,7 +181,7 @@
 
    
 
-   .. function:: std::vector<std::string> empty_list_default(std::vector<std::string> x = std::vector<std::string>())
+   .. function:: std::vector<std::string> empty_list_default(std::vector<std::string> x = std::vector<std::string>{})
 
 
 
@@ -191,7 +191,7 @@
 
    
 
-   .. function:: TestEnum enum_default_arg(TestEnum x = static_cast<TestEnum>(2))
+   .. function:: TestEnum enum_default_arg(TestEnum x = TestEnum::value_c)
 
 
 
@@ -202,6 +202,16 @@
    
 
    .. function:: TestEnum enum_echo(TestEnum x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<TestEnum> enum_list_default(std::vector<TestEnum> x = std::vector<TestEnum>{TestEnum::value_b, TestEnum::value_c})
 
 
 
@@ -298,7 +308,7 @@
 
    
 
-   .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = std::vector<int32_t>(1, 2, 3))
+   .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3})
 
 
 
@@ -387,7 +397,7 @@
 
    
 
-   .. function:: std::set<int32_t> set_default(std::set<int32_t> x = std::set<int32_t>(1, 2, 3))
+   .. function:: std::set<int32_t> set_default(std::set<int32_t> x = std::set<int32_t>{1, 2, 3})
 
 
 
@@ -481,7 +491,7 @@
 
    
 
-   .. function:: std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>(1, false))
+   .. function:: std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false})
 
 
 

@@ -122,6 +122,8 @@ class TestService : public Service {
 
   TestService::TestEnum enum_echo(TestService::TestEnum x);
 
+  std::vector<TestService::TestEnum> enum_list_default(std::vector<TestService::TestEnum> x);
+
   TestService::TestEnum enum_return();
 
   /**
@@ -253,6 +255,8 @@ class TestService : public Service {
 
   ::krpc::Stream<TestService::TestEnum> enum_echo_stream(TestService::TestEnum x);
 
+  ::krpc::Stream<std::vector<TestService::TestEnum>> enum_list_default_stream(std::vector<TestService::TestEnum> x);
+
   ::krpc::Stream<TestService::TestEnum> enum_return_stream();
 
   ::krpc::Stream<std::string> float_to_string_stream(float value);
@@ -348,6 +352,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall enum_default_arg_call(TestService::TestEnum x);
 
   ::krpc::schema::ProcedureCall enum_echo_call(TestService::TestEnum x);
+
+  ::krpc::schema::ProcedureCall enum_list_default_call(std::vector<TestService::TestEnum> x);
 
   ::krpc::schema::ProcedureCall enum_return_call();
 
@@ -579,6 +585,38 @@ namespace decoder {
 
 }  // namespace decoder
 
+// The encoder and decoder for a collection call encode and decode on the type it
+// contains without qualifying them, so the ones above, which are declared after those
+// templates, are only reachable through argument dependent lookup. That searches the
+// namespace enclosing the enumeration, which is this one, so the collection encoder and
+// decoder find an enumeration through these.
+namespace services {
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  inline std::string encode(const TestService::DeprecatedEnum& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::DeprecatedEnum& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+  inline std::string encode(const TestService::TestEnum& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::TestEnum& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+
+}  // namespace services
+
 namespace services {
 
 inline TestService::TestService(Client* client):
@@ -763,7 +801,7 @@ inline std::vector<std::string> TestService::empty_list_default(std::vector<std:
   return _result;
 }
 
-inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+inline TestService::TestEnum TestService::enum_default_arg(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   auto _data = this->_client->invoke("TestService", "EnumDefaultArg", _args);
@@ -778,6 +816,16 @@ inline TestService::TestEnum TestService::enum_echo(TestService::TestEnum x) {
   _args.push_back(encoder::encode(x));
   auto _data = this->_client->invoke("TestService", "EnumEcho", _args);
   TestService::TestEnum _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::vector<TestService::TestEnum> TestService::enum_list_default(std::vector<TestService::TestEnum> x = std::vector<TestService::TestEnum>{TestService::TestEnum::value_b, TestService::TestEnum::value_c}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(x));
+  auto _data = this->_client->invoke("TestService", "EnumListDefault", _args);
+  std::vector<TestService::TestEnum> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1202,7 +1250,7 @@ inline ::krpc::Stream<std::vector<std::string>> TestService::empty_list_default_
   return ::krpc::Stream<std::vector<std::string>>(this->_client, this->_client->build_call("TestService", "EmptyListDefault", _args));
 }
 
-inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+inline ::krpc::Stream<TestService::TestEnum> TestService::enum_default_arg_stream(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumDefaultArg", _args));
@@ -1212,6 +1260,12 @@ inline ::krpc::Stream<TestService::TestEnum> TestService::enum_echo_stream(TestS
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumEcho", _args));
+}
+
+inline ::krpc::Stream<std::vector<TestService::TestEnum>> TestService::enum_list_default_stream(std::vector<TestService::TestEnum> x = std::vector<TestService::TestEnum>{TestService::TestEnum::value_b, TestService::TestEnum::value_c}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<std::vector<TestService::TestEnum>>(this->_client, this->_client->build_call("TestService", "EnumListDefault", _args));
 }
 
 inline ::krpc::Stream<TestService::TestEnum> TestService::enum_return_stream() {
@@ -1475,7 +1529,7 @@ inline ::krpc::schema::ProcedureCall TestService::empty_list_default_call(std::v
   return this->_client->build_call("TestService", "EmptyListDefault", _args);
 }
 
-inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = static_cast<TestService::TestEnum>(2)) {
+inline ::krpc::schema::ProcedureCall TestService::enum_default_arg_call(TestService::TestEnum x = TestService::TestEnum::value_c) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return this->_client->build_call("TestService", "EnumDefaultArg", _args);
@@ -1485,6 +1539,12 @@ inline ::krpc::schema::ProcedureCall TestService::enum_echo_call(TestService::Te
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return this->_client->build_call("TestService", "EnumEcho", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::enum_list_default_call(std::vector<TestService::TestEnum> x = std::vector<TestService::TestEnum>{TestService::TestEnum::value_b, TestService::TestEnum::value_c}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "EnumListDefault", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::enum_return_call() {

@@ -262,6 +262,19 @@ TEST_F(test_client, test_enums) {
   ASSERT_EQ(value, KRPC_TESTSERVICE_TESTENUM_VALUEB);
   ASSERT_EQ(KRPC_OK, krpc_TestService_EnumEcho(conn, &value, KRPC_TESTSERVICE_TESTENUM_VALUEC));
   ASSERT_EQ(value, KRPC_TESTSERVICE_TESTENUM_VALUEC);
+
+  krpc_list_enum_t list = KRPC_NULL_LIST;
+  list.size = 2;
+  list.items = new krpc_enum_t[2];
+  list.items[0] = KRPC_TESTSERVICE_TESTENUM_VALUEA;
+  list.items[1] = KRPC_TESTSERVICE_TESTENUM_VALUEB;
+  krpc_list_enum_t result = KRPC_NULL_LIST;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_EnumListDefault(conn, &result, &list));
+  ASSERT_EQ(2u, result.size);
+  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEA, result.items[0]);
+  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEB, result.items[1]);
+  delete[] list.items;
+  KRPC_FREE_LIST(result);
 }
 
 TEST_F(test_client, test_test_service_enum_members) {

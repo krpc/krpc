@@ -87,8 +87,8 @@ class JavaGenerator(Generator):
             Type.BYTES,
         )
 
-    def generate_context_parameters(self, procedure):
-        parameters = super().generate_context_parameters(procedure)
+    def generate_context_parameters(self, name, procedure):
+        parameters = super().generate_context_parameters(name, procedure)
         for i, parameter in enumerate(parameters):
             typ = as_type(self.types, procedure["parameters"][i]["type"])
             if parameter["nullable"] and self._needs_boxing(typ):
@@ -130,7 +130,7 @@ class JavaGenerator(Generator):
                     "procedure": info["setter"]["procedure"],
                     "remote_name": info["setter"]["remote_name"],
                     "parameters": self.generate_context_parameters(
-                        info["setter"]["procedure"]
+                        info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "void",
                     "documentation": info["documentation"],
@@ -159,7 +159,8 @@ class JavaGenerator(Generator):
                         "remote_name": info["setter"]["remote_name"],
                         "parameters": [
                             self.generate_context_parameters(
-                                info["setter"]["procedure"]
+                                info["setter"]["remote_name"],
+                                info["setter"]["procedure"],
                             )[1]
                         ],
                         "return_type": "void",

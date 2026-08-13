@@ -185,7 +185,7 @@
 
       :Game Scenes: All
 
-   .. method:: TestEnum EnumDefaultArg(TestEnum x = 2)
+   .. method:: TestEnum EnumDefaultArg(TestEnum x = TestEnum.ValueC)
 
 
 
@@ -196,6 +196,16 @@
       :Game Scenes: All
 
    .. method:: TestEnum EnumEcho(TestEnum x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<TestEnum> EnumListDefault(System.Collections.Generic.IList<TestEnum> x = { TestEnum.ValueB, TestEnum.ValueC })
 
 
 

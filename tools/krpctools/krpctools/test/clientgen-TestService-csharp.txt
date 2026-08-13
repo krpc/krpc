@@ -232,7 +232,7 @@ namespace KRPC.Client.Services.TestService
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumDefaultArg")]
-        public global::KRPC.Client.Services.TestService.TestEnum EnumDefaultArg (global::KRPC.Client.Services.TestService.TestEnum x = (global::KRPC.Client.Services.TestService.TestEnum)2)
+        public global::KRPC.Client.Services.TestService.TestEnum EnumDefaultArg (global::KRPC.Client.Services.TestService.TestEnum x = global::KRPC.Client.Services.TestService.TestEnum.ValueC)
         {
             var _args = new ByteString[] {
                 global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestEnum))
@@ -249,6 +249,16 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "EnumEcho", _args);
             return (global::KRPC.Client.Services.TestService.TestEnum)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestEnum), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumListDefault")]
+        public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum> EnumListDefault (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum> x = null)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x ?? new global::System.Collections.Generic.List<global::KRPC.Client.Services.TestService.TestEnum> { global::KRPC.Client.Services.TestService.TestEnum.ValueB, global::KRPC.Client.Services.TestService.TestEnum.ValueC }, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>))
+            };
+            var _result = connection.Invoke ("TestService", "EnumListDefault", _args);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestEnum>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "EnumReturn")]

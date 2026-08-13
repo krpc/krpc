@@ -169,8 +169,8 @@ class CnanoGenerator(Generator):
             return typ.protobuf_type.code != Type.STRING
         return False
 
-    def generate_context_parameters(self, procedure):
-        parameters = super().generate_context_parameters(procedure)
+    def generate_context_parameters(self, name, procedure):
+        parameters = super().generate_context_parameters(name, procedure)
         for i, parameter in enumerate(parameters):
             if not parameter["nullable"]:
                 continue
@@ -232,7 +232,7 @@ class CnanoGenerator(Generator):
                 properties["set_" + name] = {
                     "remote_id": info["setter"]["remote_id"],
                     "parameters": self.generate_context_parameters(
-                        info["setter"]["procedure"]
+                        info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": {"ctype": "void", "cvtype": None, "name": None},
                     "documentation": info["documentation"],
@@ -259,7 +259,8 @@ class CnanoGenerator(Generator):
                         "remote_id": info["setter"]["remote_id"],
                         "parameters": [
                             self.generate_context_parameters(
-                                info["setter"]["procedure"]
+                                info["setter"]["remote_name"],
+                                info["setter"]["procedure"],
                             )[1]
                         ],
                         "return_type": {"ctype": "void", "cvtype": None, "name": None},
@@ -272,25 +273,18 @@ class CnanoGenerator(Generator):
 
         context["properties"] = properties
 
-        context["collection_types"] = []
-
-        def build_collection_types(typ):
-            if isinstance(typ, TupleType):
-                for value_type in typ.value_types:
-                    build_collection_types(value_type)
-            elif isinstance(typ, (ListType, SetType)):
-                build_collection_types(typ.value_type)
-            elif isinstance(typ, DictionaryType):
-                build_collection_types(typ.key_type)
-                build_collection_types(typ.value_type)
-            else:
-                return
-            typ = self.parse_collection_type(typ)
-            if typ not in context["collection_types"]:
-                context["collection_types"].append(typ)
-
-        for typ in sorted(self._collection_types, key=self.parse_type_name):
-            build_collection_types(typ)
+        # C requires a struct to be declared before it is used, so a collection type has to
+        # follow the collection types it contains. Several kRPC types share one C type, as
+        # every class is a krpc_object_t and every enumeration a krpc_enum_t, so collections
+        # are deduplicated by what they become in C rather than by what they are here.
+        collection_types = []
+        for typ in self._definitions.collection_types(
+            sorted(self._collection_types, key=self.parse_type_name)
+        ):
+            ctype = self.parse_collection_type(typ)
+            if ctype not in collection_types:
+                collection_types.append(ctype)
+        context["collection_types"] = collection_types
 
         return context
 

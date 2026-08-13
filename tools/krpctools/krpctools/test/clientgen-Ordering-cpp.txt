@@ -1,0 +1,72 @@
+#pragma once
+
+#include <map>
+#include <set>
+#include <string>
+#include <tuple>
+#include <vector>
+
+#include <krpc/decoder.hpp>
+#include <krpc/encoder.hpp>
+#include <krpc/error.hpp>
+#include <krpc/event.hpp>
+#include <krpc/object.hpp>
+#include <krpc/service.hpp>
+#include <krpc/stream.hpp>
+
+namespace krpc {
+namespace services {
+
+class ServiceA : public Service {
+ public:
+  explicit ServiceA(Client* client);
+
+  /**
+   * Defaults to a member of another service's enumeration.
+   */
+  void frob(ServiceB::Mode mode);
+
+  /**
+   * Defaults to a collection containing a member of another service's enumeration.
+   */
+  void frob_all(std::vector<ServiceB::Mode> modes);
+
+  ::krpc::schema::ProcedureCall frob_call(ServiceB::Mode mode);
+
+  ::krpc::schema::ProcedureCall frob_all_call(std::vector<ServiceB::Mode> modes);
+};
+
+}  // namespace services
+
+namespace services {
+
+inline ServiceA::ServiceA(Client* client):
+  Service(client) {
+}
+
+inline void ServiceA::frob(ServiceB::Mode mode = ServiceB::Mode::fast) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(mode));
+  this->_client->invoke("ServiceA", "Frob", _args);
+}
+
+inline void ServiceA::frob_all(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(modes));
+  this->_client->invoke("ServiceA", "FrobAll", _args);
+}
+
+inline ::krpc::schema::ProcedureCall ServiceA::frob_call(ServiceB::Mode mode = ServiceB::Mode::fast) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(mode));
+  return this->_client->build_call("ServiceA", "Frob", _args);
+}
+
+inline ::krpc::schema::ProcedureCall ServiceA::frob_all_call(std::vector<ServiceB::Mode> modes = std::vector<ServiceB::Mode>{ServiceB::Mode::fast}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(modes));
+  return this->_client->build_call("ServiceA", "FrobAll", _args);
+}
+}  // namespace services
+
+}  // namespace krpc

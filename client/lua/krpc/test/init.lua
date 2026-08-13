@@ -8,6 +8,7 @@ TestEncoder = require 'krpc.test.test_encoder'
 TestObjects = require 'krpc.test.test_objects'
 TestPerformance = require 'krpc.test.test_performance'
 TestPlatform = require 'krpc.test.test_platform'
+TestServiceDefinitions = require 'krpc.test.test_service_definitions'
 TestSnakeCase = require 'krpc.test.test_snake_case'
 TestTypes = require 'krpc.test.test_types'
 

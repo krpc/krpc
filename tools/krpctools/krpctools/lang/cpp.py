@@ -159,9 +159,15 @@ class CppLanguage(Language):
         if isinstance(typ, ClassType) and value is None:
             return self.parse_type(typ) + "()"
         if isinstance(typ, EnumerationType):
-            return "static_cast<%s>(%s)" % (self.parse_type(typ), value)
+            return "%s::%s" % (
+                self.parse_type(typ),
+                self.parse_enum_value_name(value.name),
+            )
         if value is None:
             return self.parse_type(typ) + "()"
+        # A collection is written as a braced initializer list. Parentheses would name a
+        # constructor instead, so std::vector<int32_t>(1, 2, 3) is not the vector of those
+        # three values it appears to be.
         if isinstance(typ, TupleType):
             values = (
                 self.parse_default_value(x, typ.value_types[i])

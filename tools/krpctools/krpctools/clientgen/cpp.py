@@ -29,8 +29,8 @@ class CppGenerator(Generator):
     def _wrap_optional(type_str):
         return _cpp_template_fix("std::optional<%s>" % type_str)
 
-    def generate_context_parameters(self, procedure):
-        parameters = super().generate_context_parameters(procedure)
+    def generate_context_parameters(self, name, procedure):
+        parameters = super().generate_context_parameters(name, procedure)
         for i, parameter in enumerate(parameters):
             # A nullable class parameter keeps its class type (null is the id-0 object);
             # every other nullable parameter is wrapped in std::optional.
@@ -88,7 +88,7 @@ class CppGenerator(Generator):
                 properties["set_" + name] = {
                     "remote_name": info["setter"]["remote_name"],
                     "parameters": self.generate_context_parameters(
-                        info["setter"]["procedure"]
+                        info["setter"]["remote_name"], info["setter"]["procedure"]
                     ),
                     "return_type": "void",
                     "return_set_client": False,
@@ -125,7 +125,8 @@ class CppGenerator(Generator):
                         "remote_name": info["setter"]["remote_name"],
                         "parameters": [
                             self.generate_context_parameters(
-                                info["setter"]["procedure"]
+                                info["setter"]["remote_name"],
+                                info["setter"]["procedure"],
                             )[1]
                         ],
                         "return_type": "void",

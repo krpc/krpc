@@ -207,7 +207,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: enum_default_arg([x = TestEnum(2)])
+.. staticmethod:: enum_default_arg([x = TestEnum.value_c])
 
 
 
@@ -224,6 +224,17 @@ Service documentation string.
 
    :param TestEnum x:
    :rtype: :class:`TestEnum`
+   
+
+
+
+
+.. staticmethod:: enum_list_default([x = [TestEnum.value_b, TestEnum.value_c]])
+
+
+
+   :param list x:
+   :rtype: list(:class:`TestEnum`)
    
 
 

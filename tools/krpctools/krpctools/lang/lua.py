@@ -10,6 +10,7 @@ from krpc.types import (
     SetType,
     DictionaryType,
 )
+from krpc.utils import snake_case
 from .language import Language
 
 
@@ -46,14 +47,36 @@ class LuaLanguage(Language):
             return "Tuple"
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
+    def parse_enum_value_name(self, name):
+        return snake_case(name)
+
     def parse_default_value(self, value, typ):
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
-        # python2 fix: convert set to string manually
-        if isinstance(typ, SetType):
-            return (
-                "{"
-                + ", ".join(self.parse_default_value(x, typ.value_type) for x in value)
-                + "}"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
+            return "true" if value else "false"
+        if isinstance(typ, EnumerationType):
+            return "%s.%s" % (
+                self.parse_type(typ),
+                self.parse_enum_value_name(value.name),
             )
+        if isinstance(typ, TupleType):
+            values = (
+                self.parse_default_value(x, typ.value_types[i])
+                for i, x in enumerate(value)
+            )
+            return "{%s}" % ", ".join(values)
+        if isinstance(typ, (ListType, SetType)):
+            values = (self.parse_default_value(x, typ.value_type) for x in value)
+            return "{%s}" % ", ".join(values)
+        if isinstance(typ, DictionaryType):
+            entries = (
+                "[%s] = %s"
+                % (
+                    self.parse_default_value(k, typ.key_type),
+                    self.parse_default_value(v, typ.value_type),
+                )
+                for k, v in value.items()
+            )
+            return "{%s}" % ", ".join(entries)
         return str(value)

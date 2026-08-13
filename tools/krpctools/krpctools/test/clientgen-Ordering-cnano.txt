@@ -1,0 +1,155 @@
+#pragma once
+
+#include <krpc_cnano/decoder.h>
+#include <krpc_cnano/deprecated.h>
+#include <krpc_cnano/encoder.h>
+#include <krpc_cnano/error.h>
+#include <krpc_cnano/memory.h>
+#include <krpc_cnano/pb_decode.h>
+#include <krpc_cnano/pb_encode.h>
+#include <krpc_cnano/types.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#ifndef KRPC_TYPE_LIST_ENUM
+#define KRPC_TYPE_LIST_ENUM
+
+typedef struct krpc_list_enum_s krpc_list_enum_t;
+struct krpc_list_enum_s {
+  size_t size;
+  krpc_enum_t * items;
+};
+
+static inline krpc_error_t krpc_encode_list_enum(
+  pb_ostream_t * stream, const krpc_list_enum_t * value);
+static inline krpc_error_t krpc_encode_size_list_enum(
+  size_t * size, const krpc_list_enum_t * value);
+static inline bool krpc_encode_callback_list_enum(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg);
+static inline krpc_error_t krpc_decode_list_enum(
+  pb_istream_t * stream, krpc_list_enum_t * value);
+
+#endif  // KRPC_TYPE_LIST_ENUM
+
+/**
+ * Defaults to a member of another service's enumeration.
+ */
+static inline krpc_error_t krpc_ServiceA_Frob(krpc_connection_t connection, krpc_ServiceB_Mode_t mode);
+
+/**
+ * Defaults to a collection containing a member of another service's enumeration.
+ */
+static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, const krpc_list_enum_t * modes);
+
+// Implementation
+
+#ifndef KRPC_IMPL_TYPE_LIST_ENUM
+#define KRPC_IMPL_TYPE_LIST_ENUM
+
+static inline bool krpc_encode_callback_items_list_enum(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  const krpc_list_enum_t * value = (const krpc_list_enum_t*)(*arg);
+  size_t i = 0;
+  for (; i < value->size; i++) {
+    if (!pb_encode_tag_for_field(stream, field))
+      KRPC_CALLBACK_RETURN_ERROR("encoding tag for list item");
+    size_t size;
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_enum(&size, value->items[i]));
+    if (!pb_encode_varint(stream, size))
+      KRPC_CALLBACK_RETURN_ERROR("encoding size for list item");
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_enum(stream, value->items[i]));
+  }
+  return true;
+}
+
+static inline krpc_error_t krpc_encode_list_enum(
+  pb_ostream_t * stream, const krpc_list_enum_t * value) {
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.encode = &krpc_encode_callback_items_list_enum;
+  message.items.arg = (krpc_list_enum_t*)value;
+  KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_encode_size_list_enum(
+  size_t * size, const krpc_list_enum_t * value) {
+  pb_ostream_t stream = PB_OSTREAM_SIZING;
+  KRPC_RETURN_ON_ERROR(krpc_encode_list_enum(&stream, value));
+  *size = stream.bytes_written;
+  return KRPC_OK;
+}
+
+static inline bool krpc_encode_callback_list_enum(
+  pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
+  if (!pb_encode_tag_for_field(stream, field))
+    KRPC_CALLBACK_RETURN_ERROR("encoding tag for list_enum");
+  krpc_list_enum_t * value = (krpc_list_enum_t*)(*arg);
+  size_t size;
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_list_enum(&size, value));
+  if (!pb_encode_varint(stream, size))
+    KRPC_CALLBACK_RETURN_ERROR("encoding size for list_enum");
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_list_enum(stream, value));
+  return true;
+}
+
+static inline bool krpc_decode_callback_item_list_enum(
+  pb_istream_t * stream, const pb_field_t * field, void ** arg) {
+  typedef struct State { size_t capacity; krpc_list_enum_t * value; } State;
+  State * state = (State*)(*arg);
+  size_t i = state->value->size;
+  state->value->size++;
+  if (state->capacity > 0 && state->value->size > state->capacity) {
+    state->value->items = (krpc_enum_t*)krpc_recalloc(state->value->items, state->capacity, KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_enum_t));
+    state->capacity += KRPC_ALLOC_BLOCK_SIZE;
+  }
+  KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_enum(stream, &state->value->items[i]));
+  return true;
+}
+
+static inline krpc_error_t krpc_decode_list_enum(
+  pb_istream_t * stream, krpc_list_enum_t * value) {
+  typedef struct State { size_t capacity; krpc_list_enum_t * value; } State;
+  State state = { 0, value };
+  value->size = 0;
+  if (value->items == NULL) {
+    value->items = (krpc_enum_t*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof(krpc_enum_t));
+    state.capacity = KRPC_ALLOC_BLOCK_SIZE;
+  }
+  krpc_schema_List message = krpc_schema_List_init_default;
+  message.items.funcs.decode = &krpc_decode_callback_item_list_enum;
+  message.items.arg = &state;
+  KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
+  return KRPC_OK;
+}
+
+#endif  // KRPC_IMPL_TYPE_LIST_ENUM
+
+static inline krpc_error_t krpc_ServiceA_Frob(krpc_connection_t connection, krpc_ServiceB_Mode_t mode) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 1, 1, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_enum, &mode));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+static inline krpc_error_t krpc_ServiceA_FrobAll(krpc_connection_t connection, const krpc_list_enum_t * modes) {
+  krpc_call_t _call;
+  krpc_argument_t _arguments[1];
+  KRPC_CHECK(krpc_call(&_call, 1, 2, 1, _arguments));
+  KRPC_CHECK(krpc_add_argument(&_call, 0, &krpc_encode_callback_list_enum, modes));
+  krpc_result_t _result = KRPC_RESULT_INIT_DEFAULT;
+  KRPC_CHECK(krpc_init_result(&_result));
+  KRPC_CHECK(krpc_invoke(connection, &_result.message, &_call.message));
+  KRPC_CHECK(krpc_free_result(&_result));
+  return KRPC_OK;
+}
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif

@@ -1,0 +1,70 @@
+using Google.Protobuf;
+using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+#if NET35
+using systemAlias = global::KRPC.Client.Compatibility;
+using genericCollectionsAlias = global::KRPC.Client.Compatibility;
+#else
+using systemAlias = global::System;
+using genericCollectionsAlias = global::System.Collections.Generic;
+#endif
+
+// Generated code references its own deprecated members (e.g. when registering
+// exception types), so suppress the deprecation warnings within this file.
+#pragma warning disable 612, 618
+
+namespace KRPC.Client.Services.ServiceA
+{
+    /// <summary>
+    /// Extension methods for ServiceA service.
+    /// </summary>
+    public static class ExtensionMethods
+    {
+        /// <summary>
+        /// Create an instance of the ServiceA service.
+        /// </summary>
+        public static global::KRPC.Client.Services.ServiceA.Service ServiceA (this global::KRPC.Client.IConnection connection)
+        {
+            return new global::KRPC.Client.Services.ServiceA.Service (connection);
+        }
+    }
+
+    /// <summary>
+    /// ServiceA service.
+    /// </summary>
+    public class Service
+    {
+        global::KRPC.Client.IConnection connection;
+
+        internal Service (global::KRPC.Client.IConnection serverConnection)
+        {
+            connection = serverConnection;
+        }
+
+        /// <summary>
+        /// Defaults to a member of another service's enumeration.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("ServiceA", "Frob")]
+        public void Frob (global::KRPC.Client.Services.ServiceB.Mode mode = global::KRPC.Client.Services.ServiceB.Mode.Fast)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (mode, typeof(global::KRPC.Client.Services.ServiceB.Mode))
+            };
+            connection.Invoke ("ServiceA", "Frob", _args);
+        }
+
+        /// <summary>
+        /// Defaults to a collection containing a member of another service's enumeration.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("ServiceA", "FrobAll")]
+        public void FrobAll (global::System.Collections.Generic.IList<global::KRPC.Client.Services.ServiceB.Mode> modes = null)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (modes ?? new global::System.Collections.Generic.List<global::KRPC.Client.Services.ServiceB.Mode> { global::KRPC.Client.Services.ServiceB.Mode.Fast }, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.ServiceB.Mode>))
+            };
+            connection.Invoke ("ServiceA", "FrobAll", _args);
+        }
+    }
+}

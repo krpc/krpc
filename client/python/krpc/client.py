@@ -5,10 +5,11 @@ from contextlib import contextmanager
 import sys
 import threading
 from krpc.connection import Connection
+from krpc.definitions import CLASS, ENUMERATION, Definition, register_all
 from krpc.error import StreamError
 from krpc.event import Event
 from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
-from krpc.service import create_service
+from krpc.service import create_service, service_definitions
 from krpc.streammanager import StreamManager
 from krpc.stream import Stream
 from krpc.encoder import Encoder
@@ -18,6 +19,41 @@ from krpc.error import RPCError
 import krpc.streammanager
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.services
+
+
+def _stub_definitions(name: str, service: object) -> Iterator[Definition]:
+    """The types of a service whose stubs were generated ahead of time, as records that can be
+    registered in a type registry. The stubs already provide the python types, so registering
+    them is what lets a dynamically created service use them."""
+
+    def register_class(class_name: str, python_type: type) -> Callable[[Types], None]:
+        def register(types: Types) -> None:
+            types.register_class_type(name, class_name, python_type)
+
+        return register
+
+    def register_enumeration(
+        enum_name: str, python_type: type
+    ) -> Callable[[Types], None]:
+        def register(types: Types) -> None:
+            types.register_enum_type(name, enum_name, python_type)
+
+        return register
+
+    classes = service._classes  # type: ignore[attr-defined]
+    for class_name, python_type in classes.items():
+        yield Definition(
+            CLASS, name, class_name, [], register_class(class_name, python_type)
+        )
+    enumerations = service._enumerations  # type: ignore[attr-defined]
+    for enum_name, python_type in enumerations.items():
+        yield Definition(
+            ENUMERATION,
+            name,
+            enum_name,
+            [],
+            register_enumeration(enum_name, python_type),
+        )
 
 
 class Client(krpc.services.Client):
@@ -47,23 +83,24 @@ class Client(krpc.services.Client):
         ).services
 
         # Load services
+        definitions = []
         dynamic_services = []
-        # Load services with pre-generated stubs first
-        # so that class/enum types are loaded if a dynamic service needs them
         for service_info in services:
             service = None
             if use_pregenerated_stubs:
                 service = self._services.get(service_info.name)
             if service is not None:
-                for name, typ in service._classes.items():  # type: ignore[attr-defined]
-                    self._types.register_class_type(service_info.name, name, typ)
-                for name, typ in service._enumerations.items():  # type: ignore[attr-defined]
-                    self._types.register_enum_type(service_info.name, name, typ)
+                definitions.extend(_stub_definitions(service_info.name, service))
             else:
                 dynamic_services.append(service_info)
-        # Then dynamically load services for those without pre-generated stubs
+                definitions.extend(service_definitions(service_info))
+        # Register the types of every service, whether its stubs were pre-generated or not,
+        # before creating any of them: a service's procedures are built from types that any
+        # service may define, and a default value cannot be decoded before the definition of
+        # the enumeration it belongs to has been registered
+        register_all(self._types, definitions)
+        # Then dynamically create services for those without pre-generated stubs
         for service_info in dynamic_services:
-            # Dynamically create
             setattr(
                 self, snake_case(service_info.name), create_service(self, service_info)
             )

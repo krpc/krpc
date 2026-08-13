@@ -62,7 +62,10 @@ class CsharpDomain(Domain):
 
     def default_value(self, value, typ):
         if isinstance(typ, EnumerationType):
-            return "%s" % value
+            return "%s.%s" % (
+                self.type(typ),
+                self.language.parse_enum_value_name(value.name),
+            )
         if isinstance(typ, TupleType):
             if value is None:
                 value = tuple()

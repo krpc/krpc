@@ -1,14 +1,11 @@
 from collections import OrderedDict, defaultdict
 from krpc.attributes import Attributes
-from krpc.types import Types
 from ..utils import as_type, decode_default_value
 
 
 class Appendable:
     def __init__(self):
         self._appended = []
-
-    types = Types()
 
     def append(self, value):
         self._appended.append(value)
@@ -28,10 +25,12 @@ class Service(Appendable):
         exceptions,
         documentation,
         sort,
+        types,
         deprecated=False,
         deprecated_reason="",
     ):
         super().__init__()
+        self.types = types
         self.name = name
         self.fullname = name
         self.documentation = documentation
@@ -54,14 +53,15 @@ class Service(Appendable):
                 info["game_scenes"] = "All"
 
             if Attributes.is_a_procedure(pname):
-                members.append(Procedure(name, pname, **info))
+                members.append(Procedure(name, pname, types=types, **info))
 
             elif Attributes.is_a_property_accessor(pname):
                 propname = Attributes.get_property_name(pname)
+                procedure = Procedure(name, pname, types=types, **info)
                 if Attributes.is_a_property_getter(pname):
-                    properties[propname]["getter"] = Procedure(name, pname, **info)
+                    properties[propname]["getter"] = procedure
                 else:
-                    properties[propname]["setter"] = Procedure(name, pname, **info)
+                    properties[propname]["setter"] = procedure
 
             elif Attributes.is_a_class_member(pname):
                 cname = Attributes.get_class_name(pname)
@@ -71,7 +71,9 @@ class Service(Appendable):
             members.append(Property(name, propname, **prop))
 
         self.classes = {
-            cname: Class(name, cname, cprocedures[cname], sort=sort, **cinfo)
+            cname: Class(
+                name, cname, cprocedures[cname], sort=sort, types=types, **cinfo
+            )
             for (cname, cinfo) in classes.items()
         }
         self.enumerations = {
@@ -105,10 +107,12 @@ class Class(Appendable):
         procedures,
         documentation,
         sort,
+        types,
         deprecated=False,
         deprecated_reason="",
     ):
         super().__init__()
+        self.types = types
         self.service_name = service_name
         self.name = name
         self.fullname = service_name + "." + name
@@ -125,14 +129,18 @@ class Class(Appendable):
                 del pinfo["id"]
 
             if Attributes.is_a_class_method(pname):
-                members.append(ClassMethod(service_name, name, pname, **pinfo))
+                members.append(
+                    ClassMethod(service_name, name, pname, types=types, **pinfo)
+                )
 
             elif Attributes.is_a_class_static_method(pname):
-                members.append(ClassStaticMethod(service_name, name, pname, **pinfo))
+                members.append(
+                    ClassStaticMethod(service_name, name, pname, types=types, **pinfo)
+                )
 
             elif Attributes.is_a_class_property_accessor(pname):
                 propname = Attributes.get_class_member_name(pname)
-                proc = Procedure(service_name, pname, **pinfo)
+                proc = Procedure(service_name, pname, types=types, **pinfo)
                 if Attributes.is_a_class_property_getter(pname):
                     properties[propname]["getter"] = proc
                 else:
@@ -148,13 +156,24 @@ class Class(Appendable):
 
 class Parameter(Appendable):
     # pylint: disable=redefined-builtin
-    def __init__(self, name, type, documentation, default_value=None, nullable=False):
+    def __init__(
+        self,
+        name,
+        type,
+        documentation,
+        types,
+        procedure,
+        default_value=None,
+        nullable=False,
+    ):
         super().__init__()
+        self.types = types
         self.name = name
         self.type = as_type(self.types, type)
         self.has_default_value = default_value is not None
         if default_value is not None:
-            default_value = decode_default_value(default_value, self.type)
+            location = "%s parameter %s" % (procedure, name)
+            default_value = decode_default_value(default_value, self.type, location)
         self.default_value = default_value
         self.nullable = nullable
         self.documentation = documentation
@@ -169,6 +188,7 @@ class Procedure(Appendable):
         name,
         parameters,
         documentation,
+        types,
         return_type=None,
         return_is_nullable=False,
         game_scenes=None,
@@ -176,6 +196,7 @@ class Procedure(Appendable):
         deprecated_reason="",
     ):
         super().__init__()
+        self.types = types
         self.service_name = service_name
         self.name = name
         self.fullname = service_name + "." + name
@@ -185,7 +206,13 @@ class Procedure(Appendable):
             self.return_type = None
         self.return_is_nullable = return_is_nullable
         self.parameters = [
-            Parameter(documentation=documentation, **info) for info in parameters
+            Parameter(
+                documentation=documentation,
+                types=types,
+                procedure=self.fullname,
+                **info
+            )
+            for info in parameters
         ]
         self.game_scenes = game_scenes
         self.documentation = documentation
@@ -220,6 +247,7 @@ class Property(Appendable):
 
 
 class ClassMethod(Appendable):
+    # pylint: disable=too-many-instance-attributes,too-many-arguments
     member_type = "class_method"
 
     def __init__(
@@ -229,6 +257,7 @@ class ClassMethod(Appendable):
         name,
         parameters,
         documentation,
+        types,
         return_type=None,
         return_is_nullable=False,
         game_scenes=None,
@@ -236,6 +265,7 @@ class ClassMethod(Appendable):
         deprecated_reason="",
     ):
         super().__init__()
+        self.types = types
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
         self.class_name = class_name
@@ -247,7 +277,13 @@ class ClassMethod(Appendable):
             self.return_type = None
         self.return_is_nullable = return_is_nullable
         self.parameters = [
-            Parameter(documentation=documentation, **info) for info in parameters
+            Parameter(
+                documentation=documentation,
+                types=types,
+                procedure=self.fullname,
+                **info
+            )
+            for info in parameters
         ]
         self.game_scenes = game_scenes
         self.documentation = documentation
@@ -257,6 +293,7 @@ class ClassMethod(Appendable):
 
 
 class ClassStaticMethod(Appendable):
+    # pylint: disable=too-many-instance-attributes,too-many-arguments
     member_type = "class_static_method"
 
     def __init__(
@@ -266,6 +303,7 @@ class ClassStaticMethod(Appendable):
         name,
         parameters,
         documentation,
+        types,
         return_type=None,
         return_is_nullable=False,
         game_scenes=None,
@@ -273,6 +311,7 @@ class ClassStaticMethod(Appendable):
         deprecated_reason="",
     ):
         super().__init__()
+        self.types = types
         name = Attributes.get_class_member_name(name)
         self.service_name = service_name
         self.class_name = class_name
@@ -284,7 +323,13 @@ class ClassStaticMethod(Appendable):
             self.return_type = None
         self.return_is_nullable = return_is_nullable
         self.parameters = [
-            Parameter(documentation=documentation, **info) for info in parameters
+            Parameter(
+                documentation=documentation,
+                types=types,
+                procedure=self.fullname,
+                **info
+            )
+            for info in parameters
         ]
         self.game_scenes = game_scenes
         self.documentation = documentation

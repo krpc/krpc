@@ -1,11 +1,10 @@
 import array
 import base64
 import re
-from krpc.decoder import Decoder
+from krpc import definitions
 
 # pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
-from krpc.types import Types, EnumerationType
 
 _CAMEL_CASE_REGEX = re.compile(r"([^A-Z]+|[A-Z][^A-Z]*)")
 
@@ -56,14 +55,12 @@ def _as_protobuf_type(types, type_info):
     return protobuf_type
 
 
-def decode_default_value(value, typ):
+def decode_default_value(value, typ, location):
+    """Decode a default value parsed from a JSON service definitions file. location names the
+    parameter it belongs to, and is reported when the value cannot be decoded."""
     if value is None:
         # A JSON null default value means the default is null
         return None
     value = base64.b64decode(value)
     value = array.array("B", value).tobytes()
-    # Note: following is a workaround for decoding EnumerationType,
-    # as set_values has not been called
-    if not isinstance(typ, EnumerationType):
-        return Decoder.decode(None, value, typ)
-    return Decoder.decode(None, value, Types().sint32_type)
+    return definitions.decode_default_value(None, value, typ, location)

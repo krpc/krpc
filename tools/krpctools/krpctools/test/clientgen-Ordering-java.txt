@@ -1,0 +1,89 @@
+package krpc.client.services;
+
+import com.google.protobuf.ByteString;
+
+import krpc.client.Connection;
+import krpc.client.Encoder;
+import krpc.client.RemoteEnum;
+import krpc.client.RemoteObject;
+import krpc.client.RPCInfo;
+import krpc.client.RPCException;
+import krpc.client.Types;
+
+// Generated code references its own deprecated members (e.g. when registering
+// exception types), so suppress the deprecation warnings within this class.
+@SuppressWarnings("deprecation")
+public class ServiceA {
+
+    public static ServiceA newInstance(Connection connection) {
+        return new ServiceA(connection);
+    }
+
+    private Connection connection;
+
+    private ServiceA(Connection connection) {
+        this.connection = connection;
+    }
+
+    private void addExceptionTypes(Connection connection) {
+    }
+
+    /**
+     * Defaults to a member of another service's enumeration.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "ServiceA", procedure = "Frob", types = _Types.class)
+    public void frob(krpc.client.services.ServiceB.Mode mode) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(mode, krpc.client.Types.createEnumeration("ServiceB", "Mode"))
+        };
+        this.connection.invoke("ServiceA", "Frob", _args);
+    }
+
+    /**
+     * Defaults to a collection containing a member of another service's enumeration.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "ServiceA", procedure = "FrobAll", types = _Types.class)
+    public void frobAll(java.util.List<krpc.client.services.ServiceB.Mode> modes) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(modes, krpc.client.Types.createList(krpc.client.Types.createEnumeration("ServiceB", "Mode")))
+        };
+        this.connection.invoke("ServiceA", "FrobAll", _args);
+    }
+
+    public static class _Types {
+        // Procedure return and parameter types are held in lookup maps that are
+        // populated by chunked initializer methods. Emitting them this way keeps
+        // every generated method under the JVM's 64KB bytecode limit as a service
+        // accumulates procedures.
+        private static final java.util.Map<String, krpc.schema.KRPC.Type> RETURN_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type>();
+        private static final java.util.Map<String, krpc.schema.KRPC.Type[]> PARAMETER_TYPES =
+            new java.util.HashMap<String, krpc.schema.KRPC.Type[]>();
+
+        static {
+            initTypes0();
+        }
+
+        private static void initTypes0() {
+            RETURN_TYPES.put("Frob", null);
+            PARAMETER_TYPES.put("Frob", new krpc.schema.KRPC.Type[] { krpc.client.Types.createEnumeration("ServiceB", "Mode") });
+            RETURN_TYPES.put("FrobAll", null);
+            PARAMETER_TYPES.put("FrobAll", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("ServiceB", "Mode")) });
+        }
+
+        public static krpc.schema.KRPC.Type getReturnType(String procedure) {
+            if (!RETURN_TYPES.containsKey(procedure))
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return RETURN_TYPES.get(procedure);
+        }
+
+        public static krpc.schema.KRPC.Type[] getParameterTypes(String procedure) {
+            krpc.schema.KRPC.Type[] parameterTypes = PARAMETER_TYPES.get(procedure);
+            if (parameterTypes == null)
+                throw new IllegalArgumentException("Procedure '" + procedure +"' not found");
+            return parameterTypes;
+        }
+    }
+}

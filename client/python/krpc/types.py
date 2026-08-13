@@ -403,6 +403,12 @@ class EnumerationType(TypeBase):
         # be called to set the python_type
         super().__init__(protobuf_type, cast(type, typ), string)
 
+    @property
+    def has_values(self) -> bool:
+        """Whether the values of the enumeration are known, which they are
+        only once its definition has been registered by calling set_values"""
+        return self._python_type is not None
+
     def set_values(self, values: Mapping[str, Mapping[str, object]]) -> None:
         """Set the python type. Creates an Enum class
         using the given values."""

@@ -1,0 +1,70 @@
+{
+  "ServiceA": {
+    "id": 1,
+    "documentation": "<doc>\n<summary>\nA service whose procedures use another service's enumeration.\n</summary>\n</doc>",
+    "procedures": {
+      "Frob": {
+        "id": 1,
+        "parameters": [
+          {
+            "name": "mode",
+            "type": {
+              "code": "ENUMERATION",
+              "service": "ServiceB",
+              "name": "Mode"
+            },
+            "default_value": "Ag=="
+          }
+        ],
+        "documentation": "<doc>\n<summary>\nDefaults to a member of another service's enumeration.\n</summary>\n</doc>"
+      },
+      "FrobAll": {
+        "id": 2,
+        "parameters": [
+          {
+            "name": "modes",
+            "type": {
+              "code": "LIST",
+              "types": [
+                {
+                  "code": "ENUMERATION",
+                  "service": "ServiceB",
+                  "name": "Mode"
+                }
+              ]
+            },
+            "default_value": "CgEC"
+          }
+        ],
+        "documentation": "<doc>\n<summary>\nDefaults to a collection containing a member of another service's enumeration.\n</summary>\n</doc>"
+      }
+    },
+    "classes": {},
+    "enumerations": {},
+    "exceptions": {}
+  },
+  "ServiceB": {
+    "id": 2,
+    "documentation": "<doc>\n<summary>\nA service defining an enumeration that another service uses.\n</summary>\n</doc>",
+    "procedures": {},
+    "classes": {},
+    "enumerations": {
+      "Mode": {
+        "documentation": "<doc>\n<summary>\nHow to frob.\n</summary>\n</doc>",
+        "values": [
+          {
+            "name": "Slow",
+            "value": 0,
+            "documentation": "<doc>\n<summary>\nFrob slowly.\n</summary>\n</doc>"
+          },
+          {
+            "name": "Fast",
+            "value": 1,
+            "documentation": "<doc>\n<summary>\nFrob quickly.\n</summary>\n</doc>"
+          }
+        ]
+      }
+    },
+    "exceptions": {}
+  }
+}

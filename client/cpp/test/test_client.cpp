@@ -243,6 +243,13 @@ TEST_F(test_client, test_enums) {
   ASSERT_EQ(krpc::services::TestService::TestEnum::value_c, test_service.enum_default_arg());
   ASSERT_EQ(krpc::services::TestService::TestEnum::value_b,
             test_service.enum_default_arg(krpc::services::TestService::TestEnum::value_b));
+  std::vector<krpc::services::TestService::TestEnum> enums = {
+      krpc::services::TestService::TestEnum::value_b,
+      krpc::services::TestService::TestEnum::value_c};
+  ASSERT_EQ(enums, test_service.enum_list_default());
+  enums = {krpc::services::TestService::TestEnum::value_a,
+           krpc::services::TestService::TestEnum::value_b};
+  ASSERT_EQ(enums, test_service.enum_list_default(enums));
 }
 
 TEST_F(test_client, test_collections) {

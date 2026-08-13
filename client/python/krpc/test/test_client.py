@@ -369,6 +369,14 @@ class TestClient(ServerTestCase, unittest.TestCase):
             enum.value_b, self.conn.test_service.enum_default_arg(enum.value_b)
         )
 
+        self.assertEqual(
+            [enum.value_b, enum.value_c], self.conn.test_service.enum_list_default()
+        )
+        self.assertEqual(
+            [enum.value_a, enum.value_b],
+            self.conn.test_service.enum_list_default([enum.value_a, enum.value_b]),
+        )
+
     def test_invalid_enum(self) -> None:
         self.assertRaises(ValueError, self.conn.test_service.TestEnum, 9999)
 
@@ -551,6 +559,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "enum_return",
                     "enum_echo",
                     "enum_default_arg",
+                    "enum_list_default",
                     "blocking_procedure",
                     "increment_list",
                     "increment_dictionary",

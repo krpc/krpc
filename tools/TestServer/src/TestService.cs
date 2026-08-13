@@ -394,6 +394,21 @@ namespace TestServer
             return x;
         }
 
+        public static class CreateEnumListDefault
+        {
+            public static object Create ()
+            {
+                return new List<TestEnum> { TestEnum.ValueB, TestEnum.ValueC };
+            }
+        }
+
+        [KRPCProcedure]
+        public static IList<TestEnum> EnumListDefault (
+            [KRPCDefaultValue (typeof(CreateEnumListDefault))] IList<TestEnum> x)
+        {
+            return x;
+        }
+
         public static class CreateEmptyListDefault
         {
             public static object Create ()

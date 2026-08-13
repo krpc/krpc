@@ -153,6 +153,13 @@
       :param TestEnum x:
    
 
+   .. method:: java.util.List<TestEnum> enumListDefault(java.util.List<TestEnum> x)
+
+
+
+      :param java.util.List<TestEnum> x:
+   
+
    .. method:: TestEnum enumReturn()
 
 

@@ -32,8 +32,8 @@ class CsharpGenerator(Generator):
         content = content.replace("  <remarks", "<remarks")
         return content
 
-    def generate_context_parameters(self, procedure):
-        parameters = super().generate_context_parameters(procedure)
+    def generate_context_parameters(self, name, procedure):
+        parameters = super().generate_context_parameters(name, procedure)
         for i, parameter in enumerate(parameters):
             typ = as_type(self.types, procedure["parameters"][i]["type"])
             if parameter["nullable"] and self._is_nullable_value_type(typ):
