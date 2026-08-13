@@ -42,7 +42,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. staticmethod:: message(content, [duration = 1.0], [position = 1], [color = (1.0, 0.92, 0.016, 1.0)], [size = 20.0])
+.. staticmethod:: message(content, [duration = 1.0], [position = UI.MessagePosition.top_center], [color = {1.0, 0.92, 0.016, 1.0}], [size = 20.0])
 
    Display a message on the screen.
 
@@ -59,7 +59,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. staticmethod:: clear([client_only = False])
+.. staticmethod:: clear([client_only = false])
 
    Remove all user interface elements.
 

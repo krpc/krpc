@@ -754,6 +754,7 @@
 <h3>C++ client<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="changelog-marker breaking">Breaking</span> Support null for any nullable type; nullable non-class values use <code class="docutils literal notranslate"><span class="pre">std::optional</span></code>, changing generated signatures (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
+<li><p>Fix a service with a collection of enumerations in a procedure signature failing to compile (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
 </ul>
 </section>
 <section id="java-client">
@@ -766,18 +767,26 @@
 <h3>Lua client<a class="headerlink" href="#lua-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="changelog-marker breaking">Breaking</span> Support <code class="docutils literal notranslate"><span class="pre">Types.none</span></code> for any nullable type (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
+<li><p>Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
 </ul>
 </section>
 <section id="python-client">
 <h3>Python client<a class="headerlink" href="#python-client" title="Link to this heading">#</a></h3>
 <ul class="simple">
 <li><p><span class="changelog-marker breaking">Breaking</span> Support <code class="docutils literal notranslate"><span class="pre">None</span></code> for any nullable type (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
+<li><p>Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
 </ul>
 </section>
 <section id="krpctools">
 <h3>krpctools<a class="headerlink" href="#krpctools" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><span class="changelog-marker breaking">Breaking</span> A generator module given to <code class="docutils literal notranslate"><span class="pre">krpc-clientgen</span></code> by path is constructed with the definitions of every service that was loaded, rather than with those of the single service it generates (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
 <li><p>Support for nullable values across all types (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1017">#1017</a>)</p></li>
+<li><p>Generate an enumeration default value as the member it names, instead of a cast of its integer value (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
+<li><p>Fix generating a default value whose type contains an enumeration, such as a list of them, failing (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
+<li><p>Fix Lua documentation writing default values in Python’s syntax rather than Lua’s (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
+<li><p>Fix C++ documentation writing a collection default value as a constructor call rather than a braced initializer list, so <code class="docutils literal notranslate"><span class="pre">std::vector&lt;int32_t&gt;(1,</span> <span class="pre">2,</span> <span class="pre">3)</span></code> named a constructor that builds something else entirely (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
+<li><p>A default value naming an undeclared enumeration value, or one whose enumeration no supplied service defines, is now reported naming the service, procedure and parameter it came from (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1044">#1044</a>)</p></li>
 </ul>
 </section>
 </section>

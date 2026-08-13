@@ -219,7 +219,7 @@ Vessel
       :Attribute: Read-only, cannot be set
       :rtype: :class:`SpaceCenter.Resources`
 
-   .. method:: resources_in_decouple_stage(stage, [cumulative = True])
+   .. method:: resources_in_decouple_stage(stage, [cumulative = true])
 
       .. warning:: Deprecated. Use :meth:`SpaceCenter.Stage.resources` from the object returned by :meth:`SpaceCenter.Vessel.decouple_stage_at` instead.
 

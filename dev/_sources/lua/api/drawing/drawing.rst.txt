@@ -17,7 +17,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_line(start, end, reference_frame, [visible = True])
+.. staticmethod:: add_line(start, end, reference_frame, [visible = true])
 
    Draw a line in the scene.
 
@@ -30,7 +30,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_direction(direction, reference_frame, [length = 10.0], [visible = True])
+.. staticmethod:: add_direction(direction, reference_frame, [length = 10.0], [visible = true])
 
    Draw a direction vector in the scene, starting from the origin of the given reference frame.
 
@@ -43,7 +43,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_direction_from_com(direction, reference_frame, [length = 10.0], [visible = True])
+.. staticmethod:: add_direction_from_com(direction, reference_frame, [length = 10.0], [visible = true])
 
    Draw a direction vector in the scene, from the center of mass of the active vessel.
 
@@ -56,7 +56,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_polygon(vertices, reference_frame, [visible = True])
+.. staticmethod:: add_polygon(vertices, reference_frame, [visible = true])
 
    Draw a polygon in the scene, defined by a list of vertices.
 
@@ -68,7 +68,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_text(text, reference_frame, position, rotation, [visible = True])
+.. staticmethod:: add_text(text, reference_frame, position, rotation, [visible = true])
 
    Draw text in the scene.
 
@@ -82,7 +82,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_navball_marker(direction, reference_frame, [visible = True])
+.. staticmethod:: add_navball_marker(direction, reference_frame, [visible = true])
 
    Draw a marker on the navball, pointing in the given direction.
 
@@ -94,7 +94,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: clear([client_only = False])
+.. staticmethod:: clear([client_only = false])
 
    Remove all objects being drawn.
 

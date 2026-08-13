@@ -36,7 +36,7 @@ Stage
       :Attribute: Read-only, cannot be set
       :rtype: List
 
-   .. method:: resources([cumulative = True])
+   .. method:: resources([cumulative = true])
 
       Returns a :meth:`SpaceCenter.Stage.resources` object for this stage.
 

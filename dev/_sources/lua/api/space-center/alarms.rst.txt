@@ -73,7 +73,7 @@ Alarms
       :param string description: Description for the alarm.
       :rtype: :class:`SpaceCenter.Alarm`
 
-   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = True], [title = 'Maneuver Node Alarm'], [description = ''])
+   .. staticmethod:: add_maneuver_node_alarm(vessel, node, [offset = 60.0], [add_burn_time = true], [title = 'Maneuver Node Alarm'], [description = ''])
 
       Create an alarm for the given vessel and maneuver node.
 

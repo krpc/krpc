@@ -1520,7 +1520,7 @@ Module
       :param string id:
       :rtype: boolean
 
-   .. method:: set_action(name, [value = True])
+   .. method:: set_action(name, [value = true])
 
       .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.action_list` by :attr:`SpaceCenter.PartAction.gui_name` and set :attr:`SpaceCenter.PartAction.activated` instead.
 
@@ -1529,7 +1529,7 @@ Module
       :param string name:
       :param boolean value:
 
-   .. method:: set_action_by_id(id, [value = True])
+   .. method:: set_action_by_id(id, [value = true])
 
       .. warning:: Deprecated. Filter :attr:`SpaceCenter.Module.action_list` by :attr:`SpaceCenter.PartAction.name` and set :attr:`SpaceCenter.PartAction.activated` instead.
 

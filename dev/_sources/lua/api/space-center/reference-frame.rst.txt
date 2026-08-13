@@ -21,7 +21,7 @@ ReferenceFrame
       This class does not contain any properties or methods. It is only
       used as a parameter to other functions.
 
-   .. staticmethod:: create_relative(reference_frame, [position = (0.0, 0.0, 0.0)], [rotation = (0.0, 0.0, 0.0, 1.0)], [velocity = (0.0, 0.0, 0.0)], [angular_velocity = (0.0, 0.0, 0.0)])
+   .. staticmethod:: create_relative(reference_frame, [position = {0.0, 0.0, 0.0}], [rotation = {0.0, 0.0, 0.0, 1.0}], [velocity = {0.0, 0.0, 0.0}], [angular_velocity = {0.0, 0.0, 0.0}])
 
       Create a relative reference frame. This is a custom reference frame
       whose components offset the components of a parent reference frame.
