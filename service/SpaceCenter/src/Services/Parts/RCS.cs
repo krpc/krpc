@@ -15,9 +15,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An RCS block or thruster. Obtained by calling <see cref="Part.RCS"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class RCS : Equatable<RCS>
+    public class RCS : Equatable<RCS>, IGameObjectState
     {
-        readonly ModuleRCS rcs;
+        ModuleRef rcsRef;
 
         internal static bool Is (Part part)
         {
@@ -32,9 +32,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal RCS (Part part)
         {
             Part = part;
-            rcs = part.InternalPart.Module<ModuleRCS> ();
-            if (rcs == null)
+            rcsRef = ModuleRef.ForType<ModuleRCS> (part.InternalPart);
+            if (rcsRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part does not have a ModuleRCS PartModule");
+        }
+
+        ModuleRCS InternalRCS {
+            get { return (ModuleRCS)rcsRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the RCS thrusters: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return rcsRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -42,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (RCS other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && rcs.Equals (other.rcs);
+            return !ReferenceEquals (other, null) && Part == other.Part && rcsRef == other.rcsRef;
         }
 
         /// <summary>
@@ -50,7 +62,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ rcs.GetHashCode ();
+            return Part.GetHashCode () ^ rcsRef.GetHashCode ();
         }
 
         /// <summary>
@@ -72,10 +84,10 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var p = Part.InternalPart;
                 return
                 p.vessel.ActionGroups.groups [BaseAction.GetGroupIndex (KSPActionGroup.RCS)] &&
-                (!p.ShieldedFromAirstream || rcs.shieldedCanThrust) &&
-                rcs.rcsEnabled &&
-                rcs.isEnabled &&
-                !rcs.isJustForShow;
+                (!p.ShieldedFromAirstream || InternalRCS.shieldedCanThrust) &&
+                InternalRCS.rcsEnabled &&
+                InternalRCS.isEnabled &&
+                !InternalRCS.isJustForShow;
             }
         }
 
@@ -84,8 +96,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Enabled {
-            get { return rcs.rcsEnabled; }
-            set { rcs.rcsEnabled = value; }
+            get { return InternalRCS.rcsEnabled; }
+            set { InternalRCS.rcsEnabled = value; }
         }
 
         /// <summary>
@@ -93,8 +105,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool PitchEnabled {
-            get { return rcs.enablePitch; }
-            set { rcs.enablePitch = value; }
+            get { return InternalRCS.enablePitch; }
+            set { InternalRCS.enablePitch = value; }
         }
 
         /// <summary>
@@ -102,8 +114,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool YawEnabled {
-            get { return rcs.enableYaw; }
-            set { rcs.enableYaw = value; }
+            get { return InternalRCS.enableYaw; }
+            set { InternalRCS.enableYaw = value; }
         }
 
         /// <summary>
@@ -111,8 +123,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RollEnabled {
-            get { return rcs.enableRoll; }
-            set { rcs.enableRoll = value; }
+            get { return InternalRCS.enableRoll; }
+            set { InternalRCS.enableRoll = value; }
         }
 
         /// <summary>
@@ -120,8 +132,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool ForwardEnabled {
-            get { return rcs.enableZ; }
-            set { rcs.enableZ = value; }
+            get { return InternalRCS.enableZ; }
+            set { InternalRCS.enableZ = value; }
         }
 
         /// <summary>
@@ -129,8 +141,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool UpEnabled {
-            get { return rcs.enableY; }
-            set { rcs.enableY = value; }
+            get { return InternalRCS.enableY; }
+            set { InternalRCS.enableY = value; }
         }
 
         /// <summary>
@@ -138,8 +150,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RightEnabled {
-            get { return rcs.enableX; }
-            set { rcs.enableX = value; }
+            get { return InternalRCS.enableX; }
+            set { InternalRCS.enableX = value; }
         }
 
         /// <summary>
@@ -151,8 +163,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool InputOverride {
-            get { return ActuatorControlAddon.GetRCSOverride (rcs); }
-            set { ActuatorControlAddon.SetRCSOverride (rcs, value); }
+            get { return ActuatorControlAddon.GetRCSOverride (InternalRCS); }
+            set { ActuatorControlAddon.SetRCSOverride (InternalRCS, value); }
         }
 
         /// <summary>
@@ -161,8 +173,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Tuple3 RotationOverride {
-            get { return ActuatorControlAddon.GetRCSRotation (rcs).ToTuple (); }
-            set { ActuatorControlAddon.SetRCSRotation (rcs, value.ToVector ()); }
+            get { return ActuatorControlAddon.GetRCSRotation (InternalRCS).ToTuple (); }
+            set { ActuatorControlAddon.SetRCSRotation (InternalRCS, value.ToVector ()); }
         }
 
         /// <summary>
@@ -172,8 +184,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public Tuple3 TranslationOverride {
-            get { return ActuatorControlAddon.GetRCSTranslation (rcs).ToTuple (); }
-            set { ActuatorControlAddon.SetRCSTranslation (rcs, value.ToVector ()); }
+            get { return ActuatorControlAddon.GetRCSTranslation (InternalRCS).ToTuple (); }
+            set { ActuatorControlAddon.SetRCSTranslation (InternalRCS, value.ToVector ()); }
         }
 
         /// <summary>
@@ -240,15 +252,15 @@ namespace KRPC.SpaceCenter.Services.Parts
                 var posZ = thrustPosition.Item3;
                 double torque = 0;
                 // Torque around X axis (pitch)
-                torque = rcs.enablePitch ? posY * forceZ - posZ * forceY : 0d;
+                torque = InternalRCS.enablePitch ? posY * forceZ - posZ * forceY : 0d;
                 if (torque > 0) torqueX += torque;
                 else torqueXn += -torque;
                 // Torque around Y axis (roll)
-                torque = rcs.enableRoll ? posZ * forceX - posX * forceZ : 0d;
+                torque = InternalRCS.enableRoll ? posZ * forceX - posX * forceZ : 0d;
                 if (torque > 0) torqueY += torque;
                 else torqueYn += -torque;
                 // Torque around Z axis (yaw)
-                torque = rcs.enableYaw ? posX * forceY - posY * forceX : 0d;
+                torque = InternalRCS.enableYaw ? posX * forceY - posY * forceX : 0d;
                 if (torque > 0) torqueZ += torque;
                 else torqueZn += -torque;
             }
@@ -295,7 +307,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         float GetThrust (double throttle, double pressure)
         {
             pressure *= PhysicsGlobals.KpaToAtmospheres;
-            return 1000f * (float)rcs.maxFuelFlow * (float)throttle * (float)rcs.G * rcs.atmosphereCurve.Evaluate ((float)pressure);
+            return 1000f * (float)InternalRCS.maxFuelFlow * (float)throttle * (float)InternalRCS.G * InternalRCS.atmosphereCurve.Evaluate ((float)pressure);
         }
 
         /// <summary>
@@ -309,7 +321,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!HasFuel)
                     return 0f;
-                return GetThrust (ThrustLimit, rcs.vessel.staticPressurekPa);
+                return GetThrust (ThrustLimit, InternalRCS.vessel.staticPressurekPa);
             }
         }
 
@@ -320,7 +332,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float MaxThrust {
-            get { return GetThrust (1f, rcs.vessel.staticPressurekPa); }
+            get { return GetThrust (1f, InternalRCS.vessel.staticPressurekPa); }
         }
 
         /// <summary>
@@ -329,7 +341,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float MaxVacuumThrust {
-            get { return rcs.thrusterPower * 1000f; }
+            get { return InternalRCS.thrusterPower * 1000f; }
         }
 
         /// <summary>
@@ -337,8 +349,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float ThrustLimit {
-            get { return rcs.thrustPercentage / 100f; }
-            set { rcs.thrustPercentage = (value * 100f).Clamp (0f, 100f); }
+            get { return InternalRCS.thrustPercentage / 100f; }
+            set { InternalRCS.thrustPercentage = (value * 100f).Clamp (0f, 100f); }
         }
 
         /// <summary>
@@ -346,7 +358,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<Thruster> Thrusters {
-            get { return Enumerable.Range (0, rcs.thrusterTransforms.Count).Select (i => new Thruster (Part, rcs, i)).ToList (); }
+            get { return Enumerable.Range (0, InternalRCS.thrusterTransforms.Count).Select (i => new Thruster (Part, InternalRCS, i)).ToList (); }
         }
 
         /// <summary>
@@ -355,7 +367,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float SpecificImpulse {
-            get { return rcs.realISP; }
+            get { return InternalRCS.realISP; }
         }
 
         /// <summary>
@@ -363,7 +375,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float VacuumSpecificImpulse {
-            get { return rcs.atmosphereCurve.Evaluate (0); }
+            get { return InternalRCS.atmosphereCurve.Evaluate (0); }
         }
 
         /// <summary>
@@ -371,7 +383,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float KerbinSeaLevelSpecificImpulse {
-            get { return rcs.atmosphereCurve.Evaluate (1); }
+            get { return InternalRCS.atmosphereCurve.Evaluate (1); }
         }
 
         /// <summary>
@@ -380,8 +392,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         void UpdateConnectedResources()
         {
-            foreach (var propellant in rcs.propellants)
-                propellant.UpdateConnectedResources(rcs.part);
+            foreach (var propellant in InternalRCS.propellants)
+                propellant.UpdateConnectedResources(InternalRCS.part);
         }
 
         /// <summary>
@@ -389,7 +401,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public IList<string> Propellants {
-            get { return rcs.propellants.Select (x => x.name).ToList (); }
+            get { return InternalRCS.propellants.Select (x => x.name).ToList (); }
         }
 
         /// <summary>
@@ -401,8 +413,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get
             {
                 UpdateConnectedResources();
-                var max = rcs.propellants.Max (p => p.ratio);
-                return rcs.propellants.ToDictionary (p => p.name, p => p.ratio / max);
+                var max = InternalRCS.propellants.Max (p => p.ratio);
+                return InternalRCS.propellants.ToDictionary (p => p.name, p => p.ratio / max);
             }
         }
 
@@ -414,7 +426,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get
             {
                 UpdateConnectedResources();
-                foreach (var propellant in rcs.propellants)
+                foreach (var propellant in InternalRCS.propellants)
                     if (propellant.actualTotalAvailable < 0.001)
                         return false;
                 return true;

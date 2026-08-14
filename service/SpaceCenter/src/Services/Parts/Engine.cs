@@ -21,12 +21,14 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// For RCS thrusters <see cref="Part.RCS"/>.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Engine : Equatable<Engine>
+    public class Engine : Equatable<Engine>, IGameObjectState
     {
-        readonly IList<ModuleEngines> engines;
-        readonly MultiModeEngine multiModeEngine;
-        readonly ModuleGimbal gimbal;
-        readonly IThrustReverser thrustReverser;
+        // A multi-mode engine has two ModuleEngines, one per mode; every other engine has one.
+        ModuleRef primaryRef;
+        ModuleRef secondaryRef;
+        ModuleRef multiModeRef;
+        ModuleRef gimbalRef;
+        readonly IThrustReverser InternalThrustReverser;
 
         internal static bool Is (Part part)
         {
@@ -42,25 +44,46 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
-            multiModeEngine = internalPart.Module<MultiModeEngine> ();
-            gimbal = internalPart.Module<ModuleGimbal> ();
-            thrustReverser = ThrustReverser.Create (internalPart);
+            var engines = internalPart.Modules.OfType<ModuleEngines> ().ToList ();
             if (engines.Count == 0)
                 throw new ArgumentException ("Part is not an engine");
+            primaryRef = ModuleRef.ForModule (engines [0]);
+            secondaryRef = engines.Count > 1
+                ? ModuleRef.ForModule (engines [1])
+                : ModuleRef.None;
+            multiModeRef = ModuleRef.ForType<MultiModeEngine> (internalPart);
+            gimbalRef = ModuleRef.ForType<ModuleGimbal> (internalPart);
+            InternalThrustReverser = ThrustReverser.Create (part);
         }
 
         Engine (ModuleEngines engine)
         {
-            Part = new Part (engine.part);
-            engines = new List<ModuleEngines>
-            {
-                engine
-            };
-            gimbal = Part.InternalPart.Module<ModuleGimbal> ();
-            thrustReverser = ThrustReverser.Create (Part.InternalPart);
             if (engine == null)
                 throw new ArgumentException ("Part does not have a ModuleEngines PartModule");
+            Part = new Part (engine.part);
+            var internalPart = Part.InternalPart;
+            // One mode of a multi-mode engine, so it has that mode's ModuleEngines and no other.
+            primaryRef = ModuleRef.ForModule (engine);
+            secondaryRef = ModuleRef.None;
+            multiModeRef = ModuleRef.None;
+            gimbalRef = ModuleRef.ForType<ModuleGimbal> (internalPart);
+            InternalThrustReverser = ThrustReverser.Create (Part);
+        }
+
+        MultiModeEngine InternalMultiModeEngine {
+            get { return (MultiModeEngine)multiModeRef.Find (Part.InternalPart); }
+        }
+
+        ModuleGimbal InternalGimbal {
+            get { return (ModuleGimbal)gimbalRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the engine: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return primaryRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -71,9 +94,10 @@ namespace KRPC.SpaceCenter.Services.Parts
             return
             !ReferenceEquals (other, null) &&
             Part == other.Part &&
-            engines.SequenceEqual (other.engines) &&
-            (multiModeEngine == other.multiModeEngine || multiModeEngine.Equals (other.multiModeEngine)) &&
-            (gimbal == other.gimbal || gimbal.Equals (other.gimbal));
+            primaryRef == other.primaryRef &&
+            secondaryRef == other.secondaryRef &&
+            multiModeRef == other.multiModeRef &&
+            gimbalRef == other.gimbalRef;
         }
 
         /// <summary>
@@ -81,15 +105,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            hash ^= engines.GetHashCode ();
-            foreach (var engine in engines)
-                hash ^= engine.GetHashCode ();
-            if (multiModeEngine != null)
-                hash ^= multiModeEngine.GetHashCode ();
-            if (gimbal != null)
-                hash ^= gimbal.GetHashCode ();
-            return hash;
+            return
+            Part.GetHashCode () ^
+            primaryRef.GetHashCode () ^
+            secondaryRef.GetHashCode () ^
+            multiModeRef.GetHashCode () ^
+            gimbalRef.GetHashCode ();
         }
 
         /// <summary>
@@ -98,7 +119,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// the ModulesEngine for the current mode.
         /// </summary>
         ModuleEngines CurrentEngine {
-            get { return engines [(multiModeEngine == null || multiModeEngine.runningPrimary) ? 0 : 1]; }
+            get {
+                var internalPart = Part.InternalPart;
+                var multiMode = (MultiModeEngine)multiModeRef.Find (internalPart);
+                return (ModuleEngines)(multiMode == null || multiMode.runningPrimary
+                    ? primaryRef.Get (internalPart)
+                    : secondaryRef.Get (internalPart));
+            }
         }
 
         /// <summary>
@@ -272,7 +299,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<Thruster> Thrusters {
             get {
                 var engine = CurrentEngine;
-                return Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (Part, engine, gimbal, i)).ToList ();
+                return Enumerable.Range (0, engine.thrustTransforms.Count).Select (i => new Thruster (Part, engine, InternalGimbal, i)).ToList ();
             }
         }
 
@@ -442,14 +469,14 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         void CheckMultiMode ()
         {
-            if (multiModeEngine == null)
+            if (InternalMultiModeEngine == null)
                 throw new InvalidOperationException ("The engine only has a single mode");
         }
 
         void CheckHasMode (string id)
         {
             CheckMultiMode ();
-            if (multiModeEngine.primaryEngineID != id && multiModeEngine.secondaryEngineID != id)
+            if (InternalMultiModeEngine.primaryEngineID != id && InternalMultiModeEngine.secondaryEngineID != id)
                 throw new InvalidOperationException ("The engine does not have the given mode");
         }
 
@@ -458,7 +485,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool HasModes {
-            get { return multiModeEngine != null; }
+            get { return InternalMultiModeEngine != null; }
         }
 
         /// <summary>
@@ -468,13 +495,13 @@ namespace KRPC.SpaceCenter.Services.Parts
         public string Mode {
             get {
                 CheckMultiMode ();
-                return multiModeEngine.mode;
+                return InternalMultiModeEngine.mode;
             }
             set {
                 CheckHasMode (value);
-                if (value == multiModeEngine.mode)
+                if (value == InternalMultiModeEngine.mode)
                     return;
-                multiModeEngine.Invoke ("ModeEvent", 0);
+                InternalMultiModeEngine.Invoke ("ModeEvent", 0);
             }
         }
 
@@ -488,8 +515,8 @@ namespace KRPC.SpaceCenter.Services.Parts
                 CheckMultiMode ();
                 var result = new Dictionary<string, Engine>
                 {
-                    [multiModeEngine.primaryEngineID] = new Engine(engines[0]),
-                    [multiModeEngine.secondaryEngineID] = new Engine(engines[1])
+                    [InternalMultiModeEngine.primaryEngineID] = new Engine ((ModuleEngines)primaryRef.Get (Part.InternalPart)),
+                    [InternalMultiModeEngine.secondaryEngineID] = new Engine ((ModuleEngines)secondaryRef.Get (Part.InternalPart))
                 };
                 return result;
             }
@@ -502,7 +529,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void ToggleMode ()
         {
             CheckMultiMode ();
-            multiModeEngine.Invoke ("ModeEvent", 0);
+            InternalMultiModeEngine.Invoke ("ModeEvent", 0);
         }
 
         /// <summary>
@@ -512,28 +539,28 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool AutoModeSwitch {
             get {
                 CheckMultiMode ();
-                return multiModeEngine.autoSwitch;
+                return InternalMultiModeEngine.autoSwitch;
             }
             set {
                 CheckMultiMode ();
-                if (value == multiModeEngine.autoSwitch)
+                if (value == InternalMultiModeEngine.autoSwitch)
                     return;
                 if (value)
-                    multiModeEngine.Invoke ("EnableAutoSwitch", 0);
+                    InternalMultiModeEngine.Invoke ("EnableAutoSwitch", 0);
                 else
-                    multiModeEngine.Invoke ("DisableAutoSwitch", 0);
+                    InternalMultiModeEngine.Invoke ("DisableAutoSwitch", 0);
             }
         }
 
         void CheckGimballed ()
         {
-            if (gimbal == null)
+            if (InternalGimbal == null)
                 throw new InvalidOperationException ("Engine is not gimballed");
         }
 
         void CheckReverser ()
         {
-            if (thrustReverser == null)
+            if (InternalThrustReverser == null)
                 throw new InvalidOperationException ("Engine does not have a thrust reverser");
         }
 
@@ -542,7 +569,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Gimballed {
-            get { return gimbal != null; }
+            get { return InternalGimbal != null; }
         }
 
         /// <summary>
@@ -551,7 +578,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float GimbalRange {
-            get { return gimbal != null && !gimbal.gimbalLock ? gimbal.gimbalRange : 0f; }
+            get { return InternalGimbal != null && !InternalGimbal.gimbalLock ? InternalGimbal.gimbalRange : 0f; }
         }
 
         /// <summary>
@@ -562,14 +589,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool GimbalLocked {
             get {
                 CheckGimballed ();
-                return gimbal.gimbalLock;
+                return InternalGimbal.gimbalLock;
             }
             set {
                 CheckGimballed ();
-                if (value && !gimbal.gimbalLock) {
-                    gimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
-                } else if (!value && gimbal.gimbalLock) {
-                    gimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                if (value && !InternalGimbal.gimbalLock) {
+                    InternalGimbal.LockAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                } else if (!value && InternalGimbal.gimbalLock) {
+                    InternalGimbal.FreeAction (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
                 }
             }
         }
@@ -582,11 +609,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float GimbalLimit {
             get {
                 CheckGimballed ();
-                return GimbalLocked ? 0f : gimbal.gimbalLimiter / 100f;
+                return GimbalLocked ? 0f : InternalGimbal.gimbalLimiter / 100f;
             }
             set {
                 CheckGimballed ();
-                gimbal.gimbalLimiter = (value * 100f).Clamp (0f, 100f);
+                InternalGimbal.gimbalLimiter = (value * 100f).Clamp (0f, 100f);
             }
         }
 
@@ -601,11 +628,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool GimbalOverride {
             get {
                 CheckGimballed ();
-                return ActuatorControlAddon.GetGimbalOverride (gimbal);
+                return ActuatorControlAddon.GetGimbalOverride (InternalGimbal);
             }
             set {
                 CheckGimballed ();
-                ActuatorControlAddon.SetGimbalOverride (gimbal, value);
+                ActuatorControlAddon.SetGimbalOverride (InternalGimbal, value);
             }
         }
 
@@ -620,11 +647,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 GimbalActuation {
             get {
                 CheckGimballed ();
-                return ActuatorControlAddon.GetGimbalActuation (gimbal).ToTuple ();
+                return ActuatorControlAddon.GetGimbalActuation (InternalGimbal).ToTuple ();
             }
             set {
                 CheckGimballed ();
-                ActuatorControlAddon.SetGimbalActuation (gimbal, value.ToVector ());
+                ActuatorControlAddon.SetGimbalActuation (InternalGimbal, value.ToVector ());
             }
         }
 
@@ -646,7 +673,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // GetPotentialTorque already applies the gimbal limiter (via
                 // ModuleGimbal.GimbalRotation, which scales the deflection by
                 // gimbalLimiter * 0.01), so no further scaling is needed here.
-                var torque = gimbal.GetPotentialTorque ();
+                var torque = InternalGimbal.GetPotentialTorque ();
                 // Note: GetPotentialTorque returns negative torques with incorrect sign
                 return new TupleV3 (torque.Item1, -torque.Item2);
             }
@@ -661,7 +688,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool CanReverseThrust {
-            get { return thrustReverser != null; }
+            get { return InternalThrustReverser != null; }
         }
 
         /// <summary>
@@ -676,11 +703,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool ThrustReversed {
             get {
                 CheckReverser ();
-                return thrustReverser.Reversed;
+                return InternalThrustReverser.Reversed;
             }
             set {
                 CheckReverser ();
-                thrustReverser.Reversed = value;
+                InternalThrustReverser.Reversed = value;
             }
         }
 
@@ -692,7 +719,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void ToggleThrustReversal ()
         {
             CheckReverser ();
-            thrustReverser.Toggle ();
+            InternalThrustReverser.Toggle ();
         }
 
         /// <summary>

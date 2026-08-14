@@ -34,24 +34,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Returns an adapter for the part's thrust reverser, or <c>null</c> if the part
         /// has no recognized reverser.
         /// </summary>
-        internal static IThrustReverser Create (global::Part part)
+        internal static IThrustReverser Create (Part part)
         {
+            var internalPart = part.InternalPart;
             // Stock and recognized-mod reversers implemented as a ModuleAnimateGeneric
             // whose animation rotates or repositions the engine's thrust transform.
-            foreach (var animation in part.Modules.OfType<ModuleAnimateGeneric> ()) {
+            foreach (var animation in internalPart.Modules.OfType<ModuleAnimateGeneric> ()) {
                 bool reversedWhenDeployed;
-                if (IsAnimationReverser (animation, part, out reversedWhenDeployed))
-                    return new AnimationThrustReverser (animation, reversedWhenDeployed);
+                if (IsAnimationReverser (animation, internalPart, out reversedWhenDeployed))
+                    return new AnimationThrustReverser (part, animation, reversedWhenDeployed);
             }
             // Recognized mod modules that reverse thrust by switching the active thrust
             // transform, driven through the stock part module API by field/event/action
             // name so kRPC does not need a compile-time reference to the mod.
-            var firespitter = part.Module ("FSswitchEngineThrustTransform");
+            var firespitter = internalPart.Module ("FSswitchEngineThrustTransform");
             if (firespitter != null && FirespitterCanReverse (firespitter))
-                return new FirespitterThrustReverser (firespitter);
-            var propSpinner = part.Module ("WBIPropSpinner");
+                return new FirespitterThrustReverser (part, firespitter);
+            var propSpinner = internalPart.Module ("WBIPropSpinner");
             if (propSpinner != null && PropSpinnerCanReverse (propSpinner))
-                return new PropSpinnerThrustReverser (propSpinner);
+                return new PropSpinnerThrustReverser (part, propSpinner);
             return null;
         }
 
@@ -116,13 +117,19 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// </summary>
     sealed class AnimationThrustReverser : IThrustReverser
     {
-        readonly ModuleAnimateGeneric animation;
+        readonly Part part;
+        ModuleRef reference;
         readonly bool reversedWhenDeployed;
 
-        internal AnimationThrustReverser (ModuleAnimateGeneric animation, bool reversedWhenDeployed)
+        internal AnimationThrustReverser (Part part, ModuleAnimateGeneric animation, bool reversedWhenDeployed)
         {
-            this.animation = animation;
+            this.part = part;
+            reference = ModuleRef.ForModule (animation);
             this.reversedWhenDeployed = reversedWhenDeployed;
+        }
+
+        ModuleAnimateGeneric Animation {
+            get { return (ModuleAnimateGeneric)reference.Get (part.InternalPart); }
         }
 
         public bool Reversed {
@@ -131,13 +138,13 @@ namespace KRPC.SpaceCenter.Services.Parts
             // animation's progress. Reading progress would make the setter
             // non-idempotent: a set re-issued while the animation is still short of
             // its midpoint would toggle a second time and cancel the first.
-            get { return !animation.animSwitch == reversedWhenDeployed; }
-            set { if (value != Reversed) animation.Toggle (); }
+            get { return !Animation.animSwitch == reversedWhenDeployed; }
+            set { if (value != Reversed) Animation.Toggle (); }
         }
 
         public void Toggle ()
         {
-            animation.Toggle ();
+            Animation.Toggle ();
         }
     }
 
@@ -147,24 +154,30 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// </summary>
     sealed class FirespitterThrustReverser : IThrustReverser
     {
-        readonly global::PartModule module;
+        readonly Part part;
+        ModuleRef reference;
 
-        internal FirespitterThrustReverser (global::PartModule module)
+        internal FirespitterThrustReverser (Part part, global::PartModule module)
         {
-            this.module = module;
+            this.part = part;
+            reference = ModuleRef.ForModule (module);
+        }
+
+        global::PartModule InternalModule {
+            get { return (global::PartModule)reference.Get (part.InternalPart); }
         }
 
         public bool Reversed {
-            get { return (bool)module.Fields ["isReversed"].GetValue (module); }
+            get { return (bool)InternalModule.Fields ["isReversed"].GetValue (InternalModule); }
             set {
-                module.Actions [value ? "reverseTTAction" : "normalTTAction"].Invoke (
+                InternalModule.Actions [value ? "reverseTTAction" : "normalTTAction"].Invoke (
                     new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
             }
         }
 
         public void Toggle ()
         {
-            module.Actions ["switchTTAction"].Invoke (
+            InternalModule.Actions ["switchTTAction"].Invoke (
                 new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
         }
     }
@@ -175,15 +188,21 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// </summary>
     sealed class PropSpinnerThrustReverser : IThrustReverser
     {
-        readonly global::PartModule module;
+        readonly Part part;
+        ModuleRef reference;
 
-        internal PropSpinnerThrustReverser (global::PartModule module)
+        internal PropSpinnerThrustReverser (Part part, global::PartModule module)
         {
-            this.module = module;
+            this.part = part;
+            reference = ModuleRef.ForModule (module);
+        }
+
+        global::PartModule InternalModule {
+            get { return (global::PartModule)reference.Get (part.InternalPart); }
         }
 
         public bool Reversed {
-            get { return (bool)module.Fields ["reverseThrust"].GetValue (module); }
+            get { return (bool)InternalModule.Fields ["reverseThrust"].GetValue (InternalModule); }
             // The module only exposes a toggle, so set the desired state by toggling
             // when it differs from the current one.
             set { if (value != Reversed) Toggle (); }
@@ -191,7 +210,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         public void Toggle ()
         {
-            module.Events ["ToggleThrustTransform"].Invoke ();
+            InternalModule.Events ["ToggleThrustTransform"].Invoke ();
         }
     }
 }

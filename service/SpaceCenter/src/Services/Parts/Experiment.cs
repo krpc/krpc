@@ -14,21 +14,35 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Part.Experiment"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Experiment : Equatable<Experiment>
+    public class Experiment : Equatable<Experiment>, IGameObjectState
     {
-        readonly ModuleScienceExperiment experiment;
-        // Note: IScienceDataContainer needs to be used for some methods, rather than
-        // ModuleScienceExperiment, as method dispatch uses the wrong method implementation for
-        // DMagic science experiments
-        readonly IScienceDataContainer dataContainer;
+        ModuleRef experimentRef;
 
         internal Experiment(Part part, ModuleScienceExperiment experiment_)
         {
-            Part = part;
-            experiment = experiment_;
-            dataContainer = experiment_;
-            if (experiment == null)
+            if (experiment_ == null)
                 throw new ArgumentException ("Part is not a science experiment");
+            Part = part;
+            experimentRef = ModuleRef.ForModule (experiment_);
+        }
+
+        ModuleScienceExperiment InternalExperiment {
+            get { return (ModuleScienceExperiment)experimentRef.Get (Part.InternalPart); }
+        }
+
+        // Note: IScienceDataContainer needs to be used for some methods, rather than
+        // ModuleScienceExperiment, as method dispatch uses the wrong method implementation for
+        // DMagic science experiments
+        IScienceDataContainer InternalDataContainer {
+            get { return InternalExperiment; }
+        }
+
+        /// <summary>
+        /// What the game holds for the experiment: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return experimentRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -36,7 +50,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Experiment other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && experiment == other.experiment;
+            return !ReferenceEquals (other, null) && Part == other.Part && experimentRef == other.experimentRef;
         }
 
         /// <summary>
@@ -44,7 +58,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ experiment.GetHashCode ();
+            return Part.GetHashCode () ^ experimentRef.GetHashCode ();
         }
 
         /// <summary>
@@ -61,7 +75,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public string Name
         {
-            get { return experiment.experimentID; }
+            get { return InternalExperiment.experimentID; }
         }
 
         /// <summary>
@@ -70,7 +84,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public string Title
         {
-            get { return experiment.experiment.experimentTitle; }
+            get { return InternalExperiment.experiment.experimentTitle; }
         }
 
         /// <summary>
@@ -88,17 +102,17 @@ namespace KRPC.SpaceCenter.Services.Parts
             // DeployExperimentExternal all start gatherData(showDialog: true), and the only
             // dialog-free caller, OnActive, is gated on staging configuration. So invoke the
             // private gatherData coroutine directly, mirroring KSP's own staging path.
-            var gatherData = experiment.GetType ().GetMethod ("gatherData", BindingFlags.NonPublic | BindingFlags.Instance);
+            var gatherData = InternalExperiment.GetType ().GetMethod ("gatherData", BindingFlags.NonPublic | BindingFlags.Instance);
             if (gatherData != null)
             {
-                var result = (IEnumerator)gatherData.Invoke(experiment, new object[] { false });
-                experiment.StartCoroutine(result);
+                var result = (IEnumerator)gatherData.Invoke(InternalExperiment, new object[] { false });
+                InternalExperiment.StartCoroutine(result);
                 return;
             }
             // DMagic experiments
-            gatherData = experiment.GetType().GetMethod("gatherScienceData", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+            gatherData = InternalExperiment.GetType().GetMethod("gatherScienceData", BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
             if (gatherData != null) {
-                gatherData.Invoke(experiment, new object[] { true });
+                gatherData.Invoke(InternalExperiment, new object[] { true });
                 return;
             }
             throw new InvalidOperationException("Failed to find a gather data method for this experiment");
@@ -110,24 +124,24 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Transmit ()
         {
-            var data = dataContainer.GetData ();
+            var data = InternalDataContainer.GetData ();
             for (int i = 0; i < data.Length; i++) {
                 // Use ExperimentResultDialogPage to compute the science value
                 // This object creation modifies the data object
                 new ExperimentResultDialogPage(
-                    experiment.part, data[i], data[i].baseTransmitValue, data[i].transmitBonus,
+                    InternalExperiment.part, data[i], data[i].baseTransmitValue, data[i].transmitBonus,
                     false, string.Empty, false,
-                    new ScienceLabSearch(experiment.part.vessel, data[i]),
+                    new ScienceLabSearch(InternalExperiment.part.vessel, data[i]),
                     null, null, null, null);
             }
-            var transmitter = ScienceUtil.GetBestTransmitter(experiment.vessel);
+            var transmitter = ScienceUtil.GetBestTransmitter(InternalExperiment.vessel);
             if (transmitter == null)
                 throw new InvalidOperationException ("No transmitters available to transmit the data");
             transmitter.TransmitData (data.ToList ());
             for (int i = 0; i < data.Length; i++)
-                dataContainer.DumpData(data[i]);
-            if (experiment.useCooldown)
-                experiment.cooldownToGo = experiment.cooldownTimer;
+                InternalDataContainer.DumpData(data[i]);
+            if (InternalExperiment.useCooldown)
+                InternalExperiment.cooldownToGo = InternalExperiment.cooldownTimer;
         }
 
         /// <summary>
@@ -136,8 +150,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Dump ()
         {
-            foreach (var data in dataContainer.GetData ())
-                dataContainer.DumpData (data);
+            foreach (var data in InternalDataContainer.GetData ())
+                InternalDataContainer.DumpData (data);
         }
 
         /// <summary>
@@ -148,12 +162,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             if (Inoperable)
                 throw new InvalidOperationException ("Experiment is inoperable");
-            experiment.ResetExperiment ();
+            InternalExperiment.ResetExperiment ();
             // ResetExperiment only clears the base ModuleScienceExperiment slot. DMagic science
             // experiments keep their results in their own IScienceDataContainer, which the base
             // reset leaves untouched, so dump the container through the interface reference too.
-            foreach (var data in dataContainer.GetData ())
-                dataContainer.DumpData (data);
+            foreach (var data in InternalDataContainer.GetData ())
+                InternalDataContainer.DumpData (data);
         }
 
         /// <summary>
@@ -161,7 +175,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Inoperable {
-            get { return experiment.Inoperable; }
+            get { return InternalExperiment.Inoperable; }
         }
 
         /// <summary>
@@ -169,7 +183,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployed {
-            get { return experiment.Deployed; }
+            get { return InternalExperiment.Deployed; }
         }
 
         /// <summary>
@@ -177,7 +191,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Rerunnable {
-            get { return dataContainer.IsRerunnable (); }
+            get { return InternalDataContainer.IsRerunnable (); }
         }
 
         /// <summary>
@@ -185,7 +199,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool HasData {
-            get { return dataContainer.GetData().Any (); }
+            get { return InternalDataContainer.GetData().Any (); }
         }
 
         /// <summary>
@@ -193,7 +207,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public IList<ScienceData> Data {
-            get { return dataContainer.GetData().Select (data => new ScienceData (experiment, data)).ToList (); }
+            get { return InternalDataContainer.GetData().Select (data => new ScienceData (InternalExperiment, data)).ToList (); }
         }
 
         /// <summary>
@@ -204,7 +218,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 var vessel = Part.InternalPart.vessel;
                 var situation = ScienceUtil.GetExperimentSituation (vessel);
-                var rndExperiment = ResearchAndDevelopment.GetExperiment (experiment.experimentID);
+                var rndExperiment = ResearchAndDevelopment.GetExperiment (InternalExperiment.experimentID);
                 return rndExperiment.IsAvailableWhile (situation, vessel.mainBody);
             }
         }
@@ -237,7 +251,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Available)
                     return null;
-                var id = experiment.experimentID;
+                var id = InternalExperiment.experimentID;
                 var vessel = Part.InternalPart.vessel;
                 var bodyName = vessel.mainBody.name;
                 var situation = ScienceUtil.GetExperimentSituation (vessel);

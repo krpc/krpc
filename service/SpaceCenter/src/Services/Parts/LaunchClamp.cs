@@ -10,9 +10,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A launch clamp. Obtained by calling <see cref="Part.LaunchClamp"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class LaunchClamp : Equatable<LaunchClamp>
+    public class LaunchClamp : Equatable<LaunchClamp>, IGameObjectState
     {
-        readonly global::LaunchClamp launchClamp;
+        ModuleRef launchClampRef;
 
         internal static bool Is (Part part)
         {
@@ -22,9 +22,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal LaunchClamp (Part part)
         {
             Part = part;
-            launchClamp = part.InternalPart.Module<global::LaunchClamp> ();
-            if (launchClamp == null)
+            launchClampRef = ModuleRef.ForType<global::LaunchClamp> (part.InternalPart);
+            if (launchClampRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part is not a launch clamp");
+        }
+
+        global::LaunchClamp InternalLaunchClamp {
+            get { return (global::LaunchClamp)launchClampRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the launch clamp: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return launchClampRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -32,7 +44,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (LaunchClamp other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && launchClamp.Equals (other.launchClamp);
+            return !ReferenceEquals (other, null) && Part == other.Part && launchClampRef == other.launchClampRef;
         }
 
         /// <summary>
@@ -40,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ launchClamp.GetHashCode ();
+            return Part.GetHashCode () ^ launchClampRef.GetHashCode ();
         }
 
         /// <summary>
@@ -55,7 +67,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Release ()
         {
-            launchClamp.Release ();
+            InternalLaunchClamp.Release ();
         }
     }
 }

@@ -12,15 +12,15 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Can be used to control the motors, steering and deployment of wheels, among other things.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
-    public class Wheel : Equatable<Wheel>
+    public class Wheel : Equatable<Wheel>, IGameObjectState
     {
-        readonly ModuleWheelBase wheel;
-        readonly ModuleWheels.ModuleWheelBrakes brakes;
-        readonly ModuleWheels.ModuleWheelDamage damage;
-        readonly ModuleWheels.ModuleWheelDeployment deployment;
-        readonly ModuleWheels.ModuleWheelMotor motor;
-        readonly ModuleWheels.ModuleWheelSteering steering;
-        readonly ModuleWheels.ModuleWheelSuspension suspension;
+        ModuleRef wheelRef;
+        ModuleRef brakesRef;
+        ModuleRef damageRef;
+        ModuleRef deploymentRef;
+        ModuleRef motorRef;
+        ModuleRef steeringRef;
+        ModuleRef suspensionRef;
 
         internal static bool Is(Part part)
         {
@@ -35,14 +35,50 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException("Part is not a wheel");
             Part = part;
             var internalPart = part.InternalPart;
-            wheel = internalPart.Module<ModuleWheelBase>();
-            brakes = internalPart.Module<ModuleWheels.ModuleWheelBrakes>();
-            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage>();
-            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment>();
-            motor = internalPart.Module<ModuleWheels.ModuleWheelMotor> ();
-            steering = internalPart.Module<ModuleWheels.ModuleWheelSteering>();
-            suspension = internalPart.Module<ModuleWheels.ModuleWheelSuspension>();
+            wheelRef = ModuleRef.ForType<ModuleWheelBase> (internalPart);
+            brakesRef = ModuleRef.ForType<ModuleWheels.ModuleWheelBrakes> (internalPart);
+            damageRef = ModuleRef.ForType<ModuleWheels.ModuleWheelDamage> (internalPart);
+            deploymentRef = ModuleRef.ForType<ModuleWheels.ModuleWheelDeployment> (internalPart);
+            motorRef = ModuleRef.ForType<ModuleWheels.ModuleWheelMotor> (internalPart);
+            steeringRef = ModuleRef.ForType<ModuleWheels.ModuleWheelSteering> (internalPart);
+            suspensionRef = ModuleRef.ForType<ModuleWheels.ModuleWheelSuspension> (internalPart);
 
+        }
+
+        ModuleWheelBase InternalWheel {
+            get { return (ModuleWheelBase)wheelRef.Get (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelBrakes InternalBrakes {
+            get { return (ModuleWheels.ModuleWheelBrakes)brakesRef.Find (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelDamage InternalDamage {
+            get { return (ModuleWheels.ModuleWheelDamage)damageRef.Find (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelDeployment InternalDeployment {
+            get { return (ModuleWheels.ModuleWheelDeployment)deploymentRef.Find (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelMotor InternalMotor {
+            get { return (ModuleWheels.ModuleWheelMotor)motorRef.Find (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelSteering InternalSteering {
+            get { return (ModuleWheels.ModuleWheelSteering)steeringRef.Find (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelSuspension InternalSuspension {
+            get { return (ModuleWheels.ModuleWheelSuspension)suspensionRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the wheel: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return wheelRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -50,7 +86,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(Wheel other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && wheel == other.wheel;
+            return !ReferenceEquals(other, null) && Part == other.Part && wheelRef == other.wheelRef;
         }
 
         /// <summary>
@@ -58,42 +94,42 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ wheel.GetHashCode();
+            return Part.GetHashCode() ^ wheelRef.GetHashCode();
         }
 
         void CheckBrakes()
         {
-            if (brakes == null)
+            if (InternalBrakes == null)
                 throw new InvalidOperationException("Wheel does not have brakes");
         }
 
         void CheckDeployment()
         {
-            if (deployment == null)
+            if (InternalDeployment == null)
                 throw new InvalidOperationException("Wheel is not deployable");
         }
 
         void CheckMotor()
         {
-            if (motor == null)
+            if (InternalMotor == null)
                 throw new InvalidOperationException("Wheel is not powered");
         }
 
         void CheckSteering()
         {
-            if (steering == null)
+            if (InternalSteering == null)
                 throw new InvalidOperationException("Wheel is not steerable");
         }
 
         void CheckSuspension()
         {
-            if (suspension == null)
+            if (InternalSuspension == null)
                 throw new InvalidOperationException("Wheel does not have suspension");
         }
 
         void CheckDamage()
         {
-            if (damage == null)
+            if (InternalDamage == null)
                 throw new InvalidOperationException("Wheel is not breakable");
         }
 
@@ -108,7 +144,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public DeployableState State {
-            get { return deployment.ToDeployableState (damage); }
+            get { return InternalDeployment.ToDeployableState (InternalDamage); }
         }
 
         /// <summary>
@@ -116,7 +152,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Radius {
-            get { return wheel.radius; }
+            get { return InternalWheel.radius; }
         }
 
         /// <summary>
@@ -124,7 +160,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Grounded {
-            get { return wheel.isGrounded; }
+            get { return InternalWheel.isGrounded; }
         }
 
         /// <summary>
@@ -132,7 +168,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool HasBrakes {
-            get { return brakes != null; }
+            get { return InternalBrakes != null; }
         }
 
         /// <summary>
@@ -142,11 +178,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float Brakes {
             get {
                 CheckBrakes();
-                return brakes.brakeTweakable;
+                return InternalBrakes.brakeTweakable;
             }
             set {
                 CheckBrakes();
-                brakes.brakeTweakable = value;
+                InternalBrakes.brakeTweakable = value;
             }
         }
 
@@ -155,8 +191,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool AutoFrictionControl {
-            get { return wheel.autoFriction; }
-            set { wheel.autoFriction = value; }
+            get { return InternalWheel.autoFriction; }
+            set { InternalWheel.autoFriction = value; }
         }
 
         /// <summary>
@@ -165,8 +201,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float ManualFrictionControl {
-            get { return wheel.frictionMultiplier; }
-            set { wheel.frictionMultiplier = value.Clamp(0, 5); }
+            get { return InternalWheel.frictionMultiplier; }
+            set { InternalWheel.frictionMultiplier = value.Clamp(0, 5); }
         }
 
         /// <summary>
@@ -174,7 +210,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Deployable {
-            get { return deployment != null; }
+            get { return InternalDeployment != null; }
         }
 
         /// <summary>
@@ -185,7 +221,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return State == DeployableState.Deployed; }
             set {
                 CheckDeployment();
-                deployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));
+                InternalDeployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));
             }
         }
 
@@ -194,7 +230,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Powered {
-            get { return motor != null; }
+            get { return InternalMotor != null; }
         }
 
         /// <summary>
@@ -204,11 +240,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool MotorEnabled {
             get {
                 CheckMotor();
-                return motor.motorEnabled;
+                return InternalMotor.motorEnabled;
             }
             set {
                 CheckMotor();
-                motor.motorEnabled = value;
+                InternalMotor.motorEnabled = value;
             }
         }
 
@@ -219,11 +255,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool MotorInverted {
             get {
                 CheckMotor();
-                return motor.motorInverted;
+                return InternalMotor.motorInverted;
             }
             set {
                 CheckMotor();
-                motor.motorInverted = value;
+                InternalMotor.motorInverted = value;
             }
         }
 
@@ -234,7 +270,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public MotorState MotorState {
             get {
                 CheckMotor();
-                return motor.state.ToMotorState();
+                return InternalMotor.state.ToMotorState();
             }
         }
 
@@ -245,7 +281,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float MotorOutput {
             get {
                 CheckMotor();
-                return motor.driveOutput;
+                return InternalMotor.driveOutput;
             }
         }
 
@@ -257,11 +293,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool TractionControlEnabled {
             get {
                 CheckMotor();
-                return motor.autoTorque;
+                return InternalMotor.autoTorque;
             }
             set {
                 CheckMotor();
-                motor.autoTorque = value;
+                InternalMotor.autoTorque = value;
             }
         }
 
@@ -274,11 +310,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float TractionControl {
             get {
                 CheckMotor();
-                return motor.tractionControlScale;
+                return InternalMotor.tractionControlScale;
             }
             set {
                 CheckMotor();
-                motor.tractionControlScale = value.Clamp(0, 5);
+                InternalMotor.tractionControlScale = value.Clamp(0, 5);
             }
         }
 
@@ -291,11 +327,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float DriveLimiter {
             get {
                 CheckMotor();
-                return motor.driveLimiter;
+                return InternalMotor.driveLimiter;
             }
             set {
                 CheckMotor();
-                motor.driveLimiter = value.Clamp(0, 100);
+                InternalMotor.driveLimiter = value.Clamp(0, 100);
             }
         }
 
@@ -304,7 +340,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Steerable {
-            get { return steering != null; }
+            get { return InternalSteering != null; }
         }
 
         /// <summary>
@@ -314,11 +350,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool SteeringEnabled {
             get {
                 CheckSteering();
-                return steering.steeringEnabled;
+                return InternalSteering.steeringEnabled;
             }
             set {
                 CheckSteering();
-                steering.steeringEnabled = value;
+                InternalSteering.steeringEnabled = value;
             }
         }
 
@@ -329,11 +365,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool SteeringInverted {
             get {
                 CheckSteering();
-                return steering.steeringInvert;
+                return InternalSteering.steeringInvert;
             }
             set {
                 CheckSteering();
-                steering.steeringInvert = value;
+                InternalSteering.steeringInvert = value;
             }
         }
 
@@ -346,11 +382,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool SteeringAngleAuto {
             get {
                 CheckSteering();
-                return steering.autoSteeringAdjust;
+                return InternalSteering.autoSteeringAdjust;
             }
             set {
                 CheckSteering();
-                steering.autoSteeringAdjust = value;
+                InternalSteering.autoSteeringAdjust = value;
             }
         }
 
@@ -363,12 +399,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             get
             {
                 CheckSteering();
-                return steering.angleTweakable;
+                return InternalSteering.angleTweakable;
             }
             set
             {
                 CheckSteering();
-                steering.angleTweakable = value;
+                InternalSteering.angleTweakable = value;
             }
         }
 
@@ -381,12 +417,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             get
             {
                 CheckSteering();
-                return steering.responseTweakable;
+                return InternalSteering.responseTweakable;
             }
             set
             {
                 CheckSteering();
-                steering.responseTweakable = value;
+                InternalSteering.responseTweakable = value;
             }
         }
 
@@ -395,7 +431,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool HasSuspension {
-            get { return suspension != null; }
+            get { return InternalSuspension != null; }
         }
 
         /// <summary>
@@ -405,7 +441,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float SuspensionSpringStrength {
             get {
                 CheckSuspension();
-                return suspension.springTweakable;
+                return InternalSuspension.springTweakable;
             }
         }
 
@@ -416,7 +452,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float SuspensionDamperStrength {
             get {
                 CheckSuspension();
-                return suspension.damperTweakable;
+                return InternalSuspension.damperTweakable;
             }
         }
 
@@ -425,7 +461,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Broken {
-            get { return damage != null && damage.isDamaged; }
+            get { return InternalDamage != null && InternalDamage.isDamaged; }
         }
 
         /// <summary>
@@ -433,7 +469,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Repairable {
-            get { return damage != null && damage.isRepairable; }
+            get { return InternalDamage != null && InternalDamage.isRepairable; }
         }
 
         /// <summary>
@@ -443,7 +479,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float Stress {
             get {
                 CheckDamage();
-                return damage.totalStress;
+                return InternalDamage.totalStress;
             }
         }
 
@@ -454,7 +490,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float StressTolerance {
             get {
                 CheckDamage();
-                return damage.stressTolerance;
+                return InternalDamage.stressTolerance;
             }
         }
 
@@ -465,7 +501,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float StressPercentage {
             get {
                 CheckDamage();
-                return damage.stressPercent;
+                return InternalDamage.stressPercent;
             }
         }
 
@@ -476,7 +512,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float Deflection {
             get {
                 CheckDamage();
-                return damage.currentDeflection;
+                return InternalDamage.currentDeflection;
             }
         }
 
@@ -487,7 +523,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public float Slip {
             get {
                 CheckDamage();
-                return damage.currentSlip;
+                return InternalDamage.currentSlip;
             }
         }
     }
