@@ -87,6 +87,55 @@ namespace KRPC.SpaceCenter.Services
             get { return SpaceCenter.Bodies [InternalOrbit.referenceBody.name]; }
         }
 
+        /// <summary>
+        /// The reference frame that moves along the orbit, and is orientated in a fixed
+        /// direction.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the point the orbit has reached at the
+        /// current time.</description></item>
+        /// <item><description>The axes do not rotate. They point in the same fixed
+        /// directions as those of
+        /// <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// For the orbit of a vessel, the origin is the point the vessel's orbit has
+        /// reached rather than the vessel's own center of mass. The two are a few meters
+        /// apart, as a vessel inside the physics bubble is simulated rather than being
+        /// held on its orbit.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return ReferenceFrame.NonRotating (this); }
+        }
+
+        /// <summary>
+        /// The reference frame that moves along the orbit, and is orientated with its
+        /// prograde/normal/radial directions.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the point the orbit has reached at the
+        /// current time.</description></item>
+        /// <item><description>The axes rotate with the orbital prograde/normal/radial
+        /// directions.</description></item>
+        /// <item><description>The x-axis points in the orbital anti-radial direction.
+        /// </description></item>
+        /// <item><description>The y-axis points in the orbital prograde direction.
+        /// </description></item>
+        /// <item><description>The z-axis points in the orbital normal direction.
+        /// </description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// For the orbit of a vessel, the origin is the point the vessel's orbit has
+        /// reached rather than the vessel's own center of mass, which is what
+        /// <see cref="Vessel.OrbitalReferenceFrame"/> is centered on.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame OrbitalReferenceFrame {
+            get { return ReferenceFrame.Orbital (this); }
+        }
+
         // The reference frame used by the closest-approach members when the caller
         // does not specify one: the orbital frame of the object the orbit belongs to,
         // falling back to the reference body's non-rotating (inertial) frame when the
@@ -347,6 +396,8 @@ namespace KRPC.SpaceCenter.Services
         /// nothing is moving along it. Use <see cref="RadiusAt"/>,
         /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
         /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// the orbit as time passes.
         ///
         /// The orbit that is returned is kept for as long as the server is running,
         /// so creating one repeatedly, for example once per update, uses more and more

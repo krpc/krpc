@@ -389,6 +389,8 @@ SpaceCenter.Flight.ThrustSpecificFuelConsumption
 SpaceCenter.Orbit
 SpaceCenter.Orbit.CreateFromPositionAndVelocity
 SpaceCenter.Orbit.Body
+SpaceCenter.Orbit.ReferenceFrame
+SpaceCenter.Orbit.OrbitalReferenceFrame
 SpaceCenter.Orbit.Apoapsis
 SpaceCenter.Orbit.Periapsis
 SpaceCenter.Orbit.ApoapsisAltitude

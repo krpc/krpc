@@ -1339,5 +1339,171 @@ class TestReferenceFrame(krpctest.TestCase):
         )
 
 
+class TestOrbitReferenceFrame(krpctest.TestCase):
+    """The frames centered on the point an orbit has reached.
+
+    These are placed by evaluating the orbit rather than by reading a transform,
+    so they work for an orbit that no object in the game is following."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("Vessel")
+        cls.remove_other_vessels()
+        cls.set_circular_orbit("Kerbin", 100000)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.kerbin = cls.space_center.bodies["Kerbin"]
+        cls.nonrot = cls.kerbin.non_rotating_reference_frame
+
+    def constructed_orbit(self, radius=1000000):
+        """An orbit no object in the game is following: circular, polar, and well
+        clear of the vessel's own orbit."""
+        speed = math.sqrt(self.kerbin.gravitational_parameter / radius)
+        return self.space_center.Orbit.create_from_position_and_velocity(
+            self.kerbin,
+            (0, 0, radius),
+            (0, speed, 0),
+            self.space_center.ut,
+            self.nonrot,
+        )
+
+    def test_origin_is_on_the_orbit(self):
+        """The frame origin is where the orbit has reached, at its orbital radius
+        from the body being orbited."""
+        orbit = self.constructed_orbit()
+        for ref in (orbit.reference_frame, orbit.orbital_reference_frame):
+            self.assertAlmostEqual(
+                (0, 0, 0), orbit.position_at(self.space_center.ut, ref), delta=200
+            )
+            self.assertAlmostEqual(
+                orbit.radius, norm(self.kerbin.position(ref)), delta=200
+            )
+
+    def test_vessel_orbit_frame_tracks_the_vessel(self):
+        """For a vessel's own orbit, the origin is where that vessel's orbit has
+        reached. It is compared against the orbit rather than against the vessel
+        itself, which is simulated inside the physics bubble and sits a few
+        meters off the orbit it is on."""
+        ref = self.vessel.orbit.reference_frame
+        self.assertAlmostEqual(
+            (0, 0, 0),
+            self.vessel.orbit.position_at(self.space_center.ut, ref),
+            delta=200,
+        )
+        self.assertAlmostEqual((0, 0, 0), self.vessel.position(ref), delta=200)
+
+    def test_non_rotating_frame_axes_are_fixed(self):
+        """The axes point in the same fixed directions as the body's non-rotating
+        frame, so a direction has the same components in both."""
+        ref = self.constructed_orbit().reference_frame
+        for direction in ((1, 0, 0), (0, 1, 0), (0, 0, 1)):
+            self.assertAlmostEqual(
+                direction,
+                self.space_center.transform_direction(direction, self.nonrot, ref),
+                places=6,
+            )
+
+    def test_non_rotating_frame_has_no_angular_velocity(self):
+        """Kerbin's spin measured in the frame is what it is in Kerbin's own
+        non-rotating frame: neither frame turns, and they share their axes.
+
+        Angular velocity can only be observed through some rotating object, and
+        Kerbin's spin is the one to hand -- so this is the way to ask whether the
+        frame itself contributes any rotation."""
+        ref = self.constructed_orbit().reference_frame
+        self.assertAlmostEqual(
+            self.kerbin.angular_velocity(self.nonrot),
+            self.kerbin.angular_velocity(ref),
+            places=9,
+        )
+
+    def test_frame_velocity_is_the_orbital_velocity(self):
+        """The frame moves along the orbit, so the body being orbited recedes at
+        the orbit's own speed.
+
+        Only the non-rotating frame shows this. In the orbital frame the origin
+        turns with the orbit, and for a circular one the omega-cross-r term at
+        the body's center is equal and opposite to the frame's own motion, so
+        the body sits still there."""
+        radius = 1000000
+        expected = math.sqrt(self.kerbin.gravitational_parameter / radius)
+        orbit = self.constructed_orbit(radius)
+        speed = norm(self.kerbin.velocity(orbit.reference_frame))
+        self.assertAlmostEqual(expected, speed, delta=1)
+
+    def test_orbital_frame_corotates_with_a_circular_orbit(self):
+        """The body being orbited is at rest in the orbital frame of a circular
+        orbit: the frame's motion along the orbit and its rotation about the body
+        cancel at the body's center."""
+        orbit = self.constructed_orbit()
+        speed = norm(self.kerbin.velocity(orbit.orbital_reference_frame))
+        self.assertAlmostEqual(0, speed, delta=1)
+
+    def test_orbital_frame_axes(self):
+        """The y-axis is prograde and the z-axis is the orbit normal, so the
+        orbit's own velocity points along +y and its position is along -x."""
+        orbit = self.constructed_orbit()
+        ref = orbit.orbital_reference_frame
+        ut = self.space_center.ut
+        velocity = orbit.velocity_at(ut, ref)
+        # The frame moves with the orbit, so the orbit is at rest in it. Take the
+        # direction from the non-rotating frame and rotate it in instead.
+        prograde = normalize(vector(orbit.velocity_at(ut, self.nonrot)))
+        self.assertAlmostEqual(
+            (0, 1, 0),
+            self.space_center.transform_direction(tuple(prograde), self.nonrot, ref),
+            places=4,
+        )
+        self.assertAlmostEqual((0, 0, 0), velocity, delta=5)
+        # The body being orbited is in the anti-radial direction, along +x.
+        position = normalize(vector(self.kerbin.position(ref)))
+        self.assertAlmostEqual(1, dot(position, vector((1, 0, 0))), places=4)
+
+    def test_orbital_frame_angular_velocity_is_the_orbital_rate(self):
+        """The frame turns once per orbit.
+
+        Kerbin's spin read in the frame is that spin minus the frame's own
+        rotation. The orbit is polar, so the frame turns about an axis lying in
+        the equatorial plane, at right angles to Kerbin's spin axis, and the two
+        rates combine in quadrature."""
+        orbit = self.constructed_orbit()
+        spin = norm(self.kerbin.angular_velocity(orbit.reference_frame))
+        combined = norm(self.kerbin.angular_velocity(orbit.orbital_reference_frame))
+        rate = math.sqrt(combined**2 - spin**2)
+        self.assertAlmostEqual(2 * math.pi / orbit.period, rate, delta=1e-6)
+
+    def test_composes_with_relative_and_hybrid(self):
+        """The frames are ordinary reference frames, so they compose.
+
+        The offset is large compared to the distance the orbit covers between
+        the two RPCs this compares, so it is the offset being measured."""
+        orbit = self.constructed_orbit()
+        offset = self.space_center.ReferenceFrame.create_relative(
+            orbit.reference_frame, position=(0, 0, 100000)
+        )
+        self.assertAlmostEqual(
+            (0, 0, -100000), orbit.position_at(self.space_center.ut, offset), delta=200
+        )
+        hybrid = self.space_center.ReferenceFrame.create_hybrid(
+            position=orbit.reference_frame,
+            rotation=self.vessel.reference_frame,
+        )
+        self.assertAlmostEqual(
+            (0, 0, 0), orbit.position_at(self.space_center.ut, hybrid), delta=200
+        )
+
+    def test_distance_to_a_constructed_orbit(self):
+        """The use the frames exist for: measure a vessel against a point that
+        nothing in the game is at."""
+        orbit = self.constructed_orbit()
+        position = self.vessel.position(orbit.reference_frame)
+        expected = norm(
+            vector(self.vessel.position(self.nonrot))
+            - vector(orbit.position_at(self.space_center.ut, self.nonrot))
+        )
+        self.assertAlmostEqual(expected, norm(position), delta=200)
+
+
 if __name__ == "__main__":
     unittest.main()

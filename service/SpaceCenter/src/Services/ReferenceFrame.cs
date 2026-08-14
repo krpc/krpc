@@ -33,6 +33,7 @@ namespace KRPC.SpaceCenter.Services
         readonly uint partId;
         readonly ModuleDockingNode dockingPort;
         readonly Thruster thruster;
+        readonly Orbit orbit;
         readonly ReferenceFrame parent;
         readonly Vector3d relativePosition;
         readonly QuaternionD relativeRotation;
@@ -46,7 +47,7 @@ namespace KRPC.SpaceCenter.Services
         ReferenceFrame (
             ReferenceFrameType type, global::CelestialBody body = null, global::Vessel vessel = null,
             ManeuverNode node = null, Part part = null, ModuleDockingNode dockingPort = null,
-            Thruster thruster = null, ReferenceFrame parent = null,
+            Thruster thruster = null, Orbit orbit = null, ReferenceFrame parent = null,
             ReferenceFrame hybridPosition = null, ReferenceFrame hybridRotation = null,
             ReferenceFrame hybridVelocity = null, ReferenceFrame hybridAngularVelocity = null)
         {
@@ -58,6 +59,7 @@ namespace KRPC.SpaceCenter.Services
                 partId = part.flightID;
             this.dockingPort = dockingPort;
             this.thruster = thruster;
+            this.orbit = orbit;
             this.parent = parent;
             this.hybridPosition = hybridPosition;
             this.hybridRotation = hybridRotation;
@@ -89,6 +91,7 @@ namespace KRPC.SpaceCenter.Services
             partId == other.partId &&
             dockingPort == other.dockingPort &&
             thruster == other.thruster &&
+            orbit == other.orbit &&
             parent == other.parent &&
             (type != ReferenceFrameType.Relative ||
             (relativePosition == other.relativePosition &&
@@ -118,6 +121,8 @@ namespace KRPC.SpaceCenter.Services
                 hash ^= dockingPort.GetHashCode ();
             if (thruster != null)
                 hash ^= thruster.GetHashCode ();
+            if (orbit != null)
+                hash ^= orbit.GetHashCode ();
             if (parent != null)
                 hash ^= parent.GetHashCode ();
             if (type == ReferenceFrameType.Relative) {
@@ -221,6 +226,9 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
                     throw new InvalidOperationException ("Maneuver nodes do not have a transform");
+                case ReferenceFrameType.OrbitNonRotating:
+                case ReferenceFrameType.OrbitOrbital:
+                    throw new InvalidOperationException ("Orbits do not have a transform");
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.transform;
@@ -345,6 +353,16 @@ namespace KRPC.SpaceCenter.Services
             return new ReferenceFrame (ReferenceFrameType.ManeuverOrbital, vessel: vessel, node: node);
         }
 
+        internal static ReferenceFrame NonRotating (Orbit orbit)
+        {
+            return new ReferenceFrame (ReferenceFrameType.OrbitNonRotating, orbit: orbit);
+        }
+
+        internal static ReferenceFrame Orbital (Orbit orbit)
+        {
+            return new ReferenceFrame (ReferenceFrameType.OrbitOrbital, orbit: orbit);
+        }
+
         internal static ReferenceFrame Object (Part part)
         {
             return new ReferenceFrame (ReferenceFrameType.Part, part: part);
@@ -467,6 +485,12 @@ namespace KRPC.SpaceCenter.Services
                         var nodeOrbitPos = node.patch.getPositionAtUT (node.UT);
                         return vesselPos - vesselOrbitPos + nodeOrbitPos;
                     }
+                case ReferenceFrameType.OrbitNonRotating:
+                case ReferenceFrameType.OrbitOrbital:
+                    // An orbit is not attached to anything in the scene, so it has no
+                    // transform position to correct this towards the way a maneuver node,
+                    // which belongs to a vessel, does. The orbit is the whole of it.
+                    return orbit.InternalOrbit.getPositionAtUT (Planetarium.GetUniversalTime ());
                 case ReferenceFrameType.Part:
                     return InternalPart.transform.position;
                 case ReferenceFrameType.PartCenterOfMass:
@@ -566,6 +590,15 @@ namespace KRPC.SpaceCenter.Services
             return vessel.CoM - vessel.mainBody.position;
         }
 
+        // The velocity the orbit this frame is built on has reached at the current time,
+        // relative to the body being orbited, in world space.
+        Vector3d OrbitVelocityNow {
+            get {
+                return orbit.InternalOrbit.getOrbitalVelocityAtUT (
+                    Planetarium.GetUniversalTime ()).SwapYZ ();
+            }
+        }
+
         /// <summary>
         /// Returns the up vector for the reference frame in world coordinates.
         /// The direction in which the y-axis points.
@@ -599,6 +632,10 @@ namespace KRPC.SpaceCenter.Services
                     return node.GetBurnVector(node.patch);
                 case ReferenceFrameType.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                case ReferenceFrameType.OrbitNonRotating:
+                    return Planetarium.up;
+                case ReferenceFrameType.OrbitOrbital:
+                    return OrbitVelocityNow;
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.transform.up;
@@ -675,6 +712,10 @@ namespace KRPC.SpaceCenter.Services
                     }
                 case ReferenceFrameType.ManeuverOrbital:
                     return node.patch.GetOrbitNormal ().SwapYZ ();
+                case ReferenceFrameType.OrbitNonRotating:
+                    return Planetarium.forward;
+                case ReferenceFrameType.OrbitOrbital:
+                    return orbit.InternalOrbit.GetOrbitNormal ().SwapYZ ();
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                     return InternalPart.transform.forward;
@@ -724,6 +765,9 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.Maneuver:
                 case ReferenceFrameType.ManeuverOrbital:
                     return node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ () + node.patch.referenceBody.GetWorldVelocity ();
+                case ReferenceFrameType.OrbitNonRotating:
+                case ReferenceFrameType.OrbitOrbital:
+                    return OrbitVelocityNow + orbit.InternalOrbit.referenceBody.GetWorldVelocity ();
                 case ReferenceFrameType.Part:
                 case ReferenceFrameType.PartCenterOfMass:
                 case ReferenceFrameType.Thrust:
@@ -846,6 +890,14 @@ namespace KRPC.SpaceCenter.Services
                 case ReferenceFrameType.ManeuverOrbital: {
                     var r = node.patch.getRelativePositionAtUT (node.UT).SwapYZ ();
                     var v = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
+                    return Vector3d.Cross (r, v) / r.sqrMagnitude;
+                }
+                case ReferenceFrameType.OrbitNonRotating:
+                    return Vector3d.zero;
+                case ReferenceFrameType.OrbitOrbital: {
+                    var ut = Planetarium.GetUniversalTime ();
+                    var r = orbit.InternalOrbit.getRelativePositionAtUT (ut).SwapYZ ();
+                    var v = orbit.InternalOrbit.getOrbitalVelocityAtUT (ut).SwapYZ ();
                     return Vector3d.Cross (r, v) / r.sqrMagnitude;
                 }
                 case ReferenceFrameType.Part:
