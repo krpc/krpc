@@ -653,6 +653,7 @@
 <li><p>Orbits, nodes and bodies</p>
 <ul>
 <li><p>Add <code class="docutils literal notranslate"><span class="pre">CelestialBody.SurfaceNormal</span></code>, <code class="docutils literal notranslate"><span class="pre">CelestialBody.BedrockNormal</span></code> and <code class="docutils literal notranslate"><span class="pre">CelestialBody.MSLNormal</span></code> to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to the surface, to the sea-bed, or to the sphere at sea level (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1030">#1030</a>)</p></li>
+<li><p>Fix <code class="docutils literal notranslate"><span class="pre">ClosestApproach.Velocity</span></code> and <code class="docutils literal notranslate"><span class="pre">ClosestApproach.TargetVelocity</span></code>, which were both offset by the velocity of the frame the active vessel’s reference body moves in, some 9284 m/s for a vessel in orbit around Kerbin. <code class="docutils literal notranslate"><span class="pre">ClosestApproach.RelativeVelocity</span></code> and <code class="docutils literal notranslate"><span class="pre">ClosestApproach.RelativeSpeed</span></code> are the difference of the two and were unaffected (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1047">#1047</a>)</p></li>
 </ul>
 </li>
 <li><p>Flight and aerodynamics</p>
