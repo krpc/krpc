@@ -1,29 +1,42 @@
 import math
 import struct
-import sys
 
 # pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
 from krpc.types import ValueType
 
-# The largest finite 32-bit float, as the double a decoded FLOAT default widens to.
-_FLOAT32_MAX = (2 - 2**-23) * 2**127
+# The extremes come from the python client, which krpctools already builds on. They describe
+# the protobuf types rather than anything about python, so every language's generator reads
+# them from here, and the python generator matches a default value against the very constant
+# it goes on to name.
+from krpc.limits import (
+    DOUBLE_MAX,
+    DOUBLE_LOWEST,
+    FLOAT_MAX,
+    FLOAT_LOWEST,
+    SINT32_MAX,
+    SINT32_MIN,
+    SINT64_MAX,
+    SINT64_MIN,
+    UINT32_MAX,
+    UINT64_MAX,
+)
 
 # The finite extremes of the floating point types, by protobuf type code. They are named
 # "lowest" rather than "min" because C++ numeric_limits<T>::min() is the smallest positive
 # normal for a float, so "min" would name two different things across the two families.
 _FLOAT_EXTREMES = {
-    Type.DOUBLE: {"max": sys.float_info.max, "lowest": -sys.float_info.max},
-    Type.FLOAT: {"max": _FLOAT32_MAX, "lowest": -_FLOAT32_MAX},
+    Type.DOUBLE: {"max": DOUBLE_MAX, "lowest": DOUBLE_LOWEST},
+    Type.FLOAT: {"max": FLOAT_MAX, "lowest": FLOAT_LOWEST},
 }
 
 # The extremes of the integer types, by protobuf type code. The unsigned minimum is zero and
 # needs no name. BOOL is deliberately absent, as Python's True and False are integers.
 _INTEGER_EXTREMES = {
-    Type.SINT32: {"max": 2**31 - 1, "min": -(2**31)},
-    Type.SINT64: {"max": 2**63 - 1, "min": -(2**63)},
-    Type.UINT32: {"max": 2**32 - 1},
-    Type.UINT64: {"max": 2**64 - 1},
+    Type.SINT32: {"max": SINT32_MAX, "min": SINT32_MIN},
+    Type.SINT64: {"max": SINT64_MAX, "min": SINT64_MIN},
+    Type.UINT32: {"max": UINT32_MAX},
+    Type.UINT64: {"max": UINT64_MAX},
 }
 
 

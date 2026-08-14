@@ -1,11 +1,11 @@
 import math
-import sys
 import unittest
 import socket
 import threading
 import warnings
 from typing import Callable
 import krpc
+import krpc.limits
 import krpc.schema.KRPC_pb2 as KRPC
 from krpc.error import RPCError
 from krpc.test.servertestcase import ServerTestCase
@@ -428,28 +428,47 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_special_default_values(self) -> None:
         # The special values of the numeric types survive the round trip from the
-        # declaration in the service, through the generated client, to the server
-        float32_max = (2 - 2**-23) * 2**127
+        # declaration in the service, through the generated client, to the server, and
+        # the client's own constants for them are what the defaults apply
         values = self.conn.test_service.double_special_defaults()
         self.assertTrue(math.isnan(values[0]))
         self.assertEqual(
-            [float("inf"), -float("inf"), sys.float_info.max, -sys.float_info.max],
+            [
+                float("inf"),
+                -float("inf"),
+                krpc.limits.DOUBLE_MAX,
+                krpc.limits.DOUBLE_LOWEST,
+            ],
             values[1:],
         )
         values = self.conn.test_service.float_special_defaults()
         self.assertTrue(math.isnan(values[0]))
         self.assertEqual(
-            [float("inf"), -float("inf"), float32_max, -float32_max], values[1:5]
+            [
+                float("inf"),
+                -float("inf"),
+                krpc.limits.FLOAT_MAX,
+                krpc.limits.FLOAT_LOWEST,
+            ],
+            values[1:5],
         )
         self.assertAlmostEqual(0.1, values[5], places=6)
         self.assertEqual(
-            [2**31 - 1, -(2**31)], self.conn.test_service.int32_special_defaults()
+            [krpc.limits.SINT32_MAX, krpc.limits.SINT32_MIN],
+            self.conn.test_service.int32_special_defaults(),
         )
         self.assertEqual(
-            [2**63 - 1, -(2**63)], self.conn.test_service.int64_special_defaults()
+            [krpc.limits.SINT64_MAX, krpc.limits.SINT64_MIN],
+            self.conn.test_service.int64_special_defaults(),
         )
-        self.assertEqual([2**32 - 1], self.conn.test_service.uint32_special_defaults())
-        self.assertEqual([2**64 - 1], self.conn.test_service.uint64_special_defaults())
+        self.assertEqual(
+            [krpc.limits.UINT32_MAX],
+            self.conn.test_service.uint32_special_defaults(),
+        )
+        self.assertEqual(
+            [krpc.limits.UINT64_MAX],
+            self.conn.test_service.uint64_special_defaults(),
+        )
 
     def test_unknown_exception_type(self) -> None:
         # An error naming a service or type this client does not know about still reports

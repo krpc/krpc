@@ -22,15 +22,27 @@ class PythonLanguage(Language):
 
     value_map = {"null": "None", "true": "True", "false": "False"}
 
-    # Python names none of the finite extremes; every one of them is exact as a literal,
-    # as Python integers are unbounded and its floats are doubles.
+    # Python builds NaN and the infinities from a string, and takes the finite extremes
+    # from krpc.limits, which names them because the language does not: its integers are
+    # unbounded and its floats are doubles, so nothing in the language or its standard
+    # library names the width of a wire type.
     special_values = {
         (Type.DOUBLE, "nan"): 'float("nan")',
         (Type.DOUBLE, "inf"): 'float("inf")',
         (Type.DOUBLE, "-inf"): '-float("inf")',
+        (Type.DOUBLE, "max"): "krpc.limits.DOUBLE_MAX",
+        (Type.DOUBLE, "lowest"): "krpc.limits.DOUBLE_LOWEST",
         (Type.FLOAT, "nan"): 'float("nan")',
         (Type.FLOAT, "inf"): 'float("inf")',
         (Type.FLOAT, "-inf"): '-float("inf")',
+        (Type.FLOAT, "max"): "krpc.limits.FLOAT_MAX",
+        (Type.FLOAT, "lowest"): "krpc.limits.FLOAT_LOWEST",
+        (Type.SINT32, "max"): "krpc.limits.SINT32_MAX",
+        (Type.SINT32, "min"): "krpc.limits.SINT32_MIN",
+        (Type.SINT64, "max"): "krpc.limits.SINT64_MAX",
+        (Type.SINT64, "min"): "krpc.limits.SINT64_MIN",
+        (Type.UINT32, "max"): "krpc.limits.UINT32_MAX",
+        (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
     }
 
     def parse_name(self, name):
