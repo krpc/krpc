@@ -30,15 +30,26 @@ class LuaLanguage(Language):
         Type.BYTES: "string",
     }
 
-    # Lua 5.1 and 5.2 have no math.maxinteger or math.mininteger, so the integer extremes
-    # are left to the literal path.
+    # Lua builds NaN by dividing zero by zero and has math.huge for the infinities, but
+    # names no finite extreme of its own: math.maxinteger and math.mininteger arrive in
+    # Lua 5.3 and the client targets 5.1 and 5.2. Those come from krpc.limits.
     special_values = {
         (Type.DOUBLE, "nan"): "0/0",
         (Type.DOUBLE, "inf"): "math.huge",
         (Type.DOUBLE, "-inf"): "-math.huge",
+        (Type.DOUBLE, "max"): "krpc.limits.DOUBLE_MAX",
+        (Type.DOUBLE, "lowest"): "krpc.limits.DOUBLE_LOWEST",
         (Type.FLOAT, "nan"): "0/0",
         (Type.FLOAT, "inf"): "math.huge",
         (Type.FLOAT, "-inf"): "-math.huge",
+        (Type.FLOAT, "max"): "krpc.limits.FLOAT_MAX",
+        (Type.FLOAT, "lowest"): "krpc.limits.FLOAT_LOWEST",
+        (Type.SINT32, "max"): "krpc.limits.SINT32_MAX",
+        (Type.SINT32, "min"): "krpc.limits.SINT32_MIN",
+        (Type.SINT64, "max"): "krpc.limits.SINT64_MAX",
+        (Type.SINT64, "min"): "krpc.limits.SINT64_MIN",
+        (Type.UINT32, "max"): "krpc.limits.UINT32_MAX",
+        (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
     }
 
     def parse_type(self, typ):

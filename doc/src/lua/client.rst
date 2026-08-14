@@ -119,3 +119,48 @@ Reference
          over the network:
 
          .. literalinclude:: /scripts/client/lua/ServerStats.lua
+
+Numeric Limits
+--------------
+
+The ``krpc.limits`` module names the extremes of the numeric types that kRPC carries over the
+wire. Lua names none of them itself, as ``math.maxinteger`` and ``math.mininteger`` arrive in
+Lua 5.3 and this client targets 5.1 and 5.2. A service can declare one of these as a
+parameter's default value, in which case it is documented as the constant here.
+
+The minimum of an unsigned type is ``0``, so it has no constant.
+
+.. note::
+
+   Every Lua 5.1 and 5.2 number is a double, which holds each of these exactly except the two
+   64-bit integer maxima: :data:`krpc.limits.SINT64_MAX` and :data:`krpc.limits.UINT64_MAX`
+   round up to :math:`2^{63}` and :math:`2^{64}`. This is a property of the number type rather
+   than of the constants, and applies equally to a 64-bit integer arriving from the server.
+
+.. data:: limits.DOUBLE_MAX
+          limits.DOUBLE_LOWEST
+
+   The largest and most negative finite 64-bit float.
+
+.. data:: limits.FLOAT_MAX
+          limits.FLOAT_LOWEST
+
+   The largest and most negative finite 32-bit float.
+
+.. data:: limits.SINT32_MAX
+          limits.SINT32_MIN
+
+   The largest and most negative 32-bit signed integer.
+
+.. data:: limits.SINT64_MAX
+          limits.SINT64_MIN
+
+   The largest and most negative 64-bit signed integer.
+
+.. data:: limits.UINT32_MAX
+
+   The largest 32-bit unsigned integer.
+
+.. data:: limits.UINT64_MAX
+
+   The largest 64-bit unsigned integer.

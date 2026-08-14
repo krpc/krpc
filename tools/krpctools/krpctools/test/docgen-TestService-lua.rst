@@ -130,7 +130,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: double_special_defaults([nan = 0/0], [infinity = math.huge], [negative_infinity = -math.huge], [maximum = 1.7976931348623157e+308], [lowest = -1.7976931348623157e+308])
+.. staticmethod:: double_special_defaults([nan = 0/0], [infinity = math.huge], [negative_infinity = -math.huge], [maximum = krpc.limits.DOUBLE_MAX], [lowest = krpc.limits.DOUBLE_LOWEST])
 
    Procedure whose defaults are the special values of double.
 
@@ -243,7 +243,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: float_special_defaults([nan = 0/0], [infinity = math.huge], [negative_infinity = -math.huge], [maximum = 3.4028235e+38], [lowest = -3.4028235e+38], [fraction = 0.1])
+.. staticmethod:: float_special_defaults([nan = 0/0], [infinity = math.huge], [negative_infinity = -math.huge], [maximum = krpc.limits.FLOAT_MAX], [lowest = krpc.limits.FLOAT_LOWEST], [fraction = 0.1])
 
    Procedure whose defaults are the special values of float, plus a finite fraction
    that no float can hold exactly.
@@ -319,7 +319,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: int32_special_defaults([maximum = 2147483647], [minimum = -2147483648])
+.. staticmethod:: int32_special_defaults([maximum = krpc.limits.SINT32_MAX], [minimum = krpc.limits.SINT32_MIN])
 
    Procedure whose defaults are the extremes of int.
 
@@ -340,7 +340,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: int64_special_defaults([maximum = 9223372036854775807], [minimum = -9223372036854775808])
+.. staticmethod:: int64_special_defaults([maximum = krpc.limits.SINT64_MAX], [minimum = krpc.limits.SINT64_MIN])
 
    Procedure whose defaults are the extremes of long.
 
@@ -585,7 +585,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: uint32_special_defaults([maximum = 4294967295])
+.. staticmethod:: uint32_special_defaults([maximum = krpc.limits.UINT32_MAX])
 
    Procedure whose default is the largest uint.
 
@@ -595,7 +595,7 @@ Service documentation string.
 
 
 
-.. staticmethod:: uint64_special_defaults([maximum = 18446744073709551615])
+.. staticmethod:: uint64_special_defaults([maximum = krpc.limits.UINT64_MAX])
 
    Procedure whose default is the largest ulong.
 

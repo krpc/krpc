@@ -393,7 +393,7 @@ Client API Reference
 Numeric Limits
 --------------
 
-The :mod:`krpc.limits` module names the extremes of the numeric types that kRPC carries over the
+The ``krpc.limits`` module names the extremes of the numeric types that kRPC carries over the
 wire. Python names none of them itself: its integers are unbounded, so there is no largest
 ``int``, and its floats are C doubles, so the standard library describes ``DOUBLE`` but says
 nothing about the 32-bit ``FLOAT``. A service can declare one of these as a parameter's default
