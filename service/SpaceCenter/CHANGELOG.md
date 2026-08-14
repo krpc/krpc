@@ -132,6 +132,10 @@
     next press of Alt+L locks or unlocks staging rather than being absorbed (#1022)
 
 - Parts
+  - `Decoupler.IsOmniDecoupler` reports what the part is configured as for every decoupler,
+    including radial ones and any that a mod derives from the stock modules. It was false for
+    all of them regardless of their configuration. The stage a part is assigned to follows the
+    same value, so a vessel carrying such a decoupler can be staged differently (#1048)
   - `Part.BoundingBox` and `Vessel.BoundingBox` now measure only the meshes of a part's own
     model. The boxes no longer take in the models of physicsless child parts, nor any object
     another mod has attached to a part, which could stretch a box to an arbitrary size (#1024)
