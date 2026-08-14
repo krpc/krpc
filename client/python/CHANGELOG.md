@@ -2,6 +2,10 @@
 - **Breaking:** Support `None` for any nullable type (#1017)
 - Fix a service failing to load when one of its procedures defaults to a member of an
   enumeration defined by a service that had not been loaded yet (#1044)
+- Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire,
+  such as `krpc.limits.SINT32_MAX` and `krpc.limits.DOUBLE_LOWEST`. Python names none of
+  them itself, and a generated stub whose parameter defaults to one now names the constant
+  rather than writing out the decimal value (#1045)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)
