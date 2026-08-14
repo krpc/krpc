@@ -176,6 +176,23 @@ public class TestService {
         return (java.util.Map<Integer,Boolean>) Encoder.decode(_data.getValue(), krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
     }
 
+    /**
+     * Procedure whose defaults are the special values of double.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "DoubleSpecialDefaults", types = _Types.class)
+    public java.util.List<Double> doubleSpecialDefaults(double nan, double infinity, double negativeInfinity, double maximum, double lowest) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(nan, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
+            Encoder.encode(infinity, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
+            Encoder.encode(negativeInfinity, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
+            Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)),
+            Encoder.encode(lowest, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "DoubleSpecialDefaults", _args);
+        return (java.util.List<Double>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)), this.connection);
+    }
+
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "DoubleToString", types = _Types.class)
     public String doubleToString(double value) throws RPCException {
@@ -286,6 +303,25 @@ public class TestService {
     }
 
     /**
+     * Procedure whose defaults are the special values of float, plus a finite fraction
+     * that no float can hold exactly.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "FloatSpecialDefaults", types = _Types.class)
+    public java.util.List<Float> floatSpecialDefaults(float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(nan, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
+            Encoder.encode(infinity, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
+            Encoder.encode(negativeInfinity, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
+            Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
+            Encoder.encode(lowest, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)),
+            Encoder.encode(fraction, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "FloatSpecialDefaults", _args);
+        return (java.util.List<Float>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)), this.connection);
+    }
+
+    /**
      * Procedure documentation string.
      */
     @SuppressWarnings({ "unchecked" })
@@ -348,6 +384,20 @@ public class TestService {
         return (org.javatuples.Pair<Integer,Long>) Encoder.decode(_data.getValue(), krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)), this.connection);
     }
 
+    /**
+     * Procedure whose defaults are the extremes of int.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "Int32SpecialDefaults", types = _Types.class)
+    public java.util.List<Integer> int32SpecialDefaults(int maximum, int minimum) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)),
+            Encoder.encode(minimum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Int32SpecialDefaults", _args);
+        return (java.util.List<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)), this.connection);
+    }
+
     @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "Int32ToString", types = _Types.class)
     public String int32ToString(int value) throws RPCException {
@@ -356,6 +406,20 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Int32ToString", _args);
         return (String) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), this.connection);
+    }
+
+    /**
+     * Procedure whose defaults are the extremes of long.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "Int64SpecialDefaults", types = _Types.class)
+    public java.util.List<Long> int64SpecialDefaults(long maximum, long minimum) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)),
+            Encoder.encode(minimum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Int64SpecialDefaults", _args);
+        return (java.util.List<Long>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -524,6 +588,32 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "TupleDefault", _args);
         return (org.javatuples.Pair<Integer,Boolean>) Encoder.decode(_data.getValue(), krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)), this.connection);
+    }
+
+    /**
+     * Procedure whose default is the largest uint.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "Uint32SpecialDefaults", types = _Types.class)
+    public java.util.List<Integer> uint32SpecialDefaults(int maximum) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Uint32SpecialDefaults", _args);
+        return (java.util.List<Integer>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)), this.connection);
+    }
+
+    /**
+     * Procedure whose default is the largest ulong.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "Uint64SpecialDefaults", types = _Types.class)
+    public java.util.List<Long> uint64SpecialDefaults(long maximum) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(maximum, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Uint64SpecialDefaults", _args);
+        return (java.util.List<Long>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)), this.connection);
     }
 
     /**
@@ -964,6 +1054,8 @@ public class TestService {
             PARAMETER_TYPES.put("DeprecatedProcedureNoMessage", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("DictionaryDefault", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
             PARAMETER_TYPES.put("DictionaryDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
+            RETURN_TYPES.put("DoubleSpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE)));
+            PARAMETER_TYPES.put("DoubleSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
             RETURN_TYPES.put("DoubleToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("DoubleToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.DOUBLE) });
             RETURN_TYPES.put("EchoNullableInt", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -984,6 +1076,8 @@ public class TestService {
             PARAMETER_TYPES.put("EnumListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createEnumeration("TestService", "TestEnum")) });
             RETURN_TYPES.put("EnumReturn", krpc.client.Types.createEnumeration("TestService", "TestEnum"));
             PARAMETER_TYPES.put("EnumReturn", new krpc.schema.KRPC.Type[] {  });
+            RETURN_TYPES.put("FloatSpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT)));
+            PARAMETER_TYPES.put("FloatSpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("FloatToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("FloatToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.FLOAT) });
             RETURN_TYPES.put("IncrementDictionary", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -996,8 +1090,12 @@ public class TestService {
             PARAMETER_TYPES.put("IncrementSet", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("IncrementTuple", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)));
             PARAMETER_TYPES.put("IncrementTuple", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)) });
+            RETURN_TYPES.put("Int32SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
+            PARAMETER_TYPES.put("Int32SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("Int32ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Int32ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("Int64SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64)));
+            PARAMETER_TYPES.put("Int64SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("Int64ToString", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("Int64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -1036,6 +1134,13 @@ public class TestService {
             PARAMETER_TYPES.put("ThrowInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
             PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
+        }
+
+        private static void initTypes1() {
+            RETURN_TYPES.put("Uint32SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)));
+            PARAMETER_TYPES.put("Uint32SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
+            RETURN_TYPES.put("Uint64SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)));
+            PARAMETER_TYPES.put("Uint64SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64) });
             RETURN_TYPES.put("get_DeprecatedProperty", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
             PARAMETER_TYPES.put("get_DeprecatedProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_DeprecatedProperty", null);
@@ -1044,9 +1149,6 @@ public class TestService {
             PARAMETER_TYPES.put("get_NullableObject", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_NullableObject", null);
             PARAMETER_TYPES.put("set_NullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("get_ObjectProperty", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("get_ObjectProperty", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("set_ObjectProperty", null);

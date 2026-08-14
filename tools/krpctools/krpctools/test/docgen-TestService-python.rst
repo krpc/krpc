@@ -141,6 +141,21 @@ Service documentation string.
 
 
 
+.. staticmethod:: double_special_defaults([nan = float("nan")], [infinity = float("inf")], [negative_infinity = -float("inf")], [maximum = krpc.limits.DOUBLE_MAX], [lowest = krpc.limits.DOUBLE_LOWEST])
+
+   Procedure whose defaults are the special values of double.
+
+   :param float nan:
+   :param float infinity:
+   :param float negative_infinity:
+   :param float maximum:
+   :param float lowest:
+   :rtype: list(float)
+   
+
+
+
+
 .. staticmethod:: double_to_string(value)
 
 
@@ -250,6 +265,23 @@ Service documentation string.
 
 
 
+.. staticmethod:: float_special_defaults([nan = float("nan")], [infinity = float("inf")], [negative_infinity = -float("inf")], [maximum = krpc.limits.FLOAT_MAX], [lowest = krpc.limits.FLOAT_LOWEST], [fraction = 0.1])
+
+   Procedure whose defaults are the special values of float, plus a finite fraction
+   that no float can hold exactly.
+
+   :param float nan:
+   :param float infinity:
+   :param float negative_infinity:
+   :param float maximum:
+   :param float lowest:
+   :param float fraction:
+   :rtype: list(float)
+   
+
+
+
+
 .. staticmethod:: float_to_string(value)
 
    Procedure documentation string.
@@ -316,12 +348,36 @@ Service documentation string.
 
 
 
+.. staticmethod:: int32_special_defaults([maximum = krpc.limits.SINT32_MAX], [minimum = krpc.limits.SINT32_MIN])
+
+   Procedure whose defaults are the extremes of int.
+
+   :param int maximum:
+   :param int minimum:
+   :rtype: list(int)
+   
+
+
+
+
 .. staticmethod:: int32_to_string(value)
 
 
 
    :param int value:
    :rtype: str
+   
+
+
+
+
+.. staticmethod:: int64_special_defaults([maximum = krpc.limits.SINT64_MAX], [minimum = krpc.limits.SINT64_MIN])
+
+   Procedure whose defaults are the extremes of long.
+
+   :param int maximum:
+   :param int minimum:
+   :rtype: list(int)
    
 
 
@@ -580,6 +636,28 @@ Service documentation string.
 
    :param tuple x:
    :rtype: tuple(int, bool)
+   
+
+
+
+
+.. staticmethod:: uint32_special_defaults([maximum = krpc.limits.UINT32_MAX])
+
+   Procedure whose default is the largest uint.
+
+   :param int maximum:
+   :rtype: list(int)
+   
+
+
+
+
+.. staticmethod:: uint64_special_defaults([maximum = krpc.limits.UINT64_MAX])
+
+   Procedure whose default is the largest ulong.
+
+   :param int maximum:
+   :rtype: list(int)
    
 
 

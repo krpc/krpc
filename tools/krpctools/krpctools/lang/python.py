@@ -13,7 +13,7 @@ from krpc.types import (
     DictionaryType,
 )
 from krpc.utils import snake_case
-from .language import Language
+from .language import Language, float32_literal
 
 
 class PythonLanguage(Language):
@@ -21,6 +21,29 @@ class PythonLanguage(Language):
     keywords = keyword.kwlist
 
     value_map = {"null": "None", "true": "True", "false": "False"}
+
+    # Python builds NaN and the infinities from a string, and takes the finite extremes
+    # from krpc.limits, which names them because the language does not: its integers are
+    # unbounded and its floats are doubles, so nothing in the language or its standard
+    # library names the width of a wire type.
+    special_values = {
+        (Type.DOUBLE, "nan"): 'float("nan")',
+        (Type.DOUBLE, "inf"): 'float("inf")',
+        (Type.DOUBLE, "-inf"): '-float("inf")',
+        (Type.DOUBLE, "max"): "krpc.limits.DOUBLE_MAX",
+        (Type.DOUBLE, "lowest"): "krpc.limits.DOUBLE_LOWEST",
+        (Type.FLOAT, "nan"): 'float("nan")',
+        (Type.FLOAT, "inf"): 'float("inf")',
+        (Type.FLOAT, "-inf"): '-float("inf")',
+        (Type.FLOAT, "max"): "krpc.limits.FLOAT_MAX",
+        (Type.FLOAT, "lowest"): "krpc.limits.FLOAT_LOWEST",
+        (Type.SINT32, "max"): "krpc.limits.SINT32_MAX",
+        (Type.SINT32, "min"): "krpc.limits.SINT32_MIN",
+        (Type.SINT64, "max"): "krpc.limits.SINT64_MAX",
+        (Type.SINT64, "min"): "krpc.limits.SINT64_MIN",
+        (Type.UINT32, "max"): "krpc.limits.UINT32_MAX",
+        (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
+    }
 
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
@@ -54,10 +77,15 @@ class PythonLanguage(Language):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def parse_default_value(self, value, typ):
+        special = self.parse_special_value(value, typ)
+        if special is not None:
+            return special
         if value is None:
             return "None"
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
+            return float32_literal(value)
         if isinstance(typ, EnumerationType):
             return "%s.%s" % (
                 self.parse_type(typ),

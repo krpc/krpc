@@ -373,6 +373,7 @@ function TestClient:test_test_service_service_members()
      'deprecated_procedure',
      'deprecated_procedure_no_message',
      'dictionary_default',
+     'double_special_defaults',
      'double_to_string',
      'echo_nullable_int',
      'echo_nullable_list',
@@ -383,6 +384,7 @@ function TestClient:test_test_service_service_members()
      'enum_echo',
      'enum_list_default',
      'enum_return',
+     'float_special_defaults',
      'float_to_string',
      'get_deprecated_property',
      'get_nullable_object',
@@ -394,7 +396,9 @@ function TestClient:test_test_service_service_members()
      'increment_nested_collection',
      'increment_set',
      'increment_tuple',
+     'int32_special_defaults',
      'int32_to_string',
+     'int64_special_defaults',
      'int64_to_string',
      'list_default',
      'not_nullable_object',
@@ -418,7 +422,9 @@ function TestClient:test_test_service_service_members()
      'throw_custom_exception_later',
      'throw_invalid_operation_exception',
      'throw_invalid_operation_exception_later',
-     'tuple_default'})
+     'tuple_default',
+     'uint32_special_defaults',
+     'uint64_special_defaults'})
 end
 
 function TestClient:test_test_service_test_class_members()

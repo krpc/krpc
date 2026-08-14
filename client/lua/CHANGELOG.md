@@ -2,6 +2,10 @@
 - **Breaking:** Support `Types.none` for any nullable type (#1017)
 - Fix a service failing to load when one of its procedures defaults to a member of an
   enumeration defined by a service that had not been loaded yet (#1044)
+- Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire,
+  such as `krpc.limits.SINT32_MAX` and `krpc.limits.DOUBLE_LOWEST`. Lua names none of them
+  itself, as `math.maxinteger` and `math.mininteger` need Lua 5.3, and a parameter that
+  defaults to one is now documented as the constant rather than the decimal value (#1045)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)

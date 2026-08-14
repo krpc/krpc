@@ -163,6 +163,23 @@ namespace KRPC.Client.Services.TestService
             return (global::System.Collections.Generic.IDictionary<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IDictionary<int,bool>), connection);
         }
 
+        /// <summary>
+        /// Procedure whose defaults are the special values of double.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleSpecialDefaults")]
+        public global::System.Collections.Generic.IList<double> DoubleSpecialDefaults (double nan = double.NaN, double infinity = double.PositiveInfinity, double negativeInfinity = double.NegativeInfinity, double maximum = double.MaxValue, double lowest = double.MinValue)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (nan, typeof(double)),
+                global::KRPC.Client.Encoder.Encode (infinity, typeof(double)),
+                global::KRPC.Client.Encoder.Encode (negativeInfinity, typeof(double)),
+                global::KRPC.Client.Encoder.Encode (maximum, typeof(double)),
+                global::KRPC.Client.Encoder.Encode (lowest, typeof(double))
+            };
+            var _result = connection.Invoke ("TestService", "DoubleSpecialDefaults", _args);
+            return (global::System.Collections.Generic.IList<double>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<double>), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "DoubleToString")]
         public string DoubleToString (double value)
         {
@@ -269,6 +286,25 @@ namespace KRPC.Client.Services.TestService
         }
 
         /// <summary>
+        /// Procedure whose defaults are the special values of float, plus a finite fraction
+        /// that no float can hold exactly.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FloatSpecialDefaults")]
+        public global::System.Collections.Generic.IList<float> FloatSpecialDefaults (float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (nan, typeof(float)),
+                global::KRPC.Client.Encoder.Encode (infinity, typeof(float)),
+                global::KRPC.Client.Encoder.Encode (negativeInfinity, typeof(float)),
+                global::KRPC.Client.Encoder.Encode (maximum, typeof(float)),
+                global::KRPC.Client.Encoder.Encode (lowest, typeof(float)),
+                global::KRPC.Client.Encoder.Encode (fraction, typeof(float))
+            };
+            var _result = connection.Invoke ("TestService", "FloatSpecialDefaults", _args);
+            return (global::System.Collections.Generic.IList<float>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<float>), connection);
+        }
+
+        /// <summary>
         /// Procedure documentation string.
         /// </summary>
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "FloatToString")]
@@ -331,6 +367,20 @@ namespace KRPC.Client.Services.TestService
             return (systemAlias::Tuple<int,long>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(systemAlias::Tuple<int,long>), connection);
         }
 
+        /// <summary>
+        /// Procedure whose defaults are the extremes of int.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32SpecialDefaults")]
+        public global::System.Collections.Generic.IList<int> Int32SpecialDefaults (int maximum = int.MaxValue, int minimum = int.MinValue)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (maximum, typeof(int)),
+                global::KRPC.Client.Encoder.Encode (minimum, typeof(int))
+            };
+            var _result = connection.Invoke ("TestService", "Int32SpecialDefaults", _args);
+            return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int32ToString")]
         public string Int32ToString (int value)
         {
@@ -339,6 +389,20 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "Int32ToString", _args);
             return (string)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(string), connection);
+        }
+
+        /// <summary>
+        /// Procedure whose defaults are the extremes of long.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64SpecialDefaults")]
+        public global::System.Collections.Generic.IList<long> Int64SpecialDefaults (long maximum = long.MaxValue, long minimum = long.MinValue)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (maximum, typeof(long)),
+                global::KRPC.Client.Encoder.Encode (minimum, typeof(long))
+            };
+            var _result = connection.Invoke ("TestService", "Int64SpecialDefaults", _args);
+            return (global::System.Collections.Generic.IList<long>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<long>), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Int64ToString")]
@@ -507,6 +571,32 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "TupleDefault", _args);
             return (systemAlias::Tuple<int,bool>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(systemAlias::Tuple<int,bool>), connection);
+        }
+
+        /// <summary>
+        /// Procedure whose default is the largest uint.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Uint32SpecialDefaults")]
+        public global::System.Collections.Generic.IList<uint> Uint32SpecialDefaults (uint maximum = uint.MaxValue)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (maximum, typeof(uint))
+            };
+            var _result = connection.Invoke ("TestService", "Uint32SpecialDefaults", _args);
+            return (global::System.Collections.Generic.IList<uint>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<uint>), connection);
+        }
+
+        /// <summary>
+        /// Procedure whose default is the largest ulong.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "Uint64SpecialDefaults")]
+        public global::System.Collections.Generic.IList<ulong> Uint64SpecialDefaults (ulong maximum = ulong.MaxValue)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (maximum, typeof(ulong))
+            };
+            var _result = connection.Invoke ("TestService", "Uint64SpecialDefaults", _args);
+            return (global::System.Collections.Generic.IList<ulong>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<ulong>), connection);
         }
 
         /// <summary>

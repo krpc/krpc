@@ -1,5 +1,6 @@
 #pragma once
 
+#include <limits>
 #include <map>
 #include <set>
 #include <string>
@@ -106,6 +107,11 @@ class TestService : public Service {
 
   std::map<int32_t, bool> dictionary_default(std::map<int32_t, bool> x);
 
+  /**
+   * Procedure whose defaults are the special values of double.
+   */
+  std::vector<double> double_special_defaults(double nan, double infinity, double negative_infinity, double maximum, double lowest);
+
   std::string double_to_string(double value);
 
   std::optional<int32_t> echo_nullable_int(std::optional<int32_t> value);
@@ -127,6 +133,12 @@ class TestService : public Service {
   TestService::TestEnum enum_return();
 
   /**
+   * Procedure whose defaults are the special values of float, plus a finite fraction
+   * that no float can hold exactly.
+   */
+  std::vector<float> float_special_defaults(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
+
+  /**
    * Procedure documentation string.
    */
   std::string float_to_string(float value);
@@ -141,7 +153,17 @@ class TestService : public Service {
 
   std::tuple<int32_t, int64_t> increment_tuple(std::tuple<int32_t, int64_t> t);
 
+  /**
+   * Procedure whose defaults are the extremes of int.
+   */
+  std::vector<int32_t> int32_special_defaults(int32_t maximum, int32_t minimum);
+
   std::string int32_to_string(int32_t value);
+
+  /**
+   * Procedure whose defaults are the extremes of long.
+   */
+  std::vector<int64_t> int64_special_defaults(int64_t maximum, int64_t minimum);
 
   std::string int64_to_string(int64_t value);
 
@@ -180,6 +202,16 @@ class TestService : public Service {
   int32_t throw_invalid_operation_exception_later();
 
   std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x);
+
+  /**
+   * Procedure whose default is the largest uint.
+   */
+  std::vector<uint32_t> uint32_special_defaults(uint32_t maximum);
+
+  /**
+   * Procedure whose default is the largest ulong.
+   */
+  std::vector<uint64_t> uint64_special_defaults(uint64_t maximum);
 
   /**
    * Deprecated property documentation string.
@@ -239,6 +271,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::map<int32_t, bool>> dictionary_default_stream(std::map<int32_t, bool> x);
 
+  ::krpc::Stream<std::vector<double>> double_special_defaults_stream(double nan, double infinity, double negative_infinity, double maximum, double lowest);
+
   ::krpc::Stream<std::string> double_to_string_stream(double value);
 
   ::krpc::Stream<std::optional<int32_t>> echo_nullable_int_stream(std::optional<int32_t> value);
@@ -259,6 +293,8 @@ class TestService : public Service {
 
   ::krpc::Stream<TestService::TestEnum> enum_return_stream();
 
+  ::krpc::Stream<std::vector<float>> float_special_defaults_stream(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
+
   ::krpc::Stream<std::string> float_to_string_stream(float value);
 
   ::krpc::Stream<std::map<std::string, int32_t>> increment_dictionary_stream(std::map<std::string, int32_t> d);
@@ -271,7 +307,11 @@ class TestService : public Service {
 
   ::krpc::Stream<std::tuple<int32_t, int64_t>> increment_tuple_stream(std::tuple<int32_t, int64_t> t);
 
+  ::krpc::Stream<std::vector<int32_t>> int32_special_defaults_stream(int32_t maximum, int32_t minimum);
+
   ::krpc::Stream<std::string> int32_to_string_stream(int32_t value);
+
+  ::krpc::Stream<std::vector<int64_t>> int64_special_defaults_stream(int64_t maximum, int64_t minimum);
 
   ::krpc::Stream<std::string> int64_to_string_stream(int64_t value);
 
@@ -307,6 +347,10 @@ class TestService : public Service {
 
   ::krpc::Stream<std::tuple<int32_t, bool>> tuple_default_stream(std::tuple<int32_t, bool> x);
 
+  ::krpc::Stream<std::vector<uint32_t>> uint32_special_defaults_stream(uint32_t maximum);
+
+  ::krpc::Stream<std::vector<uint64_t>> uint64_special_defaults_stream(uint64_t maximum);
+
   ::krpc::Stream<std::string> deprecated_property_stream();
 
   ::krpc::Stream<TestService::TestClass> nullable_object_stream();
@@ -337,6 +381,8 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall dictionary_default_call(std::map<int32_t, bool> x);
 
+  ::krpc::schema::ProcedureCall double_special_defaults_call(double nan, double infinity, double negative_infinity, double maximum, double lowest);
+
   ::krpc::schema::ProcedureCall double_to_string_call(double value);
 
   ::krpc::schema::ProcedureCall echo_nullable_int_call(std::optional<int32_t> value);
@@ -357,6 +403,8 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall enum_return_call();
 
+  ::krpc::schema::ProcedureCall float_special_defaults_call(float nan, float infinity, float negative_infinity, float maximum, float lowest, float fraction);
+
   ::krpc::schema::ProcedureCall float_to_string_call(float value);
 
   ::krpc::schema::ProcedureCall increment_dictionary_call(std::map<std::string, int32_t> d);
@@ -369,7 +417,11 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall increment_tuple_call(std::tuple<int32_t, int64_t> t);
 
+  ::krpc::schema::ProcedureCall int32_special_defaults_call(int32_t maximum, int32_t minimum);
+
   ::krpc::schema::ProcedureCall int32_to_string_call(int32_t value);
+
+  ::krpc::schema::ProcedureCall int64_special_defaults_call(int64_t maximum, int64_t minimum);
 
   ::krpc::schema::ProcedureCall int64_to_string_call(int64_t value);
 
@@ -408,6 +460,10 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall throw_invalid_operation_exception_later_call();
 
   ::krpc::schema::ProcedureCall tuple_default_call(std::tuple<int32_t, bool> x);
+
+  ::krpc::schema::ProcedureCall uint32_special_defaults_call(uint32_t maximum);
+
+  ::krpc::schema::ProcedureCall uint64_special_defaults_call(uint64_t maximum);
 
   ::krpc::schema::ProcedureCall deprecated_property_call();
 
@@ -741,6 +797,20 @@ inline std::map<int32_t, bool> TestService::dictionary_default(std::map<int32_t,
   return _result;
 }
 
+inline std::vector<double> TestService::double_special_defaults(double nan = std::numeric_limits<double>::quiet_NaN(), double infinity = std::numeric_limits<double>::infinity(), double negative_infinity = -std::numeric_limits<double>::infinity(), double maximum = (std::numeric_limits<double>::max)(), double lowest = std::numeric_limits<double>::lowest()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(nan));
+  _args.push_back(encoder::encode(infinity));
+  _args.push_back(encoder::encode(negative_infinity));
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(lowest));
+  auto _data = this->_client->invoke("TestService", "DoubleSpecialDefaults", _args);
+  std::vector<double> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::string TestService::double_to_string(double value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
@@ -839,6 +909,21 @@ inline TestService::TestEnum TestService::enum_return() {
   return _result;
 }
 
+inline std::vector<float> TestService::float_special_defaults(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(nan));
+  _args.push_back(encoder::encode(infinity));
+  _args.push_back(encoder::encode(negative_infinity));
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(lowest));
+  _args.push_back(encoder::encode(fraction));
+  auto _data = this->_client->invoke("TestService", "FloatSpecialDefaults", _args);
+  std::vector<float> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::string TestService::float_to_string(float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
@@ -899,11 +984,33 @@ inline std::tuple<int32_t, int64_t> TestService::increment_tuple(std::tuple<int3
   return _result;
 }
 
+inline std::vector<int32_t> TestService::int32_special_defaults(int32_t maximum = (std::numeric_limits<int32_t>::max)(), int32_t minimum = (std::numeric_limits<int32_t>::min)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(minimum));
+  auto _data = this->_client->invoke("TestService", "Int32SpecialDefaults", _args);
+  std::vector<int32_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::string TestService::int32_to_string(int32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
   auto _data = this->_client->invoke("TestService", "Int32ToString", _args);
   std::string _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::vector<int64_t> TestService::int64_special_defaults(int64_t maximum = (std::numeric_limits<int64_t>::max)(), int64_t minimum = (std::numeric_limits<int64_t>::min)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(minimum));
+  auto _data = this->_client->invoke("TestService", "Int64SpecialDefaults", _args);
+  std::vector<int64_t> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1079,6 +1186,26 @@ inline std::tuple<int32_t, bool> TestService::tuple_default(std::tuple<int32_t, 
   return _result;
 }
 
+inline std::vector<uint32_t> TestService::uint32_special_defaults(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  auto _data = this->_client->invoke("TestService", "Uint32SpecialDefaults", _args);
+  std::vector<uint32_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::vector<uint64_t> TestService::uint64_special_defaults(uint64_t maximum = (std::numeric_limits<uint64_t>::max)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  auto _data = this->_client->invoke("TestService", "Uint64SpecialDefaults", _args);
+  std::vector<uint64_t> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::string TestService::deprecated_property() {
   auto _data = this->_client->invoke("TestService", "get_DeprecatedProperty");
   std::string _result{};
@@ -1214,6 +1341,16 @@ inline ::krpc::Stream<std::map<int32_t, bool>> TestService::dictionary_default_s
   return ::krpc::Stream<std::map<int32_t, bool>>(this->_client, this->_client->build_call("TestService", "DictionaryDefault", _args));
 }
 
+inline ::krpc::Stream<std::vector<double>> TestService::double_special_defaults_stream(double nan = std::numeric_limits<double>::quiet_NaN(), double infinity = std::numeric_limits<double>::infinity(), double negative_infinity = -std::numeric_limits<double>::infinity(), double maximum = (std::numeric_limits<double>::max)(), double lowest = std::numeric_limits<double>::lowest()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(nan));
+  _args.push_back(encoder::encode(infinity));
+  _args.push_back(encoder::encode(negative_infinity));
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(lowest));
+  return ::krpc::Stream<std::vector<double>>(this->_client, this->_client->build_call("TestService", "DoubleSpecialDefaults", _args));
+}
+
 inline ::krpc::Stream<std::string> TestService::double_to_string_stream(double value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
@@ -1272,6 +1409,17 @@ inline ::krpc::Stream<TestService::TestEnum> TestService::enum_return_stream() {
   return ::krpc::Stream<TestService::TestEnum>(this->_client, this->_client->build_call("TestService", "EnumReturn"));
 }
 
+inline ::krpc::Stream<std::vector<float>> TestService::float_special_defaults_stream(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(nan));
+  _args.push_back(encoder::encode(infinity));
+  _args.push_back(encoder::encode(negative_infinity));
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(lowest));
+  _args.push_back(encoder::encode(fraction));
+  return ::krpc::Stream<std::vector<float>>(this->_client, this->_client->build_call("TestService", "FloatSpecialDefaults", _args));
+}
+
 inline ::krpc::Stream<std::string> TestService::float_to_string_stream(float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
@@ -1308,10 +1456,24 @@ inline ::krpc::Stream<std::tuple<int32_t, int64_t>> TestService::increment_tuple
   return ::krpc::Stream<std::tuple<int32_t, int64_t>>(this->_client, this->_client->build_call("TestService", "IncrementTuple", _args));
 }
 
+inline ::krpc::Stream<std::vector<int32_t>> TestService::int32_special_defaults_stream(int32_t maximum = (std::numeric_limits<int32_t>::max)(), int32_t minimum = (std::numeric_limits<int32_t>::min)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(minimum));
+  return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "Int32SpecialDefaults", _args));
+}
+
 inline ::krpc::Stream<std::string> TestService::int32_to_string_stream(int32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "Int32ToString", _args));
+}
+
+inline ::krpc::Stream<std::vector<int64_t>> TestService::int64_special_defaults_stream(int64_t maximum = (std::numeric_limits<int64_t>::max)(), int64_t minimum = (std::numeric_limits<int64_t>::min)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(minimum));
+  return ::krpc::Stream<std::vector<int64_t>>(this->_client, this->_client->build_call("TestService", "Int64SpecialDefaults", _args));
 }
 
 inline ::krpc::Stream<std::string> TestService::int64_to_string_stream(int64_t value) {
@@ -1408,6 +1570,18 @@ inline ::krpc::Stream<std::tuple<int32_t, bool>> TestService::tuple_default_stre
   return ::krpc::Stream<std::tuple<int32_t, bool>>(this->_client, this->_client->build_call("TestService", "TupleDefault", _args));
 }
 
+inline ::krpc::Stream<std::vector<uint32_t>> TestService::uint32_special_defaults_stream(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  return ::krpc::Stream<std::vector<uint32_t>>(this->_client, this->_client->build_call("TestService", "Uint32SpecialDefaults", _args));
+}
+
+inline ::krpc::Stream<std::vector<uint64_t>> TestService::uint64_special_defaults_stream(uint64_t maximum = (std::numeric_limits<uint64_t>::max)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  return ::krpc::Stream<std::vector<uint64_t>>(this->_client, this->_client->build_call("TestService", "Uint64SpecialDefaults", _args));
+}
+
 inline ::krpc::Stream<std::string> TestService::deprecated_property_stream() {
   return ::krpc::Stream<std::string>(this->_client, this->_client->build_call("TestService", "get_DeprecatedProperty"));
 }
@@ -1493,6 +1667,16 @@ inline ::krpc::schema::ProcedureCall TestService::dictionary_default_call(std::m
   return this->_client->build_call("TestService", "DictionaryDefault", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::double_special_defaults_call(double nan = std::numeric_limits<double>::quiet_NaN(), double infinity = std::numeric_limits<double>::infinity(), double negative_infinity = -std::numeric_limits<double>::infinity(), double maximum = (std::numeric_limits<double>::max)(), double lowest = std::numeric_limits<double>::lowest()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(nan));
+  _args.push_back(encoder::encode(infinity));
+  _args.push_back(encoder::encode(negative_infinity));
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(lowest));
+  return this->_client->build_call("TestService", "DoubleSpecialDefaults", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::double_to_string_call(double value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
@@ -1551,6 +1735,17 @@ inline ::krpc::schema::ProcedureCall TestService::enum_return_call() {
   return this->_client->build_call("TestService", "EnumReturn");
 }
 
+inline ::krpc::schema::ProcedureCall TestService::float_special_defaults_call(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(nan));
+  _args.push_back(encoder::encode(infinity));
+  _args.push_back(encoder::encode(negative_infinity));
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(lowest));
+  _args.push_back(encoder::encode(fraction));
+  return this->_client->build_call("TestService", "FloatSpecialDefaults", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::float_to_string_call(float value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
@@ -1587,10 +1782,24 @@ inline ::krpc::schema::ProcedureCall TestService::increment_tuple_call(std::tupl
   return this->_client->build_call("TestService", "IncrementTuple", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::int32_special_defaults_call(int32_t maximum = (std::numeric_limits<int32_t>::max)(), int32_t minimum = (std::numeric_limits<int32_t>::min)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(minimum));
+  return this->_client->build_call("TestService", "Int32SpecialDefaults", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::int32_to_string_call(int32_t value) {
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(value));
   return this->_client->build_call("TestService", "Int32ToString", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::int64_special_defaults_call(int64_t maximum = (std::numeric_limits<int64_t>::max)(), int64_t minimum = (std::numeric_limits<int64_t>::min)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  _args.push_back(encoder::encode(minimum));
+  return this->_client->build_call("TestService", "Int64SpecialDefaults", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::int64_to_string_call(int64_t value) {
@@ -1693,6 +1902,18 @@ inline ::krpc::schema::ProcedureCall TestService::tuple_default_call(std::tuple<
   std::vector<krpc::encoder::Value> _args;
   _args.push_back(encoder::encode(x));
   return this->_client->build_call("TestService", "TupleDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint32_special_defaults_call(uint32_t maximum = (std::numeric_limits<uint32_t>::max)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  return this->_client->build_call("TestService", "Uint32SpecialDefaults", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::uint64_special_defaults_call(uint64_t maximum = (std::numeric_limits<uint64_t>::max)()) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.push_back(encoder::encode(maximum));
+  return this->_client->build_call("TestService", "Uint64SpecialDefaults", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::deprecated_property_call() {

@@ -11,7 +11,7 @@ from krpc.types import (
     DictionaryType,
 )
 from krpc.utils import snake_case
-from .language import Language
+from .language import Language, float32_literal
 
 
 class CppLanguage(Language):
@@ -121,6 +121,29 @@ class CppLanguage(Language):
 
     value_map = {"null": "NULL"}
 
+    # <limits> spells every one of these, and names the exact type from the type map rather
+    # than relying on a <cstdint> or <cmath> macro that happens to match it. max and min are
+    # wrapped in parentheses because windows.h defines function-like macros of both names,
+    # which would otherwise expand over the call in any header included after it.
+    special_values = {
+        (Type.DOUBLE, "nan"): "std::numeric_limits<double>::quiet_NaN()",
+        (Type.DOUBLE, "inf"): "std::numeric_limits<double>::infinity()",
+        (Type.DOUBLE, "-inf"): "-std::numeric_limits<double>::infinity()",
+        (Type.DOUBLE, "max"): "(std::numeric_limits<double>::max)()",
+        (Type.DOUBLE, "lowest"): "std::numeric_limits<double>::lowest()",
+        (Type.FLOAT, "nan"): "std::numeric_limits<float>::quiet_NaN()",
+        (Type.FLOAT, "inf"): "std::numeric_limits<float>::infinity()",
+        (Type.FLOAT, "-inf"): "-std::numeric_limits<float>::infinity()",
+        (Type.FLOAT, "max"): "(std::numeric_limits<float>::max)()",
+        (Type.FLOAT, "lowest"): "std::numeric_limits<float>::lowest()",
+        (Type.SINT32, "max"): "(std::numeric_limits<int32_t>::max)()",
+        (Type.SINT32, "min"): "(std::numeric_limits<int32_t>::min)()",
+        (Type.SINT64, "max"): "(std::numeric_limits<int64_t>::max)()",
+        (Type.SINT64, "min"): "(std::numeric_limits<int64_t>::min)()",
+        (Type.UINT32, "max"): "(std::numeric_limits<uint32_t>::max)()",
+        (Type.UINT64, "max"): "(std::numeric_limits<uint64_t>::max)()",
+    }
+
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
 
@@ -152,10 +175,15 @@ class CppLanguage(Language):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def parse_default_value(self, value, typ):
+        special = self.parse_special_value(value, typ)
+        if special is not None:
+            return special
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return '"%s"' % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
+            return float32_literal(value) + "f"
         if isinstance(typ, ClassType) and value is None:
             return self.parse_type(typ) + "()"
         if isinstance(typ, EnumerationType):

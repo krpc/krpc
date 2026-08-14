@@ -158,6 +158,23 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_DoubleSpecialDefaults(krpc_connection_t connection, krpc_list_double_t * result, double nan, double infinity, double negativeInfinity, double maximum, double lowest)
+
+   Procedure whose defaults are the special values of double.
+
+   :Parameters:
+
+
+
+
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_DoubleToString(krpc_connection_t connection, char * * result, double value)
 
 
@@ -285,6 +302,25 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_FloatSpecialDefaults(krpc_connection_t connection, krpc_list_float_t * result, float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
+
+   Procedure whose defaults are the special values of float, plus a finite fraction
+   that no float can hold exactly.
+
+   :Parameters:
+
+
+
+
+
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_FloatToString(krpc_connection_t connection, char * * result, float value)
 
    Procedure documentation string.
@@ -363,11 +399,39 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_Int32SpecialDefaults(krpc_connection_t connection, krpc_list_int32_t * result, int32_t maximum, int32_t minimum)
+
+   Procedure whose defaults are the extremes of int.
+
+   :Parameters:
+
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_Int32ToString(krpc_connection_t connection, char * * result, int32_t value)
 
 
 
    :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_Int64SpecialDefaults(krpc_connection_t connection, krpc_list_int64_t * result, int64_t maximum, int64_t minimum)
+
+   Procedure whose defaults are the extremes of long.
+
+   :Parameters:
+
 
 
 
@@ -641,6 +705,32 @@ Service documentation string.
 .. function:: krpc_error_t krpc_TestService_TupleDefault(krpc_connection_t connection, krpc_tuple_int32_bool_t * result, const krpc_tuple_int32_bool_t * x)
 
 
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_Uint32SpecialDefaults(krpc_connection_t connection, krpc_list_uint32_t * result, uint32_t maximum)
+
+   Procedure whose default is the largest uint.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_Uint64SpecialDefaults(krpc_connection_t connection, krpc_list_uint64_t * result, uint64_t maximum)
+
+   Procedure whose default is the largest ulong.
 
    :Parameters:
 

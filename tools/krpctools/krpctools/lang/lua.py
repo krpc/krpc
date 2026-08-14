@@ -11,7 +11,7 @@ from krpc.types import (
     DictionaryType,
 )
 from krpc.utils import snake_case
-from .language import Language
+from .language import Language, float32_literal
 
 
 class LuaLanguage(Language):
@@ -28,6 +28,28 @@ class LuaLanguage(Language):
         Type.BOOL: "boolean",
         Type.STRING: "string",
         Type.BYTES: "string",
+    }
+
+    # Lua builds NaN by dividing zero by zero and has math.huge for the infinities, but
+    # names no finite extreme of its own: math.maxinteger and math.mininteger arrive in
+    # Lua 5.3 and the client targets 5.1 and 5.2. Those come from krpc.limits.
+    special_values = {
+        (Type.DOUBLE, "nan"): "0/0",
+        (Type.DOUBLE, "inf"): "math.huge",
+        (Type.DOUBLE, "-inf"): "-math.huge",
+        (Type.DOUBLE, "max"): "krpc.limits.DOUBLE_MAX",
+        (Type.DOUBLE, "lowest"): "krpc.limits.DOUBLE_LOWEST",
+        (Type.FLOAT, "nan"): "0/0",
+        (Type.FLOAT, "inf"): "math.huge",
+        (Type.FLOAT, "-inf"): "-math.huge",
+        (Type.FLOAT, "max"): "krpc.limits.FLOAT_MAX",
+        (Type.FLOAT, "lowest"): "krpc.limits.FLOAT_LOWEST",
+        (Type.SINT32, "max"): "krpc.limits.SINT32_MAX",
+        (Type.SINT32, "min"): "krpc.limits.SINT32_MIN",
+        (Type.SINT64, "max"): "krpc.limits.SINT64_MAX",
+        (Type.SINT64, "min"): "krpc.limits.SINT64_MIN",
+        (Type.UINT32, "max"): "krpc.limits.UINT32_MAX",
+        (Type.UINT64, "max"): "krpc.limits.UINT64_MAX",
     }
 
     def parse_type(self, typ):
@@ -51,10 +73,15 @@ class LuaLanguage(Language):
         return snake_case(name)
 
     def parse_default_value(self, value, typ):
+        special = self.parse_special_value(value, typ)
+        if special is not None:
+            return special
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
+            return float32_literal(value)
         if isinstance(typ, EnumerationType):
             return "%s.%s" % (
                 self.parse_type(typ),

@@ -2,9 +2,14 @@ local Client = require 'krpc.client'
 local Connection = require 'krpc.connection'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
+local limits = require 'krpc.limits'
 local schema = require 'krpc.schema.KRPC'
 
 local krpc = {}
+
+-- Exposed here so that krpc.limits.SINT32_MAX, the name a generated default value is
+-- documented under, resolves for anyone who has required the package
+krpc.limits = limits
 
 local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
