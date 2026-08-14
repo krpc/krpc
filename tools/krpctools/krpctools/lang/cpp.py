@@ -11,7 +11,7 @@ from krpc.types import (
     DictionaryType,
 )
 from krpc.utils import snake_case
-from .language import Language
+from .language import Language, float32_literal
 
 
 class CppLanguage(Language):
@@ -182,6 +182,8 @@ class CppLanguage(Language):
             return '"%s"' % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
+            return float32_literal(value) + "f"
         if isinstance(typ, ClassType) and value is None:
             return self.parse_type(typ) + "()"
         if isinstance(typ, EnumerationType):

@@ -11,7 +11,7 @@ from krpc.types import (
     DictionaryType,
 )
 from krpc.utils import snake_case
-from .language import Language
+from .language import Language, float32_literal
 
 
 class LuaLanguage(Language):
@@ -69,6 +69,8 @@ class LuaLanguage(Language):
             return "'%s'" % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
+            return float32_literal(value)
         if isinstance(typ, EnumerationType):
             return "%s.%s" % (
                 self.parse_type(typ),

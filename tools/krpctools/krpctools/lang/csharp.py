@@ -10,7 +10,7 @@ from krpc.types import (
     SetType,
     DictionaryType,
 )
-from .language import Language
+from .language import Language, float32_literal
 
 
 class CsharpLanguage(Language):
@@ -187,7 +187,7 @@ class CsharpLanguage(Language):
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
             return "true" if value else "false"
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
-            return str(value) + "f"
+            return float32_literal(value) + "f"
         if isinstance(typ, ClassType) and value is None:
             return "null"
         if isinstance(typ, EnumerationType):

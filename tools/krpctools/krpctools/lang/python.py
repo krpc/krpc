@@ -13,7 +13,7 @@ from krpc.types import (
     DictionaryType,
 )
 from krpc.utils import snake_case
-from .language import Language
+from .language import Language, float32_literal
 
 
 class PythonLanguage(Language):
@@ -72,6 +72,8 @@ class PythonLanguage(Language):
             return "None"
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
+        if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.FLOAT:
+            return float32_literal(value)
         if isinstance(typ, EnumerationType):
             return "%s.%s" % (
                 self.parse_type(typ),

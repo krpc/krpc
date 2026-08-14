@@ -1,4 +1,5 @@
 import math
+import struct
 import sys
 
 # pylint: disable=no-name-in-module
@@ -46,6 +47,26 @@ def special_value_name(value, typ):
         if value == extreme:
             return name
     return None
+
+
+def float32_literal(value):
+    """The shortest decimal text that round-trips to the same 32-bit float."""
+    text = repr(value)
+    for precision in range(1, 10):
+        candidate = "%.*g" % (precision, value)
+        try:
+            narrowed = struct.unpack("<f", struct.pack("<f", float(candidate)))[0]
+        except OverflowError:
+            # Rounding took the text past the largest float, as it does for the four
+            # digits of 3.403e+38, so it is not this value however it is read
+            continue
+        if narrowed == value:
+            text = candidate
+            break
+    # Text that names no fractional part and carries no exponent would read as an integer
+    if "." not in text and "e" not in text:
+        text += ".0"
+    return text
 
 
 class Language:
