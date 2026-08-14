@@ -334,9 +334,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The time since the epoch (the point at which the
+        /// The universal time, in seconds, at which the
         /// <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
-        /// was measured, in seconds.
+        /// is measured.
         /// </summary>
         [KRPCProperty]
         public double Epoch {
@@ -440,6 +440,101 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentException (
                     "Position and velocity do not describe an orbit around " +
                     internalBody.name);
+            // Nothing solved a following patch for this orbit, and a sphere-of-influence
+            // change is reported as one in the past. Zero, the value an orbit is built
+            // with, is not in the past at a universal time of zero.
+            orbit.UTsoi = -1;
+            return new Orbit (orbit);
+        }
+
+        /// <summary>
+        /// Create the orbit with the given
+        /// <a href="https://en.wikipedia.org/wiki/Orbital_elements">orbital elements</a>
+        /// around a given body. The orbit coasts freely under the gravity of that body,
+        /// so it describes where an object on it would be at any time.
+        /// </summary>
+        /// <param name="body">The celestial body being orbited.</param>
+        /// <param name="semiMajorAxis">The semi-major axis of the orbit, in meters.
+        /// Positive for an ellipse and negative for a hyperbola.</param>
+        /// <param name="eccentricity">The eccentricity of the orbit. Below one for an
+        /// ellipse and above one for a hyperbola.</param>
+        /// <param name="inclination">The inclination of the orbit, in radians.</param>
+        /// <param name="longitudeOfAscendingNode">The longitude of the ascending node,
+        /// in radians.</param>
+        /// <param name="argumentOfPeriapsis">The argument of periapsis, in
+        /// radians.</param>
+        /// <param name="meanAnomalyAtEpoch">The mean anomaly at
+        /// <paramref name="epoch"/>, in radians.</param>
+        /// <param name="epoch">The universal time, in seconds, that
+        /// <paramref name="meanAnomalyAtEpoch"/> is measured at.</param>
+        /// <remarks>
+        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts
+        /// on it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
+        /// <c>null</c> however far it travels from the body, and it is not slowed by an
+        /// atmosphere.
+        ///
+        /// The angles are measured against the same reference plane and direction that
+        /// <see cref="Inclination"/>, <see cref="LongitudeOfAscendingNode"/> and
+        /// <see cref="ArgumentOfPeriapsis"/> report them against, which
+        /// <see cref="ReferencePlaneNormal"/> and <see cref="ReferencePlaneDirection"/>
+        /// give as vectors in a reference frame.
+        ///
+        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
+        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
+        /// and the like -- describe it at <paramref name="epoch"/> and stay there, as
+        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
+        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// the orbit as time passes.
+        ///
+        /// The orbit that is returned is kept for as long as the server is running,
+        /// so creating one repeatedly, for example once per update, uses more and more
+        /// memory.
+        /// </remarks>
+        [KRPCMethod]
+        public static Orbit CreateFromOrbitalElements (
+            CelestialBody body, double semiMajorAxis, double eccentricity,
+            double inclination, double longitudeOfAscendingNode,
+            double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (!IsFinite (semiMajorAxis) || !IsFinite (eccentricity) ||
+                !IsFinite (inclination) || !IsFinite (longitudeOfAscendingNode) ||
+                !IsFinite (argumentOfPeriapsis) || !IsFinite (meanAnomalyAtEpoch) ||
+                !IsFinite (epoch))
+                throw new ArgumentException ("Orbital elements must be finite");
+            if (eccentricity < 0)
+                throw new ArgumentException (
+                    "Eccentricity must not be negative, got " + eccentricity);
+            // A conic is an ellipse with a positive semi-major axis, or a hyperbola with
+            // a negative one. The parabola between them has neither, and the game has no
+            // way to state it.
+            if (eccentricity.Equals (1.0))
+                throw new ArgumentException (
+                    "An eccentricity of exactly one is a parabola, which has no " +
+                    "semi-major axis and cannot be described as an orbit");
+            if (eccentricity < 1 && semiMajorAxis <= 0)
+                throw new ArgumentException (
+                    "An eccentricity below one is an ellipse, which needs a positive " +
+                    "semi-major axis, got " + semiMajorAxis);
+            if (eccentricity > 1 && semiMajorAxis >= 0)
+                throw new ArgumentException (
+                    "An eccentricity above one is a hyperbola, which needs a negative " +
+                    "semi-major axis, got " + semiMajorAxis);
+            // The game states the three orientation angles in degrees, and the mean
+            // anomaly in radians, which is what this reports them in.
+            var orbit = new global::Orbit (
+                GeometryExtensions.ToDegrees (inclination), eccentricity, semiMajorAxis,
+                GeometryExtensions.ToDegrees (longitudeOfAscendingNode),
+                GeometryExtensions.ToDegrees (argumentOfPeriapsis), meanAnomalyAtEpoch,
+                epoch, body.InternalBody);
+            // The constructor derives the mean motion, period and anomalies that the
+            // orbit is propagated from. Stepping it to the epoch then fills in where
+            // along the orbit it has got to, which nothing else will do for an orbit
+            // that no object is following.
+            orbit.UpdateFromUT (epoch);
             // Nothing solved a following patch for this orbit, and a sphere-of-influence
             // change is reported as one in the past. Zero, the value an orbit is built
             // with, is not in the past at a universal time of zero.

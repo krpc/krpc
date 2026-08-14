@@ -535,5 +535,192 @@ class TestCreateFromPositionAndVelocity(krpctest.TestCase):
             )
 
 
+class TestCreateFromOrbitalElements(krpctest.TestCase):
+    """Orbits built from orbital elements rather than from a position and velocity.
+
+    The load-bearing check is against Orbit.CreateFromPositionAndVelocity, which
+    the tests above pin down independently: an orbit built that way and rebuilt
+    from the elements it reports must describe the same trajectory. Reading the
+    elements back catches the radians-to-degrees conversion on its own, since the
+    game holds the three orientation angles in degrees but the mean anomaly in
+    radians, and this reports all four in radians."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.set_orbit("Kerbin", 800000, 0.15, 25, 40, 70, 1.2, 0)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.kerbin = cls.space_center.bodies["Kerbin"]
+        cls.frame = cls.kerbin.non_rotating_reference_frame
+
+    DEFAULT_ELEMENTS = {
+        "semi_major_axis": 1200000,
+        "eccentricity": 0.2,
+        "inclination": 0.4,
+        "longitude_of_ascending_node": 1.1,
+        "argument_of_periapsis": 2.3,
+        "mean_anomaly_at_epoch": 0.7,
+        "epoch": None,
+    }
+
+    def create(self, **overrides):
+        """An orbit built from a fixed set of elements, with any of them replaced.
+
+        An epoch of None, which is the default, means the current universal
+        time."""
+        elements = dict(self.DEFAULT_ELEMENTS, **overrides)
+        epoch = elements["epoch"]
+        if epoch is None:
+            epoch = self.space_center.ut
+        return self.space_center.Orbit.create_from_orbital_elements(
+            self.kerbin,
+            elements["semi_major_axis"],
+            elements["eccentricity"],
+            elements["inclination"],
+            elements["longitude_of_ascending_node"],
+            elements["argument_of_periapsis"],
+            elements["mean_anomaly_at_epoch"],
+            epoch,
+        )
+
+    def test_elements_are_recovered(self):
+        """The orbit reports back the elements it was built from.
+
+        The angles would come back a factor of 180/pi out if they were handed to
+        the game as radians, since it holds them in degrees."""
+        epoch = self.space_center.ut
+        orbit = self.create(epoch=epoch)
+        self.assertEqual("Kerbin", orbit.body.name)
+        self.assertAlmostEqual(1200000, orbit.semi_major_axis, delta=1)
+        self.assertAlmostEqual(0.2, orbit.eccentricity, places=6)
+        self.assertAlmostEqual(0.4, orbit.inclination, places=6)
+        self.assertAlmostEqual(1.1, orbit.longitude_of_ascending_node, places=6)
+        self.assertAlmostEqual(2.3, orbit.argument_of_periapsis, places=6)
+        self.assertAlmostEqual(0.7, orbit.mean_anomaly_at_epoch, places=6)
+        self.assertAlmostEqual(epoch, orbit.epoch, places=3)
+
+    def test_shape_follows_from_the_elements(self):
+        """Apoapsis and periapsis are the semi-major axis scaled by the
+        eccentricity, so the two shape elements reach the orbit the right way
+        round."""
+        orbit = self.create(semi_major_axis=1200000, eccentricity=0.2)
+        self.assertAlmostEqual(1200000 * 1.2, orbit.apoapsis, delta=1)
+        self.assertAlmostEqual(1200000 * 0.8, orbit.periapsis, delta=1)
+
+    def test_polar_orbit(self):
+        """An inclination of a quarter turn takes the orbit over the poles.
+
+        In Kerbin's non-rotating frame the y-axis points at the north pole, so a
+        polar orbit reaches nearly its full radius along y and an equatorial one
+        stays near zero there."""
+        polar = self.create(eccentricity=0, inclination=math.pi / 2)
+        equatorial = self.create(eccentricity=0, inclination=0)
+        ut = self.space_center.ut
+        for orbit, expected in ((polar, 1), (equatorial, 0)):
+            reach = max(
+                abs(orbit.position_at(ut + t, self.frame)[1]) / orbit.semi_major_axis
+                for t in range(0, int(orbit.period), max(1, int(orbit.period) // 32))
+            )
+            self.assertAlmostEqual(expected, reach, delta=0.05)
+
+    def test_matches_an_orbit_built_from_a_position_and_velocity(self):
+        """Rebuilding an orbit from the elements it reports gives the same
+        trajectory, checked as position and velocity over a range of times."""
+        radius = 1500000
+        speed = 0.9 * math.sqrt(self.kerbin.gravitational_parameter / radius)
+        ut = self.space_center.ut
+        expected = self.space_center.Orbit.create_from_position_and_velocity(
+            self.kerbin, (0, 0, radius), (speed, 0, 0), ut, self.frame
+        )
+        orbit = self.space_center.Orbit.create_from_orbital_elements(
+            self.kerbin,
+            expected.semi_major_axis,
+            expected.eccentricity,
+            expected.inclination,
+            expected.longitude_of_ascending_node,
+            expected.argument_of_periapsis,
+            expected.mean_anomaly_at_epoch,
+            expected.epoch,
+        )
+        for offset in (0, 300, 1200, 3000):
+            at = ut + offset
+            self.assertAlmostEqual(
+                expected.position_at(at, self.frame),
+                orbit.position_at(at, self.frame),
+                delta=1,
+            )
+            self.assertAlmostEqual(
+                expected.velocity_at(at, self.frame),
+                orbit.velocity_at(at, self.frame),
+                delta=0.1,
+            )
+
+    def test_round_trip_from_vessel(self):
+        """An orbit built from a vessel's own elements is that vessel's orbit.
+
+        Every element is read off the one orbit, so unlike building from a
+        position and velocity there is no physics frame separating the inputs and
+        the tolerances can be tight."""
+        expected = self.vessel.orbit
+        orbit = self.space_center.Orbit.create_from_orbital_elements(
+            self.kerbin,
+            expected.semi_major_axis,
+            expected.eccentricity,
+            expected.inclination,
+            expected.longitude_of_ascending_node,
+            expected.argument_of_periapsis,
+            expected.mean_anomaly_at_epoch,
+            expected.epoch,
+        )
+        for offset in (0, 600, 2400):
+            at = self.space_center.ut + offset
+            self.assertAlmostEqual(
+                expected.position_at(at, self.frame),
+                orbit.position_at(at, self.frame),
+                delta=1,
+            )
+        self.assertAlmostEqual(expected.period, orbit.period, delta=0.1)
+
+    def test_mean_anomaly_is_measured_at_the_epoch(self):
+        """The mean anomaly is the one given at the epoch, and advances at the
+        mean motion from there: a quarter of a period on is a quarter turn."""
+        epoch = self.space_center.ut
+        orbit = self.create(mean_anomaly_at_epoch=0.7, epoch=epoch)
+        self.assertAlmostEqual(0.7, orbit.mean_anomaly, places=6)
+        self.assertAlmostEqual(
+            0.7 + math.pi / 2,
+            orbit.mean_anomaly_at_ut(epoch + orbit.period / 4),
+            places=4,
+        )
+
+    def test_hyperbolic_orbit(self):
+        """A negative semi-major axis with an eccentricity above one is a
+        hyperbola, and like every constructed orbit it has no following patch."""
+        orbit = self.create(semi_major_axis=-1000000, eccentricity=1.5)
+        self.assertAlmostEqual(1.5, orbit.eccentricity, places=6)
+        self.assertLess(orbit.semi_major_axis, 0)
+        self.assertIsNaN(orbit.time_to_soi_change)
+        self.assertIsNone(orbit.next_orbit)
+
+    def test_negative_eccentricity(self):
+        with self.assertRaises(ValueError):
+            self.create(eccentricity=-0.1)
+
+    def test_parabolic_orbit(self):
+        """A parabola has no semi-major axis, so it cannot be described."""
+        with self.assertRaises(ValueError):
+            self.create(eccentricity=1)
+
+    def test_ellipse_with_a_negative_semi_major_axis(self):
+        with self.assertRaises(ValueError):
+            self.create(semi_major_axis=-1000000, eccentricity=0.2)
+
+    def test_hyperbola_with_a_positive_semi_major_axis(self):
+        with self.assertRaises(ValueError):
+            self.create(semi_major_axis=1000000, eccentricity=1.5)
+
+
 if __name__ == "__main__":
     unittest.main()

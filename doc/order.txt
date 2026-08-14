@@ -388,6 +388,7 @@ SpaceCenter.Flight.BallisticCoefficient
 SpaceCenter.Flight.ThrustSpecificFuelConsumption
 SpaceCenter.Orbit
 SpaceCenter.Orbit.CreateFromPositionAndVelocity
+SpaceCenter.Orbit.CreateFromOrbitalElements
 SpaceCenter.Orbit.Body
 SpaceCenter.Orbit.ReferenceFrame
 SpaceCenter.Orbit.OrbitalReferenceFrame
