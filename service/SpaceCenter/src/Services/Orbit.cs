@@ -319,6 +319,89 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// Create the orbit that passes through a given position at a given velocity.
+        /// The orbit coasts freely under the gravity of the body being orbited, so it
+        /// describes where an object left to fall from that position and velocity would
+        /// be at any later time.
+        /// </summary>
+        /// <param name="body">The celestial body being orbited.</param>
+        /// <param name="position">The position, as a position vector.</param>
+        /// <param name="velocity">The velocity, as a vector pointing in the direction of
+        /// travel, whose magnitude is the speed in meters per second.</param>
+        /// <param name="ut">The universal time, in seconds, at which the object is at
+        /// <paramref name="position"/> traveling at <paramref name="velocity"/>.</param>
+        /// <param name="referenceFrame">The reference frame that
+        /// <paramref name="position"/> and <paramref name="velocity"/> are in. Defaults to
+        /// <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <paramref name="body"/>.</param>
+        /// <remarks>
+        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts on
+        /// it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
+        /// <c>null</c> however far it travels from the body, and it is not slowed by an
+        /// atmosphere. A vessel held on rails follows its own orbit exactly, while one
+        /// inside the physics bubble is simulated and drifts from it a little.
+        ///
+        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
+        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
+        /// and the like -- describe it at <paramref name="ut"/> and stay there, as
+        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
+        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
+        ///
+        /// The orbit that is returned is kept for as long as the server is running,
+        /// so creating one repeatedly, for example once per update, uses more and more
+        /// memory.
+        /// </remarks>
+        [KRPCMethod]
+        public static Orbit CreateFromPositionAndVelocity (
+            CelestialBody body, Tuple3 position, Tuple3 velocity, double ut,
+            ReferenceFrame referenceFrame = null)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (position == null)
+                throw new ArgumentNullException (nameof (position));
+            if (velocity == null)
+                throw new ArgumentNullException (nameof (velocity));
+            var internalBody = body.InternalBody;
+            var frame = referenceFrame ?? body.NonRotatingReferenceFrame;
+            var framePosition = position.ToVector ();
+            var worldPosition = frame.PositionToWorldSpace (framePosition);
+            var worldVelocity = frame.VelocityToWorldSpace (framePosition, velocity.ToVector ());
+            // The game states an orbit relative to the body it is around, in its own axis
+            // order, so take out the body's own position and motion and swap the axes.
+            var relativePosition = worldPosition - internalBody.position;
+            var relativeVelocity = worldVelocity - internalBody.GetWorldVelocity ();
+            if (relativePosition.sqrMagnitude < 1)
+                throw new ArgumentException (
+                    "Position is at the center of " + internalBody.name +
+                    ", which does not describe an orbit");
+            var orbit = new global::Orbit ();
+            orbit.UpdateFromStateVectors (
+                relativePosition.SwapYZ (), relativeVelocity.SwapYZ (), internalBody, ut);
+            // Init derives the mean motion, period and anomalies that the orbit is
+            // propagated from; without it the orbit only carries its shape. Stepping it
+            // to the epoch then fills in where along the orbit it has got to, which
+            // nothing else will do for an orbit that no object is following.
+            orbit.Init ();
+            orbit.UpdateFromUT (ut);
+            if (!IsFinite (orbit.semiMajorAxis) || !IsFinite (orbit.eccentricity))
+                throw new ArgumentException (
+                    "Position and velocity do not describe an orbit around " +
+                    internalBody.name);
+            // Nothing solved a following patch for this orbit, and a sphere-of-influence
+            // change is reported as one in the past. Zero, the value an orbit is built
+            // with, is not in the past at a universal time of zero.
+            orbit.UTsoi = -1;
+            return new Orbit (orbit);
+        }
+
+        static bool IsFinite (double value)
+        {
+            return !double.IsNaN (value) && !double.IsInfinity (value);
+        }
+
+        /// <summary>
         /// The direction that is normal to the orbits reference plane,
         /// in the given reference frame.
         /// The reference plane is the plane from which the orbits inclination is measured.
@@ -477,6 +560,26 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(ut)).ToTuple();
+        }
+
+        /// <summary>
+        /// The velocity at a given time, in the specified reference frame.
+        /// </summary>
+        /// <returns>The velocity as a vector. The vector points in the direction of
+        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// <param name="ut">The universal time to measure the velocity at.</param>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// velocity vector is in.</param>
+        [KRPCMethod]
+        public Tuple3 VelocityAt (double ut, ReferenceFrame referenceFrame)
+        {
+            // An orbital velocity is relative to the body being orbited, so the body's
+            // own motion is added to it to give a velocity in world space.
+            var worldVelocity =
+                InternalOrbit.getOrbitalVelocityAtUT (ut).SwapYZ () +
+                InternalOrbit.referenceBody.GetWorldVelocity ();
+            return referenceFrame.VelocityFromWorldSpace (
+                InternalOrbit.getPositionAtUT (ut), worldVelocity).ToTuple ();
         }
 
         /// <summary>

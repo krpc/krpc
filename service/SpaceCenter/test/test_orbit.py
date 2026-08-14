@@ -348,5 +348,192 @@ class TestClosestApproach(krpctest.TestCase):
         self.assertAlmostEqual(approaches[0].distance, first.distance, delta=1)
 
 
+class TestCreateFromPositionAndVelocity(krpctest.TestCase):
+    """Orbits built from state vectors rather than read off a game object.
+
+    The checks that pin down the conversion into the game's state-vector
+    convention are built from chosen numbers rather than from a vessel's live
+    state, so that the physics frame the game advances between two RPCs cannot
+    move the answer. In Kerbin's non-rotating frame the y-axis points at the
+    north pole and the x and z axes lie in the equatorial plane, so a position
+    on the z-axis with a velocity along y is a polar orbit and the same position
+    with a velocity along x is an equatorial one. Get the body-relative
+    subtraction or the axis swap wrong and neither comes out right."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.set_orbit("Kerbin", 800000, 0.15, 25, 40, 70, 1.2, 0)
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.kerbin = cls.space_center.bodies["Kerbin"]
+        cls.frame = cls.kerbin.non_rotating_reference_frame
+
+    def create(self, position, velocity, reference_frame=None):
+        return self.space_center.Orbit.create_from_position_and_velocity(
+            self.kerbin,
+            position,
+            velocity,
+            self.space_center.ut,
+            reference_frame or self.frame,
+        )
+
+    def circular_speed(self, radius):
+        return math.sqrt(self.kerbin.gravitational_parameter / radius)
+
+    def test_circular_polar_orbit(self):
+        radius = 1000000
+        orbit = self.create((0, 0, radius), (0, self.circular_speed(radius), 0))
+        self.assertEqual("Kerbin", orbit.body.name)
+        self.assertAlmostEqual(radius, orbit.semi_major_axis, delta=1)
+        self.assertAlmostEqual(radius, orbit.apoapsis, delta=1)
+        self.assertAlmostEqual(radius, orbit.periapsis, delta=1)
+        self.assertAlmostEqual(0, orbit.eccentricity, places=6)
+        self.assertAlmostEqual(math.pi / 2, orbit.inclination, places=6)
+        period = (
+            2 * math.pi * math.sqrt(radius**3 / self.kerbin.gravitational_parameter)
+        )
+        self.assertAlmostEqual(period, orbit.period, delta=1)
+
+    def test_circular_equatorial_orbit(self):
+        radius = 1200000
+        orbit = self.create((0, 0, radius), (self.circular_speed(radius), 0, 0))
+        self.assertAlmostEqual(radius, orbit.semi_major_axis, delta=1)
+        self.assertAlmostEqual(0, orbit.eccentricity, places=6)
+        # An equatorial orbit is at inclination 0 or pi depending on which way
+        # round it goes; either way it stays in the plane of the equator.
+        self.assertAlmostEqual(0, math.sin(orbit.inclination), places=6)
+
+    def test_eccentric_orbit(self):
+        """A speed below circular at the given radius puts apoapsis there."""
+        radius = 2000000
+        orbit = self.create((0, 0, radius), (0.8 * self.circular_speed(radius), 0, 0))
+        self.assertAlmostEqual(radius, orbit.apoapsis, delta=1)
+        self.assertLess(orbit.periapsis, radius)
+        self.assertAlmostEqual(0.36, orbit.eccentricity, places=6)
+
+    def test_escape_trajectory(self):
+        radius = 1000000
+        escape_speed = math.sqrt(2 * self.kerbin.gravitational_parameter / radius)
+        orbit = self.create((0, 0, radius), (escape_speed * 1.5, 0, 0))
+        self.assertGreater(orbit.eccentricity, 1)
+        self.assertLess(orbit.semi_major_axis, 0)
+        self.assertIsNaN(orbit.time_to_soi_change)
+
+    def test_no_soi_change(self):
+        """A constructed orbit is a single conic, with no following patch.
+
+        The orbit is far outside Kerbin's sphere of influence, where a real
+        vessel would have left it long ago."""
+        radius = 500000000
+        orbit = self.create((0, 0, radius), (0, self.circular_speed(radius), 0))
+        self.assertGreater(radius, self.kerbin.sphere_of_influence)
+        self.assertIsNaN(orbit.time_to_soi_change)
+        self.assertIsNone(orbit.next_orbit)
+
+    def test_velocity_at_matches_speed(self):
+        """velocity_at is the orbital velocity, so its magnitude is the speed."""
+        radius = 1500000
+        orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
+        ut = self.space_center.ut
+        for offset in (0, 300, 1200):
+            at = ut + offset
+            speed = norm(orbit.velocity_at(at, self.frame))
+            expected = math.sqrt(
+                self.kerbin.gravitational_parameter
+                * ((2 / orbit.radius_at(at)) - (1 / orbit.semi_major_axis))
+            )
+            self.assertAlmostEqual(expected, speed, delta=0.1)
+
+    def test_position_at_matches_radius(self):
+        radius = 1500000
+        orbit = self.create((0, 0, radius), (0.9 * self.circular_speed(radius), 0, 0))
+        ut = self.space_center.ut
+        for offset in (0, 300, 1200):
+            at = ut + offset
+            position = orbit.position_at(at, self.frame)
+            self.assertAlmostEqual(orbit.radius_at(at), norm(position), delta=0.1)
+
+    def test_state_vectors_are_recovered(self):
+        """The orbit passes through the position and velocity it was built from."""
+        radius = 1400000
+        position = (0, 0, radius)
+        velocity = (0.85 * self.circular_speed(radius), 0, 0)
+        ut = self.space_center.ut
+        orbit = self.space_center.Orbit.create_from_position_and_velocity(
+            self.kerbin, position, velocity, ut, self.frame
+        )
+        self.assertAlmostEqual(position, orbit.position_at(ut, self.frame), delta=1)
+        self.assertAlmostEqual(velocity, orbit.velocity_at(ut, self.frame), delta=0.1)
+
+    def test_rotating_construction_frame(self):
+        """The frame the state vectors are given in is taken into account.
+
+        Kerbin's rotating frame turns with the surface, so the same numbers given
+        in it describe a different orbit: the surface motion at this radius is a
+        sixth of orbital speed, which takes the orbit well away from circular."""
+        radius = 1000000
+        speed = self.circular_speed(radius)
+        inertial = self.create((0, 0, radius), (speed, 0, 0))
+        rotating = self.create(
+            (0, 0, radius), (speed, 0, 0), self.kerbin.reference_frame
+        )
+        self.assertAlmostEqual(0, inertial.eccentricity, places=6)
+        self.assertGreater(rotating.eccentricity, 0.1)
+
+    def test_default_reference_frame(self):
+        """Omitting the frame uses the body's non-rotating frame."""
+        radius = 1000000
+        velocity = (0, self.circular_speed(radius), 0)
+        explicit = self.create((0, 0, radius), velocity, self.frame)
+        default = self.space_center.Orbit.create_from_position_and_velocity(
+            self.kerbin, (0, 0, radius), velocity, self.space_center.ut
+        )
+        self.assertAlmostEqual(
+            explicit.semi_major_axis, default.semi_major_axis, delta=1
+        )
+        self.assertAlmostEqual(explicit.inclination, default.inclination, places=6)
+
+    def test_round_trip_from_vessel(self):
+        """An orbit built from a vessel's own state vectors is that vessel's orbit.
+
+        The position, velocity and time come from separate RPCs, so the game
+        advances a physics frame or two between them and the state is not quite
+        one the vessel was ever in. The tolerances allow for that."""
+        expected = self.vessel.orbit
+        orbit = self.space_center.Orbit.create_from_position_and_velocity(
+            self.kerbin,
+            self.vessel.position(self.frame),
+            self.vessel.velocity(self.frame),
+            self.space_center.ut,
+            self.frame,
+        )
+        self.assertEqual("Kerbin", orbit.body.name)
+        self.assertAlmostEqual(expected.apoapsis, orbit.apoapsis, delta=2000)
+        self.assertAlmostEqual(expected.periapsis, orbit.periapsis, delta=2000)
+        self.assertAlmostEqual(
+            expected.semi_major_axis, orbit.semi_major_axis, delta=2000
+        )
+        self.assertAlmostEqual(expected.eccentricity, orbit.eccentricity, places=3)
+        self.assertAlmostEqual(expected.inclination, orbit.inclination, places=3)
+        self.assertAlmostEqual(
+            expected.longitude_of_ascending_node,
+            orbit.longitude_of_ascending_node,
+            places=2,
+        )
+        self.assertAlmostEqual(
+            expected.argument_of_periapsis, orbit.argument_of_periapsis, places=2
+        )
+        self.assertAlmostEqual(expected.period, orbit.period, delta=5)
+
+    def test_position_at_the_center_of_the_body(self):
+        """A position at the center of the body is not on any orbit."""
+        with self.assertRaises(ValueError):
+            self.space_center.Orbit.create_from_position_and_velocity(
+                self.kerbin, (0, 0, 0), (0, 2000, 0), self.space_center.ut, self.frame
+            )
+
+
 if __name__ == "__main__":
     unittest.main()
