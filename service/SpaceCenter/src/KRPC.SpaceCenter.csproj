@@ -83,6 +83,7 @@
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />
     <Compile Include="CameraAddon.cs" />
+    <Compile Include="ConstructedOrbitsAddon.cs" />
     <Compile Include="EditorShipAddon.cs" />
     <Compile Include="EVAAddon.cs" />
     <Compile Include="ExternalAPIAddon.cs" />

@@ -199,6 +199,38 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertEqual("Kerbin", orbit.body.name)
         self.assertEqual(vessel.orbit, orbit)
 
+    def test_the_store_drops_a_constructed_orbit_when_its_client_goes(self):
+        # An orbit a client constructs stands for nothing in the game, so nothing the
+        # game destroys ever says it is finished with. The client that asked for it
+        # going is the only thing that can.
+        conn = self.connect(use_cached=False)
+        constructed = conn.space_center.Orbit.create_from_orbital_elements(
+            conn.space_center.bodies["Kerbin"],
+            800000,
+            0.1,
+            0,
+            0,
+            0,
+            0,
+            conn.space_center.ut,
+        )
+        # The two reference frames the orbit hands out are objects in their own right,
+        # and are defined against nothing else, so they go with the orbit.
+        self.assertIsNotNone(constructed.reference_frame)
+        self.assertIsNotNone(constructed.orbital_reference_frame)
+        # The orbit of a vessel is named by the vessel rather than by the client that
+        # asked for it, so both connections have the one object and it must not go
+        # anywhere when one of them does.
+        vessel_orbit = self.space_center.active_vessel.orbit
+        self.assertEqual("Kerbin", conn.space_center.active_vessel.orbit.body.name)
+        before = self.conn.testing_tools.object_store_size
+        conn.close()
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size <= before - 3,
+            message="the constructed orbit and its frames were not dropped from the store",
+        )
+        self.assertEqual("Kerbin", vessel_orbit.body.name)
+
 
 class TestObjectLifetimeUnloaded(krpctest.TestCase):
     """A part of a vessel the game has unloaded is not a destroyed part.

@@ -25,6 +25,11 @@ namespace KRPC.SpaceCenter.Services
         // game builds a new one whenever it builds the owner, and the object has to read
         // the loaded game rather than the state it was made in.
         readonly global::Orbit patch;
+        // Whether the client that constructed the orbit has gone. A constructed orbit is
+        // as valid on the last frame of the session as on the first, so it stands for
+        // nothing the game can destroy, and its client going is the only thing that can
+        // say the object is finished with.
+        bool released;
 
         internal Orbit (Vessel vessel)
         {
@@ -72,16 +77,28 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// What the game holds for the thing the orbit belongs to. An orbit built from a KSP
-        /// orbit alone has no owner to ask, so it is kept.
+        /// orbit alone has no owner to ask, so it is kept, and an orbit constructed for a
+        /// client is kept until that client goes.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
+                if (released)
+                    return GameObjectState.Destroyed;
                 if (ownerVessel != null)
                     return ownerVessel.GameObjectState;
                 if (ownerNode != null)
                     return ownerNode.GameObjectState;
                 return GameObjectState.Live;
             }
+        }
+
+        /// <summary>
+        /// Let go of an orbit constructed for a client that has gone, so that it and the
+        /// reference frames defined against it leave the object store at the next sweep.
+        /// </summary>
+        internal void Release ()
+        {
+            released = true;
         }
 
         /// <summary>
@@ -505,7 +522,7 @@ namespace KRPC.SpaceCenter.Services
             // change is reported as one in the past. Zero, the value an orbit is built
             // with, is not in the past at a universal time of zero.
             orbit.UTsoi = -1;
-            return new Orbit (orbit);
+            return Constructed (orbit);
         }
 
         /// <summary>
@@ -600,7 +617,19 @@ namespace KRPC.SpaceCenter.Services
             // change is reported as one in the past. Zero, the value an orbit is built
             // with, is not in the past at a universal time of zero.
             orbit.UTsoi = -1;
-            return new Orbit (orbit);
+            return Constructed (orbit);
+        }
+
+        // The object for an orbit a client asked to be built, recorded as the client's so
+        // that it is let go of when the client is. An orbit read off a vessel, a body or a
+        // maneuver node is not recorded: it is named by the thing whose orbit it is, so
+        // the object store gives back one object for it however often it is asked for,
+        // and dropping it when one client goes would take it away from the others.
+        static Orbit Constructed (global::Orbit orbit)
+        {
+            var result = new Orbit (orbit);
+            ConstructedOrbitsAddon.Add (result);
+            return result;
         }
 
         static bool IsFinite (double value)
