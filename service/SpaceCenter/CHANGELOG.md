@@ -86,6 +86,11 @@
   - Add `CelestialBody.SurfaceNormal`, `CelestialBody.BedrockNormal` and `CelestialBody.MSLNormal`
     to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to
     the surface, to the sea-bed, or to the sphere at sea level (#1030)
+  - Fix `ClosestApproach.Velocity` and `ClosestApproach.TargetVelocity`, which were both
+    offset by the velocity of the frame the active vessel's reference body moves in, some
+    9284 m/s for a vessel in orbit around Kerbin. `ClosestApproach.RelativeVelocity` and
+    `ClosestApproach.RelativeSpeed` are the difference of the two and were unaffected
+    (#1047)
 
 - Flight and aerodynamics
   - Add `Flight.SurfaceNormal` to get the slope of the terrain under a vessel, as a unit vector
