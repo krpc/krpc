@@ -60,12 +60,18 @@ namespace KRPC.SpaceCenter.Services
             return o.InternalOrbit.getPositionAtUT (ut);
         }
 
-        // The true world-space velocity of the given orbit at the closest approach,
-        // including the motion of its reference body, so relative velocity is correct
-        // even when the two orbits are around different bodies.
+        // The world-space velocity of the given orbit at the closest approach: the
+        // motion around its reference body then, plus the motion of that body now. The
+        // body is taken as it is now to match WorldPosition above, which places the
+        // orbit against the body's current position, and to match the velocity a
+        // reference frame moves at, which is also the body's current one. Both objects
+        // are treated the same way, so the relative quantities remain the difference of
+        // the absolute ones.
         Vector3d WorldVelocity (Orbit o)
         {
-            return o.InternalOrbit.GetFrameVelAtUT (ut).SwapYZ ();
+            var internalOrbit = o.InternalOrbit;
+            return internalOrbit.getOrbitalVelocityAtUT (ut).SwapYZ () +
+                   internalOrbit.referenceBody.GetWorldVelocity ();
         }
 
         ReferenceFrame DefaultedFrame (ReferenceFrame referenceFrame)
