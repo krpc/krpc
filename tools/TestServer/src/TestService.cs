@@ -658,5 +658,80 @@ namespace TestServer
             {
             }
         }
+
+        // The special values of the numeric types as default arguments. Each is a compile-time
+        // constant, so they are plain optional parameters rather than KRPCDefaultValue
+        // factories. Every generated client has to spell them in a way its language accepts,
+        // which the client builds check by compiling the generated stubs.
+
+        /// <summary>
+        /// Procedure whose defaults are the special values of double.
+        /// </summary>
+        [KRPCProcedure]
+        public static IList<double> DoubleSpecialDefaults (
+            double nan = double.NaN,
+            double infinity = double.PositiveInfinity,
+            double negativeInfinity = double.NegativeInfinity,
+            double maximum = double.MaxValue,
+            double lowest = double.MinValue)
+        {
+            return new List<double> { nan, infinity, negativeInfinity, maximum, lowest };
+        }
+
+        /// <summary>
+        /// Procedure whose defaults are the special values of float, plus a finite fraction
+        /// that no float can hold exactly.
+        /// </summary>
+        [KRPCProcedure]
+        public static IList<float> FloatSpecialDefaults (
+            float nan = float.NaN,
+            float infinity = float.PositiveInfinity,
+            float negativeInfinity = float.NegativeInfinity,
+            float maximum = float.MaxValue,
+            float lowest = float.MinValue,
+            float fraction = 0.1f)
+        {
+            return new List<float> {
+                nan, infinity, negativeInfinity, maximum, lowest, fraction
+            };
+        }
+
+        /// <summary>
+        /// Procedure whose defaults are the extremes of int.
+        /// </summary>
+        [KRPCProcedure]
+        public static IList<int> Int32SpecialDefaults (
+            int maximum = int.MaxValue, int minimum = int.MinValue)
+        {
+            return new List<int> { maximum, minimum };
+        }
+
+        /// <summary>
+        /// Procedure whose defaults are the extremes of long.
+        /// </summary>
+        [KRPCProcedure]
+        public static IList<long> Int64SpecialDefaults (
+            long maximum = long.MaxValue, long minimum = long.MinValue)
+        {
+            return new List<long> { maximum, minimum };
+        }
+
+        /// <summary>
+        /// Procedure whose default is the largest uint.
+        /// </summary>
+        [KRPCProcedure]
+        public static IList<uint> Uint32SpecialDefaults (uint maximum = uint.MaxValue)
+        {
+            return new List<uint> { maximum };
+        }
+
+        /// <summary>
+        /// Procedure whose default is the largest ulong.
+        /// </summary>
+        [KRPCProcedure]
+        public static IList<ulong> Uint64SpecialDefaults (ulong maximum = ulong.MaxValue)
+        {
+            return new List<ulong> { maximum };
+        }
     }
 }

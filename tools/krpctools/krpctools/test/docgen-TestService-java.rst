@@ -97,6 +97,17 @@
       :param java.util.Map<Integer,Boolean> x:
    
 
+   .. method:: java.util.List<Double> doubleSpecialDefaults(double nan, double infinity, double negativeInfinity, double maximum, double lowest)
+
+      Procedure whose defaults are the special values of double.
+
+      :param double nan:
+      :param double infinity:
+      :param double negativeInfinity:
+      :param double maximum:
+      :param double lowest:
+   
+
    .. method:: String doubleToString(double value)
 
 
@@ -166,6 +177,19 @@
 
    
 
+   .. method:: java.util.List<Float> floatSpecialDefaults(float nan, float infinity, float negativeInfinity, float maximum, float lowest, float fraction)
+
+      Procedure whose defaults are the special values of float, plus a finite fraction
+      that no float can hold exactly.
+
+      :param float nan:
+      :param float infinity:
+      :param float negativeInfinity:
+      :param float maximum:
+      :param float lowest:
+      :param float fraction:
+   
+
    .. method:: String floatToString(float value)
 
       Procedure documentation string.
@@ -208,11 +232,27 @@
       :param org.javatuples.Pair<Integer,Long> t:
    
 
+   .. method:: java.util.List<Integer> int32SpecialDefaults(int maximum, int minimum)
+
+      Procedure whose defaults are the extremes of int.
+
+      :param int maximum:
+      :param int minimum:
+   
+
    .. method:: String int32ToString(int value)
 
 
 
       :param int value:
+   
+
+   .. method:: java.util.List<Long> int64SpecialDefaults(long maximum, long minimum)
+
+      Procedure whose defaults are the extremes of long.
+
+      :param long maximum:
+      :param long minimum:
    
 
    .. method:: String int64ToString(long value)
@@ -379,6 +419,20 @@
 
 
       :param org.javatuples.Pair<Integer,Boolean> x:
+   
+
+   .. method:: java.util.List<Integer> uint32SpecialDefaults(int maximum)
+
+      Procedure whose default is the largest uint.
+
+      :param int maximum:
+   
+
+   .. method:: java.util.List<Long> uint64SpecialDefaults(long maximum)
+
+      Procedure whose default is the largest ulong.
+
+      :param long maximum:
    
 
 

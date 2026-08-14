@@ -125,6 +125,20 @@
 
       :Game Scenes: All
 
+   .. method:: System.Collections.Generic.IList<double> DoubleSpecialDefaults(double nan = double.NaN, double infinity = double.PositiveInfinity, double negativeInfinity = double.NegativeInfinity, double maximum = double.MaxValue, double lowest = double.MinValue)
+
+      Procedure whose defaults are the special values of double.
+
+      :parameters:
+
+
+
+
+
+
+
+      :Game Scenes: All
+
    .. method:: string DoubleToString(double value)
 
 
@@ -222,6 +236,22 @@
 
       :Game Scenes: All
 
+   .. method:: System.Collections.Generic.IList<float> FloatSpecialDefaults(float nan = float.NaN, float infinity = float.PositiveInfinity, float negativeInfinity = float.NegativeInfinity, float maximum = float.MaxValue, float lowest = float.MinValue, float fraction = 0.1f)
+
+      Procedure whose defaults are the special values of float, plus a finite fraction
+      that no float can hold exactly.
+
+      :parameters:
+
+
+
+
+
+
+
+
+      :Game Scenes: All
+
    .. method:: string FloatToString(float value)
 
       Procedure documentation string.
@@ -282,11 +312,33 @@
 
       :Game Scenes: All
 
+   .. method:: System.Collections.Generic.IList<int> Int32SpecialDefaults(int maximum = int.MaxValue, int minimum = int.MinValue)
+
+      Procedure whose defaults are the extremes of int.
+
+      :parameters:
+
+
+
+
+      :Game Scenes: All
+
    .. method:: string Int32ToString(int value)
 
 
 
       :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<long> Int64SpecialDefaults(long maximum = long.MaxValue, long minimum = long.MinValue)
+
+      Procedure whose defaults are the extremes of long.
+
+      :parameters:
+
 
 
 
@@ -485,6 +537,26 @@
    .. method:: System.Tuple<int,bool> TupleDefault(System.Tuple<int,bool> x = { 1, false })
 
 
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<uint> Uint32SpecialDefaults(uint maximum = uint.MaxValue)
+
+      Procedure whose default is the largest uint.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: System.Collections.Generic.IList<ulong> Uint64SpecialDefaults(ulong maximum = ulong.MaxValue)
+
+      Procedure whose default is the largest ulong.
 
       :parameters:
 

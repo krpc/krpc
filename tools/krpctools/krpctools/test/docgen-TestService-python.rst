@@ -141,6 +141,21 @@ Service documentation string.
 
 
 
+.. staticmethod:: double_special_defaults([nan = float("nan")], [infinity = float("inf")], [negative_infinity = -float("inf")], [maximum = 1.7976931348623157e+308], [lowest = -1.7976931348623157e+308])
+
+   Procedure whose defaults are the special values of double.
+
+   :param float nan:
+   :param float infinity:
+   :param float negative_infinity:
+   :param float maximum:
+   :param float lowest:
+   :rtype: list(float)
+   
+
+
+
+
 .. staticmethod:: double_to_string(value)
 
 
@@ -250,6 +265,23 @@ Service documentation string.
 
 
 
+.. staticmethod:: float_special_defaults([nan = float("nan")], [infinity = float("inf")], [negative_infinity = -float("inf")], [maximum = 3.4028235e+38], [lowest = -3.4028235e+38], [fraction = 0.1])
+
+   Procedure whose defaults are the special values of float, plus a finite fraction
+   that no float can hold exactly.
+
+   :param float nan:
+   :param float infinity:
+   :param float negative_infinity:
+   :param float maximum:
+   :param float lowest:
+   :param float fraction:
+   :rtype: list(float)
+   
+
+
+
+
 .. staticmethod:: float_to_string(value)
 
    Procedure documentation string.
@@ -316,12 +348,36 @@ Service documentation string.
 
 
 
+.. staticmethod:: int32_special_defaults([maximum = 2147483647], [minimum = -2147483648])
+
+   Procedure whose defaults are the extremes of int.
+
+   :param int maximum:
+   :param int minimum:
+   :rtype: list(int)
+   
+
+
+
+
 .. staticmethod:: int32_to_string(value)
 
 
 
    :param int value:
    :rtype: str
+   
+
+
+
+
+.. staticmethod:: int64_special_defaults([maximum = 9223372036854775807], [minimum = -9223372036854775808])
+
+   Procedure whose defaults are the extremes of long.
+
+   :param int maximum:
+   :param int minimum:
+   :rtype: list(int)
    
 
 
@@ -580,6 +636,28 @@ Service documentation string.
 
    :param tuple x:
    :rtype: tuple(int, bool)
+   
+
+
+
+
+.. staticmethod:: uint32_special_defaults([maximum = 4294967295])
+
+   Procedure whose default is the largest uint.
+
+   :param int maximum:
+   :rtype: list(int)
+   
+
+
+
+
+.. staticmethod:: uint64_special_defaults([maximum = 18446744073709551615])
+
+   Procedure whose default is the largest ulong.
+
+   :param int maximum:
+   :rtype: list(int)
    
 
 

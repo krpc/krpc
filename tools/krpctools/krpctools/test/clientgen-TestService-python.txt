@@ -864,6 +864,32 @@ class TestService:
             self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
 
+    def double_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = 1.7976931348623157e+308, lowest: float = -1.7976931348623157e+308) -> List[float]:
+        """
+        Procedure whose defaults are the special values of double.
+        """
+        return self._client._invoke(
+            "TestService",
+            "DoubleSpecialDefaults",
+            [nan, infinity, negative_infinity, maximum, lowest],
+            ["nan", "infinity", "negative_infinity", "maximum", "lowest"],
+            [self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type],
+            self._client._types.list_type(self._client._types.double_type)
+        )
+
+    def _return_type_double_special_defaults(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.double_type)
+
+    def _build_call_double_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = 1.7976931348623157e+308, lowest: float = -1.7976931348623157e+308) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "DoubleSpecialDefaults",
+            [nan, infinity, negative_infinity, maximum, lowest],
+            ["nan", "infinity", "negative_infinity", "maximum", "lowest"],
+            [self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type],
+            self._client._types.list_type(self._client._types.double_type)
+        )
+
     def double_to_string(self, value: float) -> str:
         return self._client._invoke(
             "TestService",
@@ -1094,6 +1120,33 @@ class TestService:
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
+    def float_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = 3.4028235e+38, lowest: float = -3.4028235e+38, fraction: float = 0.1) -> List[float]:
+        """
+        Procedure whose defaults are the special values of float, plus a finite fraction
+        that no float can hold exactly.
+        """
+        return self._client._invoke(
+            "TestService",
+            "FloatSpecialDefaults",
+            [nan, infinity, negative_infinity, maximum, lowest, fraction],
+            ["nan", "infinity", "negative_infinity", "maximum", "lowest", "fraction"],
+            [self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type],
+            self._client._types.list_type(self._client._types.float_type)
+        )
+
+    def _return_type_float_special_defaults(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.float_type)
+
+    def _build_call_float_special_defaults(self, nan: float = float("nan"), infinity: float = float("inf"), negative_infinity: float = -float("inf"), maximum: float = 3.4028235e+38, lowest: float = -3.4028235e+38, fraction: float = 0.1) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "FloatSpecialDefaults",
+            [nan, infinity, negative_infinity, maximum, lowest, fraction],
+            ["nan", "infinity", "negative_infinity", "maximum", "lowest", "fraction"],
+            [self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type],
+            self._client._types.list_type(self._client._types.float_type)
+        )
+
     def float_to_string(self, value: float) -> str:
         """
         Procedure documentation string.
@@ -1235,6 +1288,32 @@ class TestService:
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
         )
 
+    def int32_special_defaults(self, maximum: int = 2147483647, minimum: int = -2147483648) -> List[int]:
+        """
+        Procedure whose defaults are the extremes of int.
+        """
+        return self._client._invoke(
+            "TestService",
+            "Int32SpecialDefaults",
+            [maximum, minimum],
+            ["maximum", "minimum"],
+            [self._client._types.sint32_type, self._client._types.sint32_type],
+            self._client._types.list_type(self._client._types.sint32_type)
+        )
+
+    def _return_type_int32_special_defaults(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.sint32_type)
+
+    def _build_call_int32_special_defaults(self, maximum: int = 2147483647, minimum: int = -2147483648) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "Int32SpecialDefaults",
+            [maximum, minimum],
+            ["maximum", "minimum"],
+            [self._client._types.sint32_type, self._client._types.sint32_type],
+            self._client._types.list_type(self._client._types.sint32_type)
+        )
+
     def int32_to_string(self, value: int) -> str:
         return self._client._invoke(
             "TestService",
@@ -1256,6 +1335,32 @@ class TestService:
             ["value"],
             [self._client._types.sint32_type],
             self._client._types.string_type
+        )
+
+    def int64_special_defaults(self, maximum: int = 9223372036854775807, minimum: int = -9223372036854775808) -> List[int]:
+        """
+        Procedure whose defaults are the extremes of long.
+        """
+        return self._client._invoke(
+            "TestService",
+            "Int64SpecialDefaults",
+            [maximum, minimum],
+            ["maximum", "minimum"],
+            [self._client._types.sint64_type, self._client._types.sint64_type],
+            self._client._types.list_type(self._client._types.sint64_type)
+        )
+
+    def _return_type_int64_special_defaults(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.sint64_type)
+
+    def _build_call_int64_special_defaults(self, maximum: int = 9223372036854775807, minimum: int = -9223372036854775808) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "Int64SpecialDefaults",
+            [maximum, minimum],
+            ["maximum", "minimum"],
+            [self._client._types.sint64_type, self._client._types.sint64_type],
+            self._client._types.list_type(self._client._types.sint64_type)
         )
 
     def int64_to_string(self, value: int) -> str:
@@ -1693,4 +1798,56 @@ class TestService:
             ["x"],
             [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)],
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)
+        )
+
+    def uint32_special_defaults(self, maximum: int = 4294967295) -> List[int]:
+        """
+        Procedure whose default is the largest uint.
+        """
+        return self._client._invoke(
+            "TestService",
+            "Uint32SpecialDefaults",
+            [maximum],
+            ["maximum"],
+            [self._client._types.uint32_type],
+            self._client._types.list_type(self._client._types.uint32_type)
+        )
+
+    def _return_type_uint32_special_defaults(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.uint32_type)
+
+    def _build_call_uint32_special_defaults(self, maximum: int = 4294967295) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "Uint32SpecialDefaults",
+            [maximum],
+            ["maximum"],
+            [self._client._types.uint32_type],
+            self._client._types.list_type(self._client._types.uint32_type)
+        )
+
+    def uint64_special_defaults(self, maximum: int = 18446744073709551615) -> List[int]:
+        """
+        Procedure whose default is the largest ulong.
+        """
+        return self._client._invoke(
+            "TestService",
+            "Uint64SpecialDefaults",
+            [maximum],
+            ["maximum"],
+            [self._client._types.uint64_type],
+            self._client._types.list_type(self._client._types.uint64_type)
+        )
+
+    def _return_type_uint64_special_defaults(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.uint64_type)
+
+    def _build_call_uint64_special_defaults(self, maximum: int = 18446744073709551615) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "Uint64SpecialDefaults",
+            [maximum],
+            ["maximum"],
+            [self._client._types.uint64_type],
+            self._client._types.list_type(self._client._types.uint64_type)
         )

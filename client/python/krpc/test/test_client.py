@@ -1,3 +1,5 @@
+import math
+import sys
 import unittest
 import socket
 import threading
@@ -424,6 +426,31 @@ class TestClient(ServerTestCase, unittest.TestCase):
             {1: False, 2: True}, self.conn.test_service.dictionary_default()
         )
 
+    def test_special_default_values(self) -> None:
+        # The special values of the numeric types survive the round trip from the
+        # declaration in the service, through the generated client, to the server
+        float32_max = (2 - 2**-23) * 2**127
+        values = self.conn.test_service.double_special_defaults()
+        self.assertTrue(math.isnan(values[0]))
+        self.assertEqual(
+            [float("inf"), -float("inf"), sys.float_info.max, -sys.float_info.max],
+            values[1:],
+        )
+        values = self.conn.test_service.float_special_defaults()
+        self.assertTrue(math.isnan(values[0]))
+        self.assertEqual(
+            [float("inf"), -float("inf"), float32_max, -float32_max], values[1:5]
+        )
+        self.assertAlmostEqual(0.1, values[5], places=6)
+        self.assertEqual(
+            [2**31 - 1, -(2**31)], self.conn.test_service.int32_special_defaults()
+        )
+        self.assertEqual(
+            [2**63 - 1, -(2**63)], self.conn.test_service.int64_special_defaults()
+        )
+        self.assertEqual([2**32 - 1], self.conn.test_service.uint32_special_defaults())
+        self.assertEqual([2**64 - 1], self.conn.test_service.uint64_special_defaults())
+
     def test_unknown_exception_type(self) -> None:
         # An error naming a service or type this client does not know about still reports
         # what went wrong, rather than failing while building the exception for it
@@ -590,6 +617,12 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "DeprecatedClass",
                     "DeprecatedEnum",
                     "DeprecatedException",
+                    "double_special_defaults",
+                    "float_special_defaults",
+                    "int32_special_defaults",
+                    "int64_special_defaults",
+                    "uint32_special_defaults",
+                    "uint64_special_defaults",
                 ]
             ),
             set(x for x in dir(self.conn.test_service) if not x.startswith("_")),

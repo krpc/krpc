@@ -131,6 +131,20 @@
 
    
 
+   .. function:: std::vector<double> double_special_defaults(double nan = std::numeric_limits<double>::quiet_NaN(), double infinity = std::numeric_limits<double>::infinity(), double negative_infinity = -std::numeric_limits<double>::infinity(), double maximum = (std::numeric_limits<double>::max)(), double lowest = std::numeric_limits<double>::lowest())
+
+      Procedure whose defaults are the special values of double.
+
+      :Parameters:
+
+
+
+
+
+
+
+   
+
    .. function:: std::string double_to_string(double value)
 
 
@@ -228,6 +242,22 @@
 
    
 
+   .. function:: std::vector<float> float_special_defaults(float nan = std::numeric_limits<float>::quiet_NaN(), float infinity = std::numeric_limits<float>::infinity(), float negative_infinity = -std::numeric_limits<float>::infinity(), float maximum = (std::numeric_limits<float>::max)(), float lowest = std::numeric_limits<float>::lowest(), float fraction = 0.1f)
+
+      Procedure whose defaults are the special values of float, plus a finite fraction
+      that no float can hold exactly.
+
+      :Parameters:
+
+
+
+
+
+
+
+
+   
+
    .. function:: std::string float_to_string(float value)
 
       Procedure documentation string.
@@ -288,11 +318,33 @@
 
    
 
+   .. function:: std::vector<int32_t> int32_special_defaults(int32_t maximum = (std::numeric_limits<int32_t>::max)(), int32_t minimum = (std::numeric_limits<int32_t>::min)())
+
+      Procedure whose defaults are the extremes of int.
+
+      :Parameters:
+
+
+
+
+   
+
    .. function:: std::string int32_to_string(int32_t value)
 
 
 
       :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<int64_t> int64_special_defaults(int64_t maximum = (std::numeric_limits<int64_t>::max)(), int64_t minimum = (std::numeric_limits<int64_t>::min)())
+
+      Procedure whose defaults are the extremes of long.
+
+      :Parameters:
+
 
 
 
@@ -494,6 +546,26 @@
    .. function:: std::tuple<int32_t, bool> tuple_default(std::tuple<int32_t, bool> x = std::tuple<int32_t, bool>{1, false})
 
 
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<uint32_t> uint32_special_defaults(uint32_t maximum = (std::numeric_limits<uint32_t>::max)())
+
+      Procedure whose default is the largest uint.
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: std::vector<uint64_t> uint64_special_defaults(uint64_t maximum = (std::numeric_limits<uint64_t>::max)())
+
+      Procedure whose default is the largest ulong.
 
       :Parameters:
 
