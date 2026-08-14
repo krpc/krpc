@@ -585,7 +585,7 @@ Control
          When the Extended Action Groups mod is installed, the assignments are queried from
          the mod instead, so that actions assigned to its additional groups are included.
 
-   .. function:: Node add_node(double ut, float prograde = 0.0, float normal = 0.0, float radial = 0.0)
+   .. function:: Node add_node(double ut, float prograde = 0.0f, float normal = 0.0f, float radial = 0.0f)
 
       Creates a maneuver node at the given universal time, and returns a
       :class:`Node` object that can be used to modify it.

@@ -172,6 +172,7 @@ Lua client
 
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
+* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Lua names none of them itself, as ``math.maxinteger`` and ``math.mininteger`` need Lua 5.3, and a parameter that defaults to one is now documented as the constant rather than the decimal value (:issue:`1045`)
 
 
 Python client
@@ -179,6 +180,7 @@ Python client
 
 * :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
+* Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Python names none of them itself, and a generated stub whose parameter defaults to one now names the constant rather than writing out the decimal value (:issue:`1045`)
 
 
 krpctools
@@ -191,6 +193,8 @@ krpctools
 * Fix Lua documentation writing default values in Python's syntax rather than Lua's (:issue:`1044`)
 * Fix C++ documentation writing a collection default value as a constructor call rather than a braced initializer list, so ``std::vector<int32_t>(1, 2, 3)`` named a constructor that builds something else entirely (:issue:`1044`)
 * A default value naming an undeclared enumeration value, or one whose enumeration no supplied service defines, is now reported naming the service, procedure and parameter it came from (:issue:`1044`)
+* The special values of the numeric types - NaN, the infinities and the extremes of the integer and floating point ranges - can now be used as parameter default values. Generated code and documentation name them as the target language does, such as ``double.NaN`` in C# and ``(std::numeric_limits<int32_t>::max)()`` in C++, rather than writing a decimal literal that does not compile. Neither Python nor Lua has a name of its own for the finite extremes, so both name the new ``krpc.limits`` constants (:issue:`1045`)
+* Fix a 32-bit float default value being written as the full decimal expansion of the double it widens to, so ``0.1f`` read as ``0.10000000149011612``, in Python, C# and C++ code and in the Python, C#, C++ and Lua documentation. C++ also writes it as a float literal now, rather than a double one (:issue:`1045`)
 
 
 v0.6.0

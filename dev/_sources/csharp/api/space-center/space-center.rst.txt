@@ -333,7 +333,7 @@ SpaceCenter
 
       :Game Scenes: Flight
 
-   .. method:: void WarpTo(double ut, float maxRailsRate = 100000.0f, float maxPhysicsRate = 2.0f)
+   .. method:: void WarpTo(double ut, float maxRailsRate = 1e+05f, float maxPhysicsRate = 2.0f)
 
       Uses time acceleration to warp forward to a time in the future, specified
       by universal time *ut*. This call blocks until the desired

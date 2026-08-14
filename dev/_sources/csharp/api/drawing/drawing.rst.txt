@@ -28,7 +28,7 @@ Drawing
 
       :Game Scenes: Flight
 
-   .. method:: Line AddDirection(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 10.0f, bool visible = true)
+   .. method:: Line AddDirection(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
 
       Draw a direction vector in the scene, starting from the origin of the given reference frame.
 
@@ -41,7 +41,7 @@ Drawing
 
       :Game Scenes: Flight
 
-   .. method:: Line AddDirectionFromCom(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 10.0f, bool visible = true)
+   .. method:: Line AddDirectionFromCom(System.Tuple<double,double,double> direction, SpaceCenter.ReferenceFrame referenceFrame, float length = 1e+01f, bool visible = true)
 
       Draw a direction vector in the scene, from the center of mass of the active vessel.
 

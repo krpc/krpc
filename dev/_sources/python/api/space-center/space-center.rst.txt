@@ -467,7 +467,7 @@ the active vessel, managing its resources, planning maneuver nodes and auto-pilo
 
 
 
-.. staticmethod:: warp_to(ut, [max_rails_rate = 100000.0], [max_physics_rate = 2.0])
+.. staticmethod:: warp_to(ut, [max_rails_rate = 1e+05], [max_physics_rate = 2.0])
 
    Uses time acceleration to warp forward to a time in the future, specified
    by universal time *ut*. This call blocks until the desired

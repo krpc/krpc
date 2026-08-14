@@ -42,7 +42,7 @@ Provides functionality for drawing and interacting with in-game user interface e
 
 
 
-.. staticmethod:: message(content, [duration = 1.0], [position = UI.MessagePosition.top_center], [color = {1.0, 0.92, 0.016, 1.0}], [size = 20.0])
+.. staticmethod:: message(content, [duration = 1.0], [position = UI.MessagePosition.top_center], [color = {1.0, 0.92, 0.016, 1.0}], [size = 2e+01])
 
    Display a message on the screen.
 

@@ -30,7 +30,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_direction(direction, reference_frame, [length = 10.0], [visible = true])
+.. staticmethod:: add_direction(direction, reference_frame, [length = 1e+01], [visible = true])
 
    Draw a direction vector in the scene, starting from the origin of the given reference frame.
 
@@ -43,7 +43,7 @@ Provides functionality for drawing objects in the flight scene.
 
 
 
-.. staticmethod:: add_direction_from_com(direction, reference_frame, [length = 10.0], [visible = true])
+.. staticmethod:: add_direction_from_com(direction, reference_frame, [length = 1e+01], [visible = true])
 
    Draw a direction vector in the scene, from the center of mass of the active vessel.
 

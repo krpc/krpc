@@ -43,6 +43,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'lua/client';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
@@ -825,6 +826,65 @@ over the network:</p>
 </dd></dl>
 
 </section>
+<section id="numeric-limits">
+<h2>Numeric Limits<a class="headerlink" href="#numeric-limits" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">krpc.limits</span></code> module names the extremes of the numeric types that kRPC carries over the
+wire. Lua names none of them itself, as <code class="docutils literal notranslate"><span class="pre">math.maxinteger</span></code> and <code class="docutils literal notranslate"><span class="pre">math.mininteger</span></code> arrive in
+Lua 5.3 and this client targets 5.1 and 5.2. A service can declare one of these as a
+parameter’s default value, in which case it is documented as the constant here.</p>
+<p>The minimum of an unsigned type is <code class="docutils literal notranslate"><span class="pre">0</span></code>, so it has no constant.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every Lua 5.1 and 5.2 number is a double, which holds each of these exactly except the two
+64-bit integer maxima: <a class="reference internal" href="#krpc.limits.SINT64_MAX" title="krpc.limits.SINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.SINT64_MAX</span></code></a> and <a class="reference internal" href="#krpc.limits.UINT64_MAX" title="krpc.limits.UINT64_MAX"><code class="xref lua lua-data docutils literal notranslate"><span class="pre">krpc.limits.UINT64_MAX</span></code></a>
+round up to <span class="math notranslate nohighlight">\(2^{63}\)</span> and <span class="math notranslate nohighlight">\(2^{64}\)</span>. This is a property of the number type rather
+than of the constants, and applies equally to a 64-bit integer arriving from the server.</p>
+</div>
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.DOUBLE_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_MAX</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.DOUBLE_LOWEST">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">DOUBLE_LOWEST</span></span><a class="headerlink" href="#krpc.limits.DOUBLE_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 64-bit float.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.FLOAT_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_MAX</span></span><a class="headerlink" href="#krpc.limits.FLOAT_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.FLOAT_LOWEST">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">FLOAT_LOWEST</span></span><a class="headerlink" href="#krpc.limits.FLOAT_LOWEST" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative finite 32-bit float.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.SINT32_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT32_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.SINT32_MIN">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT32_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT32_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 32-bit signed integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.SINT64_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.SINT64_MAX" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object lua" id="krpc.limits.SINT64_MIN">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">SINT64_MIN</span></span><a class="headerlink" href="#krpc.limits.SINT64_MIN" title="Link to this definition">#</a></dt>
+<dd><p>The largest and most negative 64-bit signed integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.UINT32_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">UINT32_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT32_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 32-bit unsigned integer.</p>
+</dd></dl>
+
+<dl class="lua data">
+<dt class="sig sig-object lua" id="krpc.limits.UINT64_MAX">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">limits.</span></span><span class="sig-name descname"><span class="pre">UINT64_MAX</span></span><a class="headerlink" href="#krpc.limits.UINT64_MAX" title="Link to this definition">#</a></dt>
+<dd><p>The largest 64-bit unsigned integer.</p>
+</dd></dl>
+
+</section>
 </section>
 
 
@@ -882,6 +942,7 @@ over the network:</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interacting-with-the-server">Interacting with the Server</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#streams-and-events">Streams and Events</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reference">Reference</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#numeric-limits">Numeric Limits</a></li>
 </ul>
   </nav></div>
 

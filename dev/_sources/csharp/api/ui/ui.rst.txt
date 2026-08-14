@@ -35,7 +35,7 @@ UI
 
          If you want to add UI elements to KSPs stock UI canvas, use :prop:`UI.StockCanvas <UI.UI.StockCanvas>`.
 
-   .. method:: void Message(string content, float duration = 1.0f, MessagePosition position = MessagePosition.TopCenter, System.Tuple<double,double,double,double> color = { 1.0, 0.92, 0.016, 1.0 }, float size = 20.0f)
+   .. method:: void Message(string content, float duration = 1.0f, MessagePosition position = MessagePosition.TopCenter, System.Tuple<double,double,double,double> color = { 1.0, 0.92, 0.016, 1.0 }, float size = 2e+01f)
 
       Display a message on the screen.
 

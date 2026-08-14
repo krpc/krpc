@@ -191,7 +191,7 @@ AutoPilot
 
       :Game Scenes: Flight
 
-   .. function:: void set_direction_and_up(std::tuple<double, double, double> direction, std::tuple<double, double, double> up, float roll = 0.0)
+   .. function:: void set_direction_and_up(std::tuple<double, double, double> direction, std::tuple<double, double, double> up, float roll = 0.0f)
 
       Set the target attitude from a nose direction and an up vector: point the nose along
       *direction* and roll so the vessel's dorsal (roof) axis aligns with

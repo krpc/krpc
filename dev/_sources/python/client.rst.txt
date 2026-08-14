@@ -389,3 +389,42 @@ Client API Reference
    .. attribute:: stream
 
       Returns the underlying stream for the event.
+
+Numeric Limits
+--------------
+
+The ``krpc.limits`` module names the extremes of the numeric types that kRPC carries over the
+wire. Python names none of them itself: its integers are unbounded, so there is no largest
+``int``, and its floats are C doubles, so the standard library describes ``DOUBLE`` but says
+nothing about the 32-bit ``FLOAT``. A service can declare one of these as a parameter's default
+value, in which case the generated stub names the constant here.
+
+The minimum of an unsigned type is ``0``, so it has no constant.
+
+.. data:: krpc.limits.DOUBLE_MAX
+          krpc.limits.DOUBLE_LOWEST
+
+   The largest and most negative finite 64-bit float.
+
+.. data:: krpc.limits.FLOAT_MAX
+          krpc.limits.FLOAT_LOWEST
+
+   The largest and most negative finite 32-bit float.
+
+.. data:: krpc.limits.SINT32_MAX
+          krpc.limits.SINT32_MIN
+
+   The largest and most negative 32-bit signed integer.
+
+.. data:: krpc.limits.SINT64_MAX
+          krpc.limits.SINT64_MIN
+
+   The largest and most negative 64-bit signed integer.
+
+.. data:: krpc.limits.UINT32_MAX
+
+   The largest 32-bit unsigned integer.
+
+.. data:: krpc.limits.UINT64_MAX
+
+   The largest 64-bit unsigned integer.
