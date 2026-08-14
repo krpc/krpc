@@ -22,6 +22,17 @@ class PythonLanguage(Language):
 
     value_map = {"null": "None", "true": "True", "false": "False"}
 
+    # Python names none of the finite extremes; every one of them is exact as a literal,
+    # as Python integers are unbounded and its floats are doubles.
+    special_values = {
+        (Type.DOUBLE, "nan"): 'float("nan")',
+        (Type.DOUBLE, "inf"): 'float("inf")',
+        (Type.DOUBLE, "-inf"): '-float("inf")',
+        (Type.FLOAT, "nan"): 'float("nan")',
+        (Type.FLOAT, "inf"): 'float("inf")',
+        (Type.FLOAT, "-inf"): '-float("inf")',
+    }
+
     def parse_name(self, name):
         return super().parse_name(snake_case(name))
 
@@ -54,6 +65,9 @@ class PythonLanguage(Language):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def parse_default_value(self, value, typ):
+        special = self.parse_special_value(value, typ)
+        if special is not None:
+            return special
         if value is None:
             return "None"
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:

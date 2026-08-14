@@ -30,6 +30,17 @@ class LuaLanguage(Language):
         Type.BYTES: "string",
     }
 
+    # Lua 5.1 and 5.2 have no math.maxinteger or math.mininteger, so the integer extremes
+    # are left to the literal path.
+    special_values = {
+        (Type.DOUBLE, "nan"): "0/0",
+        (Type.DOUBLE, "inf"): "math.huge",
+        (Type.DOUBLE, "-inf"): "-math.huge",
+        (Type.FLOAT, "nan"): "0/0",
+        (Type.FLOAT, "inf"): "math.huge",
+        (Type.FLOAT, "-inf"): "-math.huge",
+    }
+
     def parse_type(self, typ):
         if isinstance(typ, ValueType):
             return self.type_map[typ.protobuf_type.code]
@@ -51,6 +62,9 @@ class LuaLanguage(Language):
         return snake_case(name)
 
     def parse_default_value(self, value, typ):
+        special = self.parse_special_value(value, typ)
+        if special is not None:
+            return special
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return "'%s'" % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:

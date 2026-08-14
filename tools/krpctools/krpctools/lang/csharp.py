@@ -109,6 +109,27 @@ class CsharpLanguage(Language):
         Type.BYTES: "byte[]",
     }
 
+    # The named constants are already of the type they belong to, so the "f" suffix that a
+    # FLOAT literal needs must not be appended to them.
+    special_values = {
+        (Type.DOUBLE, "nan"): "double.NaN",
+        (Type.DOUBLE, "inf"): "double.PositiveInfinity",
+        (Type.DOUBLE, "-inf"): "double.NegativeInfinity",
+        (Type.DOUBLE, "max"): "double.MaxValue",
+        (Type.DOUBLE, "lowest"): "double.MinValue",
+        (Type.FLOAT, "nan"): "float.NaN",
+        (Type.FLOAT, "inf"): "float.PositiveInfinity",
+        (Type.FLOAT, "-inf"): "float.NegativeInfinity",
+        (Type.FLOAT, "max"): "float.MaxValue",
+        (Type.FLOAT, "lowest"): "float.MinValue",
+        (Type.SINT32, "max"): "int.MaxValue",
+        (Type.SINT32, "min"): "int.MinValue",
+        (Type.SINT64, "max"): "long.MaxValue",
+        (Type.SINT64, "min"): "long.MinValue",
+        (Type.UINT32, "max"): "uint.MaxValue",
+        (Type.UINT64, "max"): "ulong.MaxValue",
+    }
+
     def parse_type(self, typ):
         return self._parse_type(typ)
 
@@ -158,6 +179,9 @@ class CsharpLanguage(Language):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def parse_default_value(self, value, typ):
+        special = self.parse_special_value(value, typ)
+        if special is not None:
+            return special
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.STRING:
             return '"%s"' % value
         if isinstance(typ, ValueType) and typ.protobuf_type.code == Type.BOOL:
