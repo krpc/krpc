@@ -33,7 +33,7 @@ namespace KRPC
                 Utils.Logger.WriteLine("Service errors encountered, plugin has been disabled. Errors were:", Utils.Logger.Severity.Error);
                 foreach (var error in errors)
                     Utils.Logger.WriteLine(error, Utils.Logger.Severity.Error);
-                Utils.Compatibility.SpawnPopupDialog(
+                PopupDialog.SpawnPopupDialog(
                     new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-service-error", "kRPC Service Error",
                     "Service errors encountered, plugin has been disabled. See the log for more information.",
                     "OK", true, HighLogic.UISkin);
@@ -53,7 +53,7 @@ namespace KRPC
                     msg += Environment.NewLine + notDocumented [i];
                 if (n > 10)
                     msg += Environment.NewLine + "...";
-                Utils.Compatibility.SpawnPopupDialog(
+                PopupDialog.SpawnPopupDialog(
                     new Vector2 (0.5f, 0.5f), new Vector2 (0.5f, 0.5f), "krpc-service-warning",
                     "kRPC service warning", msg, "OK", true, HighLogic.UISkin);
             }

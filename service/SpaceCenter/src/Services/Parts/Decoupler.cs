@@ -13,7 +13,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
     public class Decoupler : Equatable<Decoupler>
     {
-        readonly Compatibility.ModuleDecoupler decoupler;
+        readonly ModuleDecouplerBase decoupler;
 
         internal static bool Is (Part part)
         {
@@ -26,8 +26,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Decoupler (Part part)
         {
             Part = part;
-            decoupler = new Compatibility.ModuleDecoupler(part.InternalPart);
-            if (decoupler.Instance == null)
+            decoupler = part.InternalPart.DecouplerModule ();
+            if (decoupler == null)
                 throw new ArgumentException("Part is not a decoupler");
         }
 
@@ -39,7 +39,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             return
             !ReferenceEquals(other, null) &&
             Part != other.Part &&
-            (decoupler.Instance == other.decoupler.Instance || decoupler.Instance.Equals(other.decoupler.Instance));
+            decoupler == other.decoupler;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ decoupler.Instance.GetHashCode();
+            return Part.GetHashCode () ^ decoupler.GetHashCode();
         }
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
 
             // Fire the decoupler
-            decoupler.Decouple();
+            decoupler.Decouple ();
 
             return PartSeparation.NewVessel (Part, preVesselIds, () => Decoupled);
         }
@@ -85,7 +85,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Decoupled {
             get {
-                return decoupler.IsDecoupled;
+                return decoupler.isDecoupled;
             }
         }
 
@@ -94,7 +94,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Staged {
-            get { return decoupler.StagingEnabled; }
+            get { return decoupler.StagingEnabled (); }
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float Impulse {
-            get { return decoupler.EjectionForce * 10f; }
+            get { return decoupler.ejectionForce * 10f; }
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool IsOmniDecoupler
         {
-            get { return decoupler.IsOmniDecoupler; }
+            get { return decoupler.isOmniDecoupler; }
         }
 
         /// <summary>

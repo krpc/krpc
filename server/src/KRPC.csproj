@@ -53,7 +53,6 @@
     <Compile Include="Utils\ClientOwnedObjects.cs" />
     <Compile Include="Utils\ClientOwnedOverrides.cs" />
     <Compile Include="Utils\ClientOwnedState.cs" />
-    <Compile Include="Utils\Compatibility.cs" />
     <Compile Include="Utils\IClientOwnedCollection.cs" />
     <Compile Include="Utils\ConfigurationStorage.cs" />
     <Compile Include="Utils\ConfigurationStorageNode.cs" />

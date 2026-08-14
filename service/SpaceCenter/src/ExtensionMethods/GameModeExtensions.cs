@@ -1,5 +1,4 @@
 using System;
-using KRPC.Utils;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
 {
@@ -18,11 +17,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                     return GameMode.ScenarioNonResumable;
                 case Game.Modes.SCIENCE_SANDBOX:
                     return GameMode.ScienceSandbox;
+                case Game.Modes.MISSION:
+                    return GameMode.Mission;
+                case Game.Modes.MISSION_BUILDER:
+                    return GameMode.MissionBuilder;
                 default:
-                    if (Compatibility.GameModeIsMission(mode))
-                        return GameMode.Mission;
-                    if (Compatibility.GameModeIsMissionBuilder(mode))
-                        return GameMode.MissionBuilder;
                     throw new ArgumentOutOfRangeException (nameof (mode));
             }
         }
