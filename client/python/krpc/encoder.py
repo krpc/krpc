@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import cast, Any, Callable, Collection, Iterable, List, Mapping
 from enum import Enum
+import struct
 
 # pylint: disable=import-error,no-name-in-module
 import google.protobuf
@@ -28,8 +29,6 @@ from krpc.types import (
 # depends on the version of protobuf installed
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
-_pb_DoubleEncoder = protobuf_encoder.DoubleEncoder(1, False, False)  # type: ignore[arg-type]
-_pb_FloatEncoder = protobuf_encoder.FloatEncoder(1, False, False)  # type: ignore[arg-type]
 
 
 class Encoder:
@@ -113,32 +112,16 @@ class _ValueEncoder:
 
     @classmethod
     def encode_double(cls, value: float) -> bytes:
-        data: List[bytes] = []
-
-        def write(x: bytes) -> None:
-            data.append(x)
-
-        _pb_DoubleEncoder(write, value, True)  # type: ignore[operator]
-        return b"".join(data[1:])  # strips the tag value
+        return struct.pack("<d", value)
 
     @classmethod
     def encode_float(cls, value: float) -> bytes:
-        data: List[bytes] = []
-
-        def write(x: bytes) -> None:
-            data.append(x)
-
-        _pb_FloatEncoder(write, value, True)  # type: ignore[operator]
-        return b"".join(data[1:])  # strips the tag value
+        return struct.pack("<f", value)
 
     @classmethod
     def _encode_varint(cls, value: int) -> bytes:
         data: List[bytes] = []
-
-        def write(x: bytes) -> None:
-            data.append(x)
-
-        _pb_VarintEncoder(write, value, True)
+        _pb_VarintEncoder(data.append, value, True)
         return b"".join(data)
 
     @classmethod
