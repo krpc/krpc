@@ -186,6 +186,8 @@ kRPC provides the following reference frames:
       * :csharp:prop:`CelestialBody.ReferenceFrame`
       * :csharp:prop:`CelestialBody.NonRotatingReferenceFrame`
       * :csharp:prop:`CelestialBody.OrbitalReferenceFrame`
+      * :csharp:prop:`Orbit.ReferenceFrame`
+      * :csharp:prop:`Orbit.OrbitalReferenceFrame`
       * :csharp:prop:`Node.ReferenceFrame`
       * :csharp:prop:`Node.OrbitalReferenceFrame`
       * :csharp:prop:`Part.ReferenceFrame`
@@ -205,6 +207,8 @@ kRPC provides the following reference frames:
       * :cpp:func:`CelestialBody::reference_frame`
       * :cpp:func:`CelestialBody::non_rotating_reference_frame`
       * :cpp:func:`CelestialBody::orbital_reference_frame`
+      * :cpp:func:`Orbit::reference_frame`
+      * :cpp:func:`Orbit::orbital_reference_frame`
       * :cpp:func:`Node::reference_frame`
       * :cpp:func:`Node::orbital_reference_frame`
       * :cpp:func:`Part::reference_frame`
@@ -224,6 +228,8 @@ kRPC provides the following reference frames:
       * :c:func:`krpc_SpaceCenter_CelestialBody_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_NonRotatingReferenceFrame`
       * :c:func:`krpc_SpaceCenter_CelestialBody_OrbitalReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Orbit_ReferenceFrame`
+      * :c:func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Node_ReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Node_OrbitalReferenceFrame`
       * :c:func:`krpc_SpaceCenter_Part_ReferenceFrame`
@@ -243,6 +249,8 @@ kRPC provides the following reference frames:
       * :java:meth:`CelestialBody.getReferenceFrame`
       * :java:meth:`CelestialBody.getNonRotatingReferenceFrame`
       * :java:meth:`CelestialBody.getOrbitalReferenceFrame`
+      * :java:meth:`Orbit.getReferenceFrame`
+      * :java:meth:`Orbit.getOrbitalReferenceFrame`
       * :java:meth:`Node.getReferenceFrame`
       * :java:meth:`Node.getOrbitalReferenceFrame`
       * :java:meth:`Part.getReferenceFrame`
@@ -262,6 +270,8 @@ kRPC provides the following reference frames:
       * :lua:attr:`SpaceCenter.CelestialBody.reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.non_rotating_reference_frame`
       * :lua:attr:`SpaceCenter.CelestialBody.orbital_reference_frame`
+      * :lua:attr:`SpaceCenter.Orbit.reference_frame`
+      * :lua:attr:`SpaceCenter.Orbit.orbital_reference_frame`
       * :lua:attr:`SpaceCenter.Node.reference_frame`
       * :lua:attr:`SpaceCenter.Node.orbital_reference_frame`
       * :lua:attr:`SpaceCenter.Part.reference_frame`
@@ -281,6 +291,8 @@ kRPC provides the following reference frames:
       * :py:attr:`CelestialBody.reference_frame`
       * :py:attr:`CelestialBody.non_rotating_reference_frame`
       * :py:attr:`CelestialBody.orbital_reference_frame`
+      * :py:attr:`Orbit.reference_frame`
+      * :py:attr:`Orbit.orbital_reference_frame`
       * :py:attr:`Node.reference_frame`
       * :py:attr:`Node.orbital_reference_frame`
       * :py:attr:`Part.reference_frame`

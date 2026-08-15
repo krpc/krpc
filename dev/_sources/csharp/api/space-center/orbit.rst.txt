@@ -12,11 +12,141 @@ Orbit
    :prop:`Vessel.Orbit`, or a celestial body, obtained by calling
    :prop:`CelestialBody.Orbit`.
 
+   .. method:: static Orbit CreateFromPositionAndVelocity(IConnection connection, CelestialBody body, System.Tuple<double,double,double> position, System.Tuple<double,double,double> velocity, double ut, ReferenceFrame referenceFrame)
+
+      Create the orbit that passes through a given position at a given velocity.
+      The orbit coasts freely under the gravity of the body being orbited, so it
+      describes where an object left to fall from that position and velocity would
+      be at any later time.
+
+      :parameters:
+
+       * **body** -- The celestial body being orbited.
+       * **position** -- The position, as a position vector.
+       * **velocity** -- The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.
+       * **ut** -- The universal time, in seconds, at which the object is at *position* traveling at *velocity*.
+       * **referenceFrame** -- The reference frame that *position* and *velocity* are in. Defaults to :prop:`CelestialBody.NonRotatingReferenceFrame` of *body*.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The orbit is a single conic around *body*. Nothing else acts on
+         it: it never changes sphere of influence, so :prop:`Orbit.NextOrbit` is
+         ``null`` however far it travels from the body, and it is not slowed by an
+         atmosphere. A vessel held on rails follows its own orbit exactly, while one
+         inside the physics bubble is simulated and drifts from it a little.
+
+         The members that describe where the orbit has got to -- :prop:`Orbit.Radius`,
+         :prop:`Orbit.Speed`, :prop:`Orbit.TrueAnomaly`, :prop:`Orbit.TimeToApoapsis`
+         and the like -- describe it at *ut* and stay there, as
+         nothing is moving along it. Use :meth:`Orbit.RadiusAt`,
+         :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
+         :meth:`Orbit.TrueAnomalyAtUT` to ask where it is at another time.
+         :prop:`Orbit.ReferenceFrame` and :prop:`Orbit.OrbitalReferenceFrame` follow
+         the orbit as time passes.
+
+         The orbit that is returned is kept for as long as the server is running,
+         so creating one repeatedly, for example once per update, uses more and more
+         memory.
+
+   .. method:: static Orbit CreateFromOrbitalElements(IConnection connection, CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+
+      Create the orbit with the given
+      `orbital elements <https://en.wikipedia.org/wiki/Orbital_elements>`_
+      around a given body. The orbit coasts freely under the gravity of that body,
+      so it describes where an object on it would be at any time.
+
+      :parameters:
+
+       * **body** -- The celestial body being orbited.
+       * **semiMajorAxis** -- The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.
+       * **eccentricity** -- The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.
+       * **inclination** -- The inclination of the orbit, in radians.
+       * **longitudeOfAscendingNode** -- The longitude of the ascending node, in radians.
+       * **argumentOfPeriapsis** -- The argument of periapsis, in radians.
+       * **meanAnomalyAtEpoch** -- The mean anomaly at *epoch*, in radians.
+       * **epoch** -- The universal time, in seconds, that *meanAnomalyAtEpoch* is measured at.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         The orbit is a single conic around *body*. Nothing else acts
+         on it: it never changes sphere of influence, so :prop:`Orbit.NextOrbit` is
+         ``null`` however far it travels from the body, and it is not slowed by an
+         atmosphere.
+
+         The angles are measured against the same reference plane and direction that
+         :prop:`Orbit.Inclination`, :prop:`Orbit.LongitudeOfAscendingNode` and
+         :prop:`Orbit.ArgumentOfPeriapsis` report them against, which
+         :meth:`Orbit.ReferencePlaneNormal` and :meth:`Orbit.ReferencePlaneDirection`
+         give as vectors in a reference frame.
+
+         The members that describe where the orbit has got to -- :prop:`Orbit.Radius`,
+         :prop:`Orbit.Speed`, :prop:`Orbit.TrueAnomaly`, :prop:`Orbit.TimeToApoapsis`
+         and the like -- describe it at *epoch* and stay there, as
+         nothing is moving along it. Use :meth:`Orbit.RadiusAt`,
+         :meth:`Orbit.PositionAt`, :meth:`Orbit.VelocityAt` and
+         :meth:`Orbit.TrueAnomalyAtUT` to ask where it is at another time.
+         :prop:`Orbit.ReferenceFrame` and :prop:`Orbit.OrbitalReferenceFrame` follow
+         the orbit as time passes.
+
+         The orbit that is returned is kept for as long as the server is running,
+         so creating one repeatedly, for example once per update, uses more and more
+         memory.
+
    .. property:: CelestialBody Body { get; }
 
       The celestial body (e.g. planet or moon) around which the object is orbiting.
 
       :Game Scenes: All
+
+   .. property:: ReferenceFrame ReferenceFrame { get; }
+
+      The reference frame that moves along the orbit, and is orientated in a fixed
+      direction.
+
+      * The origin is at the point the orbit has reached at the
+        current time.
+      * The axes do not rotate. They point in the same fixed
+        directions as those of
+        :prop:`CelestialBody.NonRotatingReferenceFrame` of
+        :prop:`Orbit.Body`.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For the orbit of a vessel, the origin is the point the vessel's orbit has
+         reached rather than the vessel's own center of mass. The two are a few meters
+         apart, as a vessel inside the physics bubble is simulated rather than being
+         held on its orbit.
+
+   .. property:: ReferenceFrame OrbitalReferenceFrame { get; }
+
+      The reference frame that moves along the orbit, and is orientated with its
+      prograde/normal/radial directions.
+
+      * The origin is at the point the orbit has reached at the
+        current time.
+      * The axes rotate with the orbital prograde/normal/radial
+        directions.
+      * The x-axis points in the orbital anti-radial direction.
+      * The y-axis points in the orbital prograde direction.
+      * The z-axis points in the orbital normal direction.
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         For the orbit of a vessel, the origin is the point the vessel's orbit has
+         reached rather than the vessel's own center of mass, which is what
+         :prop:`Vessel.OrbitalReferenceFrame` is centered on.
 
    .. property:: double Apoapsis { get; }
 
@@ -113,6 +243,18 @@ Orbit
       :returns: The position as a vector.
       :Game Scenes: All
 
+   .. method:: System.Tuple<double,double,double> VelocityAt(double ut, ReferenceFrame referenceFrame)
+
+      The velocity at a given time, in the specified reference frame.
+
+      :parameters:
+
+       * **ut** -- The universal time to measure the velocity at.
+       * **referenceFrame** -- The reference frame that the returned velocity vector is in.
+
+      :returns: The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.
+      :Game Scenes: All
+
    .. property:: double Speed { get; }
 
       The current orbital speed of the object in meters per second.
@@ -189,9 +331,9 @@ Orbit
 
    .. property:: double Epoch { get; }
 
-      The time since the epoch (the point at which the
+      The universal time, in seconds, at which the
       `mean anomaly at epoch <https://en.wikipedia.org/wiki/Mean_anomaly>`_
-      was measured, in seconds.
+      is measured.
 
       :Game Scenes: All
 

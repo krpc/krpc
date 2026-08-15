@@ -701,9 +701,138 @@
 <a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel5orbitEv" title="krpc::services::SpaceCenter::Vessel::orbit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbit()</span></code></a>, or a celestial body, obtained by calling
 <a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody5orbitEv" title="krpc::services::SpaceCenter::CelestialBody::orbit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CelestialBody::orbit()</span></code></a>.</p>
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityER6Client13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityER6Client13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityER6Client13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Orbit::create_from_position_and_velocity__ClientR.CelestialBody.std::tuple:double.double.double:.std::tuple:double.double.double:.double.ReferenceFrame"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_from_position_and_velocity</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#_CPPv4N4krpc6ClientE" title="krpc::Client"><span class="n"><span class="pre">Client</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">position</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">velocity</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityER6Client13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create the orbit that passes through a given position at a given velocity.
+The orbit coasts freely under the gravity of the body being orbited, so it
+describes where an object left to fall from that position and velocity would
+be at any later time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body being orbited.</p></li>
+<li><p><strong>position</strong> – The position, as a position vector.</p></li>
+<li><p><strong>velocity</strong> – The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.</p></li>
+<li><p><strong>ut</strong> – The universal time, in seconds, at which the object is at <em>position</em> traveling at <em>velocity</em>.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame that <em>position</em> and <em>velocity</em> are in. Defaults to <a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody28non_rotating_reference_frameEv" title="krpc::services::SpaceCenter::CelestialBody::non_rotating_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CelestialBody::non_rotating_reference_frame()</span></code></a> of <em>body</em>.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The orbit is a single conic around <em>body</em>. Nothing else acts on
+it: it never changes sphere of influence, so <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit10next_orbitEv" title="krpc::services::SpaceCenter::Orbit::next_orbit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::next_orbit()</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code> however far it travels from the body, and it is not slowed by an
+atmosphere. A vessel held on rails follows its own orbit exactly, while one
+inside the physics bubble is simulated and drifts from it a little.</p>
+<p>The members that describe where the orbit has got to – <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6radiusEv" title="krpc::services::SpaceCenter::Orbit::radius"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::radius()</span></code></a>,
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv" title="krpc::services::SpaceCenter::Orbit::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::speed()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit12true_anomalyEv" title="krpc::services::SpaceCenter::Orbit::true_anomaly"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::true_anomaly()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit16time_to_apoapsisEv" title="krpc::services::SpaceCenter::Orbit::time_to_apoapsis"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::time_to_apoapsis()</span></code></a>
+and the like – describe it at <em>ut</em> and stay there, as
+nothing is moving along it. Use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit9radius_atEd" title="krpc::services::SpaceCenter::Orbit::radius_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::radius_at()</span></code></a>,
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11position_atEd14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::position_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::position_at()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11velocity_atEd14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::velocity_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::velocity_at()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd" title="krpc::services::SpaceCenter::Orbit::true_anomaly_at_ut"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv" title="krpc::services::SpaceCenter::Orbit::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::reference_frame()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Orbit::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::orbital_reference_frame()</span></code></a> follow
+the orbit as time passes.</p>
+<p>The orbit that is returned is kept for as long as the server is running,
+so creating one repeatedly, for example once per update, uses more and more
+memory.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsER6Client13CelestialBodyddddddd">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsER6Client13CelestialBodyddddddd"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsER6Client13CelestialBodyddddddd"></span><span id="krpc::services::SpaceCenter::Orbit::create_from_orbital_elements__ClientR.CelestialBody.double.double.double.double.double.double.double"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5OrbitE" title="krpc::services::SpaceCenter::Orbit"><span class="n"><span class="pre">Orbit</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">create_from_orbital_elements</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="../../client.html#_CPPv4N4krpc6ClientE" title="krpc::Client"><span class="n"><span class="pre">Client</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">connection</span></span>, <a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">body</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">semi_major_axis</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">eccentricity</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">inclination</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">longitude_of_ascending_node</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">argument_of_periapsis</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">mean_anomaly_at_epoch</span></span>, <span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">epoch</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsER6Client13CelestialBodyddddddd" title="Link to this definition">#</a><br /></dt>
+<dd><p>Create the orbit with the given
+<a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_elements">orbital elements</a>
+around a given body. The orbit coasts freely under the gravity of that body,
+so it describes where an object on it would be at any time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body being orbited.</p></li>
+<li><p><strong>semi_major_axis</strong> – The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.</p></li>
+<li><p><strong>eccentricity</strong> – The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.</p></li>
+<li><p><strong>inclination</strong> – The inclination of the orbit, in radians.</p></li>
+<li><p><strong>longitude_of_ascending_node</strong> – The longitude of the ascending node, in radians.</p></li>
+<li><p><strong>argument_of_periapsis</strong> – The argument of periapsis, in radians.</p></li>
+<li><p><strong>mean_anomaly_at_epoch</strong> – The mean anomaly at <em>epoch</em>, in radians.</p></li>
+<li><p><strong>epoch</strong> – The universal time, in seconds, that <em>mean_anomaly_at_epoch</em> is measured at.</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The orbit is a single conic around <em>body</em>. Nothing else acts
+on it: it never changes sphere of influence, so <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit10next_orbitEv" title="krpc::services::SpaceCenter::Orbit::next_orbit"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::next_orbit()</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">NULL</span></code> however far it travels from the body, and it is not slowed by an
+atmosphere.</p>
+<p>The angles are measured against the same reference plane and direction that
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11inclinationEv" title="krpc::services::SpaceCenter::Orbit::inclination"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::inclination()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit27longitude_of_ascending_nodeEv" title="krpc::services::SpaceCenter::Orbit::longitude_of_ascending_node"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::longitude_of_ascending_node()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit21argument_of_periapsisEv" title="krpc::services::SpaceCenter::Orbit::argument_of_periapsis"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::argument_of_periapsis()</span></code></a> report them against, which
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit22reference_plane_normalER6Client14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::reference_plane_normal"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::reference_plane_normal()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit25reference_plane_directionER6Client14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::reference_plane_direction"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::reference_plane_direction()</span></code></a>
+give as vectors in a reference frame.</p>
+<p>The members that describe where the orbit has got to – <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6radiusEv" title="krpc::services::SpaceCenter::Orbit::radius"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::radius()</span></code></a>,
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv" title="krpc::services::SpaceCenter::Orbit::speed"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::speed()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit12true_anomalyEv" title="krpc::services::SpaceCenter::Orbit::true_anomaly"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::true_anomaly()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit16time_to_apoapsisEv" title="krpc::services::SpaceCenter::Orbit::time_to_apoapsis"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::time_to_apoapsis()</span></code></a>
+and the like – describe it at <em>epoch</em> and stay there, as
+nothing is moving along it. Use <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit9radius_atEd" title="krpc::services::SpaceCenter::Orbit::radius_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::radius_at()</span></code></a>,
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11position_atEd14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::position_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::position_at()</span></code></a>, <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11velocity_atEd14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::velocity_at"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::velocity_at()</span></code></a> and
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd" title="krpc::services::SpaceCenter::Orbit::true_anomaly_at_ut"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv" title="krpc::services::SpaceCenter::Orbit::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::reference_frame()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Orbit::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::orbital_reference_frame()</span></code></a> follow
+the orbit as time passes.</p>
+<p>The orbit that is returned is kept for as long as the server is running,
+so creating one repeatedly, for example once per update, uses more and more
+memory.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit4bodyEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Orbit4bodyEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit4bodyEv"></span><span id="krpc::services::SpaceCenter::Orbit::body"></span><a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBodyE" title="krpc::services::SpaceCenter::CelestialBody"><span class="n"><span class="pre">CelestialBody</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">body</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit4bodyEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The celestial body (e.g. planet or moon) around which the object is orbiting.</p>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit15reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit15reference_frameEv"></span><span id="krpc::services::SpaceCenter::Orbit::reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that moves along the orbit, and is orientated in a fixed
+direction.</p>
+<ul class="simple">
+<li><p>The origin is at the point the orbit has reached at the
+current time.</p></li>
+<li><p>The axes do not rotate. They point in the same fixed
+directions as those of
+<a class="reference internal" href="celestial-body.html#_CPPv4N4krpc8services11SpaceCenter13CelestialBody28non_rotating_reference_frameEv" title="krpc::services::SpaceCenter::CelestialBody::non_rotating_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">CelestialBody::non_rotating_reference_frame()</span></code></a> of
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit4bodyEv" title="krpc::services::SpaceCenter::Orbit::body"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::body()</span></code></a>.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the orbit of a vessel, the origin is the point the vessel’s orbit has
+reached rather than the vessel’s own center of mass. The two are a few meters
+apart, as a vessel inside the physics bubble is simulated rather than being
+held on its orbit.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv"></span><span id="krpc::services::SpaceCenter::Orbit::orbital_reference_frame"></span><a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">orbital_reference_frame</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>The reference frame that moves along the orbit, and is orientated with its
+prograde/normal/radial directions.</p>
+<ul class="simple">
+<li><p>The origin is at the point the orbit has reached at the
+current time.</p></li>
+<li><p>The axes rotate with the orbital prograde/normal/radial
+directions.</p></li>
+<li><p>The x-axis points in the orbital anti-radial direction.</p></li>
+<li><p>The y-axis points in the orbital prograde direction.</p></li>
+<li><p>The z-axis points in the orbital normal direction.</p></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the orbit of a vessel, the origin is the point the vessel’s orbit has
+reached rather than the vessel’s own center of mass, which is what
+<a class="reference internal" href="vessel.html#_CPPv4N4krpc8services11SpaceCenter6Vessel23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Vessel::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Vessel::orbital_reference_frame()</span></code></a> is centered on.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -805,6 +934,23 @@ is orbiting.</p>
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit11velocity_atEd14ReferenceFrame">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit11velocity_atEd14ReferenceFrame"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit11velocity_atEd14ReferenceFrame"></span><span id="krpc::services::SpaceCenter::Orbit::velocity_at__double.ReferenceFrame"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">velocity_at</span></span></span><span class="sig-paren">(</span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">ut</span></span>, <a class="reference internal" href="reference-frame.html#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrameE" title="krpc::services::SpaceCenter::ReferenceFrame"><span class="n"><span class="pre">ReferenceFrame</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">reference_frame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit11velocity_atEd14ReferenceFrame" title="Link to this definition">#</a><br /></dt>
+<dd><p>The velocity at a given time, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the velocity at.</p></li>
+<li><p><strong>reference_frame</strong> – The reference frame that the returned velocity vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Orbit5speedEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit5speedEv"></span><span id="krpc::services::SpaceCenter::Orbit::speed"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">speed</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit5speedEv" title="Link to this definition">#</a><br /></dt>
 <dd><p>The current orbital speed of the object in meters per second.</p>
@@ -878,9 +1024,9 @@ this value may vary erratically over time.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit5epochEv">
 <span id="_CPPv3N4krpc8services11SpaceCenter5Orbit5epochEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit5epochEv"></span><span id="krpc::services::SpaceCenter::Orbit::epoch"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">epoch</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit5epochEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The time since the epoch (the point at which the
+<dd><p>The universal time, in seconds, at which the
 <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
-was measured, in seconds.</p>
+is measured.</p>
 </dd></dl>
 
 <dl class="cpp function">

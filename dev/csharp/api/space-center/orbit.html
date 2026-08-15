@@ -700,6 +700,97 @@
 <dd><p>Describes an orbit. For example, the orbit of a vessel, obtained by calling
 <a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.Orbit" title="KRPC.Client.Services.SpaceCenter.Vessel.Orbit property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.Orbit</span></code></a>, or a celestial body, obtained by calling
 <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.Orbit" title="KRPC.Client.Services.SpaceCenter.CelestialBody.Orbit property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">CelestialBody.Orbit</span></code></a>.</p>
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <span class="sig-name descname"><span class="pre">CreateFromPositionAndVelocity</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="KRPC.Client.Services.SpaceCenter.CelestialBody class"><span class="pre">CelestialBody</span></a> <em><span class="pre">body</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">position</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <em><span class="pre">velocity</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">ut</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity" title="Link to this definition">#</a></dt>
+<dd><p>Create the orbit that passes through a given position at a given velocity.
+The orbit coasts freely under the gravity of the body being orbited, so it
+describes where an object left to fall from that position and velocity would
+be at any later time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body being orbited.</p></li>
+<li><p><strong>position</strong> – The position, as a position vector.</p></li>
+<li><p><strong>velocity</strong> – The velocity, as a vector pointing in the direction of travel, whose magnitude is the speed in meters per second.</p></li>
+<li><p><strong>ut</strong> – The universal time, in seconds, at which the object is at <em>position</em> traveling at <em>velocity</em>.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that <em>position</em> and <em>velocity</em> are in. Defaults to <a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of <em>body</em>.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The orbit is a single conic around <em>body</em>. Nothing else acts on
+it: it never changes sphere of influence, so <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit" title="KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.NextOrbit</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">null</span></code> however far it travels from the body, and it is not slowed by an
+atmosphere. A vessel held on rails follows its own orbit exactly, while one
+inside the physics bubble is simulated and drifts from it a little.</p>
+<p>The members that describe where the orbit has got to – <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Radius" title="KRPC.Client.Services.SpaceCenter.Orbit.Radius property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.Radius</span></code></a>,
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="KRPC.Client.Services.SpaceCenter.Orbit.Speed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.Speed</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomaly" title="KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomaly property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.TrueAnomaly</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToApoapsis" title="KRPC.Client.Services.SpaceCenter.Orbit.TimeToApoapsis property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.TimeToApoapsis</span></code></a>
+and the like – describe it at <em>ut</em> and stay there, as
+nothing is moving along it. Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt" title="KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.RadiusAt</span></code></a>,
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt" title="KRPC.Client.Services.SpaceCenter.Orbit.PositionAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.PositionAt</span></code></a>, <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt" title="KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.VelocityAt</span></code></a> and
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.TrueAnomalyAtUT</span></code></a> to ask where it is at another time.
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.OrbitalReferenceFrame</span></code></a> follow
+the orbit as time passes.</p>
+<p>The orbit that is returned is kept for as long as the server is running,
+so creating one repeatedly, for example once per update, uses more and more
+memory.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-KRPC.Client.Services.SpaceCenter.Orbit" title="KRPC.Client.Services.SpaceCenter.Orbit class"><span class="pre">Orbit</span></a> <span class="sig-name descname"><span class="pre">CreateFromOrbitalElements</span></span> <span class="sig-paren">(</span><a class="reference internal" href="../../client.html#class-IConnection" title="IConnection class"><span class="pre">IConnection</span></a> <em><span class="pre">connection</span></em>, <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="KRPC.Client.Services.SpaceCenter.CelestialBody class"><span class="pre">CelestialBody</span></a> <em><span class="pre">body</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">semiMajorAxis</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">eccentricity</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">inclination</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">longitudeOfAscendingNode</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">argumentOfPeriapsis</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">meanAnomalyAtEpoch</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">epoch</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements" title="Link to this definition">#</a></dt>
+<dd><p>Create the orbit with the given
+<a class="reference external" href="https://en.wikipedia.org/wiki/Orbital_elements">orbital elements</a>
+around a given body. The orbit coasts freely under the gravity of that body,
+so it describes where an object on it would be at any time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>body</strong> – The celestial body being orbited.</p></li>
+<li><p><strong>semiMajorAxis</strong> – The semi-major axis of the orbit, in meters. Positive for an ellipse and negative for a hyperbola.</p></li>
+<li><p><strong>eccentricity</strong> – The eccentricity of the orbit. Below one for an ellipse and above one for a hyperbola.</p></li>
+<li><p><strong>inclination</strong> – The inclination of the orbit, in radians.</p></li>
+<li><p><strong>longitudeOfAscendingNode</strong> – The longitude of the ascending node, in radians.</p></li>
+<li><p><strong>argumentOfPeriapsis</strong> – The argument of periapsis, in radians.</p></li>
+<li><p><strong>meanAnomalyAtEpoch</strong> – The mean anomaly at <em>epoch</em>, in radians.</p></li>
+<li><p><strong>epoch</strong> – The universal time, in seconds, that <em>meanAnomalyAtEpoch</em> is measured at.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The orbit is a single conic around <em>body</em>. Nothing else acts
+on it: it never changes sphere of influence, so <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit" title="KRPC.Client.Services.SpaceCenter.Orbit.NextOrbit property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.NextOrbit</span></code></a> is
+<code class="docutils literal notranslate"><span class="pre">null</span></code> however far it travels from the body, and it is not slowed by an
+atmosphere.</p>
+<p>The angles are measured against the same reference plane and direction that
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Inclination" title="KRPC.Client.Services.SpaceCenter.Orbit.Inclination property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.Inclination</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.LongitudeOfAscendingNode" title="KRPC.Client.Services.SpaceCenter.Orbit.LongitudeOfAscendingNode property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.LongitudeOfAscendingNode</span></code></a> and
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ArgumentOfPeriapsis" title="KRPC.Client.Services.SpaceCenter.Orbit.ArgumentOfPeriapsis property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.ArgumentOfPeriapsis</span></code></a> report them against, which
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal" title="KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneNormal method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.ReferencePlaneNormal</span></code></a> and <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection" title="KRPC.Client.Services.SpaceCenter.Orbit.ReferencePlaneDirection method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.ReferencePlaneDirection</span></code></a>
+give as vectors in a reference frame.</p>
+<p>The members that describe where the orbit has got to – <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Radius" title="KRPC.Client.Services.SpaceCenter.Orbit.Radius property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.Radius</span></code></a>,
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="KRPC.Client.Services.SpaceCenter.Orbit.Speed property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.Speed</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomaly" title="KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomaly property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.TrueAnomaly</span></code></a>, <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.TimeToApoapsis" title="KRPC.Client.Services.SpaceCenter.Orbit.TimeToApoapsis property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.TimeToApoapsis</span></code></a>
+and the like – describe it at <em>epoch</em> and stay there, as
+nothing is moving along it. Use <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt" title="KRPC.Client.Services.SpaceCenter.Orbit.RadiusAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.RadiusAt</span></code></a>,
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.PositionAt" title="KRPC.Client.Services.SpaceCenter.Orbit.PositionAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.PositionAt</span></code></a>, <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt" title="KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.VelocityAt</span></code></a> and
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.TrueAnomalyAtUT</span></code></a> to ask where it is at another time.
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.OrbitalReferenceFrame</span></code></a> follow
+the orbit as time passes.</p>
+<p>The orbit that is returned is kept for as long as the server is running,
+so creating one repeatedly, for example once per update, uses more and more
+memory.</p>
+</div>
+</dd></dl>
+
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Body">
 <a class="reference internal" href="celestial-body.html#class-KRPC.Client.Services.SpaceCenter.CelestialBody" title="KRPC.Client.Services.SpaceCenter.CelestialBody class"><span class="pre">CelestialBody</span></a> <span class="sig-name descname"><span class="pre">Body</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="Link to this definition">#</a></dt>
@@ -709,6 +800,60 @@
 <dd class="field-odd"><p>All</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">ReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that moves along the orbit, and is orientated in a fixed
+direction.</p>
+<ul class="simple">
+<li><p>The origin is at the point the orbit has reached at the
+current time.</p></li>
+<li><p>The axes do not rotate. They point in the same fixed
+directions as those of
+<a class="reference internal" href="celestial-body.html#property-KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame" title="KRPC.Client.Services.SpaceCenter.CelestialBody.NonRotatingReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">CelestialBody.NonRotatingReferenceFrame</span></code></a> of
+<a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Body" title="KRPC.Client.Services.SpaceCenter.Orbit.Body property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.Body</span></code></a>.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the orbit of a vessel, the origin is the point the vessel’s orbit has
+reached rather than the vessel’s own center of mass. The two are a few meters
+apart, as a vessel inside the physics bubble is simulated rather than being
+held on its orbit.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp property">
+<dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame">
+<a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <span class="sig-name descname"><span class="pre">OrbitalReferenceFrame</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="Link to this definition">#</a></dt>
+<dd><p>The reference frame that moves along the orbit, and is orientated with its
+prograde/normal/radial directions.</p>
+<ul class="simple">
+<li><p>The origin is at the point the orbit has reached at the
+current time.</p></li>
+<li><p>The axes rotate with the orbital prograde/normal/radial
+directions.</p></li>
+<li><p>The x-axis points in the orbital anti-radial direction.</p></li>
+<li><p>The y-axis points in the orbital prograde direction.</p></li>
+<li><p>The z-axis points in the orbital normal direction.</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For the orbit of a vessel, the origin is the point the vessel’s orbit has
+reached rather than the vessel’s own center of mass, which is what
+<a class="reference internal" href="vessel.html#property-KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Vessel.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Vessel.OrbitalReferenceFrame</span></code></a> is centered on.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -850,6 +995,26 @@ is orbiting.</p>
 </dl>
 </dd></dl>
 
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt">
+<a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.tuple" title="System.Tuple"><span class="pre">Tuple</span></a><span class="pre">&lt;</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">VelocityAt</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <em><span class="pre">ut</span></em>, <a class="reference internal" href="reference-frame.html#class-KRPC.Client.Services.SpaceCenter.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame class"><span class="pre">ReferenceFrame</span></a> <em><span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.VelocityAt" title="Link to this definition">#</a></dt>
+<dd><p>The velocity at a given time, in the specified reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ut</strong> – The universal time to measure the velocity at.</p></li>
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned velocity vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The velocity as a vector. The vector points in the direction of travel, and its magnitude is the speed in meters per second.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Speed">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">Speed</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Speed" title="Link to this definition">#</a></dt>
@@ -969,9 +1134,9 @@ this value may vary erratically over time.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.SpaceCenter.Orbit.Epoch">
 <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.double" title="System.Double"><span class="pre">Double</span></a> <span class="sig-name descname"><span class="pre">Epoch</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.Epoch" title="Link to this definition">#</a></dt>
-<dd><p>The time since the epoch (the point at which the
+<dd><p>The universal time, in seconds, at which the
 <a class="reference external" href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
-was measured, in seconds.</p>
+is measured.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>All</p>
