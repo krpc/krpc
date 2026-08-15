@@ -387,7 +387,11 @@ SpaceCenter.Flight.LiftCoefficient
 SpaceCenter.Flight.BallisticCoefficient
 SpaceCenter.Flight.ThrustSpecificFuelConsumption
 SpaceCenter.Orbit
+SpaceCenter.Orbit.CreateFromPositionAndVelocity
+SpaceCenter.Orbit.CreateFromOrbitalElements
 SpaceCenter.Orbit.Body
+SpaceCenter.Orbit.ReferenceFrame
+SpaceCenter.Orbit.OrbitalReferenceFrame
 SpaceCenter.Orbit.Apoapsis
 SpaceCenter.Orbit.Periapsis
 SpaceCenter.Orbit.ApoapsisAltitude
@@ -397,6 +401,7 @@ SpaceCenter.Orbit.SemiMinorAxis
 SpaceCenter.Orbit.Radius
 SpaceCenter.Orbit.RadiusAt
 SpaceCenter.Orbit.PositionAt
+SpaceCenter.Orbit.VelocityAt
 SpaceCenter.Orbit.Speed
 SpaceCenter.Orbit.Period
 SpaceCenter.Orbit.TimeToApoapsis

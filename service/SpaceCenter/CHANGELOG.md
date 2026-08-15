@@ -91,6 +91,22 @@
     9284 m/s for a vessel in orbit around Kerbin. `ClosestApproach.RelativeVelocity` and
     `ClosestApproach.RelativeSpeed` are the difference of the two and were unaffected
     (#1047)
+  - Add `Orbit.CreateFromPositionAndVelocity`, which builds the orbit that passes through
+    a given position at a given velocity, and `Orbit.CreateFromOrbitalElements`, which
+    builds the orbit with a given semi-major axis, eccentricity, inclination, longitude of
+    ascending node, argument of periapsis and mean anomaly at an epoch. Either way the
+    orbit coasts freely under gravity, so it describes where an object left to fall from
+    that state would be at any later time, without there being such an object in the game.
+    (#1046)
+  - Add `Orbit.ReferenceFrame` and `Orbit.OrbitalReferenceFrame`, centered on the point an
+    orbit has reached at the current time. The first is oriented in a fixed direction and
+    the second with the orbital prograde/normal/radial directions. Together with a
+    constructed orbit these give a reference frame that follows a coasting object that
+    need not exist (#1046)
+  - Add `Orbit.VelocityAt`, giving the velocity at a given time in a given reference
+    frame, alongside the existing `Orbit.PositionAt` (#1046)
+  - `Orbit.Epoch` is documented as the universal time at which the mean anomaly at epoch
+    is measured. It was described as the time since that point (#1046)
 
 - Flight and aerodynamics
   - Add `Flight.SurfaceNormal` to get the slope of the terrain under a vessel, as a unit vector

@@ -66,6 +66,15 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         ManeuverOrbital,
         /// <summary>
+        /// Centered on the point an orbit has reached, with zero angular velocity.
+        /// </summary>
+        OrbitNonRotating,
+        /// <summary>
+        /// Centered on the point an orbit has reached and oriented with its orbital
+        /// directions.
+        /// </summary>
+        OrbitOrbital,
+        /// <summary>
         /// Centered on and oriented with a part.
         /// </summary>
         Part,

@@ -87,6 +87,55 @@ namespace KRPC.SpaceCenter.Services
             get { return SpaceCenter.Bodies [InternalOrbit.referenceBody.name]; }
         }
 
+        /// <summary>
+        /// The reference frame that moves along the orbit, and is orientated in a fixed
+        /// direction.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the point the orbit has reached at the
+        /// current time.</description></item>
+        /// <item><description>The axes do not rotate. They point in the same fixed
+        /// directions as those of
+        /// <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <see cref="Body"/>.</description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// For the orbit of a vessel, the origin is the point the vessel's orbit has
+        /// reached rather than the vessel's own center of mass. The two are a few meters
+        /// apart, as a vessel inside the physics bubble is simulated rather than being
+        /// held on its orbit.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame ReferenceFrame {
+            get { return ReferenceFrame.NonRotating (this); }
+        }
+
+        /// <summary>
+        /// The reference frame that moves along the orbit, and is orientated with its
+        /// prograde/normal/radial directions.
+        /// <list type="bullet">
+        /// <item><description>The origin is at the point the orbit has reached at the
+        /// current time.</description></item>
+        /// <item><description>The axes rotate with the orbital prograde/normal/radial
+        /// directions.</description></item>
+        /// <item><description>The x-axis points in the orbital anti-radial direction.
+        /// </description></item>
+        /// <item><description>The y-axis points in the orbital prograde direction.
+        /// </description></item>
+        /// <item><description>The z-axis points in the orbital normal direction.
+        /// </description></item>
+        /// </list>
+        /// </summary>
+        /// <remarks>
+        /// For the orbit of a vessel, the origin is the point the vessel's orbit has
+        /// reached rather than the vessel's own center of mass, which is what
+        /// <see cref="Vessel.OrbitalReferenceFrame"/> is centered on.
+        /// </remarks>
+        [KRPCProperty]
+        public ReferenceFrame OrbitalReferenceFrame {
+            get { return ReferenceFrame.Orbital (this); }
+        }
+
         // The reference frame used by the closest-approach members when the caller
         // does not specify one: the orbital frame of the object the orbit belongs to,
         // falling back to the reference body's non-rotating (inertial) frame when the
@@ -285,9 +334,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// The time since the epoch (the point at which the
+        /// The universal time, in seconds, at which the
         /// <a href="https://en.wikipedia.org/wiki/Mean_anomaly">mean anomaly at epoch</a>
-        /// was measured, in seconds.
+        /// is measured.
         /// </summary>
         [KRPCProperty]
         public double Epoch {
@@ -316,6 +365,186 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public double TrueAnomaly {
             get { return InternalOrbit.trueAnomaly; }
+        }
+
+        /// <summary>
+        /// Create the orbit that passes through a given position at a given velocity.
+        /// The orbit coasts freely under the gravity of the body being orbited, so it
+        /// describes where an object left to fall from that position and velocity would
+        /// be at any later time.
+        /// </summary>
+        /// <param name="body">The celestial body being orbited.</param>
+        /// <param name="position">The position, as a position vector.</param>
+        /// <param name="velocity">The velocity, as a vector pointing in the direction of
+        /// travel, whose magnitude is the speed in meters per second.</param>
+        /// <param name="ut">The universal time, in seconds, at which the object is at
+        /// <paramref name="position"/> traveling at <paramref name="velocity"/>.</param>
+        /// <param name="referenceFrame">The reference frame that
+        /// <paramref name="position"/> and <paramref name="velocity"/> are in. Defaults to
+        /// <see cref="CelestialBody.NonRotatingReferenceFrame"/> of
+        /// <paramref name="body"/>.</param>
+        /// <remarks>
+        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts on
+        /// it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
+        /// <c>null</c> however far it travels from the body, and it is not slowed by an
+        /// atmosphere. A vessel held on rails follows its own orbit exactly, while one
+        /// inside the physics bubble is simulated and drifts from it a little.
+        ///
+        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
+        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
+        /// and the like -- describe it at <paramref name="ut"/> and stay there, as
+        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
+        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// the orbit as time passes.
+        ///
+        /// The orbit that is returned is kept for as long as the server is running,
+        /// so creating one repeatedly, for example once per update, uses more and more
+        /// memory.
+        /// </remarks>
+        [KRPCMethod]
+        public static Orbit CreateFromPositionAndVelocity (
+            CelestialBody body, Tuple3 position, Tuple3 velocity, double ut,
+            ReferenceFrame referenceFrame = null)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (position == null)
+                throw new ArgumentNullException (nameof (position));
+            if (velocity == null)
+                throw new ArgumentNullException (nameof (velocity));
+            var internalBody = body.InternalBody;
+            var frame = referenceFrame ?? body.NonRotatingReferenceFrame;
+            var framePosition = position.ToVector ();
+            var worldPosition = frame.PositionToWorldSpace (framePosition);
+            var worldVelocity = frame.VelocityToWorldSpace (framePosition, velocity.ToVector ());
+            // The game states an orbit relative to the body it is around, in its own axis
+            // order, so take out the body's own position and motion and swap the axes.
+            var relativePosition = worldPosition - internalBody.position;
+            var relativeVelocity = worldVelocity - internalBody.GetWorldVelocity ();
+            if (relativePosition.sqrMagnitude < 1)
+                throw new ArgumentException (
+                    "Position is at the center of " + internalBody.name +
+                    ", which does not describe an orbit");
+            var orbit = new global::Orbit ();
+            orbit.UpdateFromStateVectors (
+                relativePosition.SwapYZ (), relativeVelocity.SwapYZ (), internalBody, ut);
+            // Init derives the mean motion, period and anomalies that the orbit is
+            // propagated from; without it the orbit only carries its shape. Stepping it
+            // to the epoch then fills in where along the orbit it has got to, which
+            // nothing else will do for an orbit that no object is following.
+            orbit.Init ();
+            orbit.UpdateFromUT (ut);
+            if (!IsFinite (orbit.semiMajorAxis) || !IsFinite (orbit.eccentricity))
+                throw new ArgumentException (
+                    "Position and velocity do not describe an orbit around " +
+                    internalBody.name);
+            // Nothing solved a following patch for this orbit, and a sphere-of-influence
+            // change is reported as one in the past. Zero, the value an orbit is built
+            // with, is not in the past at a universal time of zero.
+            orbit.UTsoi = -1;
+            return new Orbit (orbit);
+        }
+
+        /// <summary>
+        /// Create the orbit with the given
+        /// <a href="https://en.wikipedia.org/wiki/Orbital_elements">orbital elements</a>
+        /// around a given body. The orbit coasts freely under the gravity of that body,
+        /// so it describes where an object on it would be at any time.
+        /// </summary>
+        /// <param name="body">The celestial body being orbited.</param>
+        /// <param name="semiMajorAxis">The semi-major axis of the orbit, in meters.
+        /// Positive for an ellipse and negative for a hyperbola.</param>
+        /// <param name="eccentricity">The eccentricity of the orbit. Below one for an
+        /// ellipse and above one for a hyperbola.</param>
+        /// <param name="inclination">The inclination of the orbit, in radians.</param>
+        /// <param name="longitudeOfAscendingNode">The longitude of the ascending node,
+        /// in radians.</param>
+        /// <param name="argumentOfPeriapsis">The argument of periapsis, in
+        /// radians.</param>
+        /// <param name="meanAnomalyAtEpoch">The mean anomaly at
+        /// <paramref name="epoch"/>, in radians.</param>
+        /// <param name="epoch">The universal time, in seconds, that
+        /// <paramref name="meanAnomalyAtEpoch"/> is measured at.</param>
+        /// <remarks>
+        /// The orbit is a single conic around <paramref name="body"/>. Nothing else acts
+        /// on it: it never changes sphere of influence, so <see cref="NextOrbit"/> is
+        /// <c>null</c> however far it travels from the body, and it is not slowed by an
+        /// atmosphere.
+        ///
+        /// The angles are measured against the same reference plane and direction that
+        /// <see cref="Inclination"/>, <see cref="LongitudeOfAscendingNode"/> and
+        /// <see cref="ArgumentOfPeriapsis"/> report them against, which
+        /// <see cref="ReferencePlaneNormal"/> and <see cref="ReferencePlaneDirection"/>
+        /// give as vectors in a reference frame.
+        ///
+        /// The members that describe where the orbit has got to -- <see cref="Radius"/>,
+        /// <see cref="Speed"/>, <see cref="TrueAnomaly"/>, <see cref="TimeToApoapsis"/>
+        /// and the like -- describe it at <paramref name="epoch"/> and stay there, as
+        /// nothing is moving along it. Use <see cref="RadiusAt"/>,
+        /// <see cref="PositionAt"/>, <see cref="VelocityAt"/> and
+        /// <see cref="TrueAnomalyAtUT"/> to ask where it is at another time.
+        /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
+        /// the orbit as time passes.
+        ///
+        /// The orbit that is returned is kept for as long as the server is running,
+        /// so creating one repeatedly, for example once per update, uses more and more
+        /// memory.
+        /// </remarks>
+        [KRPCMethod]
+        public static Orbit CreateFromOrbitalElements (
+            CelestialBody body, double semiMajorAxis, double eccentricity,
+            double inclination, double longitudeOfAscendingNode,
+            double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
+        {
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            if (!IsFinite (semiMajorAxis) || !IsFinite (eccentricity) ||
+                !IsFinite (inclination) || !IsFinite (longitudeOfAscendingNode) ||
+                !IsFinite (argumentOfPeriapsis) || !IsFinite (meanAnomalyAtEpoch) ||
+                !IsFinite (epoch))
+                throw new ArgumentException ("Orbital elements must be finite");
+            if (eccentricity < 0)
+                throw new ArgumentException (
+                    "Eccentricity must not be negative, got " + eccentricity);
+            // A conic is an ellipse with a positive semi-major axis, or a hyperbola with
+            // a negative one. The parabola between them has neither, and the game has no
+            // way to state it.
+            if (eccentricity.Equals (1.0))
+                throw new ArgumentException (
+                    "An eccentricity of exactly one is a parabola, which has no " +
+                    "semi-major axis and cannot be described as an orbit");
+            if (eccentricity < 1 && semiMajorAxis <= 0)
+                throw new ArgumentException (
+                    "An eccentricity below one is an ellipse, which needs a positive " +
+                    "semi-major axis, got " + semiMajorAxis);
+            if (eccentricity > 1 && semiMajorAxis >= 0)
+                throw new ArgumentException (
+                    "An eccentricity above one is a hyperbola, which needs a negative " +
+                    "semi-major axis, got " + semiMajorAxis);
+            // The game states the three orientation angles in degrees, and the mean
+            // anomaly in radians, which is what this reports them in.
+            var orbit = new global::Orbit (
+                GeometryExtensions.ToDegrees (inclination), eccentricity, semiMajorAxis,
+                GeometryExtensions.ToDegrees (longitudeOfAscendingNode),
+                GeometryExtensions.ToDegrees (argumentOfPeriapsis), meanAnomalyAtEpoch,
+                epoch, body.InternalBody);
+            // The constructor derives the mean motion, period and anomalies that the
+            // orbit is propagated from. Stepping it to the epoch then fills in where
+            // along the orbit it has got to, which nothing else will do for an orbit
+            // that no object is following.
+            orbit.UpdateFromUT (epoch);
+            // Nothing solved a following patch for this orbit, and a sphere-of-influence
+            // change is reported as one in the past. Zero, the value an orbit is built
+            // with, is not in the past at a universal time of zero.
+            orbit.UTsoi = -1;
+            return new Orbit (orbit);
+        }
+
+        static bool IsFinite (double value)
+        {
+            return !double.IsNaN (value) && !double.IsInfinity (value);
         }
 
         /// <summary>
@@ -477,6 +706,26 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 PositionAt (double ut, ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace(InternalOrbit.getPositionAtUT(ut)).ToTuple();
+        }
+
+        /// <summary>
+        /// The velocity at a given time, in the specified reference frame.
+        /// </summary>
+        /// <returns>The velocity as a vector. The vector points in the direction of
+        /// travel, and its magnitude is the speed in meters per second.</returns>
+        /// <param name="ut">The universal time to measure the velocity at.</param>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// velocity vector is in.</param>
+        [KRPCMethod]
+        public Tuple3 VelocityAt (double ut, ReferenceFrame referenceFrame)
+        {
+            // An orbital velocity is relative to the body being orbited, so the body's
+            // own motion is added to it to give a velocity in world space.
+            var worldVelocity =
+                InternalOrbit.getOrbitalVelocityAtUT (ut).SwapYZ () +
+                InternalOrbit.referenceBody.GetWorldVelocity ();
+            return referenceFrame.VelocityFromWorldSpace (
+                InternalOrbit.getPositionAtUT (ut), worldVelocity).ToTuple ();
         }
 
         /// <summary>
