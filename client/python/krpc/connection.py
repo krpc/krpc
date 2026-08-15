@@ -23,6 +23,9 @@ class Connection:
     def connect(self) -> None:
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._address, self._port))
+        # The protocol is strictly request/response, so waiting for more data to
+        # coalesce with can only add latency
+        self._socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
     def close(self) -> None:
         if self._socket is not None:
