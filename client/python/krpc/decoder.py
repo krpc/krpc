@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import cast, Optional, Type, TYPE_CHECKING
+from typing import cast, Callable, Mapping, Optional, Type, TYPE_CHECKING
 import struct
 import google.protobuf
 
@@ -102,25 +102,10 @@ class Decoder:
 
     @classmethod
     def _decode_value(cls, data: bytes, typ: TypeBase) -> object:
-        if typ.protobuf_type.code == KRPC.Type.SINT32:
-            return _ValueDecoder.decode_sint32(data)
-        if typ.protobuf_type.code == KRPC.Type.SINT64:
-            return _ValueDecoder.decode_sint64(data)
-        if typ.protobuf_type.code == KRPC.Type.UINT32:
-            return _ValueDecoder.decode_uint32(data)
-        if typ.protobuf_type.code == KRPC.Type.UINT64:
-            return _ValueDecoder.decode_uint64(data)
-        if typ.protobuf_type.code == KRPC.Type.DOUBLE:
-            return _ValueDecoder.decode_double(data)
-        if typ.protobuf_type.code == KRPC.Type.FLOAT:
-            return _ValueDecoder.decode_float(data)
-        if typ.protobuf_type.code == KRPC.Type.BOOL:
-            return _ValueDecoder.decode_bool(data)
-        if typ.protobuf_type.code == KRPC.Type.STRING:
-            return _ValueDecoder.decode_string(data)
-        if typ.protobuf_type.code == KRPC.Type.BYTES:
-            return _ValueDecoder.decode_bytes(data)
-        raise EncodingError("Invalid type")
+        decode = _VALUE_DECODERS.get(typ.protobuf_type.code)
+        if decode is None:
+            raise EncodingError("Invalid type")
+        return decode(data)
 
 
 class _ValueDecoder:
@@ -226,3 +211,19 @@ class _ValueDecoder:
     def decode_bytes(cls, data: bytes) -> bytes:
         size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
         return data[position : position + size]
+
+
+# The decoder for each value type, looked up by type code rather than found by
+# comparing against each code in turn, as this is on the hot path of every
+# remote procedure call
+_VALUE_DECODERS: Mapping[KRPC.Type.TypeCode, Callable[[bytes], object]] = {
+    KRPC.Type.SINT32: _ValueDecoder.decode_sint32,
+    KRPC.Type.SINT64: _ValueDecoder.decode_sint64,
+    KRPC.Type.UINT32: _ValueDecoder.decode_uint32,
+    KRPC.Type.UINT64: _ValueDecoder.decode_uint64,
+    KRPC.Type.DOUBLE: _ValueDecoder.decode_double,
+    KRPC.Type.FLOAT: _ValueDecoder.decode_float,
+    KRPC.Type.BOOL: _ValueDecoder.decode_bool,
+    KRPC.Type.STRING: _ValueDecoder.decode_string,
+    KRPC.Type.BYTES: _ValueDecoder.decode_bytes,
+}

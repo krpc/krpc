@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import cast, Callable, Collection, Iterable, List, Mapping
+from typing import cast, Any, Callable, Collection, Iterable, List, Mapping
 from enum import Enum
 
 # pylint: disable=import-error,no-name-in-module
@@ -101,25 +101,10 @@ class Encoder:
 
     @classmethod
     def _encode_value(cls, value: object, typ: TypeBase) -> bytes:
-        if typ.protobuf_type.code == KRPC.Type.SINT32:
-            return _ValueEncoder.encode_sint32(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.SINT64:
-            return _ValueEncoder.encode_sint64(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.UINT32:
-            return _ValueEncoder.encode_uint32(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.UINT64:
-            return _ValueEncoder.encode_uint64(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.DOUBLE:
-            return _ValueEncoder.encode_double(cast(float, value))
-        if typ.protobuf_type.code == KRPC.Type.FLOAT:
-            return _ValueEncoder.encode_float(cast(float, value))
-        if typ.protobuf_type.code == KRPC.Type.BOOL:
-            return _ValueEncoder.encode_bool(cast(bool, value))
-        if typ.protobuf_type.code == KRPC.Type.STRING:
-            return _ValueEncoder.encode_string(cast(str, value))
-        if typ.protobuf_type.code == KRPC.Type.BYTES:
-            return _ValueEncoder.encode_bytes(cast(bytes, value))
-        raise EncodingError("Invalid type")
+        encode = _VALUE_ENCODERS.get(typ.protobuf_type.code)
+        if encode is None:
+            raise EncodingError("Invalid type")
+        return encode(value)
 
 
 class _ValueEncoder:
@@ -196,3 +181,19 @@ class _ValueEncoder:
     @classmethod
     def encode_bytes(cls, value: bytes) -> bytes:
         return b"".join([cls._encode_varint(len(value)), value])
+
+
+# The encoder for each value type, looked up by type code rather than found by
+# comparing against each code in turn, as this is on the hot path of every
+# remote procedure call
+_VALUE_ENCODERS: Mapping[KRPC.Type.TypeCode, Callable[[Any], bytes]] = {
+    KRPC.Type.SINT32: _ValueEncoder.encode_sint32,
+    KRPC.Type.SINT64: _ValueEncoder.encode_sint64,
+    KRPC.Type.UINT32: _ValueEncoder.encode_uint32,
+    KRPC.Type.UINT64: _ValueEncoder.encode_uint64,
+    KRPC.Type.DOUBLE: _ValueEncoder.encode_double,
+    KRPC.Type.FLOAT: _ValueEncoder.encode_float,
+    KRPC.Type.BOOL: _ValueEncoder.encode_bool,
+    KRPC.Type.STRING: _ValueEncoder.encode_string,
+    KRPC.Type.BYTES: _ValueEncoder.encode_bytes,
+}
