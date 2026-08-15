@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using KRPC.SpaceCenter.Services;
-using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.ExtensionMethods
@@ -42,6 +41,16 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                     return module;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Returns the decoupler part module for the part, or null if it does not have one.
+        /// A part with both a stack and a radial decoupler is treated as a stack decoupler.
+        /// </summary>
+        public static ModuleDecouplerBase DecouplerModule (this Part part)
+        {
+            return (ModuleDecouplerBase)part.Module<ModuleDecouple> () ??
+            part.Module<ModuleAnchoredDecoupler> ();
         }
 
         /// <summary>
@@ -89,13 +98,13 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             do {
                 int candidate = -1;
                 var parent = part.parent;
-                var decoupler = new Compatibility.ModuleDecoupler(part);
+                var decoupler = part.DecouplerModule ();
 
                 // If the part will decouple itself from its parent, use the parts activation stage
                 if (part.HasModule<LaunchClamp> ()) {
                     candidate = part.inverseStage;
-                } else if (decoupler.Instance != null && decoupler.IsEnabled) {
-                    if (decoupler.IsOmniDecoupler)
+                } else if (decoupler != null && decoupler.isEnabled) {
+                    if (decoupler.isOmniDecoupler)
                         candidate = part.inverseStage;
                     else if (parent != null && decoupler.ExplosiveNode != null && decoupler.ExplosiveNode.attachedPart == parent)
                         candidate = part.inverseStage;
@@ -103,9 +112,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 
                 // If the part will be decoupled by its parent, use the parents activation stage
                 if (candidate == -1 && parent != null) {
-                    decoupler = new Compatibility.ModuleDecoupler(parent);
-                    if (decoupler.Instance != null && decoupler.IsEnabled) {
-                        if (decoupler.IsOmniDecoupler)
+                    decoupler = parent.DecouplerModule ();
+                    if (decoupler != null && decoupler.isEnabled) {
+                        if (decoupler.isOmniDecoupler)
                             candidate = parent.inverseStage;
                         else if (decoupler.ExplosiveNode != null && decoupler.ExplosiveNode.attachedPart == part)
                             candidate = parent.inverseStage;

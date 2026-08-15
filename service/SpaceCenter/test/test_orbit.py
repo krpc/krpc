@@ -334,6 +334,28 @@ class TestClosestApproach(krpctest.TestCase):
             delta=1,
         )
 
+    def test_absolute_velocities(self):
+        """The velocities are each object's own, not merely consistent with each
+        other.
+
+        Both orbits are circular, so the speed at the approach is the circular
+        speed at that radius, which is computed here from the gravitational
+        parameter alone and owes nothing to the reference frame machinery. The
+        relative quantities are differences and so cannot see an offset common to
+        both velocities, which is how these came to carry the velocity of the
+        frame the active vessel is in, some 9284 m/s around Kerbin."""
+        approach = self.orbit.next_closest_approach(self.target)
+        frame = self.orbit.body.non_rotating_reference_frame
+        mu = self.orbit.body.gravitational_parameter
+        for orbit, speed in (
+            (self.orbit, norm(approach.velocity(frame))),
+            (self.target, norm(approach.target_velocity(frame))),
+        ):
+            expected = math.sqrt(
+                mu * ((2 / orbit.radius_at(approach.ut)) - (1 / orbit.semi_major_axis))
+            )
+            self.assertAlmostEqual(expected, speed, delta=1)
+
     def test_closest_approaches(self):
         approaches = self.orbit.closest_approaches(self.target, 3)
         self.assertEqual(3, len(approaches))

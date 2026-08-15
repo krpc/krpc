@@ -86,6 +86,11 @@
   - Add `CelestialBody.SurfaceNormal`, `CelestialBody.BedrockNormal` and `CelestialBody.MSLNormal`
     to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to
     the surface, to the sea-bed, or to the sphere at sea level (#1030)
+  - Fix `ClosestApproach.Velocity` and `ClosestApproach.TargetVelocity`, which were both
+    offset by the velocity of the frame the active vessel's reference body moves in, some
+    9284 m/s for a vessel in orbit around Kerbin. `ClosestApproach.RelativeVelocity` and
+    `ClosestApproach.RelativeSpeed` are the difference of the two and were unaffected
+    (#1047)
   - Add `Orbit.CreateFromPositionAndVelocity`, which builds the orbit that passes through
     a given position at a given velocity, and `Orbit.CreateFromOrbitalElements`, which
     builds the orbit with a given semi-major axis, eccentricity, inclination, longitude of
@@ -143,6 +148,10 @@
     next press of Alt+L locks or unlocks staging rather than being absorbed (#1022)
 
 - Parts
+  - `Decoupler.IsOmniDecoupler` reports what the part is configured as for every decoupler,
+    including radial ones and any that a mod derives from the stock modules. It was false for
+    all of them regardless of their configuration. The stage a part is assigned to follows the
+    same value, so a vessel carrying such a decoupler can be staged differently (#1048)
   - `Part.BoundingBox` and `Vessel.BoundingBox` now measure only the meshes of a part's own
     model. The boxes no longer take in the models of physicsless child parts, nor any object
     another mod has attached to a part, which could stretch a box to an arbitrary size (#1024)

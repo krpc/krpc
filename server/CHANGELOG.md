@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility
+  code for older versions of the game has been removed (#1048)
 - The server is stopped whenever no game is loaded, so a client is disconnected when the player
   quits to the main menu rather than being left waiting on a call that never returns. It starts
   again with the next game if it is set to start automatically. State held for clients is released
