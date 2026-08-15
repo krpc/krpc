@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import cast, Callable, Mapping, Optional, Type, TYPE_CHECKING
+from typing import cast, Callable, Mapping, Optional, Tuple, Type, TYPE_CHECKING
 import struct
 import google.protobuf
 
@@ -91,6 +91,14 @@ class Decoder:
     @classmethod
     def decode_message_size(cls, data: bytes) -> int:
         return cast(int, protobuf_decoder._DecodeVarint(data, 0)[0])  # type: ignore[attr-defined]
+
+    @classmethod
+    def decode_size_prefix(cls, data: bytes) -> Tuple[int, int]:
+        """Decode the size prefix of a message, returning the size of the message
+        and the number of bytes the prefix itself occupies. Raises IndexError if
+        the data does not yet hold a complete prefix."""
+        # pylint: disable=line-too-long
+        return cast(Tuple[int, int], protobuf_decoder._DecodeVarint(data, 0))  # type: ignore[attr-defined]
 
     @classmethod
     def decode_message(
