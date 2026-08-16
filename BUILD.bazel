@@ -205,6 +205,7 @@ py_test(
         "//tools/ServiceDefinitions:csproj-srcs",
         "//tools/TestServer:csproj-srcs",
         "//tools/TestingTools:csproj-srcs",
+        "//tools/benchmarks:csproj-srcs",
     ],
     main = "csproj_test.py",
 )
@@ -291,6 +292,7 @@ filegroup(
         "//tools/ServiceDefinitions",
         "//tools/TestServer",
         "//tools/TestingTools",
+        "//tools/benchmarks:KRPC.Benchmark",
         "//tools/build/ksp:Google.Protobuf.dll",
         "//tools/build/ksp:KRPC.IO.Ports.dll",
     ],

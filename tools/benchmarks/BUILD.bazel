@@ -1,0 +1,59 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+
+# The Benchmark service. A service like any other, loaded by whichever server it is installed
+# alongside: TestServer for a game-less measurement, and the game for the same measurement
+# against a real service. It does not ship with the mod - nothing lists it in //:krpc - and
+# the in-game install adds it beside TestingTools (see tools/krpctest/krpctest/install.py).
+csharp_library(
+    name = "KRPC.Benchmark",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core",
+        "//tools/build/ksp:Google.Protobuf",
+    ],
+)
+
+# net8.0 build of the same service, for TestServer, matching //core:KRPC.Core.net8.
+csharp_library(
+    name = "KRPC.Benchmark.net8",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    out = "KRPC.Benchmark",
+    # CS1701: Google.Protobuf's net5.0 build references net5-era framework assemblies;
+    # unification handles this at runtime (MSBuild suppresses this warning by default)
+    nowarn = ["CS1701"],
+    target_frameworks = ["net8.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net8",
+        "//tools/build/dotnet:Google.Protobuf",
+    ],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    title = "KRPC.Benchmark",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)

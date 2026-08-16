@@ -5,3 +5,5 @@ using System.Runtime.CompilerServices;
 // outside src/ (which Bazel globs) to avoid a duplicate attribute.
 [assembly: InternalsVisibleTo("KRPC.Core.Test")]
 [assembly: InternalsVisibleTo("TestingTools")]
+// The Benchmark service runs a call through Services, the server's own dispatch path
+[assembly: InternalsVisibleTo("KRPC.Benchmark")]

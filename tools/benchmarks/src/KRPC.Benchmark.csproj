@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>KRPC.Benchmark</AssemblyName>
+    <RootNamespace>KRPC.Benchmarks</RootNamespace>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <Deterministic>true</Deterministic>
+    <DocumentationFile>bin\$(Configuration)\KRPC.Benchmark.xml</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+  <Import Project="$(SolutionDir)tools\build\msbuild\bazeldirs.props" />
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Google.Protobuf">
+      <HintPath>$(bazel-bin)\tools\build\ksp\Google.Protobuf.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\core\src\KRPC.Core.csproj">
+      <Project>{2ABFAF25-93F4-4AD2-A85B-6B92786E26E9}</Project>
+      <Name>KRPC.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="$(bazel-bin)\tools\benchmarks\AssemblyInfo.cs">
+      <Link>AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="Benchmark.cs" />
+    <Compile Include="Dispatch.cs" />
+    <Compile Include="Timer.cs" />
+  </ItemGroup>
+</Project>
