@@ -46,10 +46,12 @@ class Encoder:
     @classmethod
     def encode(cls, x: object, typ: TypeBase) -> bytes:
         """Encode a message or value of the given protocol buffer type"""
-        if isinstance(typ, MessageType):
-            return cast(google.protobuf.message.Message, x).SerializeToString()
+        # The value types come first: they are what most arguments are, and this is
+        # on the hot path of every remote procedure call
         if isinstance(typ, ValueType):
             return cls._encode_value(x, typ)
+        if isinstance(typ, MessageType):
+            return cast(google.protobuf.message.Message, x).SerializeToString()
         if isinstance(typ, EnumerationType):
             return cls._encode_value(cast(Enum, x).value, cls._types.sint32_type)
         if isinstance(typ, ClassType):

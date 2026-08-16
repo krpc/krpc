@@ -69,13 +69,15 @@ class Decoder:
     @classmethod
     def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
         """Given a python type, and serialized data, decode the value"""
+        # The value types come first: they are what most results are, and this is on
+        # the hot path of every remote procedure call
+        if isinstance(typ, ValueType):
+            return cls._decode_value(data, typ)
         if isinstance(typ, MessageType):
             return cls.decode_message(data, typ.python_type)
         if isinstance(typ, EnumerationType):
             value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
-        if isinstance(typ, ValueType):
-            return cls._decode_value(data, typ)
         if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
