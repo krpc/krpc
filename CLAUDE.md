@@ -129,7 +129,9 @@ bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.
  * State the problem, the change, and — for a fix — how it was verified.
  * Do not state that tests CI covers would pass (like `bazel test //:test`).
  * Do not repeat implementation details that are clear from the commit messages.
- * End with `Fixes #NNN` when an issue is linked; omit otherwise.
+ * End with one or more `Fixes #NNN` when open issues are fixed by the PR; omit otherwise.
+ * End with one or more `Related to #NNN` when open issues are related to but not fixed by the PR;
+   omit otherwise.
  * **No AI-attribution or "Generated with" footer** — PR bodies and commit messages alike.
  * One paragraph per line; GitHub renders single newlines literally. Reflow wrapped text.
  * Assign the current milestone (`tools/krpc-version.sh`) + label by type (`bug`/`enhancement`/`docs`)
