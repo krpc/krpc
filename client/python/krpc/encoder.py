@@ -30,6 +30,12 @@ from krpc.types import (
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 
+# The one byte encoding of every value that fits in one. A varint below 128 is
+# the byte itself, and message sizes and the length prefixes of strings and
+# bytes almost always are, so the common case is a lookup rather than a loop
+# that builds a list and joins it
+_SINGLE_BYTE_VARINTS = tuple(bytes((value,)) for value in range(128))
+
 
 class Encoder:
     """Routines for encoding messages and values in
@@ -95,7 +101,10 @@ class Encoder:
     ) -> bytes:
         """Encode a protobuf message, prepended with its size"""
         data = message.SerializeToString()
-        size: bytes = protobuf_encoder._VarintBytes(len(data))  # type: ignore[attr-defined]
+        length = len(data)
+        if length < 128:
+            return _SINGLE_BYTE_VARINTS[length] + data
+        size: bytes = protobuf_encoder._VarintBytes(length)  # type: ignore[attr-defined]
         return size + data
 
     @classmethod
@@ -120,6 +129,8 @@ class _ValueEncoder:
 
     @classmethod
     def _encode_varint(cls, value: int) -> bytes:
+        if value < 128:
+            return _SINGLE_BYTE_VARINTS[value]
         data: List[bytes] = []
         _pb_VarintEncoder(data.append, value, True)
         return b"".join(data)

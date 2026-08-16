@@ -29,6 +29,22 @@ if TYPE_CHECKING:
     from krpc.client import Client
 
 
+def _decode_varint(data: bytes) -> Tuple[int, int]:
+    """Decode the varint at the start of the data, returning its value and the
+    number of bytes it occupies. Raises IndexError if the data does not hold a
+    complete varint.
+
+    A varint whose first byte has the top bit clear holds its own value in that
+    byte. Message sizes, and the length prefixes of strings and bytes, are
+    almost always that, so the common case is an index rather than a call into
+    protobuf's varint reader."""
+    first = data[0]
+    if first < 128:
+        return first, 1
+    # pylint: disable=line-too-long
+    return cast(Tuple[int, int], protobuf_decoder._DecodeVarint(data, 0))  # type: ignore[attr-defined]
+
+
 class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""
@@ -90,15 +106,14 @@ class Decoder:
 
     @classmethod
     def decode_message_size(cls, data: bytes) -> int:
-        return cast(int, protobuf_decoder._DecodeVarint(data, 0)[0])  # type: ignore[attr-defined]
+        return _decode_varint(data)[0]
 
     @classmethod
     def decode_size_prefix(cls, data: bytes) -> Tuple[int, int]:
         """Decode the size prefix of a message, returning the size of the message
         and the number of bytes the prefix itself occupies. Raises IndexError if
         the data does not yet hold a complete prefix."""
-        # pylint: disable=line-too-long
-        return cast(Tuple[int, int], protobuf_decoder._DecodeVarint(data, 0))  # type: ignore[attr-defined]
+        return _decode_varint(data)
 
     @classmethod
     def decode_message(
@@ -125,12 +140,12 @@ class _ValueDecoder:
         # The zigzag payload is an unsigned varint. Reading it as a signed one would sign
         # extend it as two's complement first, which corrupts anything from 2**62 up once
         # the payload sets bit 63 - long.MaxValue would decode as -1.
-        value = protobuf_decoder._DecodeVarint(data, 0)[0]  # type: ignore[attr-defined]
+        value = _decode_varint(data)[0]
         return cast(int, protobuf_wire_format.ZigZagDecode(value))  # type: ignore[no-untyped-call]
 
     @classmethod
     def _decode_varint(cls, data: bytes) -> int:
-        return cast(int, protobuf_decoder._DecodeVarint(data, 0)[0])  # type: ignore[attr-defined]
+        return _decode_varint(data)[0]
 
     @classmethod
     def decode_sint32(cls, data: bytes) -> int:
@@ -212,12 +227,12 @@ class _ValueDecoder:
 
     @classmethod
     def decode_string(cls, data: bytes) -> str:
-        size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
+        size, position = _decode_varint(data)
         return data[position : position + size].decode("utf-8")
 
     @classmethod
     def decode_bytes(cls, data: bytes) -> bytes:
-        size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
+        size, position = _decode_varint(data)
         return data[position : position + size]
 
 
