@@ -33,6 +33,10 @@
       <Project>{7E772428-6FFF-43D3-B051-2863F2378FC8}</Project>
       <Name>KRPC.Debug</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\benchmarks\src\KRPC.Benchmark.csproj">
+      <Project>{6F4C7A18-2D31-4A05-9D67-2E1C8B4F0A73}</Project>
+      <Name>KRPC.Benchmark</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="$(bazel-bin)\tools\TestingTools\AssemblyInfo.cs">
@@ -40,6 +44,7 @@
     </Compile>
     <Compile Include="AutoLoadGame.cs" />
     <Compile Include="AutoSwitchVessel.cs" />
+    <Compile Include="Benchmark.cs" />
     <Compile Include="Fatal.cs" />
     <Compile Include="TestingTools.cs" />
     <Compile Include="TestingToolsOptions.cs" />

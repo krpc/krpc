@@ -6,6 +6,9 @@ srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"]
 
 deps = [
     "//core:KRPC.Core",
+    # The object-access benchmarks below time their cases with the same machinery the
+    # Benchmark service uses, so their numbers are in the same units as its.
+    "//tools/benchmarks:KRPC.Benchmark",
     "//server:KRPC",
     "//service/Debug:KRPC.Debug",
     "//service/SpaceCenter:KRPC.SpaceCenter",
