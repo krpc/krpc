@@ -3,7 +3,8 @@
 Builds the ``//:krpc`` release archive with Bazel and extracts its ``GameData`` tree
 into the KSP install (from ``KSP_DIR`` or ``--ksp-dir``) - exactly as a user
 installs a release - then adds the test-only bits the public release omits (the
-``TestingTools`` add-on and the test ``settings.cfg``). The optional set of managed
+``TestingTools`` add-on, the ``KRPC.Benchmark`` service and the test ``settings.cfg``).
+The optional set of managed
 third-party mods (RemoteTech, InfernalRobotics, KerbalAlarmClock) used by some service
 tests is reconciled so GameData contains exactly the requested set. Finally GameData is
 validated against the known-valid set, so an unexpected mod left over from an earlier
@@ -128,12 +129,19 @@ def _release_zip(root):
     return os.path.join(root, files[-1])
 
 
-def _testingtools_files(root):
-    """Paths to the TestingTools add-on outputs. rules_dotnet writes these to a
+# The test-only assemblies the public release omits, installed into GameData on top of it.
+# TestingTools is the add-on the tests drive the game with; KRPC.Benchmark is the benchmark
+# service, which TestServer also loads, so an in-game measurement and a game-less one are the
+# same measurement.
+_TEST_ONLY_TARGETS = ["//tools/TestingTools", "//tools/benchmarks:KRPC.Benchmark"]
+
+
+def _target_files(root, target):
+    """Paths to a Bazel target's outputs. rules_dotnet writes these to a
     configuration-specific output directory rather than under the ``bazel-bin``
     convenience symlink, so resolve them with cquery rather than hardcoding paths."""
     output = subprocess.check_output(
-        ["bazel", "cquery", "--output=files", "//tools/TestingTools"],
+        ["bazel", "cquery", "--output=files", target],
         cwd=root,
         text=True,
     )
@@ -173,11 +181,9 @@ def install(mods=(), ksp_dir=None, validate_gamedata=True, skip_mod_install=Fals
     gamedata_root = os.path.join(ksp_dir, "GameData")
     gamedata = os.path.join(gamedata_root, "kRPC")
 
-    # Build the release archive and the test-only TestingTools add-on (the latter is not
-    # part of the public release, so it is not in the zip).
-    subprocess.check_call(
-        ["bazel", "build", "//:krpc", "//tools/TestingTools"], cwd=root
-    )
+    # Build the release archive and the test-only assemblies (which are not part of the
+    # public release, so they are not in the zip).
+    subprocess.check_call(["bazel", "build", "//:krpc"] + _TEST_ONLY_TARGETS, cwd=root)
 
     # Wipe any previous kRPC install and extract the freshly built release zip's GameData
     # tree (GameData/kRPC and GameData/ModuleManager*.dll) into the KSP install, exactly as
@@ -190,10 +196,11 @@ def install(mods=(), ksp_dir=None, validate_gamedata=True, skip_mod_install=Fals
         members = [n for n in archive.namelist() if n.startswith("GameData/")]
         archive.extractall(ksp_dir, members)
 
-    # Add the test-only pieces the public release omits: the TestingTools add-on, and a
+    # Add the test-only pieces the public release omits: the assemblies above, and a
     # settings.cfg that starts the server automatically (the release ships a blank one).
-    for src in _testingtools_files(root):
-        shutil.copy(src, gamedata)
+    for target in _TEST_ONLY_TARGETS:
+        for src in _target_files(root, target):
+            shutil.copy(src, gamedata)
     shutil.copy(
         os.path.join(root, "tools", "settings.cfg"),
         os.path.join(gamedata, "PluginData", "settings.cfg"),
