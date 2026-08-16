@@ -7,8 +7,10 @@ class TestAlarm(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.space_center = cls.connect().space_center
+        cls.conn = cls.connect()
+        cls.space_center = cls.conn.space_center
         cls.alarm_manager = cls.space_center.alarm_manager
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
 
     def tearDown(self):
         for alarm in list(self.alarm_manager.alarms):
@@ -23,14 +25,27 @@ class TestAlarm(krpctest.TestCase):
     def test_access_after_remove_raises(self):
         alarm = self.alarm_manager.add_alarm(3600, "test_access_after_remove", "")
         alarm.remove()
-        with self.assertRaises(RuntimeError):
+        # The game no longer has an alarm with the id, so the object says the alarm is
+        # gone rather than that the call was invalid.
+        with self.assertRaises(self.destroyed):
             _ = alarm.title
 
     def test_remove_twice_raises(self):
         alarm = self.alarm_manager.add_alarm(3600, "test_remove_twice", "")
         alarm.remove()
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(self.destroyed):
             alarm.remove()
+
+    def test_alarm_survives_a_quickload(self):
+        alarm = self.alarm_manager.add_alarm(3600, "test_quickload", "notes")
+        self.space_center.quicksave()
+        self.wait(1)
+        self.space_center.quickload()
+        self.wait(1)
+        # Loading a game state builds its alarms again. The object names the alarm by
+        # the id the game writes into the save, so it reads the one that was built.
+        self.assertEqual("test_quickload", alarm.title)
+        self.assertEqual("notes", alarm.description)
 
     def test_alarm_with_name_after_remove(self):
         alarm = self.alarm_manager.add_alarm(

@@ -7,7 +7,9 @@ class TestSlider(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        cls.canvas = cls.conn.ui.stock_canvas
 
     def test_slider(self):
         slider = self.canvas.add_slider()
@@ -18,7 +20,7 @@ class TestSlider(krpctest.TestCase):
         self.assertEqual(0, slider.value)
         self.assertFalse(slider.changed)
         slider.remove()
-        self.assertRaises(ValueError, slider.remove)
+        self.assertRaises(self.destroyed, slider.remove)
 
     def test_value(self):
         slider = self.canvas.add_slider()

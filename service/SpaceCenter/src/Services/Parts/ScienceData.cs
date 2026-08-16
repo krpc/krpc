@@ -1,3 +1,4 @@
+using System.Linq;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
@@ -8,15 +9,41 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Experiment.Data"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class ScienceData : Equatable<ScienceData>
+    public class ScienceData : Equatable<ScienceData>, IGameObjectState
     {
-        readonly ModuleScienceExperiment experiment;
+        readonly Part part;
+        ModuleRef experimentRef;
+        // The game's own record of the data. It is a plain object rather than something in
+        // the scene, and the game offers nothing to identify it by, so it is the one thing
+        // here that is held on to rather than found again. When the game replaces it, which
+        // it does whenever it rebuilds the experiment, this object is reclaimed instead.
         readonly global::ScienceData data;
 
-        internal ScienceData (ModuleScienceExperiment experimentModule, global::ScienceData scienceData)
+        internal ScienceData (Part dataPart, ModuleScienceExperiment experimentModule, global::ScienceData scienceData)
         {
-            experiment = experimentModule;
+            part = dataPart;
+            experimentRef = ModuleRef.ForModule (experimentModule);
             data = scienceData;
+        }
+
+        ModuleScienceExperiment InternalExperiment {
+            get { return (ModuleScienceExperiment)experimentRef.Get (part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the record. It is as live, dormant or destroyed as the
+        /// experiment holding it until that experiment is there to look in, and destroyed
+        /// once the experiment no longer holds this record.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var state = experimentRef.StateOn (part);
+                if (state != GameObjectState.Live)
+                    return state;
+                var container = experimentRef.Find (part.InternalPart) as IScienceDataContainer;
+                return container != null && container.GetData ().Contains (data)
+                    ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
         }
 
         /// <summary>
@@ -24,7 +51,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ScienceData other)
         {
-            return !ReferenceEquals (other, null) && experiment == other.experiment && data == other.data;
+            return !ReferenceEquals (other, null) && part == other.part &&
+            experimentRef == other.experimentRef && data == other.data;
         }
 
         /// <summary>
@@ -32,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return experiment.GetHashCode () ^ data.GetHashCode ();
+            return part.GetHashCode () ^ experimentRef.GetHashCode () ^ data.GetHashCode ();
         }
 
         /// <summary>
@@ -64,9 +92,9 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 // Use ExperimentResultDialogPage to compute the science value
                 ExperimentResultDialogPage page = new ExperimentResultDialogPage(
-                    experiment.part, data, data.baseTransmitValue, data.transmitBonus,
+                    InternalExperiment.part, data, data.baseTransmitValue, data.transmitBonus,
                     false, string.Empty, false,
-                    new ScienceLabSearch(experiment.part.vessel, data),
+                    new ScienceLabSearch(InternalExperiment.part.vessel, data),
                     null, null, null, null);
                 return page.baseTransmitValue * page.TransmitBonus;
             }

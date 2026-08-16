@@ -48,6 +48,10 @@ The following example demonstrates how to invoke remote procedures using the Pyt
 
 .. literalinclude:: /scripts/client/python/RemoteProcedures.py
 
+Many procedures return an object standing for something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
+when a game is loaded or the thing they stand for is destroyed.
+
 All of the functionality provided by the ``SpaceCenter`` service is accessible via
 ``conn.space_center``. To explore the functionality provided by a service, you can use the
 ``help()`` function from an interactive terminal. For example, running ``help(conn.space_center)``

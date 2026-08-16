@@ -7,7 +7,9 @@ class TestPanel(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        ui = cls.connect().ui
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        ui = cls.conn.ui
         cls.canvas = ui.stock_canvas
         cls.panel_style = ui.PanelStyle
 
@@ -18,7 +20,7 @@ class TestPanel(krpctest.TestCase):
         self.assertEqual(self.panel_style.window, panel.style)
         self.assertFalse(panel.draggable)
         panel.remove()
-        self.assertRaises(ValueError, panel.remove)
+        self.assertRaises(self.destroyed, panel.remove)
 
     def test_visible_is_the_elements_own_setting(self):
         # An element is only drawn when everything it is inside is visible as well, so

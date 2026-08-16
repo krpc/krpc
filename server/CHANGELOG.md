@@ -9,6 +9,11 @@
 - Fix setting `KRPC.GameScene` from one editor straight to the other leaving the flight camera
   unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is
   being constructed now, as the game's own switch editor button does (#1038)
+- Sweep objects whose game objects no longer exist out of the object store when the game
+  loads, quickloads or reverts a game state, or changes scene, when it destroys a part or a
+  vessel, and when a client removes something it owns such as a drawing, a user interface
+  element or a force, so an object that has become useless is let go of promptly rather than
+  at the next load (#1051)
 
 ## [v0.6.0]
 - Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`) (#848)

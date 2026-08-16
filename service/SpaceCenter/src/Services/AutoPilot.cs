@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services
     /// the auto-pilot will be disengaged. Its configuration and target are left unchanged.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class AutoPilot : Equatable<AutoPilot>
+    public class AutoPilot : Equatable<AutoPilot>, IGameObjectState
     {
         static readonly HashSet<Guid> showInfoUI = new HashSet<Guid> ();
         readonly Guid vesselId;
@@ -28,6 +28,13 @@ namespace KRPC.SpaceCenter.Services
         internal AutoPilot (global::Vessel vessel)
         {
             vesselId = vessel.id;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return FlightGlobalsExtensions.VesselState (vesselId); }
         }
 
         /// <summary>
@@ -199,11 +206,8 @@ namespace KRPC.SpaceCenter.Services
             var controller = PilotAddon.FindAttitudeController (id);
             if (controller == null || !controller.Engaged)
                 return null;
-            try {
-                return new AutoPilot (FlightGlobalsExtensions.GetVesselById (id));
-            } catch (ArgumentException) {
-                return null;
-            }
+            var vessel = FlightGlobalsExtensions.FindVesselById (id);
+            return vessel == null ? null : new AutoPilot (vessel);
         }
 
         /// <summary>

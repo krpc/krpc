@@ -59,6 +59,14 @@
   - `EditorVessel.Resources`, `Part.Resources` and `Stage.Resources` report the resources
     the vessel under construction can hold, per vessel, per part and per stage, as they do
     for a vessel in flight (#1038)
+  - A part of the vessel under construction raises `KRPC.ObjectDestroyedException` once it
+    is no longer in that vessel, and once the editor has loaded any vessel over it. A part
+    in the editor is named by an identifier that is only unique within one vessel, so a
+    part of a vessel that has been replaced cannot be told from the part of the new one
+    that answers to the same identifier. An undo or a redo rebuilds the vessel the editor
+    already has rather than loading a new one, so a part it leaves alone keeps working.
+    Leaving the editor destroys the vessel it had open, and everything reached through
+    it (#1051)
 
 - Vessels and crew
   - Add `CrewMember.EVA`, which sends a Kerbal outside through the hatch of the part it is
@@ -75,6 +83,15 @@
     directions the navball marks in that mode, arranged as in
     `Vessel.OrbitalReferenceFrame`, so a direction of (0,1,0) in the frame is prograde
     (#1029)
+  - Using a vessel that no longer exists raises `KRPC.ObjectDestroyedException`, saying that
+    the vessel is gone, rather than an argument error (#1051)
+  - A `CrewMember` is named by the kerbal's name and looks them up on the game's roster on
+    every call, so the same kerbal obtained twice is the same object and one obtained before
+    a load goes on working. A kerbal the roster no longer has raises
+    `KRPC.ObjectDestroyedException`. Renaming a kerbal by setting `CrewMember.Name` renames
+    them on the roster, so every object for that kerbal, the one renamed through included,
+    stands for a kerbal that no longer exists; a fresh object has to be obtained under the
+    new name (#1051)
 
 - Staging
   - Fix stages from `Vessel.Stages`, `Vessel.StageAt`, `Vessel.DecoupleStages` and
@@ -83,6 +100,13 @@
     too, so the game had to be restarted to get working stages back (#1023)
 
 - Orbits, nodes and bodies
+  - An `Orbit` reads the orbit of the vessel, celestial body or maneuver node it belongs to as
+    it is now, rather than the one the game had when it was obtained, so it keeps working
+    across a load instead of reporting the orbit of a game state that has been replaced.
+    Asking the same thing for its orbit again gives back the same object rather than a second
+    one (#764)
+  - A `ClosestApproach` is freed once either of the orbits it describes is gone, rather than
+    being kept for the rest of the session (#1051)
   - Add `CelestialBody.SurfaceNormal`, `CelestialBody.BedrockNormal` and `CelestialBody.MSLNormal`
     to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to
     the surface, to the sea-bed, or to the sphere at sea level (#1030)
@@ -107,6 +131,17 @@
     frame, alongside the existing `Orbit.PositionAt` (#1046)
   - `Orbit.Epoch` is documented as the universal time at which the mean anomaly at epoch
     is measured. It was described as the time since that point (#1046)
+
+- Maneuver nodes
+  - Using a maneuver node that has been removed raises `KRPC.ObjectDestroyedException` rather
+    than reporting the call as invalid. Loading a game replaces the vessel's maneuver nodes,
+    so nodes obtained before the load are also gone (#1051)
+  - Fix removing a maneuver node leaking the object for the rest of the session (#771)
+
+- Reference frames
+  - A reference frame taken from a docking port keeps working across a quickload, and says the
+    port is gone rather than failing with a null reference once its part is destroyed (#885,
+    #764)
 
 - Flight and aerodynamics
   - Add `Flight.SurfaceNormal` to get the slope of the terrain under a vessel, as a unit vector
@@ -152,6 +187,13 @@
     including radial ones and any that a mod derives from the stock modules. It was false for
     all of them regardless of their configuration. The stage a part is assigned to follows the
     same value, so a vessel carrying such a decoupler can be staged differently (#1048)
+  - A force added with `Part.AddForce` stops being applied, and is freed, once its part is
+    destroyed. It previously failed on every physics update for the rest of the session. A
+    force on a part the game has unloaded, or measured in a reference frame that is defined
+    against something that is gone, waits rather than being applied (#1051)
+  - `Force.Remove` leaves the object gone, so using one afterwards raises
+    `KRPC.ObjectDestroyedException` and the object is freed. A removed force previously went
+    on reporting the force it was applying, and was kept for the rest of the session (#1051)
   - `Part.BoundingBox` and `Vessel.BoundingBox` now measure only the meshes of a part's own
     model. The boxes no longer take in the models of physicsless child parts, nor any object
     another mod has attached to a part, which could stretch a box to an arbitrary size (#1024)
@@ -168,10 +210,39 @@
   - Fix `ReactionWheel.AvailableTorque`, and the vessel level torque properties that include
     it, being scaled by the square of the wheel's authority limiter when KSPCommunityFixes is
     installed (#1042)
+  - Fix `Decoupler` objects accumulating for the rest of the session, one per call to
+    `Part.Decoupler`, and the same decoupler obtained twice comparing unequal (#1051)
+  - A `Decoupler` finds its part's decoupler module again on every call, so it keeps working
+    across a quickload. One obtained before a load previously read the module the load
+    replaced, reporting the impulse and fired state it had beforehand and failing outright
+    when fired, while reporting itself as still there (#1051)
+  - Using a part that has been destroyed raises `KRPC.ObjectDestroyedException` instead of
+    failing with a null reference (#885)
+  - Using a part module, or any of the objects built on one such as `Engine`, `Parachute`,
+    `Antenna` or `SolarPanel`, after its part has been destroyed raises
+    `KRPC.ObjectDestroyedException` instead of failing with a null reference (#885)
+  - Part modules, and the objects built on them, read the modules of the loaded game rather
+    than those of a game state that has been replaced, so they keep working across a
+    quickload instead of returning readings from before it (#764)
+  - Using a part of a vessel that the game has unloaded raises an error saying that the part
+    is not loaded. The part works again once the game loads the vessel, and is not treated as
+    destroyed in the meantime (#1051)
+  - The fields, events and actions of a part module read the loaded game's module rather than
+    one belonging to a replaced game state, and say the module is gone when it is (#764)
+  - A `ScienceSubject` belongs to the game state it was read from, and using one after that
+    state has been replaced raises `KRPC.ObjectDestroyedException` rather than returning the
+    replaced game's science. Reading `Experiment.ScienceSubject` repeatedly no longer adds a
+    new object for each read, and reads the science the game has banked against the subject
+    since the first of those reads (#771)
+  - Fix `ScienceSubject.Science` and `ScienceSubject.ScienceCap` scaling by the science gain
+    multiplier that was in force when the object was read, rather than the current one (#1051)
 
 - Resources
   - Add `ResourceTransfer.Cancel` to stop a transfer before it finishes; no more of the
     resource is moved and the transfer is marked as complete (#1028)
+  - Fix a resource transfer failing on every update, and never completing, once one of the
+    parts it runs between is destroyed; the transfer is now canceled. A transfer whose vessel
+    the game unloads waits for it rather than failing (#1051)
 
 - Camera
   - `Camera.NextCamera` and `Camera.PreviousCamera` now move the IVA view between the crew of
@@ -184,6 +255,20 @@
     with a `NullReferenceException`, as does setting it to `null` (#1031)
   - `Camera.FocussedCrewMember` returns `null` when no crew member is in view, instead of
     failing with a `NullReferenceException` (#1031)
+
+- Alarms, contracts and waypoints
+  - `SpaceCenter.Alarm`, `Contract`, `ContractParameter` and `Waypoint` objects find what
+    they stand for again on every call, rather than holding what the game gave them. They
+    keep working when the game rebuilds it, and never read a record belonging to a game
+    state that has since been replaced. One that the game no longer has raises
+    `KRPC.ObjectDestroyedException`, which is what `Alarm.Remove` and `Waypoint.Remove`
+    leave behind, and is freed rather than kept for the rest of the session (#1051)
+
+- Communications
+  - A `CommLink` is named by the two nodes it joins and reports the link between them as it
+    is now. A link over which contact has been lost reports that the two nodes are not
+    connected, rather than the signal strength the link had when contact was lost, and one
+    whose nodes are gone raises `KRPC.ObjectDestroyedException` (#1051)
 
 ## [v0.6.0]
 

@@ -85,6 +85,10 @@ namespace KRPC
             Service.CallContext.GameScene = gameScene;
             Utils.Logger.WriteLine ("Game scene switched to " + gameScene);
 
+            // The scene being left takes its game objects with it, so the service objects
+            // standing for them are due to be swept once the new scene is built.
+            GameStateChanged ();
+
             // Auto-start the server, if required
             if (config.Configuration.AutoStartServers) {
                 Utils.Logger.WriteLine ("Auto-starting server");
@@ -199,6 +203,10 @@ namespace KRPC
 
             // KSP events
             IsPaused = false;
+            GameEvents.onGameStatePostLoad.Add(OnGameStatePostLoad);
+            GameEvents.onPartDie.Add(OnPartDie);
+            GameEvents.onEditorShipModified.Add(OnEditorShipModified);
+            GameEvents.onVesselDestroy.Add(OnVesselDestroy);
             GameEvents.onGamePause.Add(OnGamePause);
             GameEvents.onGameUnpause.Add(OnGameUnpause);
             GameEvents.onEditorRestart.Add(OnEditorRestart);
@@ -236,6 +244,50 @@ namespace KRPC
                 Utils.Logger.WriteLine("Asking player to accept client connection (" + e.Client.Address + ")");
                 clientConnectingDialog.OnClientRequestingConnection(sender, e);
             }
+        }
+
+        void OnGameStatePostLoad(ConfigNode node)
+        {
+            // Fired when a game is loaded, quickloaded or reverted, which replaces every
+            // game object the service objects stand for.
+            GameStateChanged();
+        }
+
+        /// <summary>
+        /// Record that the game has replaced the state its game objects belong to.
+        /// </summary>
+        /// <remarks>
+        /// The count that says whether the game has finished building a state starts
+        /// again, because what the state being replaced counted says nothing about the
+        /// one being built, and a count carried over from it can equal the first count of
+        /// the new one by coincidence and report a state that has not begun to settle as
+        /// settled.
+        /// </remarks>
+        static void GameStateChanged ()
+        {
+            Service.GameState.Changed ();
+            lastCount = -1;
+        }
+
+        void OnPartDie(Part part)
+        {
+            // The part is gone, so the objects standing for it and for its modules can go
+            // too, without waiting for the next game to be loaded.
+            Service.GameState.RequestSweep();
+        }
+
+        void OnEditorShipModified(ShipConstruct ship)
+        {
+            // Anything no longer in the vessel under construction is gone, as the editor
+            // holds no other vessel it could be in. The game raises no part-died event in
+            // the editor, and fires this for every change to the vessel, a part deleted
+            // and a different craft loaded included.
+            Service.GameState.RequestSweep();
+        }
+
+        void OnVesselDestroy(Vessel vessel)
+        {
+            Service.GameState.RequestSweep();
         }
 
         void OnGamePause()
@@ -321,6 +373,10 @@ namespace KRPC
         /// </summary>
         public void OnDestroy ()
         {
+            GameEvents.onGameStatePostLoad.Remove(OnGameStatePostLoad);
+            GameEvents.onPartDie.Remove(OnPartDie);
+            GameEvents.onEditorShipModified.Remove(OnEditorShipModified);
+            GameEvents.onVesselDestroy.Remove(OnVesselDestroy);
             GameEvents.onGamePause.Remove(OnGamePause);
             GameEvents.onGameUnpause.Remove(OnGameUnpause);
             GameEvents.onEditorRestart.Remove(OnEditorRestart);
@@ -367,6 +423,64 @@ namespace KRPC
             GUILayoutExtensions.OnGUI ();
         }
 
+        // What the game had on the previous update of the sweep that is pending now: the
+        // number of vessels, or in an editor the number of parts in the vessel it has open.
+        // -1 means nothing counted yet.
+        static int lastCount = -1;
+
+        /// <summary>
+        /// Sweep the object store, once the game has finished building the state it loaded.
+        /// </summary>
+        /// <remarks>
+        /// A scene is not populated at the moment it is switched to: the game adds its
+        /// vessels over the following frames, and a sweep run before it has finished sees
+        /// objects that are about to exist as gone. There is no event for having finished,
+        /// so wait for the count to stop changing, which also covers a game that adds
+        /// vessels more slowly than usual. A game with nothing in it at all says nothing
+        /// about what exists, so nothing is swept then.
+        ///
+        /// In an editor the objects stand for the vessel it has open rather than for
+        /// anything in the vessel list, which is empty on a save with nothing in flight,
+        /// and that vessel is rebuilt a part at a time in the same way. Its part count is
+        /// what settles there, which is what keeps a sweep out of the middle of a craft
+        /// being loaded, where the parts of the craft being reloaded are briefly absent.
+        ///
+        /// Only counts taken since the sweep was asked for say anything about whether the
+        /// game has finished: one left over from an earlier sweep can equal the first count
+        /// of this one by coincidence, which would report a state that has not begun to
+        /// settle as settled. The count is therefore forgotten whenever no sweep is due.
+        /// </remarks>
+        static void SweepObjectStore ()
+        {
+            if (HighLogic.CurrentGame == null) {
+                lastCount = -1;
+                return;
+            }
+            var count = HighLogic.LoadedSceneIsEditor ? EditorPartCount : VesselCount;
+            if (count < 0) {
+                lastCount = -1;
+                return;
+            }
+            var settled = count > 0 && count == lastCount;
+            lastCount = count;
+            if (settled)
+                Service.GameState.Sweep ();
+        }
+
+        // The number of vessels the game lists, or -1 if it is not listing them yet.
+        static int VesselCount {
+            get { return FlightGlobals.Vessels == null ? -1 : FlightGlobals.Vessels.Count; }
+        }
+
+        // The number of parts in the vessel the editor has open, or -1 if it has none.
+        static int EditorPartCount {
+            get {
+                var editor = EditorLogic.fetch;
+                var ship = editor == null ? null : editor.ship;
+                return ReferenceEquals (ship, null) || ship.parts == null ? -1 : ship.parts.Count;
+            }
+        }
+
         /// <summary>
         /// Trigger server update
         /// </summary>
@@ -374,6 +488,10 @@ namespace KRPC
         {
             if (!ServicesChecker.OK)
                 return;
+            if (Service.GameState.SweepPending)
+                SweepObjectStore ();
+            else
+                lastCount = -1;
             if (core != null && core.AnyRunning)
                 core.Update ();
         }

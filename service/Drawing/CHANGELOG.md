@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+
+- Line, polygon, text and navball marker objects raise `KRPC.ObjectDestroyedException` once
+  the object they draw is gone, which removing it, `Drawing.Clear`, the client that made it
+  disconnecting and leaving the flight scene all do. They previously failed on a destroyed
+  game object, and were kept for the rest of the session (#1051)
+- A drawing object whose reference frame is defined against something the game has destroyed
+  is not drawn, rather than failing on every frame (#1051)
 - Add `Drawing.AddNavballMarker`, which draws a marker on the navball pointing in a given
   direction, for example to show a script's target attitude while the player flies the vessel.
   The marker's icon, color and size can be changed, and it hides and fades as the navball's own

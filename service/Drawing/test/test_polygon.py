@@ -7,6 +7,8 @@ class TestPolygon(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
         cls.drawing = cls.connect().drawing
         cls.vessel = cls.connect().space_center.active_vessel
         cls.ref = cls.vessel.reference_frame
@@ -26,7 +28,7 @@ class TestPolygon(krpctest.TestCase):
         self.assertEqual("Legacy Shaders/Particles/Additive", polygon.material)
         self.assertAlmostEqual(0.1, polygon.thickness)
         polygon.remove()
-        self.assertRaises(ValueError, polygon.remove)
+        self.assertRaises(self.destroyed, polygon.remove)
 
     def test_color(self):
         polygon = self.add_polygon()

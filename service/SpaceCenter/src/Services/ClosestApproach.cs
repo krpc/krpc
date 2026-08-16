@@ -17,7 +17,7 @@ namespace KRPC.SpaceCenter.Services
     /// self).
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class ClosestApproach : Equatable<ClosestApproach>
+    public class ClosestApproach : Equatable<ClosestApproach>, IGameObjectState
     {
         readonly Orbit orbit;
         readonly Orbit target;
@@ -52,6 +52,15 @@ namespace KRPC.SpaceCenter.Services
         public override int GetHashCode ()
         {
             return orbit.GetHashCode () ^ target.GetHashCode () ^ ut.GetHashCode ();
+        }
+
+        /// <summary>
+        /// What the game holds for the approach. It describes the two orbits at a moment,
+        /// and every member reads both of them, so it needs both: it is as live, dormant or
+        /// destroyed as the less alive of the two.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return orbit.GameObjectState.LeastAlive (target.GameObjectState); }
         }
 
         // The world-space position of the given orbit at the closest approach.

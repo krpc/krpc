@@ -18,27 +18,56 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// four thrusters.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Thruster : Equatable<Thruster>
+    public class Thruster : Equatable<Thruster>, IGameObjectState
     {
         readonly Part part;
-        readonly ModuleEngines engine;
-        readonly ModuleRCS rcs;
-        readonly ModuleGimbal gimbal;
+        // A thruster belongs either to an engine or to a set of RCS thrusters, so one of
+        // these two references stands for nothing.
+        ModuleRef engineRef;
+        ModuleRef rcsRef;
+        ModuleRef gimbalRef;
         readonly int transformIndex;
 
         internal Thruster (Part thrusterPart, ModuleEngines thrusterEngine, ModuleGimbal thrusterGimbal, int thrusterTransformIndex)
         {
             part = thrusterPart;
-            engine = thrusterEngine;
-            gimbal = thrusterGimbal;
+            var internalPart = thrusterPart.InternalPart;
+            engineRef = ModuleRef.ForModule (thrusterEngine);
+            rcsRef = ModuleRef.None;
+            gimbalRef = thrusterGimbal == null
+                ? ModuleRef.None
+                : ModuleRef.ForModule (thrusterGimbal);
             transformIndex = thrusterTransformIndex;
         }
 
         internal Thruster (Part thrusterPart, ModuleRCS thrusterRCS, int thrusterTransformIndex)
         {
             part = thrusterPart;
-            rcs = thrusterRCS;
+            engineRef = ModuleRef.None;
+            rcsRef = ModuleRef.ForModule (thrusterRCS);
+            gimbalRef = ModuleRef.None;
             transformIndex = thrusterTransformIndex;
+        }
+
+        ModuleEngines InternalEngine {
+            get { return (ModuleEngines)engineRef.Find (part.InternalPart); }
+        }
+
+        ModuleRCS InternalRCS {
+            get { return (ModuleRCS)rcsRef.Find (part.InternalPart); }
+        }
+
+        ModuleGimbal InternalGimbal {
+            get { return (ModuleGimbal)gimbalRef.Find (part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the engine or RCS module the thruster is part of.
+        /// Either is enough for the thruster, so it is as alive as the more alive of
+        /// them.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return engineRef.StateOn (part).MostAlive (rcsRef.StateOn (part)); }
         }
 
         /// <summary>
@@ -156,7 +185,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Gimballed {
-            get { return gimbal != null; }
+            get { return InternalGimbal != null; }
         }
 
         void CheckGimballed ()
@@ -175,7 +204,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 GimbalPosition (ReferenceFrame referenceFrame)
         {
             CheckGimballed ();
-            return referenceFrame.PositionFromWorldSpace (gimbal.gimbalTransforms [transformIndex].position).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalGimbal.gimbalTransforms [transformIndex].position).ToTuple ();
         }
 
         /// <summary>
@@ -185,7 +214,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public Tuple3 GimbalAngle {
             get {
                 CheckGimballed ();
-                return gimbal.actuation.ToTuple ();
+                return InternalGimbal.actuation.ToTuple ();
             }
         }
 
@@ -193,7 +222,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// Transform of the thrust vector in world space.
         /// </summary>
         internal Transform WorldTransform {
-            get { return (engine != null ? engine.thrustTransforms : rcs.thrusterTransforms) [transformIndex]; }
+            get { return (InternalEngine != null ? InternalEngine.thrustTransforms : InternalRCS.thrusterTransforms) [transformIndex]; }
         }
 
         /// <summary>
@@ -202,7 +231,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Vector3d WorldThrustDirection {
             get {
                 var transform = WorldTransform;
-                return (rcs != null && !rcs.useZaxis) ? -transform.up : -transform.forward;
+                return (InternalRCS != null && !InternalRCS.useZaxis) ? -transform.up : -transform.forward;
             }
         }
 
@@ -220,8 +249,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         void StashGimbalRotation ()
         {
-            savedRotation = gimbal.gimbalTransforms [transformIndex].localRotation;
-            gimbal.gimbalTransforms [transformIndex].localRotation = gimbal.initRots [transformIndex];
+            savedRotation = InternalGimbal.gimbalTransforms [transformIndex].localRotation;
+            InternalGimbal.gimbalTransforms [transformIndex].localRotation = InternalGimbal.initRots [transformIndex];
         }
 
         /// <summary>
@@ -229,7 +258,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         void RestoreGimbalRotation ()
         {
-            gimbal.gimbalTransforms [transformIndex].localRotation = savedRotation;
+            InternalGimbal.gimbalTransforms [transformIndex].localRotation = savedRotation;
         }
     }
 }

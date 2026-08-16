@@ -10,9 +10,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A solar panel. Obtained by calling <see cref="Part.SolarPanel"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class SolarPanel : Equatable<SolarPanel>
+    public class SolarPanel : Equatable<SolarPanel>, IGameObjectState
     {
-        readonly ModuleDeployableSolarPanel panel;
+        ModuleRef panelRef;
 
         internal static bool Is (Part part)
         {
@@ -22,9 +22,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal SolarPanel (Part part)
         {
             Part = part;
-            panel = part.InternalPart.Module<ModuleDeployableSolarPanel> ();
-            if (panel == null)
+            panelRef = ModuleRef.ForType<ModuleDeployableSolarPanel> (part.InternalPart);
+            if (panelRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part is not a solar panel");
+        }
+
+        ModuleDeployableSolarPanel InternalPanel {
+            get { return (ModuleDeployableSolarPanel)panelRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the solar panel: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return panelRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -32,7 +44,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (SolarPanel other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && panel == other.panel;
+            return !ReferenceEquals (other, null) && Part == other.Part && panelRef == other.panelRef;
         }
 
         /// <summary>
@@ -40,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ panel.GetHashCode ();
+            return Part.GetHashCode () ^ panelRef.GetHashCode ();
         }
 
         /// <summary>
@@ -56,9 +68,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployable {
             get {
                 return
-                    panel.Events ["Extend"].active || panel.Events ["Retract"].active ||
-                    panel.deployState == ModuleDeployablePart.DeployState.EXTENDING ||
-                    panel.deployState == ModuleDeployablePart.DeployState.RETRACTING;
+                    InternalPanel.Events ["Extend"].active || InternalPanel.Events ["Retract"].active ||
+                    InternalPanel.deployState == ModuleDeployablePart.DeployState.EXTENDING ||
+                    InternalPanel.deployState == ModuleDeployablePart.DeployState.RETRACTING;
             }
         }
 
@@ -69,16 +81,16 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployed {
             get {
                 return
-                panel.deployState == ModuleDeployablePart.DeployState.EXTENDED ||
-                panel.deployState == ModuleDeployablePart.DeployState.EXTENDING;
+                InternalPanel.deployState == ModuleDeployablePart.DeployState.EXTENDED ||
+                InternalPanel.deployState == ModuleDeployablePart.DeployState.EXTENDING;
             }
             set {
                 if (!Deployable)
                     throw new InvalidOperationException ("Solar panel is not deployable");
                 if (value)
-                    panel.Extend ();
+                    InternalPanel.Extend ();
                 else
-                    panel.Retract ();
+                    InternalPanel.Retract ();
             }
         }
 
@@ -87,7 +99,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public DeployableState State {
-            get { return panel.deployState.ToDeployableState (); }
+            get { return InternalPanel.deployState.ToDeployableState (); }
         }
 
         /// <summary>
@@ -96,7 +108,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float EnergyFlow {
-            get { return panel.flowRate; }
+            get { return InternalPanel.flowRate; }
         }
 
         /// <summary>
@@ -105,7 +117,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float SunExposure {
-            get { return panel.sunAOA; }
+            get { return InternalPanel.sunAOA; }
         }
     }
 }

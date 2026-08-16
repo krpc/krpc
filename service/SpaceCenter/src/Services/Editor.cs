@@ -214,8 +214,7 @@ namespace KRPC.SpaceCenter.Services
                 var driver = EditorDriver.fetch;
                 if (driver == null || driver.restartingEditor)
                     return false;
-                var logic = EditorLogic.fetch;
-                return logic != null && !ReferenceEquals (logic.ship, null);
+                return !ReferenceEquals (EditorExtensions.Ship, null);
             }
         }
 

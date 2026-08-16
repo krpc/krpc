@@ -64,7 +64,8 @@ namespace KRPC.InfernalRobotics
         public static IList<ServoGroup> ServoGroups (SpaceCenter.Services.Vessel vessel)
         {
             CheckAvailable ();
-            return IRWrapper.ServoGroupsForVessel (vessel.InternalVessel).Select (x => new ServoGroup (x)).ToList ();
+            return IRWrapper.ServoGroupsForVessel (vessel.InternalVessel)
+                .Select (x => new ServoGroup (vessel, x.Name)).ToList ();
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace KRPC.InfernalRobotics
         {
             CheckAvailable ();
             var servoGroup = IRWrapper.ServoGroupsForVessel (vessel.InternalVessel).FirstOrDefault (x => x.Name == name);
-            return servoGroup != null ? new ServoGroup (servoGroup) : null;
+            return servoGroup != null ? new ServoGroup (vessel, servoGroup.Name) : null;
         }
 
         /// <summary>

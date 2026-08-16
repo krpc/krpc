@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services
     /// are converted from kilonewtons and tonnes).
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Stage : Equatable<Stage>
+    public class Stage : Equatable<Stage>, IGameObjectState
     {
         /// <summary>
         /// The id of the vessel the stage belongs to. Unused when the stage belongs to
@@ -70,6 +70,17 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// What the game holds for the vessel the stage belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return editorVessel
+                    ? EditorExtensions.ShipState
+                    : FlightGlobalsExtensions.VesselState (vesselId);
+            }
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (Stage other)
@@ -109,13 +120,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         VesselDeltaV InternalDeltaV {
             get {
-                if (!editorVessel)
-                    return InternalVessel.VesselDeltaV;
-                var logic = EditorLogic.fetch;
-                var construct = logic == null ? null : logic.ship;
-                if (ReferenceEquals (construct, null))
-                    throw new InvalidOperationException ("The editor does not contain a vessel.");
-                return construct.vesselDeltaV;
+                return editorVessel
+                    ? EditorExtensions.GetShip ().vesselDeltaV
+                    : InternalVessel.VesselDeltaV;
             }
         }
 

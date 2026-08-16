@@ -133,6 +133,59 @@ namespace TestingTools
                 vessel.Die ();
         }
 
+        /// <summary>
+        /// Destroy a part, the way the game does when it is blown up or overheats.
+        /// Used by tests that need a part to stop existing under a client's part object.
+        /// </summary>
+        /// <param name="part">The part to destroy.</param>
+        [KRPCProcedure]
+        public static void DestroyPart (KRPC.SpaceCenter.Services.Parts.Part part)
+        {
+            if (part == null)
+                throw new ArgumentNullException (nameof (part));
+            part.InternalPart.Die ();
+        }
+
+        /// <summary>
+        /// Record the vessel in the editor as a state an undo can return to, as the game
+        /// does after each change the player makes to it.
+        /// </summary>
+        [KRPCProcedure]
+        public static void EditorSetBackup ()
+        {
+            EditorLogic.fetch.SetBackup ();
+        }
+
+        /// <summary>
+        /// Undo, restoring the vessel in the editor from the state recorded before the
+        /// last one. Used by tests that check what an undo does to a client's objects.
+        /// </summary>
+        /// <remarks>
+        /// The game drives this from the editor's own input handling, and the method that
+        /// does it is private, so there is nothing else to call.
+        /// </remarks>
+        [KRPCProcedure]
+        public static void EditorUndo ()
+        {
+            var method = typeof (EditorLogic).GetMethod (
+                "RestoreState",
+                System.Reflection.BindingFlags.Instance |
+                System.Reflection.BindingFlags.NonPublic);
+            if (method == null)
+                throw new InvalidOperationException (
+                    "EditorLogic.RestoreState not found; the game's undo has moved");
+            method.Invoke (EditorLogic.fetch, new object[] { -1 });
+        }
+
+        /// <summary>
+        /// The number of objects the server is holding on behalf of its clients. Used by tests
+        /// that check the server reclaims the objects whose game objects are gone.
+        /// </summary>
+        [KRPCProperty]
+        public static int ObjectStoreSize {
+            get { return ObjectStore.Instance.Count; }
+        }
+
         static Quaternion ZeroRotation {
             get {
                 var vessel = FlightGlobals.ActiveVessel;

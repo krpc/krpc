@@ -14,7 +14,9 @@ class TestImage(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.canvas = cls.connect().ui.stock_canvas
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        cls.canvas = cls.conn.ui.stock_canvas
 
     def test_image(self):
         image = self.canvas.add_image()
@@ -22,7 +24,7 @@ class TestImage(krpctest.TestCase):
         self.assertTrue(image.visible)
         self.assertEqual(b"", image.content)
         image.remove()
-        self.assertRaises(ValueError, image.remove)
+        self.assertRaises(self.destroyed, image.remove)
 
     def test_color(self):
         image = self.canvas.add_image()
@@ -81,6 +83,16 @@ class TestImage(krpctest.TestCase):
         image.content = PNG
         self.assertRaises(RuntimeError, image.update_pixels, pixel, 0, 0, 1, 1)
         image.remove()
+
+    def test_update_pixels_on_a_removed_image(self):
+        image = self.canvas.add_image()
+        image.set_pixels(b"\xff\x00\x00\xff" * 4, 2, 2)
+        image.remove()
+        # Redrawing a block draws into the texture rather than through the image
+        # component, so it has to say the image is gone in its own right rather than
+        # answering from what the removed image is still holding.
+        pixel = b"\x00\xff\x00\xff"
+        self.assertRaises(self.destroyed, image.update_pixels, pixel, 0, 0, 1, 1)
 
     def test_update_pixels_must_fit_inside_the_picture(self):
         image = self.canvas.add_image()

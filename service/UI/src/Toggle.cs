@@ -57,6 +57,14 @@ namespace KRPC.UI
             get { return toggle; }
         }
 
+        // The game's toggle, checked to still exist.
+        UnityEngine.UI.Toggle Internal {
+            get {
+                CheckExists ();
+                return toggle;
+            }
+        }
+
         /// <summary>
         /// The text for the toggle.
         /// </summary>
@@ -74,7 +82,7 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool Checked {
-            get { return toggle.isOn; }
+            get { return Internal.isOn; }
             set {
                 var toggleGroup = Group;
                 if (toggleGroup == null)
@@ -91,7 +99,7 @@ namespace KRPC.UI
         /// </summary>
         internal void SetChecked (bool value)
         {
-            toggle.SetIsOnWithoutNotify (value);
+            Internal.SetIsOnWithoutNotify (value);
         }
 
         /// <summary>
@@ -123,7 +131,7 @@ namespace KRPC.UI
                 if (current != null)
                     current.RemoveMember (this);
                 group = value;
-                toggle.group = value == null ? null : value.InnerGroup;
+                Internal.group = value == null ? null : value.InnerGroup;
                 if (value != null)
                     value.AddMember (this);
                 Checked = wasChecked;

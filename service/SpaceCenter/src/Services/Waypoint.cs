@@ -2,6 +2,7 @@ using System;
 using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -9,23 +10,36 @@ namespace KRPC.SpaceCenter.Services
     /// Represents a waypoint. Can be created using <see cref="WaypointManager.AddWaypoint"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Waypoint : Equatable<Waypoint>
+    public class Waypoint : Equatable<Waypoint>, IGameObjectState
     {
+        // The identifier the game gives a waypoint when it builds one. Nothing else names
+        // a waypoint: its name is neither unique nor fixed, and its seed and index only
+        // pick out the waypoints of a contract.
+        readonly Guid navigationId;
+
         /// <summary>
         /// Create a waypoint object.
         /// </summary>
         internal Waypoint (double latitude, double longitude, double altitude, CelestialBody body, string name)
         {
-            InternalWaypoint = new FinePrint.Waypoint ();
-            Name = name;
-            Body = body;
-            Icon = "report";
-            Color = 1115;
-            Latitude = latitude;
-            Longitude = longitude;
-            MeanAltitude = altitude;
-            InternalWaypoint.isNavigatable = true;
-            FinePrint.WaypointManager.AddWaypoint (InternalWaypoint);
+            if (ReferenceEquals (body, null))
+                throw new ArgumentNullException (nameof (body));
+            // The waypoint is set up before the game is given it, so this works on it
+            // directly: until the game has it, there is nothing for this object to find.
+            // What each line does is what the property of the same name does.
+            var waypoint = new FinePrint.Waypoint ();
+            waypoint.name = name;
+            waypoint.celestialName = body.Name;
+            waypoint.id = "report";
+            waypoint.seed = 1115;
+            waypoint.latitude = latitude;
+            waypoint.longitude = longitude;
+            waypoint.altitude = altitude - body.BedrockHeight (latitude, longitude);
+            waypoint.isOnSurface =
+                Math.Abs (body.SurfaceHeight (latitude, longitude) - altitude) < 10;
+            waypoint.isNavigatable = true;
+            navigationId = waypoint.navigationId;
+            FinePrint.WaypointManager.AddWaypoint (waypoint);
         }
 
         /// <summary>
@@ -33,20 +47,78 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Waypoint (FinePrint.Waypoint wp)
         {
-            InternalWaypoint = wp;
+            if (wp == null)
+                throw new ArgumentNullException (nameof (wp));
+            navigationId = wp.navigationId;
         }
 
         /// <summary>
-        /// The KSP Waypoint.
+        /// The KSP Waypoint, found again from the identifier that names it. The game builds
+        /// its waypoints again whenever it loads a game state, so the waypoint this stands
+        /// for is whichever one now carries the identifier.
         /// </summary>
-        public FinePrint.Waypoint InternalWaypoint { get; private set; }
+        public FinePrint.Waypoint InternalWaypoint {
+            get {
+                var waypoint = Find ();
+                if (waypoint == null)
+                    throw NotResolvable ();
+                return waypoint;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the waypoint. It is live while the game's waypoint
+        /// manager lists it, and destroyed once the manager is there to ask and does not, as
+        /// a waypoint that leaves the list is gone for good. A game with no waypoint manager
+        /// has no waypoints to look through, which says nothing about this one.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                if (FinePrint.WaypointManager.Instance () == null)
+                    return GameObjectState.Dormant;
+                return Find () != null ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        /// <summary>
+        /// The waypoint the game currently has under the identifier, or null if it has none.
+        /// </summary>
+        FinePrint.Waypoint Find ()
+        {
+            var manager = FinePrint.WaypointManager.Instance ();
+            if (manager == null)
+                return null;
+            var waypoints = manager.Waypoints;
+            if (waypoints == null)
+                return null;
+            for (var i = 0; i < waypoints.Count; i++) {
+                var waypoint = waypoints [i];
+                if (waypoint != null && waypoint.navigationId == navigationId)
+                    return waypoint;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// The error to raise when no waypoint answers to the identifier, which
+        /// <see cref="GameObjectState" /> decides between.
+        /// </summary>
+        Exception NotResolvable ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                return new ObjectDestroyedException (
+                    "The waypoint no longer exists, as the game no longer has a waypoint with its id.");
+            return new InvalidOperationException (
+                "The waypoint is not loaded, as the game has no waypoint manager running. " +
+                "It can be used again once the game does.");
+        }
 
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (Waypoint other)
         {
-            return !ReferenceEquals (other, null) && InternalWaypoint == other.InternalWaypoint;
+            return !ReferenceEquals (other, null) && navigationId == other.navigationId;
         }
 
         /// <summary>
@@ -54,8 +126,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            // Note: InternalNode could be set to null by Remove
-            return InternalWaypoint.GetHashCode ();
+            return navigationId.GetHashCode ();
         }
 
         /// <summary>
@@ -230,12 +301,16 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Removes the waypoint.
         /// </summary>
+        /// <remarks>
+        /// Any further use of this object throws an exception.
+        /// </remarks>
         [KRPCMethod]
         public void Remove ()
         {
-            if (HasContract)
+            var waypoint = InternalWaypoint;
+            if (waypoint.contractReference != null)
                 throw new InvalidOperationException ("Cannot remove waypoint attached to a contract.");
-            FinePrint.WaypointManager.RemoveWaypoint (InternalWaypoint);
+            FinePrint.WaypointManager.RemoveWaypoint (waypoint);
         }
     }
 }

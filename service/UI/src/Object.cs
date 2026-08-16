@@ -1,14 +1,16 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 using UnityEngine;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.UI
 {
     /// <summary>
     /// Abstract base class for all UI objects.
     /// </summary>
-    public abstract class Object : Equatable<Object>
+    public abstract class Object : Equatable<Object>, IGameObjectState
     {
         /// <summary>
         /// Whether a client can remove the object. Only the objects a client owns can be
@@ -16,19 +18,52 @@ namespace KRPC.UI
         /// with what they belong to.
         /// </summary>
         readonly bool removable;
-
-        /// <summary>
-        /// Whether the object has been destroyed. Unity carries out a destroy at the end
-        /// of the frame it was asked for in, and the server answers more than one call in
-        /// a frame, so the game object is still there to be asked afterwards and cannot be
-        /// used on its own to tell whether the object is gone.
-        /// </summary>
-        bool destroyed;
+        // Whether the element has been taken out of the interface. The game tears a game
+        // object down at the end of the frame, so this records that it is on its way out,
+        // and an element removed and read again in the same frame reports it gone.
+        bool removed;
 
         /// <summary>
         /// Unity game object for the UI element.
         /// </summary>
         protected GameObject GameObject { get; private set; }
+
+        /// <summary>
+        /// What the game holds for the element. The element is the game object it was made
+        /// with, so it is live while the game still has that object, and destroyed once it
+        /// does not, which is what removing it, clearing the interface elements,
+        /// disconnecting the client that made it and leaving the scene all do. Nothing
+        /// builds a client's element again, so there is no dormant state.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return removed || GameObject == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        /// <summary>
+        /// The game object for the element, checked to still exist. Every member that
+        /// reaches into the game goes through this, or through a component the element
+        /// found on it, so that an element the game no longer has says so rather than
+        /// failing on a torn down object.
+        /// </summary>
+        protected GameObject CheckedGameObject {
+            get {
+                CheckExists ();
+                return GameObject;
+            }
+        }
+
+        /// <summary>
+        /// Raise if the game no longer has the element.
+        /// </summary>
+        protected void CheckExists ()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                throw new ObjectDestroyedException (
+                    "The user interface object no longer exists, as it has been removed.");
+        }
 
         /// <summary>
         /// Create a UI object.
@@ -58,12 +93,16 @@ namespace KRPC.UI
         /// that a client is handed the same object identifier however it reaches the
         /// element, and asking for the same element repeatedly does not accumulate
         /// identifiers.
+        ///
+        /// The game objects are compared by reference rather than with Unity's own
+        /// equality, which reports a destroyed object as equal to null and so would make
+        /// two objects standing for different destroyed elements equal to each other.
         /// </remarks>
         public override bool Equals (Object other)
         {
             return !ReferenceEquals (other, null) &&
                 GetType () == other.GetType () &&
-                GameObject == other.GameObject;
+                ReferenceEquals (GameObject, other.GameObject);
         }
 
         /// <summary>
@@ -71,7 +110,9 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            return GameObject.GetHashCode ();
+            // The game object's identity hash rather than its own, so that nothing the
+            // game does to it can change it while a client holds this object.
+            return RuntimeHelpers.GetHashCode (GameObject);
         }
 
         /// <summary>
@@ -79,7 +120,7 @@ namespace KRPC.UI
         /// game object behind it has been destroyed by a scene change.
         /// </summary>
         internal bool Exists {
-            get { return !destroyed && GameObject != null; }
+            get { return GameObjectState != GameObjectState.Destroyed; }
         }
 
         /// <summary>
@@ -87,7 +128,10 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public RectTransform RectTransform {
-            get { return new RectTransform (GameObject.GetComponent<UnityEngine.RectTransform> ()); }
+            get {
+                return new RectTransform (
+                    CheckedGameObject.GetComponent<UnityEngine.RectTransform> ());
+            }
         }
 
         /// <summary>
@@ -115,9 +159,10 @@ namespace KRPC.UI
                 if (!CanHaveLayoutElement)
                     throw new InvalidOperationException (
                         "A canvas is not inside a layout, so it has no layout element");
-                var element = GameObject.GetComponent<UnityEngine.UI.LayoutElement> ();
+                var gameObject = CheckedGameObject;
+                var element = gameObject.GetComponent<UnityEngine.UI.LayoutElement> ();
                 if (element == null)
-                    element = GameObject.AddComponent<UnityEngine.UI.LayoutElement> ();
+                    element = gameObject.AddComponent<UnityEngine.UI.LayoutElement> ();
                 return new LayoutElement (element);
             }
         }
@@ -133,8 +178,8 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool Visible {
-            get { return GameObject.activeSelf; }
-            set { GameObject.SetActive (value); }
+            get { return CheckedGameObject.activeSelf; }
+            set { CheckedGameObject.SetActive (value); }
         }
 
         /// <summary>
@@ -149,8 +194,8 @@ namespace KRPC.UI
         /// </remarks>
         public virtual void Destroy ()
         {
+            removed = true;
             UnityEngine.Object.Destroy (GameObject);
-            destroyed = true;
         }
 
         /// <summary>
@@ -159,9 +204,15 @@ namespace KRPC.UI
         [KRPCMethod]
         public void Remove ()
         {
+            CheckExists ();
+            CheckNotRemovable ();
+            Addon.Remove (this);
+        }
+
+        void CheckNotRemovable ()
+        {
             if (!removable)
                 throw new InvalidOperationException ("UI object is not removable");
-            Addon.Remove (this);
         }
     }
 }

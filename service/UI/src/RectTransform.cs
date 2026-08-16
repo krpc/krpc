@@ -1,7 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using Tuple2 = System.Tuple<double, double>;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
@@ -13,12 +15,17 @@ namespace KRPC.UI
     /// See the <a href="https://docs.unity3d.com/Manual/class-RectTransform.html">Unity manual</a> for more details.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class RectTransform : Equatable<RectTransform>
+    public class RectTransform : Equatable<RectTransform>, IGameObjectState
     {
+        // The game's rect transform, which is what this stands for: it belongs to the
+        // interface element it was taken from and lives exactly as long as that element,
+        // and the game gives it nothing else to be named by.
         readonly UnityEngine.RectTransform rectTransform;
 
         internal RectTransform (UnityEngine.RectTransform innerRectTransform)
         {
+            if (ReferenceEquals (innerRectTransform, null))
+                throw new ArgumentNullException (nameof (innerRectTransform));
             rectTransform = innerRectTransform;
         }
 
@@ -27,7 +34,8 @@ namespace KRPC.UI
         /// </summary>
         public override bool Equals (RectTransform other)
         {
-            return !ReferenceEquals (other, null) && rectTransform == other.rectTransform;
+            return !ReferenceEquals (other, null) &&
+            ReferenceEquals (rectTransform, other.rectTransform);
         }
 
         /// <summary>
@@ -35,7 +43,32 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            return rectTransform.GetHashCode ();
+            // The transform's identity hash rather than its own, so that nothing the game
+            // does to it can change it while a client holds this object.
+            return RuntimeHelpers.GetHashCode (rectTransform);
+        }
+
+        /// <summary>
+        /// What the game holds for the rect transform. It belongs to the interface element
+        /// it was taken from, and the game destroys it with that element, which nothing
+        /// builds again.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return rectTransform == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        // The game's rect transform, checked to still exist.
+        UnityEngine.RectTransform Internal {
+            get {
+                if (GameObjectState == GameObjectState.Destroyed)
+                    throw new ObjectDestroyedException (
+                        "The rect transform no longer exists, as the user interface object " +
+                        "it belongs to has been removed.");
+                return rectTransform;
+            }
         }
 
         /// <summary>
@@ -43,8 +76,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 Position {
-            get { return rectTransform.anchoredPosition.ToTuple (); }
-            set { rectTransform.anchoredPosition = value.ToVector (); }
+            get { return Internal.anchoredPosition.ToTuple (); }
+            set { Internal.anchoredPosition = value.ToVector (); }
         }
 
         /// <summary>
@@ -52,8 +85,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple3 LocalPosition {
-            get { return rectTransform.localPosition.ToTuple (); }
-            set { rectTransform.localPosition = value.ToVector (); }
+            get { return Internal.localPosition.ToTuple (); }
+            set { Internal.localPosition = value.ToVector (); }
         }
 
         /// <summary>
@@ -61,8 +94,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 Size {
-            get { return rectTransform.sizeDelta.ToTuple (); }
-            set { rectTransform.sizeDelta = value.ToVector (); }
+            get { return Internal.sizeDelta.ToTuple (); }
+            set { Internal.sizeDelta = value.ToVector (); }
         }
 
         /// <summary>
@@ -70,8 +103,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 UpperRight {
-            get { return rectTransform.offsetMax.ToTuple (); }
-            set { rectTransform.offsetMax = value.ToVector (); }
+            get { return Internal.offsetMax.ToTuple (); }
+            set { Internal.offsetMax = value.ToVector (); }
         }
 
         /// <summary>
@@ -79,8 +112,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 LowerLeft {
-            get { return rectTransform.offsetMin.ToTuple (); }
-            set { rectTransform.offsetMin = value.ToVector (); }
+            get { return Internal.offsetMin.ToTuple (); }
+            set { Internal.offsetMin = value.ToVector (); }
         }
 
         /// <summary>
@@ -89,8 +122,8 @@ namespace KRPC.UI
         [KRPCProperty]
         public Tuple2 Anchor {
             set {
-                rectTransform.anchorMax = value.ToVector ();
-                rectTransform.anchorMin = value.ToVector ();
+                Internal.anchorMax = value.ToVector ();
+                Internal.anchorMin = value.ToVector ();
             }
         }
 
@@ -99,8 +132,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 AnchorMax {
-            get { return rectTransform.anchorMax.ToTuple (); }
-            set { rectTransform.anchorMax = value.ToVector (); }
+            get { return Internal.anchorMax.ToTuple (); }
+            set { Internal.anchorMax = value.ToVector (); }
         }
 
         /// <summary>
@@ -108,8 +141,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 AnchorMin {
-            get { return rectTransform.anchorMin.ToTuple (); }
-            set { rectTransform.anchorMin = value.ToVector (); }
+            get { return Internal.anchorMin.ToTuple (); }
+            set { Internal.anchorMin = value.ToVector (); }
         }
 
         /// <summary>
@@ -117,8 +150,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple2 Pivot {
-            get { return rectTransform.pivot.ToTuple (); }
-            set { rectTransform.pivot = value.ToVector (); }
+            get { return Internal.pivot.ToTuple (); }
+            set { Internal.pivot = value.ToVector (); }
         }
 
         /// <summary>
@@ -126,8 +159,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple4 Rotation {
-            get { return rectTransform.localRotation.ToTuple (); }
-            set { rectTransform.localRotation = value.ToQuaternion (); }
+            get { return Internal.localRotation.ToTuple (); }
+            set { Internal.localRotation = value.ToQuaternion (); }
         }
 
         /// <summary>
@@ -135,8 +168,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public Tuple3 Scale {
-            get { return rectTransform.localScale.ToTuple (); }
-            set { rectTransform.localScale = value.ToVector (); }
+            get { return Internal.localScale.ToTuple (); }
+            set { Internal.localScale = value.ToVector (); }
         }
     }
 }

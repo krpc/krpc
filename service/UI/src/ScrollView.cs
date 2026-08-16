@@ -54,6 +54,14 @@ namespace KRPC.UI
                 UnityEngine.UI.ScrollRect.ScrollbarVisibility.AutoHideAndExpandViewport;
         }
 
+        // The game's scroll rect, checked to still exist.
+        UnityEngine.UI.ScrollRect Internal {
+            get {
+                CheckExists ();
+                return scrollRect;
+            }
+        }
+
         /// <summary>
         /// The panel that is scrolled, which the elements to show are added to.
         /// </summary>
@@ -67,8 +75,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public bool Horizontal {
-            get { return scrollRect.horizontal; }
-            set { scrollRect.horizontal = value; }
+            get { return Internal.horizontal; }
+            set { Internal.horizontal = value; }
         }
 
         /// <summary>
@@ -76,8 +84,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public bool Vertical {
-            get { return scrollRect.vertical; }
-            set { scrollRect.vertical = value; }
+            get { return Internal.vertical; }
+            set { Internal.vertical = value; }
         }
     }
 }

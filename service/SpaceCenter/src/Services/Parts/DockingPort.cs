@@ -14,10 +14,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A docking port. Obtained by calling <see cref="Part.DockingPort"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class DockingPort : Equatable<DockingPort>
+    public class DockingPort : Equatable<DockingPort>, IGameObjectState
     {
-        readonly ModuleDockingNode port;
-        readonly ModuleAnimateGeneric shield;
+        ModuleRef portRef;
+        ModuleRef shieldRef;
 
         internal static bool Is (Part part)
         {
@@ -28,10 +28,22 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            port = internalPart.Module<ModuleDockingNode> ();
-            shield = internalPart.Module<ModuleAnimateGeneric> ();
-            if (port == null)
+            portRef = ModuleRef.ForType<ModuleDockingNode> (internalPart);
+            shieldRef = ModuleRef.ForType<ModuleAnimateGeneric> (internalPart);
+            if (portRef.Find (internalPart) == null)
                 throw new ArgumentException ("Part is not a docking port");
+        }
+
+        ModuleAnimateGeneric InternalShield {
+            get { return (ModuleAnimateGeneric)shieldRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the docking port: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return portRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -42,8 +54,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             return
             !ReferenceEquals (other, null) &&
             Part == other.Part &&
-            port.Equals (other.port) &&
-            (shield == other.shield || shield.Equals (other.shield));
+            portRef == other.portRef &&
+            shieldRef == other.shieldRef;
         }
 
         /// <summary>
@@ -51,17 +63,14 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode () ^ port.GetHashCode ();
-            if (shield != null)
-                hash ^= shield.GetHashCode ();
-            return hash;
+            return Part.GetHashCode () ^ portRef.GetHashCode () ^ shieldRef.GetHashCode ();
         }
 
         /// <summary>
         /// The KSP docking node object.
         /// </summary>
         public ModuleDockingNode InternalPort {
-            get { return port; }
+            get { return (ModuleDockingNode)portRef.Get (Part.InternalPart); }
         }
 
         /// <summary>
@@ -77,7 +86,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public DockingPortState State {
             get {
                 // Get the state of this docking port
-                var state = IndividualState (port);
+                var state = IndividualState (InternalPort);
                 // Get the part and port docked to this docking port, if any
                 var dockedPart = GetDockedPart;
                 var dockedPort = dockedPart != null ? dockedPart.Module<ModuleDockingNode> () : null;
@@ -134,7 +143,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             // Try decoupling or undocking this part, and then the port we are docked to, if any.
             // Decouple detaches a port that was attached in the editor, Undock separates two ports
             // that docked in flight; a given port only ever offers one of them.
-            if (port.InvokeEvent ("Decouple") || port.InvokeEvent ("Undock") ||
+            if (InternalPort.InvokeEvent ("Decouple") || InternalPort.InvokeEvent ("Undock") ||
                 (dockedPort != null && (dockedPort.InvokeEvent ("Decouple") || dockedPort.InvokeEvent ("Undock")))) {
                 return PartSeparation.NewVessel (Part, preVesselIds, () => State != DockingPortState.Docked);
             }
@@ -149,7 +158,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float ReengageDistance {
-            get { return port.minDistanceToReEngage; }
+            get { return InternalPort.minDistanceToReEngage; }
         }
 
         /// <summary>
@@ -157,7 +166,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool HasShield {
-            get { return shield != null; }
+            get { return InternalShield != null; }
         }
 
         /// <summary>
@@ -183,7 +192,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // name of the method implementing it -- which the game does not translate, unlike
                 // the display name shown on the button.
                 if (value != Shielded)
-                    shield.Events ["Toggle"].Invoke ();
+                    InternalShield.Events ["Toggle"].Invoke ();
             }
         }
 
@@ -193,7 +202,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool CanRotate
         {
-            get { return port.canRotate; }
+            get { return InternalPort.canRotate; }
         }
 
         /// <summary>
@@ -202,7 +211,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MaximumRotation
         {
-            get { return port.hardMinMaxLimits.y; }
+            get { return InternalPort.hardMinMaxLimits.y; }
         }
 
         /// <summary>
@@ -211,7 +220,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float MinimumRotation
         {
-            get { return port.hardMinMaxLimits.x; }
+            get { return InternalPort.hardMinMaxLimits.x; }
         }
 
         /// <summary>
@@ -220,8 +229,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float RotationTarget
         {
-            get { return port.targetAngle; }
-            set { port.targetAngle = value; }
+            get { return InternalPort.targetAngle; }
+            set { InternalPort.targetAngle = value; }
         }
 
         /// <summary>
@@ -230,8 +239,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool RotationLocked
         {
-            get { return port.nodeIsLocked; }
-            set { port.nodeIsLocked = value; }
+            get { return InternalPort.nodeIsLocked; }
+            set { InternalPort.nodeIsLocked = value; }
         }
 
         /// <summary>
@@ -243,7 +252,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.PositionFromWorldSpace (port.nodeTransform.position).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (InternalPort.nodeTransform.position).ToTuple ();
         }
 
         /// <summary>
@@ -255,7 +264,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple3 Direction (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.DirectionFromWorldSpace (port.nodeTransform.forward).ToTuple ();
+            return referenceFrame.DirectionFromWorldSpace (InternalPort.nodeTransform.forward).ToTuple ();
         }
 
         /// <summary>
@@ -267,7 +276,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public Tuple4 Rotation (ReferenceFrame referenceFrame)
         {
-            return referenceFrame.RotationFromWorldSpace (port.nodeTransform.rotation * Quaternion.Euler (90, 0, 0)).ToTuple ();
+            return referenceFrame.RotationFromWorldSpace (InternalPort.nodeTransform.rotation * Quaternion.Euler (90, 0, 0)).ToTuple ();
         }
 
         /// <summary>
@@ -291,7 +300,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.Object (port); }
+            get { return ReferenceFrame.Object (InternalPort); }
         }
 
         /// <summary>
@@ -300,7 +309,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         global::Part GetDockedPart {
             get {
                 var part = Part.InternalPart;
-                if (port.state == "PreAttached") {
+                if (InternalPort.state == "PreAttached") {
                     // If the port is "PreAttached" (docked from the VAB/SPH) find the connected part
                     // If the docking port points at an axially connected child part, return it
                     var child = part.children.SingleOrDefault (p => p.attachMode == AttachModes.STACK);
@@ -313,7 +322,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                     throw new InvalidOperationException ("Docking port is 'PreAttached' but is not docked to any parts");
                 }
                 // Find the port that is "Docked" to this port, if any
-                return part.vessel [port.dockedPartUId];
+                return part.vessel [InternalPort.dockedPartUId];
             }
         }
 
@@ -322,7 +331,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         bool PointsTowards (global::Part otherPart)
         {
-            return Vector3d.Dot (port.nodeTransform.forward, otherPart.transform.position - port.transform.position) > 0;
+            return Vector3d.Dot (InternalPort.nodeTransform.forward, otherPart.transform.position - InternalPort.transform.position) > 0;
         }
 
         /// <summary>

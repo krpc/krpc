@@ -2,6 +2,7 @@ using System;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -9,7 +10,7 @@ namespace KRPC.SpaceCenter.Services
     /// An alarm. Can be accessed using <see cref="SpaceCenter.AlarmManager"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter")]
-    public class Alarm : Equatable<Alarm>
+    public class Alarm : Equatable<Alarm>, IGameObjectState
     {
         readonly uint id;
 
@@ -20,14 +21,66 @@ namespace KRPC.SpaceCenter.Services
         {
             if (alarm == null)
                 throw new ArgumentNullException(nameof(alarm));
-            InternalAlarm = alarm;
             id = alarm.Id;
         }
 
         /// <summary>
-        /// The KSP Alarm
+        /// The KSP Alarm, found again from the id it is known by. The game destroys and
+        /// recreates an alarm when it is edited, and builds every alarm again when a game
+        /// is loaded, so the alarm this stands for is whichever one now answers to the id.
         /// </summary>
-        public AlarmTypeBase InternalAlarm { get; private set; }
+        public AlarmTypeBase InternalAlarm
+        {
+            get
+            {
+                var alarm = Find();
+                if (alarm == null)
+                    throw NotResolvable();
+                return alarm;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the alarm. It is live while an alarm with the id is in
+        /// the game's alarm clock, and destroyed once the alarm clock is there to ask and
+        /// has none, as an alarm that is removed is gone for good. A game that has no alarm
+        /// clock running has no alarms to look through, which says nothing about this one.
+        /// </summary>
+        public GameObjectState GameObjectState
+        {
+            get
+            {
+                if (AlarmClockScenario.Instance == null)
+                    return GameObjectState.Dormant;
+                return Find() != null ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        /// <summary>
+        /// The alarm the game currently has under the id, or null if it has none.
+        /// </summary>
+        AlarmTypeBase Find()
+        {
+            if (AlarmClockScenario.Instance == null)
+                return null;
+            AlarmTypeBase alarm;
+            AlarmClockScenario.TryGetAlarm(id, out alarm);
+            return alarm;
+        }
+
+        /// <summary>
+        /// The error to raise when no alarm answers to the id, which
+        /// <see cref="GameObjectState" /> decides between.
+        /// </summary>
+        Exception NotResolvable()
+        {
+            if (GameObjectState == GameObjectState.Destroyed)
+                return new ObjectDestroyedException(
+                    "The alarm no longer exists, as the game no longer has an alarm with its id.");
+            return new InvalidOperationException(
+                "The alarm is not loaded, as the game has no alarm clock running. " +
+                "It can be used again once the game does.");
+        }
 
         /// <summary>
         /// Returns true if the objects are equal.
@@ -53,11 +106,7 @@ namespace KRPC.SpaceCenter.Services
         [KRPCProperty]
         public uint ID
         {
-            get
-            {
-                UpdateAlarm();
-                return id;
-            }
+            get { return id; }
         }
 
         /// <summary>
@@ -67,7 +116,6 @@ namespace KRPC.SpaceCenter.Services
         public AlarmType Type
         {
             get {
-                UpdateAlarm();
                 return InternalAlarm.ToAlarmType();
             }
         }
@@ -79,13 +127,10 @@ namespace KRPC.SpaceCenter.Services
         public string Title
         {
             get {
-                UpdateAlarm();
                 return InternalAlarm.title;
             }
             set {
-                UpdateAlarm();
                 InternalAlarm.title = value;
-                UpdateAlarm();
             }
         }
 
@@ -96,13 +141,10 @@ namespace KRPC.SpaceCenter.Services
         public string Description
         {
             get {
-                UpdateAlarm();
                 return InternalAlarm.description;
             }
             set {
-                UpdateAlarm();
                 InternalAlarm.description = value;
-                UpdateAlarm();
             }
         }
 
@@ -113,13 +155,10 @@ namespace KRPC.SpaceCenter.Services
         public double Time
         {
             get {
-                UpdateAlarm();
                 return InternalAlarm.ut;
             }
             set {
-                UpdateAlarm();
                 InternalAlarm.ut = value;
-                UpdateAlarm();
             }
         }
 
@@ -130,7 +169,6 @@ namespace KRPC.SpaceCenter.Services
         public double TimeUntil
         {
             get {
-                UpdateAlarm();
                 return InternalAlarm.TimeToAlarm;
             }
         }
@@ -142,13 +180,10 @@ namespace KRPC.SpaceCenter.Services
         public double EventOffset
         {
             get {
-                UpdateAlarm();
                 return InternalAlarm.eventOffset;
             }
             set {
-                UpdateAlarm();
                 InternalAlarm.eventOffset = value;
-                UpdateAlarm();
             }
         }
 
@@ -160,7 +195,6 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 var vessel = InternalAlarm.Vessel;
                 return vessel != null ? new Vessel(vessel) : null;
             }
@@ -179,12 +213,12 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
-                var maneuverAlarm = InternalAlarm as AlarmTypeManeuver;
+                var alarm = InternalAlarm;
+                var maneuverAlarm = alarm as AlarmTypeManeuver;
                 if (maneuverAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a Maneuver alarm, it has no associated maneuver node.");
-                var vessel = InternalAlarm.Vessel;
+                var vessel = alarm.Vessel;
                 var node = maneuverAlarm.Maneuver;
                 if (vessel == null || node == null)
                     throw new InvalidOperationException(
@@ -193,13 +227,11 @@ namespace KRPC.SpaceCenter.Services
             }
             set
             {
-                UpdateAlarm();
                 var maneuverAlarm = InternalAlarm as AlarmTypeManeuver;
                 if (maneuverAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a Maneuver alarm, it has no associated maneuver node.");
                 maneuverAlarm.Maneuver = value.InternalNode;
-                UpdateAlarm();
             }
         }
 
@@ -216,7 +248,6 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
                 if (transferAlarm == null)
                     throw new InvalidOperationException(
@@ -229,13 +260,11 @@ namespace KRPC.SpaceCenter.Services
             }
             set
             {
-                UpdateAlarm();
                 var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
                 if (transferAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a TransferWindow alarm, it has no associated origin body.");
                 transferAlarm.source = value.InternalBody;
-                UpdateAlarm();
             }
         }
 
@@ -252,7 +281,6 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
                 if (transferAlarm == null)
                     throw new InvalidOperationException(
@@ -265,13 +293,11 @@ namespace KRPC.SpaceCenter.Services
             }
             set
             {
-                UpdateAlarm();
                 var transferAlarm = InternalAlarm as AlarmTypeTransferWindow;
                 if (transferAlarm == null)
                     throw new InvalidOperationException(
                         "Alarm is not a TransferWindow alarm, it has no associated destination body.");
                 transferAlarm.dest = value.InternalBody;
-                UpdateAlarm();
             }
         }
 
@@ -283,14 +309,11 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 return InternalAlarm.actions.warp.ToAlarmWarpAction();
             }
             set
             {
-                UpdateAlarm();
                 InternalAlarm.actions.warp = value.FromAlarmWarpAction();
-                UpdateAlarm();
             }
         }
 
@@ -302,14 +325,11 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 return InternalAlarm.actions.message.ToAlarmMessageAction();
             }
             set
             {
-                UpdateAlarm();
                 InternalAlarm.actions.message = value.FromAlarmMessageAction();
-                UpdateAlarm();
             }
         }
 
@@ -321,14 +341,11 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 return InternalAlarm.actions.playSound;
             }
             set
             {
-                UpdateAlarm();
                 InternalAlarm.actions.playSound = value;
-                UpdateAlarm();
             }
         }
 
@@ -341,14 +358,11 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 return InternalAlarm.actions.deleteWhenDone;
             }
             set
             {
-                UpdateAlarm();
                 InternalAlarm.actions.deleteWhenDone = value;
-                UpdateAlarm();
             }
         }
 
@@ -360,7 +374,6 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 return InternalAlarm.Triggered;
             }
         }
@@ -373,7 +386,6 @@ namespace KRPC.SpaceCenter.Services
         {
             get
             {
-                UpdateAlarm();
                 return InternalAlarm.Actioned;
             }
         }
@@ -381,22 +393,16 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// Removes the alarm.
         /// </summary>
+        /// <remarks>
+        /// Any further use of this object throws an exception.
+        /// </remarks>
         [KRPCMethod]
         public void Remove()
         {
-            UpdateAlarm();
-            AlarmClockScenario.DeleteAlarm(id);
-            InternalAlarm = null;
-        }
-
-        private void UpdateAlarm()
-        {
-            if (InternalAlarm == null)
-                throw new InvalidOperationException("Alarm does not exist");
-            AlarmTypeBase alarm;
-            AlarmClockScenario.TryGetAlarm(id, out alarm);
-            if (alarm != null)
-                InternalAlarm = alarm;
+            // Resolve first, so that removing an alarm the game does not have reports that
+            // rather than passing an id the alarm clock knows nothing about.
+            var alarm = InternalAlarm;
+            AlarmClockScenario.DeleteAlarm(alarm.Id);
         }
     }
 }

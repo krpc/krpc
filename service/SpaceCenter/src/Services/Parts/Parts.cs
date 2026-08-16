@@ -13,7 +13,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An instance can be obtained by calling <see cref="Vessel.Parts"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class Parts : Equatable<Parts>
+    public class Parts : Equatable<Parts>, IGameObjectState
     {
         /// <summary>
         /// The id of the vessel the parts belong to. Unused when the parts belong to the
@@ -35,6 +35,17 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Parts ()
         {
             editorVessel = true;
+        }
+
+        /// <summary>
+        /// What the game holds for the vessel this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return editorVessel
+                    ? EditorExtensions.ShipState
+                    : FlightGlobalsExtensions.VesselState (vesselId);
+            }
         }
 
         /// <summary>
@@ -61,13 +72,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public IShipconstruct InternalShipConstruct {
             get {
-                if (!editorVessel)
-                    return InternalVessel;
-                var logic = EditorLogic.fetch;
-                var construct = ReferenceEquals (logic, null) ? null : logic.ship;
-                if (ReferenceEquals (construct, null))
-                    throw new InvalidOperationException ("The editor does not contain a vessel.");
-                return construct;
+                return editorVessel ? (IShipconstruct)EditorExtensions.GetShip () : InternalVessel;
             }
         }
 

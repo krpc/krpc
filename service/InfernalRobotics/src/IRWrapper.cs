@@ -92,6 +92,11 @@ namespace KRPC.InfernalRobotics
 				? ModuleServoType.GetField ("groupName")
 				: null;
 
+			// The wrappers bind the mod's members once and keep them for the assembly, so
+			// anything bound against the types of a previous run is dropped here.
+			IRServo.Unbind();
+			IRServoGroup.Unbind();
+
 			LogFormatted("Got Assembly Types, grabbing Instance");
 
 			try
@@ -197,35 +202,56 @@ namespace KRPC.InfernalRobotics
 		{
 			private readonly object actualControlGroup;
 
-			private PropertyInfo nameProperty;
-			private PropertyInfo vesselProperty;
-			private PropertyInfo expandedProperty;
-			private PropertyInfo groupSpeedFactorProperty;
+			private static PropertyInfo nameProperty;
+			private static PropertyInfo vesselProperty;
+			private static PropertyInfo expandedProperty;
+			private static PropertyInfo groupSpeedFactorProperty;
 
-			private PropertyInfo forwardKeyProperty;
-			private PropertyInfo reverseKeyProperty;
+			private static PropertyInfo forwardKeyProperty;
+			private static PropertyInfo reverseKeyProperty;
 
-			private PropertyInfo movingDirectionProperty;
-			private PropertyInfo advancedModeProperty;
-			private PropertyInfo totalElectricChargeRequirementProperty;
-			private PropertyInfo buildAidProperty;
-			private PropertyInfo ikActiveProperty;
+			private static PropertyInfo movingDirectionProperty;
+			private static PropertyInfo advancedModeProperty;
+			private static PropertyInfo totalElectricChargeRequirementProperty;
+			private static PropertyInfo buildAidProperty;
+			private static PropertyInfo ikActiveProperty;
 
-			private MethodInfo moveRightMethod;
-			private MethodInfo moveLeftMethod;
-			private MethodInfo moveCenterMethod;
-			private MethodInfo moveNextPresetMethod;
-			private MethodInfo movePrevPresetMethod;
-			private MethodInfo stopMethod;
+			private static MethodInfo moveRightMethod;
+			private static MethodInfo moveLeftMethod;
+			private static MethodInfo moveCenterMethod;
+			private static MethodInfo moveNextPresetMethod;
+			private static MethodInfo movePrevPresetMethod;
+			private static MethodInfo stopMethod;
 
 			public IRServoGroup (object cg)
 			{
 				actualControlGroup = cg;
-				FindProperties();
-				FindMethods();
+				EnsureBound();
+				ActualServos = servosProperty.GetValue(actualControlGroup, null);
 			}
 
-			private void FindProperties()
+			// The lookups below depend on the mod's group type alone, so they are made once
+			// for the assembly rather than for each group wrapped. A group is wrapped every
+			// time one is listed, and there are a dozen of them.
+			private static bool bound;
+
+			internal static void Unbind()
+			{
+				bound = false;
+			}
+
+			private static void EnsureBound()
+			{
+				if(bound)
+					return;
+				FindProperties();
+				FindMethods();
+				bound = true;
+			}
+
+			private static PropertyInfo servosProperty;
+
+			private static void FindProperties()
 			{
 				nameProperty = IRServoGroupType.GetProperty("Name");
 				vesselProperty = IRServoGroupType.GetProperty("Vessel");
@@ -239,11 +265,10 @@ namespace KRPC.InfernalRobotics
 				buildAidProperty = IRServoGroupType.GetProperty("BuildAid");
 				ikActiveProperty = IRServoGroupType.GetProperty("IKActive");
 
-				var servosProperty = IRServoGroupType.GetProperty("Servos");
-				ActualServos = servosProperty.GetValue(actualControlGroup, null);
+				servosProperty = IRServoGroupType.GetProperty("Servos");
 			}
 
-			private void FindMethods()
+			private static void FindMethods()
 			{
 				moveRightMethod = IRServoGroupType.GetMethod ("MoveRight", BindingFlags.Public | BindingFlags.Instance);
 				moveLeftMethod = IRServoGroupType.GetMethod ("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
@@ -379,73 +404,90 @@ namespace KRPC.InfernalRobotics
 
 		public class IRServo : IServo
 		{
-			private PropertyInfo nameProperty;
-			private PropertyInfo UIDProperty;
-			private PropertyInfo HostPartProperty;
-			private PropertyInfo highlightProperty;
+			private static PropertyInfo nameProperty;
+			private static PropertyInfo UIDProperty;
+			private static PropertyInfo HostPartProperty;
+			private static PropertyInfo highlightProperty;
 
-			private PropertyInfo minPositionProperty;
-			private PropertyInfo maxPositionProperty;
-			private PropertyInfo isFreeMovingProperty;
+			private static PropertyInfo minPositionProperty;
+			private static PropertyInfo maxPositionProperty;
+			private static PropertyInfo isFreeMovingProperty;
 
-			private PropertyInfo minPositionLimitProperty;
-			private PropertyInfo maxPositionLimitProperty;
+			private static PropertyInfo minPositionLimitProperty;
+			private static PropertyInfo maxPositionLimitProperty;
 
-			private PropertyInfo forceLimitProperty;
-			private PropertyInfo accelerationLimitProperty;
-			private PropertyInfo speedLimitProperty;
-			private PropertyInfo defaultSpeedProperty;
+			private static PropertyInfo forceLimitProperty;
+			private static PropertyInfo accelerationLimitProperty;
+			private static PropertyInfo speedLimitProperty;
+			private static PropertyInfo defaultSpeedProperty;
 
-			private PropertyInfo isMovingProperty;
-			private PropertyInfo isLockedProperty;
-			private PropertyInfo isInvertedProperty;
+			private static PropertyInfo isMovingProperty;
+			private static PropertyInfo isLockedProperty;
+			private static PropertyInfo isInvertedProperty;
 
-			private PropertyInfo commandedPositionProperty;
-			private PropertyInfo commandedSpeedProperty;
+			private static PropertyInfo commandedPositionProperty;
+			private static PropertyInfo commandedSpeedProperty;
 
-			private PropertyInfo positionProperty;
+			private static PropertyInfo positionProperty;
 
-			private PropertyInfo forwardKeyProperty;
-			private PropertyInfo reverseKeyProperty;
+			private static PropertyInfo forwardKeyProperty;
+			private static PropertyInfo reverseKeyProperty;
 
-			private PropertyInfo targetPositionProperty;
-			private PropertyInfo targetSpeedProperty;
-			private PropertyInfo defaultPositionProperty;
-			private PropertyInfo maxForceProperty;
-			private PropertyInfo maxAccelerationProperty;
-			private PropertyInfo maxSpeedProperty;
-			private PropertyInfo electricChargeRequiredProperty;
-			private PropertyInfo springPowerProperty;
-			private PropertyInfo dampingPowerProperty;
-			private PropertyInfo rotorAccelerationProperty;
-			private PropertyInfo isLimitedProperty;
-			private PropertyInfo isRotationalProperty;
-			private PropertyInfo isServoProperty;
-			private PropertyInfo canHaveLimitsProperty;
-			private PropertyInfo hasSpringProperty;
-			private PropertyInfo isRunningProperty;
-			private PropertyInfo modeProperty;
-			private PropertyInfo presetPositionsProperty;
-			private PropertyInfo presetsProperty;
-			private MethodInfo presetAddMethod;
-			private MethodInfo presetRemoveAtMethod;
-			private MethodInfo presetSortMethod;
+			private static PropertyInfo targetPositionProperty;
+			private static PropertyInfo targetSpeedProperty;
+			private static PropertyInfo defaultPositionProperty;
+			private static PropertyInfo maxForceProperty;
+			private static PropertyInfo maxAccelerationProperty;
+			private static PropertyInfo maxSpeedProperty;
+			private static PropertyInfo electricChargeRequiredProperty;
+			private static PropertyInfo springPowerProperty;
+			private static PropertyInfo dampingPowerProperty;
+			private static PropertyInfo rotorAccelerationProperty;
+			private static PropertyInfo isLimitedProperty;
+			private static PropertyInfo isRotationalProperty;
+			private static PropertyInfo isServoProperty;
+			private static PropertyInfo canHaveLimitsProperty;
+			private static PropertyInfo hasSpringProperty;
+			private static PropertyInfo isRunningProperty;
+			private static PropertyInfo modeProperty;
+			private static PropertyInfo presetPositionsProperty;
+			private static PropertyInfo presetsProperty;
+			private static MethodInfo presetAddMethod;
+			private static MethodInfo presetRemoveAtMethod;
+			private static MethodInfo presetSortMethod;
 
-			private MethodInfo moveLeftMethod;
-			private MethodInfo moveCenterMethod;
-			private MethodInfo moveRightMethod;
-			private MethodInfo moveToMethod;
-			private MethodInfo stopMethod;
+			private static MethodInfo moveLeftMethod;
+			private static MethodInfo moveCenterMethod;
+			private static MethodInfo moveRightMethod;
+			private static MethodInfo moveToMethod;
+			private static MethodInfo stopMethod;
 
 			public IRServo(object s)
 			{
 				actualServo = s;
-
-				FindProperties();
-				FindMethods();
+				EnsureBound();
 			}
 
-			private void FindProperties()
+			// The lookups below depend on the mod's servo type alone, so they are made once
+			// for the assembly rather than for each servo wrapped. A servo is wrapped every
+			// time one is listed, and there are around forty lookups.
+			private static bool bound;
+
+			internal static void Unbind()
+			{
+				bound = false;
+			}
+
+			private static void EnsureBound()
+			{
+				if(bound)
+					return;
+				FindProperties();
+				FindMethods();
+				bound = true;
+			}
+
+			private static void FindProperties()
 			{
 				nameProperty = IRServoType.GetProperty("Name");
 				UIDProperty = IRServoType.GetProperty("UID");
@@ -503,7 +545,7 @@ namespace KRPC.InfernalRobotics
 				}
 			}
 
-			private void FindMethods()
+			private static void FindMethods()
 			{
 				moveLeftMethod = IRServoType.GetMethod("MoveLeft", BindingFlags.Public | BindingFlags.Instance);
 				moveCenterMethod = IRServoType.GetMethod("MoveCenter", BindingFlags.Public | BindingFlags.Instance);
@@ -825,6 +867,31 @@ namespace KRPC.InfernalRobotics
 			if (AssemblyExists && !isWrapped)
 				InitWrapper ();
 			return APIReady;
+		}
+
+		// The module that makes a part a servo. IServo.UID is the part's craft id, so the mod
+		// names a servo by its part, and a part carries at most one.
+		internal const string ServoModuleName = "ModuleIRServo_v3";
+
+		// The servo on a given part, or null if it has none. This is what an object standing
+		// for a servo resolves through, so that it finds the servo the game has now rather
+		// than holding the one it was built from, which belongs to a part and a game state
+		// that the game can replace.
+		internal static IServo ServoOnPart (Part part)
+		{
+			if(part == null)
+				return null;
+			EnsureReady ();
+			if(!isWrapped)
+				return null;
+			var modules = part.Modules;
+			for(int i = 0; i < modules.Count; i++)
+			{
+				var module = modules [i];
+				if(module != null && module.moduleName == ServoModuleName)
+					return new IRServo (module);
+			}
+			return null;
 		}
 
 		// Servos for a given vessel. IR's Controller only tracks the active vessel, so prefer

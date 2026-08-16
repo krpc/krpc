@@ -8,7 +8,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Obtained by calling <see cref="Control.GetActionGroupActions"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class ActionGroupAction : Equatable<ActionGroupAction>
+    public class ActionGroupAction : Equatable<ActionGroupAction>, IGameObjectState
     {
         readonly Part part;
         readonly Module module;
@@ -21,6 +21,14 @@ namespace KRPC.SpaceCenter.Services.Parts
             module = actionModule;
             name = actionName;
             id = actionId;
+        }
+
+        /// <summary>
+        /// What the game holds for the module the action belongs to, or for its part
+        /// where the action has no module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return module != null ? module.GameObjectState : part.GameObjectState; }
         }
 
         /// <summary>

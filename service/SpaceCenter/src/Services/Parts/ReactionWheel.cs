@@ -13,9 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A reaction wheel. Obtained by calling <see cref="Part.ReactionWheel"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class ReactionWheel : Equatable<ReactionWheel>
+    public class ReactionWheel : Equatable<ReactionWheel>, IGameObjectState
     {
-        readonly ModuleReactionWheel reactionWheel;
+        ModuleRef reactionWheelRef;
 
         internal static bool Is (Part part)
         {
@@ -30,9 +30,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ReactionWheel (Part part)
         {
             Part = part;
-            reactionWheel = part.InternalPart.Module<ModuleReactionWheel> ();
-            if (reactionWheel == null)
+            reactionWheelRef = ModuleRef.ForType<ModuleReactionWheel> (part.InternalPart);
+            if (reactionWheelRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part is not a reaction wheel");
+        }
+
+        ModuleReactionWheel InternalReactionWheel {
+            get { return (ModuleReactionWheel)reactionWheelRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the reaction wheel: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return reactionWheelRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -40,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ReactionWheel other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && reactionWheel == other.reactionWheel;
+            return !ReferenceEquals (other, null) && Part == other.Part && reactionWheelRef == other.reactionWheelRef;
         }
 
         /// <summary>
@@ -48,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ reactionWheel.GetHashCode ();
+            return Part.GetHashCode () ^ reactionWheelRef.GetHashCode ();
         }
 
         /// <summary>
@@ -62,11 +74,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return reactionWheel.State == ModuleReactionWheel.WheelState.Active; }
+            get { return InternalReactionWheel.State == ModuleReactionWheel.WheelState.Active; }
             set {
                 var active = Active;
                 if ((value && !active) || (!value && active))
-                    reactionWheel.Toggle (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
+                    InternalReactionWheel.Toggle (new KSPActionParam (KSPActionGroup.None, KSPActionType.Activate));
             }
         }
 
@@ -75,7 +87,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Broken {
-            get { return reactionWheel.State == ModuleReactionWheel.WheelState.Broken; }
+            get { return InternalReactionWheel.State == ModuleReactionWheel.WheelState.Broken; }
         }
 
         /// <summary>
@@ -84,8 +96,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float AuthorityLimiter {
-            get { return reactionWheel.authorityLimiter / 100f; }
-            set { reactionWheel.authorityLimiter = (value * 100f).Clamp (0f, 100f); }
+            get { return InternalReactionWheel.authorityLimiter / 100f; }
+            set { InternalReactionWheel.authorityLimiter = (value * 100f).Clamp (0f, 100f); }
         }
 
         /// <summary>
@@ -116,6 +128,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // varies between the stock module and modded replacements of it. The
                 // conditions under which the wheel produces no torque match the stock ones:
                 // the module must be enabled and active, and actuator mode 2 disables it.
+                var reactionWheel = InternalReactionWheel;
                 if (!reactionWheel.moduleIsEnabled || !Active || reactionWheel.actuatorModeCycle == 2)
                     return ITorqueProviderExtensions.zero;
                 var torque = MaxTorqueVectors.Item1 * (reactionWheel.authorityLimiter / 100.0);
@@ -125,7 +138,7 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal TupleV3 MaxTorqueVectors {
             get {
-                var torque = new Vector3d (reactionWheel.PitchTorque, reactionWheel.RollTorque, reactionWheel.YawTorque) * 1000.0d;
+                var torque = new Vector3d (InternalReactionWheel.PitchTorque, InternalReactionWheel.RollTorque, InternalReactionWheel.YawTorque) * 1000.0d;
                 return new TupleV3 (torque, -torque);
             }
         }

@@ -10,10 +10,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A radiator. Obtained by calling <see cref="Part.Radiator"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Radiator : Equatable<Radiator>
+    public class Radiator : Equatable<Radiator>, IGameObjectState
     {
-        readonly ModuleActiveRadiator activeRadiator;
-        readonly ModuleDeployableRadiator deployableRadiator;
+        ModuleRef activeRadiatorRef;
+        ModuleRef deployableRadiatorRef;
 
         internal static bool Is (Part part)
         {
@@ -27,10 +27,28 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             Part = part;
             var internalPart = part.InternalPart;
-            activeRadiator = internalPart.Module<ModuleActiveRadiator> ();
-            deployableRadiator = internalPart.Module<ModuleDeployableRadiator> ();
-            if (activeRadiator == null && deployableRadiator == null)
+            activeRadiatorRef = ModuleRef.ForType<ModuleActiveRadiator> (internalPart);
+            deployableRadiatorRef = ModuleRef.ForType<ModuleDeployableRadiator> (internalPart);
+            if (activeRadiatorRef.Find (internalPart) == null &&
+                deployableRadiatorRef.Find (internalPart) == null)
                 throw new ArgumentException ("Part is not a radiator");
+        }
+
+        ModuleActiveRadiator InternalActiveRadiator {
+            get { return (ModuleActiveRadiator)activeRadiatorRef.Find (Part.InternalPart); }
+        }
+
+        ModuleDeployableRadiator InternalDeployableRadiator {
+            get { return (ModuleDeployableRadiator)deployableRadiatorRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the radiator. A part carries an active radiator
+        /// module, a deployable one, or both, and either is enough for the radiator, so
+        /// it is as alive as the more alive of them.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return activeRadiatorRef.StateOn (Part).MostAlive (deployableRadiatorRef.StateOn (Part)); }
         }
 
         /// <summary>
@@ -41,8 +59,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             return
             !ReferenceEquals (other, null) &&
             Part == other.Part &&
-            activeRadiator == other.activeRadiator &&
-            deployableRadiator == other.deployableRadiator;
+            activeRadiatorRef == other.activeRadiatorRef &&
+            deployableRadiatorRef == other.deployableRadiatorRef;
         }
 
         /// <summary>
@@ -50,12 +68,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
-            if (activeRadiator != null)
-                hash ^= activeRadiator.GetHashCode ();
-            if (deployableRadiator != null)
-                hash ^= deployableRadiator.GetHashCode ();
-            return hash;
+            return
+            Part.GetHashCode () ^
+            activeRadiatorRef.GetHashCode () ^
+            deployableRadiatorRef.GetHashCode ();
         }
 
         /// <summary>
@@ -69,7 +85,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployable {
-            get { return deployableRadiator != null; }
+            get { return InternalDeployableRadiator != null; }
         }
 
         /// <summary>
@@ -81,16 +97,16 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 return
                 !Deployable ||
-                deployableRadiator.deployState == ModuleDeployablePart.DeployState.EXTENDED ||
-                deployableRadiator.deployState == ModuleDeployablePart.DeployState.EXTENDING;
+                InternalDeployableRadiator.deployState == ModuleDeployablePart.DeployState.EXTENDED ||
+                InternalDeployableRadiator.deployState == ModuleDeployablePart.DeployState.EXTENDING;
             }
             set {
                 if (!Deployable)
                     throw new InvalidOperationException ("Radiator is not deployable");
                 if (value)
-                    deployableRadiator.Extend ();
+                    InternalDeployableRadiator.Extend ();
                 else
-                    deployableRadiator.Retract ();
+                    InternalDeployableRadiator.Retract ();
             }
         }
 
@@ -105,7 +121,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             get {
                 if (!Deployable)
                     return DeployableState.Deployed;
-                return deployableRadiator.deployState.ToDeployableState ();
+                return InternalDeployableRadiator.deployState.ToDeployableState ();
             }
         }
     }

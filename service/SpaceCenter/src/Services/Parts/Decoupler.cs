@@ -11,9 +11,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A decoupler. Obtained by calling <see cref="Part.Decoupler"/>
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Decoupler : Equatable<Decoupler>
+    public class Decoupler : Equatable<Decoupler>, IGameObjectState
     {
-        readonly ModuleDecouplerBase decoupler;
+        ModuleRef decouplerRef;
 
         internal static bool Is (Part part)
         {
@@ -26,9 +26,25 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Decoupler (Part part)
         {
             Part = part;
-            decoupler = part.InternalPart.DecouplerModule ();
-            if (decoupler == null)
+            var module = part.InternalPart.DecouplerModule ();
+            if (module == null)
                 throw new ArgumentException("Part is not a decoupler");
+            decouplerRef = ModuleRef.ForModule (module);
+        }
+
+        /// <summary>
+        /// The decoupler's part module, found on the part again on every access.
+        /// </summary>
+        ModuleDecouplerBase InternalDecoupler {
+            get { return (ModuleDecouplerBase)decouplerRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the decoupler: the state of the part carrying it, or
+        /// destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return decouplerRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -36,10 +52,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Decoupler other)
         {
-            return
-            !ReferenceEquals(other, null) &&
-            Part != other.Part &&
-            decoupler == other.decoupler;
+            return !ReferenceEquals (other, null) &&
+            Part == other.Part && decouplerRef == other.decouplerRef;
         }
 
         /// <summary>
@@ -47,7 +61,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ decoupler.GetHashCode();
+            return Part.GetHashCode () ^ decouplerRef.GetHashCode ();
         }
 
         /// <summary>
@@ -74,7 +88,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             var preVesselIds = FlightGlobals.Vessels.Select (v => v.id).ToList ();
 
             // Fire the decoupler
-            decoupler.Decouple ();
+            InternalDecoupler.Decouple ();
 
             return PartSeparation.NewVessel (Part, preVesselIds, () => Decoupled);
         }
@@ -85,7 +99,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Decoupled {
             get {
-                return decoupler.isDecoupled;
+                return InternalDecoupler.isDecoupled;
             }
         }
 
@@ -94,7 +108,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Staged {
-            get { return decoupler.StagingEnabled (); }
+            get { return InternalDecoupler.StagingEnabled (); }
         }
 
         /// <summary>
@@ -102,7 +116,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float Impulse {
-            get { return decoupler.ejectionForce * 10f; }
+            get { return InternalDecoupler.ejectionForce * 10f; }
         }
 
         /// <summary>
@@ -111,7 +125,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool IsOmniDecoupler
         {
-            get { return decoupler.isOmniDecoupler; }
+            get { return InternalDecoupler.isOmniDecoupler; }
         }
 
         /// <summary>
@@ -122,7 +136,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             get
             {
-                var attach = decoupler.ExplosiveNode;
+                var attach = InternalDecoupler.ExplosiveNode;
                 if (attach == null || attach.attachedPart == null)
                 {
                     return null;

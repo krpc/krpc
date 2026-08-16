@@ -11,6 +11,7 @@ class TestGameScenes(krpctest.TestCase):
         cls.new_save()
         conn = cls.connect()
         cls.krpc = conn.krpc
+        cls.destroyed = conn.krpc.ObjectDestroyedException
         cls.ui = conn.ui
         cls.scenes = conn.krpc.GameScene
 
@@ -92,7 +93,7 @@ class TestGameScenes(krpctest.TestCase):
 
         self.wait_until(gone, timeout=30, message="the elements to be taken away")
         self.assertRaises(RuntimeError, getattr, text, "visible")
-        self.assertRaises(ValueError, panel.remove)
+        self.assertRaises(self.destroyed, panel.remove)
 
     def test_an_element_added_after_a_scene_change_is_kept(self):
         # Sweeping up after the previous scene must not take away what a client adds to

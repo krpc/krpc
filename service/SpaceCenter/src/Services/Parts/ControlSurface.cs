@@ -13,9 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// An aerodynamic control surface. Obtained by calling <see cref="Part.ControlSurface"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class ControlSurface : Equatable<ControlSurface>
+    public class ControlSurface : Equatable<ControlSurface>, IGameObjectState
     {
-        readonly ModuleControlSurface controlSurface;
+        ModuleRef controlSurfaceRef;
 
         internal static bool Is (Part part)
         {
@@ -30,9 +30,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ControlSurface (Part part)
         {
             Part = part;
-            controlSurface = part.InternalPart.Module<ModuleControlSurface> ();
-            if (controlSurface == null)
+            controlSurfaceRef = ModuleRef.ForType<ModuleControlSurface> (part.InternalPart);
+            if (controlSurfaceRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part does not have a ModuleControlSurface PartModule");
+        }
+
+        ModuleControlSurface InternalControlSurface {
+            get { return (ModuleControlSurface)controlSurfaceRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the control surface: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return controlSurfaceRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -40,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ControlSurface other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && controlSurface.Equals (other.controlSurface);
+            return !ReferenceEquals (other, null) && Part == other.Part && controlSurfaceRef == other.controlSurfaceRef;
         }
 
         /// <summary>
@@ -48,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ controlSurface.GetHashCode ();
+            return Part.GetHashCode () ^ controlSurfaceRef.GetHashCode ();
         }
 
         /// <summary>
@@ -62,8 +74,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool PitchEnabled {
-            get { return !controlSurface.ignorePitch; }
-            set { controlSurface.ignorePitch = !value; }
+            get { return !InternalControlSurface.ignorePitch; }
+            set { InternalControlSurface.ignorePitch = !value; }
         }
 
         /// <summary>
@@ -71,8 +83,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool YawEnabled {
-            get { return !controlSurface.ignoreYaw; }
-            set { controlSurface.ignoreYaw = !value; }
+            get { return !InternalControlSurface.ignoreYaw; }
+            set { InternalControlSurface.ignoreYaw = !value; }
         }
 
         /// <summary>
@@ -80,8 +92,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool RollEnabled {
-            get { return !controlSurface.ignoreRoll; }
-            set { controlSurface.ignoreRoll = !value; }
+            get { return !InternalControlSurface.ignoreRoll; }
+            set { InternalControlSurface.ignoreRoll = !value; }
         }
 
         /// <summary>
@@ -90,8 +102,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float AuthorityLimiter {
-            get { return controlSurface.authorityLimiter; }
-            set { controlSurface.authorityLimiter = value; }
+            get { return InternalControlSurface.authorityLimiter; }
+            set { InternalControlSurface.authorityLimiter = value; }
         }
 
         /// <summary>
@@ -99,8 +111,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Inverted {
-            get { return controlSurface.deployInvert; }
-            set { controlSurface.deployInvert = value; }
+            get { return InternalControlSurface.deployInvert; }
+            set { InternalControlSurface.deployInvert = value; }
         }
 
         /// <summary>
@@ -108,8 +120,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployed {
-            get { return controlSurface.deploy; }
-            set { controlSurface.deploy = value; }
+            get { return InternalControlSurface.deploy; }
+            set { InternalControlSurface.deploy = value; }
         }
 
         /// <summary>
@@ -121,8 +133,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool DeflectionOverride {
-            get { return ActuatorControlAddon.GetControlSurfaceOverride (controlSurface); }
-            set { ActuatorControlAddon.SetControlSurfaceOverride (controlSurface, value); }
+            get { return ActuatorControlAddon.GetControlSurfaceOverride (InternalControlSurface); }
+            set { ActuatorControlAddon.SetControlSurfaceOverride (InternalControlSurface, value); }
         }
 
         /// <summary>
@@ -131,8 +143,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float Deflection {
-            get { return ActuatorControlAddon.GetControlSurfaceDeflection (controlSurface); }
-            set { ActuatorControlAddon.SetControlSurfaceDeflection (controlSurface, value); }
+            get { return ActuatorControlAddon.GetControlSurfaceDeflection (InternalControlSurface); }
+            set { ActuatorControlAddon.SetControlSurfaceDeflection (InternalControlSurface, value); }
         }
 
         /// <summary>
@@ -140,7 +152,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float SurfaceArea {
-            get { return controlSurface.ctrlSurfaceArea; }
+            get { return InternalControlSurface.ctrlSurfaceArea; }
         }
 
         /// <summary>
@@ -158,7 +170,7 @@ namespace KRPC.SpaceCenter.Services.Parts
                 // GetPotentialTorque already applies the authority limiter (via
                 // ModuleControlSurface.GetPotentialLift, which scales the deflection by
                 // authorityLimiter * 0.01), so no further scaling is needed here.
-                var torque = controlSurface.GetPotentialTorque ();
+                var torque = InternalControlSurface.GetPotentialTorque ();
                 // ModuleControlSurface.GetPotentialTorque negates the roll (y) axis of both the
                 // positive and negative torque vectors, unlike other ITorqueProvider
                 // implementations. Normalise to the kRPC convention (positive torque >= 0,

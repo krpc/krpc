@@ -9,7 +9,8 @@ class TestPartsDecoupler(krpctest.TestCase):
         cls.new_save()
         cls.launch_vessel_from_vab("PartsDecoupler")
         cls.remove_other_vessels()
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.space_center = cls.connect().space_center
+        cls.vessel = cls.space_center.active_vessel
         # Look parts up by language-independent internal name (part.name), not the
         # localized title. Decoupler.1 = "TD-12 Decoupler" (was "TR-18A Stack
         # Decoupler"), Separator.1 = "TS-12 Stack Separator" (was "TR-18D Stack
@@ -19,6 +20,29 @@ class TestPartsDecoupler(krpctest.TestCase):
             0
         ].decoupler
         cls.disabled_decoupler = cls.vessel.parts.with_name("Separator.1")[0].decoupler
+
+    def test_a_decoupler_survives_a_quickload(self):
+        decoupler = self.stack_decoupler
+        part = decoupler.part
+        impulse = decoupler.impulse
+        self.assertFalse(decoupler.decoupled)
+        self.space_center.quicksave()
+        self.wait(1)
+        self.space_center.quickload()
+        self.wait(1)
+        # The game rebuilt the part's modules, and the object names the decoupler of
+        # its part rather than the module it was made from, so it reads the new one.
+        self.assertEqual(impulse, decoupler.impulse)
+        self.assertFalse(decoupler.decoupled)
+        # And asking the part again gives that object back rather than a second one.
+        self.assertEqual(decoupler, part.decoupler)
+
+    def test_asking_twice_gives_the_same_decoupler(self):
+        # Two objects for one decoupler are equal, so the server hands the object it
+        # already has back rather than adding another one for every call.
+        part = self.stack_decoupler.part
+        self.assertEqual(self.stack_decoupler, part.decoupler)
+        self.assertEqual(part.decoupler, part.decoupler)
 
     def test_stack_decoupler(self):
         # impulse = ejectionForce (kN) * 10. TD-12 Decoupler has ejectionForce

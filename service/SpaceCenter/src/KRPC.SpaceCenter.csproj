@@ -55,6 +55,7 @@
     <Compile Include="ExtensionMethods\ColorExtensions.cs" />
     <Compile Include="ExtensionMethods\ContractStateExtensions.cs" />
     <Compile Include="ExtensionMethods\DeployableStateExtensions.cs" />
+    <Compile Include="ExtensionMethods\EditorExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightCameraModeExtensions.cs" />
     <Compile Include="ExtensionMethods\FlightGlobalsExtensions.cs" />
     <Compile Include="ExtensionMethods\GameModeExtensions.cs" />
@@ -82,12 +83,16 @@
     <Compile Include="ExtensionMethods\VesselTypeExtensions.cs" />
     <Compile Include="ActuatorControlAddon.cs" />
     <Compile Include="CameraAddon.cs" />
+    <Compile Include="ConstructedOrbitsAddon.cs" />
+    <Compile Include="EditorShipAddon.cs" />
     <Compile Include="EVAAddon.cs" />
     <Compile Include="ExternalAPIAddon.cs" />
     <Compile Include="ExternalAPI\AGExt.cs" />
     <Compile Include="ExternalAPI\FAR.cs" />
     <Compile Include="ExternalAPI\RealFuels.cs" />
     <Compile Include="ExternalAPI\RemoteTech.cs" />
+    <Compile Include="Lifetime\CachedObject.cs" />
+    <Compile Include="Lifetime\ModuleRef.cs" />
     <Compile Include="NameTag\Career.cs" />
     <Compile Include="NameTag\NameTag.cs" />
     <Compile Include="NameTag\Utils.cs" />

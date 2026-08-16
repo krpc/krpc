@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// Supports both stock fairings, and those from the ProceduralFairings mod.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Fairing : Equatable<Fairing>
+    public class Fairing : Equatable<Fairing>, IGameObjectState
     {
         readonly Module fairing;
         readonly Module proceduralFairing;
@@ -33,6 +33,14 @@ namespace KRPC.SpaceCenter.Services.Parts
                 proceduralFairing = new Module(part, internalPart.Module("ProceduralFairingDecoupler"));
             if (fairing == null && proceduralFairing == null)
                 throw new ArgumentException ("Part is not a fairing");
+        }
+
+        /// <summary>
+        /// What the game holds for the fairing. The module objects it is built from
+        /// find their part modules again on each access, so this follows them.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return (fairing ?? proceduralFairing).GameObjectState; }
         }
 
         /// <summary>

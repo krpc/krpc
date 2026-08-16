@@ -1,8 +1,10 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.UI.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using UnityEngine;
 using Tuple2 = System.Tuple<double, double>;
 using Tuple4Int = System.Tuple<int, int, int, int>;
@@ -15,8 +17,11 @@ namespace KRPC.UI
     /// <see cref="Panel.AddVerticalLayout" /> and <see cref="Panel.AddGridLayout" />.
     /// </summary>
     [KRPCClass (Service = "UI")]
-    public class Layout : Equatable<Layout>
+    public class Layout : Equatable<Layout>, IGameObjectState
     {
+        // The game's layout group, which is what this stands for: it belongs to the
+        // interface element it was taken from and lives exactly as long as that
+        // element, and the game gives it nothing else to be named by.
         readonly UnityEngine.UI.LayoutGroup layout;
 
         internal Layout (UnityEngine.UI.LayoutGroup innerLayout)
@@ -29,7 +34,8 @@ namespace KRPC.UI
         /// </summary>
         public override bool Equals (Layout other)
         {
-            return !ReferenceEquals (other, null) && layout == other.layout;
+            return !ReferenceEquals (other, null) &&
+            ReferenceEquals (layout, other.layout);
         }
 
         /// <summary>
@@ -37,12 +43,37 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            return layout.GetHashCode ();
+            // The layout's identity hash rather than its own, so that nothing the game
+            // does to it can change it while a client holds this object.
+            return RuntimeHelpers.GetHashCode (layout);
+        }
+
+        /// <summary>
+        /// What the game holds for the layout. It belongs to the interface element it was
+        /// taken from, and the game destroys it with that element, which nothing builds
+        /// again.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                return layout == null
+                    ? GameObjectState.Destroyed : GameObjectState.Live;
+            }
+        }
+
+        // The game's layout, checked to still exist.
+        UnityEngine.UI.LayoutGroup Internal {
+            get {
+                if (GameObjectState == GameObjectState.Destroyed)
+                    throw new ObjectDestroyedException (
+                        "The layout no longer exists, as the user interface object " +
+                        "it belongs to has been removed.");
+                return layout;
+            }
         }
 
         UnityEngine.UI.GridLayoutGroup Grid {
             get {
-                var grid = layout as UnityEngine.UI.GridLayoutGroup;
+                var grid = Internal as UnityEngine.UI.GridLayoutGroup;
                 if (grid == null)
                     throw new InvalidOperationException ("The layout is not a grid layout");
                 return grid;
@@ -51,7 +82,7 @@ namespace KRPC.UI
 
         UnityEngine.UI.HorizontalOrVerticalLayoutGroup Line {
             get {
-                var line = layout as UnityEngine.UI.HorizontalOrVerticalLayoutGroup;
+                var line = Internal as UnityEngine.UI.HorizontalOrVerticalLayoutGroup;
                 if (line == null)
                     throw new InvalidOperationException (
                         "The layout is not a horizontal or vertical layout");
@@ -66,11 +97,11 @@ namespace KRPC.UI
         [KRPCProperty]
         public float Spacing {
             get {
-                var grid = layout as UnityEngine.UI.GridLayoutGroup;
+                var grid = Internal as UnityEngine.UI.GridLayoutGroup;
                 return grid != null ? grid.spacing.x : Line.spacing;
             }
             set {
-                var grid = layout as UnityEngine.UI.GridLayoutGroup;
+                var grid = Internal as UnityEngine.UI.GridLayoutGroup;
                 if (grid != null)
                     grid.spacing = new Vector2 (value, value);
                 else
@@ -85,14 +116,14 @@ namespace KRPC.UI
         [KRPCProperty]
         public Tuple4Int Padding {
             get {
-                var padding = layout.padding;
+                var padding = Internal.padding;
                 return new Tuple4Int (
                     padding.left, padding.right, padding.top, padding.bottom);
             }
             set {
                 if (value == null)
                     throw new ArgumentNullException (nameof (value));
-                layout.padding = new RectOffset (
+                Internal.padding = new RectOffset (
                     value.Item1, value.Item2, value.Item3, value.Item4);
             }
         }
@@ -102,8 +133,8 @@ namespace KRPC.UI
         /// </summary>
         [KRPCProperty]
         public TextAnchor ChildAlignment {
-            get { return layout.childAlignment.ToTextAnchor (); }
-            set { layout.childAlignment = value.FromTextAnchor (); }
+            get { return Internal.childAlignment.ToTextAnchor (); }
+            set { Internal.childAlignment = value.FromTextAnchor (); }
         }
 
         /// <summary>

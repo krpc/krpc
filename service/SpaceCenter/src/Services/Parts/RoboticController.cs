@@ -12,9 +12,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A robotic controller. Obtained by calling <see cref="Part.RoboticController"/>.
     /// </summary>
     [KRPCClass(Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class RoboticController : Equatable<RoboticController>
+    public class RoboticController : Equatable<RoboticController>, IGameObjectState
     {
-        readonly Expansions.Serenity.ModuleRoboticController controller;
+        ModuleRef controllerRef;
 
         internal static bool Is(Part part)
         {
@@ -27,7 +27,19 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException("Part is not a robotics controller");
             Part = part;
             var internalPart = part.InternalPart;
-            controller = internalPart.Module<Expansions.Serenity.ModuleRoboticController>();
+            controllerRef = ModuleRef.ForType<Expansions.Serenity.ModuleRoboticController> (internalPart);
+        }
+
+        Expansions.Serenity.ModuleRoboticController InternalController {
+            get { return (Expansions.Serenity.ModuleRoboticController)controllerRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the robotic controller: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return controllerRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -35,7 +47,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals(RoboticController other)
         {
-            return !ReferenceEquals(other, null) && Part == other.Part && controller.Equals(other.controller);
+            return !ReferenceEquals(other, null) && Part == other.Part && controllerRef == other.controllerRef;
         }
 
         /// <summary>
@@ -43,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ controller.GetHashCode();
+            return Part.GetHashCode() ^ controllerRef.GetHashCode();
         }
 
         /// <summary>
@@ -58,8 +70,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Enabled
         {
-            get { return controller.controllerEnabled; }
-            set { controller.controllerEnabled = value; }
+            get { return InternalController.controllerEnabled; }
+            set { InternalController.controllerEnabled = value; }
         }
 
         /// <summary>
@@ -68,7 +80,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Playing
         {
-            get { return controller.SequenceIsPlaying; }
+            get { return InternalController.SequenceIsPlaying; }
         }
 
         /// <summary>
@@ -77,8 +89,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float Position
         {
-            get { return controller.SequencePosition; }
-            set { controller.SetSequencePosition(value); }
+            get { return InternalController.SequencePosition; }
+            set { InternalController.SetSequencePosition(value); }
         }
 
         /// <summary>
@@ -87,7 +99,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float Length
         {
-            get { return controller.SequenceLength; }
+            get { return InternalController.SequenceLength; }
         }
 
         /// <summary>
@@ -96,7 +108,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float PlaySpeed
         {
-            get { return controller.SequencePlaySpeed; }
+            get { return InternalController.SequencePlaySpeed; }
         }
 
         /// <summary>
@@ -105,7 +117,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Play()
         {
-            controller.SequencePlay();
+            InternalController.SequencePlay();
         }
 
         /// <summary>
@@ -114,7 +126,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Stop()
         {
-            controller.SequenceStop();
+            InternalController.SequenceStop();
         }
 
         /// <summary>
@@ -123,7 +135,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public bool HasPart(Part part)
         {
-            return controller.HasPart(part.InternalPart);
+            return InternalController.HasPart(part.InternalPart);
         }
 
         /// <summary>
@@ -133,7 +145,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<IList<string>> Axes()
         {
             var output = new List<IList<string>>();
-            foreach (var axis in controller.ControlledAxes)
+            foreach (var axis in InternalController.ControlledAxes)
             {
                 output.Add(new List<string>() { axis.Part.name, axis.AxisField.name });
             }
@@ -155,7 +167,7 @@ namespace KRPC.SpaceCenter.Services.Parts
             var axisField = internalModule.Fields[fieldName] as BaseAxisField;
             if (axisField == null)
                 return false;
-            controller.AddPartAxis(internalPart, internalModule, axisField);
+            InternalController.AddPartAxis(internalPart, internalModule, axisField);
             return true;
         }
 
@@ -174,12 +186,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 
-            foreach (var axis in controller.ControlledAxes)
+            foreach (var axis in InternalController.ControlledAxes)
             {
                 if (internalModule == axis.Module && fieldName == axis.AxisField.name)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
-                    controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
+                    InternalController.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
                     if (outAxis != null)
                     {
                         outAxis.timeValue.Curve.AddKey(time, value);
@@ -204,12 +216,12 @@ namespace KRPC.SpaceCenter.Services.Parts
             var internalPart = module.Part.InternalPart;
             var internalModule = internalPart.Modules[module.Name];
 
-            foreach (var axis in controller.ControlledAxes)
+            foreach (var axis in InternalController.ControlledAxes)
             {
                 if (internalModule == axis.Module && fieldName == axis.AxisField.name)
                 {
                     Expansions.Serenity.ControlledAxis outAxis;
-                    controller.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
+                    InternalController.TryGetPartAxisField(axis.Part, axis.AxisField, out outAxis);
                     if (outAxis != null)
                     {
                         while (outAxis.timeValue.Curve.keys.Length > 0)

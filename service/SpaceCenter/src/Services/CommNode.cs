@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
 
@@ -8,7 +9,7 @@ namespace KRPC.SpaceCenter.Services
     /// Represents a communication node in the network. For example, a vessel or the KSC.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class CommNode : Equatable<CommNode>
+    public class CommNode : Equatable<CommNode>, IGameObjectState
     {
         /// <summary>
         /// Construct from a KSP CommNode object.
@@ -26,11 +27,27 @@ namespace KRPC.SpaceCenter.Services
         public CommNet.CommNode InternalNode { get; private set; }
 
         /// <summary>
+        /// What the game holds for the thing the node hangs off. The game gives nothing to
+        /// identify a node by, so the node itself is held; what can be checked is the
+        /// transform it was built with, which the game tears down with the vessel. A node
+        /// that never had one, such as a ground station, says nothing either way and is
+        /// therefore kept.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var transform = InternalNode.transform;
+                if (ReferenceEquals (transform, null))
+                    return GameObjectState.Live;
+                return transform != null ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (CommNode other)
         {
-            return !ReferenceEquals (other, null) && InternalNode == other.InternalNode;
+            return !ReferenceEquals (other, null) && ReferenceEquals (InternalNode, other.InternalNode);
         }
 
         /// <summary>
@@ -38,7 +55,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return InternalNode.GetHashCode ();
+            // The node's identity hash rather than its own, so that nothing the game does to
+            // the node can change it while a client holds this object.
+            return RuntimeHelpers.GetHashCode (InternalNode);
         }
 
         /// <summary>

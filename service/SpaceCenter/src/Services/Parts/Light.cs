@@ -12,9 +12,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A light. Obtained by calling <see cref="Part.Light"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Light : Equatable<Light>
+    public class Light : Equatable<Light>, IGameObjectState
     {
-        readonly ModuleLight light;
+        ModuleRef lightRef;
 
         internal static bool Is (Part part)
         {
@@ -24,9 +24,21 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal Light (Part part)
         {
             Part = part;
-            light = part.InternalPart.Module<ModuleLight> ();
-            if (light == null)
+            lightRef = ModuleRef.ForType<ModuleLight> (part.InternalPart);
+            if (lightRef.Find (part.InternalPart) == null)
                 throw new ArgumentException ("Part is not a light");
+        }
+
+        ModuleLight InternalLight {
+            get { return (ModuleLight)lightRef.Get (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the light: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return lightRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -34,7 +46,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Light other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && light.Equals (other.light);
+            return !ReferenceEquals (other, null) && Part == other.Part && lightRef == other.lightRef;
         }
 
         /// <summary>
@@ -42,7 +54,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ light.GetHashCode ();
+            return Part.GetHashCode () ^ lightRef.GetHashCode ();
         }
 
         /// <summary>
@@ -56,8 +68,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return light.isOn; }
-            set { light.ToggleLightAction(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate)); }
+            get { return InternalLight.isOn; }
+            set { InternalLight.ToggleLightAction(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate)); }
         }
 
         /// <summary>
@@ -65,15 +77,15 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 Color {
-            get { return new Tuple3 (light.lightR, light.lightG, light.lightB); }
+            get { return new Tuple3 (InternalLight.lightR, InternalLight.lightG, InternalLight.lightB); }
             set {
                 if (value == null)
                     throw new ArgumentNullException (nameof (Color));
-                light.lightR = value.Item1;
-                light.lightG = value.Item2;
-                light.lightB = value.Item3;
-                light.SetFlareColor(new Color(value.Item1, value.Item2, value.Item3));
-                foreach (var unityLight in light.lights)
+                InternalLight.lightR = value.Item1;
+                InternalLight.lightG = value.Item2;
+                InternalLight.lightB = value.Item3;
+                InternalLight.SetFlareColor(new Color(value.Item1, value.Item2, value.Item3));
+                foreach (var unityLight in InternalLight.lights)
                     unityLight.color = new Color (value.Item1, value.Item2, value.Item3);
             }
         }
@@ -84,8 +96,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Blink
         {
-            get { return light.blinkState; }
-            set { light.SetBlinkState(value); }
+            get { return InternalLight.blinkState; }
+            set { InternalLight.SetBlinkState(value); }
         }
 
         /// <summary>
@@ -94,8 +106,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public float BlinkRate
         {
-            get { return light.blinkRate; }
-            set { light.blinkRate = value; }
+            get { return InternalLight.blinkRate; }
+            set { InternalLight.blinkRate = value; }
         }
 
         /// <summary>
@@ -103,7 +115,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float PowerUsage {
-            get { return Active ? light.resourceAmount : 0f; }
+            get { return Active ? InternalLight.resourceAmount : 0f; }
         }
     }
 }

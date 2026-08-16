@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -9,14 +10,34 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// of the part. Obtained by calling <see cref="Module.EventList"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class PartEvent : Equatable<PartEvent>
+    public class PartEvent : Equatable<PartEvent>, IGameObjectState
     {
-        readonly BaseEvent partEvent;
+        readonly string name;
 
         internal PartEvent (Module module, BaseEvent baseEvent)
         {
             Module = module;
-            partEvent = baseEvent;
+            name = baseEvent.name;
+        }
+
+        /// <summary>
+        /// The underlying KSP event, found on the module by its identifier.
+        /// </summary>
+        BaseEvent InternalEvent {
+            get {
+                var partEvent = Module.InternalModule.Events [name];
+                if (partEvent == null)
+                    throw new ObjectDestroyedException (
+                        "The part module no longer has an event called " + name + ".");
+                return partEvent;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the module this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Module.GameObjectState; }
         }
 
         /// <summary>
@@ -24,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (PartEvent other)
         {
-            return !ReferenceEquals (other, null) && Module == other.Module && ReferenceEquals (partEvent, other.partEvent);
+            return !ReferenceEquals (other, null) && Module == other.Module && name == other.name;
         }
 
         /// <summary>
@@ -32,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Module.GetHashCode () ^ partEvent.GetHashCode ();
+            return Module.GetHashCode () ^ name.GetHashCode ();
         }
 
         /// <summary>
@@ -47,7 +68,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return partEvent.name; }
+            get { return name; }
         }
 
         /// <summary>
@@ -55,7 +76,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string GuiName {
-            get { return partEvent.guiName; }
+            get { return InternalEvent.guiName; }
         }
 
         /// <summary>
@@ -64,7 +85,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Visible {
-            get { return HighLogic.LoadedSceneIsEditor ? partEvent.guiActiveEditor : partEvent.guiActive; }
+            get { return HighLogic.LoadedSceneIsEditor ? InternalEvent.guiActiveEditor : InternalEvent.guiActive; }
         }
 
         /// <summary>
@@ -72,7 +93,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool Active {
-            get { return partEvent.active; }
+            get { return InternalEvent.active; }
         }
 
         /// <summary>
@@ -81,7 +102,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCMethod]
         public void Trigger ()
         {
-            partEvent.Invoke ();
+            InternalEvent.Invoke ();
         }
     }
 }

@@ -1,6 +1,8 @@
 using System;
 using KRPC.Service;
+using KRPC.Utils;
 using NUnit.Framework;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.Test.Service
 {
@@ -25,11 +27,11 @@ namespace KRPC.Test.Service
             Assert.AreSame (b, store.GetInstance (2));
             Assert.AreSame (c, store.GetInstance (3));
             store.RemoveInstance (a);
-            Assert.Throws<ArgumentException> (() => store.GetInstance (1));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (1));
             store.RemoveInstance (b);
-            Assert.Throws<ArgumentException> (() => store.GetInstance (2));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (2));
             store.RemoveInstance (c);
-            Assert.Throws<ArgumentException> (() => store.GetInstance (3));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (3));
         }
 
         [Test]
@@ -42,6 +44,16 @@ namespace KRPC.Test.Service
         }
 
         [Test]
+        public void RemovedAndUnissuedObjectIds ()
+        {
+            var store = new ObjectStore ();
+            var id = store.AddInstance (a);
+            store.RemoveInstance (a);
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (id));
+            Assert.Throws<ArgumentException> (() => store.GetInstance (id + 1));
+        }
+
+        [Test]
         public void InstanceAlreadyExists ()
         {
             var store = new ObjectStore ();
@@ -51,6 +63,83 @@ namespace KRPC.Test.Service
             Assert.AreEqual (1, store.AddInstance (a));
             Assert.AreEqual (1, store.GetObjectId (a));
             Assert.AreSame (a, store.GetInstance (1));
+        }
+
+        [Test]
+        public void SweepRemovesDeadInstances ()
+        {
+            var store = new ObjectStore ();
+            var alive = new MortalObject ();
+            var dead = new MortalObject ();
+            var aliveId = store.AddInstance (alive);
+            var deadId = store.AddInstance (dead);
+            dead.GameObjectState = GameObjectState.Destroyed;
+
+            Assert.AreEqual (1, store.Sweep ());
+            Assert.AreSame (alive, store.GetInstance (aliveId));
+            Assert.AreEqual (aliveId, store.GetObjectId (alive));
+            Assert.Throws<ArgumentException> (() => store.GetObjectId (dead));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (deadId));
+        }
+
+        [Test]
+        public void SweepKeepsDormantInstances ()
+        {
+            var store = new ObjectStore ();
+            var dormant = new MortalObject ();
+            var id = store.AddInstance (dormant);
+            dormant.GameObjectState = GameObjectState.Dormant;
+
+            Assert.AreEqual (0, store.Sweep ());
+            Assert.AreSame (dormant, store.GetInstance (id));
+        }
+
+        [Test]
+        public void SweepKeepsInstancesWithoutAGameObjectState ()
+        {
+            var store = new ObjectStore ();
+            var id = store.AddInstance (a);
+            Assert.AreEqual (0, store.Sweep ());
+            Assert.AreSame (a, store.GetInstance (id));
+        }
+
+        [Test]
+        public void SweepKeepsAnInstanceWhoseStateThrows ()
+        {
+            var store = new ObjectStore ();
+            var broken = new MortalObject { StateThrows = true };
+            var dead = new MortalObject ();
+            var brokenId = store.AddInstance (broken);
+            var deadId = store.AddInstance (dead);
+            dead.GameObjectState = GameObjectState.Destroyed;
+
+            // The rest of the store is still swept, and the instance that could not be
+            // asked is kept rather than dropped on the strength of an error.
+            Assert.AreEqual (1, store.Sweep ());
+            Assert.AreSame (broken, store.GetInstance (brokenId));
+            Assert.Throws<ObjectDestroyedException> (() => store.GetInstance (deadId));
+        }
+
+        [Test]
+        public void SweepRemovesAnInstanceOnlyOnce ()
+        {
+            var store = new ObjectStore ();
+            var dead = new MortalObject ();
+            store.AddInstance (dead);
+            dead.GameObjectState = GameObjectState.Destroyed;
+            Assert.AreEqual (1, store.Sweep ());
+            Assert.AreEqual (0, store.Sweep ());
+        }
+
+        [Test]
+        public void SweepDoesNotReuseObjectIds ()
+        {
+            var store = new ObjectStore ();
+            var dead = new MortalObject ();
+            var deadId = store.AddInstance (dead);
+            dead.GameObjectState = GameObjectState.Destroyed;
+            store.Sweep ();
+            Assert.AreNotEqual (deadId, store.AddInstance (new MortalObject ()));
         }
 
         [Test]

@@ -1,6 +1,7 @@
 using System;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services.Parts
 {
@@ -9,14 +10,34 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// in the in-game editor. Obtained by calling <see cref="Module.ActionList"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter")]
-    public class PartAction : Equatable<PartAction>
+    public class PartAction : Equatable<PartAction>, IGameObjectState
     {
-        readonly BaseAction action;
+        readonly string name;
 
         internal PartAction (Module module, BaseAction baseAction)
         {
             Module = module;
-            action = baseAction;
+            name = baseAction.name;
+        }
+
+        /// <summary>
+        /// The underlying KSP action, found on the module by its identifier.
+        /// </summary>
+        BaseAction InternalAction {
+            get {
+                var action = Module.InternalModule.Actions [name];
+                if (action == null)
+                    throw new ObjectDestroyedException (
+                        "The part module no longer has a action called " + name + ".");
+                return action;
+            }
+        }
+
+        /// <summary>
+        /// What the game holds for the module this belongs to.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return Module.GameObjectState; }
         }
 
         /// <summary>
@@ -24,7 +45,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (PartAction other)
         {
-            return !ReferenceEquals (other, null) && Module == other.Module && ReferenceEquals (action, other.action);
+            return !ReferenceEquals (other, null) && Module == other.Module && name == other.name;
         }
 
         /// <summary>
@@ -32,7 +53,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Module.GetHashCode () ^ action.GetHashCode ();
+            return Module.GetHashCode () ^ name.GetHashCode ();
         }
 
         /// <summary>
@@ -47,7 +68,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return action.name; }
+            get { return name; }
         }
 
         /// <summary>
@@ -55,7 +76,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public string GuiName {
-            get { return action.guiName; }
+            get { return InternalAction.guiName; }
         }
 
         /// <summary>
@@ -65,8 +86,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public bool Activated {
             set {
-                action.Invoke (new KSPActionParam (
-                    action.actionGroup,
+                InternalAction.Invoke (new KSPActionParam (
+                    InternalAction.actionGroup,
                     value ? KSPActionType.Activate : KSPActionType.Deactivate
                 ));
             }

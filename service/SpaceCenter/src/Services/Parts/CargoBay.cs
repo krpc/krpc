@@ -10,10 +10,10 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A cargo bay. Obtained by calling <see cref="Part.CargoBay"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class CargoBay : Equatable<CargoBay>
+    public class CargoBay : Equatable<CargoBay>, IGameObjectState
     {
-        readonly ModuleCargoBay bay;
-        readonly ModuleAnimateGeneric animation;
+        ModuleRef bayRef;
+        ModuleRef animationRef;
 
         internal static bool Is (Part part)
         {
@@ -30,8 +30,24 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part is not a cargo bay");
             Part = part;
             var internalPart = part.InternalPart;
-            bay = internalPart.Module<ModuleCargoBay> ();
-            animation = internalPart.Module<ModuleAnimateGeneric> ();
+            bayRef = ModuleRef.ForType<ModuleCargoBay> (internalPart);
+            animationRef = ModuleRef.ForType<ModuleAnimateGeneric> (internalPart);
+        }
+
+        ModuleCargoBay InternalBay {
+            get { return (ModuleCargoBay)bayRef.Get (Part.InternalPart); }
+        }
+
+        ModuleAnimateGeneric InternalAnimation {
+            get { return (ModuleAnimateGeneric)animationRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the cargo bay: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return bayRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -39,7 +55,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (CargoBay other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && bay.Equals (other.bay);
+            return !ReferenceEquals (other, null) && Part == other.Part && bayRef == other.bayRef;
         }
 
         /// <summary>
@@ -47,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ bay.GetHashCode ();
+            return Part.GetHashCode () ^ bayRef.GetHashCode ();
         }
 
         /// <summary>
@@ -70,7 +86,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public DeployableState State {
             get {
-                if (animation.IsMoving ())
+                if (InternalAnimation.IsMoving ())
                     return OpeningOrOpen
                         ? DeployableState.Deploying
                         : DeployableState.Retracting;
@@ -110,7 +126,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// the last frame to land.
         /// </remarks>
         bool OpeningOrOpen {
-            get { return !animation.animSwitch == (bay.closedPosition < 0.5f); }
+            get { return !InternalAnimation.animSwitch == (InternalBay.closedPosition < 0.5f); }
         }
 
         /// <summary>
@@ -121,7 +137,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         BaseEvent ToggleEvent {
             get {
-                var toggle = animation.Events ["Toggle"];
+                var toggle = InternalAnimation.Events ["Toggle"];
                 if (toggle == null)
                     return null;
                 var available = HighLogic.LoadedSceneIsEditor ? toggle.guiActiveEditor : toggle.guiActive;

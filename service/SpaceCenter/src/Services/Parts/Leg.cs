@@ -11,11 +11,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A landing leg. Obtained by calling <see cref="Part.Leg"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class Leg : Equatable<Leg>
+    public class Leg : Equatable<Leg>, IGameObjectState
     {
-        readonly ModuleWheelBase wheel;
-        readonly ModuleWheels.ModuleWheelDeployment deployment;
-        readonly ModuleWheels.ModuleWheelDamage damage;
+        ModuleRef wheelRef;
+        ModuleRef deploymentRef;
+        ModuleRef damageRef;
 
         internal static bool Is (Part part)
         {
@@ -30,9 +30,29 @@ namespace KRPC.SpaceCenter.Services.Parts
                 throw new ArgumentException ("Part is not a landing leg");
             Part = part;
             var internalPart = part.InternalPart;
-            wheel = internalPart.Module<ModuleWheelBase> ();
-            deployment = internalPart.Module<ModuleWheels.ModuleWheelDeployment> ();
-            damage = internalPart.Module<ModuleWheels.ModuleWheelDamage> ();
+            wheelRef = ModuleRef.ForType<ModuleWheelBase> (internalPart);
+            deploymentRef = ModuleRef.ForType<ModuleWheels.ModuleWheelDeployment> (internalPart);
+            damageRef = ModuleRef.ForType<ModuleWheels.ModuleWheelDamage> (internalPart);
+        }
+
+        ModuleWheelBase InternalWheel {
+            get { return (ModuleWheelBase)wheelRef.Get (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelDeployment InternalDeployment {
+            get { return (ModuleWheels.ModuleWheelDeployment)deploymentRef.Find (Part.InternalPart); }
+        }
+
+        ModuleWheels.ModuleWheelDamage InternalDamage {
+            get { return (ModuleWheels.ModuleWheelDamage)damageRef.Find (Part.InternalPart); }
+        }
+
+        /// <summary>
+        /// What the game holds for the landing leg: the state of the part
+        /// carrying it, or destroyed once that part no longer has the module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return wheelRef.StateOn (Part); }
         }
 
         /// <summary>
@@ -40,7 +60,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (Leg other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && wheel == other.wheel;
+            return !ReferenceEquals (other, null) && Part == other.Part && wheelRef == other.wheelRef;
         }
 
         /// <summary>
@@ -48,7 +68,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ wheel.GetHashCode ();
+            return Part.GetHashCode () ^ wheelRef.GetHashCode ();
         }
 
         /// <summary>
@@ -62,7 +82,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public DeployableState State {
-            get { return deployment.ToDeployableState (damage); }
+            get { return InternalDeployment.ToDeployableState (InternalDamage); }
         }
 
         /// <summary>
@@ -70,7 +90,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public bool Deployable {
-            get { return deployment != null; }
+            get { return InternalDeployment != null; }
         }
 
         /// <summary>
@@ -84,9 +104,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Deployed {
             get { return State == DeployableState.Deployed; }
             set {
-                if (deployment == null)
+                if (InternalDeployment == null)
                     throw new InvalidOperationException ("Landing leg is not deployable");
-                deployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));
+                InternalDeployment.ActionToggle(new KSPActionParam(0, value ? KSPActionType.Activate : KSPActionType.Deactivate));
             }
         }
 
@@ -95,7 +115,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public bool IsGrounded {
-            get { return wheel.isGrounded; }
+            get { return InternalWheel.isGrounded; }
         }
     }
 }

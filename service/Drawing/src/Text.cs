@@ -42,6 +42,10 @@ namespace KRPC.Drawing
         /// </summary>
         public override void Update ()
         {
+            if (!CanBeDrawn) {
+                renderer.enabled = false;
+                return;
+            }
             renderer.enabled = Visible;
             renderer.transform.position = ReferenceFrame.PositionToWorldSpace (position);
             renderer.transform.rotation = ReferenceFrame.RotationToWorldSpace (rotation);
@@ -74,6 +78,14 @@ namespace KRPC.Drawing
             base.Destroy ();
         }
 
+        // The text mesh, checked to still exist.
+        TextMesh Mesh {
+            get {
+                CheckExists ();
+                return mesh;
+            }
+        }
+
         /// <summary>
         /// A list of all available fonts.
         /// </summary>
@@ -88,8 +100,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public string Content {
-            get { return mesh.text; }
-            set { mesh.text = value; }
+            get { return Mesh.text; }
+            set { Mesh.text = value; }
         }
 
         /// <summary>
@@ -97,12 +109,13 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public string Font {
-            get { return mesh.font.name; }
+            get { return Mesh.font.name; }
             set {
                 if (!AvailableFonts ().Contains (value))
                     throw new ArgumentException ("Font does not exist");
-                mesh.font = UnityEngine.Font.CreateDynamicFontFromOSFont (value, 1024);
-                renderer.material = mesh.font.material;
+                var textMesh = Mesh;
+                textMesh.font = UnityEngine.Font.CreateDynamicFontFromOSFont (value, 1024);
+                renderer.material = textMesh.font.material;
             }
         }
 
@@ -111,8 +124,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public int Size {
-            get { return mesh.fontSize; }
-            set { mesh.fontSize = value; }
+            get { return Mesh.fontSize; }
+            set { Mesh.fontSize = value; }
         }
 
         /// <summary>
@@ -120,8 +133,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public float CharacterSize {
-            get { return mesh.characterSize; }
-            set { mesh.characterSize = value; }
+            get { return Mesh.characterSize; }
+            set { Mesh.characterSize = value; }
         }
 
         /// <summary>
@@ -129,8 +142,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public UI.FontStyle Style {
-            get { return mesh.fontStyle.ToFontStyle (); }
-            set { mesh.fontStyle = value.FromFontStyle (); }
+            get { return Mesh.fontStyle.ToFontStyle (); }
+            set { Mesh.fontStyle = value.FromFontStyle (); }
         }
 
         /// <summary>
@@ -138,8 +151,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public UI.TextAlignment Alignment {
-            get { return mesh.alignment.ToTextAlignment (); }
-            set { mesh.alignment = value.FromTextAlignment (); }
+            get { return Mesh.alignment.ToTextAlignment (); }
+            set { Mesh.alignment = value.FromTextAlignment (); }
         }
 
         /// <summary>
@@ -147,8 +160,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public float LineSpacing {
-            get { return mesh.lineSpacing; }
-            set { mesh.lineSpacing = value; }
+            get { return Mesh.lineSpacing; }
+            set { Mesh.lineSpacing = value; }
         }
 
         /// <summary>
@@ -156,8 +169,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public UI.TextAnchor Anchor {
-            get { return mesh.anchor.ToTextAnchor (); }
-            set { mesh.anchor = value.FromTextAnchor (); }
+            get { return Mesh.anchor.ToTextAnchor (); }
+            set { Mesh.anchor = value.FromTextAnchor (); }
         }
 
         /// <summary>
@@ -165,8 +178,8 @@ namespace KRPC.Drawing
         /// </summary>
         [KRPCProperty]
         public Tuple3 Color {
-            get { return mesh.color.ToTuple (); }
-            set { mesh.color = value.ToColor (); }
+            get { return Mesh.color.ToTuple (); }
+            set { Mesh.color = value.ToColor (); }
         }
     }
 }

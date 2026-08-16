@@ -7,9 +7,11 @@ class TestLine(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        cls.drawing = cls.connect().drawing
-        cls.vessel = cls.connect().space_center.active_vessel
+        cls.conn = cls.connect()
+        cls.drawing = cls.conn.drawing
+        cls.vessel = cls.conn.space_center.active_vessel
         cls.ref = cls.vessel.reference_frame
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
 
     def add_line(self):
         return self.drawing.add_line((0, 0, 0), (0, 10, 0), self.ref, False)
@@ -24,7 +26,17 @@ class TestLine(krpctest.TestCase):
         self.assertEqual("Legacy Shaders/Particles/Additive", line.material)
         self.assertAlmostEqual(0.1, line.thickness)
         line.remove()
-        self.assertRaises(ValueError, line.remove)
+        self.assertRaises(self.destroyed, line.remove)
+
+    def test_reading_a_removed_line_raises(self):
+        line = self.add_line()
+        line.remove()
+        # What raises is what reaches into the game. The start, the end and the color are
+        # the line's own configuration, and answer as they always did.
+        self.assertEqual((0, 0, 0), line.start)
+        self.assertRaises(self.destroyed, getattr, line, "material")
+        self.assertRaises(self.destroyed, setattr, line, "thickness", 1)
+        self.assertRaises(self.destroyed, setattr, line, "color", (1, 0, 0))
 
     def test_color(self):
         line = self.add_line()

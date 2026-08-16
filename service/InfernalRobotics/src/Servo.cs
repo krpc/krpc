@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.InfernalRobotics
 {
@@ -11,13 +13,24 @@ namespace KRPC.InfernalRobotics
     /// or <see cref="InfernalRobotics.ServoWithName"/>.
     /// </summary>
     [KRPCClass (Service = "InfernalRobotics")]
-    public class Servo : Equatable<Servo>
+    public class Servo : Equatable<Servo>, IGameObjectState
     {
-        readonly IRWrapper.IServo servo;
+        // The part the servo is on, which is what identifies it: a servo is a module the mod
+        // adds to a part, and the mod names one by its part. The wrapper the mod hands out
+        // is built afresh every time a servo is listed, so holding one would leave two
+        // objects for one servo comparing unequal, and would keep a destroyed part alive.
+        readonly SpaceCenter.Services.Parts.Part part;
+
+        internal Servo (SpaceCenter.Services.Parts.Part servoPart)
+        {
+            if (ReferenceEquals (servoPart, null))
+                throw new ArgumentNullException (nameof (servoPart));
+            part = servoPart;
+        }
 
         internal Servo (IRWrapper.IServo innerServo)
+            : this (new SpaceCenter.Services.Parts.Part (innerServo.HostPart))
         {
-            servo = innerServo;
         }
 
         /// <summary>
@@ -25,7 +38,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         public override bool Equals (Servo other)
         {
-            return !ReferenceEquals (other, null) && servo == other.servo;
+            return !ReferenceEquals (other, null) && part == other.part;
         }
 
         /// <summary>
@@ -33,7 +46,35 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         public override int GetHashCode ()
         {
-            return servo.GetHashCode ();
+            return part.GetHashCode ();
+        }
+
+        /// <summary>
+        /// What the game holds for the servo. It belongs to its part, so it is exactly as
+        /// live, dormant or destroyed as the part, and destroyed when a part that is there
+        /// to look at no longer carries the servo module.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                var state = part.GameObjectState;
+                if (state != GameObjectState.Live)
+                    return state;
+                return IRWrapper.ServoOnPart (part.InternalPart) != null
+                    ? GameObjectState.Live : GameObjectState.Destroyed;
+            }
+        }
+
+        // The servo the mod has on the part now. Every member reaches the mod through this,
+        // so a servo taken before a game state was replaced reads the one that stands in
+        // its place rather than the one it was built from.
+        IRWrapper.IServo Internal {
+            get {
+                var servo = IRWrapper.ServoOnPart (part.InternalPart);
+                if (servo == null)
+                    throw new ObjectDestroyedException (
+                        "The servo no longer exists, as its part no longer has one.");
+                return servo;
+            }
         }
 
         /// <summary>
@@ -41,8 +82,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return servo.Name; }
-            set { servo.Name = value; }
+            get { return Internal.Name; }
+            set { Internal.Name = value; }
         }
 
         /// <summary>
@@ -50,7 +91,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public uint UID {
-            get { return servo.UID; }
+            get { return Internal.UID; }
         }
 
         /// <summary>
@@ -58,7 +99,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public SpaceCenter.Services.Parts.Part Part {
-            get { return new SpaceCenter.Services.Parts.Part (servo.HostPart); }
+            get { return part; }
         }
 
         /// <summary>
@@ -66,7 +107,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public ServoMode Mode {
-            get { return (ServoMode)servo.Mode; }
+            get { return (ServoMode)Internal.Mode; }
         }
 
         /// <summary>
@@ -74,7 +115,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool Highlight {
-            set { servo.Highlight = value; }
+            set { Internal.Highlight = value; }
         }
 
         /// <summary>
@@ -82,7 +123,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Position {
-            get { return servo.Position; }
+            get { return Internal.Position; }
         }
 
         /// <summary>
@@ -90,7 +131,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MinConfigPosition {
-            get { return servo.MinPosition; }
+            get { return Internal.MinPosition; }
         }
 
         /// <summary>
@@ -98,7 +139,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxConfigPosition {
-            get { return servo.MaxPosition; }
+            get { return Internal.MaxPosition; }
         }
 
         /// <summary>
@@ -106,8 +147,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MinPosition {
-            get { return servo.MinPositionLimit; }
-            set { servo.MinPositionLimit = value; }
+            get { return Internal.MinPositionLimit; }
+            set { Internal.MinPositionLimit = value; }
         }
 
         /// <summary>
@@ -115,8 +156,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxPosition {
-            get { return servo.MaxPositionLimit; }
-            set { servo.MaxPositionLimit = value; }
+            get { return Internal.MaxPositionLimit; }
+            set { Internal.MaxPositionLimit = value; }
         }
 
         /// <summary>
@@ -124,7 +165,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float ConfigSpeed {
-            get { return servo.DefaultSpeed; }
+            get { return Internal.DefaultSpeed; }
         }
 
         /// <summary>
@@ -132,8 +173,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Speed {
-            get { return servo.SpeedLimit; }
-            set { servo.SpeedLimit = value; }
+            get { return Internal.SpeedLimit; }
+            set { Internal.SpeedLimit = value; }
         }
 
         /// <summary>
@@ -141,7 +182,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float CurrentSpeed {
-            get { return servo.CommandedSpeed; }
+            get { return Internal.CommandedSpeed; }
         }
 
         /// <summary>
@@ -149,8 +190,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float Acceleration {
-            get { return servo.AccelerationLimit; }
-            set { servo.AccelerationLimit = value; }
+            get { return Internal.AccelerationLimit; }
+            set { Internal.AccelerationLimit = value; }
         }
 
         /// <summary>
@@ -158,7 +199,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsMoving {
-            get { return servo.IsMoving; }
+            get { return Internal.IsMoving; }
         }
 
         /// <summary>
@@ -166,7 +207,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsFreeMoving {
-            get { return servo.IsFreeMoving; }
+            get { return Internal.IsFreeMoving; }
         }
 
         /// <summary>
@@ -174,8 +215,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsLocked {
-            get { return servo.IsLocked; }
-            set { servo.IsLocked = value; }
+            get { return Internal.IsLocked; }
+            set { Internal.IsLocked = value; }
         }
 
         /// <summary>
@@ -183,8 +224,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsAxisInverted {
-            get { return servo.IsInverted; }
-            set { servo.IsInverted = value; }
+            get { return Internal.IsInverted; }
+            set { Internal.IsInverted = value; }
         }
 
         /// <summary>
@@ -192,7 +233,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float TargetPosition {
-            get { return servo.TargetPosition; }
+            get { return Internal.TargetPosition; }
         }
 
         /// <summary>
@@ -200,7 +241,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float TargetSpeed {
-            get { return servo.TargetSpeed; }
+            get { return Internal.TargetSpeed; }
         }
 
         /// <summary>
@@ -208,7 +249,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float CommandedPosition {
-            get { return servo.CommandedPosition; }
+            get { return Internal.CommandedPosition; }
         }
 
         /// <summary>
@@ -216,7 +257,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float DefaultPosition {
-            get { return servo.DefaultPosition; }
+            get { return Internal.DefaultPosition; }
         }
 
         /// <summary>
@@ -224,8 +265,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float ForceLimit {
-            get { return servo.ForceLimit; }
-            set { servo.ForceLimit = value; }
+            get { return Internal.ForceLimit; }
+            set { Internal.ForceLimit = value; }
         }
 
         /// <summary>
@@ -233,7 +274,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxForce {
-            get { return servo.MaxForce; }
+            get { return Internal.MaxForce; }
         }
 
         /// <summary>
@@ -241,7 +282,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxAcceleration {
-            get { return servo.MaxAcceleration; }
+            get { return Internal.MaxAcceleration; }
         }
 
         /// <summary>
@@ -249,7 +290,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float MaxSpeed {
-            get { return servo.MaxSpeed; }
+            get { return Internal.MaxSpeed; }
         }
 
         /// <summary>
@@ -257,7 +298,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float ElectricChargeRequired {
-            get { return servo.ElectricChargeRequired; }
+            get { return Internal.ElectricChargeRequired; }
         }
 
         /// <summary>
@@ -265,8 +306,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float SpringPower {
-            get { return servo.SpringPower; }
-            set { servo.SpringPower = value; }
+            get { return Internal.SpringPower; }
+            set { Internal.SpringPower = value; }
         }
 
         /// <summary>
@@ -274,8 +315,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float DampingPower {
-            get { return servo.DampingPower; }
-            set { servo.DampingPower = value; }
+            get { return Internal.DampingPower; }
+            set { Internal.DampingPower = value; }
         }
 
         /// <summary>
@@ -283,8 +324,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public float RotorAcceleration {
-            get { return servo.RotorAcceleration; }
-            set { servo.RotorAcceleration = value; }
+            get { return Internal.RotorAcceleration; }
+            set { Internal.RotorAcceleration = value; }
         }
 
         /// <summary>
@@ -293,8 +334,8 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsLimited {
-            get { return servo.IsLimited; }
-            set { servo.IsLimited = value; }
+            get { return Internal.IsLimited; }
+            set { Internal.IsLimited = value; }
         }
 
         /// <summary>
@@ -302,7 +343,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsRotational {
-            get { return servo.IsRotational; }
+            get { return Internal.IsRotational; }
         }
 
         /// <summary>
@@ -310,7 +351,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsServo {
-            get { return servo.IsServo; }
+            get { return Internal.IsServo; }
         }
 
         /// <summary>
@@ -318,7 +359,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool CanHaveLimits {
-            get { return servo.CanHaveLimits; }
+            get { return Internal.CanHaveLimits; }
         }
 
         /// <summary>
@@ -326,7 +367,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool HasSpring {
-            get { return servo.HasSpring; }
+            get { return Internal.HasSpring; }
         }
 
         /// <summary>
@@ -334,7 +375,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public bool IsRunning {
-            get { return servo.IsRunning; }
+            get { return Internal.IsRunning; }
         }
 
         /// <summary>
@@ -342,7 +383,7 @@ namespace KRPC.InfernalRobotics
         /// </summary>
         [KRPCProperty]
         public IList<float> PresetPositions {
-            get { return servo.PresetPositions; }
+            get { return Internal.PresetPositions; }
         }
 
         /// <summary>
@@ -351,7 +392,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveRight ()
         {
-            servo.MoveRight ();
+            Internal.MoveRight ();
         }
 
         /// <summary>
@@ -360,7 +401,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveLeft ()
         {
-            servo.MoveLeft ();
+            Internal.MoveLeft ();
         }
 
         /// <summary>
@@ -369,7 +410,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveCenter ()
         {
-            servo.MoveCenter ();
+            Internal.MoveCenter ();
         }
 
         /// <summary>
@@ -381,7 +422,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void MoveTo (float position, float speed)
         {
-            servo.MoveTo (position, speed);
+            Internal.MoveTo (position, speed);
         }
 
         /// <summary>
@@ -390,7 +431,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void Stop ()
         {
-            servo.Stop ();
+            Internal.Stop ();
         }
 
         /// <summary>
@@ -400,7 +441,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void AddPreset (float position)
         {
-            servo.AddPreset (position);
+            Internal.AddPreset (position);
         }
 
         /// <summary>
@@ -410,7 +451,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void RemovePresetAt (int index)
         {
-            servo.RemovePresetAt (index);
+            Internal.RemovePresetAt (index);
         }
 
         /// <summary>
@@ -419,7 +460,7 @@ namespace KRPC.InfernalRobotics
         [KRPCMethod]
         public void SortPresets ()
         {
-            servo.SortPresets ();
+            Internal.SortPresets ();
         }
     }
 }

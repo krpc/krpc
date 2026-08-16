@@ -7,7 +7,9 @@ class TestInputField(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
-        ui = cls.connect().ui
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+        ui = cls.conn.ui
         cls.canvas = ui.stock_canvas
         cls.content_types = ui.InputContentType
 
@@ -19,7 +21,7 @@ class TestInputField(krpctest.TestCase):
         self.assertIsNotNone(input_field.text)
         self.assertFalse(input_field.changed)
         input_field.remove()
-        self.assertRaises(ValueError, input_field.remove)
+        self.assertRaises(self.destroyed, input_field.remove)
 
     def test_value(self):
         input_field = self.canvas.add_input_field()

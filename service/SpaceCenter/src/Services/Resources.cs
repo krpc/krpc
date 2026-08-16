@@ -15,7 +15,7 @@ namespace KRPC.SpaceCenter.Services
     /// or <see cref="Parts.Part.Resources"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight | GameScene.Editor)]
-    public class Resources : Equatable<Resources>
+    public class Resources : Equatable<Resources>, IGameObjectState
     {
         /// <summary>
         /// The id of the vessel the resources belong to, or <c>Guid.Empty</c> when they
@@ -65,6 +65,19 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// What the game holds for the vessel or part these are the resources of.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get {
+                if (hasPart)
+                    return partId.GameObjectState;
+                return editorVessel
+                    ? EditorExtensions.ShipState
+                    : FlightGlobalsExtensions.VesselState (vesselId);
+            }
+        }
+
+        /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
         public override bool Equals (Resources other)
@@ -106,13 +119,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         IShipconstruct InternalShipConstruct {
             get {
-                if (!editorVessel)
-                    return InternalVessel;
-                var logic = EditorLogic.fetch;
-                var construct = ReferenceEquals (logic, null) ? null : logic.ship;
-                if (ReferenceEquals (construct, null))
-                    throw new InvalidOperationException ("The editor does not contain a vessel.");
-                return construct;
+                return editorVessel ? (IShipconstruct)EditorExtensions.GetShip () : InternalVessel;
             }
         }
 
@@ -123,9 +130,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         VesselDeltaV InternalDeltaV {
             get {
-                if (!editorVessel)
-                    return InternalVessel.VesselDeltaV;
-                return ((ShipConstruct)InternalShipConstruct).vesselDeltaV;
+                return editorVessel
+                    ? EditorExtensions.GetShip ().vesselDeltaV
+                    : InternalVessel.VesselDeltaV;
             }
         }
 

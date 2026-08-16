@@ -214,11 +214,8 @@ namespace KRPC.SpaceCenter
 
         string DisplayName ()
         {
-            try {
-                return FlightGlobalsExtensions.GetVesselById (VesselId).GetDisplayName ();
-            } catch (ArgumentException) {
-                return "Vessel";
-            }
+            var vessel = FlightGlobalsExtensions.FindVesselById (VesselId);
+            return vessel == null ? "Vessel" : vessel.GetDisplayName ();
         }
 
         protected override void Draw (bool needRescale)

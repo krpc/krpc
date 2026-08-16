@@ -24,6 +24,19 @@ namespace KRPC.UI
         protected abstract UnityEngine.UI.Selectable Selectable { get; }
 
         /// <summary>
+        /// The component that handles interaction, checked to still exist. Every member
+        /// that reaches into the game goes through this, or through
+        /// <see cref="Object.CheckedGameObject" />, so that a control the game no longer
+        /// has says so rather than failing on a torn down object.
+        /// </summary>
+        protected UnityEngine.UI.Selectable CheckedSelectable {
+            get {
+                CheckExists ();
+                return Selectable;
+            }
+        }
+
+        /// <summary>
         /// Whether the control responds to the user.
         /// </summary>
         /// <remarks>
@@ -32,8 +45,8 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public bool Interactable {
-            get { return Selectable.interactable; }
-            set { Selectable.interactable = value; }
+            get { return CheckedSelectable.interactable; }
+            set { CheckedSelectable.interactable = value; }
         }
 
         /// <summary>
@@ -51,8 +64,8 @@ namespace KRPC.UI
         /// </remarks>
         [KRPCProperty]
         public Tuple4 Color {
-            get { return Selectable.targetGraphic.color.ToRgbaTuple (); }
-            set { Selectable.targetGraphic.color = value.ToColor (); }
+            get { return CheckedSelectable.targetGraphic.color.ToRgbaTuple (); }
+            set { CheckedSelectable.targetGraphic.color = value.ToColor (); }
         }
 
         /// <summary>
@@ -62,16 +75,17 @@ namespace KRPC.UI
         [KRPCProperty]
         public string Tooltip {
             get {
-                var handler = GameObject.GetComponent<TooltipHandler> ();
+                var handler = CheckedGameObject.GetComponent<TooltipHandler> ();
                 return handler == null || handler.Text == null
                     ? string.Empty : handler.Text;
             }
             set {
-                var handler = GameObject.GetComponent<TooltipHandler> ();
+                var gameObject = CheckedGameObject;
+                var handler = gameObject.GetComponent<TooltipHandler> ();
                 if (handler == null) {
                     if (string.IsNullOrEmpty (value))
                         return;
-                    handler = GameObject.AddComponent<TooltipHandler> ();
+                    handler = gameObject.AddComponent<TooltipHandler> ();
                 }
                 handler.Text = value;
             }

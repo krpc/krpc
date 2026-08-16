@@ -13,9 +13,11 @@ namespace KRPC.SpaceCenter.Services.Parts
     /// A resource converter. Obtained by calling <see cref="Part.ResourceConverter"/>.
     /// </summary>
     [KRPCClass (Service = "SpaceCenter", GameScene = GameScene.Flight)]
-    public class ResourceConverter: Equatable<ResourceConverter>
+    public class ResourceConverter: Equatable<ResourceConverter>, IGameObjectState
     {
-        readonly IList<ModuleResourceConverter> converters;
+        // One reference per converter the part has, in the order the part lists them, which
+        // is the order the index arguments of this class count in.
+        readonly ModuleRef[] converterRefs;
 
         internal static bool Is (Part part)
         {
@@ -25,9 +27,26 @@ namespace KRPC.SpaceCenter.Services.Parts
         internal ResourceConverter (Part part)
         {
             Part = part;
-            converters = part.InternalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
-            if (converters.Count == 0)
+            var internalPart = part.InternalPart;
+            var modules = internalPart.Modules.OfType<ModuleResourceConverter> ().ToList ();
+            if (modules.Count == 0)
                 throw new ArgumentException ("Part is does not contain any resource converters");
+            converterRefs = new ModuleRef [modules.Count];
+            for (var i = 0; i < modules.Count; i++)
+                converterRefs [i] = ModuleRef.ForModule (modules [i]);
+        }
+
+        ModuleResourceConverter Converter (int index)
+        {
+            return (ModuleResourceConverter)converterRefs [index].Get (Part.InternalPart);
+        }
+
+        /// <summary>
+        /// What the game holds for the converters: the state of the part carrying
+        /// them, or destroyed once that part no longer has them.
+        /// </summary>
+        public GameObjectState GameObjectState {
+            get { return converterRefs [0].StateOn (Part); }
         }
 
         /// <summary>
@@ -35,7 +54,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override bool Equals (ResourceConverter other)
         {
-            return !ReferenceEquals (other, null) && Part == other.Part && converters.SequenceEqual (other.converters);
+            return !ReferenceEquals (other, null) && Part == other.Part &&
+            converterRefs.SequenceEqual (other.converterRefs);
         }
 
         /// <summary>
@@ -44,7 +64,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public override int GetHashCode ()
         {
             int hash = Part.GetHashCode ();
-            foreach (var converter in converters)
+            foreach (var converter in converterRefs)
                 hash ^= converter.GetHashCode ();
             return hash;
         }
@@ -60,7 +80,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public int Count {
-            get { return converters.Count; }
+            get { return converterRefs.Length; }
         }
 
         void CheckConverterExists (int index)
@@ -77,7 +97,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public bool Active (int index)
         {
             CheckConverterExists (index);
-            return converters [index].IsActivated;
+            return Converter (index).IsActivated;
         }
 
         /// <summary>
@@ -88,7 +108,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public string Name (int index)
         {
             CheckConverterExists (index);
-            return converters [index].ConverterName;
+            return Converter (index).ConverterName;
         }
 
         /// <summary>
@@ -99,7 +119,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void Start (int index)
         {
             CheckConverterExists (index);
-            converters [index].StartResourceConverter ();
+            Converter (index).StartResourceConverter ();
         }
 
         /// <summary>
@@ -110,7 +130,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public void Stop (int index)
         {
             CheckConverterExists (index);
-            converters [index].StopResourceConverter ();
+            Converter (index).StopResourceConverter ();
         }
 
         /// <summary>
@@ -121,7 +141,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public ResourceConverterState State (int index)
         {
             CheckConverterExists (index);
-            var converter = converters [index];
+            var converter = Converter (index);
             // Use IsActivated for the active/idle distinction rather than matching
             // the localized "Inactive" status string. A running converter reports
             // either "<x>% load" (while thermally throttled) or "Operational" (at
@@ -180,7 +200,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public string StatusInfo (int index)
         {
             CheckConverterExists (index);
-            return converters [index].status;
+            return Converter (index).status;
         }
 
         /// <summary>
@@ -191,7 +211,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<string> Inputs (int index)
         {
             CheckConverterExists (index);
-            return converters [index].inputList.Select (x => x.ResourceName).ToList ();
+            return Converter (index).inputList.Select (x => x.ResourceName).ToList ();
         }
 
         /// <summary>
@@ -202,7 +222,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         public IList<string> Outputs (int index)
         {
             CheckConverterExists (index);
-            return converters [index].outputList.Select (x => x.ResourceName).ToList ();
+            return Converter (index).outputList.Select (x => x.ResourceName).ToList ();
         }
 
         /// <summary>
@@ -211,7 +231,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         [KRPCProperty]
         public float ThermalEfficiency {
             get {
-                var core = converters[0];
+                var core = Converter (0);
                 var temp = Convert.ToSingle(core.GetCoreTemperature());
                 return core.ThermalEfficiency.Evaluate(temp);
             }
@@ -222,7 +242,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float CoreTemperature {
-            get { return (float)converters[0].GetCoreTemperature (); }
+            get { return (float)Converter (0).GetCoreTemperature (); }
         }
 
         /// <summary>
@@ -230,7 +250,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         [KRPCProperty]
         public float OptimumCoreTemperature {
-            get { return (float)converters[0].GetGoalTemperature (); }
+            get { return (float)Converter (0).GetGoalTemperature (); }
         }
     }
 }

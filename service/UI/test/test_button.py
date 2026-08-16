@@ -7,6 +7,8 @@ class TestButton(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.new_save()
+        cls.conn = cls.connect()
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
         cls.canvas = cls.connect().ui.stock_canvas
 
     def test_button(self):
@@ -17,7 +19,7 @@ class TestButton(krpctest.TestCase):
         self.assertEqual("Foo", button.text.content)
         self.assertFalse(button.clicked)
         button.remove()
-        self.assertRaises(ValueError, button.remove)
+        self.assertRaises(self.destroyed, button.remove)
 
     def test_the_label_cannot_be_removed_on_its_own(self):
         # The label is part of the button, so it goes when the button goes.
