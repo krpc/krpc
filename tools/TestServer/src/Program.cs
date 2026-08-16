@@ -118,6 +118,13 @@ namespace TestServer
                 return;
             }
 
+            // Services are found by scanning the assemblies that are loaded, and the runtime
+            // does not load one until something in it is used. Nothing in this program calls
+            // into the benchmark service, so name a type from it to get it loaded before the
+            // scan; the game has no such problem, since KSP loads every assembly it installs.
+            Logger.WriteLine (
+                "Loaded " + typeof (KRPC.Benchmarks.Benchmark).Assembly.GetName ().Name);
+
             var core = Core.Instance;
             var serverVersion = Assembly.GetEntryAssembly ().GetName ().Version;
             core.Version = serverVersion.Major + "." + serverVersion.Minor + "." + serverVersion.Build;
