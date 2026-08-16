@@ -330,22 +330,20 @@ class Types:
 class TypeBase:
     """Base class for all type objects"""
 
+    # The protocol buffer type, the python type and the type code are plain
+    # attributes rather than properties: naming one is on the hot path of every
+    # remote procedure call, where a property would cost a call
+
     def __init__(
         self, protobuf_type: KRPC.Type, python_type: type, string: str
     ) -> None:
-        self._protobuf_type = protobuf_type
-        self._python_type = python_type
+        self.protobuf_type = protobuf_type
+        self.python_type = python_type
+        # The type code, which is what the encoder and decoder select on. Held
+        # here as well as in the protocol buffer type, as reading it from there
+        # is a protocol buffer field access
+        self.code = protobuf_type.code
         self._string = string
-
-    @property
-    def protobuf_type(self) -> KRPC.Type:
-        """Get the protocol buffer type string for the type"""
-        return self._protobuf_type
-
-    @property
-    def python_type(self) -> type:
-        """Get the python type"""
-        return self._python_type
 
     def __str__(self) -> str:
         return "<type: " + str(self._string) + ">"
@@ -403,13 +401,13 @@ class EnumerationType(TypeBase):
     def has_values(self) -> bool:
         """Whether the values of the enumeration are known, which they are
         only once its definition has been registered by calling set_values"""
-        return self._python_type is not None
+        return self.python_type is not None
 
     def set_values(self, values: Mapping[str, Mapping[str, object]]) -> None:
         """Set the python type. Creates an Enum class
         using the given values."""
-        assert self._python_type is None
-        self._python_type = _create_enum_type(self._enum_name, values, self._doc)
+        assert self.python_type is None
+        self.python_type = _create_enum_type(self._enum_name, values, self._doc)
 
 
 class TupleType(TypeBase):

@@ -109,7 +109,7 @@ class Encoder:
 
     @classmethod
     def _encode_value(cls, value: object, typ: TypeBase) -> bytes:
-        encode = _VALUE_ENCODERS.get(typ.protobuf_type.code)
+        encode = _VALUE_ENCODERS.get(typ.code)
         if encode is None:
             raise EncodingError("Invalid type")
         return encode(value)

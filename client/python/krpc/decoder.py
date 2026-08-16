@@ -125,7 +125,7 @@ class Decoder:
 
     @classmethod
     def _decode_value(cls, data: bytes, typ: TypeBase) -> object:
-        decode = _VALUE_DECODERS.get(typ.protobuf_type.code)
+        decode = _VALUE_DECODERS.get(typ.code)
         if decode is None:
             raise EncodingError("Invalid type")
         return decode(data)
