@@ -41,20 +41,22 @@ class Connection:
     def receive_message(self, typ: type) -> google.protobuf.message.Message:
         """Receive a protobuf message and decode it"""
 
-        # Read the size prefix of the message, then discard it from the buffer
+        # Read until the buffer holds the size prefix and the whole message it
+        # describes, then take the message out in one go. An incomplete prefix
+        # runs off the end of the buffer, which is an IndexError
         buffer = self._buffer
         while True:
             try:
-                # A size prefix is a varint, so it is at most 10 bytes; decoding
-                # only those avoids copying the rest of the buffer to look at it
-                size, prefix_length = Decoder.decode_size_prefix(bytes(buffer[:10]))
-                break
+                size, prefix_length = Decoder.decode_size_prefix(buffer)
             except IndexError:
                 self._fill()
-        del buffer[:prefix_length]
-
-        # Read and decode the message itself
-        data = self.receive(size)
+                continue
+            end = prefix_length + size
+            if len(buffer) >= end:
+                break
+            self._fill()
+        data = bytes(buffer[prefix_length:end])
+        del buffer[:end]
         return Decoder.decode_message(data, typ)
 
     def send(self, data: bytes) -> None:
