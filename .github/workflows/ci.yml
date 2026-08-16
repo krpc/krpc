@@ -366,6 +366,22 @@ jobs:
       - name: build
         run: bazel build //doc:compile-scripts
 
+  build-benchmarks:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/krpc/buildenv:3.9.1
+      options: --user runner:runner
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.github_token }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: setup
+        uses: ./.github/actions/build-setup
+      - name: build
+        run: bazel build //tools/benchmarks/...
+
   test-docs:
     runs-on: ubuntu-latest
     container:
@@ -600,6 +616,7 @@ jobs:
       - name: test
         run: |
           bazel test \
+            //tools/benchmarks:test \
             //tools/krpctest:test \
             //tools/krpctools:test
 
@@ -650,6 +667,7 @@ jobs:
       - build-docs-html
       - build-docs-pdf
       - build-docs-examples
+      - build-benchmarks
       - test-docs
       - test-core
       - test-service
