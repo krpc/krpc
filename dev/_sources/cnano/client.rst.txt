@@ -204,6 +204,10 @@ The following example demonstrates how to invoke remote procedures using the Cna
 
 .. literalinclude:: /scripts/client/cnano/RemoteProcedures.c
 
+Many procedures return an object standing for something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
+when a game is loaded or the thing they stand for is destroyed.
+
 .. _cnano-client-streams:
 .. _cnano-client-events:
 

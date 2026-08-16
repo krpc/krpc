@@ -195,3 +195,11 @@ A null reference was passed to a method that does not accept it as a valid argum
 Exception class ArgumentOutOfRangeException
 
 The value of an argument is outside the allowable range of values as defined by the invoked method.
+
+
+
+Exception class ObjectDestroyedException
+
+The game object that a service object refers to no longer exists,
+so the object cannot be used. For example, the part it represents
+was destroyed, or the vessel it belongs to was recovered.

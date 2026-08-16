@@ -144,3 +144,10 @@ Alarm
    .. function:: krpc_error_t krpc_KerbalAlarmClock_Alarm_Remove(krpc_connection_t connection)
 
       Removes the alarm. Any further use of this object throws an exception.
+
+
+   
+
+      .. note::
+
+         Any further use of this object throws an exception.

@@ -19,6 +19,15 @@ ServoGroup
 
       :Game Scenes: Flight
 
+
+      .. note::
+
+         Renaming a group renames it for every servo in it. The name is what this object
+         names the group by, and is fixed for its lifetime, so every object for the group
+         stands for one the vessel no longer has once it is renamed, the object the rename
+         was made through included. An object for the group has to be obtained again under
+         the new name.
+
    .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_ForwardKey(krpc_connection_t connection, char * * result)
    .. function:: void krpc_InfernalRobotics_ServoGroup_set_ForwardKey(const char * value)
 
@@ -49,7 +58,7 @@ ServoGroup
 
    .. function:: krpc_error_t krpc_InfernalRobotics_ServoGroup_Vessel(krpc_connection_t connection, krpc_SpaceCenter_Vessel_t * result)
 
-      The vessel the group belongs to, or ``nullptr`` if it is not available.
+      The vessel the group belongs to.
 
       :Game Scenes: Flight
 

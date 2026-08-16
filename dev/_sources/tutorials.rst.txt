@@ -1,5 +1,5 @@
-Tutorials and Examples
-======================
+Tutorials
+=========
 
 This collection of tutorials and example scripts explain how to use the features
 of kRPC.
@@ -14,4 +14,5 @@ of kRPC.
    tutorials/parts
    tutorials/docking-guidance
    tutorials/user-interface
+   tutorials/object-lifetime
    tutorials/autopilot

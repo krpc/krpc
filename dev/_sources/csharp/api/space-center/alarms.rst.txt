@@ -280,6 +280,11 @@ Alarms
       :Game Scenes: All
 
 
+      .. note::
+
+         Any further use of this object throws an exception.
+
+
 
 .. enum:: AlarmType
 

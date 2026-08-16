@@ -286,6 +286,10 @@ Alarms
 
    
 
+      .. note::
+
+         Any further use of this object throws an exception.
+
 
 
 .. type:: krpc_SpaceCenter_AlarmType_t

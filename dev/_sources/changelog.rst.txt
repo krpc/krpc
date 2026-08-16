@@ -16,6 +16,8 @@ Core
 ^^^^
 
 * Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are now read and written on their own threads rather than on the thread that runs the game. Data waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (:issue:`1035`)
+* Add ``KRPC.ObjectDestroyedException``, raised when the game object that an object refers to no longer exists (:issue:`1051`)
+* Objects whose game objects the game no longer has are removed from the object store when a game state is loaded, and using an object that has been removed raises ``KRPC.ObjectDestroyedException`` rather than an argument error (:issue:`1051`)
 * Fix one server stopping emptying the object store that every server shares, which invalidated the objects held by clients of the servers still running (:issue:`1020`)
 * Support for nullable values across all types (:issue:`1017`)
 * :breaking:`Breaking` Null values are now signaled by an ``is_null`` field rather than by an object id of 0, and nullability is enforced uniformly for every type. Class-typed arguments are no longer implicitly nullable (:issue:`1017`)
@@ -28,6 +30,7 @@ Server
 * :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility code for older versions of the game has been removed (:issue:`1048`)
 * The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu rather than being left waiting on a call that never returns. It starts again with the next game if it is set to start automatically. State held for clients is released at the same time, so user interface elements no longer stay on the screen for the whole of the main menu (:issue:`1041`)
 * Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is being constructed now, as the game's own switch editor button does (:issue:`1038`)
+* Sweep objects whose game objects no longer exist out of the object store when the game loads, quickloads or reverts a game state, or changes scene, when it destroys a part or a vessel, and when a client removes something it owns such as a drawing, a user interface element or a force, so an object that has become useless is let go of promptly rather than at the next load (:issue:`1051`)
 
 
 SpaceCenter service
@@ -49,6 +52,7 @@ SpaceCenter service
   * ``EditorVessel.Parts`` gives the parts tree of the vessel under construction, as ``Vessel.Parts`` does in flight. The members of ``Part`` and of the part-type classes that describe the design are available; those that need a vessel in flight or running physics, such as ``Part.Position`` and the thermal members, remain restricted to the flight scene. ``Engine.ThrustLimit`` can be read and set from the editor (:issue:`1038`)
   * ``EditorVessel.Stages``, ``EditorVessel.StageAt``, ``EditorVessel.DecoupleStages`` and ``EditorVessel.DecoupleStageAt`` give the vessel's stages, with the same stock delta-v, thrust, TWR, specific impulse and mass figures that ``Stage`` reports in flight, along with ``EditorVessel.DeltaV``, ``VacuumDeltaV``, ``SeaLevelDeltaV`` and ``BurnTime`` for the whole vessel. ``Editor.DeltaVBody``, ``Editor.DeltaVAltitude`` and ``Editor.DeltaVSituation`` set the situation those figures assume, as the game's own delta-v app does. The figures are recalculated in the background after any change to the vessel or the situation; ``EditorVessel.DeltaVReady`` reports whether they are current, and reading them before they are raises rather than returning a stale figure (:issue:`1038`)
   * ``EditorVessel.Resources``, ``Part.Resources`` and ``Stage.Resources`` report the resources the vessel under construction can hold, per vessel, per part and per stage, as they do for a vessel in flight (:issue:`1038`)
+  * A part of the vessel under construction raises ``KRPC.ObjectDestroyedException`` once it is no longer in that vessel, and once the editor has loaded any vessel over it. A part in the editor is named by an identifier that is only unique within one vessel, so a part of a vessel that has been replaced cannot be told from the part of the new one that answers to the same identifier. An undo or a redo rebuilds the vessel the editor already has rather than loading a new one, so a part it leaves alone keeps working. Leaving the editor destroys the vessel it had open, and everything reached through it (:issue:`1051`)
 
 * Vessels and crew
 
@@ -56,6 +60,8 @@ SpaceCenter service
   * Add ``Vessel.Terminate``, which removes a vessel and its parts from the game without recovering anything, as terminating it from the tracking station does. Its crew are reported missing. The active vessel cannot be terminated (:issue:`1034`)
   * ``Vessel.Recover`` now recovers non-active vessels without switching to the space center scene, and the mission completion dialog is auto-closed. (:issue:`1021`)
   * Add ``Vessel.OrbitSpeedReferenceFrame``, ``Vessel.SurfaceSpeedReferenceFrame`` and ``Vessel.TargetSpeedReferenceFrame``, one per navball speed mode. The velocity of the vessel in one of these frames is the velocity the navball shows in that mode, and its magnitude the speed displayed. Each frame is oriented with the prograde/normal/radial directions the navball marks in that mode, arranged as in ``Vessel.OrbitalReferenceFrame``, so a direction of (0,1,0) in the frame is prograde (:issue:`1029`)
+  * Using a vessel that no longer exists raises ``KRPC.ObjectDestroyedException``, saying that the vessel is gone, rather than an argument error (:issue:`1051`)
+  * A ``CrewMember`` is named by the kerbal's name and looks them up on the game's roster on every call, so the same kerbal obtained twice is the same object and one obtained before a load goes on working. A kerbal the roster no longer has raises ``KRPC.ObjectDestroyedException``. Renaming a kerbal by setting ``CrewMember.Name`` renames them on the roster, so every object for that kerbal, the one renamed through included, stands for a kerbal that no longer exists; a fresh object has to be obtained under the new name (:issue:`1051`)
 
 * Staging
 
@@ -63,12 +69,23 @@ SpaceCenter service
 
 * Orbits, nodes and bodies
 
+  * An ``Orbit`` reads the orbit of the vessel, celestial body or maneuver node it belongs to as it is now, rather than the one the game had when it was obtained, so it keeps working across a load instead of reporting the orbit of a game state that has been replaced. Asking the same thing for its orbit again gives back the same object rather than a second one (:issue:`764`)
+  * A ``ClosestApproach`` is freed once either of the orbits it describes is gone, rather than being kept for the rest of the session (:issue:`1051`)
   * Add ``CelestialBody.SurfaceNormal``, ``CelestialBody.BedrockNormal`` and ``CelestialBody.MSLNormal`` to get the slope of the terrain at a given latitude and longitude, as a unit vector normal to the surface, to the sea-bed, or to the sphere at sea level (:issue:`1030`)
   * Fix ``ClosestApproach.Velocity`` and ``ClosestApproach.TargetVelocity``, which were both offset by the velocity of the frame the active vessel's reference body moves in, some 9284 m/s for a vessel in orbit around Kerbin. ``ClosestApproach.RelativeVelocity`` and ``ClosestApproach.RelativeSpeed`` are the difference of the two and were unaffected (:issue:`1047`)
   * Add ``Orbit.CreateFromPositionAndVelocity``, which builds the orbit that passes through a given position at a given velocity, and ``Orbit.CreateFromOrbitalElements``, which builds the orbit with a given semi-major axis, eccentricity, inclination, longitude of ascending node, argument of periapsis and mean anomaly at an epoch. Either way the orbit coasts freely under gravity, so it describes where an object left to fall from that state would be at any later time, without there being such an object in the game. (:issue:`1046`)
   * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time. The first is oriented in a fixed direction and the second with the orbital prograde/normal/radial directions. Together with a constructed orbit these give a reference frame that follows a coasting object that need not exist (:issue:`1046`)
   * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame, alongside the existing ``Orbit.PositionAt`` (:issue:`1046`)
   * ``Orbit.Epoch`` is documented as the universal time at which the mean anomaly at epoch is measured. It was described as the time since that point (:issue:`1046`)
+
+* Maneuver nodes
+
+  * Using a maneuver node that has been removed raises ``KRPC.ObjectDestroyedException`` rather than reporting the call as invalid. Loading a game replaces the vessel's maneuver nodes, so nodes obtained before the load are also gone (:issue:`1051`)
+  * Fix removing a maneuver node leaking the object for the rest of the session (:issue:`771`)
+
+* Reference frames
+
+  * A reference frame taken from a docking port keeps working across a quickload, and says the port is gone rather than failing with a null reference once its part is destroyed (:issue:`885`, :issue:`764`)
 
 * Flight and aerodynamics
 
@@ -89,14 +106,26 @@ SpaceCenter service
 * Parts
 
   * ``Decoupler.IsOmniDecoupler`` reports what the part is configured as for every decoupler, including radial ones and any that a mod derives from the stock modules. It was false for all of them regardless of their configuration. The stage a part is assigned to follows the same value, so a vessel carrying such a decoupler can be staged differently (:issue:`1048`)
+  * A force added with ``Part.AddForce`` stops being applied, and is freed, once its part is destroyed. It previously failed on every physics update for the rest of the session. A force on a part the game has unloaded, or measured in a reference frame that is defined against something that is gone, waits rather than being applied (:issue:`1051`)
+  * ``Force.Remove`` leaves the object gone, so using one afterwards raises ``KRPC.ObjectDestroyedException`` and the object is freed. A removed force previously went on reporting the force it was applying, and was kept for the rest of the session (:issue:`1051`)
   * ``Part.BoundingBox`` and ``Vessel.BoundingBox`` now measure only the meshes of a part's own model. The boxes no longer take in the models of physicsless child parts, nor any object another mod has attached to a part, which could stretch a box to an arbitrary size (:issue:`1024`)
   * Computing a bounding box no longer duplicates the meshes of every part it measures (:issue:`1024`)
   * Add support for [RealFuels](https://forum.kerbalspaceprogram.com/index.php?/topic/58236-\*). ``SpaceCenter.RealFuelsAvailable`` reports whether it is installed. On an engine it manages (``Engine.HasRealFuels``), ``Engine.Ignitions`` and ``Engine.IgnitionResources`` give the ignitions left and what each one consumes; ``Engine.HasUllage``, ``Engine.PropellantStability`` and ``Engine.PropellantReliability`` give how settled the propellant is; and ``Engine.PressureFed`` and ``Engine.HasFeedPressure`` give whether the engine needs tank pressure and whether it has it. On a tank it manages (``Part.HasRealFuelsTank``), ``Part.HighlyPressurized`` and ``Part.BoiloffRate`` give the tank's pressurization and how fast its cryogenic contents are boiling off (:issue:`1039`)
   * Fix ``ReactionWheel.AvailableTorque``, and the vessel level torque properties that include it, being scaled by the square of the wheel's authority limiter when KSPCommunityFixes is installed (:issue:`1042`)
+  * Fix ``Decoupler`` objects accumulating for the rest of the session, one per call to ``Part.Decoupler``, and the same decoupler obtained twice comparing unequal (:issue:`1051`)
+  * A ``Decoupler`` finds its part's decoupler module again on every call, so it keeps working across a quickload. One obtained before a load previously read the module the load replaced, reporting the impulse and fired state it had beforehand and failing outright when fired, while reporting itself as still there (:issue:`1051`)
+  * Using a part that has been destroyed raises ``KRPC.ObjectDestroyedException`` instead of failing with a null reference (:issue:`885`)
+  * Using a part module, or any of the objects built on one such as ``Engine``, ``Parachute``, ``Antenna`` or ``SolarPanel``, after its part has been destroyed raises ``KRPC.ObjectDestroyedException`` instead of failing with a null reference (:issue:`885`)
+  * Part modules, and the objects built on them, read the modules of the loaded game rather than those of a game state that has been replaced, so they keep working across a quickload instead of returning readings from before it (:issue:`764`)
+  * Using a part of a vessel that the game has unloaded raises an error saying that the part is not loaded. The part works again once the game loads the vessel, and is not treated as destroyed in the meantime (:issue:`1051`)
+  * The fields, events and actions of a part module read the loaded game's module rather than one belonging to a replaced game state, and say the module is gone when it is (:issue:`764`)
+  * A ``ScienceSubject`` belongs to the game state it was read from, and using one after that state has been replaced raises ``KRPC.ObjectDestroyedException`` rather than returning the replaced game's science. Reading ``Experiment.ScienceSubject`` repeatedly no longer adds a new object for each read, and reads the science the game has banked against the subject since the first of those reads (:issue:`771`)
+  * Fix ``ScienceSubject.Science`` and ``ScienceSubject.ScienceCap`` scaling by the science gain multiplier that was in force when the object was read, rather than the current one (:issue:`1051`)
 
 * Resources
 
   * Add ``ResourceTransfer.Cancel`` to stop a transfer before it finishes; no more of the resource is moved and the transfer is marked as complete (:issue:`1028`)
+  * Fix a resource transfer failing on every update, and never completing, once one of the parts it runs between is destroyed; the transfer is now canceled. A transfer whose vessel the game unloads waits for it rather than failing (:issue:`1051`)
 
 * Camera
 
@@ -104,11 +133,21 @@ SpaceCenter service
   * Setting ``Camera.FocussedCrewMember`` to the crew member already in view no longer switches to the flight camera. Setting it to a crew member who is not in the active vessel, or who is not in the interior of a part, now raises an error rather than being ignored or failing with a ``NullReferenceException``, as does setting it to ``null`` (:issue:`1031`)
   * ``Camera.FocussedCrewMember`` returns ``null`` when no crew member is in view, instead of failing with a ``NullReferenceException`` (:issue:`1031`)
 
+* Alarms, contracts and waypoints
+
+  * ``SpaceCenter.Alarm``, ``Contract``, ``ContractParameter`` and ``Waypoint`` objects find what they stand for again on every call, rather than holding what the game gave them. They keep working when the game rebuilds it, and never read a record belonging to a game state that has since been replaced. One that the game no longer has raises ``KRPC.ObjectDestroyedException``, which is what ``Alarm.Remove`` and ``Waypoint.Remove`` leave behind, and is freed rather than kept for the rest of the session (:issue:`1051`)
+
+* Communications
+
+  * A ``CommLink`` is named by the two nodes it joins and reports the link between them as it is now. A link over which contact has been lost reports that the two nodes are not connected, rather than the signal strength the link had when contact was lost, and one whose nodes are gone raises ``KRPC.ObjectDestroyedException`` (:issue:`1051`)
+
 
 
 Drawing service
 ^^^^^^^^^^^^^^^
 
+* Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, which removing it, ``Drawing.Clear``, the client that made it disconnecting and leaving the flight scene all do. They previously failed on a destroyed game object, and were kept for the rest of the session (:issue:`1051`)
+* A drawing object whose reference frame is defined against something the game has destroyed is not drawn, rather than failing on every frame (:issue:`1051`)
 * Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction, for example to show a script's target attitude while the player flies the vessel. The marker's icon, color and size can be changed, and it hides and fades as the navball's own markers do (:issue:`1037`)
 
 
@@ -141,6 +180,41 @@ User Interface service
 * Two user interface objects that refer to the same element now compare equal, so a client can tell whether it already has an element without keeping track of it (:issue:`1040`)
 * A canvas added with ``UI.AddCanvas`` follows the interface scale the player has set, as the stock canvas does, so the same interface is the same size on either (:issue:`1040`)
 * Fix ``Text.Font`` making a font of its own every time it is set, and leaving it behind when the label went. A font of a given name is made once and shared by the labels using it (:issue:`1040`)
+* A user interface object raises ``KRPC.ObjectDestroyedException`` once the element it stands for is gone, which removing it, ``UI.Clear``, the client that made it disconnecting and changing scene all do. They previously failed on a destroyed game object, and were kept for the rest of the session (:issue:`1051`)
+* ``RectTransform``, ``Layout``, ``LayoutElement`` and ``SizeFitter`` do the same once the element they were taken from is gone, and are dropped with it rather than being kept for the rest of the session (:issue:`1051`)
+* Fix ``RectTransform`` objects accumulating for the rest of the session, one for every read of any object's ``RectTransform``. Reading the same one twice now gives the same object (:issue:`1051`)
+
+
+InfernalRobotics service
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Fix ``Servo`` and ``ServoGroup`` objects accumulating for the rest of the session, one per servo or group per call that lists any, and the same servo or group obtained twice comparing unequal (:issue:`1051`)
+* A servo and a servo group keep working across a quickload, driving what the game rebuilt rather than what they were obtained from, and raise ``KRPC.ObjectDestroyedException`` once the part or the vessel they belong to is gone. A servo is named by the part it is on, and a group by its vessel and the group's name, so renaming a group leaves every object for it, the one the rename was made through included, standing for a group that no longer exists; an object for the group has to be obtained again under the new name (:issue:`1051`)
+* ``ServoGroup.Vessel`` is the vessel the group was obtained for, and is no longer ``null`` when Infernal Robotics does not report one (:issue:`1051`)
+
+
+KerbalAlarmClock service
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* An alarm keeps working across a quickload, reading the alarm Kerbal Alarm Clock rebuilt rather than the one it was obtained from, and raises ``KRPC.ObjectDestroyedException`` once the mod no longer has an alarm with its id, which is what ``Alarm.Remove`` leaves behind. It reports that it is unavailable, rather than gone, while the mod is not ready. Alarm objects are freed rather than kept for the rest of the session (:issue:`1051`)
+
+
+RemoteTech service
+^^^^^^^^^^^^^^^^^^
+
+* An ``Antenna`` whose part the game has destroyed, or that is no longer an antenna, and a ``Comms`` whose vessel is gone, raise ``KRPC.ObjectDestroyedException`` rather than reaching into what is no longer there, and are freed rather than kept for the rest of the session (:issue:`1051`)
+
+
+LiDAR service
+^^^^^^^^^^^^^
+
+* A ``Laser`` whose part the game has destroyed, or that is no longer a laser, raises ``KRPC.ObjectDestroyedException`` rather than reaching into a part that is gone, and is freed rather than kept for the rest of the session (:issue:`1051`)
+
+
+DockingCamera service
+^^^^^^^^^^^^^^^^^^^^^
+
+* A ``Camera`` whose part the game has destroyed, or that is no longer a camera, raises ``KRPC.ObjectDestroyedException`` rather than reaching into a part that is gone, and is freed rather than kept for the rest of the session (:issue:`1051`)
 
 
 Debug service

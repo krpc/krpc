@@ -56,6 +56,10 @@ vessel and then prints out its altitude:
 
 .. literalinclude:: /scripts/client/java/RemoteProcedures.java
 
+Many procedures return an object standing for something in the game, such as a vessel or
+a part. See :doc:`Object Lifetime </tutorials/object-lifetime>` for what those objects do
+when a game is loaded or the thing they stand for is destroyed.
+
 .. _java-client-streams:
 
 Streaming Data

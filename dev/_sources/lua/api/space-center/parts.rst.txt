@@ -1206,6 +1206,11 @@ Part
       Remove the force.
 
 
+      .. note::
+
+         Any further use of this object throws an exception.
+
+
 
 Module
 ------

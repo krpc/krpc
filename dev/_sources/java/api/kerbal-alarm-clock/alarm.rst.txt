@@ -162,3 +162,9 @@ Alarm
    .. method:: void remove()
 
       Removes the alarm. Any further use of this object throws an exception.
+
+   
+
+      .. note::
+
+         Any further use of this object throws an exception.

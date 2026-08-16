@@ -264,6 +264,11 @@ Alarms
       Removes the alarm.
 
 
+      .. note::
+
+         Any further use of this object throws an exception.
+
+
 
 .. class:: AlarmType
 

@@ -180,3 +180,8 @@ Waypoints
    .. method:: remove()
 
       Removes the waypoint.
+
+
+      .. note::
+
+         Any further use of this object throws an exception.

@@ -152,7 +152,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -374,7 +374,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -714,6 +714,14 @@ in the InfernalRobotics UI.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Renaming a group renames it for every servo in it. The name is what this object
+names the group by, and is fixed for its lifetime, so every object for the group
+stands for one the vessel no longer has once it is renamed, the object the rename
+was made through included. An object for the group has to be obtained again under
+the new name.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -783,7 +791,7 @@ in the InfernalRobotics UI.</p>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services16InfernalRobotics10ServoGroup6vesselEv">
 <span id="_CPPv3N4krpc8services16InfernalRobotics10ServoGroup6vesselEv"></span><span id="_CPPv2N4krpc8services16InfernalRobotics10ServoGroup6vesselEv"></span><span id="krpc::services::InfernalRobotics::ServoGroup::vessel"></span><a class="reference internal" href="../space-center/space-center.html#_CPPv4N4krpc8services11SpaceCenterE" title="krpc::services::SpaceCenter"><span class="n"><span class="pre">SpaceCenter</span></span></a><span class="p"><span class="pre">::</span></span><a class="reference internal" href="../space-center/vessel.html#_CPPv4N4krpc8services11SpaceCenter6VesselE" title="krpc::services::SpaceCenter::Vessel"><span class="n"><span class="pre">Vessel</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">vessel</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services16InfernalRobotics10ServoGroup6vesselEv" title="Link to this definition">#</a><br /></dt>
-<dd><p>The vessel the group belongs to, or <code class="docutils literal notranslate"><span class="pre">NULL</span></code> if it is not available.</p>
+<dd><p>The vessel the group belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>

@@ -152,7 +152,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -374,7 +374,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../tutorials.html">
-    Tutorials and Examples
+    Tutorials
   </a>
 </li>
 
@@ -709,6 +709,14 @@ in the InfernalRobotics UI.</p>
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Renaming a group renames it for every servo in it. The name is what this object
+names the group by, and is fixed for its lifetime, so every object for the group
+stands for one the vessel no longer has once it is renamed, the object the rename
+was made through included. An object for the group has to be obtained again under
+the new name.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp property">
@@ -758,7 +766,7 @@ in the InfernalRobotics UI.</p>
 <dl class="csharp property">
 <dt class="sig sig-object csharp" id="property-KRPC.Client.Services.InfernalRobotics.ServoGroup.Vessel">
 <a class="reference internal" href="../space-center/vessel.html#class-KRPC.Client.Services.SpaceCenter.Vessel" title="KRPC.Client.Services.SpaceCenter.Vessel class"><span class="pre">SpaceCenter.Vessel</span></a> <span class="sig-name descname"><span class="pre">Vessel</span></span> <span class="pre">{</span> <span class="property"><span class="pre">get;</span></span> <span class="pre">}</span><a class="headerlink" href="#property-KRPC.Client.Services.InfernalRobotics.ServoGroup.Vessel" title="Link to this definition">#</a></dt>
-<dd><p>The vessel the group belongs to, or <code class="docutils literal notranslate"><span class="pre">null</span></code> if it is not available.</p>
+<dd><p>The vessel the group belongs to.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Flight</p>
