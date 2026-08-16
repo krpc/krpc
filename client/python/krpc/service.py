@@ -100,7 +100,6 @@ def _construct_func(
         "'" + str(service_name) + "'",
         "'" + str(procedure_name) + "'",
         "[" + ",".join(param_names) + "]",
-        "param_names",
         "param_types",
         "return_type",
     ]
@@ -114,7 +113,6 @@ def _construct_func(
     context = {
         "invoke": invoke,
         "DefaultArgument": DefaultArgument,
-        "param_names": param_names,
         "param_types": param_types,
         "return_type": return_type,
     }

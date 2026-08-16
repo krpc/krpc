@@ -70,7 +70,6 @@ class DeprecatedClass(ClassBase):
             "TestService",
             "DeprecatedClass_DeprecatedMethod",
             [self, ],
-            ["self", ],
             [self._client._types.class_type("TestService", "DeprecatedClass"), ],
             self._client._types.string_type
         )
@@ -83,7 +82,6 @@ class DeprecatedClass(ClassBase):
             "TestService",
             "DeprecatedClass_DeprecatedMethod",
             [self, ],
-            ["self", ],
             [self._client._types.class_type("TestService", "DeprecatedClass"), ],
             self._client._types.string_type
         )
@@ -103,7 +101,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_get_IntProperty",
             [self],
-            ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.sint32_type
         )
@@ -114,7 +111,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_set_IntProperty",
             [self, value],
-            ["self", "value"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.sint32_type],
             None
         )
@@ -127,7 +123,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_get_IntProperty",
             [self],
-            ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.sint32_type
         )
@@ -138,7 +133,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_get_ObjectProperty",
             [self],
-            ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -149,7 +143,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_set_ObjectProperty",
             [self, value],
-            ["self", "value"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
             None
         )
@@ -162,7 +155,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_get_ObjectProperty",
             [self],
-            ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -177,7 +169,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_set_StringPropertyPrivateGet",
             [self, value],
-            ["self", "value"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.string_type],
             None
         )
@@ -188,7 +179,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_get_StringPropertyPrivateSet",
             [self],
-            ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -201,7 +191,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_get_StringPropertyPrivateSet",
             [self],
-            ["self"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -211,7 +200,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_EchoNullableObject",
             [self, value],
-            ["self", "value"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -224,7 +212,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_EchoNullableObject",
             [self, value],
-            ["self", "value"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -234,7 +221,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_FloatToString",
             [self, x],
-            ["self", "x"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.float_type],
             self._client._types.string_type
         )
@@ -247,7 +233,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_FloatToString",
             [self, x],
-            ["self", "x"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.float_type],
             self._client._types.string_type
         )
@@ -260,7 +245,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_GetValue",
             [self, ],
-            ["self", ],
             [self._client._types.class_type("TestService", "TestClass"), ],
             self._client._types.string_type
         )
@@ -273,7 +257,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_GetValue",
             [self, ],
-            ["self", ],
             [self._client._types.class_type("TestService", "TestClass"), ],
             self._client._types.string_type
         )
@@ -283,7 +266,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_ObjectToString",
             [self, other],
-            ["self", "other"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -296,7 +278,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_ObjectToString",
             [self, other],
-            ["self", "other"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -306,7 +287,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_OptionalArguments",
             [self, x, y, z, obj],
-            ["self", "x", "y", "z", "obj"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.string_type, self._client._types.string_type, self._client._types.string_type, self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -319,7 +299,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_OptionalArguments",
             [self, x, y, z, obj],
-            ["self", "x", "y", "z", "obj"],
             [self._client._types.class_type("TestService", "TestClass"), self._client._types.string_type, self._client._types.string_type, self._client._types.string_type, self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -331,7 +310,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_static_StaticMethod",
             [a, b],
-            ["a", "b"],
             [self._client._types.string_type, self._client._types.string_type],
             self._client._types.string_type
         )
@@ -348,7 +326,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_static_StaticMethod",
             [a, b],
-            ["a", "b"],
             [self._client._types.string_type, self._client._types.string_type],
             self._client._types.string_type
         )
@@ -360,7 +337,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_static_StaticNullableObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -377,7 +353,6 @@ class TestClass(ClassBase):
             "TestService",
             "TestClass_static_StaticNullableObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -447,7 +422,6 @@ class TestService:
             "get_DeprecatedProperty",
             [],
             [],
-            [],
             self._client._types.string_type
         )
 
@@ -458,7 +432,6 @@ class TestService:
             "TestService",
             "set_DeprecatedProperty",
             [value],
-            ["value"],
             [self._client._types.string_type],
             None
         )
@@ -472,7 +445,6 @@ class TestService:
             "get_DeprecatedProperty",
             [],
             [],
-            [],
             self._client._types.string_type
         )
 
@@ -481,7 +453,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "get_NullableObject",
-            [],
             [],
             [],
             self._client._types.class_type("TestService", "TestClass")
@@ -493,7 +464,6 @@ class TestService:
             "TestService",
             "set_NullableObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             None
         )
@@ -507,7 +477,6 @@ class TestService:
             "get_NullableObject",
             [],
             [],
-            [],
             self._client._types.class_type("TestService", "TestClass")
         )
 
@@ -516,7 +485,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "get_ObjectProperty",
-            [],
             [],
             [],
             self._client._types.class_type("TestService", "TestClass")
@@ -528,7 +496,6 @@ class TestService:
             "TestService",
             "set_ObjectProperty",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             None
         )
@@ -540,7 +507,6 @@ class TestService:
         return self._client._build_call(
             "TestService",
             "get_ObjectProperty",
-            [],
             [],
             [],
             self._client._types.class_type("TestService", "TestClass")
@@ -556,7 +522,6 @@ class TestService:
             "get_StringProperty",
             [],
             [],
-            [],
             self._client._types.string_type
         )
 
@@ -566,7 +531,6 @@ class TestService:
             "TestService",
             "set_StringProperty",
             [value],
-            ["value"],
             [self._client._types.string_type],
             None
         )
@@ -578,7 +542,6 @@ class TestService:
         return self._client._build_call(
             "TestService",
             "get_StringProperty",
-            [],
             [],
             [],
             self._client._types.string_type
@@ -594,7 +557,6 @@ class TestService:
             "TestService",
             "set_StringPropertyPrivateGet",
             [value],
-            ["value"],
             [self._client._types.string_type],
             None
         )
@@ -604,7 +566,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "get_StringPropertyPrivateSet",
-            [],
             [],
             [],
             self._client._types.string_type
@@ -619,7 +580,6 @@ class TestService:
             "get_StringPropertyPrivateSet",
             [],
             [],
-            [],
             self._client._types.string_type
         )
 
@@ -628,7 +588,6 @@ class TestService:
             "TestService",
             "AddMultipleValues",
             [x, y, z],
-            ["x", "y", "z"],
             [self._client._types.float_type, self._client._types.sint32_type, self._client._types.sint64_type],
             self._client._types.string_type
         )
@@ -641,7 +600,6 @@ class TestService:
             "TestService",
             "AddMultipleValues",
             [x, y, z],
-            ["x", "y", "z"],
             [self._client._types.float_type, self._client._types.sint32_type, self._client._types.sint64_type],
             self._client._types.string_type
         )
@@ -651,7 +609,6 @@ class TestService:
             "TestService",
             "AddToObjectList",
             [l, value],
-            ["l", "value"],
             [self._client._types.list_type(self._client._types.class_type("TestService", "TestClass")), self._client._types.string_type],
             self._client._types.list_type(self._client._types.class_type("TestService", "TestClass"))
         )
@@ -664,7 +621,6 @@ class TestService:
             "TestService",
             "AddToObjectList",
             [l, value],
-            ["l", "value"],
             [self._client._types.list_type(self._client._types.class_type("TestService", "TestClass")), self._client._types.string_type],
             self._client._types.list_type(self._client._types.class_type("TestService", "TestClass"))
         )
@@ -674,7 +630,6 @@ class TestService:
             "TestService",
             "BlockingProcedure",
             [n, sum],
-            ["n", "sum"],
             [self._client._types.sint32_type, self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -687,7 +642,6 @@ class TestService:
             "TestService",
             "BlockingProcedure",
             [n, sum],
-            ["n", "sum"],
             [self._client._types.sint32_type, self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -697,7 +651,6 @@ class TestService:
             "TestService",
             "BoolToString",
             [value],
-            ["value"],
             [self._client._types.bool_type],
             self._client._types.string_type
         )
@@ -710,7 +663,6 @@ class TestService:
             "TestService",
             "BoolToString",
             [value],
-            ["value"],
             [self._client._types.bool_type],
             self._client._types.string_type
         )
@@ -720,7 +672,6 @@ class TestService:
             "TestService",
             "BytesToHexString",
             [value],
-            ["value"],
             [self._client._types.bytes_type],
             self._client._types.string_type
         )
@@ -733,7 +684,6 @@ class TestService:
             "TestService",
             "BytesToHexString",
             [value],
-            ["value"],
             [self._client._types.bytes_type],
             self._client._types.string_type
         )
@@ -743,7 +693,6 @@ class TestService:
             "TestService",
             "Counter",
             [id, divisor],
-            ["id", "divisor"],
             [self._client._types.string_type, self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -756,7 +705,6 @@ class TestService:
             "TestService",
             "Counter",
             [id, divisor],
-            ["id", "divisor"],
             [self._client._types.string_type, self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -766,7 +714,6 @@ class TestService:
             "TestService",
             "CreateTestObject",
             [value],
-            ["value"],
             [self._client._types.string_type],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -779,7 +726,6 @@ class TestService:
             "TestService",
             "CreateTestObject",
             [value],
-            ["value"],
             [self._client._types.string_type],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -795,7 +741,6 @@ class TestService:
             "TestService",
             "DeprecatedProcedure",
             [value],
-            ["value"],
             [self._client._types.float_type],
             self._client._types.string_type
         )
@@ -808,7 +753,6 @@ class TestService:
             "TestService",
             "DeprecatedProcedure",
             [value],
-            ["value"],
             [self._client._types.float_type],
             self._client._types.string_type
         )
@@ -824,7 +768,6 @@ class TestService:
             "TestService",
             "DeprecatedProcedureNoMessage",
             [value],
-            ["value"],
             [self._client._types.float_type],
             self._client._types.string_type
         )
@@ -837,7 +780,6 @@ class TestService:
             "TestService",
             "DeprecatedProcedureNoMessage",
             [value],
-            ["value"],
             [self._client._types.float_type],
             self._client._types.string_type
         )
@@ -847,7 +789,6 @@ class TestService:
             "TestService",
             "DictionaryDefault",
             [x],
-            ["x"],
             [self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)],
             self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
@@ -860,7 +801,6 @@ class TestService:
             "TestService",
             "DictionaryDefault",
             [x],
-            ["x"],
             [self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)],
             self._client._types.dictionary_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
@@ -873,7 +813,6 @@ class TestService:
             "TestService",
             "DoubleSpecialDefaults",
             [nan, infinity, negative_infinity, maximum, lowest],
-            ["nan", "infinity", "negative_infinity", "maximum", "lowest"],
             [self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type],
             self._client._types.list_type(self._client._types.double_type)
         )
@@ -886,7 +825,6 @@ class TestService:
             "TestService",
             "DoubleSpecialDefaults",
             [nan, infinity, negative_infinity, maximum, lowest],
-            ["nan", "infinity", "negative_infinity", "maximum", "lowest"],
             [self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type, self._client._types.double_type],
             self._client._types.list_type(self._client._types.double_type)
         )
@@ -896,7 +834,6 @@ class TestService:
             "TestService",
             "DoubleToString",
             [value],
-            ["value"],
             [self._client._types.double_type],
             self._client._types.string_type
         )
@@ -909,7 +846,6 @@ class TestService:
             "TestService",
             "DoubleToString",
             [value],
-            ["value"],
             [self._client._types.double_type],
             self._client._types.string_type
         )
@@ -919,7 +855,6 @@ class TestService:
             "TestService",
             "EchoNullableInt",
             [value],
-            ["value"],
             [self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -932,7 +867,6 @@ class TestService:
             "TestService",
             "EchoNullableInt",
             [value],
-            ["value"],
             [self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -942,7 +876,6 @@ class TestService:
             "TestService",
             "EchoNullableList",
             [l],
-            ["l"],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -955,7 +888,6 @@ class TestService:
             "TestService",
             "EchoNullableList",
             [l],
-            ["l"],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -965,7 +897,6 @@ class TestService:
             "TestService",
             "EchoNullableString",
             [value],
-            ["value"],
             [self._client._types.string_type],
             self._client._types.string_type
         )
@@ -978,7 +909,6 @@ class TestService:
             "TestService",
             "EchoNullableString",
             [value],
-            ["value"],
             [self._client._types.string_type],
             self._client._types.string_type
         )
@@ -988,7 +918,6 @@ class TestService:
             "TestService",
             "EchoTestObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -1001,7 +930,6 @@ class TestService:
             "TestService",
             "EchoTestObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -1011,7 +939,6 @@ class TestService:
             "TestService",
             "EmptyListDefault",
             [x],
-            ["x"],
             [self._client._types.list_type(self._client._types.string_type)],
             self._client._types.list_type(self._client._types.string_type)
         )
@@ -1024,7 +951,6 @@ class TestService:
             "TestService",
             "EmptyListDefault",
             [x],
-            ["x"],
             [self._client._types.list_type(self._client._types.string_type)],
             self._client._types.list_type(self._client._types.string_type)
         )
@@ -1034,7 +960,6 @@ class TestService:
             "TestService",
             "EnumDefaultArg",
             [x],
-            ["x"],
             [self._client._types.enumeration_type("TestService", "TestEnum")],
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
@@ -1047,7 +972,6 @@ class TestService:
             "TestService",
             "EnumDefaultArg",
             [x],
-            ["x"],
             [self._client._types.enumeration_type("TestService", "TestEnum")],
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
@@ -1057,7 +981,6 @@ class TestService:
             "TestService",
             "EnumEcho",
             [x],
-            ["x"],
             [self._client._types.enumeration_type("TestService", "TestEnum")],
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
@@ -1070,7 +993,6 @@ class TestService:
             "TestService",
             "EnumEcho",
             [x],
-            ["x"],
             [self._client._types.enumeration_type("TestService", "TestEnum")],
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
@@ -1080,7 +1002,6 @@ class TestService:
             "TestService",
             "EnumListDefault",
             [x],
-            ["x"],
             [self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))],
             self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
         )
@@ -1093,7 +1014,6 @@ class TestService:
             "TestService",
             "EnumListDefault",
             [x],
-            ["x"],
             [self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))],
             self._client._types.list_type(self._client._types.enumeration_type("TestService", "TestEnum"))
         )
@@ -1102,7 +1022,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "EnumReturn",
-            [],
             [],
             [],
             self._client._types.enumeration_type("TestService", "TestEnum")
@@ -1117,7 +1036,6 @@ class TestService:
             "EnumReturn",
             [],
             [],
-            [],
             self._client._types.enumeration_type("TestService", "TestEnum")
         )
 
@@ -1130,7 +1048,6 @@ class TestService:
             "TestService",
             "FloatSpecialDefaults",
             [nan, infinity, negative_infinity, maximum, lowest, fraction],
-            ["nan", "infinity", "negative_infinity", "maximum", "lowest", "fraction"],
             [self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type],
             self._client._types.list_type(self._client._types.float_type)
         )
@@ -1143,7 +1060,6 @@ class TestService:
             "TestService",
             "FloatSpecialDefaults",
             [nan, infinity, negative_infinity, maximum, lowest, fraction],
-            ["nan", "infinity", "negative_infinity", "maximum", "lowest", "fraction"],
             [self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type, self._client._types.float_type],
             self._client._types.list_type(self._client._types.float_type)
         )
@@ -1156,7 +1072,6 @@ class TestService:
             "TestService",
             "FloatToString",
             [value],
-            ["value"],
             [self._client._types.float_type],
             self._client._types.string_type
         )
@@ -1169,7 +1084,6 @@ class TestService:
             "TestService",
             "FloatToString",
             [value],
-            ["value"],
             [self._client._types.float_type],
             self._client._types.string_type
         )
@@ -1179,7 +1093,6 @@ class TestService:
             "TestService",
             "IncrementDictionary",
             [d],
-            ["d"],
             [self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)],
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)
         )
@@ -1192,7 +1105,6 @@ class TestService:
             "TestService",
             "IncrementDictionary",
             [d],
-            ["d"],
             [self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)],
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.sint32_type)
         )
@@ -1202,7 +1114,6 @@ class TestService:
             "TestService",
             "IncrementList",
             [l],
-            ["l"],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -1215,7 +1126,6 @@ class TestService:
             "TestService",
             "IncrementList",
             [l],
-            ["l"],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -1225,7 +1135,6 @@ class TestService:
             "TestService",
             "IncrementNestedCollection",
             [d],
-            ["d"],
             [self._client._types.dictionary_type(self._client._types.string_type, self._client._types.list_type(self._client._types.sint32_type))],
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.list_type(self._client._types.sint32_type))
         )
@@ -1238,7 +1147,6 @@ class TestService:
             "TestService",
             "IncrementNestedCollection",
             [d],
-            ["d"],
             [self._client._types.dictionary_type(self._client._types.string_type, self._client._types.list_type(self._client._types.sint32_type))],
             self._client._types.dictionary_type(self._client._types.string_type, self._client._types.list_type(self._client._types.sint32_type))
         )
@@ -1248,7 +1156,6 @@ class TestService:
             "TestService",
             "IncrementSet",
             [h],
-            ["h"],
             [self._client._types.set_type(self._client._types.sint32_type)],
             self._client._types.set_type(self._client._types.sint32_type)
         )
@@ -1261,7 +1168,6 @@ class TestService:
             "TestService",
             "IncrementSet",
             [h],
-            ["h"],
             [self._client._types.set_type(self._client._types.sint32_type)],
             self._client._types.set_type(self._client._types.sint32_type)
         )
@@ -1271,7 +1177,6 @@ class TestService:
             "TestService",
             "IncrementTuple",
             [t],
-            ["t"],
             [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)],
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
         )
@@ -1284,7 +1189,6 @@ class TestService:
             "TestService",
             "IncrementTuple",
             [t],
-            ["t"],
             [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)],
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.sint64_type)
         )
@@ -1297,7 +1201,6 @@ class TestService:
             "TestService",
             "Int32SpecialDefaults",
             [maximum, minimum],
-            ["maximum", "minimum"],
             [self._client._types.sint32_type, self._client._types.sint32_type],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -1310,7 +1213,6 @@ class TestService:
             "TestService",
             "Int32SpecialDefaults",
             [maximum, minimum],
-            ["maximum", "minimum"],
             [self._client._types.sint32_type, self._client._types.sint32_type],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -1320,7 +1222,6 @@ class TestService:
             "TestService",
             "Int32ToString",
             [value],
-            ["value"],
             [self._client._types.sint32_type],
             self._client._types.string_type
         )
@@ -1333,7 +1234,6 @@ class TestService:
             "TestService",
             "Int32ToString",
             [value],
-            ["value"],
             [self._client._types.sint32_type],
             self._client._types.string_type
         )
@@ -1346,7 +1246,6 @@ class TestService:
             "TestService",
             "Int64SpecialDefaults",
             [maximum, minimum],
-            ["maximum", "minimum"],
             [self._client._types.sint64_type, self._client._types.sint64_type],
             self._client._types.list_type(self._client._types.sint64_type)
         )
@@ -1359,7 +1258,6 @@ class TestService:
             "TestService",
             "Int64SpecialDefaults",
             [maximum, minimum],
-            ["maximum", "minimum"],
             [self._client._types.sint64_type, self._client._types.sint64_type],
             self._client._types.list_type(self._client._types.sint64_type)
         )
@@ -1369,7 +1267,6 @@ class TestService:
             "TestService",
             "Int64ToString",
             [value],
-            ["value"],
             [self._client._types.sint64_type],
             self._client._types.string_type
         )
@@ -1382,7 +1279,6 @@ class TestService:
             "TestService",
             "Int64ToString",
             [value],
-            ["value"],
             [self._client._types.sint64_type],
             self._client._types.string_type
         )
@@ -1392,7 +1288,6 @@ class TestService:
             "TestService",
             "ListDefault",
             [x],
-            ["x"],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -1405,7 +1300,6 @@ class TestService:
             "TestService",
             "ListDefault",
             [x],
-            ["x"],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
         )
@@ -1415,7 +1309,6 @@ class TestService:
             "TestService",
             "NotNullableObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -1428,7 +1321,6 @@ class TestService:
             "TestService",
             "NotNullableObject",
             [value],
-            ["value"],
             [self._client._types.class_type("TestService", "TestClass")],
             self._client._types.class_type("TestService", "TestClass")
         )
@@ -1438,7 +1330,6 @@ class TestService:
             "TestService",
             "OnTimer",
             [milliseconds, repeats],
-            ["milliseconds", "repeats"],
             [self._client._types.uint32_type, self._client._types.uint32_type],
             self._client._types.event_type
         )
@@ -1451,7 +1342,6 @@ class TestService:
             "TestService",
             "OnTimer",
             [milliseconds, repeats],
-            ["milliseconds", "repeats"],
             [self._client._types.uint32_type, self._client._types.uint32_type],
             self._client._types.event_type
         )
@@ -1461,7 +1351,6 @@ class TestService:
             "TestService",
             "OnTimerUsingLambda",
             [milliseconds],
-            ["milliseconds"],
             [self._client._types.uint32_type],
             self._client._types.event_type
         )
@@ -1474,7 +1363,6 @@ class TestService:
             "TestService",
             "OnTimerUsingLambda",
             [milliseconds],
-            ["milliseconds"],
             [self._client._types.uint32_type],
             self._client._types.event_type
         )
@@ -1484,7 +1372,6 @@ class TestService:
             "TestService",
             "OptionalArguments",
             [x, y, z, obj],
-            ["x", "y", "z", "obj"],
             [self._client._types.string_type, self._client._types.string_type, self._client._types.string_type, self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -1497,7 +1384,6 @@ class TestService:
             "TestService",
             "OptionalArguments",
             [x, y, z, obj],
-            ["x", "y", "z", "obj"],
             [self._client._types.string_type, self._client._types.string_type, self._client._types.string_type, self._client._types.class_type("TestService", "TestClass")],
             self._client._types.string_type
         )
@@ -1506,7 +1392,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ResetCustomExceptionLater",
-            [],
             [],
             [],
             None
@@ -1521,7 +1406,6 @@ class TestService:
             "ResetCustomExceptionLater",
             [],
             [],
-            [],
             None
         )
 
@@ -1529,7 +1413,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ResetInvalidOperationExceptionLater",
-            [],
             [],
             [],
             None
@@ -1544,7 +1427,6 @@ class TestService:
             "ResetInvalidOperationExceptionLater",
             [],
             [],
-            [],
             None
         )
 
@@ -1552,7 +1434,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ReturnNullWhenNotAllowed",
-            [],
             [],
             [],
             self._client._types.class_type("TestService", "TestClass")
@@ -1567,7 +1448,6 @@ class TestService:
             "ReturnNullWhenNotAllowed",
             [],
             [],
-            [],
             self._client._types.class_type("TestService", "TestClass")
         )
 
@@ -1576,7 +1456,6 @@ class TestService:
             "TestService",
             "SetDefault",
             [x],
-            ["x"],
             [self._client._types.set_type(self._client._types.sint32_type)],
             self._client._types.set_type(self._client._types.sint32_type)
         )
@@ -1589,7 +1468,6 @@ class TestService:
             "TestService",
             "SetDefault",
             [x],
-            ["x"],
             [self._client._types.set_type(self._client._types.sint32_type)],
             self._client._types.set_type(self._client._types.sint32_type)
         )
@@ -1599,7 +1477,6 @@ class TestService:
             "TestService",
             "StringToInt32",
             [value],
-            ["value"],
             [self._client._types.string_type],
             self._client._types.sint32_type
         )
@@ -1612,7 +1489,6 @@ class TestService:
             "TestService",
             "StringToInt32",
             [value],
-            ["value"],
             [self._client._types.string_type],
             self._client._types.sint32_type
         )
@@ -1621,7 +1497,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ThrowArgumentException",
-            [],
             [],
             [],
             self._client._types.sint32_type
@@ -1636,7 +1511,6 @@ class TestService:
             "ThrowArgumentException",
             [],
             [],
-            [],
             self._client._types.sint32_type
         )
 
@@ -1645,7 +1519,6 @@ class TestService:
             "TestService",
             "ThrowArgumentNullException",
             [foo],
-            ["foo"],
             [self._client._types.string_type],
             self._client._types.sint32_type
         )
@@ -1658,7 +1531,6 @@ class TestService:
             "TestService",
             "ThrowArgumentNullException",
             [foo],
-            ["foo"],
             [self._client._types.string_type],
             self._client._types.sint32_type
         )
@@ -1668,7 +1540,6 @@ class TestService:
             "TestService",
             "ThrowArgumentOutOfRangeException",
             [foo],
-            ["foo"],
             [self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -1681,7 +1552,6 @@ class TestService:
             "TestService",
             "ThrowArgumentOutOfRangeException",
             [foo],
-            ["foo"],
             [self._client._types.sint32_type],
             self._client._types.sint32_type
         )
@@ -1690,7 +1560,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ThrowCustomException",
-            [],
             [],
             [],
             self._client._types.sint32_type
@@ -1705,7 +1574,6 @@ class TestService:
             "ThrowCustomException",
             [],
             [],
-            [],
             self._client._types.sint32_type
         )
 
@@ -1713,7 +1581,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ThrowCustomExceptionLater",
-            [],
             [],
             [],
             self._client._types.sint32_type
@@ -1728,7 +1595,6 @@ class TestService:
             "ThrowCustomExceptionLater",
             [],
             [],
-            [],
             self._client._types.sint32_type
         )
 
@@ -1736,7 +1602,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ThrowInvalidOperationException",
-            [],
             [],
             [],
             self._client._types.sint32_type
@@ -1751,7 +1616,6 @@ class TestService:
             "ThrowInvalidOperationException",
             [],
             [],
-            [],
             self._client._types.sint32_type
         )
 
@@ -1759,7 +1623,6 @@ class TestService:
         return self._client._invoke(
             "TestService",
             "ThrowInvalidOperationExceptionLater",
-            [],
             [],
             [],
             self._client._types.sint32_type
@@ -1774,7 +1637,6 @@ class TestService:
             "ThrowInvalidOperationExceptionLater",
             [],
             [],
-            [],
             self._client._types.sint32_type
         )
 
@@ -1783,7 +1645,6 @@ class TestService:
             "TestService",
             "TupleDefault",
             [x],
-            ["x"],
             [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)],
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
@@ -1796,7 +1657,6 @@ class TestService:
             "TestService",
             "TupleDefault",
             [x],
-            ["x"],
             [self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)],
             self._client._types.tuple_type(self._client._types.sint32_type, self._client._types.bool_type)
         )
@@ -1809,7 +1669,6 @@ class TestService:
             "TestService",
             "Uint32SpecialDefaults",
             [maximum],
-            ["maximum"],
             [self._client._types.uint32_type],
             self._client._types.list_type(self._client._types.uint32_type)
         )
@@ -1822,7 +1681,6 @@ class TestService:
             "TestService",
             "Uint32SpecialDefaults",
             [maximum],
-            ["maximum"],
             [self._client._types.uint32_type],
             self._client._types.list_type(self._client._types.uint32_type)
         )
@@ -1835,7 +1693,6 @@ class TestService:
             "TestService",
             "Uint64SpecialDefaults",
             [maximum],
-            ["maximum"],
             [self._client._types.uint64_type],
             self._client._types.list_type(self._client._types.uint64_type)
         )
@@ -1848,7 +1705,6 @@ class TestService:
             "TestService",
             "Uint64SpecialDefaults",
             [maximum],
-            ["maximum"],
             [self._client._types.uint64_type],
             self._client._types.list_type(self._client._types.uint64_type)
         )

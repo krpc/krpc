@@ -64,7 +64,6 @@ class ServiceA:
             "ServiceA",
             "Frob",
             [mode],
-            ["mode"],
             [self._client._types.enumeration_type("ServiceB", "Mode")],
             None
         )
@@ -77,7 +76,6 @@ class ServiceA:
             "ServiceA",
             "Frob",
             [mode],
-            ["mode"],
             [self._client._types.enumeration_type("ServiceB", "Mode")],
             None
         )
@@ -90,7 +88,6 @@ class ServiceA:
             "ServiceA",
             "FrobAll",
             [modes],
-            ["modes"],
             [self._client._types.list_type(self._client._types.enumeration_type("ServiceB", "Mode"))],
             None
         )
@@ -103,7 +100,6 @@ class ServiceA:
             "ServiceA",
             "FrobAll",
             [modes],
-            ["modes"],
             [self._client._types.list_type(self._client._types.enumeration_type("ServiceB", "Mode"))],
             None
         )

@@ -79,7 +79,7 @@ class Client(krpc.services.Client):
 
         services = cast(
             KRPC.Services,
-            self._invoke("KRPC", "GetServices", [], [], [], self._types.services_type),
+            self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
         ).services
 
         # Load services
@@ -233,7 +233,6 @@ class Client(krpc.services.Client):
         service: str,
         procedure: str,
         args: Iterable[object],
-        param_names: Iterable[str],
         param_types: Iterable[TypeBase],
         return_type: Optional[TypeBase],
     ) -> object:
@@ -273,7 +272,6 @@ class Client(krpc.services.Client):
         service: str,
         procedure: str,
         args: Iterable[object],
-        param_names: Iterable[str],  # pylint: disable=unused-argument
         param_types: Iterable[TypeBase],
         return_type: Optional[TypeBase],  # pylint: disable=unused-argument
     ) -> KRPC.ProcedureCall:
