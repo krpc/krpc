@@ -414,6 +414,64 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void StructComparison ()
+        {
+            var items = new List<int> ();
+            var a = new TestStruct (1, "jeb", TestEnum.ValueA, items);
+            var b = new TestStruct (1, "jeb", TestEnum.ValueA, items);
+            var c = new TestStruct (2, "jeb", TestEnum.ValueA, items);
+
+            Assert.IsTrue (a.Equals (b));
+            Assert.IsTrue (a == b);
+            Assert.IsTrue (a != c);
+            Assert.AreEqual (a.GetHashCode (), b.GetHashCode ());
+
+            // Ordered by the fields in turn, as a tuple of the same values is
+            Assert.IsTrue (a < c);
+            Assert.IsTrue (c > a);
+            Assert.IsTrue (a <= b);
+            Assert.IsTrue (a >= b);
+            Assert.AreEqual (0, a.CompareTo (b));
+            Assert.Less (a.CompareTo (c), 0);
+
+            var sorted = new List<TestStruct> { c, a };
+            sorted.Sort ();
+            Assert.AreEqual (a, sorted [0]);
+
+            var set = new HashSet<TestStruct> { a, b, c };
+            Assert.AreEqual (2, set.Count);
+        }
+
+        [Test]
+        public void StructEqualityOfACollectionFieldIsByContents ()
+        {
+            // A collection field is equal to one holding the same items, whatever object
+            // each of them is
+            // Asserted through Equals rather than through Assert.AreEqual, which compares
+            // collections structurally with a comparer of NUnit's own
+            var x = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
+            var y = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
+            var z = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 2 });
+            Assert.IsTrue (x.Equals (y));
+            Assert.AreEqual (x.GetHashCode (), y.GetHashCode ());
+            Assert.IsFalse (x.Equals (z));
+        }
+
+        [Test]
+        public void StructComparisonOfACollectionFieldThrows ()
+        {
+            // A collection has no ordering, so comparing two structures whose collection
+            // fields are different objects throws, as comparing two such tuples does
+            var a = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
+            var b = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 2 });
+            Assert.Throws<System.ArgumentException> (() => a.CompareTo (b));
+            Assert.Throws<System.ArgumentException> (
+                () => Comparer<Tuple<int, IList<int>>>.Default.Compare (
+                    new Tuple<int, IList<int>> (1, new List<int> { 1 }),
+                    new Tuple<int, IList<int>> (1, new List<int> { 2 })));
+        }
+
+        [Test]
         public void CollectionsDefaultValues ()
         {
             Assert.AreEqual (new Tuple<int,bool> (1, false), Connection.TestService ().TupleDefault ());
