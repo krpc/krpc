@@ -505,3 +505,20 @@ Client API Reference
    .. function:: operator bool()
 
       Returns whether the event object is bound to a stream.
+
+.. function:: template <typename T> std::size_t hash_value(const T& value)
+
+   Returns a hash of a value of any type the client carries: the arithmetic types, strings,
+   enumerations, class objects, tuples, and the list, set and dictionary collection types,
+   nested however deeply. A structure is also hashed by this function, and is given a
+   ``std::hash`` of its own, so an unordered container keyed by one needs nothing further.
+
+.. class:: hash
+
+   A function object that calls :func:`hash_value`, to give a standard container that takes
+   its hash as a template argument. The standard library hashes neither ``std::tuple`` nor
+   any of the collection types, so a container keyed by one needs this:
+
+   .. code-block:: cpp
+
+      std::unordered_set<std::tuple<double, double, double>, krpc::hash> points;
