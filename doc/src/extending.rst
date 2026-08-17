@@ -402,6 +402,82 @@ to add functionality to the kRPC server.
         conn = krpc.connect()
         state = conn.eva.FlagState.lowered
 
+.. csharp:attribute:: KRPCStruct (string Service)
+
+   :parameters:
+
+    * **Service** -- Optional name of the service to add this structure to. If omitted, the
+      structure is added to the service that contains its definition.
+
+   This `attribute <https://msdn.microsoft.com/en-us/library/aa287992.aspx>`_ is applied to a
+   ``struct``. It adds the structure and its fields to the server. A structure is a compound value
+   with named fields, whose value is sent to the client in full rather than as a reference to an
+   object that stays on the server.
+
+   The fields of the structure are its ``public`` instance properties that are annotated with
+   :csharp:attr:`KRPCProperty` and have both a getter and a setter, in the order they are declared.
+   A property that is not annotated is not a field, and is not visible to a client.
+
+   A :csharp:attr:`KRPCStruct` must be part of a service, just like a
+   :csharp:attr:`KRPCClass`. Similarly, a :csharp:attr:`KRPCStruct` can be declared outside of a
+   service if it has its ``Service`` parameter set to the name of the service that it is part of.
+
+   The struct type to which this attribute is applied must satisfy the following criteria:
+
+   * The struct must be ``public`` and must not be generic.
+
+   * The name of the struct must be a valid :ref:`kRPC identifier <service-api-identifiers>`.
+
+   * The struct must either be declared inside a :csharp:attr:`KRPCService`, or have its ``Service``
+     parameter set to the name of the service it is part of.
+
+   * It must have at least one field, and the type of every field must be a :ref:`serializable type
+     <service-api-serializable-types>`.
+
+   * A field must not be nullable and must not restrict the game scenes it is available in, so
+     neither the ``Nullable`` nor the ``GameScene`` parameter of its :csharp:attr:`KRPCProperty`
+     attribute may be set.
+
+   * The structure must not contain itself, whether directly or through the fields of another
+     structure that it contains.
+
+   Fields may only be **appended** to a structure. Reordering them, removing one or changing the
+   type of one is a breaking change for clients generated against the previous definition, as the
+   value of a structure is sent as the values of its fields in order.
+
+   **Choosing between a structure and a class.** A structure sends the values of all of its fields
+   whenever it is sent, in a single procedure call. Use one for compound data whose fields are
+   almost always wanted together, such as a position and a velocity. Use a
+   :csharp:attr:`KRPCClass` for something with mutable state, or whose members are expensive enough
+   that a client should be able to ask for them one at a time.
+
+   **Examples**
+
+   * Declare a structure with three fields:
+
+     .. code-block:: csharp
+
+        [KRPCStruct]
+        public struct LaunchSiteInfo {
+            [KRPCProperty]
+            public string Name { get; set; }
+
+            [KRPCProperty]
+            public CelestialBody Body { get; set; }
+
+            [KRPCProperty]
+            public double Latitude { get; set; }
+        }
+
+     This can be used from a python client as follows:
+
+     .. code-block:: python
+
+        import krpc
+        conn = krpc.connect()
+        site = conn.space_center.launch_sites[0]
+        print(site.name, site.latitude)
+
 .. csharp:attribute:: KRPCException (string Service, Type MappedException)
 
    :parameters:
@@ -524,6 +600,8 @@ following types are serializable:
 * Any type annotated with :csharp:attr:`KRPCClass`
 
 * Any type annotated with :csharp:attr:`KRPCEnum`
+
+* Any type annotated with :csharp:attr:`KRPCStruct`
 
 * Collections of serializable types:
 
