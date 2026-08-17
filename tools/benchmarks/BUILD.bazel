@@ -1,6 +1,8 @@
 load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "assembly_version", "author")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:python.bzl", "py_lint_test")
 
 # The Benchmark service. A service like any other, loaded by whichever server it is installed
 # alongside: TestServer for a game-less measurement, and the game for the same measurement
@@ -56,4 +58,59 @@ filegroup(
         "**/*.csproj",
     ]),
     visibility = ["//:__pkg__"],
+)
+
+# What the runners share: the result record and the table, and the chunk sizing.
+py_library(
+    name = "benchmarks_lib",
+    srcs = [
+        "chunking.py",
+        "report.py",
+    ],
+    # The modules refer to each other as tools.benchmarks.<name>, which is also how the
+    # in-game scripts reach them when pytest runs them from the repository.
+    imports = ["../.."],
+    visibility = ["//visibility:public"],
+    deps = ["//client/python:krpc_lib"],
+)
+
+# The in-game benchmarks: `bazel run //tools/benchmarks:server -- [pytest args]`. Launches the
+# game, so it takes minutes. The scripts are read from the repository rather than the runfiles
+# tree, as the in-game tests are, so adding or editing one needs no change here.
+py_binary(
+    name = "server",
+    srcs = ["run_server.py"],
+    main = "run_server.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":benchmarks_lib",
+        "//tools/krpctest:krpctest_lib",
+        "@pypi//pytest",
+    ],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":lint",
+    ],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pylint",
+    ],
+)
+
+py_lint_test(
+    name = "pylint",
+    size = "medium",
+    srcs = glob(["*.py"]) + glob(["server/*.py"]),
+    pylint_config = "pylint.rc",
+    deps = [
+        "//client/python:krpc_lib",
+        "//tools/krpctest:krpctest_lib",
+        "@pypi//pytest",
+    ],
 )
