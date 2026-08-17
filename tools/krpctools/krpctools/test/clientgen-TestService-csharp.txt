@@ -115,6 +115,20 @@ namespace KRPC.Client.Services.TestService
             return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
         }
 
+        /// <summary>
+        /// Returns a struct whose IntField counts the number of times it has been called,
+        /// so that a stream on it changes on every update.
+        /// </summary>
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CounterStruct")]
+        public global::KRPC.Client.Services.TestService.TestStruct CounterStruct (string id = "")
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (id, typeof(string))
+            };
+            var _result = connection.Invoke ("TestService", "CounterStruct", _args);
+            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "CreateTestObject")]
         public global::KRPC.Client.Services.TestService.TestClass CreateTestObject (string value)
         {
@@ -337,6 +351,16 @@ namespace KRPC.Client.Services.TestService
             return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementListOfStructs")]
+        public global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct> IncrementListOfStructs (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct> l)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (l, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>))
+            };
+            var _result = connection.Invoke ("TestService", "IncrementListOfStructs", _args);
+            return (global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<global::KRPC.Client.Services.TestService.TestStruct>), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "IncrementNestedCollection")]
         public global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>> IncrementNestedCollection (global::System.Collections.Generic.IDictionary<string,global::System.Collections.Generic.IList<int>> d)
         {
@@ -425,6 +449,16 @@ namespace KRPC.Client.Services.TestService
             return (global::System.Collections.Generic.IList<int>)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::System.Collections.Generic.IList<int>), connection);
         }
 
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NestedStructEcho")]
+        public global::KRPC.Client.Services.TestService.TestNestedStruct NestedStructEcho (global::KRPC.Client.Services.TestService.TestNestedStruct x)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestNestedStruct))
+            };
+            var _result = connection.Invoke ("TestService", "NestedStructEcho", _args);
+            return (global::KRPC.Client.Services.TestService.TestNestedStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestNestedStruct), connection);
+        }
+
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "NotNullableObject")]
         public global::KRPC.Client.Services.TestService.TestClass NotNullableObject (global::KRPC.Client.Services.TestService.TestClass value)
         {
@@ -506,6 +540,38 @@ namespace KRPC.Client.Services.TestService
             };
             var _result = connection.Invoke ("TestService", "StringToInt32", _args);
             return (int)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(int), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructDefault")]
+        public global::KRPC.Client.Services.TestService.TestStruct StructDefault (global::KRPC.Client.Services.TestService.TestStruct? x = null)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x ?? new global::KRPC.Client.Services.TestService.TestStruct (42, "jeb", global::KRPC.Client.Services.TestService.TestEnum.ValueB, new global::System.Collections.Generic.List<int> { 1, 2, 3 }), typeof(global::KRPC.Client.Services.TestService.TestStruct?))
+            };
+            var _result = connection.Invoke ("TestService", "StructDefault", _args);
+            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructEcho")]
+        public global::KRPC.Client.Services.TestService.TestStruct StructEcho (global::KRPC.Client.Services.TestService.TestStruct x)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestStruct))
+            };
+            var _result = connection.Invoke ("TestService", "StructEcho", _args);
+            return (global::KRPC.Client.Services.TestService.TestStruct)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct), connection);
+        }
+
+        [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "StructEchoNullable")]
+        public global::KRPC.Client.Services.TestService.TestStruct? StructEchoNullable (global::KRPC.Client.Services.TestService.TestStruct? x)
+        {
+            var _args = new ByteString[] {
+                global::KRPC.Client.Encoder.Encode (x, typeof(global::KRPC.Client.Services.TestService.TestStruct?))
+            };
+            var _result = connection.Invoke ("TestService", "StructEchoNullable", _args);
+            if (_result.IsNull)
+                return null;
+            return (global::KRPC.Client.Services.TestService.TestStruct?)global::KRPC.Client.Encoder.Decode (_result.Value, typeof(global::KRPC.Client.Services.TestService.TestStruct?), connection);
         }
 
         [global::KRPC.Client.Attributes.RPCAttribute ("TestService", "ThrowArgumentException")]
@@ -720,6 +786,221 @@ namespace KRPC.Client.Services.TestService
         /// Enum ValueC documentation string.
         /// </summary>
         ValueC = 2
+    }
+
+    /// <summary>
+    /// Deprecated struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    [global::System.Obsolete ("Use the TestStruct struct instead.")]
+    public struct DeprecatedStruct : IEquatable<DeprecatedStruct>
+    {
+        /// <summary>
+        /// Construct a DeprecatedStruct from the values of its fields.
+        /// </summary>
+        public DeprecatedStruct (int value, int oldValue) : this ()
+        {
+            Value = value;
+            OldValue = oldValue;
+        }
+
+        /// <summary>
+        /// Deprecated struct Value documentation string.
+        /// </summary>
+        public int Value { get; private set; }
+
+        /// <summary>
+        /// Deprecated struct OldValue documentation string.
+        /// </summary>
+        [global::System.Obsolete ("Use the Value field instead.")]
+        public int OldValue { get; private set; }
+
+        /// <summary>
+        /// Returns true if this DeprecatedStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is DeprecatedStruct && Equals ((DeprecatedStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this DeprecatedStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (DeprecatedStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (Value, other.Value) && global::KRPC.Client.ValueUtils.Equal (OldValue, other.OldValue);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this DeprecatedStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (Value);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (OldValue);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two DeprecatedStruct values are equal.
+        /// </summary>
+        public static bool operator == (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two DeprecatedStruct values are not equal.
+        /// </summary>
+        public static bool operator != (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+    }
+
+    /// <summary>
+    /// Nested struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct TestNestedStruct : IEquatable<TestNestedStruct>
+    {
+        /// <summary>
+        /// Construct a TestNestedStruct from the values of its fields.
+        /// </summary>
+        public TestNestedStruct (global::KRPC.Client.Services.TestService.TestStruct structField, global::KRPC.Client.Services.TestService.TestClass objectField, string stringField) : this ()
+        {
+            StructField = structField;
+            ObjectField = objectField;
+            StringField = stringField;
+        }
+
+        public global::KRPC.Client.Services.TestService.TestStruct StructField { get; private set; }
+
+        public global::KRPC.Client.Services.TestService.TestClass ObjectField { get; private set; }
+
+        public string StringField { get; private set; }
+
+        /// <summary>
+        /// Returns true if this TestNestedStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is TestNestedStruct && Equals ((TestNestedStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this TestNestedStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (TestNestedStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (StructField, other.StructField) && global::KRPC.Client.ValueUtils.Equal (ObjectField, other.ObjectField) && global::KRPC.Client.ValueUtils.Equal (StringField, other.StringField);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this TestNestedStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StructField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ObjectField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StringField);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNestedStruct values are equal.
+        /// </summary>
+        public static bool operator == (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNestedStruct values are not equal.
+        /// </summary>
+        public static bool operator != (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+    }
+
+    /// <summary>
+    /// Struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct TestStruct : IEquatable<TestStruct>
+    {
+        /// <summary>
+        /// Construct a TestStruct from the values of its fields.
+        /// </summary>
+        public TestStruct (int intField, string stringField, global::KRPC.Client.Services.TestService.TestEnum enumField, global::System.Collections.Generic.IList<int> listField) : this ()
+        {
+            IntField = intField;
+            StringField = stringField;
+            EnumField = enumField;
+            ListField = listField;
+        }
+
+        /// <summary>
+        /// Struct IntField documentation string.
+        /// </summary>
+        public int IntField { get; private set; }
+
+        public string StringField { get; private set; }
+
+        public global::KRPC.Client.Services.TestService.TestEnum EnumField { get; private set; }
+
+        public global::System.Collections.Generic.IList<int> ListField { get; private set; }
+
+        /// <summary>
+        /// Returns true if this TestStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is TestStruct && Equals ((TestStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this TestStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (TestStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (IntField, other.IntField) && global::KRPC.Client.ValueUtils.Equal (StringField, other.StringField) && global::KRPC.Client.ValueUtils.Equal (EnumField, other.EnumField) && global::KRPC.Client.ValueUtils.Equal (ListField, other.ListField);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this TestStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (IntField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StringField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (EnumField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ListField);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two TestStruct values are equal.
+        /// </summary>
+        public static bool operator == (TestStruct lhs, TestStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two TestStruct values are not equal.
+        /// </summary>
+        public static bool operator != (TestStruct lhs, TestStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
     }
 
     [Serializable]

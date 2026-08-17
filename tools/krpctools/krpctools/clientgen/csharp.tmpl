@@ -144,6 +144,79 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
     }
     {% endfor %}
+    {% for struct_name,struct in structs.items() %}
+
+{% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
+{% endif %}
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+{% if struct.deprecated %}    [global::System.Obsolete{% if struct.deprecated_reason %} ("{{ struct.deprecated_reason }}"){% endif %}]
+{% endif %}
+    public struct {{ struct_name }} : IEquatable<{{ struct_name }}>
+    {
+        /// <summary>
+        /// Construct a {{ struct_name }} from the values of its fields.
+        /// </summary>
+        public {{ struct_name }} ({% for field in struct['fields'] %}{{ field.type }} {{ field.name | lower_camel_case }}{% if not loop.last %}, {% endif %}{% endfor %}) : this ()
+        {
+            {% for field in struct['fields'] %}
+            {{ field.name }} = {{ field.name | lower_camel_case }};
+            {% endfor %}
+        }
+        {% for field in struct['fields'] %}
+
+{% if field.documentation %}{{ field.documentation | indent(width=8) }}
+{% endif %}
+{% if field.deprecated %}        [global::System.Obsolete{% if field.deprecated_reason %} ("{{ field.deprecated_reason }}"){% endif %}]
+{% endif %}
+        public {{ field.type }} {{ field.name }} { get; private set; }
+        {% endfor %}
+
+        /// <summary>
+        /// Returns true if this {{ struct_name }} is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is {{ struct_name }} && Equals (({{ struct_name }})obj);
+        }
+
+        /// <summary>
+        /// Returns true if this {{ struct_name }} is equal to the given one.
+        /// </summary>
+        public bool Equals ({{ struct_name }} other)
+        {
+            return {% for field in struct['fields'] %}global::KRPC.Client.ValueUtils.Equal ({{ field.name }}, other.{{ field.name }}){% if not loop.last %} && {% endif %}{% endfor %};
+        }
+
+        /// <summary>
+        /// Returns a hash code for this {{ struct_name }}.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            {% for field in struct['fields'] %}
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode ({{ field.name }});
+            {% endfor %}
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two {{ struct_name }} values are equal.
+        /// </summary>
+        public static bool operator == ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two {{ struct_name }} values are not equal.
+        /// </summary>
+        public static bool operator != ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+    }
+    {% endfor %}
     {% for exception_name,exception in exceptions.items() %}
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}
