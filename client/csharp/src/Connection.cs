@@ -40,6 +40,10 @@ namespace KRPC.Client
 
             rpcClient = new TcpClient ();
             rpcClient.Connect (address, rpcPort);
+            // A call writes a request and then waits for its response, so there is never a
+            // second small write for Nagle's algorithm to hold the first one back for. Left on,
+            // it can only delay a request the server is already waiting for.
+            rpcClient.NoDelay = true;
             rpcStream = rpcClient.GetStream ();
             codedRpcStream = new CodedOutputStream (rpcStream, true);
             var request = new ConnectionRequest ();
@@ -56,6 +60,7 @@ namespace KRPC.Client
             if (streamPort != 0) {
                 streamClient = new TcpClient ();
                 streamClient.Connect (address, streamPort);
+                streamClient.NoDelay = true;
                 var streamStream = streamClient.GetStream ();
                 request = new ConnectionRequest ();
                 request.Type = Type.Stream;
