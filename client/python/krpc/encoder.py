@@ -173,14 +173,6 @@ class _ValueEncoder:
         return b"".join(data)
 
     @classmethod
-    def encode_sint32(cls, value: int) -> bytes:
-        return cls._encode_signed_varint(value)
-
-    @classmethod
-    def encode_sint64(cls, value: int) -> bytes:
-        return cls._encode_signed_varint(value)
-
-    @classmethod
     def encode_uint32(cls, value: int) -> bytes:
         if value < 0:
             raise EncodingError("Value must be non-negative, got %d" % value)
@@ -209,10 +201,11 @@ class _ValueEncoder:
 
 # The encoder for each value type, looked up by type code rather than found by
 # comparing against each code in turn, as this is on the hot path of every
-# remote procedure call
+# remote procedure call. The signed integer types share an encoder, named for
+# what it writes rather than for one of the types that write it
 _VALUE_ENCODERS: Mapping[KRPC.Type.TypeCode, Callable[[Any], bytes]] = {
-    KRPC.Type.SINT32: _ValueEncoder.encode_sint32,
-    KRPC.Type.SINT64: _ValueEncoder.encode_sint64,
+    KRPC.Type.SINT32: _ValueEncoder._encode_signed_varint,
+    KRPC.Type.SINT64: _ValueEncoder._encode_signed_varint,
     KRPC.Type.UINT32: _ValueEncoder.encode_uint32,
     KRPC.Type.UINT64: _ValueEncoder.encode_uint64,
     KRPC.Type.DOUBLE: _ValueEncoder.encode_double,

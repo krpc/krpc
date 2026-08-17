@@ -176,22 +176,6 @@ class _ValueDecoder:
     def _decode_varint(cls, data: bytes) -> int:
         return _decode_varint(data)[0]
 
-    @classmethod
-    def decode_sint32(cls, data: bytes) -> int:
-        return cls._decode_signed_varint(data)
-
-    @classmethod
-    def decode_sint64(cls, data: bytes) -> int:
-        return cls._decode_signed_varint(data)
-
-    @classmethod
-    def decode_uint32(cls, data: bytes) -> int:
-        return cls._decode_varint(data)
-
-    @classmethod
-    def decode_uint64(cls, data: bytes) -> int:
-        return cls._decode_varint(data)
-
     # The code for the following two methods is taken from
     # google.protobuf.internal.decoder._FloatDecoder and _DoubleDecoder
     # Copyright 2008, Google Inc.
@@ -267,12 +251,13 @@ class _ValueDecoder:
 
 # The decoder for each value type, looked up by type code rather than found by
 # comparing against each code in turn, as this is on the hot path of every
-# remote procedure call
+# remote procedure call. The signed and unsigned integer types share a decoder
+# apiece, named for what it reads rather than for one of the types that read it
 _VALUE_DECODERS: Mapping[KRPC.Type.TypeCode, Callable[[bytes], object]] = {
-    KRPC.Type.SINT32: _ValueDecoder.decode_sint32,
-    KRPC.Type.SINT64: _ValueDecoder.decode_sint64,
-    KRPC.Type.UINT32: _ValueDecoder.decode_uint32,
-    KRPC.Type.UINT64: _ValueDecoder.decode_uint64,
+    KRPC.Type.SINT32: _ValueDecoder._decode_signed_varint,
+    KRPC.Type.SINT64: _ValueDecoder._decode_signed_varint,
+    KRPC.Type.UINT32: _ValueDecoder._decode_varint,
+    KRPC.Type.UINT64: _ValueDecoder._decode_varint,
     KRPC.Type.DOUBLE: _ValueDecoder.decode_double,
     KRPC.Type.FLOAT: _ValueDecoder.decode_float,
     KRPC.Type.BOOL: _ValueDecoder.decode_bool,
