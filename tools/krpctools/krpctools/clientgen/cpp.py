@@ -144,11 +144,14 @@ class CppGenerator(Generator):
             list(context["procedures"].values())
             + list(context["properties"].values())
             + list(context["enumerations"].values())
+            + list(context["structs"].values())
             + list(context["exceptions"].values())
             + list(context["classes"].values())
         )
         for enm in context["enumerations"].values():
             deprecatable += list(enm["values"])
+        for struct_info in context["structs"].values():
+            deprecatable += list(struct_info["fields"])
         for class_info in context["classes"].values():
             deprecatable += (
                 list(class_info["methods"].values())

@@ -49,6 +49,33 @@ class ClientGenTestCase:
     def test_ordering(self):
         self.run_test("ServiceA", "Ordering")
 
+    def test_struct_of_the_same_name_in_another_service(self):
+        # A field whose type is a structure of the same name in another service refers to
+        # that one, not to the structure that holds it
+        struct = {
+            "documentation": "",
+            "fields": [
+                {
+                    "name": "Other",
+                    "type": {"code": "STRUCT", "service": "ServiceB", "name": "Thing"},
+                    "documentation": "",
+                }
+            ],
+        }
+        service = {
+            "id": 1,
+            "documentation": "",
+            "procedures": {},
+            "classes": {},
+            "enumerations": {},
+            "exceptions": {},
+            "structs": {"Thing": struct},
+        }
+        other = dict(
+            service, id=2, structs={"Thing": {"documentation": "", "fields": []}}
+        )
+        self.generate("ServiceA", {"ServiceA": service, "ServiceB": other})
+
     def test_service_that_is_not_defined(self):
         defs = self.load("Ordering")
         del defs["ServiceB"]

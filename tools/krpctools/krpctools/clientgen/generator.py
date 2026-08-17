@@ -1,6 +1,14 @@
 import collections
 import jinja2
 from krpc.attributes import Attributes
+from krpc.definitions import topological_order
+from krpc.types import (
+    DictionaryType,
+    ListType,
+    SetType,
+    StructType,
+    TupleType,
+)
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line, as_type, decode_default_value
 from .docparser import flatten_deprecation_reason
@@ -330,7 +338,9 @@ class Generator:
         context["procedures"] = sort_dict(context["procedures"])
         context["properties"] = sort_dict(context["properties"])
         context["enumerations"] = sort_dict(context["enumerations"])
-        context["structs"] = sort_dict(context["structs"])
+        context["structs"] = _ordered_structs(
+            sort_dict(context["structs"]), self.service_name
+        )
         context["classes"] = sort_dict(context["classes"])
         context["exceptions"] = sort_dict(context["exceptions"])
         for cls in context["classes"].values():
@@ -363,3 +373,37 @@ class Generator:
 
     def parse_default_value(self, value, typ):
         return self.language.parse_default_value(value, typ)
+
+
+def _ordered_structs(structs, service_name):
+    """The given structures, which are the ones the named service defines, ordered so that
+    each follows the ones its fields carry. A generated declaration of a structure names the
+    types of its fields, and C and C++ need a type to be declared before it is named."""
+
+    def dependencies(item):
+        _, struct = item
+        names = set()
+        for field in struct["fields"]:
+            names.update(_struct_names_in(field["krpc_type"]))
+        return [
+            (name, structs[name])
+            for service, name in sorted(names)
+            if service == service_name and name in structs
+        ]
+
+    ordered = topological_order(structs.items(), lambda item: item[0], dependencies)
+    return collections.OrderedDict(ordered)
+
+
+def _struct_names_in(typ):
+    """The service and name of every structure the given type is, or holds in a collection"""
+    if isinstance(typ, StructType):
+        yield (typ.protobuf_type.service, typ.protobuf_type.name)
+    elif isinstance(typ, TupleType):
+        for value_type in typ.value_types:
+            yield from _struct_names_in(value_type)
+    elif isinstance(typ, (ListType, SetType)):
+        yield from _struct_names_in(typ.value_type)
+    elif isinstance(typ, DictionaryType):
+        yield from _struct_names_in(typ.key_type)
+        yield from _struct_names_in(typ.value_type)

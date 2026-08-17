@@ -56,6 +56,13 @@ class {{ service_name }} : public Service {
   class {{ class_name }};
   {% endfor %}
   {% endif %}
+  {% if structs | length > 0 %}
+
+  // Structure forward declarations
+  {% for struct_name in structs.keys() %}
+  struct {{ struct_name }};
+  {% endfor %}
+  {% endif %}
   {% if exceptions | length > 0 %}
   {% for exception_name,exception in exceptions.items() %}
 
@@ -179,10 +186,35 @@ class {{ service_name }} : public Service {
     {% endfor %}
   };
   {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+{% if struct.documentation %}{{ struct.documentation | indent(width=2) }}
+{% endif %}
+  struct {% if struct.deprecated %}[[deprecated{% if struct.deprecated_reason %}("{{ struct.deprecated_reason }}"){% endif %}]] {% endif %}{{ struct_name }} {
+    {% for field in struct['fields'] %}
+{% if field.documentation %}{{ field.documentation | indent(width=4) }}
+{% endif %}
+    {{ field.type }} {{ field.name }}{% if field.deprecated %} [[deprecated{% if field.deprecated_reason %}("{{ field.deprecated_reason }}"){% endif %}]]{% endif %};
+    {% endfor %}
+
+    {{ struct_name }}() : {% for field in struct['fields'] %}{{ field.name }}(){% if not loop.last %}, {% endif %}{% endfor %} {}
+
+    {{ struct_name }}({% for field in struct['fields'] %}{{ field.type }} {{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}) :
+      {% for field in struct['fields'] %}{{ field.name }}({{ field.name }}){% if not loop.last %}, {% endif %}{% endfor %} {}
+
+    bool operator==(const {{ struct_name }}& other) const {
+      return {% for field in struct['fields'] %}this->{{ field.name }} == other.{{ field.name }}{% if not loop.last %} && {% endif %}{% endfor %};
+    }
+
+    bool operator!=(const {{ struct_name }}& other) const {
+      return !(*this == other);
+    }
+  };
+  {% endfor %}
 };
 
 }  // namespace services
-{% if enumerations | length > 0 %}
+{% if enumerations | length > 0 or structs | length > 0 %}
 
 namespace encoder {
   {% for enum_name,enm in enumerations.items() %}
@@ -197,6 +229,31 @@ namespace encoder {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
   {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::{{ service_name }}::{{ struct_name }}& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    {% for field in struct['fields'] %}
+    structMessage.add_items(encode(value.{{ field.name }}));
+    {% endfor %}
+    return krpc::encoder::encode(structMessage);
+  }
+  {% if struct.deprecated %}
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
@@ -220,6 +277,31 @@ namespace decoder {
     value = static_cast<services::{{ service_name }}::{{ enum_name }}>(x);
   }
   {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::{{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < {{ struct['fields'] | length }})
+      throw EncodingError("Value for {{ struct_name }} does not have all of its fields");
+    {% for field in struct['fields'] %}
+    decode(value.{{ field.name }}, structMessage.items({{ loop.index0 }}), client);
+    {% endfor %}
+  }
+  {% if struct.deprecated %}
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
@@ -250,6 +332,27 @@ namespace services {
     decoder::decode(value, data, client);
   }
   {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  inline std::string encode(const {{ service_name }}::{{ struct_name }}& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode({{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+  {% if struct.deprecated %}
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif

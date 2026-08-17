@@ -26,6 +26,11 @@ class TestService : public Service {
   class DeprecatedClass;
   class TestClass;
 
+  // Structure forward declarations
+  struct DeprecatedStruct;
+  struct TestStruct;
+  struct TestNestedStruct;
+
   class CustomException : public ::krpc::RPCError {
    public:
     inline explicit CustomException(const std::string& msg) : ::krpc::RPCError(msg) {}
@@ -89,6 +94,12 @@ class TestService : public Service {
 
   int32_t counter(std::string id, int32_t divisor);
 
+  /**
+   * Returns a struct whose IntField counts the number of times it has been called,
+   * so that a stream on it changes on every update.
+   */
+  TestService::TestStruct counter_struct(std::string id);
+
   TestService::TestClass create_test_object(std::string value);
 
   /**
@@ -147,6 +158,8 @@ class TestService : public Service {
 
   std::vector<int32_t> increment_list(std::vector<int32_t> l);
 
+  std::vector<TestService::TestStruct> increment_list_of_structs(std::vector<TestService::TestStruct> l);
+
   std::map<std::string, std::vector<int32_t> > increment_nested_collection(std::map<std::string, std::vector<int32_t> > d);
 
   std::set<int32_t> increment_set(std::set<int32_t> h);
@@ -169,6 +182,8 @@ class TestService : public Service {
 
   std::vector<int32_t> list_default(std::vector<int32_t> x);
 
+  TestService::TestNestedStruct nested_struct_echo(TestService::TestNestedStruct x);
+
   TestService::TestClass not_nullable_object(TestService::TestClass value);
 
   ::krpc::Event on_timer(uint32_t milliseconds, uint32_t repeats);
@@ -186,6 +201,12 @@ class TestService : public Service {
   std::set<int32_t> set_default(std::set<int32_t> x);
 
   int32_t string_to_int32(std::string value);
+
+  TestService::TestStruct struct_default(TestService::TestStruct x);
+
+  TestService::TestStruct struct_echo(TestService::TestStruct x);
+
+  std::optional<TestService::TestStruct> struct_echo_nullable(std::optional<TestService::TestStruct> x);
 
   int32_t throw_argument_exception();
 
@@ -263,6 +284,8 @@ class TestService : public Service {
 
   ::krpc::Stream<int32_t> counter_stream(std::string id, int32_t divisor);
 
+  ::krpc::Stream<TestService::TestStruct> counter_struct_stream(std::string id);
+
   ::krpc::Stream<TestService::TestClass> create_test_object_stream(std::string value);
 
   ::krpc::Stream<std::string> deprecated_procedure_stream(float value);
@@ -301,6 +324,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::vector<int32_t>> increment_list_stream(std::vector<int32_t> l);
 
+  ::krpc::Stream<std::vector<TestService::TestStruct>> increment_list_of_structs_stream(std::vector<TestService::TestStruct> l);
+
   ::krpc::Stream<std::map<std::string, std::vector<int32_t> >> increment_nested_collection_stream(std::map<std::string, std::vector<int32_t> > d);
 
   ::krpc::Stream<std::set<int32_t>> increment_set_stream(std::set<int32_t> h);
@@ -317,6 +342,8 @@ class TestService : public Service {
 
   ::krpc::Stream<std::vector<int32_t>> list_default_stream(std::vector<int32_t> x);
 
+  ::krpc::Stream<TestService::TestNestedStruct> nested_struct_echo_stream(TestService::TestNestedStruct x);
+
   ::krpc::Stream<TestService::TestClass> not_nullable_object_stream(TestService::TestClass value);
 
   ::krpc::Stream<::krpc::Event> on_timer_stream(uint32_t milliseconds, uint32_t repeats);
@@ -330,6 +357,12 @@ class TestService : public Service {
   ::krpc::Stream<std::set<int32_t>> set_default_stream(std::set<int32_t> x);
 
   ::krpc::Stream<int32_t> string_to_int32_stream(std::string value);
+
+  ::krpc::Stream<TestService::TestStruct> struct_default_stream(TestService::TestStruct x);
+
+  ::krpc::Stream<TestService::TestStruct> struct_echo_stream(TestService::TestStruct x);
+
+  ::krpc::Stream<std::optional<TestService::TestStruct>> struct_echo_nullable_stream(std::optional<TestService::TestStruct> x);
 
   ::krpc::Stream<int32_t> throw_argument_exception_stream();
 
@@ -373,6 +406,8 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall counter_call(std::string id, int32_t divisor);
 
+  ::krpc::schema::ProcedureCall counter_struct_call(std::string id);
+
   ::krpc::schema::ProcedureCall create_test_object_call(std::string value);
 
   ::krpc::schema::ProcedureCall deprecated_procedure_call(float value);
@@ -411,6 +446,8 @@ class TestService : public Service {
 
   ::krpc::schema::ProcedureCall increment_list_call(std::vector<int32_t> l);
 
+  ::krpc::schema::ProcedureCall increment_list_of_structs_call(std::vector<TestService::TestStruct> l);
+
   ::krpc::schema::ProcedureCall increment_nested_collection_call(std::map<std::string, std::vector<int32_t> > d);
 
   ::krpc::schema::ProcedureCall increment_set_call(std::set<int32_t> h);
@@ -426,6 +463,8 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall int64_to_string_call(int64_t value);
 
   ::krpc::schema::ProcedureCall list_default_call(std::vector<int32_t> x);
+
+  ::krpc::schema::ProcedureCall nested_struct_echo_call(TestService::TestNestedStruct x);
 
   ::krpc::schema::ProcedureCall not_nullable_object_call(TestService::TestClass value);
 
@@ -444,6 +483,12 @@ class TestService : public Service {
   ::krpc::schema::ProcedureCall set_default_call(std::set<int32_t> x);
 
   ::krpc::schema::ProcedureCall string_to_int32_call(std::string value);
+
+  ::krpc::schema::ProcedureCall struct_default_call(TestService::TestStruct x);
+
+  ::krpc::schema::ProcedureCall struct_echo_call(TestService::TestStruct x);
+
+  ::krpc::schema::ProcedureCall struct_echo_nullable_call(std::optional<TestService::TestStruct> x);
 
   ::krpc::schema::ProcedureCall throw_argument_exception_call();
 
@@ -595,6 +640,85 @@ class TestService : public Service {
 
     ::krpc::schema::ProcedureCall string_property_private_set_call();
   };
+
+  /**
+   * Deprecated struct documentation string.
+   *
+   * \deprecated Use the TestStruct struct instead.
+   */
+  struct [[deprecated("Use the TestStruct struct instead.")]] DeprecatedStruct {
+    /**
+     * Deprecated struct Value documentation string.
+     */
+    int32_t value;
+    /**
+     * Deprecated struct OldValue documentation string.
+     *
+     * \deprecated Use the Value field instead.
+     */
+    int32_t old_value [[deprecated("Use the Value field instead.")]];
+
+    DeprecatedStruct() : value(), old_value() {}
+
+    DeprecatedStruct(int32_t value, int32_t old_value) :
+value(value), old_value(old_value) {}
+
+    bool operator==(const DeprecatedStruct& other) const {
+      return this->value == other.value && this->old_value == other.old_value;
+    }
+
+    bool operator!=(const DeprecatedStruct& other) const {
+      return !(*this == other);
+    }
+  };
+
+  /**
+   * Struct documentation string.
+   */
+  struct TestStruct {
+    /**
+     * Struct IntField documentation string.
+     */
+    int32_t int_field;
+    std::string string_field;
+    TestService::TestEnum enum_field;
+    std::vector<int32_t> list_field;
+
+    TestStruct() : int_field(), string_field(), enum_field(), list_field() {}
+
+    TestStruct(int32_t int_field, std::string string_field, TestService::TestEnum enum_field, std::vector<int32_t> list_field) :
+int_field(int_field), string_field(string_field), enum_field(enum_field), list_field(list_field) {}
+
+    bool operator==(const TestStruct& other) const {
+      return this->int_field == other.int_field && this->string_field == other.string_field && this->enum_field == other.enum_field && this->list_field == other.list_field;
+    }
+
+    bool operator!=(const TestStruct& other) const {
+      return !(*this == other);
+    }
+  };
+
+  /**
+   * Nested struct documentation string.
+   */
+  struct TestNestedStruct {
+    TestService::TestStruct struct_field;
+    TestService::TestClass object_field;
+    std::string string_field;
+
+    TestNestedStruct() : struct_field(), object_field(), string_field() {}
+
+    TestNestedStruct(TestService::TestStruct struct_field, TestService::TestClass object_field, std::string string_field) :
+struct_field(struct_field), object_field(object_field), string_field(string_field) {}
+
+    bool operator==(const TestNestedStruct& other) const {
+      return this->struct_field == other.struct_field && this->object_field == other.object_field && this->string_field == other.string_field;
+    }
+
+    bool operator!=(const TestNestedStruct& other) const {
+      return !(*this == other);
+    }
+  };
 };
 
 }  // namespace services
@@ -614,6 +738,49 @@ namespace encoder {
 
   inline std::string encode(const services::TestService::TestEnum& value) {
     return krpc::encoder::encode(static_cast<int32_t>(value));
+  }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::TestService::DeprecatedStruct& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    structMessage.add_items(encode(value.value));
+    structMessage.add_items(encode(value.old_value));
+    return krpc::encoder::encode(structMessage);
+  }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::TestService::TestStruct& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    structMessage.add_items(encode(value.int_field));
+    structMessage.add_items(encode(value.string_field));
+    structMessage.add_items(encode(value.enum_field));
+    structMessage.add_items(encode(value.list_field));
+    return krpc::encoder::encode(structMessage);
+  }
+
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::TestService::TestNestedStruct& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    structMessage.add_items(encode(value.struct_field));
+    structMessage.add_items(encode(value.object_field));
+    structMessage.add_items(encode(value.string_field));
+    return krpc::encoder::encode(structMessage);
   }
 
 }  // namespace encoder
@@ -637,6 +804,49 @@ namespace decoder {
     int32_t x;
     decode(x, data, client);
     value = static_cast<services::TestService::TestEnum>(x);
+  }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::TestService::DeprecatedStruct& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < 2)
+      throw EncodingError("Value for DeprecatedStruct does not have all of its fields");
+    decode(value.value, structMessage.items(0), client);
+    decode(value.old_value, structMessage.items(1), client);
+  }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::TestService::TestStruct& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < 4)
+      throw EncodingError("Value for TestStruct does not have all of its fields");
+    decode(value.int_field, structMessage.items(0), client);
+    decode(value.string_field, structMessage.items(1), client);
+    decode(value.enum_field, structMessage.items(2), client);
+    decode(value.list_field, structMessage.items(3), client);
+  }
+
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::TestService::TestNestedStruct& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < 3)
+      throw EncodingError("Value for TestNestedStruct does not have all of its fields");
+    decode(value.struct_field, structMessage.items(0), client);
+    decode(value.object_field, structMessage.items(1), client);
+    decode(value.string_field, structMessage.items(2), client);
   }
 
 }  // namespace decoder
@@ -668,6 +878,37 @@ namespace services {
   }
 
   inline void decode(TestService::TestEnum& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  inline std::string encode(const TestService::DeprecatedStruct& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::DeprecatedStruct& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+  inline std::string encode(const TestService::TestStruct& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::TestStruct& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+
+  inline std::string encode(const TestService::TestNestedStruct& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode(TestService::TestNestedStruct& value, const std::string& data, Client* client) {
     decoder::decode(value, data, client);
   }
 
@@ -758,6 +999,17 @@ inline int32_t TestService::counter(std::string id = "", int32_t divisor = 1) {
   _args.push_back(encoder::encode(divisor));
   auto _data = this->_client->invoke("TestService", "Counter", _args);
   int32_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline TestService::TestStruct TestService::counter_struct(std::string id = "") {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(id));
+  auto _data = this->_client->invoke("TestService", "CounterStruct", _args);
+  TestService::TestStruct _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -978,6 +1230,17 @@ inline std::vector<int32_t> TestService::increment_list(std::vector<int32_t> l) 
   return _result;
 }
 
+inline std::vector<TestService::TestStruct> TestService::increment_list_of_structs(std::vector<TestService::TestStruct> l) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(l));
+  auto _data = this->_client->invoke("TestService", "IncrementListOfStructs", _args);
+  std::vector<TestService::TestStruct> _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline std::map<std::string, std::vector<int32_t> > TestService::increment_nested_collection(std::map<std::string, std::vector<int32_t> > d) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1068,6 +1331,17 @@ inline std::vector<int32_t> TestService::list_default(std::vector<int32_t> x = s
   return _result;
 }
 
+inline TestService::TestNestedStruct TestService::nested_struct_echo(TestService::TestNestedStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  auto _data = this->_client->invoke("TestService", "NestedStructEcho", _args);
+  TestService::TestNestedStruct _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
 inline TestService::TestClass TestService::not_nullable_object(TestService::TestClass value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1149,6 +1423,39 @@ inline int32_t TestService::string_to_int32(std::string value) {
   _args.push_back(encoder::encode(value));
   auto _data = this->_client->invoke("TestService", "StringToInt32", _args);
   int32_t _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline TestService::TestStruct TestService::struct_default(TestService::TestStruct x = TestService::TestStruct{42, "jeb", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  auto _data = this->_client->invoke("TestService", "StructDefault", _args);
+  TestService::TestStruct _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline TestService::TestStruct TestService::struct_echo(TestService::TestStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  auto _data = this->_client->invoke("TestService", "StructEcho", _args);
+  TestService::TestStruct _result{};
+  if (!_data.is_null())
+    decoder::decode(_result, _data.value(), this->_client);
+  return _result;
+}
+
+inline std::optional<TestService::TestStruct> TestService::struct_echo_nullable(std::optional<TestService::TestStruct> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_nullable(x));
+  auto _data = this->_client->invoke("TestService", "StructEchoNullable", _args);
+  std::optional<TestService::TestStruct> _result{};
   if (!_data.is_null())
     decoder::decode(_result, _data.value(), this->_client);
   return _result;
@@ -1371,6 +1678,13 @@ inline ::krpc::Stream<int32_t> TestService::counter_stream(std::string id = "", 
   return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "Counter", _args));
 }
 
+inline ::krpc::Stream<TestService::TestStruct> TestService::counter_struct_stream(std::string id = "") {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(id));
+  return ::krpc::Stream<TestService::TestStruct>(this->_client, this->_client->build_call("TestService", "CounterStruct", _args));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::create_test_object_stream(std::string value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1510,6 +1824,13 @@ inline ::krpc::Stream<std::vector<int32_t>> TestService::increment_list_stream(s
   return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "IncrementList", _args));
 }
 
+inline ::krpc::Stream<std::vector<TestService::TestStruct>> TestService::increment_list_of_structs_stream(std::vector<TestService::TestStruct> l) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(l));
+  return ::krpc::Stream<std::vector<TestService::TestStruct>>(this->_client, this->_client->build_call("TestService", "IncrementListOfStructs", _args));
+}
+
 inline ::krpc::Stream<std::map<std::string, std::vector<int32_t> >> TestService::increment_nested_collection_stream(std::map<std::string, std::vector<int32_t> > d) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1568,6 +1889,13 @@ inline ::krpc::Stream<std::vector<int32_t>> TestService::list_default_stream(std
   return ::krpc::Stream<std::vector<int32_t>>(this->_client, this->_client->build_call("TestService", "ListDefault", _args));
 }
 
+inline ::krpc::Stream<TestService::TestNestedStruct> TestService::nested_struct_echo_stream(TestService::TestNestedStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<TestService::TestNestedStruct>(this->_client, this->_client->build_call("TestService", "NestedStructEcho", _args));
+}
+
 inline ::krpc::Stream<TestService::TestClass> TestService::not_nullable_object_stream(TestService::TestClass value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1616,6 +1944,27 @@ inline ::krpc::Stream<int32_t> TestService::string_to_int32_stream(std::string v
   _args.reserve(1);
   _args.push_back(encoder::encode(value));
   return ::krpc::Stream<int32_t>(this->_client, this->_client->build_call("TestService", "StringToInt32", _args));
+}
+
+inline ::krpc::Stream<TestService::TestStruct> TestService::struct_default_stream(TestService::TestStruct x = TestService::TestStruct{42, "jeb", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<TestService::TestStruct>(this->_client, this->_client->build_call("TestService", "StructDefault", _args));
+}
+
+inline ::krpc::Stream<TestService::TestStruct> TestService::struct_echo_stream(TestService::TestStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  return ::krpc::Stream<TestService::TestStruct>(this->_client, this->_client->build_call("TestService", "StructEcho", _args));
+}
+
+inline ::krpc::Stream<std::optional<TestService::TestStruct>> TestService::struct_echo_nullable_stream(std::optional<TestService::TestStruct> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_nullable(x));
+  return ::krpc::Stream<std::optional<TestService::TestStruct>>(this->_client, this->_client->build_call("TestService", "StructEchoNullable", _args));
 }
 
 inline ::krpc::Stream<int32_t> TestService::throw_argument_exception_stream() {
@@ -1738,6 +2087,13 @@ inline ::krpc::schema::ProcedureCall TestService::counter_call(std::string id = 
   _args.push_back(encoder::encode(id));
   _args.push_back(encoder::encode(divisor));
   return this->_client->build_call("TestService", "Counter", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::counter_struct_call(std::string id = "") {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(id));
+  return this->_client->build_call("TestService", "CounterStruct", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::create_test_object_call(std::string value) {
@@ -1879,6 +2235,13 @@ inline ::krpc::schema::ProcedureCall TestService::increment_list_call(std::vecto
   return this->_client->build_call("TestService", "IncrementList", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::increment_list_of_structs_call(std::vector<TestService::TestStruct> l) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(l));
+  return this->_client->build_call("TestService", "IncrementListOfStructs", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::increment_nested_collection_call(std::map<std::string, std::vector<int32_t> > d) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1937,6 +2300,13 @@ inline ::krpc::schema::ProcedureCall TestService::list_default_call(std::vector<
   return this->_client->build_call("TestService", "ListDefault", _args);
 }
 
+inline ::krpc::schema::ProcedureCall TestService::nested_struct_echo_call(TestService::TestNestedStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "NestedStructEcho", _args);
+}
+
 inline ::krpc::schema::ProcedureCall TestService::not_nullable_object_call(TestService::TestClass value) {
   std::vector<krpc::encoder::Value> _args;
   _args.reserve(1);
@@ -1993,6 +2363,27 @@ inline ::krpc::schema::ProcedureCall TestService::string_to_int32_call(std::stri
   _args.reserve(1);
   _args.push_back(encoder::encode(value));
   return this->_client->build_call("TestService", "StringToInt32", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_default_call(TestService::TestStruct x = TestService::TestStruct{42, "jeb", TestService::TestEnum::value_b, std::vector<int32_t>{1, 2, 3}}) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "StructDefault", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_echo_call(TestService::TestStruct x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode(x));
+  return this->_client->build_call("TestService", "StructEcho", _args);
+}
+
+inline ::krpc::schema::ProcedureCall TestService::struct_echo_nullable_call(std::optional<TestService::TestStruct> x) {
+  std::vector<krpc::encoder::Value> _args;
+  _args.reserve(1);
+  _args.push_back(encoder::encode_nullable(x));
+  return this->_client->build_call("TestService", "StructEchoNullable", _args);
 }
 
 inline ::krpc::schema::ProcedureCall TestService::throw_argument_exception_call() {
