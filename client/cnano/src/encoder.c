@@ -81,6 +81,25 @@ krpc_error_t krpc_encode_double(pb_ostream_t* stream, double value) {
   return KRPC_OK;
 }
 
+/* How many bytes a value takes to write as a variable length integer. Counting the seven bit
+   groups costs a fraction of encoding the value into a sizing stream to find out. */
+static size_t krpc_varint_size(uint64_t value) {
+  size_t size = 1;
+  while (value >= 0x80) {
+    value >>= 7;
+    size++;
+  }
+  return size;
+}
+
+/* A signed value as the unsigned one a variable length integer carries, matching what the
+   protocol buffer encoder does with it. */
+static uint64_t krpc_zigzag(int64_t value) {
+  const uint64_t mask = ((uint64_t)-1) >> 1;
+  if (value < 0) return ~(((uint64_t)value & mask) << 1);
+  return (uint64_t)value << 1;
+}
+
 /*[[[cog
 types = [
   ('double', 'double',   None,      '&', 8),
@@ -112,12 +131,12 @@ krpc_error_t krpc_encode_size_""" + typ + """(size_t * size, """ + ctyp + """ va
   return KRPC_OK;
 }""")
   else:
+    # Every argument of every call is measured before it is written, so counting the seven bit
+    # groups a value takes beats encoding it into a sizing stream to find out.
+    zigzag = 'krpc_zigzag(value)' if enc == 'svarint' else '(uint64_t)value'
     cog.outl("""
 krpc_error_t krpc_encode_size_""" + typ + """(size_t * size, """ + ctyp + """ value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_""" + enc + """(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of """ + typ + """", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size(""" + zigzag + """);
   return KRPC_OK;
 }""")
 
@@ -209,58 +228,37 @@ krpc_error_t krpc_encode_size_float(size_t* size, float value) {
 }
 
 krpc_error_t krpc_encode_size_int32(size_t* size, int32_t value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_svarint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of int32", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size(krpc_zigzag(value));
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_size_int64(size_t* size, int64_t value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_svarint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of int64", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size(krpc_zigzag(value));
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_size_uint32(size_t* size, uint32_t value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_varint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of uint32", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size((uint64_t)value);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_size_uint64(size_t* size, uint64_t value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_varint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of uint64", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size((uint64_t)value);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_size_bool(size_t* size, bool value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_varint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of bool", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size((uint64_t)value);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_size_object(size_t* size, krpc_object_t value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_varint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of object", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size((uint64_t)value);
   return KRPC_OK;
 }
 
 krpc_error_t krpc_encode_size_enum(size_t* size, krpc_enum_t value) {
-  pb_ostream_t stream = PB_OSTREAM_SIZING;
-  if (!pb_encode_svarint(&stream, value))
-    KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to get size of enum", &stream);
-  *size = stream.bytes_written;
+  *size = krpc_varint_size(krpc_zigzag(value));
   return KRPC_OK;
 }
 
