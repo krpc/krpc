@@ -145,6 +145,23 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+py_binary(
+    name = "java",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=java",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath //client/java:benchmark)",
+    ],
+    data = [
+        "//client/java:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 test_suite(
     name = "test",
     tests = [

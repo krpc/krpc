@@ -1,4 +1,4 @@
-load("@rules_java//java:defs.bzl", "java_library", "java_test")
+load("@rules_java//java:defs.bzl", "java_binary", "java_library", "java_test")
 load("//:config.bzl", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:java.bzl", "java_checkstyle_test")
@@ -84,6 +84,20 @@ java_test(
         "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:junit_junit",
         "@maven//:org_hamcrest_hamcrest",
+        "@maven//:org_javatuples_javatuples",
+    ],
+)
+
+# The benchmark program, run by //tools/benchmarks:java. Not a test: it measures.
+java_binary(
+    name = "benchmark",
+    srcs = ["benchmark/krpc/client/Benchmark.java"] + [":services-testservice"],
+    javacopts = copts,
+    main_class = "krpc.client.Benchmark",
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [
+        ":krpc",
+        "@maven//:com_google_protobuf_protobuf_java",
         "@maven//:org_javatuples_javatuples",
     ],
 )
