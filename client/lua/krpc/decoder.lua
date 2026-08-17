@@ -170,6 +170,19 @@ function decoder.decode(data, typ)
       result[i] = decoder.decode(items[i], value_types[i])
     end
     return result
+  elseif code == Types.STRUCT then
+    -- Fields are only ever appended to a structure, so a value from a newer server may
+    -- carry more items than this client knows about, and those are ignored
+    local items, count = _decode_items(data, _ITEMS)
+    local field_types = typ.field_types
+    if count < #field_types then
+      error('Value for ' .. typ._struct_name .. ' does not have all of its fields')
+    end
+    local values = {}
+    for i = 1, #field_types do
+      values[i] = decoder.decode(items[i], field_types[i])
+    end
+    return typ.lua_type(unpack(values))
   elseif typ:is_a(Types.MessageType) then
     return decoder.decode_message(data, typ.lua_type)
   end

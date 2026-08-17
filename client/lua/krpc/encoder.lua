@@ -148,6 +148,16 @@ function encoder.encode(x, typ)
       parts[count] = _delimited(_ITEMS, encoder.encode(item[1], item[2]))
     end
     return _concat(parts)
+  elseif code == Types.STRUCT then
+    -- A structure is encoded as the values of its fields in order, which is the same
+    -- encoding as a tuple of those values
+    local field_names = typ.field_names
+    local field_types = typ.field_types
+    local parts = {}
+    for i = 1, #field_names do
+      parts[i] = _delimited(_ITEMS, encoder.encode(x[field_names[i]], field_types[i]))
+    end
+    return _concat(parts)
   elseif typ:is_a(Types.MessageType) then
     return x:SerializeToString()
   end

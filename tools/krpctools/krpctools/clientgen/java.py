@@ -117,6 +117,14 @@ class JavaGenerator(Generator):
             "nullable": nullable,
         }
 
+    def add_struct_field_specifications(self, context):
+        """Add to every field of a structure the type specification and the accessor name its
+        generated declaration is written with"""
+        for struct_info in context["structs"].values():
+            for field in struct_info["fields"]:
+                field["spec"] = self.parse_type_specification(field["krpc_type"])
+                field["accessor_name"] = upper_camel_case(field["name"])
+
     def parse_context(self, context):
         # Expand service properties into get and set methods
         properties = collections.OrderedDict()
@@ -224,12 +232,7 @@ class JavaGenerator(Generator):
             for value in enm["values"]:
                 value["name"] = self.language.parse_const_name(value["name"])
 
-        # Add the type specification of every field of a structure, which its generated
-        # declaration needs to give the encoding the types of its fields
-        for struct_info in context["structs"].values():
-            for field in struct_info["fields"]:
-                field["spec"] = self.parse_type_specification(field["krpc_type"])
-                field["accessor_name"] = upper_camel_case(field["name"])
+        self.add_struct_field_specifications(context)
 
         # Add serial version UIDs to classes
         items = list(context["classes"].items()) + list(context["exceptions"].items())
