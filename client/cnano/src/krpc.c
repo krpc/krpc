@@ -14,12 +14,28 @@
    and - with the transport asked not to hold data back - a packet of its own.
 
    The buffer bounds how much is written at a time, never the size of a message: one larger
-   than the buffer is written in as many passes as it takes. */
+   than the buffer is written in as many passes as it takes. It is lent by the caller rather
+   than held here, so that sending a message costs one buffer whichever way it is written. */
 typedef struct {
   krpc_connection_t connection;
+  uint8_t *data;
+  size_t size;
   size_t used;
-  uint8_t buffer[KRPC_BUFFER_SIZE];
 } krpc_writer_t;
+
+/* The most room the size a message is prefixed with can need in front of it */
+#define KRPC_SIZE_PREFIX_MAX 5
+
+/* Where a message is encoded before it is sent, for the common case of one that fits. Written
+   to through a callback of its own rather than by pb_ostream_from_buffer, so that a message too
+   big for the buffer is told apart from one that failed to encode: only the first is worth
+   encoding a second time to write it a bufferful at a time. */
+typedef struct {
+  uint8_t *data;
+  size_t size;
+  size_t used;
+  bool overflowed;
+} krpc_buffer_t;
 
 /* The same for reading, with one difference: the connection is only ever asked for bytes the
    message being read still has to come, so a read never waits on a message that has not been
@@ -32,6 +48,7 @@ typedef struct {
   uint8_t buffer[KRPC_BUFFER_SIZE];
 } krpc_reader_t;
 
+static bool buffer_write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count);
 static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count);
 static bool read_callback(pb_istream_t *stream, uint8_t *buf, size_t count);
 static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msgdesc_t *fields,
@@ -197,12 +214,23 @@ krpc_error_t krpc_invoke(krpc_connection_t connection, krpc_schema_ProcedureResu
   return KRPC_OK;
 }
 
+static bool buffer_write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count) {
+  krpc_buffer_t *buffer = (krpc_buffer_t *)stream->state;
+  if (count > buffer->size - buffer->used) {
+    buffer->overflowed = true;
+    return false;
+  }
+  memcpy(buffer->data + buffer->used, buf, count);
+  buffer->used += count;
+  return true;
+}
+
 /* Hand what has been buffered to the connection */
 static krpc_error_t krpc_writer_flush(krpc_writer_t *writer) {
   size_t used = writer->used;
   writer->used = 0;
   if (used == 0) return KRPC_OK;
-  return krpc_write(writer->connection, writer->buffer, used);
+  return krpc_write(writer->connection, writer->data, used);
 }
 
 static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t count) {
@@ -210,11 +238,10 @@ static bool write_callback(pb_ostream_t *stream, const uint8_t *buf, size_t coun
   while (count > 0) {
     size_t space;
     size_t take;
-    if (writer->used == sizeof(writer->buffer))
-      KRPC_CALLBACK_RETURN_ON_ERROR(krpc_writer_flush(writer));
-    space = sizeof(writer->buffer) - writer->used;
+    if (writer->used == writer->size) KRPC_CALLBACK_RETURN_ON_ERROR(krpc_writer_flush(writer));
+    space = writer->size - writer->used;
     take = count < space ? count : space;
-    memcpy(writer->buffer + writer->used, buf, take);
+    memcpy(writer->data + writer->used, buf, take);
     writer->used += take;
     buf += take;
     count -= take;
@@ -270,16 +297,60 @@ static krpc_error_t krpc_read_size(krpc_connection_t connection, size_t *size) {
   return KRPC_OK;
 }
 
+/* How many bytes the size a message is prefixed with takes to write */
+static size_t krpc_size_prefix_length(size_t size) {
+  size_t length = 1;
+  while (size >= 0x80) {
+    size >>= 7;
+    length++;
+  }
+  return length;
+}
+
 static krpc_error_t krpc_send_message(krpc_connection_t connection, const pb_msgdesc_t *fields,
                                       const void *message) {
-  krpc_writer_t writer;
-  pb_ostream_t stream = {&write_callback, NULL, SIZE_MAX, 0};
-  writer.connection = connection;
-  writer.used = 0;
-  stream.state = &writer;
-  if (!pb_encode_delimited(&stream, fields, message))
+  uint8_t data[KRPC_BUFFER_SIZE];
+  krpc_buffer_t buffer;
+  pb_ostream_t stream = {&buffer_write_callback, NULL, SIZE_MAX, 0};
+  buffer.data = data + KRPC_SIZE_PREFIX_MAX;
+  buffer.size = sizeof(data) - KRPC_SIZE_PREFIX_MAX;
+  buffer.used = 0;
+  buffer.overflowed = false;
+  stream.state = &buffer;
+  /* A message is prefixed with its size, so writing one in order means knowing how long it is
+     before it has been encoded, which costs a pass over it to measure. Encoding it into the
+     buffer with room left in front instead means the size is known once it is there, and can
+     be written into the room left for it. That halves what encoding a message costs. */
+  if (pb_encode(&stream, fields, message)) {
+    size_t size = buffer.used;
+    size_t length = krpc_size_prefix_length(size);
+    uint8_t *at = buffer.data - length;
+    uint8_t *start = at;
+    while (size >= 0x80) {
+      *at++ = (uint8_t)(size | 0x80);
+      size >>= 7;
+    }
+    *at = (uint8_t)size;
+    return krpc_write(connection, start, length + buffer.used);
+  }
+  /* A message that failed to encode for any other reason would only fail the same way again,
+     so it is reported here rather than encoded a second time. */
+  if (!buffer.overflowed)
     KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode message", &stream);
-  return krpc_writer_flush(&writer);
+  /* Larger than the buffer, so it is measured and then written a bufferful at a time, through
+     the same buffer the message did not fit in. */
+  {
+    krpc_writer_t writer;
+    pb_ostream_t streamed = {&write_callback, NULL, SIZE_MAX, 0};
+    writer.connection = connection;
+    writer.data = data;
+    writer.size = sizeof(data);
+    writer.used = 0;
+    streamed.state = &writer;
+    if (!pb_encode_delimited(&streamed, fields, message))
+      KRPC_RETURN_STREAM_ERROR(ENCODING_FAILED, "failed to encode message", &streamed);
+    return krpc_writer_flush(&writer);
+  }
 }
 
 static krpc_error_t krpc_receive_message(krpc_connection_t connection, const pb_msgdesc_t *fields,
