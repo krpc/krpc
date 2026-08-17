@@ -40,6 +40,46 @@ Enum ValueC documentation string.
 """
 
 
+class DeprecatedStruct(NamedTuple):
+    """
+    Deprecated. Use the TestStruct struct instead.
+
+    Deprecated struct documentation string.
+    """
+    value: int
+    """
+    Deprecated struct Value documentation string.
+    """
+    old_value: int
+    """
+    Deprecated. Use the Value field instead.
+
+    Deprecated struct OldValue documentation string.
+    """
+
+
+class TestNestedStruct(NamedTuple):
+    """
+    Nested struct documentation string.
+    """
+    struct_field: TestStruct
+    object_field: TestClass
+    string_field: str
+
+
+class TestStruct(NamedTuple):
+    """
+    Struct documentation string.
+    """
+    int_field: int
+    """
+    Struct IntField documentation string.
+    """
+    string_field: str
+    enum_field: TestEnum
+    list_field: List[int]
+
+
 class CustomException(RuntimeError):
     pass
 
@@ -402,6 +442,9 @@ class TestService:
         "TestEnum": TestEnum,
     }
     _structs = {
+        "DeprecatedStruct": DeprecatedStruct,
+        "TestNestedStruct": TestNestedStruct,
+        "TestStruct": TestStruct,
     }
     _exceptions = {
         "CustomException": CustomException,
@@ -706,6 +749,31 @@ class TestService:
             [id, divisor],
             [self._client._types.string_type, self._client._types.sint32_type],
             self._client._types.sint32_type
+        )
+
+    def counter_struct(self, id: str = '') -> TestStruct:
+        """
+        Returns a struct whose IntField counts the number of times it has been called,
+        so that a stream on it changes on every update.
+        """
+        return self._client._invoke(
+            "TestService",
+            "CounterStruct",
+            [id],
+            [self._client._types.string_type],
+            self._client._types.struct_type("TestService", "TestStruct")
+        )
+
+    def _return_type_counter_struct(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestStruct")
+
+    def _build_call_counter_struct(self, id: str = '') -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "CounterStruct",
+            [id],
+            [self._client._types.string_type],
+            self._client._types.struct_type("TestService", "TestStruct")
         )
 
     def create_test_object(self, value: str) -> TestClass:
@@ -1129,6 +1197,27 @@ class TestService:
             self._client._types.list_type(self._client._types.sint32_type)
         )
 
+    def increment_list_of_structs(self, l: List[TestStruct]) -> List[TestStruct]:
+        return self._client._invoke(
+            "TestService",
+            "IncrementListOfStructs",
+            [l],
+            [self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))],
+            self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))
+        )
+
+    def _return_type_increment_list_of_structs(self) -> TypeBase:
+        return self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))
+
+    def _build_call_increment_list_of_structs(self, l: List[TestStruct]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "IncrementListOfStructs",
+            [l],
+            [self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))],
+            self._client._types.list_type(self._client._types.struct_type("TestService", "TestStruct"))
+        )
+
     def increment_nested_collection(self, d: Dict[str, List[int]]) -> Dict[str, List[int]]:
         return self._client._invoke(
             "TestService",
@@ -1301,6 +1390,27 @@ class TestService:
             [x],
             [self._client._types.list_type(self._client._types.sint32_type)],
             self._client._types.list_type(self._client._types.sint32_type)
+        )
+
+    def nested_struct_echo(self, x: TestNestedStruct) -> TestNestedStruct:
+        return self._client._invoke(
+            "TestService",
+            "NestedStructEcho",
+            [x],
+            [self._client._types.struct_type("TestService", "TestNestedStruct")],
+            self._client._types.struct_type("TestService", "TestNestedStruct")
+        )
+
+    def _return_type_nested_struct_echo(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestNestedStruct")
+
+    def _build_call_nested_struct_echo(self, x: TestNestedStruct) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "NestedStructEcho",
+            [x],
+            [self._client._types.struct_type("TestService", "TestNestedStruct")],
+            self._client._types.struct_type("TestService", "TestNestedStruct")
         )
 
     def not_nullable_object(self, value: TestClass) -> TestClass:
@@ -1490,6 +1600,69 @@ class TestService:
             [value],
             [self._client._types.string_type],
             self._client._types.sint32_type
+        )
+
+    def struct_default(self, x: TestStruct = TestStruct(42, 'jeb', TestEnum.value_b, [1, 2, 3])) -> TestStruct:
+        return self._client._invoke(
+            "TestService",
+            "StructDefault",
+            [x],
+            [self._client._types.struct_type("TestService", "TestStruct")],
+            self._client._types.struct_type("TestService", "TestStruct")
+        )
+
+    def _return_type_struct_default(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestStruct")
+
+    def _build_call_struct_default(self, x: TestStruct = TestStruct(42, 'jeb', TestEnum.value_b, [1, 2, 3])) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "StructDefault",
+            [x],
+            [self._client._types.struct_type("TestService", "TestStruct")],
+            self._client._types.struct_type("TestService", "TestStruct")
+        )
+
+    def struct_echo(self, x: TestStruct) -> TestStruct:
+        return self._client._invoke(
+            "TestService",
+            "StructEcho",
+            [x],
+            [self._client._types.struct_type("TestService", "TestStruct")],
+            self._client._types.struct_type("TestService", "TestStruct")
+        )
+
+    def _return_type_struct_echo(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestStruct")
+
+    def _build_call_struct_echo(self, x: TestStruct) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "StructEcho",
+            [x],
+            [self._client._types.struct_type("TestService", "TestStruct")],
+            self._client._types.struct_type("TestService", "TestStruct")
+        )
+
+    def struct_echo_nullable(self, x: Optional[TestStruct]) -> Optional[TestStruct]:
+        return self._client._invoke(
+            "TestService",
+            "StructEchoNullable",
+            [x],
+            [self._client._types.struct_type("TestService", "TestStruct")],
+            self._client._types.struct_type("TestService", "TestStruct")
+        )
+
+    def _return_type_struct_echo_nullable(self) -> TypeBase:
+        return self._client._types.struct_type("TestService", "TestStruct")
+
+    def _build_call_struct_echo_nullable(self, x: Optional[TestStruct]) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "StructEchoNullable",
+            [x],
+            [self._client._types.struct_type("TestService", "TestStruct")],
+            self._client._types.struct_type("TestService", "TestStruct")
         )
 
     def throw_argument_exception(self) -> int:

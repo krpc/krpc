@@ -361,6 +361,7 @@ function TestClient:test_test_service_service_members()
     members,
     {'DeprecatedClass',
      'DeprecatedEnum',
+     'DeprecatedStruct',
      'TestClass',
      'TestEnum',
      'add_multiple_values',
