@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -63,7 +64,7 @@ schema::ProcedureResult Client::invoke(const schema::ProcedureCall& call) {
   return this->send_request(request_buffer);
 }
 
-schema::ProcedureResult Client::invoke(const std::string& service, const std::string& procedure,
+schema::ProcedureResult Client::invoke(std::string_view service, std::string_view procedure,
                                        const std::vector<encoder::Value>& args) {
   std::lock_guard<std::mutex> lock_guard(*lock);
   request_buffer.Clear();
@@ -104,7 +105,7 @@ void Client::add_arguments(schema::ProcedureCall* call, const std::vector<encode
   }
 }
 
-schema::Request Client::build_request(const std::string& service, const std::string& procedure,
+schema::Request Client::build_request(std::string_view service, std::string_view procedure,
                                       const std::vector<encoder::Value>& args) {
   schema::Request request;
   schema::ProcedureCall* call = request.add_calls();
@@ -114,7 +115,7 @@ schema::Request Client::build_request(const std::string& service, const std::str
   return request;
 }
 
-schema::ProcedureCall Client::build_call(const std::string& service, const std::string& procedure,
+schema::ProcedureCall Client::build_call(std::string_view service, std::string_view procedure,
                                          const std::vector<encoder::Value>& args) {
   schema::ProcedureCall call;
   call.set_service(service);

@@ -7,6 +7,7 @@
 #include <memory>
 #include <mutex>  // NOLINT(build/c++11)
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -28,14 +29,14 @@ class Client {
   schema::ProcedureResult invoke(const schema::Request& request);
   schema::ProcedureResult invoke(const schema::ProcedureCall& call);
   schema::ProcedureResult invoke(
-      const std::string& service, const std::string& procedure,
+      std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
 
   schema::Request build_request(
-      const std::string& service, const std::string& procedure,
+      std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
   schema::ProcedureCall build_call(
-      const std::string& service, const std::string& procedure,
+      std::string_view service, std::string_view procedure,
       const std::vector<encoder::Value>& args = std::vector<encoder::Value>());
   void add_exception_thrower(const std::string& service, const std::string& name,
                              const std::function<void(std::string)>& thrower);
