@@ -523,6 +523,10 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 [
                     "krpc",
                     "test_service",
+                    # The server-side benchmarks the test server exposes. It has no
+                    # pre-generated stubs, so this is also the client building a service
+                    # from the definitions the server hands over.
+                    "benchmark",
                     "stream",
                     "add_stream",
                     "stream_update_condition",

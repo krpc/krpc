@@ -64,6 +64,8 @@ csharp_library(
         "KRPC.Core.Test",
         "TestingTools",
         "DynamicProxyGenAssembly2",
+        # The Benchmark service runs a call through Services, the server's own dispatch path
+        "KRPC.Benchmark",
     ],
     target_frameworks = ["net472"],
     treat_warnings_as_errors = True,
@@ -86,6 +88,8 @@ csharp_library(
         "KRPC.Core.Test",
         "TestingTools",
         "DynamicProxyGenAssembly2",
+        # The Benchmark service runs a call through Services, the server's own dispatch path
+        "KRPC.Benchmark",
     ],
     # CS1701: Google.Protobuf's net5.0 build references net5-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses

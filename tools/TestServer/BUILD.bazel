@@ -32,6 +32,8 @@ exe_srcs = srcs + ["src/Program.cs"]
 
 exe_deps = [
     "//core:KRPC.Core.net8",
+    # The benchmark service, which the server exposes alongside TestService
+    "//tools/benchmarks:KRPC.Benchmark.net8",
     "//tools/build/dotnet:Google.Protobuf",
     "//tools/build/dotnet:System.IO.Ports",
     "//tools/build/dotnet:NDesk.Options",

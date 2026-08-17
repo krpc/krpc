@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestServer", "tools\TestSer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestingTools", "tools\TestingTools\src\TestingTools.csproj", "{D0F002FB-E12F-4EE3-9A95-AC3AC08086A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Benchmark", "tools\benchmarks\src\KRPC.Benchmark.csproj", "{6F4C7A18-2D31-4A05-9D67-2E1C8B4F0A73}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client", "client\csharp\src\KRPC.Client.csproj", "{5D390973-8F07-4B28-827F-FB3A1E739FD7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KRPC.Client.Test", "client\csharp\test\KRPC.Client.Test.csproj", "{2E186057-56B2-499B-BFE8-C414FF24E55F}"
@@ -60,6 +62,10 @@ Global
 		{48205F2E-3CEE-4480-873A-DEAFCD291407}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{48205F2E-3CEE-4480-873A-DEAFCD291407}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{48205F2E-3CEE-4480-873A-DEAFCD291407}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F4C7A18-2D31-4A05-9D67-2E1C8B4F0A73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F4C7A18-2D31-4A05-9D67-2E1C8B4F0A73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F4C7A18-2D31-4A05-9D67-2E1C8B4F0A73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F4C7A18-2D31-4A05-9D67-2E1C8B4F0A73}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D390973-8F07-4B28-827F-FB3A1E739FD7}.Release|Any CPU.ActiveCfg = Release|Any CPU

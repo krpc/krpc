@@ -1,6 +1,6 @@
 load("//:config.bzl", "lua_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:lua.bzl", "lua_test")
+load("//tools/build:lua.bzl", "lua_binary", "lua_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files(["CHANGELOG.md"])
@@ -59,6 +59,22 @@ client_test(
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
     test_executable = ":luatest",
+)
+
+# The benchmark program, run by //tools/benchmarks:lua. Not a test: it measures. The script
+# is run from outside the rock tree, so it does not ship in the released rock.
+lua_binary(
+    name = "benchmark",
+    src = ":src",
+    main = "benchmark.lua",
+    rockspec = ":rockspec",
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [
+        "@lua_luafilesystem//file",
+        "@lua_luasocket//file",
+        "@lua_penlight//file",
+        "@lua_protobuf//file",
+    ],
 )
 
 lua_test(

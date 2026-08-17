@@ -197,8 +197,9 @@ local function filter_private(xs)
 end
 
 function TestClient:test_client_members()
+  -- benchmark is the server-side benchmarks the test server exposes
   luaunit.assertEquals(
-    Set{'krpc', 'test_service'},
+    Set{'krpc', 'test_service', 'benchmark'},
     Set(filter_private(tablex.keys(self.conn)))
   )
 end

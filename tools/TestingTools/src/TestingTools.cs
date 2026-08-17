@@ -12,7 +12,7 @@ namespace TestingTools
     /// kRPC testing tools.
     /// </summary>
     [KRPCService]
-    public static class TestingTools
+    public static partial class TestingTools
     {
         /// <summary>
         /// Get the name of the current save game.

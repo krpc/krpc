@@ -1,0 +1,261 @@
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
+load("@rules_python//python:defs.bzl", "py_binary", "py_library")
+load("//:config.bzl", "assembly_version", "author")
+load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:benchmark.bzl", "optimized_binary")
+load("//tools/build:python.bzl", "py_lint_test")
+
+# The Benchmark service. A service like any other, loaded by whichever server it is installed
+# alongside: TestServer for a game-less measurement, and the game for the same measurement
+# against a real service. It does not ship with the mod - nothing lists it in //:krpc - and
+# the in-game install adds it beside TestingTools (see tools/krpctest/krpctest/install.py).
+csharp_library(
+    name = "KRPC.Benchmark",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    target_frameworks = ["net472"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core",
+        "//tools/build/ksp:Google.Protobuf",
+    ],
+)
+
+# net8.0 build of the same service, for TestServer, matching //core:KRPC.Core.net8.
+csharp_library(
+    name = "KRPC.Benchmark.net8",
+    srcs = glob(["src/**/*.cs"]) + [":AssemblyInfo"],
+    out = "KRPC.Benchmark",
+    # CS1701: Google.Protobuf's net5.0 build references net5-era framework assemblies;
+    # unification handles this at runtime (MSBuild suppresses this warning by default)
+    nowarn = ["CS1701"],
+    target_frameworks = ["net8.0"],
+    treat_warnings_as_errors = True,
+    visibility = ["//visibility:public"],
+    warning_level = 4,
+    deps = [
+        "//core:KRPC.Core.net8",
+        "//tools/build/dotnet:Google.Protobuf",
+    ],
+)
+
+csharp_assembly_info(
+    name = "AssemblyInfo",
+    cls_compliant = False,
+    copyright = author,
+    title = "KRPC.Benchmark",
+    version = assembly_version,
+    visibility = [
+        "//:__pkg__",  # Make visible to //:csproj-deps so it can copy AssemblyInfo.cs to generated_deps
+    ],
+)
+
+# Sources for //:csproj-test, which checks them against the .csproj file lists.
+filegroup(
+    name = "csproj-srcs",
+    srcs = glob([
+        "**/*.cs",
+        "**/*.csproj",
+    ]),
+    visibility = ["//:__pkg__"],
+)
+
+# What the runners share: the result record and the table, the chunk sizing, and starting a
+# TestServer to measure against.
+py_library(
+    name = "benchmarks_lib",
+    srcs = [
+        "chunking.py",
+        "report.py",
+        "runner.py",
+        "testserver.py",
+    ],
+    # The modules refer to each other as tools.benchmarks.<name>, which is also how the
+    # in-game scripts reach them when pytest runs them from the repository.
+    imports = ["../.."],
+    visibility = ["//visibility:public"],
+    deps = ["//client/python:krpc_lib"],
+)
+
+# The in-game benchmarks: `bazel run //tools/benchmarks:server -- [pytest args]`. Launches the
+# game, so it takes minutes. The scripts are read from the repository rather than the runfiles
+# tree, as the in-game tests are, so adding or editing one needs no change here.
+py_binary(
+    name = "server",
+    srcs = ["run_server.py"],
+    main = "run_server.py",
+    visibility = ["//visibility:public"],
+    deps = [
+        ":benchmarks_lib",
+        "//tools/krpctest:krpctest_lib",
+        "@pypi//pytest",
+    ],
+)
+
+# The game-less server benchmarks: `bazel run //tools/benchmarks:testserver`. Starts its own
+# TestServer, so a run is seconds and needs nothing installed.
+py_binary(
+    name = "testserver",
+    srcs = ["run_dispatch.py"],
+    args = ["--server=$(rootpath //tools/TestServer)"],
+    data = ["//tools/TestServer"],
+    main = "run_dispatch.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+# The python client benchmarks: `bazel run //tools/benchmarks:python`.
+py_binary(
+    name = "python",
+    srcs = ["run_python.py"],
+    args = ["--server=$(rootpath //tools/TestServer)"],
+    data = ["//tools/TestServer"],
+    main = "run_python.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+# The client benchmarks, one target per language: `bazel run //tools/benchmarks:cpp` and so
+# on. Each runs that language's own benchmark program, since measuring what a client costs
+# means timing it from inside that client; run_client.py is what they share. The python one
+# above is its own target rather than one of these, because it needs no separate program.
+# Built optimized, which the other clients are the equivalent of already: java and lua leave
+# their optimizing to the runtime, and a C++ program compiled the way bazel builds by default
+# is not one anybody runs.
+optimized_binary(
+    name = "cpp_client",
+    binary = "//client/cpp:benchmark",
+)
+
+py_binary(
+    name = "cpp",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=cpp",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath :cpp_client)",
+    ],
+    data = [
+        ":cpp_client",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+py_binary(
+    name = "java",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=java",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath //client/java:benchmark)",
+    ],
+    data = [
+        "//client/java:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+py_binary(
+    name = "csharp",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=csharp",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath //client/csharp:benchmark)",
+    ],
+    data = [
+        "//client/csharp:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+py_binary(
+    name = "lua",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=lua",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath //client/lua:benchmark)",
+    ],
+    data = [
+        "//client/lua:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+# Every client at once, as one table: `bazel run //tools/benchmarks:clients`. Runs what the
+# targets above run, one language after another, so the columns are the same measurements those
+# targets report rather than a second way of taking them.
+py_binary(
+    name = "clients",
+    srcs = [
+        "run_client.py",
+        "run_clients.py",
+        "run_python.py",
+    ],
+    args = [
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=cpp=$(rootpath :cpp_client)",
+        "--client=java=$(rootpath //client/java:benchmark)",
+        "--client=csharp=$(rootpath //client/csharp:benchmark)",
+        "--client=lua=$(rootpath //client/lua:benchmark)",
+    ],
+    data = [
+        ":cpp_client",
+        "//client/csharp:benchmark",
+        "//client/java:benchmark",
+        "//client/lua:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_clients.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+# Compare two runs: `bazel run //tools/benchmarks:compare -- before.json after.json`.
+py_binary(
+    name = "compare",
+    srcs = ["compare.py"],
+    main = "compare.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+test_suite(
+    name = "test",
+    tests = [
+        ":lint",
+    ],
+)
+
+test_suite(
+    name = "lint",
+    tests = [
+        ":pylint",
+    ],
+)
+
+py_lint_test(
+    name = "pylint",
+    size = "medium",
+    srcs = glob(["*.py"]) + glob(["server/*.py"]),
+    pylint_config = "pylint.rc",
+    deps = [
+        "//client/python:krpc_lib",
+        "//tools/krpctest:krpctest_lib",
+        "@pypi//pytest",
+    ],
+)

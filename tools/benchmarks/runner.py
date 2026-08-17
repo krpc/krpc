@@ -1,0 +1,54 @@
+"""The command line and the output every TestServer-based benchmark runner shares."""
+
+import argparse
+import os
+
+from tools.benchmarks.report import table, write_json
+
+
+def arguments(description):
+    return parser(description).parse_args()
+
+
+def parser(description):
+    """The options every TestServer-based runner takes, for one to add its own to."""
+    options = argparse.ArgumentParser(description=description)
+    options.add_argument(
+        "--server",
+        metavar="PATH",
+        default=None,
+        help="the TestServer executable to run (the bazel target supplies this)",
+    )
+    options.add_argument(
+        "--json",
+        metavar="PATH",
+        default=None,
+        help="write the results to PATH, to compare against another run",
+    )
+    return options
+
+
+def report(results, suite, environment, json_path, render=table):
+    """Print the table, and write the results out when asked for.
+
+    ``render`` is the table to print: the usual one by default, and the one that puts a suite
+    per column where a run measured several of them.
+    """
+    for line in render(results, suite, environment):
+        print(line)
+    if json_path:
+        written = path(json_path)
+        write_json(results, written, suite, environment)
+        print("  written to %s" % written)
+
+
+def path(name):
+    """Resolve a path on the command line the way whoever typed it meant it.
+
+    A py_binary under `bazel run` starts in the runfiles tree, so a relative path would
+    otherwise be read from, or written into, a directory of symlinks that the next build
+    replaces.
+    """
+    if os.path.isabs(name):
+        return name
+    return os.path.join(os.environ.get("BUILD_WORKING_DIRECTORY", os.getcwd()), name)
