@@ -60,20 +60,24 @@ function Connection:send_message(message)
 end
 
 function Connection:receive_message(typ)
-  -- Receive a protobuf message.
-  local size
-  local data = ''
-  while true do
-    data = data .. self:receive(1)
-    local ok, result = pcall(decoder.decode_size, data)
-    if ok then
-      size = result
-      break
+  -- Receive a protobuf message. Its size arrives in front of it as a varint, and how long that
+  -- varint is is only known once its last byte has arrived, so it is read a byte at a time.
+  -- Reading the size itself, rather than handing what has arrived so far to a decoder that
+  -- raises an error until the whole of it has, saves a protected call for every one of those
+  -- bytes.
+  local size = 0
+  local shift = 1
+  -- A message size is a 32 bit value, so five bytes carry the whole of it. A varint that has
+  -- not ended by then is not a size, however much more of it arrives.
+  for _ = 1, 5 do
+    local byte = self:receive(1):byte()
+    size = size + (byte % 128) * shift
+    if byte < 128 then
+      return decoder.decode_message(self:receive(size), typ)
     end
+    shift = shift * 128
   end
-
-  data = self:receive(size)
-  return decoder.decode_message(data, typ)
+  error('Failed to decode the size of a message')
 end
 
 return Connection
