@@ -200,6 +200,18 @@ cc_binary(
     ],
 )
 
+# The benchmark program, run by //tools/benchmarks:cpp. Not a test: it measures.
+cc_binary(
+    name = "benchmark",
+    srcs = [
+        "benchmark/benchmark.cpp",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [":krpc"],
+)
+
 clang_tidy_test(
     name = "clangtidy",
     size = "large",

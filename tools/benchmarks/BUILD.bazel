@@ -2,6 +2,7 @@ load("@rules_dotnet//dotnet:defs.bzl", "csharp_library")
 load("@rules_python//python:defs.bzl", "py_binary", "py_library")
 load("//:config.bzl", "assembly_version", "author")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
+load("//tools/build:benchmark.bzl", "optimized_binary")
 load("//tools/build:python.bzl", "py_lint_test")
 
 # The Benchmark service. A service like any other, loaded by whichever server it is installed
@@ -111,6 +112,35 @@ py_binary(
     args = ["--server=$(rootpath //tools/TestServer)"],
     data = ["//tools/TestServer"],
     main = "run_python.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
+# The client benchmarks, one target per language: `bazel run //tools/benchmarks:cpp` and so
+# on. Each runs that language's own benchmark program, since measuring what a client costs
+# means timing it from inside that client; run_client.py is what they share. The python one
+# above is its own target rather than one of these, because it needs no separate program.
+# Built optimized, which the other clients are the equivalent of already: java and lua leave
+# their optimizing to the runtime, and a C++ program compiled the way bazel builds by default
+# is not one anybody runs.
+optimized_binary(
+    name = "cpp_client",
+    binary = "//client/cpp:benchmark",
+)
+
+py_binary(
+    name = "cpp",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=cpp",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath :cpp_client)",
+    ],
+    data = [
+        ":cpp_client",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
     visibility = ["//visibility:public"],
     deps = [":benchmarks_lib"],
 )
