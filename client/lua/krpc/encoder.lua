@@ -1,5 +1,4 @@
 local pb = require 'protobuf.pb'
-local pb_encoder = require 'protobuf.encoder'
 local seq = require 'pl.seq'
 local tablex = require 'pl.tablex'
 local schema = require 'krpc.schema.KRPC'
@@ -9,39 +8,48 @@ local encoder = {}
 
 local _types = Types()
 
+-- Where the routines below leave the bytes they produce. They are handed to a writer, and one
+-- writer shared by all of them costs nothing per value, where a closure made for the value
+-- would be allocated and thrown away again for every one encoded.
+local _written
+local function _write(data)
+  _written = data
+end
+
+-- What pb.struct_pack calls a single precision and a double precision number.
+local FLOAT_FORMAT = string.byte('f')
+local DOUBLE_FORMAT = string.byte('d')
+
+-- The encoding of every varint that fits in one byte, which is most of the values a call
+-- carries: an index, a count, a small identifier or a boolean.
+local _small_varints = {}
+for value = 0, 127 do
+  _small_varints[value] = string.char(value)
+end
+
 local function _encode_varint(x)
+  local small = _small_varints[x]
+  if small then
+    return small
+  end
   if x < 0 then
     error('Value must be non-negative, got ' .. x)
   elseif x == math.huge then
     return '\255\255\255\255\255\255\255\255\127'
   else
-    local data = ''
-    local function write(y)
-      data = y
-    end
-    pb.varint_encoder(write, x)
-    return data
+    pb.varint_encoder(_write, x)
+    return _written
   end
 end
 
 local function _encode_float(value)
-  local data = ''
-  local function write(x)
-    data = data .. x
-  end
-  local encoder = pb_encoder.FloatEncoder(1,False,False)
-  encoder(write, value)
-  return data:sub(2) -- strips the tag value
+  pb.struct_pack(_write, FLOAT_FORMAT, value)
+  return _written
 end
 
 local function _encode_double(value)
-  local data = ''
-  local function write(x)
-    data = data .. x
-  end
-  local encoder = pb_encoder.DoubleEncoder(1,False,False)
-  encoder(write, value)
-  return data:sub(2) -- strips the tag value
+  pb.struct_pack(_write, DOUBLE_FORMAT, value)
+  return _written
 end
 
 local function _encode_value(x, typ)

@@ -1,5 +1,4 @@
 local pb = require 'protobuf.pb'
-local pb_decoder = require 'protobuf.decoder'
 local List = require 'pl.List'
 local Set = require 'pl.Set'
 local Map = require 'pl.Map'
@@ -22,20 +21,16 @@ local function _decode_varint(data)
   end
 end
 
+-- What pb.struct_unpack calls a single precision and a double precision number.
+local FLOAT_FORMAT = string.byte('f')
+local DOUBLE_FORMAT = string.byte('d')
+
 local function _decode_float(data)
-  local field_dict = {}
-  local key = 1
-  local decoder = pb_decoder.FloatDecoder(1,False,False,key,nil)
-  local pos = decoder(data, 0, data:len(), nil, field_dict)
-  return field_dict[1]
+  return pb.struct_unpack(FLOAT_FORMAT, data, 0)
 end
 
 local function _decode_double(data)
-  local field_dict = {}
-  local key = 1
-  local decoder = pb_decoder.DoubleDecoder(1,False,False,key,nil)
-  local pos = decoder(data, 0, data:len(), nil, field_dict)
-  return field_dict[1]
+  return pb.struct_unpack(DOUBLE_FORMAT, data, 0)
 end
 
 local function _decode_value(data, typ)
