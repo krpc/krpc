@@ -6,6 +6,7 @@ import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
 import krpc.client.Types;
@@ -124,6 +125,20 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "Counter", _args);
         return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    /**
+     * Returns a struct whose IntField counts the number of times it has been called,
+     * so that a stream on it changes on every update.
+     */
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "CounterStruct", types = _Types.class)
+    public krpc.client.services.TestService.TestStruct counterStruct(String id) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(id, krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "CounterStruct", _args);
+        return (krpc.client.services.TestService.TestStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestStruct"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -355,6 +370,16 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "IncrementListOfStructs", types = _Types.class)
+    public java.util.List<krpc.client.services.TestService.TestStruct> incrementListOfStructs(java.util.List<krpc.client.services.TestService.TestStruct> l) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(l, krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "IncrementListOfStructs", _args);
+        return (java.util.List<krpc.client.services.TestService.TestStruct>) Encoder.decode(_data.getValue(), krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "IncrementNestedCollection", types = _Types.class)
     public java.util.Map<String,java.util.List<Integer>> incrementNestedCollection(java.util.Map<String,java.util.List<Integer>> d) throws RPCException {
         ByteString[] _args = new ByteString[] {
@@ -443,6 +468,16 @@ public class TestService {
     }
 
     @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "NestedStructEcho", types = _Types.class)
+    public krpc.client.services.TestService.TestNestedStruct nestedStructEcho(krpc.client.services.TestService.TestNestedStruct x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestNestedStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "NestedStructEcho", _args);
+        return (krpc.client.services.TestService.TestNestedStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestNestedStruct"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
     @RPCInfo(service = "TestService", procedure = "NotNullableObject", types = _Types.class)
     public krpc.client.services.TestService.TestClass notNullableObject(krpc.client.services.TestService.TestClass value) throws RPCException {
         ByteString[] _args = new ByteString[] {
@@ -523,6 +558,39 @@ public class TestService {
         };
         krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "StringToInt32", _args);
         return (int) Encoder.decode(_data.getValue(), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "StructDefault", types = _Types.class)
+    public krpc.client.services.TestService.TestStruct structDefault(krpc.client.services.TestService.TestStruct x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "StructDefault", _args);
+        return (krpc.client.services.TestService.TestStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestStruct"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "StructEcho", types = _Types.class)
+    public krpc.client.services.TestService.TestStruct structEcho(krpc.client.services.TestService.TestStruct x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "StructEcho", _args);
+        return (krpc.client.services.TestService.TestStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestStruct"), this.connection);
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    @RPCInfo(service = "TestService", procedure = "StructEchoNullable", types = _Types.class)
+    public krpc.client.services.TestService.TestStruct structEchoNullable(krpc.client.services.TestService.TestStruct x) throws RPCException {
+        ByteString[] _args = new ByteString[] {
+            Encoder.encode(x, krpc.client.Types.createStruct("TestService", "TestStruct"))
+        };
+        krpc.schema.KRPC.ProcedureResult _data = this.connection.invoke("TestService", "StructEchoNullable", _args);
+        if (_data.getIsNull()) {
+          return null;
+        }
+        return (krpc.client.services.TestService.TestStruct) Encoder.decode(_data.getValue(), krpc.client.Types.createStruct("TestService", "TestStruct"), this.connection);
     }
 
     @SuppressWarnings({ "unchecked" })
@@ -806,6 +874,237 @@ public class TestService {
     }
 
     /**
+     * Deprecated struct documentation string.
+     *
+     * @deprecated Use the TestStruct struct instead.
+     */
+    @Deprecated
+    public static class DeprecatedStruct implements RemoteStruct {
+        private final int value;
+        private final int oldValue;
+
+        public DeprecatedStruct(int value, int oldValue) {
+            this.value = value;
+            this.oldValue = oldValue;
+        }
+
+        /**
+         * Deprecated struct Value documentation string.
+         */
+        public int getValue() {
+            return value;
+        }
+
+        /**
+         * Deprecated struct OldValue documentation string.
+         *
+         * @deprecated Use the Value field instead.
+         */
+        @Deprecated
+        public int getOldValue() {
+            return oldValue;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a DeprecatedStruct from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static DeprecatedStruct fromFieldValues(Object[] values) {
+            return new DeprecatedStruct(
+                (int) values[0],
+                (int) values[1]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                value,
+                oldValue
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof DeprecatedStruct)) {
+                return false;
+            }
+            DeprecatedStruct other = (DeprecatedStruct) obj;
+            return java.util.Objects.equals(this.value, other.value)                && java.util.Objects.equals(this.oldValue, other.oldValue);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(value, oldValue);
+        }
+    }
+
+    /**
+     * Struct documentation string.
+     */
+    public static class TestStruct implements RemoteStruct {
+        private final int intField;
+        private final String stringField;
+        private final krpc.client.services.TestService.TestEnum enumField;
+        private final java.util.List<Integer> listField;
+
+        public TestStruct(int intField, String stringField, krpc.client.services.TestService.TestEnum enumField, java.util.List<Integer> listField) {
+            this.intField = intField;
+            this.stringField = stringField;
+            this.enumField = enumField;
+            this.listField = listField;
+        }
+
+        /**
+         * Struct IntField documentation string.
+         */
+        public int getIntField() {
+            return intField;
+        }
+
+        public String getStringField() {
+            return stringField;
+        }
+
+        public krpc.client.services.TestService.TestEnum getEnumField() {
+            return enumField;
+        }
+
+        public java.util.List<Integer> getListField() {
+            return listField;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING),
+                krpc.client.Types.createEnumeration("TestService", "TestEnum"),
+                krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a TestStruct from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static TestStruct fromFieldValues(Object[] values) {
+            return new TestStruct(
+                (int) values[0],
+                (String) values[1],
+                (krpc.client.services.TestService.TestEnum) values[2],
+                (java.util.List<Integer>) values[3]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                intField,
+                stringField,
+                enumField,
+                listField
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof TestStruct)) {
+                return false;
+            }
+            TestStruct other = (TestStruct) obj;
+            return java.util.Objects.equals(this.intField, other.intField)                && java.util.Objects.equals(this.stringField, other.stringField)                && java.util.Objects.equals(this.enumField, other.enumField)                && java.util.Objects.equals(this.listField, other.listField);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(intField, stringField, enumField, listField);
+        }
+    }
+
+    /**
+     * Nested struct documentation string.
+     */
+    public static class TestNestedStruct implements RemoteStruct {
+        private final krpc.client.services.TestService.TestStruct structField;
+        private final krpc.client.services.TestService.TestClass objectField;
+        private final String stringField;
+
+        public TestNestedStruct(krpc.client.services.TestService.TestStruct structField, krpc.client.services.TestService.TestClass objectField, String stringField) {
+            this.structField = structField;
+            this.objectField = objectField;
+            this.stringField = stringField;
+        }
+
+        public krpc.client.services.TestService.TestStruct getStructField() {
+            return structField;
+        }
+
+        public krpc.client.services.TestService.TestClass getObjectField() {
+            return objectField;
+        }
+
+        public String getStringField() {
+            return stringField;
+        }
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                krpc.client.Types.createStruct("TestService", "TestStruct"),
+                krpc.client.Types.createClass("TestService", "TestClass"),
+                krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING)
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a TestNestedStruct from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static TestNestedStruct fromFieldValues(Object[] values) {
+            return new TestNestedStruct(
+                (krpc.client.services.TestService.TestStruct) values[0],
+                (krpc.client.services.TestService.TestClass) values[1],
+                (String) values[2]
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                structField,
+                objectField,
+                stringField
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof TestNestedStruct)) {
+                return false;
+            }
+            TestNestedStruct other = (TestNestedStruct) obj;
+            return java.util.Objects.equals(this.structField, other.structField)                && java.util.Objects.equals(this.objectField, other.objectField)                && java.util.Objects.equals(this.stringField, other.stringField);
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash(structField, objectField, stringField);
+        }
+    }
+
+    /**
      * Deprecated class documentation string.
      *
      * @deprecated Use TestClass instead.
@@ -1046,6 +1345,8 @@ public class TestService {
             PARAMETER_TYPES.put("BytesToHexString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BYTES) });
             RETURN_TYPES.put("Counter", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("Counter", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
+            RETURN_TYPES.put("CounterStruct", krpc.client.Types.createStruct("TestService", "TestStruct"));
+            PARAMETER_TYPES.put("CounterStruct", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("CreateTestObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("CreateTestObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
             RETURN_TYPES.put("DeprecatedProcedure", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING));
@@ -1084,6 +1385,8 @@ public class TestService {
             PARAMETER_TYPES.put("IncrementDictionary", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("IncrementList", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("IncrementList", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("IncrementListOfStructs", krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")));
+            PARAMETER_TYPES.put("IncrementListOfStructs", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createStruct("TestService", "TestStruct")) });
             RETURN_TYPES.put("IncrementNestedCollection", krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))));
             PARAMETER_TYPES.put("IncrementNestedCollection", new krpc.schema.KRPC.Type[] { krpc.client.Types.createDictionary(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING), krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32))) });
             RETURN_TYPES.put("IncrementSet", krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
@@ -1100,6 +1403,8 @@ public class TestService {
             PARAMETER_TYPES.put("Int64ToString", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT64) });
             RETURN_TYPES.put("ListDefault", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)));
             PARAMETER_TYPES.put("ListDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
+            RETURN_TYPES.put("NestedStructEcho", krpc.client.Types.createStruct("TestService", "TestNestedStruct"));
+            PARAMETER_TYPES.put("NestedStructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestNestedStruct") });
             RETURN_TYPES.put("NotNullableObject", krpc.client.Types.createClass("TestService", "TestClass"));
             PARAMETER_TYPES.put("NotNullableObject", new krpc.schema.KRPC.Type[] { krpc.client.Types.createClass("TestService", "TestClass") });
             RETURN_TYPES.put("OnTimer", krpc.client.Types.createMessage(krpc.schema.KRPC.Type.TypeCode.EVENT));
@@ -1118,10 +1423,19 @@ public class TestService {
             PARAMETER_TYPES.put("SetDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createSet(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32)) });
             RETURN_TYPES.put("StringToInt32", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("StringToInt32", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+            RETURN_TYPES.put("StructDefault", krpc.client.Types.createStruct("TestService", "TestStruct"));
+            PARAMETER_TYPES.put("StructDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestStruct") });
+            RETURN_TYPES.put("StructEcho", krpc.client.Types.createStruct("TestService", "TestStruct"));
+            PARAMETER_TYPES.put("StructEcho", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestStruct") });
+            RETURN_TYPES.put("StructEchoNullable", krpc.client.Types.createStruct("TestService", "TestStruct"));
+            PARAMETER_TYPES.put("StructEchoNullable", new krpc.schema.KRPC.Type[] { krpc.client.Types.createStruct("TestService", "TestStruct") });
             RETURN_TYPES.put("ThrowArgumentException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentException", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("ThrowArgumentNullException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentNullException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.STRING) });
+        }
+
+        private static void initTypes1() {
             RETURN_TYPES.put("ThrowArgumentOutOfRangeException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
             PARAMETER_TYPES.put("ThrowArgumentOutOfRangeException", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32) });
             RETURN_TYPES.put("ThrowCustomException", krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32));
@@ -1134,9 +1448,6 @@ public class TestService {
             PARAMETER_TYPES.put("ThrowInvalidOperationExceptionLater", new krpc.schema.KRPC.Type[] {  });
             RETURN_TYPES.put("TupleDefault", krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)));
             PARAMETER_TYPES.put("TupleDefault", new krpc.schema.KRPC.Type[] { krpc.client.Types.createTuple(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.SINT32),krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.BOOL)) });
-        }
-
-        private static void initTypes1() {
             RETURN_TYPES.put("Uint32SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32)));
             PARAMETER_TYPES.put("Uint32SpecialDefaults", new krpc.schema.KRPC.Type[] { krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT32) });
             RETURN_TYPES.put("Uint64SpecialDefaults", krpc.client.Types.createList(krpc.client.Types.createValue(krpc.schema.KRPC.Type.TypeCode.UINT64)));

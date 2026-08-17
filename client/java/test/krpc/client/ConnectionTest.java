@@ -249,6 +249,53 @@ public class ConnectionTest {
   }
 
   @Test
+  public void testStructs() throws RPCException {
+    TestService.TestStruct value = new TestService.TestStruct(
+        42, "jeb", TestService.TestEnum.VALUE_B, Arrays.asList(new Integer[] { 1, 2, 3 }));
+    TestService.TestStruct result = testService.structEcho(value);
+    assertEquals(value, result);
+    assertEquals(42, result.getIntField());
+    assertEquals("jeb", result.getStringField());
+    assertEquals(TestService.TestEnum.VALUE_B, result.getEnumField());
+    assertEquals(Arrays.asList(new Integer[] { 1, 2, 3 }), result.getListField());
+  }
+
+  @Test
+  public void testNestedStructs() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("bob");
+    TestService.TestNestedStruct value = new TestService.TestNestedStruct(
+        new TestService.TestStruct(
+            1, "jeb", TestService.TestEnum.VALUE_A, new ArrayList<Integer>()),
+        obj, "bill");
+    TestService.TestNestedStruct result = testService.nestedStructEcho(value);
+    assertEquals(value, result);
+    assertEquals(1, result.getStructField().getIntField());
+    assertEquals(obj, result.getObjectField());
+    assertEquals("bill", result.getStringField());
+  }
+
+  @Test
+  public void testCollectionsOfStructs() throws RPCException {
+    List<TestService.TestStruct> values = Arrays.asList(
+        new TestService.TestStruct(
+            0, "jeb", TestService.TestEnum.VALUE_C, new ArrayList<Integer>()),
+        new TestService.TestStruct(
+            1, "bob", TestService.TestEnum.VALUE_C, new ArrayList<Integer>()));
+    List<TestService.TestStruct> result = testService.incrementListOfStructs(values);
+    assertEquals(2, result.size());
+    assertEquals(1, result.get(0).getIntField());
+    assertEquals(2, result.get(1).getIntField());
+  }
+
+  @Test
+  public void testNullableStructs() throws RPCException {
+    assertNull(testService.structEchoNullable(null));
+    TestService.TestStruct value = new TestService.TestStruct(
+        1, "jeb", TestService.TestEnum.VALUE_A, new ArrayList<Integer>());
+    assertEquals(value, testService.structEchoNullable(value));
+  }
+
+  @Test
   @SuppressWarnings("serial")
   public void testCollectionsNested() throws RPCException {
     assertEquals(new HashMap<String, List<Integer>>(),

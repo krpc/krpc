@@ -6,6 +6,7 @@ import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
 import krpc.client.Types;

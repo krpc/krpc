@@ -8,6 +8,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -48,6 +49,11 @@ class JavaGenerator(Generator):
             )
         if isinstance(typ, EnumerationType):
             return 'krpc.client.Types.createEnumeration("%s", "%s")' % (
+                typ.protobuf_type.service,
+                typ.protobuf_type.name,
+            )
+        if isinstance(typ, StructType):
+            return 'krpc.client.Types.createStruct("%s", "%s")' % (
                 typ.protobuf_type.service,
                 typ.protobuf_type.name,
             )
@@ -218,6 +224,13 @@ class JavaGenerator(Generator):
             for value in enm["values"]:
                 value["name"] = self.language.parse_const_name(value["name"])
 
+        # Add the type specification of every field of a structure, which its generated
+        # declaration needs to give the encoding the types of its fields
+        for struct_info in context["structs"].values():
+            for field in struct_info["fields"]:
+                field["spec"] = self.parse_type_specification(field["krpc_type"])
+                field["accessor_name"] = upper_camel_case(field["name"])
+
         # Add serial version UIDs to classes
         items = list(context["classes"].items()) + list(context["exceptions"].items())
         for class_name, cls in items:
@@ -230,11 +243,17 @@ class JavaGenerator(Generator):
             list(context["procedures"].values())
             + list(context["properties"].values())
             + list(context["enumerations"].values())
+            + list(context["structs"].values())
             + list(context["exceptions"].values())
             + list(context["classes"].values())
         )
         for enm in context["enumerations"].values():
             deprecatable += list(enm["values"])
+        deprecatable += [
+            field
+            for struct_info in context["structs"].values()
+            for field in struct_info["fields"]
+        ]
         for cls in context["classes"].values():
             deprecatable += (
                 list(cls["methods"].values())

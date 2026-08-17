@@ -9,12 +9,15 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import krpc.client.EncodingException;
 import krpc.schema.KRPC;
 import org.javatuples.Decade;
@@ -85,6 +88,8 @@ public class Encoder {
           return encodeObject((RemoteObject) value);
         case ENUMERATION:
           return encodeEnum((RemoteEnum) value);
+        case STRUCT:
+          return encodeStruct((RemoteStruct) value, type);
         case TUPLE:
           return encodeTuple((Tuple) value, type.getTypesList());
         case LIST:
@@ -132,6 +137,8 @@ public class Encoder {
           return decodeObject(data, type, connection);
         case ENUMERATION:
           return decodeEnum(data, type);
+        case STRUCT:
+          return decodeStruct(data, type, connection);
         case TUPLE:
           return decodeTuple(data, type.getTypesList(), connection);
         case LIST:
@@ -245,6 +252,78 @@ public class Encoder {
 
   static ByteString encodeEnum(RemoteEnum value) throws IOException {
     return encodeSint32(value.getValue());
+  }
+
+  /**
+   * What encoding a structure needs from the generated class that defines it: the types of its
+   * fields, in the order they are encoded in, and the method that builds one from their values.
+   * A struct type carries only the service and the name of the structure, so this is found by
+   * reflection, once per structure rather than for every value encoded or decoded.
+   */
+  private static final class StructInfo {
+    final List<KRPC.Type> fieldTypes;
+    final Method fromFieldValues;
+
+    @SuppressWarnings("unchecked")
+    StructInfo(KRPC.Type type) {
+      try {
+        Class<?> structType = Class.forName(
+            "krpc.client.services." + type.getService() + "$" + type.getName());
+        fieldTypes = (List<KRPC.Type>) structType.getMethod("fieldTypes").invoke(null);
+        fromFieldValues = structType.getMethod("fromFieldValues", Object[].class);
+      } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException
+          | InvocationTargetException exn) {
+        throw new EncodingException("Failed to find the fields of a struct", exn);
+      }
+    }
+  }
+
+  private static final ConcurrentMap<String, StructInfo> STRUCT_INFOS =
+      new ConcurrentHashMap<>();
+
+  static StructInfo structInfo(KRPC.Type type) {
+    return STRUCT_INFOS.computeIfAbsent(
+        type.getService() + "$" + type.getName(), name -> new StructInfo(type));
+  }
+
+  /**
+   * A structure is encoded as the values of its fields in order, which is the same encoding
+   * as a tuple of those values.
+   */
+  static ByteString encodeStruct(RemoteStruct value, KRPC.Type type) throws IOException {
+    List<KRPC.Type> fieldTypes = structInfo(type).fieldTypes;
+    Object[] values = value.fieldValues();
+    if (values.length != fieldTypes.size()) {
+      throw new EncodingException("Failed to encode struct");
+    }
+    KRPC.Tuple.Builder struct = KRPC.Tuple.newBuilder();
+    for (int i = 0; i < values.length; i++) {
+      struct.addItems(encode(values[i], fieldTypes.get(i)));
+    }
+    return UnsafeByteOperations.unsafeWrap(struct.build().toByteArray());
+  }
+
+  /**
+   * Fields are only ever appended to a structure, so a value from a newer server may carry
+   * more items than this client knows about, and those are ignored.
+   */
+  @SuppressWarnings("unchecked")
+  static <T> T decodeStruct(ByteString data, KRPC.Type type, Connection connection)
+      throws IOException {
+    StructInfo info = structInfo(type);
+    KRPC.Tuple structMessage = KRPC.Tuple.newBuilder().mergeFrom(data).build();
+    if (structMessage.getItemsCount() < info.fieldTypes.size()) {
+      throw new EncodingException("Failed to decode struct");
+    }
+    Object[] values = new Object[info.fieldTypes.size()];
+    for (int i = 0; i < values.length; i++) {
+      values[i] = decode(structMessage.getItems(i), info.fieldTypes.get(i), connection);
+    }
+    try {
+      return (T) info.fromFieldValues.invoke(null, (Object) values);
+    } catch (IllegalAccessException | InvocationTargetException exn) {
+      throw new EncodingException("Failed to decode struct", exn);
+    }
   }
 
   static ByteString encodeTuple(Tuple value, List<KRPC.Type> valueTypes) throws IOException {
