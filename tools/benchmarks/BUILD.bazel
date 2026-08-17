@@ -196,6 +196,35 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+# Every client at once, as one table: `bazel run //tools/benchmarks:clients`. Runs what the
+# targets above run, one language after another, so the columns are the same measurements those
+# targets report rather than a second way of taking them.
+py_binary(
+    name = "clients",
+    srcs = [
+        "run_client.py",
+        "run_clients.py",
+        "run_python.py",
+    ],
+    args = [
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=cpp=$(rootpath :cpp_client)",
+        "--client=java=$(rootpath //client/java:benchmark)",
+        "--client=csharp=$(rootpath //client/csharp:benchmark)",
+        "--client=lua=$(rootpath //client/lua:benchmark)",
+    ],
+    data = [
+        ":cpp_client",
+        "//client/csharp:benchmark",
+        "//client/java:benchmark",
+        "//client/lua:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_clients.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 # Compare two runs: `bazel run //tools/benchmarks:compare -- before.json after.json`.
 py_binary(
     name = "compare",

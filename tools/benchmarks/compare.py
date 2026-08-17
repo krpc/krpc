@@ -99,12 +99,18 @@ def compare(title, before_path, after_path, before, after, floors=None):
         "  before: %s" % before_path,
         "  after:  %s" % after_path,
     ]
-    for suite, scenario in _blocks(before, after):
+    blocks = _blocks(before, after)
+    named = len({suite for suite, _ in blocks}) > 1
+    for suite, scenario in blocks:
         keys = [k for k in after if k[:2] == (suite, scenario) and k in before]
         if keys:
             lines.append("")
             lines.extend(
-                _block(scenario, [(before[k], after[k]) for k in keys], floors)
+                _block(
+                    _label(suite, scenario, named),
+                    [(before[k], after[k]) for k in keys],
+                    floors,
+                )
             )
     lines.extend(_unmatched("only in the before run", before, after))
     lines.extend(_unmatched("only in the after run", after, before))
@@ -139,6 +145,15 @@ def compare(title, before_path, after_path, before, after, floors=None):
             for key in unmeasured:
                 lines.append("    %s" % after[key].case)
     return lines
+
+
+def _label(suite, scenario, named):
+    """What a block is called. The scenario alone where a run measured one suite, and the suite
+    with it where it measured several: a run of every client is five blocks of round trips, and
+    which client each one is, is the whole point of reading them."""
+    if not named:
+        return scenario
+    return "%s - %s" % (suite, scenario) if scenario else suite
 
 
 def _blocks(before, after):

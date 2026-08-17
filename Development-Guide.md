@@ -248,6 +248,7 @@ and tools for A/B testing to compare performance.
 bazel run //tools/benchmarks:testserver              # server, game-less
 bazel run //tools/benchmarks:python                  # a client, against TestServer
 bazel run //tools/benchmarks:cpp                     #   "  (also: java, csharp, lua)
+bazel run //tools/benchmarks:clients                 # every client, one table
 bazel run //tools/benchmarks:server                  # server, in game, launches KSP
 ```
 
@@ -278,6 +279,12 @@ What each one measures:
    go to RPCs, and a client that takes longer than the server's receive timeout to send its next
    call is served once per update, so the figure stops being the client's cost and becomes
    16.7 ms.
+ * **`:clients`** — the same measurement for every client in turn, reported as one table with a
+   column per language, which is how to read what a call costs in one client against another.
+   The clients run one after another rather than at once, so that none of them is timing the
+   others' load, and each gets a server of its own, so a column here is the same measurement
+   that client's own target reports. Its `--json` file holds every client's results together,
+   and `:compare` reads it as a block per client.
  * **`:server`** — the same per-call measurement against real `SpaceCenter` procedures in a live
    game, plus the object-access microbenchmarks and the cost of a stream over a few hundred parts.
    It is a pytest suite, so arguments go to pytest (`-- tools/benchmarks/server/test_station.py`,

@@ -20,6 +20,12 @@ NOISY_SPREAD = 0.25
 # that unit go into a second. A case measured in anything else reports no rate.
 PER_SECOND = {"s": 1.0, "ms": 1e3, "us": 1e6, "ns": 1e9, "ns/op": 1e9}
 
+# Every figure in a table of one suite per column is printed to the same number of places, so
+# that a column of them reads down as a column. The significant digits of a client's round trip
+# in milliseconds are the last of these; a table of one suite still prints as many as its
+# figures are worth and no more.
+FIGURE = "%.5f"
+
 # A case whose samples moved this much between the start of the measurement and the end, on top
 # of however far they scattered, is called out under its block. Drift and noise both widen the
 # spread but mean opposite things: noise says the estimate is uncertain, drift says the case was
@@ -227,6 +233,147 @@ def table(results, title, environment=None):
         "  timings hold for this machine and this session only: compare runs, not numbers"
     )
     return lines
+
+
+def by_suite(results, title, environment=None):
+    """Render results from several suites as one table: a row per case, a column per suite.
+
+    Suites are only worth reading side by side where they measured the same cases in the same
+    units, which is what the client benchmarks do and why they have a table of their own. A
+    case a suite did not measure leaves its cell blank rather than dropping the row.
+    """
+    lines = ["", "kRPC benchmarks - %s" % title]
+    for name, value in (environment or {}).items():
+        lines.append("  %s: %s" % (name, value))
+    suites = _fastest_first(results)
+    for scenario in _scenarios(results):
+        lines.append("")
+        lines.extend(
+            _columns(
+                scenario, suites, [x for x in results if (x.scenario or "") == scenario]
+            )
+        )
+    lines.append("")
+    lines.append(
+        "  timings hold for this machine and this session only: compare runs, not numbers"
+    )
+    return lines
+
+
+def _fastest_first(results):
+    """The suites in the order their columns read best: fastest first, on the first case they
+    report.
+
+    A table of clients is read to rank them, and the order the runner happened to measure them
+    in ranks nothing. The first case decides it rather than every case at once, so that the
+    order is one a reader can check against the top row rather than a scoring of their own.
+    """
+    suites = _suites(results)
+    first = _cases(results)[0]
+    found = {x.suite: x for x in results if x.case == first}
+    return sorted(suites, key=lambda x: found[x].value if x in found else float("inf"))
+
+
+def _columns(scenario, suites, results):
+    cases = _cases(results)
+    found = {(x.suite, x.case): x for x in results}
+    case_width = max([len("case")] + [len(x) for x in cases])
+    unit_width = max([len("unit")] + [len(x.unit) for x in results])
+    width = max([len(FIGURE % 0)] + [len(_column(x)) for x in suites])
+
+    def block(cell, heading=None, unit=False):
+        """One block of the table: a row per case, a cell per suite, worked out by ``cell``."""
+        rows = [] if heading is None else ["    %s" % heading]
+        for case in cases:
+            measured = [found[(s, case)] for s in suites if (s, case) in found]
+            cells = [(case, case_width, False)]
+            cells += [
+                (cell(found.get((s, case)), measured), width, True) for s in suites
+            ]
+            if unit:
+                cells += [("", 1, False), (measured[0].unit, unit_width, False)]
+            rows.append(_row(cells))
+        return rows
+
+    header = _row(
+        [("case", case_width, False)]
+        + [(_column(x), width, True) for x in suites]
+        + [("", 1, False), ("unit", unit_width, False)]
+    )
+    lines = []
+    if scenario:
+        lines.append("  %s" % scenario)
+    lines.append(header)
+    lines.append("    " + "-" * (len(header) - 4))
+    lines.extend(block(_figure, unit=True))
+
+    # The reciprocals as a block of their own. One suite's table says what each figure works
+    # out to a second in a note under it, which here would be a line per case per suite.
+    if any(per_second(x) is not None for x in results):
+        lines.append("")
+        lines.extend(block(_rate, heading=_counted(results)))
+
+    # What each suite costs against the one that measured the case fastest, which is the
+    # comparison a table of several of them is read for: the figures above it hold for the
+    # machine and the session that took them, and these hold wherever they were taken.
+    if len(suites) > 1:
+        lines.append("")
+        lines.extend(block(_slower, heading="slower than the fastest"))
+
+    for result in results:
+        for warning in warnings(result):
+            lines.append(
+                "    %s, %s: %s" % (_column(result.suite), result.case, warning)
+            )
+    return lines
+
+
+def _figure(result, measured):
+    # pylint: disable=unused-argument
+    return "" if result is None else FIGURE % result.value
+
+
+def _rate(result, measured):
+    # pylint: disable=unused-argument
+    value = None if result is None else per_second(result)
+    return "" if value is None else "%d" % round(value)
+
+
+def _slower(result, measured):
+    """How far above the fastest measurement of the same case this one is."""
+    if result is None:
+        return ""
+    best = min(x.value for x in measured)
+    if best <= 0 or result.value <= best:
+        return "-"
+    return "+%.0f%%" % (100 * (result.value - best) / best)
+
+
+def _counted(results):
+    """What the block of reciprocals counts, where every case in it counts the same thing."""
+    named = {x.rate for x in results if x.rate}
+    return named.pop() if len(named) == 1 else "per second"
+
+
+def _column(suite):
+    """A suite's name as a column heading: what tells it from the others beside it."""
+    return suite.split(", ")[-1]
+
+
+def _suites(results):
+    seen = []
+    for result in results:
+        if result.suite not in seen:
+            seen.append(result.suite)
+    return seen
+
+
+def _cases(results):
+    seen = []
+    for result in results:
+        if result.case not in seen:
+            seen.append(result.case)
+    return seen
 
 
 def _scenarios(results):

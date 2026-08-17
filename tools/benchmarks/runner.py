@@ -28,9 +28,13 @@ def parser(description):
     return options
 
 
-def report(results, suite, environment, json_path):
-    """Print the table, and write the results out when asked for."""
-    for line in table(results, suite, environment):
+def report(results, suite, environment, json_path, render=table):
+    """Print the table, and write the results out when asked for.
+
+    ``render`` is the table to print: the usual one by default, and the one that puts a suite
+    per column where a run measured several of them.
+    """
+    for line in render(results, suite, environment):
         print(line)
     if json_path:
         written = path(json_path)
