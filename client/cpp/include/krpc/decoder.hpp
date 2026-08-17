@@ -7,6 +7,7 @@
 #include <set>
 #include <string>
 #include <tuple>
+#include <utility>
 #include <vector>
 
 #include "krpc/error.hpp"
@@ -74,7 +75,8 @@ inline void decode(Object<T>& object, const std::string& data, Client* client) {
 
 template <typename... Ts>
 inline void decode(std::tuple<Ts...>& tuple, const std::string& data, Client* client) {
-  krpc::schema::Tuple tupleMessage;
+  // See the note on the list below for why the message this arrives in is kept between calls.
+  static thread_local krpc::schema::Tuple tupleMessage;
   if (!tupleMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
   int index = 0;
   std::apply([&](Ts&... args) { (decode(args, tupleMessage.items(index++), client), ...); }, tuple);
@@ -89,42 +91,52 @@ inline void decode(std::optional<T>& value, const std::string& data, Client* cli
   value = inner;
 }
 
+// A collection arrives as a message holding its items, one encoded value each. That message is
+// kept between calls rather than made for one: parsing into it reuses the storage the items it
+// held last time have, where a message made for the call goes to the allocator for every item
+// and gives it all back again. It is one per thread, since the thread that reads stream updates
+// decodes them while the program is decoding what it asked for; and it is one per element type,
+// which is what makes it safe to reuse - reaching this function again while it is running takes
+// a collection of itself, which is not a type that can be written.
 template <typename T>
 inline void decode(std::vector<T>& list, const std::string& data, Client* client) {
-  list.clear();
-  krpc::schema::List listMessage;
+  static thread_local krpc::schema::List listMessage;
   if (!listMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+  list.clear();
+  // The number of items is known before any of them are decoded, so the list is given room for
+  // all of them rather than growing as they arrive.
+  list.reserve(listMessage.items_size());
   for (int i = 0; i < listMessage.items_size(); i++) {
     T value;
     decode(value, listMessage.items(i), client);
-    list.push_back(value);
+    list.push_back(std::move(value));
   }
 }
 
 template <typename T>
 inline void decode(std::set<T>& set, const std::string& data, Client* client) {
-  set.clear();
-  krpc::schema::Set setMessage;
+  static thread_local krpc::schema::Set setMessage;
   if (!setMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+  set.clear();
   for (int i = 0; i < setMessage.items_size(); i++) {
     T value;
     decode(value, setMessage.items(i), client);
-    set.insert(value);
+    set.insert(std::move(value));
   }
 }
 
 template <typename K, typename V>
 inline void decode(std::map<K, V>& dictionary, const std::string& data, Client* client) {
-  dictionary.clear();
-  krpc::schema::Dictionary dictionaryMessage;
+  static thread_local krpc::schema::Dictionary dictionaryMessage;
   if (!dictionaryMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+  dictionary.clear();
   for (int i = 0; i < dictionaryMessage.entries_size(); i++) {
     const schema::DictionaryEntry& entry = dictionaryMessage.entries(i);
     K key;
     V value;
     decode(key, entry.key(), client);
     decode(value, entry.value(), client);
-    dictionary[key] = value;
+    dictionary[std::move(key)] = std::move(value);
   }
 }
 

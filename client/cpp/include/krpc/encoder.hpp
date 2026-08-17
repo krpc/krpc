@@ -57,9 +57,17 @@ inline std::string encode(const Object<T>& object) {
   return encode(object._id);
 }
 
+// A collection is sent as a message holding its items, one encoded value each. That message is
+// kept between calls rather than made for one: clearing it reuses the storage the items it held
+// last time have, where a message made for the call goes to the allocator for every item and
+// gives it all back again. It is one per thread, since a stream is added from the thread that
+// reads stream updates while the program is making calls of its own; and it is one per element
+// type, which is what makes it safe to reuse - reaching this function again while it is running
+// takes a collection of itself, which is not a type that can be written.
 template <typename T>
 inline std::string encode(const std::vector<T>& list) {
-  krpc::schema::List listMessage;
+  static thread_local krpc::schema::List listMessage;
+  listMessage.Clear();
   for (typename std::vector<T>::const_iterator x = list.begin(); x != list.end(); ++x)
     listMessage.add_items(encode(*x));
   return encode(listMessage);
@@ -67,7 +75,8 @@ inline std::string encode(const std::vector<T>& list) {
 
 template <typename K, typename V>
 inline std::string encode(const std::map<K, V>& dictionary) {
-  krpc::schema::Dictionary dictionaryMessage;
+  static thread_local krpc::schema::Dictionary dictionaryMessage;
+  dictionaryMessage.Clear();
   for (typename std::map<K, V>::const_iterator x = dictionary.begin(); x != dictionary.end(); ++x) {
     schema::DictionaryEntry* entry = dictionaryMessage.add_entries();
     entry->set_key(encode(x->first));
@@ -78,7 +87,8 @@ inline std::string encode(const std::map<K, V>& dictionary) {
 
 template <typename T>
 inline std::string encode(const std::set<T>& set) {
-  krpc::schema::Set setMessage;
+  static thread_local krpc::schema::Set setMessage;
+  setMessage.Clear();
   for (typename std::set<T>::const_iterator x = set.begin(); x != set.end(); ++x)
     setMessage.add_items(encode(*x));
   return encode(setMessage);
@@ -86,9 +96,11 @@ inline std::string encode(const std::set<T>& set) {
 
 template <typename... Ts>
 inline std::string encode(const std::tuple<Ts...>& tuple) {
-  krpc::schema::Tuple tupleMessage;
-  std::apply([&tupleMessage](const Ts&... args) { (tupleMessage.add_items(encode(args)), ...); },
-             tuple);
+  // See the note on the list above for why the message this is sent in is kept between calls.
+  static thread_local krpc::schema::Tuple tupleMessage;
+  tupleMessage.Clear();
+  // The message is not captured: it lives for the thread rather than for this call.
+  std::apply([](const Ts&... args) { (tupleMessage.add_items(encode(args)), ...); }, tuple);
   return encode(tupleMessage);
 }
 
