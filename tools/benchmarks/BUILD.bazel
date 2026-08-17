@@ -196,6 +196,15 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+# Compare two runs: `bazel run //tools/benchmarks:compare -- before.json after.json`.
+py_binary(
+    name = "compare",
+    srcs = ["compare.py"],
+    main = "compare.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 test_suite(
     name = "test",
     tests = [
