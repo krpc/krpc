@@ -85,19 +85,20 @@ class Decoder:
         msg: object
         if isinstance(typ, ListType):
             msg = cast(KRPC.List, cls.decode_message(data, KRPC.List))
-            return [cls.decode(client, item, typ.value_type) for item in msg.items]
+            decode_item = cls._item_decoder(client, typ.value_type)
+            return [decode_item(item) for item in msg.items]
         if isinstance(typ, DictionaryType):
             msg = cast(KRPC.Dictionary, cls.decode_message(data, KRPC.Dictionary))
+            decode_key = cls._item_decoder(client, typ.key_type)
+            decode_value = cls._item_decoder(client, typ.value_type)
             return dict(
-                (
-                    cls.decode(client, entry.key, typ.key_type),
-                    cls.decode(client, entry.value, typ.value_type),
-                )
+                (decode_key(entry.key), decode_value(entry.value))
                 for entry in msg.entries
             )
         if isinstance(typ, SetType):
             msg = cast(KRPC.Set, cls.decode_message(data, KRPC.Set))
-            return set(cls.decode(client, item, typ.value_type) for item in msg.items)
+            decode_item = cls._item_decoder(client, typ.value_type)
+            return set(decode_item(item) for item in msg.items)
         if isinstance(typ, TupleType):
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
             return tuple(
@@ -124,6 +125,32 @@ class Decoder:
         message = typ()
         message.ParseFromString(data)
         return message
+
+    @classmethod
+    def _item_decoder(
+        cls, client: Optional[Client], typ: TypeBase
+    ) -> Callable[[bytes], object]:
+        """A function that decodes one value of the given type.
+
+        A collection carries many values of the same type, so working out how to decode
+        one of them is worth doing once for the collection rather than once for every
+        item in it. The types a collection usually holds are answered directly; anything
+        else falls back to the full decode.
+        """
+        if isinstance(typ, ValueType):
+            decode = _VALUE_DECODERS.get(typ.code)
+            if decode is None:
+                raise EncodingError("Invalid type")
+            return decode
+        if isinstance(typ, ClassType):
+            decode_id = _VALUE_DECODERS[cls._types.uint64_type.code]
+            python_type = typ.python_type
+            return lambda data: python_type(client, decode_id(data))
+        if isinstance(typ, EnumerationType):
+            decode_value = _VALUE_DECODERS[cls._types.sint32_type.code]
+            enum_type = typ.python_type
+            return lambda data: enum_type(decode_value(data))
+        return lambda data: cls.decode(client, data, typ)
 
     @classmethod
     def _decode_value(cls, data: bytes, typ: TypeBase) -> object:

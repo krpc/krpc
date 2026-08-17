@@ -59,27 +59,31 @@ class Encoder:
             return cls._encode_value(object_id, cls._types.uint64_type)
         if isinstance(typ, ListType):
             list_msg = KRPC.List()
+            encode_item = cls._item_encoder(typ.value_type)
             list_msg.items.extend(
-                cls.encode(item, typ.value_type) for item in cast(Iterable[object], x)
+                encode_item(item) for item in cast(Iterable[object], x)
             )
             return list_msg.SerializeToString()
         if isinstance(typ, DictionaryType):
             dict_msg = KRPC.Dictionary()
             entries = []
             dict_obj = cast(Mapping, x)  # type: ignore[type-arg]
+            encode_key = cls._item_encoder(typ.key_type)
+            encode_value = cls._item_encoder(typ.value_type)
             for key, value in sorted(
                 dict_obj.items(), key=lambda i: i[0]
             ):  # type: ignore[no-any-return]
                 entry = KRPC.DictionaryEntry()
-                entry.key = cls.encode(key, typ.key_type)
-                entry.value = cls.encode(value, typ.value_type)
+                entry.key = encode_key(key)
+                entry.value = encode_value(value)
                 entries.append(entry)
             dict_msg.entries.extend(entries)
             return dict_msg.SerializeToString()
         if isinstance(typ, SetType):
             set_msg = KRPC.Set()
+            encode_item = cls._item_encoder(typ.value_type)
             set_msg.items.extend(
-                cls.encode(item, typ.value_type) for item in cast(Iterable[object], x)
+                encode_item(item) for item in cast(Iterable[object], x)
             )
             return set_msg.SerializeToString()
         if isinstance(typ, TupleType):
@@ -108,6 +112,28 @@ class Encoder:
             return _SINGLE_BYTE_VARINTS[length] + data
         size: bytes = protobuf_encoder._VarintBytes(length)  # type: ignore[attr-defined]
         return size + data
+
+    @classmethod
+    def _item_encoder(cls, typ: TypeBase) -> Callable[[Any], bytes]:
+        """A function that encodes one value of the given type.
+
+        A collection carries many values of the same type, so working out how to encode
+        one of them is worth doing once for the collection rather than once for every
+        item in it. The types a collection usually holds are answered directly; anything
+        else falls back to the full encode.
+        """
+        if isinstance(typ, ValueType):
+            encode = _VALUE_ENCODERS.get(typ.code)
+            if encode is None:
+                raise EncodingError("Invalid type")
+            return encode
+        if isinstance(typ, ClassType):
+            encode_id = _VALUE_ENCODERS[cls._types.uint64_type.code]
+            return lambda x: encode_id(x._object_id)
+        if isinstance(typ, EnumerationType):
+            encode_value = _VALUE_ENCODERS[cls._types.sint32_type.code]
+            return lambda x: encode_value(x.value)
+        return lambda x: cls.encode(x, typ)
 
     @classmethod
     def _encode_value(cls, value: object, typ: TypeBase) -> bytes:
@@ -140,6 +166,8 @@ class _ValueEncoder:
     @classmethod
     def _encode_signed_varint(cls, value: int) -> bytes:
         value = protobuf_wire_format.ZigZagEncode(value)  # type: ignore[no-untyped-call]
+        if value < 128:
+            return _SINGLE_BYTE_VARINTS[value]
         data: List[bytes] = []
         _pb_SignedVarintEncoder(data.append, value, True)
         return b"".join(data)
