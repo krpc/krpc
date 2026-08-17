@@ -111,4 +111,56 @@ function encoder.encode_message_with_size(message)
   return delimiter .. data
 end
 
+-- The tags the request carrying a procedure call is written with, each the field's number and
+-- wire type in one byte. From krpc.proto:
+--
+--   Request.calls           1, length delimited
+--   ProcedureCall.service   1, length delimited
+--   ProcedureCall.procedure 2, length delimited
+--   ProcedureCall.arguments 3, length delimited
+--   Argument.position       1, varint
+--   Argument.value          2, length delimited
+--   Argument.is_null        3, varint
+--
+-- test_encoder builds the same requests through the protocol buffer message layer and compares
+-- the bytes, so a field renumbered in the schema without these following fails there.
+local _REQUEST_CALLS = '\10'
+local _CALL_SERVICE = '\10'
+local _CALL_PROCEDURE = '\18'
+local _CALL_ARGUMENTS = '\26'
+local _ARGUMENT_POSITION = '\8'
+local _ARGUMENT_VALUE = '\18'
+local _ARGUMENT_IS_NULL = '\24'
+
+local _concat = table.concat
+
+local function _delimited(tag, data)
+  return tag .. _encode_varint(data:len()) .. data
+end
+
+--- Encode the request carrying one procedure call, prefixed by its size, ready to send.
+--
+-- The arguments are the already encoded value of each, in order, with Types.none where a call
+-- passes nothing. Written here rather than built as a protocol buffer message and serialized:
+-- the message layer allocates a table of fields and a pair of listeners for each of the three
+-- messages a call needs, and then walks all of them twice, once to size them and once to write
+-- them. That costs an order of magnitude more than the bytes it produces.
+function encoder.encode_request(service, procedure, arguments)
+  local parts = { _delimited(_CALL_SERVICE, service), _delimited(_CALL_PROCEDURE, procedure) }
+  local count = 2
+  for i = 1, #arguments do
+    local value = arguments[i]
+    local argument
+    if value == Types.none then
+      argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _ARGUMENT_IS_NULL .. '\1'
+    else
+      argument = _ARGUMENT_POSITION .. _encode_varint(i-1) .. _delimited(_ARGUMENT_VALUE, value)
+    end
+    count = count + 1
+    parts[count] = _delimited(_CALL_ARGUMENTS, argument)
+  end
+  local request = _delimited(_REQUEST_CALLS, _concat(parts))
+  return _encode_varint(request:len()) .. request
+end
+
 return encoder

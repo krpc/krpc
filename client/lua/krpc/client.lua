@@ -45,8 +45,8 @@ function Client:_invoke(service, procedure, args, param_types, return_type)
   -- Build the request
   local request = self:_build_request(service, procedure, args, param_types)
 
-  -- Send the request
-  self._rpc_connection:send_message(request)
+  -- Send the request, which is already the bytes to send
+  self._rpc_connection:send(request)
   local response = self._rpc_connection:receive_message(schema.Response)
 
   -- Check for an error response
@@ -70,20 +70,15 @@ function Client:_invoke(service, procedure, args, param_types, return_type)
   return nil
 end
 
---- Build a KRPC.Request object
+--- Build the bytes of the request carrying a procedure call, ready to send
 function Client:_build_request(service, procedure, args, param_types)
-  local request = schema.Request()
-  local call = request.calls:add()
-  call.service = service
-  call.procedure = procedure
+  local arguments = {}
 
   for i,value in ipairs(args) do
     local typ = param_types[i]
-    local arg = call.arguments:add()
-    arg.position = i-1
     if value == Types.none then
       -- A null argument is signaled out-of-band by is_null; the value field is left unset
-      arg.is_null = true
+      arguments[i] = Types.none
     else
       local valid = false
       if type(typ.lua_type) == 'string' then
@@ -100,11 +95,11 @@ function Client:_build_request(service, procedure, args, param_types)
           error(string.format('%s.%s() argument %d must be a %s, got a %s', service, procedure, i, typ.lua_type, type(value)))
         end
       end
-      arg.value = encoder.encode(value, typ)
+      arguments[i] = encoder.encode(value, typ)
     end
   end
 
-  return request
+  return encoder.encode_request(service, procedure, arguments)
 end
 
 --- Construct an error description from a KRPC.Error object
