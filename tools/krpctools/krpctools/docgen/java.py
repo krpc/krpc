@@ -2,6 +2,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -19,6 +20,8 @@ from .nodes import (
     ClassProperty,
     Enumeration,
     EnumerationValue,
+    Struct,
+    StructField,
 )
 from ..utils import lower_camel_case
 from ..lang.java import JavaLanguage
@@ -53,7 +56,7 @@ class JavaDomain(Domain):
             return self.language.type_map_classes[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return self.shorten_ref(
                 "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
             )
@@ -83,6 +86,8 @@ class JavaDomain(Domain):
             return ":type:`%s`" % self.type(typ)
         if isinstance(typ, EnumerationType):
             return ":class:`%s`" % self.type(typ)
+        if isinstance(typ, StructType):
+            return ":type:`%s`" % self.type(typ)
         if isinstance(typ, ListType):
             return ":class:`java.util.List<%s>`" % self._type(typ.value_type, True)
         if isinstance(typ, DictionaryType):
@@ -123,6 +128,10 @@ class JavaDomain(Domain):
             name = name.split(".")
             name[-1] = snake_case(name[-1]).upper()
             name = ".".join(name)
+        elif isinstance(obj, StructField):
+            name = name.split(".")
+            name[-1] = "get" + name[-1] + "()"
+            name = ".".join(name)
         return self.shorten_ref(name)
 
     def see(self, obj):
@@ -135,10 +144,11 @@ class JavaDomain(Domain):
                 Property,
                 ClassProperty,
                 EnumerationValue,
+                StructField,
             )
         ):
             prefix = "meth"
-        elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
+        elif any(isinstance(obj, cls) for cls in (Class, Enumeration, Struct)):
             prefix = "type"
         else:
             raise RuntimeError(str(obj))

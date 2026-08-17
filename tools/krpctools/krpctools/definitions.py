@@ -2,12 +2,13 @@ from krpc.definitions import (
     CLASS,
     ENUMERATION,
     EXCEPTION,
+    STRUCT,
     Definition,
     register_all,
     topological_order,
 )
 from krpc.types import Types, TupleType, ListType, SetType, DictionaryType
-from .utils import as_type
+from .utils import as_type, as_protobuf_type
 
 
 class Definitions:
@@ -70,6 +71,16 @@ def _definitions(services_info):
                 [],
                 _register_exception(service_name, name),
             )
+        for name, struct in info.get("structs", {}).items():
+            # A structure is registered after the definitions its field types name, as
+            # building its fields resolves those types
+            yield Definition(
+                STRUCT,
+                service_name,
+                name,
+                [as_protobuf_type(field["type"]) for field in struct["fields"]],
+                _register_struct(service_name, name, struct),
+            )
 
 
 def _register_class(service, name):
@@ -91,6 +102,21 @@ def _register_enumeration(service, name, enumeration):
 
     def register(types):
         types.enumeration_type(service, name).set_values(values)
+
+    return register
+
+
+def _register_struct(service, name, struct):
+    # The fields keep the names they are declared with, as each language names them its own way
+    fields = [(field["name"], field["type"]) for field in struct["fields"]]
+
+    def register(types):
+        types.struct_type(service, name).set_fields(
+            [
+                (field_name, as_type(types, type_info))
+                for field_name, type_info in fields
+            ]
+        )
 
     return register
 

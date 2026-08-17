@@ -2,6 +2,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -18,6 +19,8 @@ from .nodes import (
     ClassProperty,
     Enumeration,
     EnumerationValue,
+    Struct,
+    StructField,
 )
 from ..lang.csharp import CsharpLanguage
 
@@ -41,7 +44,7 @@ class CsharpDomain(Domain):
             return self.language.type_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
             return "KRPC.Schema.KRPC.%s" % typ.python_type.__name__
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return self.shorten_ref(
                 "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
             )
@@ -61,6 +64,11 @@ class CsharpDomain(Domain):
         raise RuntimeError("Unknown type '%s'" % str(typ))
 
     def default_value(self, value, typ):
+        if isinstance(typ, StructType):
+            values = (
+                self.default_value(x, typ.field_types[i]) for i, x in enumerate(value)
+            )
+            return "new %s(%s)" % (self.type(typ), ", ".join(values))
         if isinstance(typ, EnumerationType):
             return "%s.%s" % (
                 self.type(typ),
@@ -102,9 +110,11 @@ class CsharpDomain(Domain):
             prefix = "prop"
         elif isinstance(obj, EnumerationValue):
             prefix = "enum"
+        elif isinstance(obj, StructField):
+            prefix = "prop"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = "meth"
-        elif isinstance(obj, (Class, Enumeration)):
+        elif isinstance(obj, (Class, Enumeration, Struct)):
             prefix = "type"
         else:
             raise RuntimeError(str(obj))

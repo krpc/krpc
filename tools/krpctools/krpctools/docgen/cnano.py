@@ -2,6 +2,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -18,6 +19,8 @@ from .nodes import (
     ClassProperty,
     Enumeration,
     EnumerationValue,
+    Struct,
+    StructField,
 )
 from ..lang.cnano import CnanoLanguage
 
@@ -61,6 +64,8 @@ class CnanoDomain(Domain):
             return "object"
         if isinstance(typ, EnumerationType):
             return "enum"
+        if isinstance(typ, StructType):
+            return "%s_%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
         raise RuntimeError("Unknown type " + str(typ))
 
     def type(self, typ):
@@ -88,6 +93,8 @@ class CnanoDomain(Domain):
         elif isinstance(typ, (ClassType, EnumerationType)):
             ctype = "krpc_%s_%s_t" % (typ.protobuf_type.service, typ.protobuf_type.name)
             ptr = False
+        elif isinstance(typ, StructType):
+            ctype = "krpc_%s_%s_t" % (typ.protobuf_type.service, typ.protobuf_type.name)
         else:
             raise RuntimeError("Unknown type " + str(typ))
         # Note:
@@ -134,7 +141,7 @@ class CnanoDomain(Domain):
         ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
             ref = ref.upper()
-        elif isinstance(obj, (Class, Enumeration)):
+        elif isinstance(obj, (Class, Enumeration, Struct)):
             ref += "_t"
         return ref
 
@@ -147,8 +154,12 @@ class CnanoDomain(Domain):
             prefix = "type"
         elif isinstance(obj, Enumeration):
             prefix = "type"
+        elif isinstance(obj, Struct):
+            prefix = "type"
         elif isinstance(obj, EnumerationValue):
             prefix = "macro"
+        elif isinstance(obj, StructField):
+            prefix = "member"
         else:
             raise RuntimeError(str(obj))
         return ":%s:`%s`" % (prefix, self.ref(obj))

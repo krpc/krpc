@@ -6,7 +6,10 @@ def lookup_cref(cref, services):
             objs.extend(service.members.values())
             objs.extend(service.classes.values())
             objs.extend(service.enumerations.values())
+            objs.extend(service.structs.values())
             objs.extend(service.exceptions.values())
+            for struct in service.structs.values():
+                objs.extend(struct.fields.values())
             for cls in service.classes.values():
                 objs.extend(cls.members.values())
             for enumeration in service.enumerations.values():

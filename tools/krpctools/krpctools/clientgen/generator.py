@@ -103,6 +103,7 @@ class Generator:
             "properties": {},
             "classes": {},
             "enumerations": {},
+            "structs": {},
             "exceptions": {},
         }
 
@@ -136,6 +137,29 @@ class Generator:
                 "deprecated": enumeration.get("deprecated", False),
                 "deprecated_reason": self.parse_deprecation_reason(
                     enumeration.get("deprecated_reason", "")
+                ),
+            }
+
+        for name, struct in self._get_defs("structs"):
+            context["structs"][name] = {
+                "fields": [
+                    {
+                        "name": self.parse_name(x["name"]),
+                        "remote_name": x["name"],
+                        "krpc_type": self.as_type(x["type"]),
+                        "type": self.parse_type(self.as_type(x["type"])),
+                        "documentation": self.parse_documentation(x["documentation"]),
+                        "deprecated": x.get("deprecated", False),
+                        "deprecated_reason": self.parse_deprecation_reason(
+                            x.get("deprecated_reason", "")
+                        ),
+                    }
+                    for x in struct["fields"]
+                ],
+                "documentation": self.parse_documentation(struct["documentation"]),
+                "deprecated": struct.get("deprecated", False),
+                "deprecated_reason": self.parse_deprecation_reason(
+                    struct.get("deprecated_reason", "")
                 ),
             }
 
@@ -306,6 +330,7 @@ class Generator:
         context["procedures"] = sort_dict(context["procedures"])
         context["properties"] = sort_dict(context["properties"])
         context["enumerations"] = sort_dict(context["enumerations"])
+        context["structs"] = sort_dict(context["structs"])
         context["classes"] = sort_dict(context["classes"])
         context["exceptions"] = sort_dict(context["exceptions"])
         for cls in context["classes"].values():
@@ -314,6 +339,10 @@ class Generator:
             cls["properties"] = sort_dict(cls["properties"])
 
         return context
+
+    def as_type(self, type_info):
+        """Convert a type parsed from the service definitions into a type object"""
+        return as_type(self.types, type_info)
 
     def get_return_type(self, procedure):
         if "return_type" not in procedure:
