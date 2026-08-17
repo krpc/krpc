@@ -30,9 +30,9 @@ namespace KRPC.Client
         /// </summary>
         /// <remarks>
         /// A number, a string or an object identifier is a handful of bytes on the wire, and its
-        /// bytes are written into a buffer the thread keeps and copied out of it. A coded output
-        /// stream carries a buffer of several kilobytes of its own, which is far more to allocate
-        /// for one number than writing the number costs. Anything carried by a protobuf message
+        /// bytes are written into a buffer of that size. A coded output stream carries a buffer
+        /// of several kilobytes of its own, which is far more to allocate for one number than
+        /// writing the number costs. Anything carried by a protobuf message
         /// is left to protobuf to serialize.
         /// </remarks>
         static ByteString EncodeValue (object value, Type type)
@@ -281,29 +281,17 @@ namespace KRPC.Client
             return single.Value;
         }
 
-        // The buffer a value's bytes are written into before being copied out of it, one per
-        // thread. A value too big for it gets a buffer of its own rather than enlarging this one
-        // for the rest of the thread's life.
-        const int ScratchSize = 4096;
-
         // The longest a varint can be: ten bytes, for a 64 bit value.
         const int VarintSize = 10;
 
-        [ThreadStatic]
-        static byte[] scratch;
-
-        static byte[] Scratch (int size)
-        {
-            if (size > ScratchSize)
-                return new byte [size];
-            if (scratch == null)
-                scratch = new byte [ScratchSize];
-            return scratch;
-        }
+        // A value's bytes are written into a buffer of their own, made where they are written.
+        // Keeping one buffer per thread instead was measured and is far worse: reaching a
+        // thread's own static costs several times what making a buffer this small costs, and it
+        // is reached once for every value written.
 
         static ByteString Varint (ulong value)
         {
-            var buffer = Scratch (VarintSize);
+            var buffer = new byte [VarintSize];
             return ByteString.CopyFrom (buffer, 0, WriteVarint (value, buffer, 0));
         }
 
@@ -320,7 +308,7 @@ namespace KRPC.Client
 
         static ByteString Fixed32 (uint bits)
         {
-            var buffer = Scratch (4);
+            var buffer = new byte [4];
             for (var i = 0; i < 4; i++)
                 buffer [i] = (byte)(bits >> (8 * i));
             return ByteString.CopyFrom (buffer, 0, 4);
@@ -328,7 +316,7 @@ namespace KRPC.Client
 
         static ByteString Fixed64 (ulong bits)
         {
-            var buffer = Scratch (8);
+            var buffer = new byte [8];
             for (var i = 0; i < 8; i++)
                 buffer [i] = (byte)(bits >> (8 * i));
             return ByteString.CopyFrom (buffer, 0, 8);
@@ -337,7 +325,7 @@ namespace KRPC.Client
         static ByteString EncodeString (string value)
         {
             var count = Encoding.UTF8.GetByteCount (value);
-            var buffer = Scratch (count + VarintSize);
+            var buffer = new byte [count + VarintSize];
             var length = WriteVarint ((ulong)count, buffer, 0);
             Encoding.UTF8.GetBytes (value, 0, value.Length, buffer, length);
             return ByteString.CopyFrom (buffer, 0, length + count);
@@ -345,7 +333,7 @@ namespace KRPC.Client
 
         static ByteString EncodeBytes (byte[] value)
         {
-            var buffer = Scratch (value.Length + VarintSize);
+            var buffer = new byte [value.Length + VarintSize];
             var length = WriteVarint ((ulong)value.Length, buffer, 0);
             Buffer.BlockCopy (value, 0, buffer, length, value.Length);
             return ByteString.CopyFrom (buffer, 0, length + value.Length);
