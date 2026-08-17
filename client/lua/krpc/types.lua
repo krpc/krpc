@@ -294,6 +294,10 @@ Types.TypeBase = class()
 
 function Types.TypeBase:_init(protobuf_type, lua_type, type_string)
   self.protobuf_type = protobuf_type
+  -- A copy of the type code as a plain field. It says everything the encoding needs to know
+  -- about a type, and is read once for every value encoded or decoded, where reading it off the
+  -- protobuf message goes through that message's field lookup every time.
+  self.code = protobuf_type.code
   self.lua_type = lua_type
   self._string = type_string
 end

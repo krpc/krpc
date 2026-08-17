@@ -1,12 +1,9 @@
 local pb = require 'protobuf.pb'
-local seq = require 'pl.seq'
 local tablex = require 'pl.tablex'
 local schema = require 'krpc.schema.KRPC'
 local Types = require 'krpc.types'
 
 local encoder = {}
-
-local _types = Types()
 
 -- Where the routines below leave the bytes they produce. They are handed to a writer, and one
 -- writer shared by all of them costs nothing per value, where a closure made for the value
@@ -52,69 +49,59 @@ local function _encode_double(value)
   return _written
 end
 
-local function _encode_value(x, typ)
-  code = typ.protobuf_type.code
-  if code == Types.DOUBLE then
-    return _encode_double(x)
-  elseif code == Types.FLOAT then
-    return _encode_float(x)
-  elseif code == Types.SINT32 then
-    return _encode_varint(pb.zig_zag_encode32(x))
-  elseif code == Types.SINT64 then
-    return _encode_varint(pb.zig_zag_encode64(x))
-  elseif code == Types.UINT32 or code == Types.UINT64 then
-    return _encode_varint(x)
-  elseif code == Types.BOOL then
-    if x then
-      return _encode_varint(1)
-    else
-      return _encode_varint(0)
-    end
-  elseif code == Types.STRING or code == Types.BYTES then
-    return _encode_varint(x:len()) .. x
-  end
-  error('Failed to encode data')
-end
+-- How to encode a value, by the code of the type it has. Which of these a type wants is the
+-- first thing encoding a value asks, and a table says so in one lookup where asking a type what
+-- class it is walks its ancestry once per question.
+local _value_encoders = {
+  [Types.DOUBLE] = _encode_double,
+  [Types.FLOAT] = _encode_float,
+  [Types.SINT32] = function(x) return _encode_varint(pb.zig_zag_encode32(x)) end,
+  [Types.SINT64] = function(x) return _encode_varint(pb.zig_zag_encode64(x)) end,
+  [Types.UINT32] = _encode_varint,
+  [Types.UINT64] = _encode_varint,
+  [Types.BOOL] = function(x) return _encode_varint(x and 1 or 0) end,
+  [Types.STRING] = function(x) return _encode_varint(x:len()) .. x end,
+  [Types.BYTES] = function(x) return _encode_varint(x:len()) .. x end,
+  [Types.ENUMERATION] = function(x) return _encode_varint(pb.zig_zag_encode32(x.value)) end,
+  [Types.CLASS] = function(x) return _encode_varint(x._object_id) end,
+}
 
 function encoder.encode(x, typ)
-  if typ:is_a(Types.MessageType) then
-    return x:SerializeToString()
-  elseif typ:is_a(Types.ValueType) then
-    return _encode_value(x, typ)
-  elseif typ:is_a(Types.EnumerationType) then
-    return _encode_value(x.value, _types:sint32_type())
-  elseif typ:is_a(Types.ClassType) then
-    return _encode_value(x._object_id, _types:uint64_type())
-  elseif typ:is_a(Types.ListType) then
+  local code = typ.code
+  local encode_value = _value_encoders[code]
+  if encode_value then
+    return encode_value(x)
+  end
+  if code == Types.LIST then
     local msg = schema.List()
     for item in x:iter() do
       msg.items:append(encoder.encode(item, typ.value_type))
     end
     return msg:SerializeToString()
-  elseif typ:is_a(Types.DictionaryType) then
+  elseif code == Types.DICTIONARY then
     local msg = schema.Dictionary()
-    local entry_type = schema.DictionaryEntry()
     for key,value in tablex.sort(x) do
       local entry = msg.entries:add()
       entry.key = encoder.encode(key, typ.key_type)
       entry.value = encoder.encode(value, typ.value_type)
     end
     return msg:SerializeToString()
-  elseif typ:is_a(Types.SetType) then
+  elseif code == Types.SET then
     local msg = schema.Set()
     for item in pairs(x) do
       msg.items:append(encoder.encode(item, typ.value_type))
     end
     return msg:SerializeToString()
-  elseif typ:is_a(Types.TupleType) then
+  elseif code == Types.TUPLE then
     local msg = schema.Tuple()
     for _,item in ipairs(tablex.zip(x, typ.value_types)) do
       msg.items:append(encoder.encode(item[1], item[2]))
     end
     return msg:SerializeToString()
-  else
-    error('Cannot encode object of type ' .. tostring(typ))
+  elseif typ:is_a(Types.MessageType) then
+    return x:SerializeToString()
   end
+  error('Cannot encode object of type ' .. tostring(typ))
 end
 
 function encoder.encode_message_with_size(message)
