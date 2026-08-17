@@ -861,74 +861,6 @@ namespace KRPC.Client.Services.TestService
     }
 
     /// <summary>
-    /// Nested struct documentation string.
-    /// </summary>
-    [Serializable]
-    [global::KRPC.Client.Attributes.KRPCStruct]
-    public struct TestNestedStruct : IEquatable<TestNestedStruct>
-    {
-        /// <summary>
-        /// Construct a TestNestedStruct from the values of its fields.
-        /// </summary>
-        public TestNestedStruct (global::KRPC.Client.Services.TestService.TestStruct structField, global::KRPC.Client.Services.TestService.TestClass objectField, string stringField) : this ()
-        {
-            StructField = structField;
-            ObjectField = objectField;
-            StringField = stringField;
-        }
-
-        public global::KRPC.Client.Services.TestService.TestStruct StructField { get; private set; }
-
-        public global::KRPC.Client.Services.TestService.TestClass ObjectField { get; private set; }
-
-        public string StringField { get; private set; }
-
-        /// <summary>
-        /// Returns true if this TestNestedStruct is equal to the given object.
-        /// </summary>
-        public override bool Equals (object obj)
-        {
-            return obj is TestNestedStruct && Equals ((TestNestedStruct)obj);
-        }
-
-        /// <summary>
-        /// Returns true if this TestNestedStruct is equal to the given one.
-        /// </summary>
-        public bool Equals (TestNestedStruct other)
-        {
-            return global::KRPC.Client.ValueUtils.Equal (StructField, other.StructField) && global::KRPC.Client.ValueUtils.Equal (ObjectField, other.ObjectField) && global::KRPC.Client.ValueUtils.Equal (StringField, other.StringField);
-        }
-
-        /// <summary>
-        /// Returns a hash code for this TestNestedStruct.
-        /// </summary>
-        public override int GetHashCode ()
-        {
-            int hash = 17;
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StructField);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ObjectField);
-            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StringField);
-            return hash;
-        }
-
-        /// <summary>
-        /// Returns true if the two TestNestedStruct values are equal.
-        /// </summary>
-        public static bool operator == (TestNestedStruct lhs, TestNestedStruct rhs)
-        {
-            return lhs.Equals (rhs);
-        }
-
-        /// <summary>
-        /// Returns true if the two TestNestedStruct values are not equal.
-        /// </summary>
-        public static bool operator != (TestNestedStruct lhs, TestNestedStruct rhs)
-        {
-            return !lhs.Equals (rhs);
-        }
-    }
-
-    /// <summary>
     /// Struct documentation string.
     /// </summary>
     [Serializable]
@@ -998,6 +930,74 @@ namespace KRPC.Client.Services.TestService
         /// Returns true if the two TestStruct values are not equal.
         /// </summary>
         public static bool operator != (TestStruct lhs, TestStruct rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+    }
+
+    /// <summary>
+    /// Nested struct documentation string.
+    /// </summary>
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+    public struct TestNestedStruct : IEquatable<TestNestedStruct>
+    {
+        /// <summary>
+        /// Construct a TestNestedStruct from the values of its fields.
+        /// </summary>
+        public TestNestedStruct (global::KRPC.Client.Services.TestService.TestStruct structField, global::KRPC.Client.Services.TestService.TestClass objectField, string stringField) : this ()
+        {
+            StructField = structField;
+            ObjectField = objectField;
+            StringField = stringField;
+        }
+
+        public global::KRPC.Client.Services.TestService.TestStruct StructField { get; private set; }
+
+        public global::KRPC.Client.Services.TestService.TestClass ObjectField { get; private set; }
+
+        public string StringField { get; private set; }
+
+        /// <summary>
+        /// Returns true if this TestNestedStruct is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is TestNestedStruct && Equals ((TestNestedStruct)obj);
+        }
+
+        /// <summary>
+        /// Returns true if this TestNestedStruct is equal to the given one.
+        /// </summary>
+        public bool Equals (TestNestedStruct other)
+        {
+            return global::KRPC.Client.ValueUtils.Equal (StructField, other.StructField) && global::KRPC.Client.ValueUtils.Equal (ObjectField, other.ObjectField) && global::KRPC.Client.ValueUtils.Equal (StringField, other.StringField);
+        }
+
+        /// <summary>
+        /// Returns a hash code for this TestNestedStruct.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StructField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (ObjectField);
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode (StringField);
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNestedStruct values are equal.
+        /// </summary>
+        public static bool operator == (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two TestNestedStruct values are not equal.
+        /// </summary>
+        public static bool operator != (TestNestedStruct lhs, TestNestedStruct rhs)
         {
             return !lhs.Equals (rhs);
         }

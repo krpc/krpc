@@ -58,15 +58,6 @@ class DeprecatedStruct(NamedTuple):
     """
 
 
-class TestNestedStruct(NamedTuple):
-    """
-    Nested struct documentation string.
-    """
-    struct_field: TestStruct
-    object_field: TestClass
-    string_field: str
-
-
 class TestStruct(NamedTuple):
     """
     Struct documentation string.
@@ -78,6 +69,15 @@ class TestStruct(NamedTuple):
     string_field: str
     enum_field: TestEnum
     list_field: List[int]
+
+
+class TestNestedStruct(NamedTuple):
+    """
+    Nested struct documentation string.
+    """
+    struct_field: TestStruct
+    object_field: TestClass
+    string_field: str
 
 
 class CustomException(RuntimeError):
@@ -443,8 +443,8 @@ class TestService:
     }
     _structs = {
         "DeprecatedStruct": DeprecatedStruct,
-        "TestNestedStruct": TestNestedStruct,
         "TestStruct": TestStruct,
+        "TestNestedStruct": TestNestedStruct,
     }
     _exceptions = {
         "CustomException": CustomException,

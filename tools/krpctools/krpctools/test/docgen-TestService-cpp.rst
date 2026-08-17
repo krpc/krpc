@@ -78,6 +78,17 @@
 
    
 
+   .. function:: TestStruct counter_struct(std::string id = "")
+
+      Returns a struct whose IntField counts the number of times it has been called,
+      so that a stream on it changes on every update.
+
+      :Parameters:
+
+
+
+   
+
    .. function:: TestClass create_test_object(std::string value)
 
 
@@ -288,6 +299,16 @@
 
    
 
+   .. function:: std::vector<TestStruct> increment_list_of_structs(std::vector<TestStruct> l)
+
+
+
+      :Parameters:
+
+
+
+   
+
    .. function:: std::map<std::string, std::vector<int32_t>> increment_nested_collection(std::map<std::string, std::vector<int32_t>> d)
 
 
@@ -361,6 +382,16 @@
    
 
    .. function:: std::vector<int32_t> list_default(std::vector<int32_t> x = std::vector<int32_t>{1, 2, 3})
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestNestedStruct nested_struct_echo(TestNestedStruct x)
 
 
 
@@ -479,6 +510,36 @@
    
 
    .. function:: int32_t string_to_int32(std::string value)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestStruct struct_default(TestStruct x = TestStruct{42, "jeb", TestEnum::value_b, std::vector<int32_t>{1, 2, 3}})
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestStruct struct_echo(TestStruct x)
+
+
+
+      :Parameters:
+
+
+
+   
+
+   .. function:: TestStruct struct_echo_nullable(TestStruct x)
 
 
 
@@ -736,6 +797,67 @@
 
       Deprecated enum ValueB documentation string.
 
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: TestStruct
+
+   Struct documentation string.
+
+
+   .. member:: int32_t int_field
+
+      Struct IntField documentation string.
+
+   .. member:: std::string string_field
+
+
+
+   .. member:: TestEnum enum_field
+
+
+
+   .. member:: std::vector<int32_t> list_field
+
+
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: TestNestedStruct
+
+   Nested struct documentation string.
+
+
+   .. member:: TestStruct struct_field
+
+
+
+   .. member:: TestClass object_field
+
+
+
+   .. member:: std::string string_field
+
+
+
+
+.. namespace:: krpc::services::TestService
+.. struct:: DeprecatedStruct
+
+   .. warning:: Deprecated. Use the TestStruct struct instead.
+
+   Deprecated struct documentation string.
+
+
+   .. member:: int32_t value
+
+      Deprecated struct Value documentation string.
+
+   .. member:: int32_t old_value
+
+      .. warning:: Deprecated. Use the Value field instead.
+
+      Deprecated struct OldValue documentation string.
 
 
 .. namespace:: krpc::services::TestService

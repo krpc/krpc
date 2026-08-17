@@ -73,6 +73,17 @@
 
       :Game Scenes: All
 
+   .. method:: TestStruct CounterStruct(string id = "")
+
+      Returns a struct whose IntField counts the number of times it has been called,
+      so that a stream on it changes on every update.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: TestClass CreateTestObject(string value)
 
 
@@ -282,6 +293,16 @@
 
       :Game Scenes: All
 
+   .. method:: System.Collections.Generic.IList<TestStruct> IncrementListOfStructs(System.Collections.Generic.IList<TestStruct> l)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<int>> IncrementNestedCollection(System.Collections.Generic.IDictionary<string,System.Collections.Generic.IList<int>> d)
 
 
@@ -355,6 +376,16 @@
       :Game Scenes: All
 
    .. method:: System.Collections.Generic.IList<int> ListDefault(System.Collections.Generic.IList<int> x = { 1, 2, 3 })
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: TestNestedStruct NestedStructEcho(TestNestedStruct x)
 
 
 
@@ -470,6 +501,36 @@
       :Game Scenes: All
 
    .. method:: int StringToInt32(string value)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: TestStruct StructDefault(TestStruct x = new TestStruct(42, "jeb", TestEnum.ValueB, { 1, 2, 3 }))
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: TestStruct StructEcho(TestStruct x)
+
+
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
+   .. method:: TestStruct StructEchoNullable(TestStruct x)
 
 
 
@@ -723,6 +784,64 @@
 
       Deprecated enum ValueB documentation string.
 
+
+
+.. struct:: TestStruct
+
+   Struct documentation string.
+
+
+   .. property:: int IntField { get; set; }
+
+      Struct IntField documentation string.
+
+   .. property:: string StringField { get; set; }
+
+
+
+   .. property:: TestEnum EnumField { get; set; }
+
+
+
+   .. property:: System.Collections.Generic.IList<int> ListField { get; set; }
+
+
+
+
+.. struct:: TestNestedStruct
+
+   Nested struct documentation string.
+
+
+   .. property:: TestStruct StructField { get; set; }
+
+
+
+   .. property:: TestClass ObjectField { get; set; }
+
+
+
+   .. property:: string StringField { get; set; }
+
+
+
+
+.. struct:: DeprecatedStruct
+
+   .. warning:: Deprecated. Use the TestStruct struct instead.
+
+   Deprecated struct documentation string.
+
+
+   .. property:: int Value { get; set; }
+
+      Deprecated struct Value documentation string.
+
+   .. property:: int OldValue { get; set; }
+
+      .. warning:: Deprecated. Use the Value field instead.
+
+      Deprecated struct OldValue documentation string.
 
 
 .. class:: CustomException

@@ -7,7 +7,7 @@ from krpc.definitions import (
     register_all,
     topological_order,
 )
-from krpc.types import Types, TupleType, ListType, SetType, DictionaryType
+from krpc.types import Types, TupleType, ListType, SetType, DictionaryType, StructType
 from .utils import as_type, as_protobuf_type
 
 
@@ -39,8 +39,9 @@ class Definitions:
 
     @staticmethod
     def collection_types(types):
-        """The collection types among the given types, and the collection types they contain,
-        innermost first, so that a type always follows the types it is composed of."""
+        """The structural types among the given types, and the ones they contain, innermost
+        first, so that a type always follows the types it is composed of. A structure counts as
+        one, as it is composed of the types of its fields in the same way."""
         return topological_order(
             [typ for typ in types if _is_collection(typ)],
             lambda typ: typ.protobuf_type.SerializeToString(),
@@ -129,12 +130,14 @@ def _register_exception(service, name):
 
 
 def _is_collection(typ):
-    return isinstance(typ, (TupleType, ListType, SetType, DictionaryType))
+    return isinstance(typ, (TupleType, ListType, SetType, DictionaryType, StructType))
 
 
 def _contained_collection_types(typ):
     if isinstance(typ, TupleType):
         contained = typ.value_types
+    elif isinstance(typ, StructType):
+        contained = typ.field_types
     elif isinstance(typ, (ListType, SetType)):
         contained = [typ.value_type]
     elif isinstance(typ, DictionaryType):
