@@ -173,6 +173,11 @@ class _ValueEncoder:
         value = _pb_zigzag_encode(value)
         if value < 128:
             return _SINGLE_BYTE_VARINTS[value]
+        # Two bytes carry a value up to 16383, which is most of what is not one byte, and
+        # writing them costs one call where protobuf's encoder builds a list and joins it.
+        # A collection reaches this once per value it carries.
+        if value < 16384:
+            return bytes((value & 0x7F | 0x80, value >> 7))
         data: List[bytes] = []
         _pb_SignedVarintEncoder(data.append, value, True)
         return b"".join(data)

@@ -178,7 +178,14 @@ class _ValueDecoder:
         # The zigzag payload is an unsigned varint. Reading it as a signed one would sign
         # extend it as two's complement first, which corrupts anything from 2**62 up once
         # the payload sets bit 63 - long.MaxValue would decode as -1.
-        return _pb_zigzag_decode(_decode_varint(data)[0])
+        #
+        # The single byte case is read here rather than through _decode_varint, which is the
+        # general form of it: a collection reaches this once per value it carries, and a
+        # value from -64 to 63 is one byte.
+        first = data[0]
+        if first < 128:
+            return _pb_zigzag_decode(first)
+        return _pb_zigzag_decode(_pb_decode_varint(data, 0)[0])
 
     @classmethod
     def _decode_varint(cls, data: bytes) -> int:
