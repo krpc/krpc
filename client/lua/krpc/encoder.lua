@@ -66,6 +66,44 @@ local _value_encoders = {
   [Types.CLASS] = function(x) return _encode_varint(x._object_id) end,
 }
 
+-- The tags the messages written here are written with, each a field's number and wire type in
+-- one byte. From krpc.proto:
+--
+--   Request.calls             1, length delimited
+--   ProcedureCall.service     1, length delimited
+--   ProcedureCall.procedure   2, length delimited
+--   ProcedureCall.arguments   3, length delimited
+--   Argument.position         1, varint
+--   Argument.value            2, length delimited
+--   Argument.is_null          3, varint
+--   Tuple.items               1, length delimited
+--   List.items                1, length delimited
+--   Set.items                 1, length delimited
+--   Dictionary.entries        1, length delimited
+--   DictionaryEntry.key       1, length delimited
+--   DictionaryEntry.value     2, length delimited
+--
+-- test_encoder reads back what is written with these through the protocol buffer message layer
+-- and checks it arrived intact, so a field renumbered in the schema without these following, or
+-- a tag written wrongly, fails there.
+local _REQUEST_CALLS = '\10'
+local _CALL_SERVICE = '\10'
+local _CALL_PROCEDURE = '\18'
+local _CALL_ARGUMENTS = '\26'
+local _ARGUMENT_POSITION = '\8'
+local _ARGUMENT_VALUE = '\18'
+local _ARGUMENT_IS_NULL = '\24'
+local _ITEMS = '\10'
+local _ENTRIES = '\10'
+local _ENTRY_KEY = '\10'
+local _ENTRY_VALUE = '\18'
+
+local _concat = table.concat
+
+local function _delimited(tag, data)
+  return tag .. _encode_varint(data:len()) .. data
+end
+
 function encoder.encode(x, typ)
   local code = typ.code
   local encode_value = _value_encoders[code]
@@ -73,31 +111,43 @@ function encoder.encode(x, typ)
     return encode_value(x)
   end
   if code == Types.LIST then
-    local msg = schema.List()
+    local value_type = typ.value_type
+    local parts = {}
+    local count = 0
     for item in x:iter() do
-      msg.items:append(encoder.encode(item, typ.value_type))
+      count = count + 1
+      parts[count] = _delimited(_ITEMS, encoder.encode(item, value_type))
     end
-    return msg:SerializeToString()
+    return _concat(parts)
   elseif code == Types.DICTIONARY then
-    local msg = schema.Dictionary()
+    local key_type = typ.key_type
+    local value_type = typ.value_type
+    local parts = {}
+    local count = 0
     for key,value in tablex.sort(x) do
-      local entry = msg.entries:add()
-      entry.key = encoder.encode(key, typ.key_type)
-      entry.value = encoder.encode(value, typ.value_type)
+      local entry = _delimited(_ENTRY_KEY, encoder.encode(key, key_type)) ..
+                    _delimited(_ENTRY_VALUE, encoder.encode(value, value_type))
+      count = count + 1
+      parts[count] = _delimited(_ENTRIES, entry)
     end
-    return msg:SerializeToString()
+    return _concat(parts)
   elseif code == Types.SET then
-    local msg = schema.Set()
+    local value_type = typ.value_type
+    local parts = {}
+    local count = 0
     for item in pairs(x) do
-      msg.items:append(encoder.encode(item, typ.value_type))
+      count = count + 1
+      parts[count] = _delimited(_ITEMS, encoder.encode(item, value_type))
     end
-    return msg:SerializeToString()
+    return _concat(parts)
   elseif code == Types.TUPLE then
-    local msg = schema.Tuple()
+    local parts = {}
+    local count = 0
     for _,item in ipairs(tablex.zip(x, typ.value_types)) do
-      msg.items:append(encoder.encode(item[1], item[2]))
+      count = count + 1
+      parts[count] = _delimited(_ITEMS, encoder.encode(item[1], item[2]))
     end
-    return msg:SerializeToString()
+    return _concat(parts)
   elseif typ:is_a(Types.MessageType) then
     return x:SerializeToString()
   end
@@ -109,33 +159,6 @@ function encoder.encode_message_with_size(message)
   local data = message:SerializeToString()
   local delimiter = _encode_varint(data:len())
   return delimiter .. data
-end
-
--- The tags the request carrying a procedure call is written with, each the field's number and
--- wire type in one byte. From krpc.proto:
---
---   Request.calls           1, length delimited
---   ProcedureCall.service   1, length delimited
---   ProcedureCall.procedure 2, length delimited
---   ProcedureCall.arguments 3, length delimited
---   Argument.position       1, varint
---   Argument.value          2, length delimited
---   Argument.is_null        3, varint
---
--- test_encoder builds the same requests through the protocol buffer message layer and compares
--- the bytes, so a field renumbered in the schema without these following fails there.
-local _REQUEST_CALLS = '\10'
-local _CALL_SERVICE = '\10'
-local _CALL_PROCEDURE = '\18'
-local _CALL_ARGUMENTS = '\26'
-local _ARGUMENT_POSITION = '\8'
-local _ARGUMENT_VALUE = '\18'
-local _ARGUMENT_IS_NULL = '\24'
-
-local _concat = table.concat
-
-local function _delimited(tag, data)
-  return tag .. _encode_varint(data:len()) .. data
 end
 
 --- Encode the request carrying one procedure call, prefixed by its size, ready to send.

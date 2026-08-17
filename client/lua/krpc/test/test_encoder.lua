@@ -4,6 +4,9 @@ local encoder = require 'krpc.encoder'
 local platform = require 'krpc.platform'
 local Types = require 'krpc.types'
 local schema = require 'krpc.schema.KRPC'
+local List = require 'pl.List'
+local Map = require 'pl.Map'
+local Set = require 'pl.Set'
 
 local TestEncoder = class()
 
@@ -109,6 +112,47 @@ function TestEncoder:test_encode_request_round_trips_through_message_layer()
       end
     end
   end
+end
+
+-- A list, a set, a tuple and a dictionary are written the same way the request is, so they are
+-- read back through the message layer for the same reason.
+function TestEncoder:test_encode_collections_round_trip_through_message_layer()
+  local long = string.rep('x', 300)
+
+  local list_type = types:list_type(types:string_type())
+  local values = List{'one', 'two', long}
+  local list_message = schema.List()
+  list_message:ParseFromString(encoder.encode(values, list_type))
+  luaunit.assertEquals(3, #list_message.items)
+  for i, item in ipairs(list_message.items) do
+    luaunit.assertEquals(encoder.encode(values[i], types:string_type()), item)
+  end
+
+  local set_type = types:set_type(types:uint32_type())
+  local set_message = schema.Set()
+  set_message:ParseFromString(encoder.encode(Set{7}, set_type))
+  luaunit.assertEquals(1, #set_message.items)
+  luaunit.assertEquals(encoder.encode(7, types:uint32_type()), set_message.items[1])
+
+  local tuple_type = types:tuple_type(List{types:uint32_type(), types:string_type()})
+  local tuple_message = schema.Tuple()
+  tuple_message:ParseFromString(encoder.encode(List{7, long}, tuple_type))
+  luaunit.assertEquals(2, #tuple_message.items)
+  luaunit.assertEquals(encoder.encode(7, types:uint32_type()), tuple_message.items[1])
+  luaunit.assertEquals(encoder.encode(long, types:string_type()), tuple_message.items[2])
+
+  local dictionary_type = types:dictionary_type(types:string_type(), types:uint32_type())
+  local dictionary_message = schema.Dictionary()
+  dictionary_message:ParseFromString(encoder.encode(Map{a = 1, b = 2}, dictionary_type))
+  luaunit.assertEquals(2, #dictionary_message.entries)
+  luaunit.assertEquals(encoder.encode('a', types:string_type()),
+                       dictionary_message.entries[1].key)
+  luaunit.assertEquals(encoder.encode(1, types:uint32_type()),
+                       dictionary_message.entries[1].value)
+  luaunit.assertEquals(encoder.encode('b', types:string_type()),
+                       dictionary_message.entries[2].key)
+  luaunit.assertEquals(encoder.encode(2, types:uint32_type()),
+                       dictionary_message.entries[2].value)
 end
 
 function TestEncoder:test_encode_class()
