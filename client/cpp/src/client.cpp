@@ -50,39 +50,49 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {
-  schema::Response response;
-  {
-    std::lock_guard<std::mutex> lock_guard(*lock);
-    rpc_connection->send(encoder::encode_message_with_size(request));
-    rpc_connection->receive_message(response);
-  }
-
-  if (response.has_error()) throw_exception(response.error());
-
-  if (response.results(0).has_error()) throw_exception(response.results(0).error());
-
-  return response.results(0);
+  std::lock_guard<std::mutex> lock_guard(*lock);
+  return this->send_request(request);
 }
 
 schema::ProcedureResult Client::invoke(const schema::ProcedureCall& call) {
-  schema::Request request;
+  std::lock_guard<std::mutex> lock_guard(*lock);
+  request_buffer.Clear();
   // Copied because the call is received by const reference and a Request owns its calls, so it
   // cannot be moved in. CopyFrom also stays correct if ProcedureCall gains fields.
-  request.add_calls()->CopyFrom(call);
-  return this->invoke(request);
+  request_buffer.add_calls()->CopyFrom(call);
+  return this->send_request(request_buffer);
 }
 
 schema::ProcedureResult Client::invoke(const std::string& service, const std::string& procedure,
                                        const std::vector<encoder::Value>& args) {
-  return this->invoke(this->build_request(service, procedure, args));
-}
-
-schema::Request Client::build_request(const std::string& service, const std::string& procedure,
-                                      const std::vector<encoder::Value>& args) {
-  schema::Request request;
-  schema::ProcedureCall* call = request.add_calls();
+  std::lock_guard<std::mutex> lock_guard(*lock);
+  request_buffer.Clear();
+  schema::ProcedureCall* call = request_buffer.add_calls();
   call->set_service(service);
   call->set_procedure(procedure);
+  add_arguments(call, args);
+  return this->send_request(request_buffer);
+}
+
+// Send a request and return the result it is answered by. Called with lock held, which is what
+// makes the response and the bytes the request is written as safe to keep from one call to the
+// next.
+schema::ProcedureResult Client::send_request(const schema::Request& request) {
+  encoder::encode_message_with_size(request, &request_data);
+  rpc_connection->send(request_data);
+  rpc_connection->receive_message(response_buffer);
+
+  if (response_buffer.has_error()) throw_exception(response_buffer.error());
+
+  // Moved out of the response, which is about to be reused, rather than copied out of it.
+  schema::ProcedureResult result = std::move(*response_buffer.mutable_results(0));
+
+  if (result.has_error()) throw_exception(result.error());
+
+  return result;
+}
+
+void Client::add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args) {
   for (unsigned int i = 0; i < args.size(); i++) {
     schema::Argument* arg = call->add_arguments();
     arg->set_position(i);
@@ -92,6 +102,15 @@ schema::Request Client::build_request(const std::string& service, const std::str
     else
       arg->set_value(args[i].value);
   }
+}
+
+schema::Request Client::build_request(const std::string& service, const std::string& procedure,
+                                      const std::vector<encoder::Value>& args) {
+  schema::Request request;
+  schema::ProcedureCall* call = request.add_calls();
+  call->set_service(service);
+  call->set_procedure(procedure);
+  add_arguments(call, args);
   return request;
 }
 
@@ -100,15 +119,7 @@ schema::ProcedureCall Client::build_call(const std::string& service, const std::
   schema::ProcedureCall call;
   call.set_service(service);
   call.set_procedure(procedure);
-  for (unsigned int i = 0; i < args.size(); i++) {
-    schema::Argument* arg = call.add_arguments();
-    arg->set_position(i);
-    // A null argument is signaled by is_null with the value left unset.
-    if (args[i].is_null)
-      arg->set_is_null(true);
-    else
-      arg->set_value(args[i].value);
-  }
+  add_arguments(&call, args);
   return call;
 }
 

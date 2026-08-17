@@ -48,6 +48,9 @@ template <typename... Ts>
 std::string encode(const std::tuple<Ts...>& tuple);
 
 std::string encode_message_with_size(const google::protobuf::MessageLite& message);
+/** Encode a message, preceded by its size, into data. Reuses whatever data has already
+    allocated, for a caller that encodes one message after another. */
+void encode_message_with_size(const google::protobuf::MessageLite& message, std::string* data);
 
 template <typename T>
 inline std::string encode(const Object<T>& object) {

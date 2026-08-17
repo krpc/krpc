@@ -43,6 +43,8 @@ class Client {
  private:
   friend class StreamManager;
   void throw_exception(const schema::Error& error) const;
+  schema::ProcedureResult send_request(const schema::Request& request);
+  static void add_arguments(schema::ProcedureCall* call, const std::vector<encoder::Value>& args);
 
  public:
   std::shared_ptr<StreamImpl> add_stream(const schema::ProcedureCall& call);
@@ -80,6 +82,13 @@ class Client {
   std::shared_ptr<Connection> rpc_connection;
   std::shared_ptr<StreamManager> stream_manager;
   std::shared_ptr<std::mutex> lock;
+  // The request a call is built into, the bytes it is written as, and the response it is
+  // answered by. Kept from one call to the next and guarded by lock, so that a call reuses
+  // what the one before it allocated: clearing a protobuf message keeps the storage its fields
+  // have, and the buffer keeps its capacity.
+  schema::Request request_buffer;
+  std::string request_data;
+  schema::Response response_buffer;
   std::map<std::pair<std::string, std::string>, std::function<void(std::string)>>
       exception_throwers;
   // Guards exception_throwers. Services register their throwers as they are constructed,
