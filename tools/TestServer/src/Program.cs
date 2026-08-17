@@ -24,6 +24,7 @@ namespace TestServer
             Console.WriteLine ("usage: TestServer.exe [-h] [-v] [--type=TYPE]");
             Console.WriteLine ("                      [--bind=ADDRESS] [--rpc_port=VALUE] [--stream_port=VALUE]");
             Console.WriteLine ("                      [--port=PATH]");
+            Console.WriteLine ("                      [--no-frame-pacing]");
             Console.WriteLine ("                      [--debug] [--quiet] [--server-debug]");
             Console.WriteLine ();
             Console.WriteLine ("A kRPC test server for the client library unit tests");
@@ -40,6 +41,7 @@ namespace TestServer
             Logger.Enabled = true;
             Logger.Level = Logger.Severity.Info;
             bool serverDebug = false;
+            bool framePacing = true;
             string type = "protobuf";
             string bind = "127.0.0.1";
             ushort rpcPort = 0;
@@ -101,6 +103,9 @@ namespace TestServer
                 }, {
                     "server-debug", "Output debug information about the server",
                     v => serverDebug = v != null
+                }, {
+                    "no-frame-pacing", "Run the update loop as fast as it will go, rather than pacing it to 60 updates a second, and turn adaptive rate control off with it. For timing a client: paced, a call whose client takes longer than the receive timeout to send the next one is served once per update, so the round trip measures the update rate rather than the client.",
+                    v => framePacing = v == null
                 }
             };
             options.Parse (args);
@@ -126,6 +131,11 @@ namespace TestServer
                 "Loaded " + typeof (KRPC.Benchmarks.Benchmark).Assembly.GetName ().Name);
 
             var core = Core.Instance;
+            // Adaptive rate control keys off how long an update took against a target update
+            // rate. Unpaced there is no such rate, so all it does is wander MaxTimePerUpdate
+            // around, which is run to run variation in a measurement for nothing.
+            if (!framePacing)
+                Configuration.Instance.AdaptiveRateControl = false;
             var serverVersion = Assembly.GetEntryAssembly ().GetName ().Version;
             core.Version = serverVersion.Major + "." + serverVersion.Minor + "." + serverVersion.Build;
             CallContext.GameScene = GameScene.SpaceCenter;
@@ -174,6 +184,7 @@ namespace TestServer
             Logger.WriteLine ("Starting server...");
             core.StartAll ();
             Logger.WriteLine ("type = " + type);
+            Logger.WriteLine ("frame pacing = " + (framePacing ? "60 updates/s" : "off"));
             if (rpcTcpServer != null) {
                 Logger.WriteLine ("bind = " + bindAddress);
                 Logger.WriteLine ("rpc_port = " + rpcTcpServer.ActualPort);
@@ -208,13 +219,18 @@ namespace TestServer
 
                 // Wait, to force 60 FPS — sleep most of the remaining time rather than
                 // spinning, so the process doesn't burn a core during profiling/benchmarks.
-                var remainingTicks = ticksPerUpdate - timer.ElapsedTicks;
-                if (remainingTicks > Stopwatch.Frequency / 1000) {
-                    var sleepMs = (int)(remainingTicks * 1000L / Stopwatch.Frequency) - 1;
-                    if (sleepMs > 0)
-                        Thread.Sleep (sleepMs);
-                }
-                while (timer.ElapsedTicks < ticksPerUpdate) {
+                // Unpaced, the next update follows immediately instead, which costs a core
+                // and is what makes a round trip measure the client rather than the update
+                // it landed in.
+                if (framePacing) {
+                    var remainingTicks = ticksPerUpdate - timer.ElapsedTicks;
+                    if (remainingTicks > Stopwatch.Frequency / 1000) {
+                        var sleepMs = (int)(remainingTicks * 1000L / Stopwatch.Frequency) - 1;
+                        if (sleepMs > 0)
+                            Thread.Sleep (sleepMs);
+                    }
+                    while (timer.ElapsedTicks < ticksPerUpdate) {
+                    }
                 }
                 update++;
             }
