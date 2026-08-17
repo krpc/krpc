@@ -239,6 +239,50 @@ against KSP from outside a checkout of this repository. Installing them with `pi
 `krpc-install` and `krpc-run-ksp` console scripts, and registers a pytest plugin so the tests run
 with `pytest` directly — the equivalents of the two Bazel targets above.
 
+### Benchmarks
+
+`tools/benchmarks/` implements a benchmark suite to measure the performance of the clients and server,
+and tools for A/B testing to compare performance.
+
+```
+bazel run //tools/benchmarks:testserver              # server, game-less
+bazel run //tools/benchmarks:python                  # a client, against TestServer
+bazel run //tools/benchmarks:cpp                     #   "  (also: java, csharp, lua)
+bazel run //tools/benchmarks:server                  # server, in game, launches KSP
+```
+
+Each takes `--json PATH` which writes the results to a file, and:
+```
+bazel run //tools/benchmarks:compare -- before.json after.json
+```
+prints the two result sets side by side for comparison, marking the changes large enough to be worth
+reading. How large that is depends on how much the machine moves on its own, which is worth measuring
+rather than guessing at: run the suite twice without changing anything, and pass both runs as the
+noise floor.
+```
+bazel run //tools/benchmarks:compare -- before.json after.json --noise a.json b.json
+```
+
+What each one measures:
+
+ * **`:testserver`** — what the server pays per remote procedure call: argument decode, dispatch,
+   the procedure, result encode. It runs against `TestServer`, which is the server without the
+   game, so a change to `core/` or `server/` can be measured without launching the game.
+ * **`:python`, `:cpp`, `:java`, `:csharp`, `:lua`** — what a client pays: the round trip for a
+   call, and what a call carrying a collection of values costs, against the same `TestServer`.
+   Measuring a client means timing it from inside that client, so each is its own program in its
+   own language, printing results for `run_client.py` to turn into the usual table.
+
+   They run against a server started with `--no-frame-pacing`, which runs its update loop as
+   fast as it will go: paced, a round trip is inflated by the part of each update that does not
+   go to RPCs, and a client that takes longer than the server's receive timeout to send its next
+   call is served once per update, so the figure stops being the client's cost and becomes
+   16.7 ms.
+ * **`:server`** — the same per-call measurement against real `SpaceCenter` procedures in a live
+   game, plus the object-access microbenchmarks and the cost of a stream over a few hundred parts.
+   It is a pytest suite, so arguments go to pytest (`-- tools/benchmarks/server/test_station.py`,
+   `-- -k stream`).
+
 ## Tools
 
 Included in the project are various tools to aid development.
