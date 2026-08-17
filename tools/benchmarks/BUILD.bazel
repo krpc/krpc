@@ -179,6 +179,23 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+py_binary(
+    name = "lua",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=lua",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath //client/lua:benchmark)",
+    ],
+    data = [
+        "//client/lua:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 test_suite(
     name = "test",
     tests = [
