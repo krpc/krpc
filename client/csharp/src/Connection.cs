@@ -23,6 +23,11 @@ namespace KRPC.Client
         CodedOutputStream codedRpcStream;
         MessageReader rpcReader;
 
+        // The request a call is sent as, and the parts it is built from. See BuildRequest.
+        readonly Request request = new Request ();
+        readonly ProcedureCall call = new ProcedureCall ();
+        readonly List<Argument> callArguments = new List<Argument> ();
+
         internal StreamManager StreamManager {
             get;
             private set;
@@ -38,6 +43,9 @@ namespace KRPC.Client
             if (address == null)
                 address = IPAddress.Loopback;
 
+            // Every request carries the one call, which is filled in for each of them.
+            request.Calls.Add (call);
+
             rpcClient = new TcpClient ();
             rpcClient.Connect (address, rpcPort);
             // A call writes a request and then waits for its response, so there is never a
@@ -47,11 +55,11 @@ namespace KRPC.Client
             rpcStream = rpcClient.GetStream ();
             codedRpcStream = new CodedOutputStream (rpcStream, true);
             rpcReader = new MessageReader (rpcStream);
-            var request = new ConnectionRequest ();
-            request.Type = Type.Rpc;
-            request.ClientName = name;
-            codedRpcStream.WriteLength (request.CalculateSize ());
-            request.WriteTo (codedRpcStream);
+            var connectionRequest = new ConnectionRequest ();
+            connectionRequest.Type = Type.Rpc;
+            connectionRequest.ClientName = name;
+            codedRpcStream.WriteLength (connectionRequest.CalculateSize ());
+            connectionRequest.WriteTo (codedRpcStream);
             codedRpcStream.Flush ();
             rpcReader.Read ();
             var response = ConnectionResponse.Parser.ParseFrom (
@@ -64,12 +72,12 @@ namespace KRPC.Client
                 streamClient.Connect (address, streamPort);
                 streamClient.NoDelay = true;
                 var streamStream = streamClient.GetStream ();
-                request = new ConnectionRequest ();
-                request.Type = Type.Stream;
-                request.ClientIdentifier = response.ClientIdentifier;
+                connectionRequest = new ConnectionRequest ();
+                connectionRequest.Type = Type.Stream;
+                connectionRequest.ClientIdentifier = response.ClientIdentifier;
                 var codedStreamStream = new CodedOutputStream (streamStream, true);
-                codedStreamStream.WriteLength (request.CalculateSize ());
-                request.WriteTo (codedStreamStream);
+                codedStreamStream.WriteLength (connectionRequest.CalculateSize ());
+                connectionRequest.WriteTo (codedStreamStream);
                 codedStreamStream.Flush ();
                 // The reader that reads the reply goes on to read the stream updates that
                 // follow it. It may have taken the first of them along with the reply, so a
@@ -159,16 +167,10 @@ namespace KRPC.Client
         public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             CheckDisposed ();
-            return Invoke (GetCall (service, procedure, arguments));
-        }
-
-        internal ProcedureResult Invoke (ProcedureCall call)
-        {
-            var request = new Request ();
-            request.Calls.Add (call);
             Response response;
 
             lock (invokeLock) {
+                BuildRequest (service, procedure, arguments);
                 // Send request to server
                 codedRpcStream.WriteLength (request.CalculateSize ());
                 request.WriteTo (codedRpcStream);
@@ -184,6 +186,36 @@ namespace KRPC.Client
             if (response.Results[0].Error != null)
                 throw GetException (response.Results [0].Error);
             return response.Results[0];
+        }
+
+        /// <summary>
+        /// Fill in the request that the next call is sent as.
+        /// </summary>
+        /// <remarks>
+        /// The request, the call it carries and the arguments of that call are kept from one
+        /// call to the next rather than built for each. A protobuf message allocates storage for
+        /// its fields as they are set, and the shape of a request never changes, so a call after
+        /// the first fills in storage it already has. They are guarded by the lock that already
+        /// serializes a call against the response it is waiting for.
+        /// </remarks>
+        void BuildRequest (string service, string procedure, IList<ByteString> values)
+        {
+            call.Service = service;
+            call.Procedure = procedure;
+            call.Arguments.Clear ();
+            if (values == null)
+                return;
+            for (var position = 0; position < values.Count; position++) {
+                while (callArguments.Count <= position)
+                    callArguments.Add (new Argument ());
+                var argument = callArguments [position];
+                argument.Position = (uint)position;
+                // A null encoding signals a null value, carried out-of-band by is_null with
+                // the value field left unset.
+                argument.IsNull = values [position] == null;
+                argument.Value = values [position] ?? ByteString.Empty;
+                call.Arguments.Add (argument);
+            }
         }
 
         internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)
