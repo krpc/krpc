@@ -18,6 +18,10 @@ from tools.benchmarks import runner, testserver
 from tools.benchmarks.report import Result
 
 SUITE = "client, python"
+SCENARIO = "round trips"
+
+# What a round trip's figure counts, for the report to work its reciprocal out from.
+RATE = "calls/s"
 
 # How long one timed loop should run for. Long enough that the clock and a stray scheduling
 # delay do not decide the answer, short enough that a whole run stays in seconds.
@@ -50,19 +54,28 @@ LIST_VALUES = 100
 
 def main():
     args = runner.arguments(__doc__.splitlines()[0])
-    environment = {}
-    # Against an unpaced server, so that a round trip is the client's cost rather than the
-    # update it landed in. `run_client.py` has the long version.
-    with testserver.connection("benchmark_python", args.server, frame_pacing=False) as (
+    results, environment = measure(args.server)
+    runner.report(results, SUITE, environment, args.json)
+    return 0
+
+
+def measure(server):
+    """Measure the client against a TestServer of its own, and say what it ran against.
+
+    The server is unpaced, so that a round trip is the client's cost rather than the update it
+    landed in. `run_client.py` has the long version.
+    """
+    with testserver.connection("benchmark_python", server, frame_pacing=False) as (
         conn,
         pacing,
     ):
         testserver.warm_up(conn)
         results = measure_calls(conn)
-        environment["server"] = conn.krpc.get_status().version
-        environment["measured against"] = testserver.settings(conn, pacing)
-    runner.report(results, SUITE, environment, args.json)
-    return 0
+        environment = {
+            "server": conn.krpc.get_status().version,
+            "measured against": testserver.settings(conn, pacing),
+        }
+    return results, environment
 
 
 def measure_calls(conn):
@@ -85,14 +98,7 @@ def measure_calls(conn):
 
 def round_trip(case, call):
     samples, settled = timed_loop(call)
-    best = min(samples)
-    note = "%d calls/s" % round(1000 / best) if best > 0 else ""
-    if not settled:
-        note += (
-            "%sstill getting faster after %.0f s of warmup, so this is an upper bound"
-            % ("; " if note else "", SETTLE_TIMEOUT_SECONDS)
-        )
-    return Result(SUITE, "round trips", case, samples, unit="ms", note=note)
+    return Result(SUITE, SCENARIO, case, samples, unit="ms", rate=RATE, settled=settled)
 
 
 def timed_loop(call):

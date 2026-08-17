@@ -41,31 +41,31 @@ SCENARIO = "round trips"
 def main():
     args = arguments()
     suite = "client, %s" % args.name
-    cases, version, settings = run(args)
-    if not cases:
-        raise RuntimeError("the benchmark program measured nothing")
+    cases, version, settings = run(args.server, args.client)
     results = [record(suite, case) for case in cases]
     environment = {"server": version, "measured against": settings}
     runner.report(results, suite, environment, args.json)
     return 0
 
 
-def run(args):
-    """Run the benchmark program against a server of its own.
+def run(server, client):
+    """Run a client's benchmark program against a server of its own.
 
     Returns the cases it printed, the server's version, and what that server was configured to
     do. The settings are read after the program has finished, so that the update budget they
     report is the one the measurement ran under.
     """
-    with testserver.running(args.server, frame_pacing=False) as (rpc_port, stream_port):
+    with testserver.running(server, frame_pacing=False) as (rpc_port, stream_port):
         # On a connection of our own, closed again before the program runs, so that what is
         # measured is one client talking to the server, as it was before the warmup.
         with testserver.connect("benchmark_warmup", rpc_port, stream_port) as conn:
             testserver.warm_up(conn)
-        output = measure(args.client, rpc_port, stream_port)
+        cases = parse(measure(client, rpc_port, stream_port))["results"]
+        if not cases:
+            raise RuntimeError("the benchmark program measured nothing")
         with testserver.connect("benchmark_settings", rpc_port, stream_port) as conn:
             return (
-                parse(output)["results"],
+                cases,
                 conn.krpc.get_status().version,
                 testserver.settings(conn, False),
             )
@@ -128,18 +128,16 @@ def parse(output):
 
 def record(suite, case):
     """Turn one case a benchmark program printed into a result."""
-    note = case.get("note", "")
-    samples = case["samples"]
-    value = min(samples)
-    if case.get("rate") and value > 0:
-        rate = "%d %s" % (round(1000 / value), case["rate"])
-        note = "%s; %s" % (rate, note) if note else rate
-    if not case.get("settled", True):
-        settling = (
-            "still getting faster when it was measured, so this is an upper bound"
-        )
-        note = "%s; %s" % (note, settling) if note else settling
-    return Result(suite, SCENARIO, case["case"], samples, unit=case["unit"], note=note)
+    return Result(
+        suite,
+        SCENARIO,
+        case["case"],
+        case["samples"],
+        unit=case["unit"],
+        note=case.get("note", ""),
+        rate=case.get("rate", ""),
+        settled=case.get("settled", True),
+    )
 
 
 if __name__ == "__main__":

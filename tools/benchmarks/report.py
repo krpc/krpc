@@ -16,6 +16,10 @@ import statistics
 # block, since a number that unsteady is not one to draw a conclusion from.
 NOISY_SPREAD = 0.25
 
+# What a figure has to be measured in for its reciprocal to be a rate a second, and how many of
+# that unit go into a second. A case measured in anything else reports no rate.
+PER_SECOND = {"s": 1.0, "ms": 1e3, "us": 1e6, "ns": 1e9, "ns/op": 1e9}
+
 # A case whose samples moved this much between the start of the measurement and the end, on top
 # of however far they scattered, is called out under its block. Drift and noise both widen the
 # spread but mean opposite things: noise says the estimate is uncertain, drift says the case was
@@ -53,6 +57,8 @@ class Result:
         iterations=None,
         note="",
         context=False,
+        settled=True,
+        rate="",
     ):
         self.suite = suite
         self.scenario = scenario
@@ -71,6 +77,15 @@ class Result:
         # cost of the empty loop, say, which is subtracted from every case beside it. Still
         # worth comparing between runs, but not worth warning that it wobbled.
         self.context = context
+        # Whether the case had stopped getting faster before it was measured. Where it had
+        # not, the figure is where it had reached rather than what the case costs, which is
+        # said beside it rather than left for the reader to notice.
+        self.settled = settled
+        # What one of whatever this case does is called, for a figure worth reading as a rate
+        # as well as a cost: a round trip measured in milliseconds is also so many calls a
+        # second. Naming the thing counted is the measurement's to do; working the rate out
+        # and phrasing it is not.
+        self.rate = rate
 
     @property
     def best(self):
@@ -144,6 +159,8 @@ class Result:
             "iterations": self.iterations,
             "note": self.note,
             "context": self.context,
+            "settled": self.settled,
+            "rate": self.rate,
         }
 
     @classmethod
@@ -161,6 +178,8 @@ class Result:
             iterations=data["iterations"],
             note=data["note"],
             context=data.get("context", False),
+            settled=data.get("settled", True),
+            rate=data.get("rate", ""),
         )
 
 
@@ -259,24 +278,63 @@ def _block(scenario, results):
         cells.append(("%.1f%%" % (100 * result.spread), 7, True))
         lines.append(_row(cells))
     for result in results:
-        if result.note:
-            lines.append("    %s: %s" % (result.case, result.note))
-        if abs(result.drift) > DRIFT + result.spread and not result.context:
-            lines.append(
-                "    %s: ran %.0f%% %s by the end than at the start, so it was still "
-                "settling rather than noisy - measure it again"
-                % (
-                    result.case,
-                    100 * abs(result.drift),
-                    "slower" if result.drift > 0 else "faster",
-                )
-            )
-        elif result.spread > NOISY_SPREAD and not result.context:
-            lines.append(
-                "    %s: samples spread %.0f%%, too unsteady to draw a conclusion from"
-                % (result.case, 100 * result.spread)
-            )
+        note = _joined(rate_note(result), result.note)
+        if note:
+            lines.append("    %s: %s" % (result.case, note))
+        for warning in warnings(result):
+            lines.append("    %s: %s" % (result.case, warning))
     return lines
+
+
+def per_second(result):
+    """How many times a second the case's figure works out to, where that means anything: it
+    has to count something it named, and be measured in a unit of time to be inverted.
+    """
+    scale = PER_SECOND.get(result.unit)
+    if not result.rate or scale is None or result.value <= 0:
+        return None
+    return scale / result.value
+
+
+def rate_note(result):
+    """What the figure works out to a second, worded for a note.
+
+    Worded here rather than by whoever measured it, so that a rate reads the same way for every
+    client and every suite rather than once per language.
+    """
+    value = per_second(result)
+    return "" if value is None else "%d %s" % (round(value), result.rate)
+
+
+def _joined(*parts):
+    return "; ".join(part for part in parts if part)
+
+
+def warnings(result):
+    """What is worth saying about a measurement besides the number it reports.
+
+    Said here rather than by whoever measured it, so that a case is described the same way
+    wherever it is reported and however many languages took the measurement.
+    """
+    said = []
+    if not result.settled:
+        said.append(
+            "still getting faster when it was measured, so this is an upper bound"
+        )
+    if result.context:
+        return said
+    if abs(result.drift) > DRIFT + result.spread:
+        said.append(
+            "ran %.0f%% %s by the end than at the start, so it was still settling rather "
+            "than noisy - measure it again"
+            % (100 * abs(result.drift), "slower" if result.drift > 0 else "faster")
+        )
+    elif result.spread > NOISY_SPREAD:
+        said.append(
+            "samples spread %.0f%%, too unsteady to draw a conclusion from"
+            % (100 * result.spread)
+        )
+    return said
 
 
 def _row(cells):
