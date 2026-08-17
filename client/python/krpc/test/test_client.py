@@ -500,6 +500,20 @@ class TestClient(ServerTestCase, unittest.TestCase):
             service.struct_default(),
         )
 
+    def test_struct_comparison(self) -> None:
+        service = self.conn.test_service
+        value = service.TestStruct(
+            int_field=42,
+            string_field="jeb",
+            enum_field=service.TestEnum.value_b,
+            list_field=[1, 2, 3],
+        )
+        result = service.struct_echo(value)
+        other = service.struct_echo(value._replace(int_field=43))
+        self.assertEqual(value, result)
+        self.assertLess(result, other)
+        self.assertEqual([result, other], sorted([other, result]))
+
     def test_colllections_default_values(self) -> None:
         self.assertEqual((1, False), self.conn.test_service.tuple_default())
         self.assertEqual([1, 2, 3], self.conn.test_service.list_default())
