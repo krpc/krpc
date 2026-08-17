@@ -43,6 +43,11 @@ namespace KRPC.Service.Scanner
         public Dictionary<string,EnumerationSignature> Enumerations { get; private set; }
 
         /// <summary>
+        /// The structures defined in this service, and their fields
+        /// </summary>
+        public Dictionary<string,StructSignature> Structs { get; private set; }
+
+        /// <summary>
         /// The exceptions defined in this service
         /// </summary>
         public Dictionary<string,ExceptionSignature> Exceptions { get; private set; }
@@ -73,6 +78,7 @@ namespace KRPC.Service.Scanner
             Documentation = DocumentationUtils.ResolveCrefs (type.GetDocumentation ());
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
+            Structs = new Dictionary<string, StructSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
             gameScene = TypeUtils.GetServiceGameScene (type);
@@ -92,6 +98,7 @@ namespace KRPC.Service.Scanner
             Documentation = string.Empty;
             Classes = new Dictionary<string, ClassSignature> ();
             Enumerations = new Dictionary<string, EnumerationSignature> ();
+            Structs = new Dictionary<string, StructSignature> ();
             Procedures = new Dictionary<string, ProcedureSignature> ();
             Exceptions = new Dictionary<string, ExceptionSignature> ();
             gameScene = GameScene.All;
@@ -200,6 +207,30 @@ namespace KRPC.Service.Scanner
         }
 
         /// <summary>
+        /// Add a structure to the service for the given struct type annotated with the KRPCStruct attribute.
+        /// Returns the name of the structure.
+        /// </summary>
+        public string AddStruct (Type structType)
+        {
+            TypeUtils.ValidateKRPCStruct (structType);
+            var name = structType.Name;
+            if (Structs.ContainsKey (name))
+                throw new ServiceException ("Service " + Name + " contains duplicate structs " + name);
+            var fields = new List<StructFieldSignature> ();
+            foreach (var property in TypeUtils.GetStructFields (structType)) {
+                string fieldDeprecatedReason;
+                var fieldDeprecated = TypeUtils.GetPropertyDeprecated (property, property.GetGetMethod (), out fieldDeprecatedReason);
+                fields.Add (new StructFieldSignature (
+                    Name, name, property.Name, property.PropertyType, property.GetDocumentation (),
+                    fieldDeprecated, fieldDeprecatedReason));
+            }
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (structType, out deprecatedReason);
+            Structs [name] = new StructSignature (Name, name, fields, structType.GetDocumentation (), deprecated, deprecatedReason);
+            return name;
+        }
+
+        /// <summary>
         /// Add an exception to the service for the given exception type annotated with the KRPCException attribute.
         /// Returns the name of the exception.
         /// </summary>
@@ -289,6 +320,7 @@ namespace KRPC.Service.Scanner
             info.AddValue ("procedures", Procedures);
             info.AddValue ("classes", Classes);
             info.AddValue ("enumerations", Enumerations);
+            info.AddValue ("structs", Structs);
             info.AddValue ("exceptions", Exceptions);
             if (Deprecated) {
                 info.AddValue ("deprecated", true);

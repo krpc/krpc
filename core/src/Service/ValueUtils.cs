@@ -19,7 +19,23 @@ namespace KRPC.Service
                 return SetsEqual((IEnumerable)x, (IEnumerable)y);
             if (TypeUtils.IsADictionaryCollectionType(type))
                 return DictionariesEqual((IDictionary)x, (IDictionary)y);
+            if (TypeUtils.IsAStructType(type))
+                return StructsEqual(type, x, y);
             return x.Equals(y);
+        }
+
+        /// <summary>
+        /// Compare two structure values field by field. The default equality of a C# struct
+        /// compares its fields with their own equality, which for a collection-typed field is
+        /// reference equality, so a structure holding one has to be compared here instead.
+        /// </summary>
+        static bool StructsEqual(Type type, object x, object y) {
+            foreach (var field in TypeUtils.GetStructFields(type)) {
+                var getter = field.GetGetMethod();
+                if (!Equal(getter.Invoke(x, null), getter.Invoke(y, null)))
+                    return false;
+            }
+            return true;
         }
 
         static bool ListsEqual(IList x, IList y) {

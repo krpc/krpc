@@ -31,9 +31,10 @@ namespace KRPC.Test.Service
         public void TestService ()
         {
             var service = services.ServicesList.First (x => x.Name == "TestService");
-            Assert.AreEqual (61, service.Procedures.Count);
+            Assert.AreEqual (65, service.Procedures.Count);
             Assert.AreEqual (3, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
+            Assert.AreEqual (2, service.Structs.Count);
             Assert.AreEqual ("<doc>\n<summary>\nTest service documentation.\n</summary>\n</doc>", service.Documentation);
             MessageAssert.IsNotDeprecated (service);
         }
@@ -419,6 +420,39 @@ namespace KRPC.Test.Service
                     MessageAssert.HasReturnType (proc, typeof(IDictionary<int,bool>));
                     MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
                     MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoStruct") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestStruct), "x");
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestStruct));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoListOfStructs") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(IList<TestService.TestStruct>), "l");
+                    MessageAssert.HasReturnType (proc, typeof(IList<TestService.TestStruct>));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "EchoNestedStruct") {
+                    MessageAssert.HasParameters (proc, 1);
+                    MessageAssert.HasParameter (proc, 0, typeof(TestService.TestNestedStruct), "x");
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestNestedStruct));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
+                } else if (proc.Name == "StructDefault") {
+                    MessageAssert.HasParameters (proc, 1);
+                    var parameter = proc.Parameters [0];
+                    Assert.AreEqual (typeof(TestService.TestStruct), parameter.Type);
+                    Assert.AreEqual ("x", parameter.Name);
+                    Assert.IsTrue (parameter.HasDefaultValue);
+                    var defaultValue = (TestService.TestStruct)parameter.DefaultValue;
+                    Assert.AreEqual (42, defaultValue.IntField);
+                    Assert.AreEqual ("jeb", defaultValue.StringField);
+                    Assert.AreEqual (global::KRPC.Test.Service.TestService.TestEnum.Y, defaultValue.EnumField);
+                    Assert.AreEqual ("kerbin", defaultValue.ObjectField.Value);
+                    CollectionAssert.AreEqual (new [] { "a", "b" }, defaultValue.ListField);
+                    MessageAssert.HasReturnType (proc, typeof(TestService.TestStruct));
+                    MessageAssert.HasGameScene (proc, global::KRPC.Service.GameScene.Flight);
+                    MessageAssert.HasNoDocumentation (proc);
                 } else if (proc.Name == "ProcedureAvailableInInheritedGameScene") {
                     MessageAssert.HasNoParameters (proc);
                     MessageAssert.HasNoReturnType (proc);
@@ -444,8 +478,8 @@ namespace KRPC.Test.Service
                 }
                 foundProcedures++;
             }
-            Assert.AreEqual (61, foundProcedures);
-            Assert.AreEqual (61, service.Procedures.Count);
+            Assert.AreEqual (65, foundProcedures);
+            Assert.AreEqual (65, service.Procedures.Count);
         }
 
         [Test]
@@ -499,6 +533,36 @@ namespace KRPC.Test.Service
             }
             Assert.AreEqual (2, foundEnumerations);
             Assert.AreEqual (2, service.Enumerations.Count);
+        }
+
+        [Test]
+        public void TestServiceStructs ()
+        {
+            var service = services.ServicesList.First (x => x.Name == "TestService");
+            int foundStructs = 0;
+            foreach (var str in service.Structs) {
+                if (str.Name == "TestStruct") {
+                    MessageAssert.HasDocumentation (str, "<doc>\n<summary>\nDocumentation string for TestStruct.\n</summary>\n</doc>");
+                    MessageAssert.HasFields (str, 5);
+                    MessageAssert.HasField (str, 0, "IntField", typeof(int), "<doc>\n<summary>\nDocumented struct field\n</summary>\n</doc>");
+                    MessageAssert.HasField (str, 1, "StringField", typeof(string));
+                    MessageAssert.HasField (str, 2, "EnumField", typeof(TestService.TestEnum));
+                    MessageAssert.HasField (str, 3, "ObjectField", typeof(TestService.TestClass));
+                    MessageAssert.HasField (str, 4, "ListField", typeof(IList<string>));
+                    MessageAssert.IsNotDeprecated (str);
+                } else if (str.Name == "TestNestedStruct") {
+                    MessageAssert.HasNoDocumentation (str);
+                    MessageAssert.HasFields (str, 2);
+                    MessageAssert.HasField (str, 0, "StructField", typeof(TestService.TestStruct));
+                    MessageAssert.HasField (str, 1, "IntField", typeof(int));
+                    MessageAssert.IsNotDeprecated (str);
+                } else {
+                    Assert.Fail ();
+                }
+                foundStructs++;
+            }
+            Assert.AreEqual (2, foundStructs);
+            Assert.AreEqual (2, service.Structs.Count);
         }
 
         [Test]

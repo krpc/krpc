@@ -13,6 +13,8 @@ namespace KRPC.Service.Messages
 
         public IList<Enumeration> Enumerations { get; private set; }
 
+        public IList<Struct> Structs { get; private set; }
+
         public IList<Exception> Exceptions { get; private set; }
 
         public string Documentation { get; set; }
@@ -27,6 +29,7 @@ namespace KRPC.Service.Messages
             Procedures = new List<Procedure> ();
             Classes = new List<Class> ();
             Enumerations = new List<Enumeration> ();
+            Structs = new List<Struct> ();
             Exceptions = new List<Exception> ();
             Documentation = string.Empty;
             DeprecatedReason = string.Empty;
