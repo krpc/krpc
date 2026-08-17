@@ -30,6 +30,11 @@ from krpc.types import (
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 
+# protobuf's zigzag encoder carries no types, so it is bound here with the type it does
+# have rather than described again at every call. A call carrying a collection reaches it
+# once per value, so this also saves looking it up on its module that many times
+_pb_zigzag_encode: Callable[[int], int] = protobuf_wire_format.ZigZagEncode
+
 # The one byte encoding of every value that fits in one. A varint below 128 is
 # the byte itself, and message sizes and the length prefixes of strings and
 # bytes almost always are, so the common case is a lookup rather than a loop
@@ -165,7 +170,7 @@ class _ValueEncoder:
 
     @classmethod
     def _encode_signed_varint(cls, value: int) -> bytes:
-        value = protobuf_wire_format.ZigZagEncode(value)  # type: ignore[no-untyped-call]
+        value = _pb_zigzag_encode(value)
         if value < 128:
             return _SINGLE_BYTE_VARINTS[value]
         data: List[bytes] = []

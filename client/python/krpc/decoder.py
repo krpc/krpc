@@ -29,6 +29,16 @@ if TYPE_CHECKING:
     from krpc.client import Client
 
 
+# protobuf's varint reader and zigzag decoder are internal and carry no types, so they are
+# bound here with the types they do have rather than described again at every call. A call
+# carrying a collection reaches them once per value, so this also saves looking them up on
+# their module that many times
+_pb_decode_varint: Callable[[bytes, int], Tuple[int, int]] = (
+    protobuf_decoder._DecodeVarint  # type: ignore[attr-defined]
+)
+_pb_zigzag_decode: Callable[[int], int] = protobuf_wire_format.ZigZagDecode
+
+
 def _decode_varint(data: bytes) -> Tuple[int, int]:
     """Decode the varint at the start of the data, returning its value and the
     number of bytes it occupies. Raises IndexError if the data does not hold a
@@ -41,8 +51,7 @@ def _decode_varint(data: bytes) -> Tuple[int, int]:
     first = data[0]
     if first < 128:
         return first, 1
-    # pylint: disable=line-too-long
-    return cast(Tuple[int, int], protobuf_decoder._DecodeVarint(data, 0))  # type: ignore[attr-defined]
+    return _pb_decode_varint(data, 0)
 
 
 class Decoder:
@@ -169,8 +178,7 @@ class _ValueDecoder:
         # The zigzag payload is an unsigned varint. Reading it as a signed one would sign
         # extend it as two's complement first, which corrupts anything from 2**62 up once
         # the payload sets bit 63 - long.MaxValue would decode as -1.
-        value = _decode_varint(data)[0]
-        return cast(int, protobuf_wire_format.ZigZagDecode(value))  # type: ignore[no-untyped-call]
+        return _pb_zigzag_decode(_decode_varint(data)[0])
 
     @classmethod
     def _decode_varint(cls, data: bytes) -> int:
