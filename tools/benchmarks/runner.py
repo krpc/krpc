@@ -7,20 +7,25 @@ from tools.benchmarks.report import table, write_json
 
 
 def arguments(description):
-    parser = argparse.ArgumentParser(description=description)
-    parser.add_argument(
+    return parser(description).parse_args()
+
+
+def parser(description):
+    """The options every TestServer-based runner takes, for one to add its own to."""
+    options = argparse.ArgumentParser(description=description)
+    options.add_argument(
         "--server",
         metavar="PATH",
         default=None,
         help="the TestServer executable to run (the bazel target supplies this)",
     )
-    parser.add_argument(
+    options.add_argument(
         "--json",
         metavar="PATH",
         default=None,
         help="write the results to PATH, to compare against another run",
     )
-    return parser.parse_args()
+    return options
 
 
 def report(results, suite, environment, json_path):
