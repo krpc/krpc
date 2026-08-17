@@ -49,6 +49,7 @@ boolean
 circularization
 clickable
 clientgen
+codec
 collidable
 collinear
 combusting
