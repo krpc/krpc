@@ -72,6 +72,64 @@ function decoder.guid(data)
   return table.concat(parts, '-')
 end
 
+-- The tag every value of a collection is carried under: field number 1, length delimited, for
+-- the items of a Tuple, a List and a Set and for the entries of a Dictionary. A DictionaryEntry
+-- carries its key under the same tag and its value under field number 2. See the same list in
+-- the encoder, which writes them, and test_decoder, which reads collections written by the
+-- protocol buffer message layer back through these.
+local _ITEMS = 10
+local _ENTRY_KEY = 10
+local _ENTRY_VALUE = 18
+
+--- Read the values a collection carries, each a length delimited field under the given tag.
+--
+-- Read here rather than by parsing a message, for the reason the encoder writes them here: the
+-- protocol buffer library is written in lua, and parsing a message of a hundred values into a
+-- container that type checks each one costs far more than reading the bytes does.
+local function _decode_items(data, tag)
+  local items = {}
+  local count = 0
+  local position = 0
+  local length = data:len()
+  while position < length do
+    if data:byte(position+1) ~= tag then
+      error('Unexpected field in an encoded collection')
+    end
+    local size, after = pb.varint_decoder(data, position+1)
+    items[count+1] = data:sub(after+1, after+size)
+    count = count + 1
+    position = after + size
+  end
+  return items, count
+end
+
+--- Read the key and the value out of one entry of a dictionary.
+--
+-- The two are read by the tag in front of each rather than by the order they are in, as a
+-- message carries its fields in whatever order the writer chose.
+local function _decode_entry(data)
+  -- A key or a value that encodes to nothing, an empty collection or an empty string among
+  -- them, is left out of the entry entirely, and reads back as the nothing it was
+  local key = ''
+  local value = ''
+  local position = 0
+  local length = data:len()
+  while position < length do
+    local tag = data:byte(position+1)
+    local size, after = pb.varint_decoder(data, position+1)
+    local field = data:sub(after+1, after+size)
+    if tag == _ENTRY_KEY then
+      key = field
+    elseif tag == _ENTRY_VALUE then
+      value = field
+    else
+      error('Unexpected field in an encoded dictionary entry')
+    end
+    position = after + size
+  end
+  return key, value
+end
+
 function decoder.decode(data, typ)
   local code = typ.code
   local decode_value = _value_decoders[code]
@@ -79,34 +137,37 @@ function decoder.decode(data, typ)
     return decode_value(data, typ)
   end
   if code == Types.LIST then
-    local msg = decoder.decode_message(data, schema.List)
-    local result = List{}
+    local items, count = _decode_items(data, _ITEMS)
     local value_type = typ.value_type
-    for _,item in ipairs(msg.items) do
-      result:append(decoder.decode(item, value_type))
+    local result = List{}
+    for i = 1, count do
+      result[i] = decoder.decode(items[i], value_type)
     end
     return result
   elseif code == Types.DICTIONARY then
-    local msg = decoder.decode_message(data, schema.Dictionary)
+    local entries, count = _decode_items(data, _ITEMS)
+    local key_type = typ.key_type
+    local value_type = typ.value_type
     local result = Map{}
-    for _,item in ipairs(msg.entries) do
-      result[decoder.decode(item.key, typ.key_type)] =
-        decoder.decode(item.value, typ.value_type)
+    for i = 1, count do
+      local key, value = _decode_entry(entries[i])
+      result[decoder.decode(key, key_type)] = decoder.decode(value, value_type)
     end
     return result
   elseif code == Types.SET then
-    local msg = decoder.decode_message(data, schema.Set)
-    local result = Set{}
+    local items, count = _decode_items(data, _ITEMS)
     local value_type = typ.value_type
-    for _,item in ipairs(msg.items) do
-      result[decoder.decode(item, value_type)] = true
+    local result = Set{}
+    for i = 1, count do
+      result[decoder.decode(items[i], value_type)] = true
     end
     return result
   elseif code == Types.TUPLE then
-    local msg = decoder.decode_message(data, schema.Tuple)
+    local items, count = _decode_items(data, _ITEMS)
+    local value_types = typ.value_types
     local result = List{}
-    for _,item in ipairs(tablex.zip(msg.items, typ.value_types)) do
-      result:append(decoder.decode(item[1], item[2]))
+    for i = 1, count do
+      result[i] = decoder.decode(items[i], value_types[i])
     end
     return result
   elseif typ:is_a(Types.MessageType) then
