@@ -1,9 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using Google.Protobuf;
@@ -65,60 +61,67 @@ namespace KRPC.Client
             case TypeCode.String:
                 return EncodeString ((string)value);
             default:
-                if (type.Equals (typeof(byte[])))
-                    return EncodeBytes ((byte[])value);
-                if (IsAClassType (type))
-                    return Varint (((RemoteObject)value).id);
-                if (IsATupleType (type))
-                    return EncodeTuple (value, type).ToByteString ();
-                if (IsAListType (type))
-                    return EncodeList (value, type).ToByteString ();
-                if (IsASetType (type))
-                    return EncodeSet (value, type).ToByteString ();
-                if (IsADictionaryType (type))
-                    return EncodeDictionary (value, type).ToByteString ();
-                if (IsAMessageType (type))
-                    return ((IMessage)value).ToByteString ();
+                return EncodeObject (value, type);
+            }
+        }
+
+        /// <summary>
+        /// Encode a value that is not a number, a string or an enumeration, from what is known
+        /// about its type.
+        /// </summary>
+        static ByteString EncodeObject (object value, Type type)
+        {
+            var info = TypeInfo.For (type);
+            switch (info.Kind) {
+            case TypeKind.Bytes:
+                return EncodeBytes ((byte[])value);
+            case TypeKind.Class:
+                return Varint (((RemoteObject)value).id);
+            case TypeKind.Tuple:
+                return EncodeTuple (value, info).ToByteString ();
+            case TypeKind.List:
+                return EncodeList (value, info).ToByteString ();
+            case TypeKind.Set:
+                return EncodeSet (value, info).ToByteString ();
+            case TypeKind.Dictionary:
+                return EncodeDictionary (value, info).ToByteString ();
+            case TypeKind.Message:
+                return ((IMessage)value).ToByteString ();
+            default:
                 throw new ArgumentException (type + " is not a serializable type");
             }
         }
 
-        static IMessage EncodeTuple (object value, Type type)
+        static IMessage EncodeTuple (object value, TypeInfo info)
         {
             var encodedTuple = new Schema.KRPC.Tuple ();
-            var valueTypes = type.GetGenericArguments ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString (CultureInfo.InvariantCulture));
-            var tupleType = genericType.MakeGenericType (valueTypes);
-            for (int i = 0; i < valueTypes.Length; i++) {
-                var property = tupleType.GetProperty ("Item" + (i + 1).ToString (CultureInfo.InvariantCulture));
-                var item = property.GetGetMethod ().Invoke (value, null);
-                encodedTuple.Items.Add (EncodeValue (item, valueTypes [i]));
-            }
+            for (int i = 0; i < info.Arguments.Length; i++)
+                encodedTuple.Items.Add (EncodeValue (info.Items [i] (value), info.Arguments [i]));
             return encodedTuple;
         }
 
-        static IMessage EncodeList (object value, Type type)
+        static IMessage EncodeList (object value, TypeInfo info)
         {
             var encodedList = new Schema.KRPC.List ();
-            var valueType = type.GetGenericArguments ().Single ();
+            var valueType = info.Arguments [0];
             foreach (var item in (IList)value)
                 encodedList.Items.Add (EncodeValue (item, valueType));
             return encodedList;
         }
 
-        static IMessage EncodeSet (object value, Type type)
+        static IMessage EncodeSet (object value, TypeInfo info)
         {
             var encodedSet = new Schema.KRPC.Set ();
-            var valueType = type.GetGenericArguments ().Single ();
+            var valueType = info.Arguments [0];
             foreach (var item in (IEnumerable)value)
                 encodedSet.Items.Add (EncodeValue (item, valueType));
             return encodedSet;
         }
 
-        static IMessage EncodeDictionary (object value, Type type)
+        static IMessage EncodeDictionary (object value, TypeInfo info)
         {
-            var keyType = type.GetGenericArguments () [0];
-            var valueType = type.GetGenericArguments () [1];
+            var keyType = info.Arguments [0];
+            var valueType = info.Arguments [1];
             var encodedDictionary = new Schema.KRPC.Dictionary ();
             foreach (DictionaryEntry entry in (IDictionary)value) {
                 var encodedEntry = new Schema.KRPC.DictionaryEntry ();
@@ -165,90 +168,82 @@ namespace KRPC.Client
             case TypeCode.String:
                 return value.CreateCodedInput ().ReadString ();
             default:
-                if (type.Equals (typeof(byte[])))
-                    return value.CreateCodedInput ().ReadBytes ().ToByteArray ();
-                if (IsAClassType (type)) {
-                    if (client == null)
-                        throw new ArgumentException ("Client not passed when decoding remote object");
-                    return (RemoteObject)Activator.CreateInstance (type, client, ReadVarint (value));
-                }
-                if (IsATupleType (type))
-                    return DecodeTuple (value, type, client);
-                if (IsAListType (type))
-                    return DecodeList (value, type, client);
-                if (IsASetType (type))
-                    return DecodeSet (value, type, client);
-                if (IsADictionaryType (type))
-                    return DecodeDictionary (value, type, client);
-                if (IsAMessageType (type)) {
+                return DecodeObject (value, type, client);
+            }
+        }
+
+        /// <summary>
+        /// Decode a value that is not a number, a string or an enumeration, from what is known
+        /// about its type.
+        /// </summary>
+        static object DecodeObject (ByteString value, Type type, IConnection client)
+        {
+            var info = TypeInfo.For (type);
+            switch (info.Kind) {
+            case TypeKind.Bytes:
+                return value.CreateCodedInput ().ReadBytes ().ToByteArray ();
+            case TypeKind.Class:
+                if (client == null)
+                    throw new ArgumentException ("Client not passed when decoding remote object");
+                return info.NewObject (client, ReadVarint (value));
+            case TypeKind.Tuple:
+                return DecodeTuple (value, info, client);
+            case TypeKind.List:
+                return DecodeList (value, info, client);
+            case TypeKind.Set:
+                return DecodeSet (value, info, client);
+            case TypeKind.Dictionary:
+                return DecodeDictionary (value, info, client);
+            case TypeKind.Message: {
                     var message = (IMessage)Activator.CreateInstance (type);
                     message.MergeFrom (value);
                     return message;
                 }
-                if (type == typeof (Event)) {
+            case TypeKind.Event: {
                     var message = new Schema.KRPC.Event ();
                     message.MergeFrom (value);
                     return new Event ((Connection)client, message);
                 }
+            default:
                 throw new ArgumentException (type + " is not a serializable type");
             }
         }
 
-        static object DecodeTuple (ByteString data, Type type, IConnection client)
+        static object DecodeTuple (ByteString data, TypeInfo info, IConnection client)
         {
             var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (data);
-            var valueTypes = type.GetGenericArguments ();
-            var genericType = Type.GetType ("System.Tuple`" + valueTypes.Length.ToString (CultureInfo.InvariantCulture));
-            var values = new object[valueTypes.Length];
-            for (int i = 0; i < valueTypes.Length; i++) {
-                var item = encodedTuple.Items [i];
-                values [i] = Decode (item, valueTypes [i], client);
-            }
-            var tuple = genericType
-                .MakeGenericType (valueTypes)
-                .GetConstructor (valueTypes)
-                .Invoke (values);
-            return tuple;
+            var values = new object [info.Arguments.Length];
+            for (int i = 0; i < values.Length; i++)
+                values [i] = Decode (encodedTuple.Items [i], info.Arguments [i], client);
+            return info.NewTuple (values);
         }
 
-        static object DecodeList (ByteString data, Type type, IConnection client)
+        static object DecodeList (ByteString data, TypeInfo info, IConnection client)
         {
             var encodedList = Schema.KRPC.List.Parser.ParseFrom (data);
-            var valueType = type.GetGenericArguments ().Single ();
-            var list = (IList)(typeof(List<>)
-                .MakeGenericType (valueType)
-                .GetConstructor (Type.EmptyTypes)
-                .Invoke (null));
+            var valueType = info.Arguments [0];
+            var list = (IList)info.New ();
             foreach (var item in encodedList.Items)
                 list.Add (Decode (item, valueType, client));
             return list;
         }
 
-        static object DecodeSet (ByteString data, Type type, IConnection client)
+        static object DecodeSet (ByteString data, TypeInfo info, IConnection client)
         {
             var encodedSet = Schema.KRPC.Set.Parser.ParseFrom (data);
-            var valueType = type.GetGenericArguments ().Single ();
-            var set = (IEnumerable)(typeof(HashSet<>)
-                .MakeGenericType (valueType)
-                .GetConstructor (Type.EmptyTypes)
-                .Invoke (null));
-            MethodInfo methodInfo = type.GetMethod ("Add");
-            foreach (var item in encodedSet.Items) {
-                var decodedItem = Decode (item, valueType, client);
-                methodInfo.Invoke (set, new [] { decodedItem });
-            }
+            var valueType = info.Arguments [0];
+            var set = info.New ();
+            foreach (var item in encodedSet.Items)
+                info.Add (set, Decode (item, valueType, client));
             return set;
         }
 
-        static object DecodeDictionary (ByteString data, Type type, IConnection client)
+        static object DecodeDictionary (ByteString data, TypeInfo info, IConnection client)
         {
             var encodedDictionary = Schema.KRPC.Dictionary.Parser.ParseFrom (data);
-            var keyType = type.GetGenericArguments () [0];
-            var valueType = type.GetGenericArguments () [1];
-            var dictionary = (IDictionary)(typeof(Dictionary<,>)
-                .MakeGenericType (keyType, valueType)
-                .GetConstructor (Type.EmptyTypes)
-                .Invoke (null));
+            var keyType = info.Arguments [0];
+            var valueType = info.Arguments [1];
+            var dictionary = (IDictionary)info.New ();
             foreach (var entry in encodedDictionary.Entries) {
                 var key = Decode (entry.Key, keyType, client);
                 var value = Decode (entry.Value, valueType, client);
@@ -411,62 +406,6 @@ namespace KRPC.Client
         static long DecodeZigZag64 (ulong value)
         {
             return (long)(value >> 1) ^ -(long)(value & 1);
-        }
-
-        static bool IsAGenericType (Type type, Type genericType)
-        {
-            while (!ReferenceEquals (type, null)) {
-                if (type.IsGenericType && type.GetGenericTypeDefinition ().Equals (genericType))
-                    return true;
-                foreach (var intType in type.GetInterfaces())
-                    if (IsAGenericType (intType, genericType))
-                        return true;
-                type = type.BaseType;
-            }
-            return false;
-        }
-
-        static bool IsAClassType (Type type)
-        {
-            return type.IsSubclassOf (typeof(RemoteObject));
-        }
-
-        static bool IsATupleType (Type type)
-        {
-            return
-            IsAGenericType (type, typeof(Tuple<>)) ||
-            IsAGenericType (type, typeof(Tuple<,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,,>)) ||
-            IsAGenericType (type, typeof(Tuple<,,,,,,,>));
-        }
-
-        static bool IsACollectionType (Type type)
-        {
-            return IsATupleType (type) || IsAListType (type) || IsASetType (type) || IsADictionaryType (type);
-        }
-
-        static bool IsAListType (Type type)
-        {
-            return IsAGenericType (type, typeof(IList<>));
-        }
-
-        static bool IsASetType (Type type)
-        {
-            return IsAGenericType (type, typeof(ISet<>));
-        }
-
-        static bool IsADictionaryType (Type type)
-        {
-            return IsAGenericType (type, typeof(IDictionary<,>));
-        }
-
-        static bool IsAMessageType (Type type)
-        {
-            return typeof(IMessage).IsAssignableFrom (type);
         }
     }
 }

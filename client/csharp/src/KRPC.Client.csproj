@@ -43,6 +43,7 @@
     <Compile Include="Stream.cs" />
     <Compile Include="StreamImpl.cs" />
     <Compile Include="StreamManager.cs" />
+    <Compile Include="TypeInfo.cs" />
     <Compile Include="$(bazel-bin)\protobuf\KRPC.cs">
       <Link>KRPC.cs</Link>
     </Compile>
