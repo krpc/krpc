@@ -21,7 +21,7 @@ namespace KRPC.Client
         TcpClient streamClient;
         NetworkStream rpcStream;
         CodedOutputStream codedRpcStream;
-        byte[] responseBuffer = new byte [BUFFER_INITIAL_SIZE];
+        MessageReader rpcReader;
 
         internal StreamManager StreamManager {
             get;
@@ -46,14 +46,16 @@ namespace KRPC.Client
             rpcClient.NoDelay = true;
             rpcStream = rpcClient.GetStream ();
             codedRpcStream = new CodedOutputStream (rpcStream, true);
+            rpcReader = new MessageReader (rpcStream);
             var request = new ConnectionRequest ();
             request.Type = Type.Rpc;
             request.ClientName = name;
             codedRpcStream.WriteLength (request.CalculateSize ());
             request.WriteTo (codedRpcStream);
             codedRpcStream.Flush ();
-            int size = ReadMessageData (rpcStream, ref responseBuffer);
-            var response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+            rpcReader.Read ();
+            var response = ConnectionResponse.Parser.ParseFrom (
+                rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
             if (response.Status != ConnectionResponse.Types.Status.Ok)
                 throw new ConnectionException (response.Message);
 
@@ -69,11 +71,16 @@ namespace KRPC.Client
                 codedStreamStream.WriteLength (request.CalculateSize ());
                 request.WriteTo (codedStreamStream);
                 codedStreamStream.Flush ();
-                size = ReadMessageData (streamStream, ref responseBuffer);
-                response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+                // The reader that reads the reply goes on to read the stream updates that
+                // follow it. It may have taken the first of them along with the reply, so a
+                // second reader on the same socket would never see it.
+                var streamReader = new MessageReader (streamStream);
+                streamReader.Read ();
+                response = ConnectionResponse.Parser.ParseFrom (
+                    streamReader.Buffer, streamReader.Offset, streamReader.Size);
                 if (response.Status != ConnectionResponse.Types.Status.Ok)
                     throw new ConnectionException (response.Message);
-                StreamManager = new StreamManager (this, streamClient);
+                StreamManager = new StreamManager (this, streamReader);
             }
 
             Services.KRPC.Service.AddExceptionTypes (this);
@@ -167,8 +174,9 @@ namespace KRPC.Client
                 request.WriteTo (codedRpcStream);
                 codedRpcStream.Flush ();
                 // Receive response
-                int size = ReadMessageData (rpcStream, ref responseBuffer);
-                response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+                rpcReader.Read ();
+                response = Response.Parser.ParseFrom (
+                    rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
             }
 
             if (response.Error != null)
@@ -310,56 +318,6 @@ namespace KRPC.Client
             var instanceExpr = Expression.Lambda<Func<object>> (
                 Expression.Convert (instance, typeof(object)));
             return instanceExpr.Compile () ();
-        }
-
-        // Initial buffer size of 1 MB
-        internal const int BUFFER_INITIAL_SIZE = 1 * 1024 * 1024;
-        // Initial increases in increments of 512 KB
-        internal const int BUFFER_INCREASE_SIZE = 512 * 1024;
-
-        /// <summary>
-        /// Read the data from a message from the given stream into the given buffer.
-        /// May reallocate the buffer if it is too small to receive the message.
-        /// Returns the lenght of the message in bytes.
-        /// If a stopEvent is specified, this method will return 0 if the event is triggered.
-        /// </summary>
-        internal static int ReadMessageData (System.IO.Stream stream, ref byte[] buffer, EventWaitHandle stopEvent = null)
-        {
-            bool stop = stopEvent != null && stopEvent.WaitOne (0);
-            int bufferSize = 0;
-            int messageSize = 0;
-
-            // Read the offset and size of the message data
-            while (!stop) {
-                bufferSize += stream.Read (buffer, bufferSize, 1);
-                stop |= stopEvent != null && stopEvent.WaitOne (0);
-                try {
-                    var codedStream = new CodedInputStream (buffer, 0, bufferSize);
-                    messageSize = (int)codedStream.ReadUInt32 ();
-                    stop |= stopEvent != null && stopEvent.WaitOne (0);
-                    break;
-                } catch (InvalidProtocolBufferException) {
-                }
-            }
-            if (stop)
-                return 0;
-
-            // Read the response data
-            bufferSize = 0;
-            while (!stop && bufferSize < messageSize) {
-                // Increase the size of the buffer if the remaining space is low
-                if (buffer.Length - bufferSize < BUFFER_INCREASE_SIZE) {
-                    var newBuffer = new byte [buffer.Length + BUFFER_INCREASE_SIZE];
-                    Array.Copy (buffer, newBuffer, bufferSize);
-                    buffer = newBuffer;
-                }
-                bufferSize += stream.Read (buffer, bufferSize, messageSize - bufferSize);
-                stop |= stopEvent != null && stopEvent.WaitOne (0);
-            }
-            if (stop)
-                return 0;
-
-            return messageSize;
         }
 
         readonly IDictionary<string, System.Type> exceptionTypes = new Dictionary<string, System.Type>();

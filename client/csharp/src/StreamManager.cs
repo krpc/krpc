@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Sockets;
 using System.Threading;
-using Google.Protobuf;
 using KRPC.Client.Services.KRPC;
 using KRPC.Schema.KRPC;
 
@@ -17,10 +15,10 @@ namespace KRPC.Client
         readonly UpdateThread updateThreadObject;
         readonly Thread updateThread;
 
-        public StreamManager (Connection serverConnection, TcpClient streamClient)
+        public StreamManager (Connection serverConnection, MessageReader reader)
         {
             connection = serverConnection;
-            updateThreadObject = new UpdateThread (this, streamClient);
+            updateThreadObject = new UpdateThread (this, reader);
             updateThread = new Thread (new ThreadStart (updateThreadObject.Main));
             updateThread.Start ();
         }
@@ -139,15 +137,14 @@ namespace KRPC.Client
         sealed class UpdateThread
         {
             readonly StreamManager manager;
-            readonly NetworkStream stream;
+            readonly MessageReader reader;
             volatile bool stop;
             readonly EventWaitHandle stopEvent = new EventWaitHandle (false, EventResetMode.ManualReset);
-            byte [] buffer = new byte [Connection.BUFFER_INITIAL_SIZE];
 
-            public UpdateThread (StreamManager streamManager, TcpClient streamClient)
+            public UpdateThread (StreamManager streamManager, MessageReader streamReader)
             {
                 manager = streamManager;
-                stream = streamClient.GetStream ();
+                reader = streamReader;
             }
 
             public void Stop ()
@@ -160,10 +157,10 @@ namespace KRPC.Client
             {
                 try {
                     while (!stop) {
-                        var size = Connection.ReadMessageData (stream, ref buffer, stopEvent);
-                        if (size == 0 || stop)
+                        if (!reader.Read (stopEvent) || stop)
                             break;
-                        var update = StreamUpdate.Parser.ParseFrom (new CodedInputStream (buffer, 0, size));
+                        var update = StreamUpdate.Parser.ParseFrom (
+                            reader.Buffer, reader.Offset, reader.Size);
                         if (stop)
                             break;
                         foreach (var result in update.Results) {

@@ -37,6 +37,7 @@
     <Compile Include="Event.cs" />
     <Compile Include="ExpressionUtils.cs" />
     <Compile Include="IConnection.cs" />
+    <Compile Include="MessageReader.cs" />
     <Compile Include="RPCException.cs" />
     <Compile Include="RemoteObject.cs" />
     <Compile Include="Stream.cs" />
