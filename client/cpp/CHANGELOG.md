@@ -1,7 +1,13 @@
 ## [v0.7.0] - unreleased
 - Support structure types, which a service defines as a compound value with named fields. One
   is generated as a `struct` carrying its fields as members, with a constructor taking them in
-  the order the structure declares them and equality over them (#1066)
+  the order the structure declares them, and equality, ordering and a `std::hash` over them,
+  comparing its fields in turn as a `std::tuple` of the same values does (#1066)
+- Add `krpc::hash_value` and the `krpc::hash` function object, which hash any type the client
+  carries. The standard library hashes neither `std::tuple` nor its containers, which is what a
+  kRPC tuple and the collection types are, so a tuple could not be the key of an unordered
+  container: `std::unordered_set<std::tuple<double, double, double>, krpc::hash>` now can be
+  (#1067)
 - **Breaking:** Support null for any nullable type; nullable non-class values use
   `std::optional`, changing generated signatures (#1017)
 - Add `krpc::connect_local`, which connects to a server on the same machine over unix

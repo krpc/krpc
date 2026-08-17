@@ -1,7 +1,9 @@
 ## [v0.7.0] - unreleased
 - Support structure types, which a service defines as a compound value with named fields. One
   is generated as a `struct` carrying its fields as properties, with a constructor taking them
-  in the order the structure declares them and equality over them (#1066)
+  in the order the structure declares them. It implements `IEquatable` and `IComparable` and
+  carries the equality and relational operators, ordering by its fields in turn as a
+  `System.Tuple` of the same values does (#1066)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
 - Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
