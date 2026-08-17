@@ -29,6 +29,9 @@ void Connection::connect() {
   port_str << port;
   auto endpoints = resolver.resolve(asio::ip::tcp::v4(), address, port_str.str());
   asio::connect(socket, endpoints);
+  // The protocol is strictly request and response, so holding a write back to coalesce it with
+  // a later one can only add latency.
+  socket.set_option(asio::ip::tcp::no_delay(true));
 }
 
 void Connection::send(const char* data, size_t length) {
