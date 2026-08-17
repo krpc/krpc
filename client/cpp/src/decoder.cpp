@@ -95,11 +95,29 @@ void decode(google::protobuf::MessageLite& message, const std::string& data, Cli
 }
 
 uint32_t decode_size(const std::string& data) {
-  uint32_t result;
-  google::protobuf::io::CodedInputStream stream(reinterpret_cast<const uint8_t*>(&data[0]),
-                                                static_cast<int>(data.size()));
-  if (!stream.ReadVarint32(&result)) throw EncodingError("Failed to decode size");
-  return result;
+  uint32_t size = 0;
+  size_t prefix_length = 0;
+  if (!decode_size_prefix(data.data(), data.size(), &size, &prefix_length))
+    throw EncodingError("Failed to decode size");
+  return size;
+}
+
+bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length) {
+  // A size is a varint of at most five bytes, each carrying seven bits of it and a top bit
+  // saying whether another byte follows. Read it here rather than through a coded stream, as
+  // this sits between every message and the one after it.
+  uint32_t result = 0;
+  for (size_t i = 0; i < length; i++) {
+    uint8_t byte = static_cast<uint8_t>(data[i]);
+    result |= static_cast<uint32_t>(byte & 0x7f) << (7 * i);
+    if ((byte & 0x80) == 0) {
+      *size = result;
+      *prefix_length = i + 1;
+      return true;
+    }
+    if (i == 4) throw EncodingError("Failed to decode size");
+  }
+  return false;
 }
 
 }  // namespace decoder

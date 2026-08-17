@@ -1,15 +1,20 @@
 #include "krpc/connection.hpp"
 
+#include <google/protobuf/message_lite.h>
+
+#include <algorithm>
 #include <asio/buffer.hpp>
 #include <asio/connect.hpp>  // IWYU pragma: keep
 #include <asio/error_code.hpp>
 #include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
+#include <cstring>
 #include <memory>
 #include <new>
 #include <ostream>
 #include <string>
+#include <utility>
 // IWYU pragma: no_include <asio/detail/impl/epoll_reactor.hpp>
 // IWYU pragma: no_include <asio/detail/impl/reactive_socket_service_base.ipp>
 // IWYU pragma: no_include <asio/impl/connect.hpp>
@@ -41,27 +46,70 @@ void Connection::send(const char* data, size_t length) {
 void Connection::send(const std::string& data) { asio::write(socket, asio::buffer(data)); }
 
 std::string Connection::receive_message() {
-  std::string data;
-  size_t size = 0;
-  while (true) {
-    try {
-      data += this->receive(1);
-      size = decoder::decode_size(data);
-      break;
-    } catch (EncodingError&) {  // NOLINT(bugprone-empty-catch): need more bytes
-    }
+  auto [data, size] = this->buffered_message();
+  return std::string(data, size);
+}
+
+void Connection::receive_message(google::protobuf::MessageLite& message) {
+  auto [data, size] = this->buffered_message();
+  if (!message.ParseFromArray(data, static_cast<int>(size)))
+    throw EncodingError("Failed to decode message");
+}
+
+std::pair<const char*, size_t> Connection::buffered_message() {
+  // Read until the buffer holds a size prefix and the whole message it describes. A message
+  // longer than a read is read through the buffer as well: the extra copy costs one memcpy,
+  // where reading its body straight into its own storage costs a system call every time.
+  uint32_t size = 0;
+  size_t prefix_length = 0;
+  while (!decoder::decode_size_prefix(buffer.data() + consumed, available(), &size, &prefix_length))
+    this->fill();
+  while (available() < prefix_length + size) this->fill();
+  consumed += prefix_length;
+  const char* message = buffer.data() + consumed;
+  consumed += size;
+  return {message, size};
+}
+
+void Connection::fill() {
+  // Move what is left to the front rather than reading further along a buffer that only ever
+  // grows. In the ordinary case nothing is left and this moves nothing.
+  if (consumed > 0) {
+    std::memmove(buffer.data(), buffer.data() + consumed, available());
+    filled -= consumed;
+    consumed = 0;
   }
-  return this->receive(size);
+  if (buffer.size() - filled < READ_SIZE) buffer.resize(filled + READ_SIZE);
+  filled += socket.read_some(asio::buffer(&buffer[filled], buffer.size() - filled));
+}
+
+void Connection::take(char* data, size_t length) {
+  std::memcpy(data, buffer.data() + consumed, length);
+  consumed += length;
 }
 
 std::string Connection::receive(size_t length) {
   std::string data;
   data.resize(length);
-  asio::read(socket, asio::buffer(&data[0], length));
+  size_t buffered = std::min(length, available());
+  this->take(&data[0], buffered);
+  // Whatever an earlier read has already brought in is used first, and the rest read into the
+  // caller's own storage: a message this long is one the buffer was never going to hold.
+  if (buffered < length) asio::read(socket, asio::buffer(&data[buffered], length - buffered));
   return data;
 }
 
 std::string Connection::partial_receive(size_t length, std::chrono::milliseconds timeout) {
+  // Data read for an earlier message is data that has arrived, so a caller polling for more
+  // has to be given it before the socket is waited on.
+  if (available() > 0) {
+    length = std::min(length, available());
+    std::string data;
+    data.resize(length);
+    this->take(&data[0], length);
+    return data;
+  }
+
   size_t read = 0;
   std::string data;
   data.resize(length);

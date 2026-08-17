@@ -60,6 +60,10 @@ void decode(std::map<K, V>& dictionary, const std::string& data, Client* client 
 
 uint32_t decode_size(const std::string& data);
 
+/** Read the size prefix a message is preceded by out of a buffer. Returns false if the buffer
+    does not hold a complete prefix yet, leaving size and prefix_length untouched. */
+bool decode_size_prefix(const char* data, size_t length, uint32_t* size, size_t* prefix_length);
+
 template <typename T>
 inline void decode(Object<T>& object, const std::string& data, Client* client) {
   uint64_t id;

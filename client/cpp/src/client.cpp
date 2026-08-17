@@ -28,7 +28,7 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
   request.set_client_name(name);
   rpc_connection->send(encoder::encode_message_with_size(request));
   schema::ConnectionResponse response;
-  decoder::decode(response, rpc_connection->receive_message(), nullptr);
+  rpc_connection->receive_message(response);
   if (response.status() != schema::ConnectionResponse::OK)
     throw ConnectionError(response.message());
 
@@ -42,7 +42,7 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
     request.set_client_identifier(response.client_identifier());
     stream_connection->send(encoder::encode_message_with_size(request));
     schema::ConnectionResponse response;
-    decoder::decode(response, stream_connection->receive_message(), nullptr);
+    stream_connection->receive_message(response);
     if (response.status() != schema::ConnectionResponse::OK)
       throw ConnectionError(response.message());
     stream_manager = std::make_shared<StreamManager>(this, stream_connection);
@@ -50,15 +50,12 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
 }
 
 schema::ProcedureResult Client::invoke(const schema::Request& request) {
-  std::string data;
+  schema::Response response;
   {
     std::lock_guard<std::mutex> lock_guard(*lock);
     rpc_connection->send(encoder::encode_message_with_size(request));
-    data = rpc_connection->receive_message();
+    rpc_connection->receive_message(response);
   }
-
-  schema::Response response;
-  decoder::decode(response, data, this);
 
   if (response.has_error()) throw_exception(response.error());
 
