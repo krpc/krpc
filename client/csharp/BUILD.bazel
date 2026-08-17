@@ -1,4 +1,4 @@
-load("@rules_dotnet//dotnet:defs.bzl", "csharp_library", "csharp_nunit_test")
+load("@rules_dotnet//dotnet:defs.bzl", "csharp_binary", "csharp_library", "csharp_nunit_test")
 load("//:config.bzl", "assembly_version", "author", "nuget_version")
 load("//tools/build:assembly_info.bzl", "csharp_assembly_info")
 load("//tools/build:client_test.bzl", "client_test")
@@ -236,6 +236,29 @@ csharp_nunit_test(
         "//tools/build/dotnet:Castle.Core",
         "//tools/build/dotnet:Google.Protobuf",
         "//tools/build/dotnet:Moq",
+    ],
+)
+
+# The benchmark program, run by //tools/benchmarks:csharp. Not a test: it measures.
+csharp_binary(
+    name = "benchmark",
+    srcs = [
+        "benchmark/Benchmark.cs",
+        ":TestAssemblyInfo",
+        ":services-testservice",
+    ],
+    # CS1701: Google.Protobuf references net5/6-era framework assemblies; unification handles
+    # this at runtime. Matches the test target beside it.
+    nowarn = [
+        "CS1591",
+        "CS1573",
+        "CS1701",
+    ],
+    target_frameworks = ["net8.0"],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [
+        ":KRPC.Client.net8",
+        "//tools/build/dotnet:Google.Protobuf",
     ],
 )
 

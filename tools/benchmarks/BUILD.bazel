@@ -162,6 +162,23 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+py_binary(
+    name = "csharp",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=csharp",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath //client/csharp:benchmark)",
+    ],
+    data = [
+        "//client/csharp:benchmark",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 test_suite(
     name = "test",
     tests = [
