@@ -17,6 +17,10 @@ function Connection:connect()
   if result == nil then
     error('Socket error: ' .. err)
   end
+  -- A call writes a request and then waits for its response, so there is never a second small
+  -- write for Nagle's algorithm to hold the first one back for. Left on, it can only delay a
+  -- request the server is already waiting for.
+  self._socket:setoption('tcp-nodelay', true)
 end
 
 function Connection:close()
