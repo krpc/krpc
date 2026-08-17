@@ -95,6 +95,7 @@ message Service {
   string documentation = 6;
   bool deprecated = 7;
   string deprecated_reason = 8;
+  repeated Struct structs = 9;
 }
 
 message Procedure {
@@ -160,6 +161,22 @@ message Exception {
   string deprecated_reason = 4;
 }
 
+message Struct {
+  string name = 1;
+  repeated StructField fields = 2;
+  string documentation = 3;
+  bool deprecated = 4;
+  string deprecated_reason = 5;
+}
+
+message StructField {
+  string name = 1;
+  Type type = 2;
+  string documentation = 3;
+  bool deprecated = 4;
+  string deprecated_reason = 5;
+}
+
 message Type {
   TypeCode code = 1;
   string service = 2;
@@ -183,6 +200,7 @@ message Type {
     // Objects
     CLASS = 100;
     ENUMERATION = 101;
+    STRUCT = 102;
 
     // Messages
     EVENT = 200;
