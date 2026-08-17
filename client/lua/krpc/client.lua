@@ -18,7 +18,7 @@ function Client:_init(rpc_connection)
   self._rpc_connection = rpc_connection
 
   -- Set up the main KRPC service
-  local services = self:_invoke('KRPC', 'GetServices', nil, nil, nil, self._types:services_type()).services
+  local services = self:_invoke('KRPC', 'GetServices', nil, nil, self._types:services_type()).services
 
   -- Register the types of every service before creating any of them: a service's procedures
   -- are built from types that any service may define, and a default value cannot be decoded
@@ -38,13 +38,12 @@ function Client:close()
 end
 
 --- Execute an RPC
-function Client:_invoke(service, procedure, args, param_names, param_types, return_type)
+function Client:_invoke(service, procedure, args, param_types, return_type)
   args = args or List{}
-  param_names = param_names or List{}
   param_types = param_types or List{}
 
   -- Build the request
-  local request = self:_build_request(service, procedure, args, param_names, param_types, return_type)
+  local request = self:_build_request(service, procedure, args, param_types)
 
   -- Send the request
   self._rpc_connection:send_message(request)
@@ -72,7 +71,7 @@ function Client:_invoke(service, procedure, args, param_names, param_types, retu
 end
 
 --- Build a KRPC.Request object
-function Client:_build_request(service, procedure, args, param_names, param_types, return_type)
+function Client:_build_request(service, procedure, args, param_types)
   local request = schema.Request()
   local call = request.calls:add()
   call.service = service
