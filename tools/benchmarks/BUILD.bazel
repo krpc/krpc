@@ -60,12 +60,15 @@ filegroup(
     visibility = ["//:__pkg__"],
 )
 
-# What the runners share: the result record and the table, and the chunk sizing.
+# What the runners share: the result record and the table, the chunk sizing, and starting a
+# TestServer to measure against.
 py_library(
     name = "benchmarks_lib",
     srcs = [
         "chunking.py",
         "report.py",
+        "runner.py",
+        "testserver.py",
     ],
     # The modules refer to each other as tools.benchmarks.<name>, which is also how the
     # in-game scripts reach them when pytest runs them from the repository.
@@ -87,6 +90,18 @@ py_binary(
         "//tools/krpctest:krpctest_lib",
         "@pypi//pytest",
     ],
+)
+
+# The game-less server benchmarks: `bazel run //tools/benchmarks:testserver`. Starts its own
+# TestServer, so a run is seconds and needs nothing installed.
+py_binary(
+    name = "testserver",
+    srcs = ["run_dispatch.py"],
+    args = ["--server=$(rootpath //tools/TestServer)"],
+    data = ["//tools/TestServer"],
+    main = "run_dispatch.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
 )
 
 test_suite(
