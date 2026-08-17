@@ -104,6 +104,17 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+# The python client benchmarks: `bazel run //tools/benchmarks:python`.
+py_binary(
+    name = "python",
+    srcs = ["run_python.py"],
+    args = ["--server=$(rootpath //tools/TestServer)"],
+    data = ["//tools/TestServer"],
+    main = "run_python.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 test_suite(
     name = "test",
     tests = [
