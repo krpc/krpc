@@ -14,6 +14,7 @@
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
 #include <tuple>
+#include <unordered_set>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -399,6 +400,33 @@ TEST_F(test_client, test_struct_default_value) {
   krpc::services::TestService::TestStruct value(
       42, "jeb", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
   ASSERT_EQ(value, test_service.struct_default());
+}
+
+TEST_F(test_client, test_struct_comparison) {
+  typedef krpc::services::TestService::TestStruct Struct;
+  Struct a(1, "jeb", krpc::services::TestService::TestEnum::value_a, {1, 2});
+  Struct b(1, "jeb", krpc::services::TestService::TestEnum::value_a, {1, 2});
+  Struct c(2, "jeb", krpc::services::TestService::TestEnum::value_a, {1, 2});
+
+  ASSERT_EQ(a, b);
+  ASSERT_NE(a, c);
+  // Ordered by the fields in turn, as a tuple of the same values is
+  ASSERT_LT(a, c);
+  ASSERT_GT(c, a);
+  ASSERT_LE(a, b);
+  ASSERT_GE(a, b);
+
+  std::set<Struct> set{c, a, b};
+  ASSERT_EQ(2u, set.size());
+  ASSERT_EQ(a, *set.begin());
+
+  // A structure is a type of our own, so it gets a std::hash and needs nothing further to be
+  // the key of an unordered container
+  std::unordered_set<Struct> hashed{a, b, c};
+  ASSERT_EQ(2u, hashed.size());
+  ASSERT_EQ(std::hash<Struct>()(a), std::hash<Struct>()(b));
+  // A collection of structures hashes too, through krpc::hash
+  ASSERT_EQ(krpc::hash_value(std::vector<Struct>{a}), krpc::hash_value(std::vector<Struct>{b}));
 }
 
 TEST_F(test_client, test_collections_default_values) {
