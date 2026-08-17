@@ -13,6 +13,7 @@ from typing import (
     List,
     Mapping,
     Optional,
+    Tuple,
     Type,
     cast,
 )
@@ -21,6 +22,13 @@ import krpc.schema.KRPC_pb2 as KRPC
 
 if TYPE_CHECKING:
     from krpc.client import Client
+
+
+class UnknownTypeError(ValueError):
+    """Raised when a type in a service definition is one this client cannot use, either
+    because its type code is not one this client knows about, or because it names a structure
+    whose definition was skipped. Both are what a definition from a newer server looks like.
+    """
 
 
 VALUE_TYPES = {
@@ -49,6 +57,33 @@ EXCEPTION_TYPES = {
     "ArgumentNullException": ValueError,
     "ArgumentOutOfRangeException": ValueError,
 }
+
+
+# Every type code a type object can be built for. A definition from a newer server may name
+# a type code that is not among them, which is what makes a definition partly unusable
+# rather than malformed
+_KNOWN_TYPE_CODES = (
+    set(VALUE_TYPES)
+    | set(MESSAGE_TYPES)
+    | {
+        KRPC.Type.NONE,
+        KRPC.Type.CLASS,
+        KRPC.Type.ENUMERATION,
+        KRPC.Type.STRUCT,
+        KRPC.Type.TUPLE,
+        KRPC.Type.LIST,
+        KRPC.Type.SET,
+        KRPC.Type.DICTIONARY,
+    }
+)
+
+
+def is_a_known_type(protobuf_type: KRPC.Type) -> bool:
+    """Whether a type object can be built for the given protocol buffer type. It cannot when
+    the type, or one it contains, has a type code this client does not know about."""
+    if protobuf_type.code not in _KNOWN_TYPE_CODES:
+        return False
+    return all(is_a_known_type(typ) for typ in protobuf_type.types)
 
 
 def _protobuf_type(
@@ -137,6 +172,8 @@ class Types:
             typ = ClassType(protobuf_type, doc)
         elif protobuf_type.code == KRPC.Type.ENUMERATION:
             typ = EnumerationType(protobuf_type, doc)
+        elif protobuf_type.code == KRPC.Type.STRUCT:
+            typ = StructType(protobuf_type, doc)
         elif protobuf_type.code == KRPC.Type.TUPLE:
             typ = TupleType(protobuf_type, self)
         elif protobuf_type.code == KRPC.Type.LIST:
@@ -148,7 +185,7 @@ class Types:
         elif protobuf_type.code in MESSAGE_TYPES:
             typ = MessageType(protobuf_type)
         else:
-            raise ValueError("Invalid type")
+            raise UnknownTypeError("Unknown type code %d" % protobuf_type.code)
 
         self._types[key] = typ
         return typ
@@ -180,6 +217,17 @@ class Types:
             )
             self._type_cache[key] = typ
         return cast(EnumerationType, typ)
+
+    def struct_type(
+        self, service: str, name: str, doc: Optional[str] = None
+    ) -> StructType:
+        """Get a structure type"""
+        key = (KRPC.Type.STRUCT, service, name)
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(_protobuf_type(KRPC.Type.STRUCT, service, name), doc=doc)
+            self._type_cache[key] = typ
+        return cast(StructType, typ)
 
     def exception_type(
         self, service: str, name: str, doc: Optional[str] = None
@@ -297,6 +345,20 @@ class Types:
                 return typ.python_type(
                     [self.coerce_to(x, typ.value_types[i]) for i, x in enumerate(value)]
                 )
+            # Coerce tuples and lists (with the right number of elements) to structures,
+            # taking their elements as the fields in order
+            if isinstance(value, collections.abc.Iterable) and isinstance(
+                typ, StructType
+            ):
+                values = list(value)
+                if len(values) != len(typ.field_types):
+                    raise ValueError
+                return typ.python_type(
+                    *[
+                        self.coerce_to(x, typ.field_types[i])
+                        for i, x in enumerate(values)
+                    ]
+                )
         except ValueError as exn:
             raise ValueError(
                 "Failed to coerce value "
@@ -410,6 +472,54 @@ class EnumerationType(TypeBase):
         self.python_type = _create_enum_type(self._enum_name, values, self._doc)
 
 
+class StructType(TypeBase):
+    """A structure type, whose value is the values of its fields"""
+
+    def __init__(
+        self, protobuf_type: KRPC.Type, doc: Optional[str], typ: Optional[type] = None
+    ) -> None:
+        if protobuf_type.code != KRPC.Type.STRUCT:
+            raise ValueError("Not a struct type")
+        if not protobuf_type.service:
+            raise ValueError("Struct type has no service name")
+        if not protobuf_type.name:
+            raise ValueError("Struct type has no struct name")
+        self._service_name = protobuf_type.service
+        self._struct_name = protobuf_type.name
+        self._doc = doc
+        # The names and types of the fields, in the order their values are encoded in. Empty
+        # until set_fields is called, as the field list is not carried by the type itself
+        self.field_names: List[str] = []
+        self.field_types: List[TypeBase] = []
+        string = "Struct(%s.%s)" % (protobuf_type.service, protobuf_type.name)
+        # When typ is None, set_fields must be called to set the python_type
+        super().__init__(protobuf_type, cast(type, typ), string)
+
+    @property
+    def has_fields(self) -> bool:
+        """Whether the fields of the structure are known, which they are only once its
+        definition has been registered by calling set_fields"""
+        return self.python_type is not None
+
+    def set_fields(
+        self,
+        fields: Iterable[Tuple[str, TypeBase]],
+        python_type: Optional[type] = None,
+    ) -> None:
+        """Set the fields of the structure, as pairs of a name and a type in the order the
+        structure declares them. Creates a named tuple to represent a value of the
+        structure, unless a python type to use instead is given."""
+        assert self.python_type is None
+        fields = list(fields)
+        self.field_names = [name for name, _ in fields]
+        self.field_types = [typ for _, typ in fields]
+        if python_type is None:
+            python_type = _create_struct_type(
+                self._struct_name, self.field_names, self._doc
+            )
+        self.python_type = python_type
+
+
 class TupleType(TypeBase):
     """A tuple collection type"""
 
@@ -471,6 +581,28 @@ class MessageType(TypeBase):
             raise ValueError("Not a message type")
         typ = MESSAGE_TYPES[protobuf_type.code]
         super().__init__(protobuf_type, typ, typ.__name__)
+
+
+def check_type_is_known(typ: TypeBase) -> None:
+    """Raise an UnknownTypeError if the given type, or a type it contains, is a structure
+    whose definition was skipped and whose fields are therefore not known. Whatever names
+    such a type cannot be encoded or decoded, and is skipped in turn."""
+    if isinstance(typ, StructType):
+        if not typ.has_fields:
+            raise UnknownTypeError(
+                "The definition of the struct %s.%s was skipped"
+                % (typ.protobuf_type.service, typ.protobuf_type.name)
+            )
+        for field_type in typ.field_types:
+            check_type_is_known(field_type)
+    elif isinstance(typ, TupleType):
+        for value_type in typ.value_types:
+            check_type_is_known(value_type)
+    elif isinstance(typ, (ListType, SetType)):
+        check_type_is_known(typ.value_type)
+    elif isinstance(typ, DictionaryType):
+        check_type_is_known(typ.key_type)
+        check_type_is_known(typ.value_type)
 
 
 class DynamicType:
@@ -582,6 +714,14 @@ def _create_enum_type(
     for name in values.keys():
         setattr(getattr(typ, name), "__doc__", values[name]["doc"])
     return typ  # type: ignore[return-value]
+
+
+def _create_struct_type(
+    struct_name: str, field_names: List[str], doc: Optional[str]
+) -> type:
+    typ = collections.namedtuple(struct_name, field_names)  # type: ignore[misc]
+    setattr(typ, "__doc__", doc)
+    return typ
 
 
 def _create_exception_type(

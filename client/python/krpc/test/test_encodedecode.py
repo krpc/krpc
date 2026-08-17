@@ -157,6 +157,36 @@ class TestEncodeDecode(unittest.TestCase):
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)
 
+    def test_struct(self) -> None:
+        typ = self.types.struct_type("ServiceName", "StructName")
+        typ.set_fields(
+            [
+                ("count", self.types.uint32_type),
+                ("name", self.types.string_type),
+                ("flag", self.types.bool_type),
+            ]
+        )
+        value = typ.python_type(count=1, name="jeb", flag=False)
+        # A structure carries the values of its fields in order, which is what a tuple of
+        # those values encodes to
+        cases: List[Tuple[object, str]] = [(value, "0a01010a04036a65620a0100")]
+        self._run_test_encode_value(typ, cases)
+        self._run_test_decode_value(typ, cases)
+
+    def test_struct_with_the_wrong_number_of_fields(self) -> None:
+        typ = self.types.struct_type("ServiceName", "OtherStructName")
+        typ.set_fields([("count", self.types.uint32_type)])
+        self.assertRaises(EncodingError, Encoder.encode, (1, 2), typ)
+        self.assertRaises(EncodingError, Decoder.decode, None, b"", typ)
+
+    def test_struct_with_appended_fields(self) -> None:
+        # A value from a newer server may carry fields this client does not know about,
+        # which come after the ones it does and are ignored
+        typ = self.types.struct_type("ServiceName", "AppendedStructName")
+        typ.set_fields([("count", self.types.uint32_type)])
+        value = Decoder.decode(None, unhexlify("0a01010a04036a6562"), typ)
+        self.assertEqual(typ.python_type(count=1), value)
+
     def test_list(self) -> None:
         cases: List[Tuple[object, str]] = [
             ([], ""),
