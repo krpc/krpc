@@ -6,6 +6,13 @@
   such as `krpc.limits.SINT32_MAX` and `krpc.limits.DOUBLE_LOWEST`. Lua names none of them
   itself, as `math.maxinteger` and `math.mininteger` need Lua 5.3, and a parameter that
   defaults to one is now documented as the constant rather than the decimal value (#1045)
+- Reduce the cost of a remote procedure call. The request carrying a call is written as the
+  bytes it comes to, rather than built as a protocol buffer message and serialized, and so are
+  the lists, sets, tuples and dictionaries a call carries, which are read back the same way. A
+  value is encoded and decoded by looking up its type code rather than by asking the type what
+  class it is, a float or a double is packed without building a protobuf field encoder for it,
+  the size of a message is read directly rather than by handing each byte to a decoder until it
+  stops raising an error, and the client connection disables Nagle's algorithm (#1056)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)

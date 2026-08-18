@@ -13,6 +13,14 @@
   opens a connection of its own to each server. Messages are then sent as they are, rather than
   wrapped in the multiplexed message a serial port needs to say which of the connections it
   carries a message belongs to (#1055)
+- Reduce the cost of a remote procedure call. A message is sent and received through a buffer
+  rather than a piece at a time, taking a call from tens of reads and writes down to one write
+  and two reads, and a message is measured as it is encoded rather than by a pass over it
+  first (#1056)
+- Add `KRPC_BUFFER_SIZE`, how much of a message to hold in memory while it is written to or
+  read from the connection. It bounds the memory a call costs and never the size of a message,
+  but a message that fits is cheaper to send, so it is worth setting above the largest call a
+  program makes. Defaults to 1024 bytes, and to 128 on Arduino (#1056)
 
 ## [v0.6.0]
 - Distribute via vcpkg (#874)

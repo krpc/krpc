@@ -1,6 +1,15 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
+- Reduce the cost of a remote procedure call. A value is encoded and decoded without a
+  protobuf stream of its own, its bytes are written into a buffer of their own rather than one
+  the thread keeps, a response is read a block at a time and parsed straight out of the read
+  buffer, the request a call is built into is kept from one call to the next, and the client
+  connections disable Nagle's algorithm (#1056)
+- Reduce the cost of a call that returns a collection or an object. What kind of value a type
+  carries, and how to build one, is worked out the first time the type is seen rather than for
+  every value encoded or decoded, and a collection works out how to encode and decode its
+  items once for the collection rather than once for every item (#1056)
 
 ## [v0.6.0]
 - **Breaking:** Requires .NET Framework 4.7.2 or later (#948)
