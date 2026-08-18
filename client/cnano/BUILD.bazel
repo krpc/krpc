@@ -187,7 +187,8 @@ cog_test(
 
 # The library built for each of the transports that can be tested here. Both enable server error
 # messages, so that the tests cover decoding them and a failure says what the server objected to;
-# the default build, with them disabled, is covered by the krpc_cnano library itself.
+# the default build, with them disabled, is covered by the krpc_cnano library itself. The TCP/IP
+# one is not testonly, as the benchmark program is built on it too.
 cc_library(
     name = "krpc_cnano_serialio",
     testonly = True,
@@ -336,6 +337,18 @@ cc_binary(
     ],
 )
 
+# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures.
+cc_binary(
+    name = "benchmark",
+    srcs = [
+        "benchmark/benchmark.c",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [":krpc_cnano_tcpip"],
+)
+
 test_suite(
     name = "lint",
     tests = [
@@ -356,6 +369,7 @@ clang_format_test(
     name = "clangformat",
     size = "small",
     srcs = glob([
+        "benchmark/*.c",
         "src/*.c",
         "include/**/*.h",
         "test/**/*.cpp",

@@ -247,7 +247,7 @@ and tools for A/B testing to compare performance.
 ```
 bazel run //tools/benchmarks:testserver              # server, game-less
 bazel run //tools/benchmarks:python                  # a client, against TestServer
-bazel run //tools/benchmarks:cpp                     #   "  (also: java, csharp, lua)
+bazel run //tools/benchmarks:cpp                     #   "  (also: java, csharp, lua, cnano)
 bazel run //tools/benchmarks:clients                 # every client, one table
 bazel run //tools/benchmarks:server                  # server, in game, launches KSP
 ```
@@ -269,10 +269,15 @@ What each one measures:
  * **`:testserver`** — what the server pays per remote procedure call: argument decode, dispatch,
    the procedure, result encode. It runs against `TestServer`, which is the server without the
    game, so a change to `core/` or `server/` can be measured without launching the game.
- * **`:python`, `:cpp`, `:java`, `:csharp`, `:lua`** — what a client pays: the round trip for a
-   call, and what a call carrying a collection of values costs, against the same `TestServer`.
-   Measuring a client means timing it from inside that client, so each is its own program in its
-   own language, printing results for `run_client.py` to turn into the usual table.
+ * **`:python`, `:cpp`, `:java`, `:csharp`, `:lua`, `:cnano`** — what a client pays: the round
+   trip for a call, and what a call carrying a collection of values costs, against the same
+   `TestServer`. Measuring a client means timing it from inside that client, so each is its own
+   program in its own language, printing results for `run_client.py` to turn into the usual table.
+
+   `:cnano` measures the client built for TCP/IP rather than for the serial port it is usually
+   built for. The server reads a serial port on a poll whose interval is longer than everything
+   these cases measure put together, so over a serial port the figures would be that poll rather
+   than the client.
 
    They run against a server started with `--no-frame-pacing`, which runs its update loop as
    fast as it will go: paced, a round trip is inflated by the part of each update that does not

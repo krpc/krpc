@@ -196,6 +196,31 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
+# Measured over TCP/IP rather than the serial port this client is usually built for, since the
+# server reads a serial port on a poll whose interval is longer than everything this measures
+# put together.
+optimized_binary(
+    name = "cnano_client",
+    binary = "//client/cnano:benchmark",
+)
+
+py_binary(
+    name = "cnano",
+    srcs = ["run_client.py"],
+    args = [
+        "--name=cnano",
+        "--server=$(rootpath //tools/TestServer)",
+        "--client=$(rootpath :cnano_client)",
+    ],
+    data = [
+        ":cnano_client",
+        "//tools/TestServer",
+    ],
+    main = "run_client.py",
+    visibility = ["//visibility:public"],
+    deps = [":benchmarks_lib"],
+)
+
 # Every client at once, as one table: `bazel run //tools/benchmarks:clients`. Runs what the
 # targets above run, one language after another, so the columns are the same measurements those
 # targets report rather than a second way of taking them.
@@ -212,8 +237,10 @@ py_binary(
         "--client=java=$(rootpath //client/java:benchmark)",
         "--client=csharp=$(rootpath //client/csharp:benchmark)",
         "--client=lua=$(rootpath //client/lua:benchmark)",
+        "--client=cnano=$(rootpath :cnano_client)",
     ],
     data = [
+        ":cnano_client",
         ":cpp_client",
         "//client/csharp:benchmark",
         "//client/java:benchmark",
