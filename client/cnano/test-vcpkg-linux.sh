@@ -1,5 +1,5 @@
 #!/bin/bash
-# Test installing the kRPC C-nano client via vcpkg overlay port.
+# Test installing the kRPC C-nano client via vcpkg overlay port, once per transport it offers.
 # Builds the release archive with Bazel, or uses a provided archive.
 # Usage: test-vcpkg.sh [/path/to/krpc-cnano-VERSION.zip]
 # Requires: VCPKG_ROOT environment variable pointing to a vcpkg installation.
@@ -47,38 +47,26 @@ sed -i \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port into a local directory
+# Install via the overlay port and build the consumer project against it, once per transport the
+# port offers. Where the library is built for TCP/IP the consumer opens a connection, which is
+# what proves the transport reaches a program through the package vcpkg installed.
 out=$(pwd)/bazel-bin/client/cnano/test-vcpkg
 rm -rf "$out"
 mkdir -p "$out"
-"$vcpkg_bin" install krpc-cnano --overlay-ports="$tmpport" --x-install-root="$out/vcpkg_installed"
 
-# Consumer test: a small project that uses find_package(krpc_cnano CONFIG REQUIRED)
-mkdir -p "$out/consumer"
-
-cat > "$out/consumer/main.c" << 'EOF'
-#include <stdio.h>
-#include <krpc_cnano.h>
-#include <krpc_cnano/services/krpc.h>
-int main(void) {
-    /* Compile+link test only — no server connection. */
-    printf("krpc_cnano library linked OK\n");
-    return 0;
+function run_scenario {
+  local name=$1
+  local package=$2
+  local dir="$out/$name"
+  mkdir -p "$dir"
+  "$vcpkg_bin" install "$package" --overlay-ports="$tmpport" \
+    --x-install-root="$dir/vcpkg_installed"
+  cmake -S "$scriptroot/test-consumer" -B "$dir/consumer" \
+    "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+    "-DVCPKG_INSTALLED_DIR=$dir/vcpkg_installed" \
+    -DCMAKE_BUILD_TYPE=Release
+  cmake --build "$dir/consumer" --parallel "$(nproc)"
 }
-EOF
 
-cat > "$out/consumer/CMakeLists.txt" << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_cnano_consumer_test LANGUAGES C)
-set(CMAKE_C_STANDARD 99)
-find_package(krpc_cnano CONFIG REQUIRED)
-add_executable(test_app main.c)
-target_link_libraries(test_app PRIVATE krpc_cnano::krpc_cnano)
-EOF
-
-mkdir -p "$out/consumer/build"
-cmake -S "$out/consumer" -B "$out/consumer/build" \
-  "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
-  "-DVCPKG_INSTALLED_DIR=$out/vcpkg_installed" \
-  -DCMAKE_BUILD_TYPE=Release
-cmake --build "$out/consumer/build" --parallel "$(nproc)"
+run_scenario serialio "krpc-cnano"
+run_scenario tcpip "krpc-cnano[tcp]"

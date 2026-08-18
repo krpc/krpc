@@ -8,5 +8,10 @@
     "nanopb",
     { "name": "vcpkg-cmake", "host": true },
     { "name": "vcpkg-cmake-config", "host": true }
-  ]
+  ],
+  "features": {
+    "tcp": {
+      "description": "Communicate with the server over TCP/IP rather than a serial port"
+    }
+  }
 }
