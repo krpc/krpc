@@ -18,6 +18,18 @@
 #endif
 #endif
 
+/* A serial link carries the RPC and stream connections over the one link, so each message sent
+   over it is wrapped in a multiplexed message saying which connection it belongs to. A transport
+   that opens a connection of its own per server sends the messages themselves.
+
+   A custom transport is taken to carry both connections over one link, as a serial port does;
+   one that opens a connection per server is built with KRPC_SINGLE_CONNECTION. */
+#if defined(KRPC_COMMUNICATION_POSIX) || defined(KRPC_COMMUNICATION_WINDOWS) || \
+    defined(KRPC_COMMUNICATION_ARDUINO) ||                                      \
+    (defined(KRPC_COMMUNICATION_CUSTOM) && !defined(KRPC_SINGLE_CONNECTION))
+#define KRPC_MULTIPLEXED
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
