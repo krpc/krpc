@@ -1,6 +1,7 @@
 #pragma once
 {% macro args(parameters) %}
 std::vector<krpc::encoder::Value> _args;
+_args.reserve({{ parameters | length }});
 {% for x in parameters %}
 _args.push_back({% if x.nullable is defined and x.nullable %}encoder::encode_nullable({{x.name}}){% else %}encoder::encode({{x.name}}){% endif %});
 {% endfor %}

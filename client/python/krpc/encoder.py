@@ -1,6 +1,7 @@
 from __future__ import annotations
-from typing import cast, Callable, Collection, Iterable, List, Mapping
+from typing import cast, Any, Callable, Collection, Iterable, List, Mapping
 from enum import Enum
+import struct
 
 # pylint: disable=import-error,no-name-in-module
 import google.protobuf
@@ -28,8 +29,17 @@ from krpc.types import (
 # depends on the version of protobuf installed
 _pb_VarintEncoder = protobuf_encoder._VarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
 _pb_SignedVarintEncoder = protobuf_encoder._SignedVarintEncoder()  # type: ignore[attr-defined]  # pylint: disable=invalid-name
-_pb_DoubleEncoder = protobuf_encoder.DoubleEncoder(1, False, False)  # type: ignore[arg-type]
-_pb_FloatEncoder = protobuf_encoder.FloatEncoder(1, False, False)  # type: ignore[arg-type]
+
+# protobuf's zigzag encoder carries no types, so it is bound here with the type it does
+# have rather than described again at every call. A call carrying a collection reaches it
+# once per value, so this also saves looking it up on its module that many times
+_pb_zigzag_encode: Callable[[int], int] = protobuf_wire_format.ZigZagEncode
+
+# The one byte encoding of every value that fits in one. A varint below 128 is
+# the byte itself, and message sizes and the length prefixes of strings and
+# bytes almost always are, so the common case is a lookup rather than a loop
+# that builds a list and joins it
+_SINGLE_BYTE_VARINTS = tuple(bytes((value,)) for value in range(128))
 
 
 class Encoder:
@@ -41,10 +51,12 @@ class Encoder:
     @classmethod
     def encode(cls, x: object, typ: TypeBase) -> bytes:
         """Encode a message or value of the given protocol buffer type"""
-        if isinstance(typ, MessageType):
-            return cast(google.protobuf.message.Message, x).SerializeToString()
+        # The value types come first: they are what most arguments are, and this is
+        # on the hot path of every remote procedure call
         if isinstance(typ, ValueType):
             return cls._encode_value(x, typ)
+        if isinstance(typ, MessageType):
+            return cast(google.protobuf.message.Message, x).SerializeToString()
         if isinstance(typ, EnumerationType):
             return cls._encode_value(cast(Enum, x).value, cls._types.sint32_type)
         if isinstance(typ, ClassType):
@@ -52,27 +64,31 @@ class Encoder:
             return cls._encode_value(object_id, cls._types.uint64_type)
         if isinstance(typ, ListType):
             list_msg = KRPC.List()
+            encode_item = cls._item_encoder(typ.value_type)
             list_msg.items.extend(
-                cls.encode(item, typ.value_type) for item in cast(Iterable[object], x)
+                encode_item(item) for item in cast(Iterable[object], x)
             )
             return list_msg.SerializeToString()
         if isinstance(typ, DictionaryType):
             dict_msg = KRPC.Dictionary()
             entries = []
             dict_obj = cast(Mapping, x)  # type: ignore[type-arg]
+            encode_key = cls._item_encoder(typ.key_type)
+            encode_value = cls._item_encoder(typ.value_type)
             for key, value in sorted(
                 dict_obj.items(), key=lambda i: i[0]
             ):  # type: ignore[no-any-return]
                 entry = KRPC.DictionaryEntry()
-                entry.key = cls.encode(key, typ.key_type)
-                entry.value = cls.encode(value, typ.value_type)
+                entry.key = encode_key(key)
+                entry.value = encode_value(value)
                 entries.append(entry)
             dict_msg.entries.extend(entries)
             return dict_msg.SerializeToString()
         if isinstance(typ, SetType):
             set_msg = KRPC.Set()
+            encode_item = cls._item_encoder(typ.value_type)
             set_msg.items.extend(
-                cls.encode(item, typ.value_type) for item in cast(Iterable[object], x)
+                encode_item(item) for item in cast(Iterable[object], x)
             )
             return set_msg.SerializeToString()
         if isinstance(typ, TupleType):
@@ -96,30 +112,40 @@ class Encoder:
     ) -> bytes:
         """Encode a protobuf message, prepended with its size"""
         data = message.SerializeToString()
-        size: bytes = protobuf_encoder._VarintBytes(len(data))  # type: ignore[attr-defined]
+        length = len(data)
+        if length < 128:
+            return _SINGLE_BYTE_VARINTS[length] + data
+        size: bytes = protobuf_encoder._VarintBytes(length)  # type: ignore[attr-defined]
         return size + data
 
     @classmethod
+    def _item_encoder(cls, typ: TypeBase) -> Callable[[Any], bytes]:
+        """A function that encodes one value of the given type.
+
+        A collection carries many values of the same type, so working out how to encode
+        one of them is worth doing once for the collection rather than once for every
+        item in it. The types a collection usually holds are answered directly; anything
+        else falls back to the full encode.
+        """
+        if isinstance(typ, ValueType):
+            encode = _VALUE_ENCODERS.get(typ.code)
+            if encode is None:
+                raise EncodingError("Invalid type")
+            return encode
+        if isinstance(typ, ClassType):
+            encode_id = _VALUE_ENCODERS[cls._types.uint64_type.code]
+            return lambda x: encode_id(x._object_id)
+        if isinstance(typ, EnumerationType):
+            encode_value = _VALUE_ENCODERS[cls._types.sint32_type.code]
+            return lambda x: encode_value(x.value)
+        return lambda x: cls.encode(x, typ)
+
+    @classmethod
     def _encode_value(cls, value: object, typ: TypeBase) -> bytes:
-        if typ.protobuf_type.code == KRPC.Type.SINT32:
-            return _ValueEncoder.encode_sint32(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.SINT64:
-            return _ValueEncoder.encode_sint64(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.UINT32:
-            return _ValueEncoder.encode_uint32(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.UINT64:
-            return _ValueEncoder.encode_uint64(cast(int, value))
-        if typ.protobuf_type.code == KRPC.Type.DOUBLE:
-            return _ValueEncoder.encode_double(cast(float, value))
-        if typ.protobuf_type.code == KRPC.Type.FLOAT:
-            return _ValueEncoder.encode_float(cast(float, value))
-        if typ.protobuf_type.code == KRPC.Type.BOOL:
-            return _ValueEncoder.encode_bool(cast(bool, value))
-        if typ.protobuf_type.code == KRPC.Type.STRING:
-            return _ValueEncoder.encode_string(cast(str, value))
-        if typ.protobuf_type.code == KRPC.Type.BYTES:
-            return _ValueEncoder.encode_bytes(cast(bytes, value))
-        raise EncodingError("Invalid type")
+        encode = _VALUE_ENCODERS.get(typ.code)
+        if encode is None:
+            raise EncodingError("Invalid type")
+        return encode(value)
 
 
 class _ValueEncoder:
@@ -128,48 +154,33 @@ class _ValueEncoder:
 
     @classmethod
     def encode_double(cls, value: float) -> bytes:
-        data: List[bytes] = []
-
-        def write(x: bytes) -> None:
-            data.append(x)
-
-        _pb_DoubleEncoder(write, value, True)  # type: ignore[operator]
-        return b"".join(data[1:])  # strips the tag value
+        return struct.pack("<d", value)
 
     @classmethod
     def encode_float(cls, value: float) -> bytes:
-        data: List[bytes] = []
-
-        def write(x: bytes) -> None:
-            data.append(x)
-
-        _pb_FloatEncoder(write, value, True)  # type: ignore[operator]
-        return b"".join(data[1:])  # strips the tag value
+        return struct.pack("<f", value)
 
     @classmethod
     def _encode_varint(cls, value: int) -> bytes:
+        if value < 128:
+            return _SINGLE_BYTE_VARINTS[value]
         data: List[bytes] = []
-
-        def write(x: bytes) -> None:
-            data.append(x)
-
-        _pb_VarintEncoder(write, value, True)
+        _pb_VarintEncoder(data.append, value, True)
         return b"".join(data)
 
     @classmethod
     def _encode_signed_varint(cls, value: int) -> bytes:
-        value = protobuf_wire_format.ZigZagEncode(value)  # type: ignore[no-untyped-call]
+        value = _pb_zigzag_encode(value)
+        if value < 128:
+            return _SINGLE_BYTE_VARINTS[value]
+        # Two bytes carry a value up to 16383, which is most of what is not one byte, and
+        # writing them costs one call where protobuf's encoder builds a list and joins it.
+        # A collection reaches this once per value it carries.
+        if value < 16384:
+            return bytes((value & 0x7F | 0x80, value >> 7))
         data: List[bytes] = []
         _pb_SignedVarintEncoder(data.append, value, True)
         return b"".join(data)
-
-    @classmethod
-    def encode_sint32(cls, value: int) -> bytes:
-        return cls._encode_signed_varint(value)
-
-    @classmethod
-    def encode_sint64(cls, value: int) -> bytes:
-        return cls._encode_signed_varint(value)
 
     @classmethod
     def encode_uint32(cls, value: int) -> bytes:
@@ -196,3 +207,20 @@ class _ValueEncoder:
     @classmethod
     def encode_bytes(cls, value: bytes) -> bytes:
         return b"".join([cls._encode_varint(len(value)), value])
+
+
+# The encoder for each value type, looked up by type code rather than found by
+# comparing against each code in turn, as this is on the hot path of every
+# remote procedure call. The signed integer types share an encoder, named for
+# what it writes rather than for one of the types that write it
+_VALUE_ENCODERS: Mapping[KRPC.Type.TypeCode, Callable[[Any], bytes]] = {
+    KRPC.Type.SINT32: _ValueEncoder._encode_signed_varint,
+    KRPC.Type.SINT64: _ValueEncoder._encode_signed_varint,
+    KRPC.Type.UINT32: _ValueEncoder.encode_uint32,
+    KRPC.Type.UINT64: _ValueEncoder.encode_uint64,
+    KRPC.Type.DOUBLE: _ValueEncoder.encode_double,
+    KRPC.Type.FLOAT: _ValueEncoder.encode_float,
+    KRPC.Type.BOOL: _ValueEncoder.encode_bool,
+    KRPC.Type.STRING: _ValueEncoder.encode_string,
+    KRPC.Type.BYTES: _ValueEncoder.encode_bytes,
+}

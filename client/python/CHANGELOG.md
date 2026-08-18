@@ -6,6 +6,15 @@
   such as `krpc.limits.SINT32_MAX` and `krpc.limits.DOUBLE_LOWEST`. Python names none of
   them itself, and a generated stub whose parameter defaults to one now names the constant
   rather than writing out the decimal value (#1045)
+- Reduce the cost of a remote procedure call. Type objects are cached by the arguments
+  naming them and their python type and type code read as plain attributes, values are
+  encoded and decoded through a lookup on their type code rather than a chain of
+  comparisons, floats and doubles are packed directly and short varints without going
+  through protobuf's varint routines, a request is built as a single message, a response
+  is read in one system call and taken out of the read buffer in one pass, a service
+  reaches its procedures by ordinary attribute lookup, and the client connections disable
+  Nagle's algorithm. A collection works out how to encode and decode its items once for
+  the collection rather than once for every item (#1056)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)

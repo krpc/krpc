@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import cast, Optional, Type, TYPE_CHECKING
+from typing import cast, Callable, Mapping, Optional, Tuple, Type, TYPE_CHECKING
 import struct
 import google.protobuf
 
@@ -29,6 +29,31 @@ if TYPE_CHECKING:
     from krpc.client import Client
 
 
+# protobuf's varint reader and zigzag decoder are internal and carry no types, so they are
+# bound here with the types they do have rather than described again at every call. A call
+# carrying a collection reaches them once per value, so this also saves looking them up on
+# their module that many times
+_pb_decode_varint: Callable[[bytes, int], Tuple[int, int]] = (
+    protobuf_decoder._DecodeVarint  # type: ignore[attr-defined]
+)
+_pb_zigzag_decode: Callable[[int], int] = protobuf_wire_format.ZigZagDecode
+
+
+def _decode_varint(data: bytes) -> Tuple[int, int]:
+    """Decode the varint at the start of the data, returning its value and the
+    number of bytes it occupies. Raises IndexError if the data does not hold a
+    complete varint.
+
+    A varint whose first byte has the top bit clear holds its own value in that
+    byte. Message sizes, and the length prefixes of strings and bytes, are
+    almost always that, so the common case is an index rather than a call into
+    protobuf's varint reader."""
+    first = data[0]
+    if first < 128:
+        return first, 1
+    return _pb_decode_varint(data, 0)
+
+
 class Decoder:
     """Routines for decoding messages and values from
     the protocol buffer serialization format"""
@@ -53,13 +78,15 @@ class Decoder:
     @classmethod
     def decode(cls, client: Optional[Client], data: bytes, typ: TypeBase) -> object:
         """Given a python type, and serialized data, decode the value"""
+        # The value types come first: they are what most results are, and this is on
+        # the hot path of every remote procedure call
+        if isinstance(typ, ValueType):
+            return cls._decode_value(data, typ)
         if isinstance(typ, MessageType):
             return cls.decode_message(data, typ.python_type)
         if isinstance(typ, EnumerationType):
             value = cls._decode_value(data, cls._types.sint32_type)
             return typ.python_type(value)
-        if isinstance(typ, ValueType):
-            return cls._decode_value(data, typ)
         if isinstance(typ, ClassType):
             object_id_typ = cls._types.uint64_type
             object_id = cls._decode_value(data, object_id_typ)
@@ -67,19 +94,20 @@ class Decoder:
         msg: object
         if isinstance(typ, ListType):
             msg = cast(KRPC.List, cls.decode_message(data, KRPC.List))
-            return [cls.decode(client, item, typ.value_type) for item in msg.items]
+            decode_item = cls._item_decoder(client, typ.value_type)
+            return [decode_item(item) for item in msg.items]
         if isinstance(typ, DictionaryType):
             msg = cast(KRPC.Dictionary, cls.decode_message(data, KRPC.Dictionary))
+            decode_key = cls._item_decoder(client, typ.key_type)
+            decode_value = cls._item_decoder(client, typ.value_type)
             return dict(
-                (
-                    cls.decode(client, entry.key, typ.key_type),
-                    cls.decode(client, entry.value, typ.value_type),
-                )
+                (decode_key(entry.key), decode_value(entry.value))
                 for entry in msg.entries
             )
         if isinstance(typ, SetType):
             msg = cast(KRPC.Set, cls.decode_message(data, KRPC.Set))
-            return set(cls.decode(client, item, typ.value_type) for item in msg.items)
+            decode_item = cls._item_decoder(client, typ.value_type)
+            return set(decode_item(item) for item in msg.items)
         if isinstance(typ, TupleType):
             msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
             return tuple(
@@ -90,7 +118,14 @@ class Decoder:
 
     @classmethod
     def decode_message_size(cls, data: bytes) -> int:
-        return cast(int, protobuf_decoder._DecodeVarint(data, 0)[0])  # type: ignore[attr-defined]
+        return _decode_varint(data)[0]
+
+    @classmethod
+    def decode_size_prefix(cls, data: bytes) -> Tuple[int, int]:
+        """Decode the size prefix of a message, returning the size of the message
+        and the number of bytes the prefix itself occupies. Raises IndexError if
+        the data does not yet hold a complete prefix."""
+        return _decode_varint(data)
 
     @classmethod
     def decode_message(
@@ -101,26 +136,37 @@ class Decoder:
         return message
 
     @classmethod
+    def _item_decoder(
+        cls, client: Optional[Client], typ: TypeBase
+    ) -> Callable[[bytes], object]:
+        """A function that decodes one value of the given type.
+
+        A collection carries many values of the same type, so working out how to decode
+        one of them is worth doing once for the collection rather than once for every
+        item in it. The types a collection usually holds are answered directly; anything
+        else falls back to the full decode.
+        """
+        if isinstance(typ, ValueType):
+            decode = _VALUE_DECODERS.get(typ.code)
+            if decode is None:
+                raise EncodingError("Invalid type")
+            return decode
+        if isinstance(typ, ClassType):
+            decode_id = _VALUE_DECODERS[cls._types.uint64_type.code]
+            python_type = typ.python_type
+            return lambda data: python_type(client, decode_id(data))
+        if isinstance(typ, EnumerationType):
+            decode_value = _VALUE_DECODERS[cls._types.sint32_type.code]
+            enum_type = typ.python_type
+            return lambda data: enum_type(decode_value(data))
+        return lambda data: cls.decode(client, data, typ)
+
+    @classmethod
     def _decode_value(cls, data: bytes, typ: TypeBase) -> object:
-        if typ.protobuf_type.code == KRPC.Type.SINT32:
-            return _ValueDecoder.decode_sint32(data)
-        if typ.protobuf_type.code == KRPC.Type.SINT64:
-            return _ValueDecoder.decode_sint64(data)
-        if typ.protobuf_type.code == KRPC.Type.UINT32:
-            return _ValueDecoder.decode_uint32(data)
-        if typ.protobuf_type.code == KRPC.Type.UINT64:
-            return _ValueDecoder.decode_uint64(data)
-        if typ.protobuf_type.code == KRPC.Type.DOUBLE:
-            return _ValueDecoder.decode_double(data)
-        if typ.protobuf_type.code == KRPC.Type.FLOAT:
-            return _ValueDecoder.decode_float(data)
-        if typ.protobuf_type.code == KRPC.Type.BOOL:
-            return _ValueDecoder.decode_bool(data)
-        if typ.protobuf_type.code == KRPC.Type.STRING:
-            return _ValueDecoder.decode_string(data)
-        if typ.protobuf_type.code == KRPC.Type.BYTES:
-            return _ValueDecoder.decode_bytes(data)
-        raise EncodingError("Invalid type")
+        decode = _VALUE_DECODERS.get(typ.code)
+        if decode is None:
+            raise EncodingError("Invalid type")
+        return decode(data)
 
 
 class _ValueDecoder:
@@ -132,28 +178,18 @@ class _ValueDecoder:
         # The zigzag payload is an unsigned varint. Reading it as a signed one would sign
         # extend it as two's complement first, which corrupts anything from 2**62 up once
         # the payload sets bit 63 - long.MaxValue would decode as -1.
-        value = protobuf_decoder._DecodeVarint(data, 0)[0]  # type: ignore[attr-defined]
-        return cast(int, protobuf_wire_format.ZigZagDecode(value))  # type: ignore[no-untyped-call]
+        #
+        # The single byte case is read here rather than through _decode_varint, which is the
+        # general form of it: a collection reaches this once per value it carries, and a
+        # value from -64 to 63 is one byte.
+        first = data[0]
+        if first < 128:
+            return _pb_zigzag_decode(first)
+        return _pb_zigzag_decode(_pb_decode_varint(data, 0)[0])
 
     @classmethod
     def _decode_varint(cls, data: bytes) -> int:
-        return cast(int, protobuf_decoder._DecodeVarint(data, 0)[0])  # type: ignore[attr-defined]
-
-    @classmethod
-    def decode_sint32(cls, data: bytes) -> int:
-        return cls._decode_signed_varint(data)
-
-    @classmethod
-    def decode_sint64(cls, data: bytes) -> int:
-        return cls._decode_signed_varint(data)
-
-    @classmethod
-    def decode_uint32(cls, data: bytes) -> int:
-        return cls._decode_varint(data)
-
-    @classmethod
-    def decode_uint64(cls, data: bytes) -> int:
-        return cls._decode_varint(data)
+        return _decode_varint(data)[0]
 
     # The code for the following two methods is taken from
     # google.protobuf.internal.decoder._FloatDecoder and _DoubleDecoder
@@ -219,10 +255,27 @@ class _ValueDecoder:
 
     @classmethod
     def decode_string(cls, data: bytes) -> str:
-        size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
+        size, position = _decode_varint(data)
         return data[position : position + size].decode("utf-8")
 
     @classmethod
     def decode_bytes(cls, data: bytes) -> bytes:
-        size, position = protobuf_decoder._DecodeVarint(data, 0)  # type: ignore[attr-defined]
+        size, position = _decode_varint(data)
         return data[position : position + size]
+
+
+# The decoder for each value type, looked up by type code rather than found by
+# comparing against each code in turn, as this is on the hot path of every
+# remote procedure call. The signed and unsigned integer types share a decoder
+# apiece, named for what it reads rather than for one of the types that read it
+_VALUE_DECODERS: Mapping[KRPC.Type.TypeCode, Callable[[bytes], object]] = {
+    KRPC.Type.SINT32: _ValueDecoder._decode_signed_varint,
+    KRPC.Type.SINT64: _ValueDecoder._decode_signed_varint,
+    KRPC.Type.UINT32: _ValueDecoder._decode_varint,
+    KRPC.Type.UINT64: _ValueDecoder._decode_varint,
+    KRPC.Type.DOUBLE: _ValueDecoder.decode_double,
+    KRPC.Type.FLOAT: _ValueDecoder.decode_float,
+    KRPC.Type.BOOL: _ValueDecoder.decode_bool,
+    KRPC.Type.STRING: _ValueDecoder.decode_string,
+    KRPC.Type.BYTES: _ValueDecoder.decode_bytes,
+}

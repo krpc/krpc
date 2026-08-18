@@ -6,16 +6,26 @@ import google.protobuf
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 
+# Size of a socket read. Reads are made a block at a time and buffered, rather
+# than exactly the number of bytes wanted, so that a message costs one read
+# rather than one per byte of its size prefix plus one for its body.
+_READ_SIZE = 8192
+
 
 class Connection:
     def __init__(self, address: str, port: int) -> None:
         self._address = address
         self._port = port
         self._socket: socket.socket = None  # type: ignore[assignment]
+        # Data read from the socket that has not been consumed yet
+        self._buffer = bytearray()
 
     def connect(self) -> None:
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self._socket.connect((self._address, self._port))
+        # The protocol is strictly request/response, so waiting for more data to
+        # coalesce with can only add latency
+        self._socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
     def close(self) -> None:
         if self._socket is not None:
@@ -31,29 +41,37 @@ class Connection:
     def receive_message(self, typ: type) -> google.protobuf.message.Message:
         """Receive a protobuf message and decode it"""
 
-        # Read the size and position of the response message
-        data = b""
+        # Read until the buffer holds the size prefix and the whole message it
+        # describes, then take the message out in one go. An incomplete prefix
+        # runs off the end of the buffer, which is an IndexError
+        buffer = self._buffer
         while True:
             try:
-                data += self.partial_receive(1)
-                size = Decoder.decode_message_size(data)
-                break
+                size, prefix_length = Decoder.decode_size_prefix(buffer)
             except IndexError:
-                pass
-
-        # Read and decode the response message
-        data = self.receive(size)
+                self._fill()
+                continue
+            end = prefix_length + size
+            if len(buffer) >= end:
+                break
+            self._fill()
+        data = bytes(buffer[prefix_length:end])
+        del buffer[:end]
         return Decoder.decode_message(data, typ)
 
     def send(self, data: bytes) -> None:
         """Send data to the connection.
         Blocks until all data has been sent."""
         assert data
-        while data:
-            sent = self._socket.send(data)
-            if sent == 0:
-                raise socket.error("Connection closed")
-            data = data[sent:]
+        self._socket.sendall(data)
+
+    def _fill(self) -> None:
+        """Read a block from the socket into the buffer.
+        Blocks until at least one byte has been read."""
+        data = self._socket.recv(_READ_SIZE)
+        if not data:
+            raise socket.error("Connection closed")
+        self._buffer += data
 
     def receive(self, length: int) -> bytes:
         """Receive data from the connection.
@@ -61,19 +79,23 @@ class Connection:
         if length == 0:
             return b""
         assert length > 0
-        data = b""
-        while len(data) < length:
-            remaining = length - len(data)
-            result = self._socket.recv(min(4096, remaining))
-            if not result:
-                raise socket.error("Connection closed")
-            data += result
+        buffer = self._buffer
+        while len(buffer) < length:
+            self._fill()
+        data = bytes(buffer[:length])
+        del buffer[:length]
         return data
 
     def partial_receive(self, length: int, timeout: float = 0.01) -> bytes:
         """Receive up to length bytes of data from the connection.
         Returns no data if none arrived within the timeout."""
         assert length > 0
+        buffer = self._buffer
+        if buffer:
+            length = min(length, len(buffer))
+            data = bytes(buffer[:length])
+            del buffer[:length]
+            return data
         try:
             ready = select.select([self._socket], [], [], timeout)
         except ValueError as exn:

@@ -73,22 +73,54 @@ class Types:
     strings, and stores python types for services and service defined
     class and enumeration types."""
 
+    # The value types are held one attribute each, so that naming one costs an
+    # attribute lookup on the hot path of every remote procedure call
+    # pylint: disable=too-many-instance-attributes
+
     def __init__(self) -> None:
         # Mapping from protobuf type strings to type objects
         self._types: dict[bytes, TypeBase] = {}
         self._exception_types: dict[tuple[str, str], Type[Exception]] = {}
+        # Type objects keyed by the arguments they were asked for, rather than by
+        # the serialized protobuf type that keys _types. The generated service
+        # stubs name their parameter and return types on every call, so this is on
+        # the hot path of every remote procedure call; a lookup here costs a tuple
+        # hash instead of building and serializing a protobuf message.
+        self._type_cache: dict[tuple[object, ...], TypeBase] = {}
+
+        # The value types are the same objects for the lifetime of the store, so
+        # they are resolved once here rather than on every access
+        self.double_type = self._value_type(KRPC.Type.DOUBLE)
+        self.float_type = self._value_type(KRPC.Type.FLOAT)
+        self.sint32_type = self._value_type(KRPC.Type.SINT32)
+        self.sint64_type = self._value_type(KRPC.Type.SINT64)
+        self.uint32_type = self._value_type(KRPC.Type.UINT32)
+        self.uint64_type = self._value_type(KRPC.Type.UINT64)
+        self.bool_type = self._value_type(KRPC.Type.BOOL)
+        self.string_type = self._value_type(KRPC.Type.STRING)
+        self.bytes_type = self._value_type(KRPC.Type.BYTES)
+        self.event_type = cast(
+            MessageType, self.as_type(_protobuf_type(KRPC.Type.EVENT))
+        )
+
+    def _value_type(self, code: int) -> ValueType:
+        return cast(ValueType, self.as_type(_protobuf_type(code)))
 
     def register_class_type(self, service: str, name: str, python_type: type) -> None:
         protobuf_type = _protobuf_type(KRPC.Type.CLASS, service, name)
         key = protobuf_type.SerializeToString()
         assert key not in self._types
-        self._types[key] = ClassType(protobuf_type, None, python_type)
+        typ = ClassType(protobuf_type, None, python_type)
+        self._types[key] = typ
+        self._type_cache[(KRPC.Type.CLASS, service, name)] = typ
 
     def register_enum_type(self, service: str, name: str, python_type: type) -> None:
         protobuf_type = _protobuf_type(KRPC.Type.ENUMERATION, service, name)
         key = protobuf_type.SerializeToString()
         assert key not in self._types
-        self._types[key] = EnumerationType(protobuf_type, None, python_type)
+        typ = EnumerationType(protobuf_type, None, python_type)
+        self._types[key] = typ
+        self._type_cache[(KRPC.Type.ENUMERATION, service, name)] = typ
 
     def as_type(self, protobuf_type: KRPC.Type, doc: str | None = None) -> TypeBase:
         """Return a type object given a protocol buffer type"""
@@ -125,68 +157,29 @@ class Types:
     def is_none_type(cls, protobuf_type: KRPC.Type) -> bool:
         return protobuf_type.code == KRPC.Type.NONE
 
-    @property
-    def double_type(self) -> ValueType:
-        """Get a double value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.DOUBLE)))
-
-    @property
-    def float_type(self) -> ValueType:
-        """Get a float value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.FLOAT)))
-
-    @property
-    def sint32_type(self) -> ValueType:
-        """Get an sint32 value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.SINT32)))
-
-    @property
-    def sint64_type(self) -> ValueType:
-        """Get an sint64 value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.SINT64)))
-
-    @property
-    def uint32_type(self) -> ValueType:
-        """Get a uint32 value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.UINT32)))
-
-    @property
-    def uint64_type(self) -> ValueType:
-        """Get a uint64 value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.UINT64)))
-
-    @property
-    def bool_type(self) -> ValueType:
-        """Get a bool value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.BOOL)))
-
-    @property
-    def string_type(self) -> ValueType:
-        """Get a string value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.STRING)))
-
-    @property
-    def bytes_type(self) -> TypeBase:
-        """Get a bytes value type"""
-        return cast(ValueType, self.as_type(_protobuf_type(KRPC.Type.BYTES)))
-
     def class_type(
         self, service: str, name: str, doc: Optional[str] = None
     ) -> ClassType:
         """Get a class type"""
-        return cast(
-            ClassType,
-            self.as_type(_protobuf_type(KRPC.Type.CLASS, service, name), doc=doc),
-        )
+        key = (KRPC.Type.CLASS, service, name)
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(_protobuf_type(KRPC.Type.CLASS, service, name), doc=doc)
+            self._type_cache[key] = typ
+        return cast(ClassType, typ)
 
     def enumeration_type(
         self, service: str, name: str, doc: Optional[str] = None
     ) -> EnumerationType:
         """Get an enumeration type"""
-        return cast(
-            EnumerationType,
-            self.as_type(_protobuf_type(KRPC.Type.ENUMERATION, service, name), doc=doc),
-        )
+        key = (KRPC.Type.ENUMERATION, service, name)
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(
+                _protobuf_type(KRPC.Type.ENUMERATION, service, name), doc=doc
+            )
+            self._type_cache[key] = typ
+        return cast(EnumerationType, typ)
 
     def exception_type(
         self, service: str, name: str, doc: Optional[str] = None
@@ -199,53 +192,56 @@ class Types:
 
     def tuple_type(self, *value_types: TypeBase) -> TupleType:
         """Get a tuple type"""
-        return cast(
-            TupleType,
-            self.as_type(
+        key: tuple[object, ...] = (KRPC.Type.TUPLE,) + value_types
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(
                 _protobuf_type(
                     KRPC.Type.TUPLE, None, None, [t.protobuf_type for t in value_types]
                 )
-            ),
-        )
+            )
+            self._type_cache[key] = typ
+        return cast(TupleType, typ)
 
     def list_type(self, value_type: TypeBase) -> ListType:
         """Get a list type"""
-        return cast(
-            ListType,
-            self.as_type(
+        key = (KRPC.Type.LIST, value_type)
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(
                 _protobuf_type(KRPC.Type.LIST, None, None, [value_type.protobuf_type])
-            ),
-        )
+            )
+            self._type_cache[key] = typ
+        return cast(ListType, typ)
 
     def set_type(self, value_type: TypeBase) -> SetType:
         """Get a set type"""
-        return cast(
-            SetType,
-            self.as_type(
+        key = (KRPC.Type.SET, value_type)
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(
                 _protobuf_type(KRPC.Type.SET, None, None, [value_type.protobuf_type])
-            ),
-        )
+            )
+            self._type_cache[key] = typ
+        return cast(SetType, typ)
 
     def dictionary_type(
         self, key_type: TypeBase, value_type: TypeBase
     ) -> DictionaryType:
         """Get a dictionary type"""
-        return cast(
-            DictionaryType,
-            self.as_type(
+        key = (KRPC.Type.DICTIONARY, key_type, value_type)
+        typ = self._type_cache.get(key)
+        if typ is None:
+            typ = self.as_type(
                 _protobuf_type(
                     KRPC.Type.DICTIONARY,
                     None,
                     None,
                     [key_type.protobuf_type, value_type.protobuf_type],
                 )
-            ),
-        )
-
-    @property
-    def event_type(self) -> MessageType:
-        """Get an Event message type"""
-        return cast(MessageType, self.as_type(_protobuf_type(KRPC.Type.EVENT)))
+            )
+            self._type_cache[key] = typ
+        return cast(DictionaryType, typ)
 
     @property
     def procedure_call_type(self) -> MessageType:
@@ -334,22 +330,20 @@ class Types:
 class TypeBase:
     """Base class for all type objects"""
 
+    # The protocol buffer type, the python type and the type code are plain
+    # attributes rather than properties: naming one is on the hot path of every
+    # remote procedure call, where a property would cost a call
+
     def __init__(
         self, protobuf_type: KRPC.Type, python_type: type, string: str
     ) -> None:
-        self._protobuf_type = protobuf_type
-        self._python_type = python_type
+        self.protobuf_type = protobuf_type
+        self.python_type = python_type
+        # The type code, which is what the encoder and decoder select on. Held
+        # here as well as in the protocol buffer type, as reading it from there
+        # is a protocol buffer field access
+        self.code = protobuf_type.code
         self._string = string
-
-    @property
-    def protobuf_type(self) -> KRPC.Type:
-        """Get the protocol buffer type string for the type"""
-        return self._protobuf_type
-
-    @property
-    def python_type(self) -> type:
-        """Get the python type"""
-        return self._python_type
 
     def __str__(self) -> str:
         return "<type: " + str(self._string) + ">"
@@ -407,13 +401,13 @@ class EnumerationType(TypeBase):
     def has_values(self) -> bool:
         """Whether the values of the enumeration are known, which they are
         only once its definition has been registered by calling set_values"""
-        return self._python_type is not None
+        return self.python_type is not None
 
     def set_values(self, values: Mapping[str, Mapping[str, object]]) -> None:
         """Set the python type. Creates an Enum class
         using the given values."""
-        assert self._python_type is None
-        self._python_type = _create_enum_type(self._enum_name, values, self._doc)
+        assert self.python_type is None
+        self.python_type = _create_enum_type(self._enum_name, values, self._doc)
 
 
 class TupleType(TypeBase):

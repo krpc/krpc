@@ -146,6 +146,14 @@ argument to the compiler.
 
 * Memory allocation
 
+  * ``KRPC_BUFFER_SIZE`` -- How much of a message to hold in memory while it is written to or read
+    from the connection, defaulting to 1024 bytes, and to 128 bytes when building for Arduino where
+    a kilobyte is a large share of the memory there is. A message larger than this is carried in as
+    many passes as it takes, so this bounds the memory a call costs and never the size of a message
+    it can carry. A message that fits is also cheaper to send, as its size can be written in front
+    of it rather than found by a pass over it first, so it is worth setting this above the largest
+    call a program makes. Two buffers of this size are used, one for a message being sent and one
+    for a message being received, and neither outlives the call it is made for.
   * ``KRPC_ALLOC_BLOCK_SIZE`` -- The size of collections (lists, sets, etc.) are not know ahead of
     time, so when they are received from the server they are decoded into dynamically allocated
     memory on the heap. This option controls how many items to increase the capacity of the

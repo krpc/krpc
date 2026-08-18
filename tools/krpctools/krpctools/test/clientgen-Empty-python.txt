@@ -15,35 +15,31 @@ class EmptyService:
 
     def __init__(self, client: Client) -> None:
         self._client = client
+        # The classes, enumerations and exceptions the service defines are put on the
+        # service here, so that reaching one is an ordinary attribute lookup and nothing
+        # has to intercept the lookups that do not name one - which is every call, as a
+        # call goes through a procedure or a property. A class is bound to the client it
+        # is reached through, so that its static methods use that client.
+        self.__dict__.update(self._enumerations)
+        self.__dict__.update(self._exceptions)
+        for name, class_type in self._classes.items():
+            self.__dict__[name] = WrappedClass(client, class_type)
 
-    def __getattribute__(self, name):
-        # Intercepts calls to obtain classes from the service,
-        # to inject the client instance so that it can be used
-        # for static method calls
-        classes = object.__getattribute__(self, "_classes")
-        if name in classes:
-            client = object.__getattribute__(self, "_client")
-            return WrappedClass(client, classes[name])
-
-        # Intercept calls to obtain enumeration types
-        enumerations = object.__getattribute__(self, "_enumerations")
-        if name in enumerations:
-           return enumerations[name]
-
-        # Intercept calls to obtain exception types
-        exceptions = object.__getattribute__(self, "_exceptions")
-        if name in exceptions:
-           return exceptions[name]
-
-        # Fall back to default behaviour
-        return object.__getattribute__(self, name)
-
-    def __dir__(self):
-        result = object.__dir__(self)
-        result.extend(object.__getattribute__(self, "_classes").keys())
-        result.extend(object.__getattribute__(self, "_enumerations").keys())
-        result.extend(object.__getattribute__(self, "_exceptions").keys())
-        return result
+    def __getattr__(self, name):
+        # Reached only once the ordinary lookup has failed, which for a service means
+        # either a name it does not define, or one it does whose procedure or property
+        # raised an AttributeError of its own. Python discards that error before calling
+        # this, so it cannot be reported here; what can be done is to not report a member
+        # that does exist as missing, which would point at the wrong thing entirely.
+        cls = type(self)
+        if hasattr(cls, name):
+            raise AttributeError(
+                "'%s' object attribute '%s' raised AttributeError"
+                % (cls.__name__, name)
+            )
+        raise AttributeError(
+            "'%s' object has no attribute '%s'" % (cls.__name__, name)
+        )
 
     _classes = {
     }

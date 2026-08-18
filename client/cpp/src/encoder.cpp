@@ -95,14 +95,19 @@ std::string encode(const google::protobuf::MessageLite& message) {
 }
 
 std::string encode_message_with_size(const google::protobuf::MessageLite& message) {
+  std::string data;
+  encode_message_with_size(message, &data);
+  return data;
+}
+
+void encode_message_with_size(const google::protobuf::MessageLite& message, std::string* data) {
   size_t length = message.ByteSizeLong();
   size_t header_length = google::protobuf::io::CodedOutputStream::VarintSize64(length);
-  std::string data(header_length + length, 0);
+  data->resize(header_length + length);
   (void)google::protobuf::io::CodedOutputStream::WriteVarint64ToArray(
-      length, reinterpret_cast<uint8_t*>(&data[0]));
-  if (!message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(&data[header_length])))
+      length, reinterpret_cast<uint8_t*>(&(*data)[0]));
+  if (!message.SerializeWithCachedSizesToArray(reinterpret_cast<uint8_t*>(&(*data)[header_length])))
     throw EncodingError("Failed to encode message with size");
-  return data;
 }
 
 }  // namespace encoder

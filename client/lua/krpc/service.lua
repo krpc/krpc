@@ -66,16 +66,15 @@ local function _construct_func(invoke, service_name, procedure_name, prefix_para
       {'service_name',
        'procedure_name',
        '{'..stringx.join(',', param_names)..'}',
-       'param_names',
        'param_types',
        'return_type'
       }) ..
     ')'
   local func = 'return function (' .. stringx.join(',', prefix_param_names..param_names) .. ') ' .. body .. ' end'
   local wrapper =
-    'return function (invoke,service_name,procedure_name,param_names,param_types,return_type,Map) ' .. func .. ' end'
+    'return function (invoke,service_name,procedure_name,param_types,return_type,Map) ' .. func .. ' end'
   local callable = assert(loadstring(wrapper, '_construct_func('..service_name..','..procedure_name..')'))()
-  return callable(invoke,service_name,procedure_name,param_names,param_types,return_type,Map)
+  return callable(invoke,service_name,procedure_name,param_types,return_type,Map)
 end
 
 local ServiceBase = class(Types.DynamicType)

@@ -3,6 +3,16 @@
   `std::optional`, changing generated signatures (#1017)
 - Fix a service with a collection of enumerations in a procedure signature failing to
   compile (#1044)
+- Reduce the cost of a remote procedure call. A response is read a block at a time and
+  parsed straight out of the read buffer, the request a call is built into and the response
+  it is answered by are kept from one call to the next, the arguments of a call are sized up
+  front, and the client connections disable Nagle's algorithm. `Client::invoke`,
+  `Client::build_request` and `Client::build_call` name a service and a procedure with
+  `std::string_view`, so a call no longer builds a string for either (#1056)
+- Reduce the cost of a call that carries a collection. A value is read without setting up a
+  protobuf stream for it, the message a collection is carried in is kept from one call to the
+  next rather than allocated and freed for each, and a list is given room for its values up
+  front (#1056)
 
 ## [v0.6.0]
 - Update to protobuf v35.1 (#850)

@@ -79,7 +79,7 @@ class Client(krpc.services.Client):
 
         services = cast(
             KRPC.Services,
-            self._invoke("KRPC", "GetServices", [], [], [], self._types.services_type),
+            self._invoke("KRPC", "GetServices", [], [], self._types.services_type),
         ).services
 
         # Load services
@@ -233,18 +233,15 @@ class Client(krpc.services.Client):
         service: str,
         procedure: str,
         args: Iterable[object],
-        param_names: Iterable[str],
         param_types: Iterable[TypeBase],
         return_type: Optional[TypeBase],
     ) -> object:
         """Execute an RPC"""
 
-        # Build the request
-        call = self._build_call(
-            service, procedure, args, param_names, param_types, return_type
-        )
+        # Build the request. A request carries exactly one call, so the call is
+        # filled in where it belongs rather than built on its own and copied in
         request = KRPC.Request()
-        request.calls.extend([call])
+        self._encode_call(request.calls.add(), service, procedure, args, param_types)
 
         # Send the request
         with self._rpc_connection_lock:
@@ -258,38 +255,52 @@ class Client(krpc.services.Client):
             raise self._build_error(response.error)
 
         # Check for an error in the procedure results
-        if response.results[0].HasField("error"):
-            raise self._build_error(response.results[0].error)
+        result = response.results[0]
+        if result.HasField("error"):
+            raise self._build_error(result.error)
 
         # Decode the response and return the (optional) result
-        result = None
-        if return_type is not None and not response.results[0].is_null:
-            result = Decoder.decode(self, response.results[0].value, return_type)
-            if isinstance(result, KRPC.Event):
-                result = Event(self, result)
-        return result
+        if return_type is None or result.is_null:
+            return None
+        value = Decoder.decode(self, result.value, return_type)
+        if isinstance(value, KRPC.Event):
+            value = Event(self, value)
+        return value
 
     def _build_call(
         self,
         service: str,
         procedure: str,
         args: Iterable[object],
-        param_names: Iterable[str],  # pylint: disable=unused-argument
         param_types: Iterable[TypeBase],
         return_type: Optional[TypeBase],  # pylint: disable=unused-argument
     ) -> KRPC.ProcedureCall:
         """Build a KRPC.ProcedureCall object"""
 
         call = KRPC.ProcedureCall()
+        self._encode_call(call, service, procedure, args, param_types)
+        return call
+
+    def _encode_call(
+        self,
+        call: KRPC.ProcedureCall,
+        service: str,
+        procedure: str,
+        args: Iterable[object],
+        param_types: Iterable[TypeBase],
+    ) -> None:
+        """Fill in a KRPC.ProcedureCall message with a call and its arguments"""
+
         call.service = service
         call.procedure = procedure
+        arguments = call.arguments
 
         for i, (value, typ) in enumerate(zip(args, param_types)):
             if isinstance(value, DefaultArgument):
                 continue
             if value is None:
                 # A null argument is signaled out-of-band; the value field is left unset
-                call.arguments.add(position=i, is_null=True)
+                arguments.add(position=i, is_null=True)
                 continue
             if not isinstance(value, typ.python_type):
                 try:
@@ -299,9 +310,7 @@ class Client(krpc.services.Client):
                         "%s.%s() argument %d must be a %s, got a %s"
                         % (service, procedure, i, typ.python_type, type(value))
                     ) from exc
-            call.arguments.add(position=i, value=Encoder.encode(value, typ))
-
-        return call
+            arguments.add(position=i, value=Encoder.encode(value, typ))
 
     def _build_error(self, error: KRPC.Error) -> Exception:
         """Build an exception from an error message that

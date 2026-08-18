@@ -21,7 +21,12 @@ namespace KRPC.Client
         TcpClient streamClient;
         NetworkStream rpcStream;
         CodedOutputStream codedRpcStream;
-        byte[] responseBuffer = new byte [BUFFER_INITIAL_SIZE];
+        MessageReader rpcReader;
+
+        // The request a call is sent as, and the parts it is built from. See BuildRequest.
+        readonly Request request = new Request ();
+        readonly ProcedureCall call = new ProcedureCall ();
+        readonly List<Argument> callArguments = new List<Argument> ();
 
         internal StreamManager StreamManager {
             get;
@@ -38,37 +43,52 @@ namespace KRPC.Client
             if (address == null)
                 address = IPAddress.Loopback;
 
+            // Every request carries the one call, which is filled in for each of them.
+            request.Calls.Add (call);
+
             rpcClient = new TcpClient ();
             rpcClient.Connect (address, rpcPort);
+            // A call writes a request and then waits for its response, so there is never a
+            // second small write for Nagle's algorithm to hold the first one back for. Left on,
+            // it can only delay a request the server is already waiting for.
+            rpcClient.NoDelay = true;
             rpcStream = rpcClient.GetStream ();
             codedRpcStream = new CodedOutputStream (rpcStream, true);
-            var request = new ConnectionRequest ();
-            request.Type = Type.Rpc;
-            request.ClientName = name;
-            codedRpcStream.WriteLength (request.CalculateSize ());
-            request.WriteTo (codedRpcStream);
+            rpcReader = new MessageReader (rpcStream);
+            var connectionRequest = new ConnectionRequest ();
+            connectionRequest.Type = Type.Rpc;
+            connectionRequest.ClientName = name;
+            codedRpcStream.WriteLength (connectionRequest.CalculateSize ());
+            connectionRequest.WriteTo (codedRpcStream);
             codedRpcStream.Flush ();
-            int size = ReadMessageData (rpcStream, ref responseBuffer);
-            var response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+            rpcReader.Read ();
+            var response = ConnectionResponse.Parser.ParseFrom (
+                rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
             if (response.Status != ConnectionResponse.Types.Status.Ok)
                 throw new ConnectionException (response.Message);
 
             if (streamPort != 0) {
                 streamClient = new TcpClient ();
                 streamClient.Connect (address, streamPort);
+                streamClient.NoDelay = true;
                 var streamStream = streamClient.GetStream ();
-                request = new ConnectionRequest ();
-                request.Type = Type.Stream;
-                request.ClientIdentifier = response.ClientIdentifier;
+                connectionRequest = new ConnectionRequest ();
+                connectionRequest.Type = Type.Stream;
+                connectionRequest.ClientIdentifier = response.ClientIdentifier;
                 var codedStreamStream = new CodedOutputStream (streamStream, true);
-                codedStreamStream.WriteLength (request.CalculateSize ());
-                request.WriteTo (codedStreamStream);
+                codedStreamStream.WriteLength (connectionRequest.CalculateSize ());
+                connectionRequest.WriteTo (codedStreamStream);
                 codedStreamStream.Flush ();
-                size = ReadMessageData (streamStream, ref responseBuffer);
-                response = ConnectionResponse.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+                // The reader that reads the reply goes on to read the stream updates that
+                // follow it. It may have taken the first of them along with the reply, so a
+                // second reader on the same socket would never see it.
+                var streamReader = new MessageReader (streamStream);
+                streamReader.Read ();
+                response = ConnectionResponse.Parser.ParseFrom (
+                    streamReader.Buffer, streamReader.Offset, streamReader.Size);
                 if (response.Status != ConnectionResponse.Types.Status.Ok)
                     throw new ConnectionException (response.Message);
-                StreamManager = new StreamManager (this, streamClient);
+                StreamManager = new StreamManager (this, streamReader);
             }
 
             Services.KRPC.Service.AddExceptionTypes (this);
@@ -147,23 +167,18 @@ namespace KRPC.Client
         public ProcedureResult Invoke (string service, string procedure, IList<ByteString> arguments = null)
         {
             CheckDisposed ();
-            return Invoke (GetCall (service, procedure, arguments));
-        }
-
-        internal ProcedureResult Invoke (ProcedureCall call)
-        {
-            var request = new Request ();
-            request.Calls.Add (call);
             Response response;
 
             lock (invokeLock) {
+                BuildRequest (service, procedure, arguments);
                 // Send request to server
                 codedRpcStream.WriteLength (request.CalculateSize ());
                 request.WriteTo (codedRpcStream);
                 codedRpcStream.Flush ();
                 // Receive response
-                int size = ReadMessageData (rpcStream, ref responseBuffer);
-                response = Response.Parser.ParseFrom (new CodedInputStream (responseBuffer, 0, size));
+                rpcReader.Read ();
+                response = Response.Parser.ParseFrom (
+                    rpcReader.Buffer, rpcReader.Offset, rpcReader.Size);
             }
 
             if (response.Error != null)
@@ -171,6 +186,36 @@ namespace KRPC.Client
             if (response.Results[0].Error != null)
                 throw GetException (response.Results [0].Error);
             return response.Results[0];
+        }
+
+        /// <summary>
+        /// Fill in the request that the next call is sent as.
+        /// </summary>
+        /// <remarks>
+        /// The request, the call it carries and the arguments of that call are kept from one
+        /// call to the next rather than built for each. A protobuf message allocates storage for
+        /// its fields as they are set, and the shape of a request never changes, so a call after
+        /// the first fills in storage it already has. They are guarded by the lock that already
+        /// serializes a call against the response it is waiting for.
+        /// </remarks>
+        void BuildRequest (string service, string procedure, IList<ByteString> values)
+        {
+            call.Service = service;
+            call.Procedure = procedure;
+            call.Arguments.Clear ();
+            if (values == null)
+                return;
+            for (var position = 0; position < values.Count; position++) {
+                while (callArguments.Count <= position)
+                    callArguments.Add (new Argument ());
+                var argument = callArguments [position];
+                argument.Position = (uint)position;
+                // A null encoding signals a null value, carried out-of-band by is_null with
+                // the value field left unset.
+                argument.IsNull = values [position] == null;
+                argument.Value = values [position] ?? ByteString.Empty;
+                call.Arguments.Add (argument);
+            }
         }
 
         internal static ProcedureCall GetCall (string service, string procedure, IList<ByteString> arguments = null)
@@ -305,56 +350,6 @@ namespace KRPC.Client
             var instanceExpr = Expression.Lambda<Func<object>> (
                 Expression.Convert (instance, typeof(object)));
             return instanceExpr.Compile () ();
-        }
-
-        // Initial buffer size of 1 MB
-        internal const int BUFFER_INITIAL_SIZE = 1 * 1024 * 1024;
-        // Initial increases in increments of 512 KB
-        internal const int BUFFER_INCREASE_SIZE = 512 * 1024;
-
-        /// <summary>
-        /// Read the data from a message from the given stream into the given buffer.
-        /// May reallocate the buffer if it is too small to receive the message.
-        /// Returns the lenght of the message in bytes.
-        /// If a stopEvent is specified, this method will return 0 if the event is triggered.
-        /// </summary>
-        internal static int ReadMessageData (System.IO.Stream stream, ref byte[] buffer, EventWaitHandle stopEvent = null)
-        {
-            bool stop = stopEvent != null && stopEvent.WaitOne (0);
-            int bufferSize = 0;
-            int messageSize = 0;
-
-            // Read the offset and size of the message data
-            while (!stop) {
-                bufferSize += stream.Read (buffer, bufferSize, 1);
-                stop |= stopEvent != null && stopEvent.WaitOne (0);
-                try {
-                    var codedStream = new CodedInputStream (buffer, 0, bufferSize);
-                    messageSize = (int)codedStream.ReadUInt32 ();
-                    stop |= stopEvent != null && stopEvent.WaitOne (0);
-                    break;
-                } catch (InvalidProtocolBufferException) {
-                }
-            }
-            if (stop)
-                return 0;
-
-            // Read the response data
-            bufferSize = 0;
-            while (!stop && bufferSize < messageSize) {
-                // Increase the size of the buffer if the remaining space is low
-                if (buffer.Length - bufferSize < BUFFER_INCREASE_SIZE) {
-                    var newBuffer = new byte [buffer.Length + BUFFER_INCREASE_SIZE];
-                    Array.Copy (buffer, newBuffer, bufferSize);
-                    buffer = newBuffer;
-                }
-                bufferSize += stream.Read (buffer, bufferSize, messageSize - bufferSize);
-                stop |= stopEvent != null && stopEvent.WaitOne (0);
-            }
-            if (stop)
-                return 0;
-
-            return messageSize;
         }
 
         readonly IDictionary<string, System.Type> exceptionTypes = new Dictionary<string, System.Type>();
