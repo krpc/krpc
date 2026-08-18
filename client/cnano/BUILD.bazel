@@ -161,10 +161,14 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
-        ":arduino",
-        ":client",
+        ":client-serialio",
+        ":client-tcpip",
         ":cog",
+        ":communication-arduino",
+        ":communication-serialio",
+        ":communication-tcpip",
         ":lint",
+        ":unit",
     ],
 )
 
@@ -181,12 +185,83 @@ cog_test(
     ],
 )
 
+# The library built for each of the transports that can be tested here. Both enable server error
+# messages, so that the tests cover decoding them and a failure says what the server objected to;
+# the default build, with them disabled, is covered by the krpc_cnano library itself. The TCP/IP
+# one is not testonly, as the benchmark program is built on it too.
+cc_library(
+    name = "krpc_cnano_serialio",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_ERROR_MESSAGES"],
+    includes = ["include"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+cc_library(
+    name = "krpc_cnano_tcpip",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = [
+        "KRPC_COMMUNICATION_TCP",
+        "KRPC_ERROR_MESSAGES",
+    ],
+    includes = ["include"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+# What the client does regardless of the transport it talks over: encoding and decoding values
+# and messages. It needs no server, so it runs on its own rather than under the harness that
+# starts one, and it is built for one transport rather than every one of them.
+cc_test(
+    name = "unit",
+    size = "small",
+    srcs = [
+        "test/test_decoder.cpp",
+        "test/test_encode_decode.cpp",
+        "test/test_encoder.cpp",
+        "test/test_utils.cpp",
+        "test/testing_tools.hpp",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    deps = [
+        ":krpc_cnano_serialio",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The communication backends, one test each. Every one of them runs against something that
+# behaves as the thing it talks to does, so none needs the hardware, port or server it is
+# written for.
+cc_test(
+    name = "communication-serialio",
+    size = "small",
+    srcs = ["test/test_communication_posix.cpp"],
+    deps = [
+        ":krpc_cnano_serialio",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "communication-tcpip",
+    size = "small",
+    srcs = ["test/test_communication_tcp.cpp"],
+    deps = [
+        ":krpc_cnano_tcpip",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
 # Builds the Arduino communication backend for the host, against a stand-in for the Arduino
 # HardwareSerial class, so it can be tested without hardware. It deliberately does not depend
 # on krpc_cnano, whose copy of communication.c is built for the host platform instead and
 # defines the same functions.
 cc_test(
-    name = "arduino",
+    name = "communication-arduino",
     size = "small",
     srcs = [
         "include/krpc_cnano/communication.h",
@@ -204,8 +279,12 @@ cc_test(
     deps = ["@cpp_googletest//:gtest"],
 )
 
+# The client end to end against a TestServer, once per transport. The two differ in more than
+# the socket: a serial port carries both of the connections to a server over the one link, so
+# its messages are wrapped in a multiplexed message saying which they belong to, where a
+# transport that opens a connection per server sends the messages themselves.
 client_test(
-    name = "client",
+    name = "client-serialio",
     size = "small",
     server_executable = "//tools/TestServer",
     server_type = "serialio",
@@ -213,36 +292,61 @@ client_test(
         "local",
         "requires-network",
     ],
-    test_executable = ":cnanotest",
+    test_executable = ":cnanotest-serialio",
 )
 
-test_srcs = glob([
-    "test/test_*.cpp",
-    "test/*.hpp",
-]) + [":services-test-service"]
-
-# The tests are built with server error messages enabled, so that they cover decoding them. The
-# default build, with them disabled, is covered by the krpc_cnano library itself.
-cc_library(
-    name = "krpc_cnano_error_messages",
-    testonly = True,
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = ["KRPC_ERROR_MESSAGES"],
-    includes = ["include"],
-    deps = ["@c_nanopb//:nanopb"],
+client_test(
+    name = "client-tcpip",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    server_type = "protobuf",
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    test_executable = ":cnanotest-tcpip",
 )
+
+client_test_srcs = [
+    "test/server_test.hpp",
+    "test/test_client.cpp",
+    ":services-test-service",
+]
 
 cc_binary(
-    name = "cnanotest",
+    name = "cnanotest-serialio",
     testonly = True,
-    srcs = test_srcs,
+    srcs = client_test_srcs,
     includes = ["test"],
     deps = [
-        ":krpc_cnano_error_messages",
+        ":krpc_cnano_serialio",
         "@cpp_googletest//:gmock",
         "@cpp_googletest//:gtest",
     ],
+)
+
+cc_binary(
+    name = "cnanotest-tcpip",
+    testonly = True,
+    srcs = client_test_srcs,
+    includes = ["test"],
+    deps = [
+        ":krpc_cnano_tcpip",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures.
+cc_binary(
+    name = "benchmark",
+    srcs = [
+        "benchmark/benchmark.c",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [":krpc_cnano_tcpip"],
 )
 
 test_suite(
@@ -265,6 +369,7 @@ clang_format_test(
     name = "clangformat",
     size = "small",
     srcs = glob([
+        "benchmark/*.c",
         "src/*.c",
         "include/**/*.h",
         "test/**/*.cpp",

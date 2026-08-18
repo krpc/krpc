@@ -1,5 +1,6 @@
 #!/bin/bash
-# Test installing the kRPC C-nano client via vcpkg overlay port on Windows.
+# Test installing the kRPC C-nano client via vcpkg overlay port on Windows, once per
+# transport it offers.
 # Expects the release archive (krpc-cnano-*.zip) in the current directory.
 # Usage: test-vcpkg-windows.sh
 set -eo pipefail
@@ -31,32 +32,23 @@ sed -i \
   "$tmpport/portfile.cmake"
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
-# Install via the overlay port into a local directory
-"$vcpkg_bin" install krpc-cnano:x64-windows --overlay-ports="$tmpport" --x-install-root=vcpkg_installed
-
-# Consumer test
-mkdir -p consumer
-cat > consumer/main.c << 'EOF'
-#include <stdio.h>
-#include <krpc_cnano.h>
-#include <krpc_cnano/services/krpc.h>
-int main(void) {
-    /* Compile+link test only — no server connection. */
-    printf("krpc_cnano library linked OK\n");
-    return 0;
+# Install via the overlay port and build the consumer project against it, once per transport the
+# port offers. Where the library is built for TCP/IP the consumer opens a connection, which is
+# what proves the transport, and the winsock library it needs, reach a program through the
+# package vcpkg installed.
+function run_scenario {
+  local name=$1
+  local package=$2
+  mkdir -p "$name"
+  "$vcpkg_bin" install "$package" --overlay-ports="$tmpport" \
+    --x-install-root="$name/vcpkg_installed"
+  cmake -S "$scriptroot/test-consumer" -B "$name/consumer" \
+    "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+    "-DVCPKG_INSTALLED_DIR=$(pwd)/$name/vcpkg_installed" \
+    -DVCPKG_TARGET_TRIPLET=x64-windows \
+    -DCMAKE_BUILD_TYPE=Release
+  cmake --build "$name/consumer" --config Release --parallel
 }
-EOF
-cat > consumer/CMakeLists.txt << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_cnano_consumer_test LANGUAGES C)
-set(CMAKE_C_STANDARD 99)
-find_package(krpc_cnano CONFIG REQUIRED)
-add_executable(test_app main.c)
-target_link_libraries(test_app PRIVATE krpc_cnano::krpc_cnano)
-EOF
-cmake -S consumer -B consumer/build \
-  "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
-  "-DVCPKG_INSTALLED_DIR=$(pwd)/vcpkg_installed" \
-  -DVCPKG_TARGET_TRIPLET=x64-windows \
-  -DCMAKE_BUILD_TYPE=Release
-cmake --build consumer/build --config Release --parallel
+
+run_scenario serialio "krpc-cnano:x64-windows"
+run_scenario tcpip "krpc-cnano[tcp]:x64-windows"

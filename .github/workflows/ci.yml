@@ -147,10 +147,14 @@ jobs:
         with:
           path: ${{ env.CCACHE_DIR }}
           key: ccache-${{ steps.cache-key.outputs.hash }}
-      - name: build-system
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system
-      - name: build-fetch
-        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch
+      - name: build-system-serialio
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-serialio
+      - name: build-system-tcpip
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-tcpip
+      - name: build-fetch-serialio
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-serialio
+      - name: build-fetch-tcpip
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-tcpip
 
   build-client-cnano-cmake-windows:
     needs: test-client-cnano
@@ -166,9 +170,18 @@ jobs:
         uses: ./.github/actions/vcpkg-windows
         with:
           packages: nanopb:x64-windows
-      - name: test-build
+      - name: build-system-serialio
         shell: bash
-        run: client/cnano/test-cmake-windows.sh
+        run: client/cnano/test-cmake-windows.sh system-serialio
+      - name: build-system-tcpip
+        shell: bash
+        run: client/cnano/test-cmake-windows.sh system-tcpip
+      - name: build-fetch-serialio
+        shell: bash
+        run: client/cnano/test-cmake-windows.sh fetch-serialio
+      - name: build-fetch-tcpip
+        shell: bash
+        run: client/cnano/test-cmake-windows.sh fetch-tcpip
 
   build-client-cnano-vcpkg-linux:
     needs: test-client-cnano

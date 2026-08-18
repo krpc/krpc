@@ -4,16 +4,22 @@ Installing the kRPC C-nano client library
 Via vcpkg
 ---------
 
-The library can be installed using the bundled vcpkg overlay port. Extract this
-archive and run:
+The library is published to the vcpkg registry, so it can be installed without
+this archive:
 
 On Linux:
 
-    vcpkg install krpc-cnano --overlay-ports=vcpkg-port
+    vcpkg install krpc-cnano
 
 On Windows:
 
-    vcpkg install krpc-cnano:x64-windows --overlay-ports=vcpkg-port
+    vcpkg install krpc-cnano:x64-windows
+
+The library communicates over a serial port unless the "tcp" feature is asked
+for, which builds it to communicate over TCP/IP instead:
+
+    vcpkg install "krpc-cnano[tcp]"
+    vcpkg install "krpc-cnano[tcp]:x64-windows"
 
 Then pass the vcpkg toolchain file when configuring your CMake project:
 
@@ -69,6 +75,24 @@ package, pass KRPC_FETCH_DEPS=ON:
 The fine-grained option KRPC_FETCH_NANOPB=ON is also accepted. When an option
 is OFF (the default), the system package is required and CMake will error if it
 cannot be found.
+
+
+Choosing the transport
+----------------------
+
+By default the library communicates with the server over a serial port, using
+the API of the platform it is built for. To communicate over TCP/IP with a
+server reachable over the network, pass KRPC_COMMUNICATION_TCP=ON:
+
+    cmake -B build -DKRPC_COMMUNICATION_TCP=ON
+    cmake --build build
+    sudo cmake --install build
+
+Ask for it this way rather than by defining KRPC_COMMUNICATION_TCP directly, so
+that programs linking the library are built for the same transport and, on
+Windows, are linked against winsock along with it. A connection is then opened
+with the address and port the server is listening on, in place of the name of a
+port.
 
 
 Using the installed library

@@ -1,50 +1,107 @@
 #!/bin/bash
 # Test building the C-nano client on Windows using CMake with vcpkg.
 # Expects the release archive (krpc-cnano-*.zip) in the current directory.
-# Usage: test-build-windows.sh
+# Covers the two things a build chooses between, crossed with each other:
+#   how nanopb is provided) system) the nanopb vcpkg installs
+#                           fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
+#   which transport)        serialio) a serial port, reached through the Windows file API
+#                           tcpip)    TCP/IP, reached through winsock (KRPC_COMMUNICATION_TCP=ON)
+# Each is followed by a consumer test using find_package(krpc_cnano CONFIG REQUIRED).
+# Usage: test-cmake-windows.sh [system-serialio|system-tcpip|fetch-serialio|fetch-tcpip]
+#        (default: run all)
 set -eo pipefail
 set -x
 
-# Extract the release archive
-unzip -q krpc-cnano-*.zip
+scenarios="system-serialio system-tcpip fetch-serialio fetch-tcpip"
+scenario="${1:-all}"
+
+scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Extract the release archive, over any tree an earlier scenario left behind
+unzip -o -q krpc-cnano-*.zip
 src=$(ls -d krpc-cnano-*/)
 
-# Configure
-cmake -S "$src" -B build \
-  -DCMAKE_INSTALL_PREFIX=install \
-  -DCMAKE_BUILD_TYPE=Release \
-  "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-  -DVCPKG_TARGET_TRIPLET=x64-windows \
-  2>&1 | tee configure.log
-grep -q "Found nanopb" configure.log
-! grep -q "Fetching nanopb via FetchContent" configure.log
+root=$(pwd)
+toolchain="C:/vcpkg/scripts/buildsystems/vcpkg.cmake"
 
-# Build and install
-cmake --build build --config Release --parallel
-cmake --install build --config Release
-
-# Consumer test
-mkdir -p consumer
-cat > consumer/main.c << 'EOF'
-#include <stdio.h>
-#include <krpc_cnano.h>
-#include <krpc_cnano/services/krpc.h>
-int main(void) {
-    printf("krpc_cnano library linked OK\n");
-    return 0;
+# Verify a pattern appears in the cmake configure log.
+function check_present {
+  local log=$1
+  local pattern=$2
+  if ! grep -q "$pattern" "$log"; then
+    echo "FAIL: expected '${pattern}' in cmake configure output but not found"
+    exit 1
+  fi
 }
-EOF
-cat > consumer/CMakeLists.txt << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_cnano_consumer_test LANGUAGES C)
-set(CMAKE_C_STANDARD 99)
-find_package(krpc_cnano CONFIG REQUIRED)
-add_executable(test_app main.c)
-target_link_libraries(test_app PRIVATE krpc_cnano::krpc_cnano)
-EOF
-cmake -S consumer -B consumer/build \
-  "-DCMAKE_PREFIX_PATH=$(pwd)/install" \
-  -DCMAKE_BUILD_TYPE=Release \
-  "-DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake" \
-  -DVCPKG_TARGET_TRIPLET=x64-windows
-cmake --build consumer/build --config Release --parallel
+
+# Verify a pattern does not appear in the cmake configure log.
+function check_absent {
+  local log=$1
+  local pattern=$2
+  if grep -q "$pattern" "$log"; then
+    echo "FAIL: '${pattern}' should not appear in cmake configure output"
+    exit 1
+  fi
+}
+
+# Build and install the library, then build the consumer project against the installed package
+# with find_package(krpc_cnano CONFIG REQUIRED), to verify the package config and targets work
+# end-to-end. Where the library is built for TCP/IP the program opens a connection, which is what
+# proves the transport, and the winsock library it needs, reach it through the package.
+function run_scenario {
+  local name=$1
+  local out="$root/$name"
+  local log="$out/configure.log"
+  local options=()
+  mkdir -p "$out"
+
+  case "$name" in
+    fetch-*)  options+=(-DKRPC_FETCH_DEPS=ON) ;;
+    system-*) ;;
+    *) echo "unknown scenario '$name'"; exit 1 ;;
+  esac
+  case "$name" in
+    *-tcpip)    options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
+    *-serialio) ;;
+    *) echo "unknown scenario '$name'"; exit 1 ;;
+  esac
+
+  # Configure, build and install the library
+  cmake -S "$src" -B "$out/build" \
+    -DCMAKE_INSTALL_PREFIX="$out/install" \
+    -DCMAKE_BUILD_TYPE=Release \
+    "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+    -DVCPKG_TARGET_TRIPLET=x64-windows \
+    "${options[@]}" 2>&1 | tee "$log"
+
+  # Which of the two ways of providing nanopb the configure step actually took
+  case "$name" in
+    fetch-*)
+      check_present "$log" "Fetching nanopb via FetchContent"
+      check_absent  "$log" "Found nanopb"
+      ;;
+    system-*)
+      check_present "$log" "Found nanopb"
+      check_absent  "$log" "Fetching nanopb via FetchContent"
+      ;;
+  esac
+
+  cmake --build "$out/build" --config Release --parallel
+  cmake --install "$out/build" --config Release
+
+  # Consumer test
+  cmake -S "$scriptroot/test-consumer" -B "$out/consumer" \
+    "-DCMAKE_PREFIX_PATH=$out/install" \
+    -DCMAKE_BUILD_TYPE=Release \
+    "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
+    -DVCPKG_TARGET_TRIPLET=x64-windows
+  cmake --build "$out/consumer" --config Release --parallel
+}
+
+if [[ "$scenario" == "all" ]]; then
+  for name in $scenarios; do
+    run_scenario "$name"
+  done
+else
+  run_scenario "$scenario"
+fi
