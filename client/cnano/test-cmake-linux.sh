@@ -1,18 +1,23 @@
 #!/bin/bash
 # Test building the C-nano client using CMake.
 # Accepts the release archive as the first argument.
-# Runs CMake build scenario(s):
-#   system) system-installed nanopb
-#   fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
+# Covers the two things a build chooses between, crossed with each other:
+#   how nanopb is provided) system) a system-installed nanopb
+#                           fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
+#   which transport)        serialio) a serial port, the default
+#                           tcpip)    TCP/IP (KRPC_COMMUNICATION_TCP=ON)
 # Each is followed by a consumer test using find_package(krpc_cnano CONFIG REQUIRED).
-# Usage: test-cmake-linux.sh ARCHIVE [system|fetch]  (default: run both)
+# Usage: test-cmake-linux.sh ARCHIVE [system-serialio|system-tcpip|fetch-serialio|fetch-tcpip]
+#        (default: run all)
 set -e
 set -o pipefail
 set -x
 set -o functrace
 
-archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [system|fetch]}")"
-mode="${2:-all}"
+scenarios="system-serialio system-tcpip fetch-serialio fetch-tcpip"
+
+archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [$(echo $scenarios | tr ' ' '|')]}")"
+scenario="${2:-all}"
 
 scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$scriptroot/../.."
@@ -72,53 +77,58 @@ function check_absent {
   fi
 }
 
-# Build a small consumer project that uses find_package(krpc_cnano CONFIG REQUIRED)
-# to verify the installed package config and targets work end-to-end.
+# Build the consumer project against the installed package, to verify the package config and
+# targets work end-to-end. Where the library is built for TCP/IP the program opens a connection,
+# which is what proves the transport reaches it through the package.
 function consumer_test {
   local install_dir=$1
-  local test_dir=$2
-  mkdir -p "$test_dir"
-
-  cat > "$test_dir/main.c" << 'EOF'
-#include <stdio.h>
-#include <krpc_cnano.h>
-#include <krpc_cnano/services/krpc.h>
-int main(void) {
-    /* Compile+link test only — no server connection. */
-    printf("krpc_cnano library linked OK\n");
-    return 0;
-}
-EOF
-
-  cat > "$test_dir/CMakeLists.txt" << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_cnano_consumer_test LANGUAGES C)
-set(CMAKE_C_STANDARD 99)
-find_package(krpc_cnano CONFIG REQUIRED)
-add_executable(test_app main.c)
-target_link_libraries(test_app PRIVATE krpc_cnano::krpc_cnano)
-EOF
-
-  mkdir -p "$test_dir/build"
-  cmake -S "$test_dir" -B "$test_dir/build" \
+  local build_dir=$2
+  cmake -S "$scriptroot/test-consumer" -B "$build_dir" \
     -DCMAKE_PREFIX_PATH="$install_dir" \
     -DCMAKE_BUILD_TYPE=Release
-  cmake --build "$test_dir/build" --parallel $(nproc)
+  cmake --build "$build_dir" --parallel $(nproc)
 }
 
-# 1) System-installed nanopb
-if [[ "$mode" == "system" || "$mode" == "all" ]]; then
-  build_install "$out/system/build" "$out/system/install" "$out/system/configure.log"
-  check_present "$out/system/configure.log" "Found nanopb"
-  check_absent  "$out/system/configure.log" "Fetching nanopb via FetchContent"
-  consumer_test "$out/system/install" "$out/system/consumer"
-fi
+# Build, install and consume the library for one scenario, named for how nanopb is provided and
+# which transport the library talks over.
+function run_scenario {
+  local name=$1
+  local dir="$out/$name"
+  local log="$dir/configure.log"
+  local options=()
 
-# 2) FetchContent nanopb via global option
-if [[ "$mode" == "fetch" || "$mode" == "all" ]]; then
-  build_install "$out/fetch/build" "$out/fetch/install" "$out/fetch/configure.log" \
-    -DKRPC_FETCH_DEPS=ON
-  check_present "$out/fetch/configure.log" "Fetching nanopb via FetchContent"
-  check_absent  "$out/fetch/configure.log" "Found nanopb"
-  consumer_test "$out/fetch/install" "$out/fetch/consumer"
+  case "$name" in
+    fetch-*)  options+=(-DKRPC_FETCH_DEPS=ON) ;;
+    system-*) ;;
+    *) echo "unknown scenario '$name'"; exit 1 ;;
+  esac
+  case "$name" in
+    *-tcpip)    options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
+    *-serialio) ;;
+    *) echo "unknown scenario '$name'"; exit 1 ;;
+  esac
+
+  build_install "$dir/build" "$dir/install" "$log" "${options[@]}"
+
+  # Which of the two ways of providing nanopb the configure step actually took
+  case "$name" in
+    fetch-*)
+      check_present "$log" "Fetching nanopb via FetchContent"
+      check_absent  "$log" "Found nanopb"
+      ;;
+    system-*)
+      check_present "$log" "Found nanopb"
+      check_absent  "$log" "Fetching nanopb via FetchContent"
+      ;;
+  esac
+
+  consumer_test "$dir/install" "$dir/consumer"
+}
+
+if [[ "$scenario" == "all" ]]; then
+  for name in $scenarios; do
+    run_scenario "$name"
+  done
+else
+  run_scenario "$scenario"
 fi
