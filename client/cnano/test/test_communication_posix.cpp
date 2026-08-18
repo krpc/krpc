@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+// The serial transport reads and writes its port through the file API, which a pipe answers to
+// in the same way, so these need no serial port to run against.
 #if defined(KRPC_COMMUNICATION_POSIX)
 
 #include <unistd.h>

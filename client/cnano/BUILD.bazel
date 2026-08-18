@@ -161,10 +161,12 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
-        ":arduino",
-        ":client",
+        ":client-serialio",
         ":cog",
+        ":communication-arduino",
+        ":communication-serialio",
         ":lint",
+        ":unit",
     ],
 )
 
@@ -181,12 +183,60 @@ cog_test(
     ],
 )
 
+# The library the tests are built against, with server error messages enabled so that they cover
+# decoding them and a failure says what the server objected to. The default build, with them
+# disabled, is covered by the krpc_cnano library itself.
+cc_library(
+    name = "krpc_cnano_serialio",
+    testonly = True,
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = ["KRPC_ERROR_MESSAGES"],
+    includes = ["include"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+# What the client does regardless of the transport it talks over: encoding and decoding values
+# and messages. It needs no server, so it runs on its own rather than under the harness that
+# starts one.
+cc_test(
+    name = "unit",
+    size = "small",
+    srcs = [
+        "test/test_decoder.cpp",
+        "test/test_encode_decode.cpp",
+        "test/test_encoder.cpp",
+        "test/test_utils.cpp",
+        "test/testing_tools.hpp",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    deps = [
+        ":krpc_cnano_serialio",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The communication backends, one test each. Every one of them runs against something that
+# behaves as the thing it talks to does, so none needs the hardware, port or server it is
+# written for.
+cc_test(
+    name = "communication-serialio",
+    size = "small",
+    srcs = ["test/test_communication_posix.cpp"],
+    deps = [
+        ":krpc_cnano_serialio",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
 # Builds the Arduino communication backend for the host, against a stand-in for the Arduino
 # HardwareSerial class, so it can be tested without hardware. It deliberately does not depend
 # on krpc_cnano, whose copy of communication.c is built for the host platform instead and
 # defines the same functions.
 cc_test(
-    name = "arduino",
+    name = "communication-arduino",
     size = "small",
     srcs = [
         "include/krpc_cnano/communication.h",
@@ -204,8 +254,9 @@ cc_test(
     deps = ["@cpp_googletest//:gtest"],
 )
 
+# The client end to end against a TestServer, over the transport it is built for.
 client_test(
-    name = "client",
+    name = "client-serialio",
     size = "small",
     server_executable = "//tools/TestServer",
     server_type = "serialio",
@@ -213,33 +264,22 @@ client_test(
         "local",
         "requires-network",
     ],
-    test_executable = ":cnanotest",
+    test_executable = ":cnanotest-serialio",
 )
 
-test_srcs = glob([
-    "test/test_*.cpp",
-    "test/*.hpp",
-]) + [":services-test-service"]
-
-# The tests are built with server error messages enabled, so that they cover decoding them. The
-# default build, with them disabled, is covered by the krpc_cnano library itself.
-cc_library(
-    name = "krpc_cnano_error_messages",
-    testonly = True,
-    srcs = srcs + [":protobuf"],
-    hdrs = hdrs + [":protobuf"],
-    defines = ["KRPC_ERROR_MESSAGES"],
-    includes = ["include"],
-    deps = ["@c_nanopb//:nanopb"],
-)
+client_test_srcs = [
+    "test/server_test.hpp",
+    "test/test_client.cpp",
+    ":services-test-service",
+]
 
 cc_binary(
-    name = "cnanotest",
+    name = "cnanotest-serialio",
     testonly = True,
-    srcs = test_srcs,
+    srcs = client_test_srcs,
     includes = ["test"],
     deps = [
-        ":krpc_cnano_error_messages",
+        ":krpc_cnano_serialio",
         "@cpp_googletest//:gmock",
         "@cpp_googletest//:gtest",
     ],
