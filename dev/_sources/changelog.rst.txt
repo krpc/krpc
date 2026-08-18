@@ -230,12 +230,16 @@ C-nano client
 * Add ``KRPC_COMMUNICATION_TCP``, which builds the library to communicate with a server over TCP/IP rather than over a serial port, leaving the server on its default protocol. A connection is opened with the address and port the server is listening on, held in a ``krpc_connection_config_t``, in place of the name of a port. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_TCP=ON``, which also links the winsock library it needs on Windows (:issue:`1055`)
 * Add a ``tcp`` feature to the vcpkg port, which installs the library built to communicate over TCP/IP; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
 * Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` communication mechanism that opens a connection of its own to each server. Messages are then sent as they are, rather than wrapped in the multiplexed message a serial port needs to say which of the connections it carries a message belongs to (:issue:`1055`)
+* Reduce the cost of a remote procedure call. A message is sent and received through a buffer rather than a piece at a time, taking a call from tens of reads and writes down to one write and two reads, and a message is measured as it is encoded rather than by a pass over it first (:issue:`1056`)
+* Add ``KRPC_BUFFER_SIZE``, how much of a message to hold in memory while it is written to or read from the connection. It bounds the memory a call costs and never the size of a message, but a message that fits is cheaper to send, so it is worth setting above the largest call a program makes. Defaults to 1024 bytes, and to 128 on Arduino (:issue:`1056`)
 
 
 C# client
 ^^^^^^^^^
 
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
+* Reduce the cost of a remote procedure call. A value is encoded and decoded without a protobuf stream of its own, its bytes are written into a buffer of their own rather than one the thread keeps, a response is read a block at a time and parsed straight out of the read buffer, the request a call is built into is kept from one call to the next, and the client connections disable Nagle's algorithm (:issue:`1056`)
+* Reduce the cost of a call that returns a collection or an object. What kind of value a type carries, and how to build one, is worked out the first time the type is seen rather than for every value encoded or decoded, and a collection works out how to encode and decode its items once for the collection rather than once for every item (:issue:`1056`)
 
 
 C++ client
@@ -243,6 +247,8 @@ C++ client
 
 * :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
 * Fix a service with a collection of enumerations in a procedure signature failing to compile (:issue:`1044`)
+* Reduce the cost of a remote procedure call. A response is read a block at a time and parsed straight out of the read buffer, the request a call is built into and the response it is answered by are kept from one call to the next, the arguments of a call are sized up front, and the client connections disable Nagle's algorithm. ``Client::invoke``, ``Client::build_request`` and ``Client::build_call`` name a service and a procedure with ``std::string_view``, so a call no longer builds a string for either (:issue:`1056`)
+* Reduce the cost of a call that carries a collection. A value is read without setting up a protobuf stream for it, the message a collection is carried in is kept from one call to the next rather than allocated and freed for each, and a list is given room for its values up front (:issue:`1056`)
 
 
 Java client
@@ -257,6 +263,7 @@ Lua client
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
 * Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Lua names none of them itself, as ``math.maxinteger`` and ``math.mininteger`` need Lua 5.3, and a parameter that defaults to one is now documented as the constant rather than the decimal value (:issue:`1045`)
+* Reduce the cost of a remote procedure call. The request carrying a call is written as the bytes it comes to, rather than built as a protocol buffer message and serialized, and so are the lists, sets, tuples and dictionaries a call carries, which are read back the same way. A value is encoded and decoded by looking up its type code rather than by asking the type what class it is, a float or a double is packed without building a protobuf field encoder for it, the size of a message is read directly rather than by handing each byte to a decoder until it stops raising an error, and the client connection disables Nagle's algorithm (:issue:`1056`)
 
 
 Python client
@@ -265,6 +272,7 @@ Python client
 * :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
 * Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Python names none of them itself, and a generated stub whose parameter defaults to one now names the constant rather than writing out the decimal value (:issue:`1045`)
+* Reduce the cost of a remote procedure call. Type objects are cached by the arguments naming them and their python type and type code read as plain attributes, values are encoded and decoded through a lookup on their type code rather than a chain of comparisons, floats and doubles are packed directly and short varints without going through protobuf's varint routines, a request is built as a single message, a response is read in one system call and taken out of the read buffer in one pass, a service reaches its procedures by ordinary attribute lookup, and the client connections disable Nagle's algorithm. A collection works out how to encode and decode its items once for the collection rather than once for every item (:issue:`1056`)
 
 
 krpctools
