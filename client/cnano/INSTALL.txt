@@ -4,16 +4,16 @@ Installing the kRPC C-nano client library
 Via vcpkg
 ---------
 
-The library can be installed using the bundled vcpkg overlay port. Extract this
-archive and run:
+The library is published to the vcpkg registry, so it can be installed without
+this archive:
 
 On Linux:
 
-    vcpkg install krpc-cnano --overlay-ports=vcpkg-port
+    vcpkg install krpc-cnano
 
 On Windows:
 
-    vcpkg install krpc-cnano:x64-windows --overlay-ports=vcpkg-port
+    vcpkg install krpc-cnano:x64-windows
 
 Then pass the vcpkg toolchain file when configuring your CMake project:
 
