@@ -227,6 +227,9 @@ C-nano client
 ^^^^^^^^^^^^^
 
 * :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
+* Add ``KRPC_COMMUNICATION_TCP``, which builds the library to communicate with a server over TCP/IP rather than over a serial port, leaving the server on its default protocol. A connection is opened with the address and port the server is listening on, held in a ``krpc_connection_config_t``, in place of the name of a port. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_TCP=ON``, which also links the winsock library it needs on Windows (:issue:`1055`)
+* Add a ``tcp`` feature to the vcpkg port, which installs the library built to communicate over TCP/IP; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
+* Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` communication mechanism that opens a connection of its own to each server. Messages are then sent as they are, rather than wrapped in the multiplexed message a serial port needs to say which of the connections it carries a message belongs to (:issue:`1055`)
 
 
 C# client

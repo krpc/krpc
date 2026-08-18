@@ -725,6 +725,16 @@ that they are built using the C++ compiler. This allows the library to use the C
 </pre></div>
 </div>
 </div></div>
+<p>The library communicates over a serial port unless the <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature is asked for, which builds
+it to communicate over TCP/IP instead:</p>
+<div class="sphinx-tabs docutils container">
+<div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;krpc-cnano[tcp]&quot;</span>
+</pre></div>
+</div>
+</div><div aria-labelledby="tab-1-1-1" class="sphinx-tabs-panel" hidden="true" id="panel-1-1-1" name="1-1" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;krpc-cnano[tcp]:x64-windows&quot;</span>
+</pre></div>
+</div>
+</div></div>
 </section>
 <section id="cmake">
 <h3>CMake<a class="headerlink" href="#cmake" title="Link to this heading">#</a></h3>
@@ -783,8 +793,20 @@ not need to specify this manually.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code> – Specifies that the library should be built using Arduino
 serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
 to specify this manually.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> – Specifies that the library should be built to communicate over
+TCP/IP with a server reachable over the network. A serial port remains the usual choice for the
+devices this client is written for, so this is never auto-detected and has to be specified.
+CMake builds of the library should ask for it with <code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_TCP=ON</span></code>, and vcpkg
+installs with the <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature, rather than by defining it directly, so that programs
+linking the library are built for the same transport and, on Windows, are linked against
+winsock along with it.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> – Allows you to provide your own implementation for the
 communication mechanism.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_SINGLE_CONNECTION</span></code> – Only meaningful alongside <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code>. A serial
+port carries the RPC and stream connections over the one link, so every message sent over it is
+wrapped in a multiplexed message saying which connection it belongs to. A custom communication
+mechanism is assumed to work the same way; define this if yours instead opens a connection of
+its own to each server, as a socket does, and the messages are sent unwrapped.</p></li>
 </ul>
 </li>
 <li><p>Memory allocation</p>
@@ -812,18 +834,21 @@ define <code class="docutils literal notranslate"><span class="pre">PB_NO_ERRMSG
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <section id="configuring-the-server">
 <h3>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h3>
-<p>The C-nano client library communicates with the server over a serial port using <a class="reference external" href="https://github.com/nanopb/nanopb">protobuf messages</a>. The kRPC server, which runs in the game, needs to be
-configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
-done from the in-game server configuration window, which also allows settings such as
-the port name, baud rate and parity settings.</p>
+<p>The C-nano client library communicates with the server using <a class="reference external" href="https://github.com/nanopb/nanopb">protobuf messages</a>, over a serial port by default. The kRPC server, which runs in
+the game, needs to be configured to use the serial port protocol (instead of the default TCP/IP
+protocol). This can be done from the in-game server configuration window, which also allows settings
+such as the port name, baud rate and parity settings.</p>
+<p>Building the library with <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> instead has it communicate over TCP/IP, with a
+server left on its default protocol. A connection is then opened with the address and port the
+server is listening on rather than the name of a port.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>A serial port carries data far more slowly than the game produces it, and the server
 drops a connection that produces more data than the port can carry for a sustained
 period. See <a class="reference internal" href="../communication-protocols/serialio.html#communication-protocol-serialio-buffering"><span class="std std-ref">Buffering and Data Rates</span></a> for the limits and how to
-stay within them. The client blocks while waiting for data from the server, with no
-timeout, so a call that is never answered, for example because the connection was
-dropped, never returns.</p>
+stay within them. This does not apply over TCP/IP. The client blocks while waiting for
+data from the server, with no timeout, so a call that is never answered, for example
+because the connection was dropped, never returns.</p>
 </div>
 </section>
 <section id="linking">
@@ -946,6 +971,18 @@ platform is detected) calling this function opens a serial port using the port n
 <p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_WINDOWS</span></code> (auto-detected on Windows)
 calling this function opens the serial port named by <em>arg</em> using the Windows API, for example
 <code class="docutils literal notranslate"><span class="pre">krpc_open(&amp;conn,</span> <span class="pre">&quot;COM1&quot;)</span></code>.</p>
+<p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_TCP</span></code> calling this function connects to the
+server over TCP/IP. <em>arg</em> is a pointer to a structure of type <code class="docutils literal notranslate"><span class="pre">krpc_connection_config_t</span></code>
+holding the address of the machine the server is running on and the port its RPC server is
+listening on. The address may be a host name or an address literal, and every endpoint it
+resolves to is tried until one accepts the connection. For example:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">krpc_connection_t</span><span class="w"> </span><span class="n">conn</span><span class="p">;</span>
+<span class="n">krpc_connection_config_t</span><span class="w"> </span><span class="n">config</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;127.0.0.1&quot;</span><span class="p">;</span>
+<span class="n">config</span><span class="p">.</span><span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">50000</span><span class="p">;</span>
+<span class="n">krpc_open</span><span class="p">(</span><span class="o">&amp;</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">config</span><span class="p">);</span>
+</pre></div>
+</div>
 <p>When the library is built using <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_ARDUINO</span></code>, <em>connection</em> must be a pointer to
 a <code class="docutils literal notranslate"><span class="pre">HardwareSerial</span></code> object. <em>arg</em> is optionally used to pass additional configuration options
 used to initialize the connection, including baud rate for the serial port.</p>
