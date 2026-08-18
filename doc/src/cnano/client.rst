@@ -112,8 +112,19 @@ argument to the compiler.
   * ``KRPC_COMMUNICATION_ARDUINO`` -- Specifies that the library should be built using Arduino
     serial communication mechanisms. The Arduino platform will be auto-detected so you do not need
     to specify this manually.
+  * ``KRPC_COMMUNICATION_TCP`` -- Specifies that the library should be built to communicate over
+    TCP/IP with a server reachable over the network. A serial port remains the usual choice for the
+    devices this client is written for, so this is never auto-detected and has to be specified.
+    CMake builds of the library should ask for it with ``-DKRPC_COMMUNICATION_TCP=ON`` rather than
+    by defining it directly, so that programs linking the library are built for the same transport
+    and, on Windows, are linked against winsock along with it.
   * ``KRPC_COMMUNICATION_CUSTOM`` -- Allows you to provide your own implementation for the
     communication mechanism.
+  * ``KRPC_SINGLE_CONNECTION`` -- Only meaningful alongside ``KRPC_COMMUNICATION_CUSTOM``. A serial
+    port carries the RPC and stream connections over the one link, so every message sent over it is
+    wrapped in a multiplexed message saying which connection it belongs to. A custom communication
+    mechanism is assumed to work the same way; define this if yours instead opens a connection of
+    its own to each server, as a socket does, and the messages are sent unwrapped.
 
 * Memory allocation
 
@@ -138,18 +149,22 @@ Getting Started
 Configuring the Server
 ^^^^^^^^^^^^^^^^^^^^^^
 
-The C-nano client library communicates with the server over a serial port using `protobuf messages
-<https://github.com/nanopb/nanopb>`_. The kRPC server, which runs in the game, needs to be
-configured to use the serial port protocol (instead of the default TCP/IP protocol). This can be
-done from the in-game server configuration window, which also allows settings such as
-the port name, baud rate and parity settings.
+The C-nano client library communicates with the server using `protobuf messages
+<https://github.com/nanopb/nanopb>`_, over a serial port by default. The kRPC server, which runs in
+the game, needs to be configured to use the serial port protocol (instead of the default TCP/IP
+protocol). This can be done from the in-game server configuration window, which also allows settings
+such as the port name, baud rate and parity settings.
+
+Building the library with ``KRPC_COMMUNICATION_TCP`` instead has it communicate over TCP/IP, with a
+server left on its default protocol. A connection is then opened with the address and port the
+server is listening on rather than the name of a port.
 
 .. note:: A serial port carries data far more slowly than the game produces it, and the server
           drops a connection that produces more data than the port can carry for a sustained
           period. See :ref:`communication-protocol-serialio-buffering` for the limits and how to
-          stay within them. The client blocks while waiting for data from the server, with no
-          timeout, so a call that is never answered, for example because the connection was
-          dropped, never returns.
+          stay within them. This does not apply over TCP/IP. The client blocks while waiting for
+          data from the server, with no timeout, so a call that is never answered, for example
+          because the connection was dropped, never returns.
 
 Linking
 ^^^^^^^
@@ -236,6 +251,20 @@ Client API Reference
    When the library is built using ``KRPC_COMMUNICATION_WINDOWS`` (auto-detected on Windows)
    calling this function opens the serial port named by *arg* using the Windows API, for example
    ``krpc_open(&conn, "COM1")``.
+
+   When the library is built using ``KRPC_COMMUNICATION_TCP`` calling this function connects to the
+   server over TCP/IP. *arg* is a pointer to a structure of type ``krpc_connection_config_t``
+   holding the address of the machine the server is running on and the port its RPC server is
+   listening on. The address may be a host name or an address literal, and every endpoint it
+   resolves to is tried until one accepts the connection. For example:
+
+   .. code-block:: c
+
+     krpc_connection_t conn;
+     krpc_connection_config_t config;
+     config.address = "127.0.0.1";
+     config.port = 50000;
+     krpc_open(&conn, &config);
 
    When the library is built using ``KRPC_COMMUNICATION_ARDUINO``, *connection* must be a pointer to
    a ``HardwareSerial`` object. *arg* is optionally used to pass additional configuration options

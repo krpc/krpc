@@ -162,9 +162,11 @@ test_suite(
     name = "test",
     tests = [
         ":client-serialio",
+        ":client-tcpip",
         ":cog",
         ":communication-arduino",
         ":communication-serialio",
+        ":communication-tcpip",
         ":lint",
         ":unit",
     ],
@@ -183,9 +185,9 @@ cog_test(
     ],
 )
 
-# The library the tests are built against, with server error messages enabled so that they cover
-# decoding them and a failure says what the server objected to. The default build, with them
-# disabled, is covered by the krpc_cnano library itself.
+# The library built for each of the transports that can be tested here. Both enable server error
+# messages, so that the tests cover decoding them and a failure says what the server objected to;
+# the default build, with them disabled, is covered by the krpc_cnano library itself.
 cc_library(
     name = "krpc_cnano_serialio",
     testonly = True,
@@ -196,9 +198,21 @@ cc_library(
     deps = ["@c_nanopb//:nanopb"],
 )
 
+cc_library(
+    name = "krpc_cnano_tcpip",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = [
+        "KRPC_COMMUNICATION_TCP",
+        "KRPC_ERROR_MESSAGES",
+    ],
+    includes = ["include"],
+    deps = ["@c_nanopb//:nanopb"],
+)
+
 # What the client does regardless of the transport it talks over: encoding and decoding values
 # and messages. It needs no server, so it runs on its own rather than under the harness that
-# starts one.
+# starts one, and it is built for one transport rather than every one of them.
 cc_test(
     name = "unit",
     size = "small",
@@ -231,6 +245,16 @@ cc_test(
     ],
 )
 
+cc_test(
+    name = "communication-tcpip",
+    size = "small",
+    srcs = ["test/test_communication_tcp.cpp"],
+    deps = [
+        ":krpc_cnano_tcpip",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
 # Builds the Arduino communication backend for the host, against a stand-in for the Arduino
 # HardwareSerial class, so it can be tested without hardware. It deliberately does not depend
 # on krpc_cnano, whose copy of communication.c is built for the host platform instead and
@@ -254,7 +278,10 @@ cc_test(
     deps = ["@cpp_googletest//:gtest"],
 )
 
-# The client end to end against a TestServer, over the transport it is built for.
+# The client end to end against a TestServer, once per transport. The two differ in more than
+# the socket: a serial port carries both of the connections to a server over the one link, so
+# its messages are wrapped in a multiplexed message saying which they belong to, where a
+# transport that opens a connection per server sends the messages themselves.
 client_test(
     name = "client-serialio",
     size = "small",
@@ -265,6 +292,18 @@ client_test(
         "requires-network",
     ],
     test_executable = ":cnanotest-serialio",
+)
+
+client_test(
+    name = "client-tcpip",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    server_type = "protobuf",
+    tags = [
+        "local",
+        "requires-network",
+    ],
+    test_executable = ":cnanotest-tcpip",
 )
 
 client_test_srcs = [
@@ -280,6 +319,18 @@ cc_binary(
     includes = ["test"],
     deps = [
         ":krpc_cnano_serialio",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+cc_binary(
+    name = "cnanotest-tcpip",
+    testonly = True,
+    srcs = client_test_srcs,
+    includes = ["test"],
+    deps = [
+        ":krpc_cnano_tcpip",
         "@cpp_googletest//:gmock",
         "@cpp_googletest//:gtest",
     ],

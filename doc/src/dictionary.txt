@@ -199,3 +199,4 @@ virtualenv
 waypoint
 waypoints
 websockets
+winsock
