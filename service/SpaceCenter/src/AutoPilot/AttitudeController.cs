@@ -262,15 +262,15 @@ namespace KRPC.SpaceCenter.AutoPilot
         // Demoted convenience scalars (heading-singular near the vertical). The getters read the
         // surface-frame Euler decomposition; the setters re-aim the nose by (pitch, heading) while
         // preserving the current roll relative to the up reference (so a pitch/heading change no
-        // longer perturbs roll near the vertical). See AimNose.
+        // longer perturbs roll near the vertical). See SetTargetDirection.
         public double TargetPitch {
             get { return targetRotation.PitchHeadingRoll ().x; }
-            set { AimNose (DirectionFromPitchHeading (value, targetRotation.PitchHeadingRoll ().y)); }
+            set { SetTargetDirection (DirectionFromPitchHeading (value, targetRotation.PitchHeadingRoll ().y)); }
         }
 
         public double TargetHeading {
             get { return targetRotation.PitchHeadingRoll ().y; }
-            set { AimNose (DirectionFromPitchHeading (targetRotation.PitchHeadingRoll ().x, value)); }
+            set { SetTargetDirection (DirectionFromPitchHeading (targetRotation.PitchHeadingRoll ().x, value)); }
         }
 
         // Roll about the nose measured relative to the up reference (roof aligned to the reference =
@@ -352,10 +352,18 @@ namespace KRPC.SpaceCenter.AutoPilot
             BeginSlew ();
         }
 
+        // Re-aim the nose to a new direction through the shared primitive, preserving roll relative
+        // to the up reference. When roll is controlled the current roll is kept, so re-aiming the
+        // nose never silently drops a commanded roll; when it is suppressed the target is built
+        // wings-level (roll 0 vs the reference) — matching the historical pitch/heading target and,
+        // crucially, giving consecutive targets a consistent roll so a smoothed slew between them
+        // stays a clean pure-pitch/heading path (FromToRotation's minimal-arc roll varies with
+        // direction and wanders the heading through the slerp). The rollControlled flag is left
+        // unchanged. Backs TargetDirection and the demoted TargetPitch/TargetHeading setters.
         public void SetTargetDirection (Vector3d direction)
         {
-            targetRotation = GeometryExtensions.FromToRotation (Vector3d.up, direction.normalized);
-            rollControlled = false;
+            var roll = rollControlled ? RollRelativeTo (targetRotation, upReference) : 0.0;
+            targetRotation = RotationFromDirectionUpRoll (direction, upReference, roll);
             BeginSlew ();
         }
 
@@ -379,20 +387,6 @@ namespace KRPC.SpaceCenter.AutoPilot
             upReference = up;
             targetRotation = RotationFromDirectionUpRoll (direction, up, roll);
             rollControlled = true;
-            BeginSlew ();
-        }
-
-        // Re-aim the nose to a new direction through the shared primitive, preserving roll relative
-        // to the up reference. When roll is controlled the current roll is kept; when it is suppressed
-        // the target is built wings-level (roll 0 vs the reference) — matching the historical
-        // pitch/heading target and, crucially, giving consecutive pitch/heading targets a consistent
-        // roll so a smoothed slew between them stays a clean pure-pitch/heading path (FromToRotation's
-        // minimal-arc roll varies with direction and wanders the heading through the slerp). The
-        // rollControlled flag is left unchanged. Backs the demoted TargetPitch/TargetHeading setters.
-        void AimNose (Vector3d direction)
-        {
-            var roll = rollControlled ? RollRelativeTo (targetRotation, upReference) : 0.0;
-            targetRotation = RotationFromDirectionUpRoll (direction, upReference, roll);
             BeginSlew ();
         }
 

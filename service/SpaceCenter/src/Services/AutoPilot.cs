@@ -229,6 +229,11 @@ namespace KRPC.SpaceCenter.Services
         /// An error will be thrown if this property is set to a reference frame that rotates with
         /// the vessel being controlled, as it is impossible to rotate the vessel in such a
         /// reference frame.
+        ///
+        /// The target and the <see cref="UpReference"/> are held as vectors in this frame, so
+        /// changing it re-interprets them in the new frame rather than converting them: the
+        /// orientation the vessel is held in, and what a given <see cref="TargetRoll"/> means,
+        /// both change. Set the frame first, then the target.
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
@@ -318,6 +323,11 @@ namespace KRPC.SpaceCenter.Services
         /// effect of <see cref="SetDirectionAndUp"/>. Setting the target rotation, target direction,
         /// or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
         /// keeps roll well-defined through the vertical.
+        ///
+        /// Because roll is measured against this reference, changing it changes the angle that
+        /// <see cref="TargetRoll"/> and <see cref="CurrentTargetRoll"/> report, even though the
+        /// vessel is still being held in exactly the same orientation. Set the reference first and
+        /// the roll afterwards, or set both at once with <see cref="SetDirectionAndUp"/>.
         /// </remarks>
         [KRPCProperty]
         public Tuple3 UpReference {
@@ -376,6 +386,12 @@ namespace KRPC.SpaceCenter.Services
         /// Direction vector corresponding to the target pitch and heading.
         /// This is in the reference frame specified by <see cref="ReferenceFrame"/>.
         /// </summary>
+        /// <remarks>
+        /// The setter re-aims the nose and nothing else: it preserves the current
+        /// <see cref="TargetRoll"/> relative to <see cref="UpReference"/>, and leaves roll
+        /// suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
+        /// held throughout.
+        /// </remarks>
         [KRPCProperty]
         public Tuple3 TargetDirection {
             get { return Controller.TargetDirection.ToTuple (); }
