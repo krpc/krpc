@@ -21,6 +21,12 @@ mypy==2.3.0
 pylint==4.0.6
 pytest
 
+# Rasterizing the SVG icons and diagrams. pyvips-binary carries libvips and the
+# librsvg that renders them, as wheels for every platform the build runs on, so
+# no system install is involved.
+pyvips==3.1.1
+pyvips-binary==8.18.5
+
 # Sphinx and extensions for the documentation
 pydata-sphinx-theme==0.20.0
 pyenchant==3.3.0

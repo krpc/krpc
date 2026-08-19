@@ -8,6 +8,15 @@ exports_files([
 ])
 
 py_binary(
+    name = "rasterize",
+    srcs = ["rasterize.py"],
+    deps = [
+        "@pypi//pyvips",
+        "@pypi//pyvips_binary",
+    ],
+)
+
+py_binary(
     name = "run_and_stamp",
     srcs = ["run_and_stamp.py"],
 )
