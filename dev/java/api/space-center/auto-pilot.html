@@ -817,6 +817,10 @@ persists across engagements so that a craft known to be flexible re-latches quic
 <p>An error will be thrown if this property is set to a reference frame that rotates with
 the vessel being controlled, as it is impossible to rotate the vessel in such a
 reference frame.</p>
+<p>The target and the <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a> are held as vectors in this frame, so
+changing it re-interprets them in the new frame rather than converting them: the
+orientation the vessel is held in, and what a given <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> means,
+both change. Set the frame first, then the target.</p>
 </div>
 </dd></dl>
 
@@ -919,6 +923,10 @@ the reference can be set once and then rolls commanded against it with
 effect of <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>. Setting the target rotation, target direction,
 or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
 keeps roll well-defined through the vertical.</p>
+<p>Because roll is measured against this reference, changing it changes the angle that
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getCurrentTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getCurrentTargetRoll()</span></code></a> report, even though the
+vessel is still being held in exactly the same orientation. Set the reference first and
+the roll afterwards, or set both at once with <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)" title="krpc.client.services.SpaceCenter.AutoPilot.setDirectionAndUp(org.javatuples.Triplet, org.javatuples.Triplet, float)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.setDirectionAndUp(org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">float)</span></code></a>.</p>
 </div>
 </dd></dl>
 
@@ -961,6 +969,13 @@ This is in the reference frame specified by <a class="reference internal" href="
 <dd class="field-odd"><p>Flight</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The setter re-aims the nose and nothing else: it preserves the current
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()" title="krpc.client.services.SpaceCenter.AutoPilot.getTargetRoll()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getTargetRoll()</span></code></a> relative to <a class="reference internal" href="#krpc.client.services.SpaceCenter.AutoPilot.getUpReference()" title="krpc.client.services.SpaceCenter.AutoPilot.getUpReference()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">AutoPilot.getUpReference()</span></code></a>, and leaves roll
+suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
+held throughout.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">

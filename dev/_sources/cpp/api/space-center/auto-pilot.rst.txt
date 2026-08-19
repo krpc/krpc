@@ -86,6 +86,11 @@ AutoPilot
          the vessel being controlled, as it is impossible to rotate the vessel in such a
          reference frame.
 
+         The target and the :func:`AutoPilot::up_reference` are held as vectors in this frame, so
+         changing it re-interprets them in the new frame rather than converting them: the
+         orientation the vessel is held in, and what a given :func:`AutoPilot::target_roll` means,
+         both change. Set the frame first, then the target.
+
    .. function:: float target_pitch()
    .. function:: void set_target_pitch(float value)
 
@@ -156,6 +161,11 @@ AutoPilot
          or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
          keeps roll well-defined through the vertical.
 
+         Because roll is measured against this reference, changing it changes the angle that
+         :func:`AutoPilot::target_roll` and :func:`AutoPilot::current_target_roll` report, even though the
+         vessel is still being held in exactly the same orientation. Set the reference first and
+         the roll afterwards, or set both at once with :func:`AutoPilot::set_direction_and_up`.
+
    .. function:: void target_pitch_and_heading(float pitch, float heading)
 
       Set target pitch and heading angles.
@@ -182,6 +192,14 @@ AutoPilot
       This is in the reference frame specified by :func:`AutoPilot::reference_frame`.
 
       :Game Scenes: Flight
+
+
+      .. note::
+
+         The setter re-aims the nose and nothing else: it preserves the current
+         :func:`AutoPilot::target_roll` relative to :func:`AutoPilot::up_reference`, and leaves roll
+         suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
+         held throughout.
 
    .. function:: std::tuple<double, double, double, double> target_rotation()
    .. function:: void set_target_rotation(std::tuple<double, double, double, double> value)

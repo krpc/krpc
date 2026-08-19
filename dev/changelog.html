@@ -657,6 +657,11 @@
 <li><p>Fix stages from <code class="docutils literal notranslate"><span class="pre">Vessel.Stages</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.StageAt</span></code>, <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStages</span></code> and <code class="docutils literal notranslate"><span class="pre">Vessel.DecoupleStageAt</span></code> breaking after a Revert to Launch, reporting that delta-v had not been calculated for the vessel. Stages requested after the revert were affected too, so the game had to be restarted to get working stages back (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1023">#1023</a>)</p></li>
 </ul>
 </li>
+<li><p>Autopilot</p>
+<ul>
+<li><p>Setting <code class="docutils literal notranslate"><span class="pre">AutoPilot.TargetDirection</span></code> keeps the target roll, rather than clearing it. It re-aims the nose and nothing else, holding the commanded roll relative to <code class="docutils literal notranslate"><span class="pre">AutoPilot.UpReference</span></code> as the scalar <code class="docutils literal notranslate"><span class="pre">TargetPitch</span></code> and <code class="docutils literal notranslate"><span class="pre">TargetHeading</span></code> setters do, so tracking a moving direction such as prograde no longer drops the roll on every update (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/1054">#1054</a>)</p></li>
+</ul>
+</li>
 <li><p>Orbits, nodes and bodies</p>
 <ul>
 <li><p>An <code class="docutils literal notranslate"><span class="pre">Orbit</span></code> reads the orbit of the vessel, celestial body or maneuver node it belongs to as it is now, rather than the one the game had when it was obtained, so it keeps working across a load instead of reporting the orbit of a game state that has been replaced. Asking the same thing for its orbit again gives back the same object rather than a second one (<a class="extlink-issue reference external" href="https://github.com/krpc/krpc/issues/764">#764</a>)</p></li>

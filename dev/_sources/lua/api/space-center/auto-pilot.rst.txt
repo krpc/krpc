@@ -80,6 +80,11 @@ AutoPilot
          the vessel being controlled, as it is impossible to rotate the vessel in such a
          reference frame.
 
+         The target and the :attr:`SpaceCenter.AutoPilot.up_reference` are held as vectors in this frame, so
+         changing it re-interprets them in the new frame rather than converting them: the
+         orientation the vessel is held in, and what a given :attr:`SpaceCenter.AutoPilot.target_roll` means,
+         both change. Set the frame first, then the target.
+
    .. attribute:: target_pitch: number
 
       The target pitch, in degrees, between -90° and +90°.
@@ -146,6 +151,11 @@ AutoPilot
          or the scalar pitch/heading leaves it unchanged. Choosing a reference off the flight path
          keeps roll well-defined through the vertical.
 
+         Because roll is measured against this reference, changing it changes the angle that
+         :attr:`SpaceCenter.AutoPilot.target_roll` and :attr:`SpaceCenter.AutoPilot.current_target_roll` report, even though the
+         vessel is still being held in exactly the same orientation. Set the reference first and
+         the roll afterwards, or set both at once with :meth:`SpaceCenter.AutoPilot.set_direction_and_up`.
+
    .. method:: target_pitch_and_heading(pitch, heading)
 
       Set target pitch and heading angles.
@@ -167,6 +177,13 @@ AutoPilot
 
       :Attribute: Can be read or written
       :rtype: Tuple
+
+      .. note::
+
+         The setter re-aims the nose and nothing else: it preserves the current
+         :attr:`SpaceCenter.AutoPilot.target_roll` relative to :attr:`SpaceCenter.AutoPilot.up_reference`, and leaves roll
+         suppressed if no target roll is set. Point the nose repeatedly and a commanded roll is
+         held throughout.
 
    .. attribute:: target_rotation: Tuple
 
