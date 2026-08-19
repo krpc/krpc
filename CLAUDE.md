@@ -108,31 +108,47 @@ bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.
  * Run *killed* rather than interrupted → cleanup hook skipped → `pkill -f KSP.x86_64`.
  * Trace from in-game with `KRPC.Utils.Logger.WriteLine("…")`, then grep `$KSP_DIR/KSP.log`.
 
+## Writing
+
+Applies to anything a person reads: commit messages, PR descriptions, code comments, docs.
+
+General guidance:
+
+ * Write concisely. When trimming, keep facts and trim the framing.
+ * Keep descriptions high level. The code is the detail, and should be self-documenting.
+ * One person writes it and many may read it. You, the writer, should do the compression.
+ * Avoid emdashes. Use a comma or a hyphen instead.
+ * Avoid AI tells: "emojis", greetings etc.
+ * American English everywhere ("meters", "color", "normalized"); `//doc:spelling` enforces it in the docs.
+   Legitimate unknown words → `doc/src/dictionary.txt`.
+ * No "Authored by" / `Co-Authored-By` lines.
+
 ## Comments and docs
 
  * Explain what the code does now and why; must make sense to someone who never saw the old version.
  * **Never reference what a change replaced** — no "replaces X", "instead of the old Y", "previously",
    "no longer needed", no migration/phase references. That belongs in the commit message and changelog.
- * American English everywhere ("meters", "color", "normalized"); `//doc:spelling` enforces it.
-   Legitimate unknown words → `doc/src/dictionary.txt`.
 
 ## Commits
 
- * One thing per commit.
- * Short message: single-line summary, then one or two short paragraphs.
- * No "Authored by" / `Co-Authored-By` lines.
+ * One logical thing per commit.
+ * Concise message, sized to the diff. Tiny commits just need a single-line summary, larger commits needs
+   a single-line summary then short paragraph(s).
 
 ## Pull requests
 
- * Concise technical prose; bullets only for discrete items. Multi-part change → lead paragraphs with
-   a short bold phrase (`**Root cause.**`, `**Fix.**`, `**Testing.**`).
- * State the problem, the change, and — for a fix — how it was verified.
+ * Concise technical prose, proportional to the diff; bullets only for discrete items. Multi-part
+   change → lead paragraphs with a short bold phrase (`**Root cause.**`, `**Fix.**`, `**Testing.**`).
+ * State the problem, the change, and for a fix how it was verified.
  * Do not state that tests CI covers would pass (like `bazel test //:test`).
  * Do not repeat implementation details that are clear from the commit messages.
+ * After drafting, cut: any sentence that restates the diff, the weaker of two sections that say the
+   same thing, any paragraph over four lines. If it will not compress further, that is a sign the
+   change is not understood well enough yet; re-read the diff rather than add words.
  * End with one or more `Fixes #NNN` when open issues are fixed by the PR; omit otherwise.
  * End with one or more `Related to #NNN` when open issues are related to but not fixed by the PR;
    omit otherwise.
- * **No AI-attribution or "Generated with" footer** — PR bodies and commit messages alike.
+ * **No AI-attribution or "Generated with" footer**, in PR bodies and commit messages alike.
  * One paragraph per line; GitHub renders single newlines literally. Reflow wrapped text.
  * Assign the current milestone (`tools/krpc-version.sh`) + label by type (`bug`/`enhancement`/`docs`)
    and component (`server`, `client:python`, `service:space-center`, `tools`, …), e.g.
@@ -147,6 +163,8 @@ but with entries grouped logically rather than by add/change/fix type. Entries a
 Add entries under that header, creating it if needed, only for components actually modified.
 `doc/src/changelog.rst` is generated from these files.
 
+ * Be concise and high level. Size the entry to the diff. Keep your audience in mind: these are read by
+   the end user, not a developer. The PR/issue link provides the detail, not the changelog text.
  * **Before a branch is pushed, consolidate into a dedicated final commit** (single-commit PRs
    excepted) — every PR touches these files. On an unpushed local branch this is relaxed: you may
    commit changelog entries freely, e.g. alongside the change they describe. Squash them into that
