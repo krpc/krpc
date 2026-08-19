@@ -11,7 +11,7 @@
  */
 
 /* clock_gettime is POSIX rather than C. See the same note in src/communication.c. */
-#if !defined(_POSIX_C_SOURCE)
+#if !defined(_WIN32) && !defined(_POSIX_C_SOURCE)
 #define _POSIX_C_SOURCE 199309L
 #endif
 
@@ -19,7 +19,15 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#else
 #include <time.h>
+#endif
 
 #include "services/test_service.h"
 
@@ -74,10 +82,21 @@ static void check(krpc_error_t error, const char *what) {
   exit(1);
 }
 
+/* A clock that only goes forwards, which the two platforms spell differently: the
+   performance counter on Windows, the monotonic clock elsewhere. Only differences
+   between two readings mean anything, so where the zero sits does not matter. */
 static double now(void) {
+#ifdef _WIN32
+  LARGE_INTEGER frequency;
+  LARGE_INTEGER counter;
+  QueryPerformanceFrequency(&frequency);
+  QueryPerformanceCounter(&counter);
+  return (double)counter.QuadPart / (double)frequency.QuadPart;
+#else
   struct timespec time;
   clock_gettime(CLOCK_MONOTONIC, &time);
   return (double)time.tv_sec + (double)time.tv_nsec * 1e-9;
+#endif
 }
 
 /* The calls the cases measure. A returned string is left to the client to allocate and then
