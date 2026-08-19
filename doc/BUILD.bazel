@@ -163,6 +163,9 @@ sphinx_build(
     # is "dev" for a dev build and the release number otherwise.
     opts = {"version": docs_version},
     sphinx_build = ":sphinx-build",
+    # The dot graphs are drawn by graphviz, which is a system install rather than
+    # something the build fetches, and only the Linux image carries it.
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 sphinx_build(
