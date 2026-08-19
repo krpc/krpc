@@ -9,9 +9,26 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  packages: read
+
+# One group per pull request, so a new push cancels the runs its commit
+# superseded. Pushes and manual runs have no head ref and fall back to the run
+# id, giving each a group of its own that nothing else can cancel or queue
+# behind.
+concurrency:
+  group: ci-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+# Every job below caps its runtime at half an hour. The longest takes eight
+# minutes warm and roughly twice that when a cache miss makes it fetch its
+# dependencies first, so the cap only ever fires on a hang, in place of the
+# six hours a job would otherwise sit on a runner.
 jobs:
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -80,6 +97,7 @@ jobs:
           - name: test-tools
             test: //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -145,6 +163,7 @@ jobs:
           - name: test-tools
             test: //tools/benchmarks:test //tools/krpctest:test //tools/krpctools:test
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -163,6 +182,7 @@ jobs:
 
   linux-build-krpc:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -199,6 +219,7 @@ jobs:
 
   linux-build-genfiles:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -221,6 +242,7 @@ jobs:
   linux-build-csharp-sln:
     needs: linux-build-genfiles
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -250,6 +272,7 @@ jobs:
   windows-build-csharp-sln:
     needs: linux-build-genfiles
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -280,6 +303,7 @@ jobs:
 
   linux-test-client-cnano:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -304,6 +328,7 @@ jobs:
   linux-build-client-cnano-cmake:
     needs: linux-test-client-cnano
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -350,6 +375,7 @@ jobs:
   windows-build-client-cnano-cmake:
     needs: linux-test-client-cnano
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -377,6 +403,7 @@ jobs:
   linux-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -396,6 +423,7 @@ jobs:
   windows-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -415,6 +443,7 @@ jobs:
 
   linux-test-client-cpp:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -439,6 +468,7 @@ jobs:
   linux-build-client-cpp-cmake:
     needs: linux-test-client-cpp
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     container:
       image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
@@ -481,6 +511,7 @@ jobs:
   windows-build-client-cpp-cmake:
     needs: linux-test-client-cpp
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -499,6 +530,7 @@ jobs:
   linux-build-client-cpp-vcpkg:
     needs: linux-test-client-cpp
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -518,6 +550,7 @@ jobs:
   windows-build-client-cpp-vcpkg:
     needs: linux-test-client-cpp
     runs-on: windows-latest
+    timeout-minutes: 30
     steps:
       - name: checkout
         uses: actions/checkout@v6
@@ -537,6 +570,7 @@ jobs:
 
   all-checks-passed:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     if: always()
     needs:
       - lint
