@@ -24,7 +24,7 @@ jobs:
       - name: bazel
         run: buildifier -mode check -lint warn -r .
 
-  build-krpc:
+  linux-build-krpc:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -60,7 +60,7 @@ jobs:
           name: testserver
           path: bazel-bin/tools/TestServer/TestServer-*.zip
 
-  build-genfiles:
+  linux-build-genfiles:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -81,8 +81,8 @@ jobs:
           name: genfiles
           path: bazel-bin/krpc-genfiles-*.zip
 
-  build-csharp-sln:
-    needs: build-genfiles
+  linux-build-csharp-sln:
+    needs: linux-build-genfiles
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -110,8 +110,8 @@ jobs:
       - name: test
         run: bazel test //:csproj-test
 
-  build-client-cnano-cmake-linux:
-    needs: test-client-cnano
+  linux-build-client-cnano-cmake:
+    needs: linux-test-client-cnano
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -156,8 +156,8 @@ jobs:
       - name: build-fetch-tcpip
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-tcpip
 
-  build-client-cnano-cmake-windows:
-    needs: test-client-cnano
+  windows-build-client-cnano-cmake:
+    needs: linux-test-client-cnano
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -183,8 +183,8 @@ jobs:
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch-tcpip
 
-  build-client-cnano-vcpkg-linux:
-    needs: test-client-cnano
+  linux-build-client-cnano-vcpkg:
+    needs: linux-test-client-cnano
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -202,8 +202,8 @@ jobs:
           VCPKG_ROOT: /usr/local/share/vcpkg
         run: client/cnano/test-vcpkg-linux.sh krpc-cnano-*.zip
 
-  build-client-cnano-vcpkg-windows:
-    needs: test-client-cnano
+  windows-build-client-cnano-vcpkg:
+    needs: linux-test-client-cnano
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -222,8 +222,8 @@ jobs:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
         run: client/cnano/test-vcpkg-windows.sh
 
-  build-client-cpp-cmake-linux:
-    needs: test-client-cpp
+  linux-build-client-cpp-cmake:
+    needs: linux-test-client-cpp
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -264,8 +264,8 @@ jobs:
       - name: build-fetch
         run: client/cpp/test-cmake-linux.sh krpc-cpp-*.zip fetch
 
-  build-client-cpp-cmake-windows:
-    needs: test-client-cpp
+  windows-build-client-cpp-cmake:
+    needs: linux-test-client-cpp
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -282,8 +282,8 @@ jobs:
         shell: bash
         run: client/cpp/test-cmake-windows.sh
 
-  build-client-cpp-vcpkg-linux:
-    needs: test-client-cpp
+  linux-build-client-cpp-vcpkg:
+    needs: linux-test-client-cpp
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -301,8 +301,8 @@ jobs:
           VCPKG_ROOT: /usr/local/share/vcpkg
         run: client/cpp/test-vcpkg-linux.sh krpc-cpp-*.zip
 
-  build-client-cpp-vcpkg-windows:
-    needs: test-client-cpp
+  windows-build-client-cpp-vcpkg:
+    needs: linux-test-client-cpp
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -321,7 +321,7 @@ jobs:
           VCPKG_DEFAULT_BINARY_CACHE: C:\vcpkg-binary-cache
         run: client/cpp/test-vcpkg-windows.sh
 
-  build-docs-html:
+  linux-build-docs-html:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -342,7 +342,7 @@ jobs:
           name: docs-html
           path: bazel-bin/doc/html.zip
 
-  build-docs-pdf:
+  linux-build-docs-pdf:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -363,7 +363,7 @@ jobs:
           name: docs-pdf
           path: bazel-bin/doc/krpc-*.pdf
 
-  build-docs-examples:
+  linux-build-docs-examples:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -379,7 +379,7 @@ jobs:
       - name: build
         run: bazel build //doc:compile-scripts
 
-  build-benchmarks:
+  linux-build-benchmarks:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -395,7 +395,7 @@ jobs:
       - name: build
         run: bazel build //tools/benchmarks/...
 
-  test-docs:
+  linux-test-docs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -411,7 +411,7 @@ jobs:
       - name: build
         run: bazel test //doc:test
 
-  test-core:
+  linux-test-core:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -427,7 +427,7 @@ jobs:
       - name: test
         run: bazel test //core:test
 
-  test-service:
+  linux-test-service:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -443,7 +443,7 @@ jobs:
       - name: test
         run: bazel test //service/...
 
-  test-client-cnano:
+  linux-test-client-cnano:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -466,7 +466,7 @@ jobs:
           name: client-cnano
           path: bazel-bin/client/cnano/krpc-cnano-*.zip
 
-  test-client-cpp:
+  linux-test-client-cpp:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -489,7 +489,7 @@ jobs:
           name: client-cpp
           path: bazel-bin/client/cpp/krpc-cpp-*.zip
 
-  test-client-csharp:
+  linux-test-client-csharp:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -512,7 +512,7 @@ jobs:
           name: client-csharp-nupkg
           path: bazel-bin/client/csharp/KRPC.Client.*.nupkg
 
-  test-client-java:
+  linux-test-client-java:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -535,7 +535,7 @@ jobs:
           name: client-java
           path: bazel-bin/client/java/krpc-java-*.jar
 
-  test-client-python:
+  linux-test-client-python:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -558,7 +558,7 @@ jobs:
           name: client-python
           path: bazel-bin/client/python/krpc-python-*.tar.gz
 
-  test-client-lua:
+  linux-test-client-lua:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -581,7 +581,7 @@ jobs:
           name: client-lua
           path: bazel-bin/client/lua/krpc-lua-*.zip
 
-  test-client-serialio:
+  linux-test-client-serialio:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -597,7 +597,7 @@ jobs:
       - name: test
         run: bazel test //client/serialio:test
 
-  test-client-websockets:
+  linux-test-client-websockets:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -613,7 +613,7 @@ jobs:
       - name: test
         run: bazel test //client/websockets:test
 
-  test-tools:
+  linux-test-tools:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/krpc/buildenv:3.9.1
@@ -633,66 +633,266 @@ jobs:
             //tools/krpctest:test \
             //tools/krpctools:test
 
-  # Windows / Bazel scaffold (build-system migration, Phase 8). The custom rules
-  # are all OS-independent now and the known blockers have been cleared (e.g. the
-  # protoc select in tools/build/protobuf now keys on the target OS rather than
-  # the C++ `compiler` value), but Windows support is still being validated on a
-  # real runner. Disabled for now (if: false) so it doesn't run in CI; it stays
-  # non-blocking (continue-on-error, and out of the all-checks-passed gate) and
-  # can be re-enabled once it goes reliably green.
-  build-windows:
-    if: false
+  # One job per thing built or tested, mirroring the Linux jobs above. Windows
+  # has no equivalent of the ones whose every target needs a POSIX tool -- the
+  # lua client, the serial transport, the pdf documentation -- because there
+  # would be nothing left in them to run.
+  windows-build-krpc:
     runs-on: windows-latest
-    continue-on-error: true
-    # Git Bash (MSYS2) rewrites arguments that look like POSIX paths, which
-    # mangles Bazel's //pkg:target patterns (e.g. //core:test -> /core:test).
-    # Disable that conversion so the target patterns reach Bazel intact.
-    env:
-      MSYS2_ARG_CONV_EXCL: "*"
     steps:
       - name: checkout
         uses: actions/checkout@v6
       - name: bazelisk
         run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
       - name: build
         shell: bash
-        run: bazelisk build //... --config=windows
+        run: |
+          bazelisk build --config=windows \
+            //:krpc \
+            //:csproj \
+            //tools/krpctools \
+            //tools/TestServer:archive
+
+  windows-build-csharp-sln:
+    needs: linux-build-genfiles
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: download-genfiles
+        uses: actions/download-artifact@v8
+        with:
+          name: genfiles
+      # Git Bash carries no unzip, so unpack with what Windows does have.
+      - name: extract-genfiles
+        shell: pwsh
+        run: |
+          Get-ChildItem krpc-genfiles-*.zip | ForEach-Object {
+            Expand-Archive -Path $_ -DestinationPath . -Force
+          }
+          Remove-Item krpc-genfiles-*.zip
+      - name: build
+        shell: bash
+        run: |
+          dotnet build KRPC.sln -c Debug -warnaserror
+          dotnet build KRPC.sln -c Release -warnaserror
       - name: test
         shell: bash
-        run: bazelisk test //core:test //client/csharp:test --config=windows
+        run: bazelisk test //:csproj-test --config=windows
+
+  windows-build-docs-examples:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //doc:compile-scripts --config=windows
+
+  windows-build-benchmarks:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //tools/benchmarks/... --config=windows
+
+  windows-test-core:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: test
+        shell: bash
+        run: bazelisk test //core:test --config=windows
+
+  windows-test-service:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: test
+        shell: bash
+        run: bazelisk test //service/... --config=windows
+
+  windows-test-client-cnano:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //client/cnano:cnano --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //client/cnano:test --config=windows
+
+  windows-test-client-cpp:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //client/cpp:cpp --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //client/cpp:test --config=windows
+
+  windows-test-client-csharp:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //client/csharp --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //client/csharp:test --config=windows
+
+  windows-test-client-java:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //client/java:java --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //client/java:test --config=windows
+
+  windows-test-client-python:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: build
+        shell: bash
+        run: bazelisk build //client/python:python --config=windows
+      - name: test
+        shell: bash
+        run: bazelisk test //client/python:test --config=windows
+
+  windows-test-client-websockets:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: test
+        shell: bash
+        run: bazelisk test //client/websockets:test --config=windows
+
+  windows-test-tools:
+    runs-on: windows-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v6
+      - name: bazelisk
+        run: npm install -g @bazel/bazelisk
+      - name: setup
+        uses: ./.github/actions/bazel-fetch-windows
+      - name: test
+        shell: bash
+        run: |
+          bazelisk test --config=windows \
+            //tools/benchmarks:test \
+            //tools/krpctest:test \
+            //tools/krpctools:test
 
   all-checks-passed:
     runs-on: ubuntu-latest
     if: always()
     needs:
       - lint
-      - build-krpc
-      - build-genfiles
-      - build-csharp-sln
-      - build-client-cnano-cmake-linux
-      - build-client-cnano-cmake-windows
-      - build-client-cnano-vcpkg-linux
-      - build-client-cnano-vcpkg-windows
-      - build-client-cpp-cmake-linux
-      - build-client-cpp-cmake-windows
-      - build-client-cpp-vcpkg-linux
-      - build-client-cpp-vcpkg-windows
-      - build-docs-html
-      - build-docs-pdf
-      - build-docs-examples
-      - build-benchmarks
-      - test-docs
-      - test-core
-      - test-service
-      - test-client-cnano
-      - test-client-cpp
-      - test-client-csharp
-      - test-client-java
-      - test-client-python
-      - test-client-lua
-      - test-client-serialio
-      - test-client-websockets
-      - test-tools
+      - linux-build-krpc
+      - linux-build-genfiles
+      - linux-build-csharp-sln
+      - linux-build-client-cnano-cmake
+      - windows-build-client-cnano-cmake
+      - linux-build-client-cnano-vcpkg
+      - windows-build-client-cnano-vcpkg
+      - linux-build-client-cpp-cmake
+      - windows-build-client-cpp-cmake
+      - linux-build-client-cpp-vcpkg
+      - windows-build-client-cpp-vcpkg
+      - linux-build-docs-html
+      - linux-build-docs-pdf
+      - linux-build-docs-examples
+      - linux-build-benchmarks
+      - linux-test-docs
+      - linux-test-core
+      - linux-test-service
+      - linux-test-client-cnano
+      - linux-test-client-cpp
+      - linux-test-client-csharp
+      - linux-test-client-java
+      - linux-test-client-python
+      - linux-test-client-lua
+      - linux-test-client-serialio
+      - linux-test-client-websockets
+      - linux-test-tools
+      - windows-build-krpc
+      - windows-build-csharp-sln
+      - windows-build-docs-examples
+      - windows-build-benchmarks
+      - windows-test-core
+      - windows-test-service
+      - windows-test-client-cnano
+      - windows-test-client-cpp
+      - windows-test-client-csharp
+      - windows-test-client-java
+      - windows-test-client-python
+      - windows-test-client-websockets
+      - windows-test-tools
     steps:
       - name: check
         run: |
