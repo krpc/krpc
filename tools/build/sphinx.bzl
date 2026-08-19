@@ -115,7 +115,9 @@ def _spelling_impl(ctx):
         "chmod 644 `pwd`/doc/srcs/dictionary.txt",
         # -W treats warnings as errors: the spelling builder logs each misspelling as a warning, so
         # this fails the build (via its exit code) on any misspelling as well as any other warning.
-        "%s -b spelling -E -N -T -W %s ./out %s 2>&1 | tee stdout" % (sphinx_build.short_path, src_dir, opts),
+        # -t spelling asks conf.py for the spellchecker, which only this builder
+        # has any use for.
+        "%s -b spelling -t spelling -E -N -T -W %s ./out %s 2>&1 | tee stdout" % (sphinx_build.short_path, src_dir, opts),
     ]
     sub_commands.append("(" + "; ".join(sphinx_commands) + ")")
 
