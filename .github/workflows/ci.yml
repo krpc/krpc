@@ -167,8 +167,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-      - name: bazelisk
-        run: npm install -g @bazel/bazelisk
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
       - name: build
@@ -276,8 +274,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v6
-      - name: bazelisk
-        run: npm install -g @bazel/bazelisk
       - name: setup
         uses: ./.github/actions/bazel-fetch-windows
       - name: download-genfiles
