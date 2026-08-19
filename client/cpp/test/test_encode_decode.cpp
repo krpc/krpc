@@ -45,6 +45,17 @@ void test_double(double decoded, std::string encoded) {
     ASSERT_TRUE(std::isnan(value));
 }
 
+// Which payload std::numeric_limits gives a signalling NaN is left to the
+// implementation, so there is no one encoding to expect it to produce. What the
+// codec has to get right is that it comes back a NaN rather than an infinity or
+// a number, so check the round trip and not the bytes it goes through.
+template <typename T>
+void test_nan(T decoded) {
+  T value = 0;
+  krpc::decoder::decode(value, krpc::encoder::encode(decoded));
+  ASSERT_TRUE(std::isnan(value));
+}
+
 void test_string(std::string decoded, std::string encoded) {
   ASSERT_EQ(encoded, krpc::platform::hexlify(krpc::encoder::encode(decoded)));
   std::string value;
@@ -106,7 +117,7 @@ TEST(test_encode_decode, test_double) {
   test_double(std::numeric_limits<double>::infinity(), "000000000000f07f");
   test_double(-std::numeric_limits<double>::infinity(), "000000000000f0ff");
   test_double(std::numeric_limits<double>::quiet_NaN(), "000000000000f87f");
-  test_double(std::numeric_limits<double>::signaling_NaN(), "000000000000f47f");
+  test_nan<double>(std::numeric_limits<double>::signaling_NaN());
 }
 
 TEST(test_encode_decode, test_float) {
@@ -116,7 +127,7 @@ TEST(test_encode_decode, test_float) {
   test_float(std::numeric_limits<float>::infinity(), "0000807f");
   test_float(-std::numeric_limits<float>::infinity(), "000080ff");
   test_float(std::numeric_limits<float>::quiet_NaN(), "0000c07f");
-  test_float(std::numeric_limits<float>::signaling_NaN(), "0000a07f");
+  test_nan<float>(std::numeric_limits<float>::signaling_NaN());
 }
 
 TEST(test_encode_decode, test_sint32) {
