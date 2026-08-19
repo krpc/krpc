@@ -18,7 +18,7 @@ runs:
       uses: actions/cache/restore@v5
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
-        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
+        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
     - name: bazel-fetch
       if: steps.bazel-cache.outputs.cache-hit != 'true'
       shell: bash
@@ -28,4 +28,4 @@ runs:
       uses: actions/cache/save@v5
       with:
         path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
-        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel') }}
+        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
