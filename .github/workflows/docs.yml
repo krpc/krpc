@@ -35,7 +35,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}

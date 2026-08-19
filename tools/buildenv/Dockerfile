@@ -7,7 +7,7 @@ LABEL maintainer="djungelorm <djungelorm@users.noreply.github.com>"
 # uses the hermetic rules_python toolchain, not these.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    curl ca-certificates gnupg git wget gosu \
+    curl ca-certificates gnupg git wget \
     python3 python3-pip python-is-python3 && \
     apt-get clean
 
@@ -47,12 +47,12 @@ RUN apt-get update && \
     texlive-latex-extra tex-gyre libenchant-2-2 && \
     apt-get clean
 
-# Install other build tools. gcc/g++/ccache/cmake/librsvg2-bin are for the CMake
-# consumer jobs; luarocks/socat for the Linux-only lua/image/serialio rules;
+# Install other build tools. gcc/g++/ccache/cmake are for the CMake consumer
+# jobs; luarocks for the Linux-only lua rules and socat for the serial ones;
 # graphviz for the documentation's dot graphs.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc g++ ccache librsvg2-bin cmake luarocks socat graphviz && \
+    gcc g++ ccache cmake luarocks socat graphviz && \
     apt-get clean
 
 # Install system LLVM (clang-20) from apt.llvm.org for CI's C/C++ client build and
@@ -69,12 +69,17 @@ RUN wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | gpg --dearmor -o /usr
     libc++-20-dev libc++abi-20-dev libclang-rt-20-dev libunwind-20-dev && \
     apt-get clean
 
-# Install buildifier
+# Install buildifier. Go is needed only to compile it -- the binary that comes
+# out carries its own runtime -- so the toolchain, the checkout and the module
+# cache go again in the same layer rather than riding along in the image.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends golang && \
-    apt-get clean && \
     git clone https://github.com/bazelbuild/buildtools.git --depth 1 --branch v7.1.2 && \
-    (cd buildtools/buildifier; GOBIN=/usr/local/bin go install)
+    (cd buildtools/buildifier; GOBIN=/usr/local/bin go install) && \
+    apt-get purge -y golang golang-go golang-src && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf buildtools /root/go
 
 # Install ASIO
 RUN apt-get update && \

@@ -68,7 +68,8 @@ A few components are not hermetic and need supporting packages installed on your
 
  * Bazel (installed via bazelisk, below)
  * Lua and LuaRocks (for building the Lua client)
- * pdflatex, latexmk and svg/graphviz tools (for building the documentation)
+ * pdflatex, latexmk, graphviz and enchant (for building and checking the documentation)
+ * socat (for the serial transport tests, see "Running the Tests" below)
 
 On Ubuntu, install bazel (via bazelisk) using:
 
@@ -80,9 +81,9 @@ sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 
 Then install the supporting packages:
 ```
-sudo apt-get install luarocks \
+sudo apt-get install luarocks socat \
   latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
-  texlive-latex-extra texlive-fonts-extra tex-gyre librsvg2-bin graphviz libenchant-2-2
+  texlive-latex-extra texlive-fonts-extra tex-gyre graphviz libenchant-2-2
 ```
 
 By default the Bazel build downloads its own hermetic LLVM toolchain to build the C/C++ clients.
@@ -191,11 +192,8 @@ original KSP DLLs.
 kRPC contains a suite of tests for the server plugin, services, client libraries and other parts of
 the project.
 
-The SerialIO communication tests need `socat` installed. Without it, those tests will fail. Install
-it via apt on Ubuntu with:
-```
-sudo apt-get install socat
-```
+The serial transport tests need `socat`, which pairs the two pseudo-terminals they talk over; it is
+in the package list above. Without it those tests fail.
 
 The unit tests can be run using: `bazel test //:test`
 

@@ -13,7 +13,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -27,7 +27,7 @@ jobs:
   linux-build-krpc:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -63,7 +63,7 @@ jobs:
   linux-build-genfiles:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -85,7 +85,7 @@ jobs:
     needs: linux-build-genfiles
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -114,7 +114,7 @@ jobs:
     needs: linux-test-client-cnano
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -226,7 +226,7 @@ jobs:
     needs: linux-test-client-cpp
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -324,7 +324,7 @@ jobs:
   linux-build-docs-html:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -345,7 +345,7 @@ jobs:
   linux-build-docs-pdf:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -366,7 +366,7 @@ jobs:
   linux-build-docs-examples:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -382,7 +382,7 @@ jobs:
   linux-build-benchmarks:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -398,7 +398,7 @@ jobs:
   linux-test-docs:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -414,7 +414,7 @@ jobs:
   linux-test-core:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -430,7 +430,7 @@ jobs:
   linux-test-service:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -446,7 +446,7 @@ jobs:
   linux-test-client-cnano:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -469,7 +469,7 @@ jobs:
   linux-test-client-cpp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -492,7 +492,7 @@ jobs:
   linux-test-client-csharp:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -515,7 +515,7 @@ jobs:
   linux-test-client-java:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -538,7 +538,7 @@ jobs:
   linux-test-client-python:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -561,7 +561,7 @@ jobs:
   linux-test-client-lua:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -584,7 +584,7 @@ jobs:
   linux-test-client-serialio:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -600,7 +600,7 @@ jobs:
   linux-test-client-websockets:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
@@ -616,7 +616,7 @@ jobs:
   linux-test-tools:
     runs-on: ubuntu-latest
     container:
-      image: ghcr.io/krpc/buildenv:3.9.1
+      image: ghcr.io/krpc/buildenv:3.10.0
       options: --user runner:runner
       credentials:
         username: ${{ github.actor }}
