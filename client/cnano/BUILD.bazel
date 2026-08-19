@@ -241,11 +241,15 @@ cc_test(
 
 # The communication backends, one test each. Every one of them runs against something that
 # behaves as the thing it talks to does, so none needs the hardware, port or server it is
-# written for.
+# written for. The serial backend has a source per platform, POSIX and Windows being separate
+# implementations of it.
 cc_test(
     name = "communication-serialio",
     size = "small",
-    srcs = ["test/test_communication_posix.cpp"],
+    srcs = [
+        "test/test_communication_posix.cpp",
+        "test/test_communication_windows.cpp",
+    ],
     deps = [
         ":krpc_cnano_serialio",
         "@cpp_googletest//:gtest",
