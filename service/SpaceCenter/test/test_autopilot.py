@@ -470,6 +470,29 @@ def _make_autopilot_test_class(
                 self.ap.target_heading = 200
                 self.assertAlmostEqual(self.ap.target_roll, roll, delta=1e-2)
 
+        def test_target_direction_preserves_roll(self):
+            # Setting target_direction re-aims the nose and nothing else: the commanded
+            # roll relative to the up reference is preserved, as it is for the scalar
+            # pitch/heading setters, including through the vertical. A suppressed roll
+            # stays suppressed.
+            self.ap.reset()
+            self.ap.reference_frame = self.vessel.surface_reference_frame
+            north = (0, 1, 0)
+            east = (0, 0, 1)
+            zenith = (1, 0, 0)
+            for roll in (0, 35, -60, 120):
+                self.ap.set_direction_and_up(east, north, roll)
+                for direction in (normalize((1, 0, 1)), zenith, normalize((0, -1, 1))):
+                    self.ap.target_direction = direction
+                    self.assertAlmostEqual(
+                        self.ap.target_direction, direction, delta=1e-3
+                    )
+                    self.assertAlmostEqual(self.ap.target_roll, roll, delta=1e-2)
+
+            self.ap.target_roll = float("nan")
+            self.ap.target_direction = east
+            self.assertTrue(math.isnan(self.ap.target_roll))
+
         def test_up_parallel_direction_suppresses_roll(self):
             # up parallel to the direction has no roll anchor (the roof cannot point where
             # the nose already does); it falls back to direction-only rather than

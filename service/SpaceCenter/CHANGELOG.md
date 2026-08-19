@@ -99,6 +99,13 @@
     not been calculated for the vessel. Stages requested after the revert were affected
     too, so the game had to be restarted to get working stages back (#1023)
 
+- Autopilot
+  - Setting `AutoPilot.TargetDirection` keeps the target roll, rather than clearing it. It
+    re-aims the nose and nothing else, holding the commanded roll relative to
+    `AutoPilot.UpReference` as the scalar `TargetPitch` and `TargetHeading` setters do, so
+    tracking a moving direction such as prograde no longer drops the roll on every
+    update (#1054)
+
 - Orbits, nodes and bodies
   - An `Orbit` reads the orbit of the vessel, celestial body or maneuver node it belongs to as
     it is now, rather than the one the game had when it was obtained, so it keeps working
