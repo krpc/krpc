@@ -427,6 +427,30 @@ void test_tuple_int32_bool(const krpc_tuple_int32_bool_t& decoded, std::string e
   }
 }
 
+// Which payload std::numeric_limits gives a signalling NaN is left to the
+// implementation, so there is no one encoding to expect it to produce. What the
+// codec has to get right is that it comes back a NaN rather than an infinity or
+// a number, so check the round trip and not the bytes it goes through.
+void test_nan_double(double decoded) {
+  uint8_t data[8];
+  pb_ostream_t ostream = create_ostream(data, sizeof(data));
+  ASSERT_EQ(KRPC_OK, krpc_encode_double(&ostream, decoded));
+  pb_istream_t istream = pb_istream_from_buffer(data, ostream.bytes_written);
+  double value = 0;
+  ASSERT_EQ(KRPC_OK, krpc_decode_double(&istream, &value));
+  ASSERT_TRUE(std::isnan(value));
+}
+
+void test_nan_float(float decoded) {
+  uint8_t data[4];
+  pb_ostream_t ostream = create_ostream(data, sizeof(data));
+  ASSERT_EQ(KRPC_OK, krpc_encode_float(&ostream, decoded));
+  pb_istream_t istream = pb_istream_from_buffer(data, ostream.bytes_written);
+  float value = 0;
+  ASSERT_EQ(KRPC_OK, krpc_decode_float(&istream, &value));
+  ASSERT_TRUE(std::isnan(value));
+}
+
 TEST(test_encode_decode, test_double) {
   test_double(0.0, "0000000000000000");
   test_double(-1.0, "000000000000f0bf");
@@ -434,7 +458,7 @@ TEST(test_encode_decode, test_double) {
   test_double(std::numeric_limits<double>::infinity(), "000000000000f07f");
   test_double(-std::numeric_limits<double>::infinity(), "000000000000f0ff");
   test_double(std::numeric_limits<double>::quiet_NaN(), "000000000000f87f");
-  test_double(std::numeric_limits<double>::signaling_NaN(), "000000000000f47f");
+  test_nan_double(std::numeric_limits<double>::signaling_NaN());
 }
 
 TEST(test_encode_decode, test_float) {
@@ -444,7 +468,7 @@ TEST(test_encode_decode, test_float) {
   test_float(std::numeric_limits<float>::infinity(), "0000807f");
   test_float(-std::numeric_limits<float>::infinity(), "000080ff");
   test_float(std::numeric_limits<float>::quiet_NaN(), "0000c07f");
-  test_float(std::numeric_limits<float>::signaling_NaN(), "0000a07f");
+  test_nan_float(std::numeric_limits<float>::signaling_NaN());
 }
 
 TEST(test_encode_decode, test_sint32) {

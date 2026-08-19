@@ -208,6 +208,12 @@ cc_library(
         "KRPC_ERROR_MESSAGES",
     ],
     includes = ["include"],
+    # The sockets are winsock's on Windows, which is a library of its own rather
+    # than part of the C runtime.
+    linkopts = select({
+        "@platforms//os:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
     deps = ["@c_nanopb//:nanopb"],
 )
 
@@ -235,11 +241,15 @@ cc_test(
 
 # The communication backends, one test each. Every one of them runs against something that
 # behaves as the thing it talks to does, so none needs the hardware, port or server it is
-# written for.
+# written for. The serial backend has a source per platform, POSIX and Windows being separate
+# implementations of it.
 cc_test(
     name = "communication-serialio",
     size = "small",
-    srcs = ["test/test_communication_posix.cpp"],
+    srcs = [
+        "test/test_communication_posix.cpp",
+        "test/test_communication_windows.cpp",
+    ],
     deps = [
         ":krpc_cnano_serialio",
         "@cpp_googletest//:gtest",
@@ -270,7 +280,12 @@ cc_test(
         "test/arduino/HardwareSerial.h",
         "test/arduino/test_communication_arduino.cpp",
     ],
-    copts = ["-xc++"],
+    # communication.c is C, but the Arduino backend it holds is C++ and the header
+    # says so. Compile it as C++, spelled for the active compiler.
+    copts = select({
+        "@platforms//os:windows": ["/TP"],
+        "//conditions:default": ["-xc++"],
+    }),
     includes = [
         "include",
         "test/arduino",

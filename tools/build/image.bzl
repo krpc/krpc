@@ -1,24 +1,28 @@
 " Image tools "
 
 def _impl(ctx):
-    output = ctx.outputs.out
-    input = ctx.file.src
-    ctx.actions.run_shell(
-        inputs = [input],
-        outputs = [output],
-        progress_message = "Generating PNG image %s" % output.short_path,
-        # The default shell environment supplies PATH, needed to find rsvg-convert.
-        # LC_ALL is set on top of it so that text shaping in the rendered image does
-        # not vary with whoever runs the build; unlike the inherited variables it
-        # also forms part of the action key.
-        use_default_shell_env = True,
-        env = {"LC_ALL": "C.UTF-8"},
-        command = "rsvg-convert --format=png -o %s %s" % (output.path, input.path),
+    args = ctx.actions.args()
+    args.add("--out", ctx.outputs.out)
+    args.add(ctx.file.src)
+    ctx.actions.run(
+        executable = ctx.executable._rasterizer,
+        arguments = [args],
+        inputs = [ctx.file.src],
+        outputs = [ctx.outputs.out],
+        progress_message = "Generating PNG image %s" % ctx.outputs.out.short_path,
+        mnemonic = "Rasterize",
     )
 
 png_image = rule(
     implementation = _impl,
-    attrs = {"src": attr.label(allow_single_file = [".svg"])},
+    attrs = {
+        "src": attr.label(allow_single_file = [".svg"]),
+        "_rasterizer": attr.label(
+            default = Label("//tools/build:rasterize"),
+            executable = True,
+            cfg = "exec",
+        ),
+    },
     outputs = {"out": "%{name}.png"},
 )
 
@@ -28,12 +32,5 @@ def png_images(name, srcs, visibility = None):
     for src in srcs:
         png_name = src.replace(".svg", "")
         png_srcs.append(png_name)
-
-        # rsvg-convert is a system tool with no hermetic cross-platform Bazel
-        # story, so SVG->PNG rasterisation is Linux-only.
-        png_image(
-            name = png_name,
-            src = src,
-            target_compatible_with = ["@platforms//os:linux"],
-        )
+        png_image(name = png_name, src = src)
     native.filegroup(name = name, srcs = png_srcs, visibility = visibility)

@@ -163,6 +163,9 @@ sphinx_build(
     # is "dev" for a dev build and the release number otherwise.
     opts = {"version": docs_version},
     sphinx_build = ":sphinx-build",
+    # The dot graphs are drawn by graphviz, which is a system install rather than
+    # something the build fetches, and only the Linux image carries it.
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 sphinx_build(
@@ -268,6 +271,9 @@ py_test(
     # directory, which is not a valid package name, and it aborts.
     legacy_create_init = False,
     main = "check_scripts_mypy.py",
+    # The example scripts are type-checked against a client generated for one
+    # platform, so a second one has nothing more to say about them.
+    target_compatible_with = ["@platforms//os:linux"],
     deps = [
         "//client/python:krpc_lib",
         "@pypi//mypy",
@@ -367,13 +373,9 @@ filegroup(
     ],
 )
 
-# The C example scripts include <unistd.h> for sleep(), so they only compile on
-# POSIX hosts; the compile check is Linux-only. The C++ examples use portable
-# <thread>, so compile-scripts-cpp stays cross-platform.
 cc_binary_multiple(
     name = "compile-scripts-cnano",
     srcs = glob(["src/scripts/**/*.c"]),
-    target_compatible_with = ["@platforms//os:linux"],
     deps = ["//client/cnano:krpc_cnano"],
 )
 

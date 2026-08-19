@@ -9,6 +9,14 @@ build:linux --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build:macos --cxxopt=-std=c++17 --host_cxxopt=-std=c++17
 build:windows --cxxopt=/std:c++17 --host_cxxopt=/std:c++17
 
+# MSVC only does the two-phase name lookup the standard asks for under
+# /permissive-, which C++17 does not turn on by default. Without it, a
+# dependent call in a template is resolved against everything declared by the
+# end of the translation unit rather than what the template's definition could
+# see, which makes the generated per-enum encoders ambiguous with the ones the
+# collection encoders reach by argument dependent lookup.
+build:windows --cxxopt=/permissive- --host_cxxopt=/permissive-
+
 # The LLVM toolchain adds -stdlib=libc++ to every C++ compile; clang treats it as
 # a link-phase flag and warns it is "unused during compilation" on each .cc file
 # (noisy across the third-party gtest/protobuf builds). Suppress that one benign
@@ -18,6 +26,13 @@ build:linux --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused
 build:macos --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
 
 build --java_runtime_version=remotejdk_11
+
+# rules_python's default launcher is itself a python script, so every py_binary
+# and py_test starts under whatever python3 sits on PATH before handing over to
+# the interpreter the build fetched. The script launcher goes straight to that
+# one, which leaves no system python in the build at all -- and none to find on
+# a Windows runner, which has no python3 on PATH to start with.
+common --@rules_python//python/config_settings:bootstrap_impl=script
 
 # Pin the locale for build actions and tests. Several tools change behaviour with
 # it: the code generators read and write UTF-8 sources, C and Lua case folding and

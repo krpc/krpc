@@ -26,12 +26,17 @@ extensions = [
     'sphinx.ext.graphviz',
     'sphinx.ext.todo',
     'sphinx.ext.extlinks',
-    'sphinxcontrib.spelling',
     'sphinx_tabs.tabs',
     'sphinxcontrib.luadomain',
     'sphinx_csharp.csharp',
     'javasphinx'
 ]
+
+# The spellchecker loads a native library through pyenchant, and only the
+# spelling builder has any use for it, so it is added when that builder asks
+# for it (sphinx-build -t spelling) rather than by every build.
+if tags.has('spelling'):  # noqa: F821  -- sphinx supplies tags to conf.py
+    extensions.append('sphinxcontrib.spelling')
 
 # Render Graphviz diagrams as SVG in HTML so they stay crisp when scaled.
 graphviz_output_format = 'svg'

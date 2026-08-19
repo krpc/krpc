@@ -1,3 +1,10 @@
+## [v3.10.0]
+- Remove `librsvg2-bin` (the SVG images are drawn by libvips, fetched as a wheel
+  by the Bazel build)
+- Remove `gosu`, which nothing invoked
+- Drop the Go toolchain, the buildtools checkout and the module cache after
+  buildifier is compiled
+
 ## [v3.9.1]
 - Add `python-is-python3`, providing a `python` executable for the CI
   version-stamping step in the build-setup action

@@ -36,7 +36,7 @@ def _java_checkstyle_impl(ctx):
         runfiles = ctx.runfiles(files = runfiles),
     )
 
-java_checkstyle_test = rule(
+_java_checkstyle_test = rule(
     implementation = _java_checkstyle_impl,
     attrs = {
         "srcs": attr.label_list(allow_files = True),
@@ -48,3 +48,13 @@ java_checkstyle_test = rule(
     },
     test = True,
 )
+
+# The check runs from a generated shell script, which Windows has no way to
+# launch, so it is Linux-only and a Windows build skips it. Style is a property
+# of the sources rather than of the platform, so checking it once is enough.
+# buildifier: disable=function-docstring
+def java_checkstyle_test(**kwargs):
+    _java_checkstyle_test(
+        target_compatible_with = ["@platforms//os:linux"],
+        **kwargs
+    )

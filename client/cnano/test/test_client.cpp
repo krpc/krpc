@@ -14,10 +14,31 @@
 
 class test_client : public server_test {};
 
+// The version is three dot separated runs of digits. It is checked by hand
+// rather than against a regular expression because gtest falls back to a syntax
+// of its own where it cannot use POSIX ones, and the two have no spelling of a
+// digit in common: [0-9] is only understood by the former, \d only by the latter.
+static bool is_version(const char* value) {
+  int parts = 1;
+  int digits = 0;
+  for (; *value != '\0'; value++) {
+    if (*value == '.') {
+      if (digits == 0) return false;
+      digits = 0;
+      parts++;
+    } else if (*value >= '0' && *value <= '9') {
+      digits++;
+    } else {
+      return false;
+    }
+  }
+  return parts == 3 && digits > 0;
+}
+
 TEST_F(test_client, test_version) {
   krpc_schema_Status status = krpc_schema_Status_init_default;
   ASSERT_EQ(KRPC_OK, krpc_KRPC_GetStatus(conn, &status));
-  ASSERT_THAT(status.version, testing::MatchesRegex("[0-9]+\\.[0-9]+\\.[0-9]+"));
+  ASSERT_TRUE(is_version(status.version)) << status.version;
 }
 
 TEST_F(test_client, test_optional_return_value) {

@@ -129,6 +129,11 @@ def py_lint_test(
         main = Label("//tools/build/python:run_lint.py"),
         args = args,
         data = data,
+        # black ships as a compiled extension, which fails to load from the deep
+        # runfiles paths a Windows build puts it behind: they run past the limit
+        # on a path length. Formatting is a property of the sources rather than
+        # of the platform, so the check is Linux-only and a Windows build skips it.
+        target_compatible_with = ["@platforms//os:linux"],
         deps = deps + [
             "@pypi//black",
             "@pypi//pylint",

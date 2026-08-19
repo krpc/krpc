@@ -1,0 +1,48 @@
+runs:
+  using: composite
+  steps:
+    # The Linux jobs read these settings from /etc/bazel.bazelrc, baked into the
+    # buildenv image. Windows has the same idea -- a system-wide rc file every
+    # invocation reads -- under %ProgramData%, so write the Windows equivalent:
+    # a repository cache this workflow can save and restore, a failing test that
+    # says why in the log, and Linux-only targets that skip rather than refuse
+    # to build when a job names a pattern covering a mix of the two. The cache
+    # path is fixed because this action only ever runs on a GitHub Windows
+    # runner, where D: is the workspace disk.
+    - name: bazel-config
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path D:\bazel-repo | Out-Null
+        $rc = "$env:ProgramData\bazel.bazelrc"
+        Set-Content -Path $rc -Value "common --repository_cache=D:/bazel-repo"
+        Add-Content -Path $rc -Value "test --test_output=errors"
+        Add-Content -Path $rc -Value "build --skip_incompatible_explicit_targets"
+    - name: get-bazel-info
+      shell: bash
+      run: |
+        echo "BAZEL_VERSION=$(bazelisk --version | cut -d' ' -f2)" >> "$GITHUB_ENV"
+        # Git Bash (MSYS2) rewrites arguments that look like POSIX paths, which
+        # mangles Bazel's //pkg:target patterns (e.g. //core:test -> /core:test).
+        # Set here rather than on the workflow because the Windows jobs that do
+        # not use Bazel drive tools which want that rewriting left alone.
+        echo 'MSYS2_ARG_CONV_EXCL=*' >> "$GITHUB_ENV"
+        # Cache only the download archives, as the Linux action does: Bazel keeps
+        # its cache of extracted repositories in a sibling directory, which is far
+        # larger and is rebuilt per job anyway.
+        echo 'BAZEL_DOWNLOAD_CACHE=D:\bazel-repo\content_addressable' >> "$GITHUB_ENV"
+    - name: restore-bazel-cache
+      id: bazel-cache
+      uses: actions/cache/restore@v5
+      with:
+        path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
+        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}
+    - name: bazel-fetch
+      if: steps.bazel-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: bazelisk fetch //...
+    - name: save-bazel-cache
+      if: steps.bazel-cache.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v5
+      with:
+        path: ${{ env.BAZEL_DOWNLOAD_CACHE }}
+        key: bazel-repo-cache-${{ runner.os }}-${{ env.BAZEL_VERSION }}-${{ hashFiles('MODULE.bazel', 'tools/build/python/requirements_lock.txt') }}

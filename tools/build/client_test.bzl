@@ -1,114 +1,63 @@
 " client test tools "
 
-def _impl(ctx):
-    server_type = ctx.attr.server_type
+load("@rules_python//python:defs.bzl", "py_test")
 
-    test_executable_runfiles = ctx.attr.test_executable.default_runfiles.files.to_list()
-    server_executable_runfiles = ctx.attr.server_executable.default_runfiles.files.to_list()
-
-    sub_commands = [
-        # rules_dotnet binaries locate their runfiles (the dotnet runtime and
-        # assemblies) with the bash runfiles library, resolved via
-        # RUNFILES_DIR, which must point at this test's runfiles tree
-        'export RUNFILES_DIR="${RUNFILES_DIR:-$TEST_SRCDIR}"',
-        "ORIG_DIR=`pwd`",
-        # The test executable is staged into a nested runfiles tree, as the
-        # executable may be a wrapper script that expects to find its runfiles
-        # at $0.runfiles
-        "mkdir -p `dirname test-executable.runfiles/_main/%s`" % ctx.executable.test_executable.short_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/test-executable.runfiles/_main/%s"' % (ctx.executable.test_executable.short_path, ctx.executable.test_executable.short_path),
-    ]
-
-    test_runfiles_dir = "test-executable.runfiles/_main/" + ctx.executable.test_executable.short_path + ".runfiles/_main"
-
-    for f in test_executable_runfiles:
-        sub_commands.append("mkdir -p `dirname %s`" % (test_runfiles_dir + "/" + f.short_path))
-        sub_commands.append('ln -f -s "`pwd`/%s" "`pwd`/%s"' % (f.short_path, test_runfiles_dir + "/" + f.short_path))
-
-    stdout = "server-stdout"
-    if server_type != "serialio":
-        server_args = "--type=%s" % server_type
-        get_server_settings = [
-            "RPC_PORT=`awk '/rpc_port = /{print $NF}' %s`" % stdout,
-            "STREAM_PORT=`awk '/stream_port = /{print $NF}' %s`" % stdout,
-            'echo "Server started, rpc port = $RPC_PORT, stream port = $STREAM_PORT"',
-        ]
-        test_env = "RPC_PORT=$RPC_PORT STREAM_PORT=$STREAM_PORT"
-    else:
-        socat_stdout = "socat-stdout"
-        sub_commands.extend([
-            "mkdir -p serial-ports",
-            "(cd serial-ports; socat -d -d PTY,raw,echo=0,link=server-port PTY,raw,echo=0,link=client-port >../%s 2>&1) &" % socat_stdout,
-            "SOCAT_PID=$!",
-            'while ! grep "starting data transfer loop" %s >/dev/null 2>&1; do sleep 0.1 ; done' % socat_stdout,
-            'echo "Virtual ports established using socat"',
-            "SERVER_PORT=`pwd`/serial-ports/server-port",
-            "CLIENT_PORT=`pwd`/serial-ports/client-port",
-            'echo "Server port = $SERVER_PORT"',
-            'echo "Client port = $CLIENT_PORT"',
-        ])
-
-        # Serial transfers run on background threads whose failures are only visible in the
-        # server's log, so capture the detail needed to diagnose them
-        server_args = '--type=serialio --debug --port="$SERVER_PORT"'
-        get_server_settings = [
-            # The virtual serial link (server PTY <-> socat <-> client PTY) is not always ready the
-            # instant the server reports started, so wait briefly for it to settle before the client
-            # connects.
-            "sleep 1",
-            'echo "Server started, port = $SERVER_PORT"',
-        ]
-        test_env = "PORT=$CLIENT_PORT"
-
-    sub_commands.extend([
-        'echo "" > %s' % stdout,
-        # The server's output goes to a file that never reaches the test log, which leaves a
-        # server-side failure invisible: the client just hangs until the test times out and is
-        # killed. Dump the file when the test fails, and from a trap for the timeout case, since
-        # the harness delivers SIGTERM when it times the test out.
-        'trap \'echo "=== server output ==="; cat %s\' TERM' % stdout,
-        # Run the server directly from this test's runfiles tree; its
-        # launcher finds the dotnet runtime and assemblies via RUNFILES_DIR,
-        # and the dotnet host's relative probing paths resolve the
-        # runfiles-root-relative assembly paths in its deps.json from the
-        # working directory $RUNFILES_DIR/_main
-        '(cd "$RUNFILES_DIR/_main"; %s %s >> "$ORIG_DIR/%s") &' % (ctx.executable.server_executable.short_path, server_args, stdout),
-        "SERVER_PID=$!",
-        'tail -n0 -f %s | sed "/Server started successfully/ q"' % stdout,
-    ] + get_server_settings + [
-        "(cd test-executable.runfiles/_main/%s.runfiles/_main; %s ../../%s)" % (ctx.executable.test_executable.short_path, test_env, ctx.executable.test_executable.basename),
-        "RESULT=$?",
-        "kill $SERVER_PID",
-        'if [ $RESULT -ne 0 ]; then echo "=== server output ==="; cat %s; fi' % stdout,
-        "exit $RESULT",
-    ])
+def _config_impl(ctx):
+    config = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.write(
-        output = ctx.outputs.executable,
-        content = "\n".join(sub_commands) + "\n",
-        is_executable = True,
+        output = config,
+        content = json.encode({
+            "server": ctx.executable.server_executable.short_path,
+            "test": ctx.executable.test_executable.short_path,
+            "server_type": ctx.attr.server_type,
+        }),
     )
+    return DefaultInfo(files = depset([config]))
 
-    return DefaultInfo(
-        executable = ctx.outputs.executable,
-        runfiles = ctx.runfiles(files = [ctx.executable.test_executable, ctx.executable.server_executable] + test_executable_runfiles + server_executable_runfiles).merge(ctx.attr._bash_runfiles[DefaultInfo].default_runfiles),
-    )
-
-_client_test = rule(
-    implementation = _impl,
+# The harness needs the path of each executable within the runfiles tree, which
+# only a rule can ask for; location expansion resolves a label to the files it
+# builds, and neither the server nor a test executable is a single file.
+_client_test_config = rule(
+    implementation = _config_impl,
     attrs = {
-        "test_executable": attr.label(executable = True, cfg = "exec"),
-        "server_executable": attr.label(executable = True, cfg = "exec"),
+        "test_executable": attr.label(executable = True, cfg = "target"),
+        "server_executable": attr.label(executable = True, cfg = "target"),
         "server_type": attr.string(default = "protobuf"),
-        "_bash_runfiles": attr.label(default = Label("@bazel_tools//tools/bash/runfiles")),
     },
-    test = True,
 )
 
 # buildifier: disable=function-docstring
-def client_test(**kwargs):
-    # The integration harness is a generated bash script that drives TestServer
-    # (and socat for the serial transport), so it is Linux-only by design.
-    _client_test(
-        target_compatible_with = ["@platforms//os:linux"],
+def client_test(
+        name,
+        test_executable,
+        server_executable,
+        server_type = "protobuf",
+        target_compatible_with = None,
+        **kwargs):
+    # The serial transport is tested over a pair of pseudo-terminals that socat
+    # links together, and socat has no Windows build. The other transports need
+    # nothing beyond the server and the client, so they run anywhere.
+    if server_type == "serialio":
+        target_compatible_with = (target_compatible_with or []) + ["@platforms//os:linux"]
+
+    config = name + "-config"
+    _client_test_config(
+        name = config,
+        test_executable = test_executable,
+        server_executable = server_executable,
+        server_type = server_type,
+        testonly = True,
+    )
+    py_test(
+        name = name,
+        srcs = [Label("//tools/build:run_client_test.py")],
+        main = Label("//tools/build:run_client_test.py"),
+        args = ["$(rootpath :%s)" % config],
+        data = [
+            config,
+            test_executable,
+            server_executable,
+        ],
+        target_compatible_with = target_compatible_with,
         **kwargs
     )
