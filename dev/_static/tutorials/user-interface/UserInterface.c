@@ -1,5 +1,11 @@
 #include <stdio.h>
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#define sleep(seconds) Sleep((seconds) * 1000)
+#else
 #include <unistd.h>
+#endif
 #include <krpc_cnano.h>
 #include <krpc_cnano/services/space_center.h>
 #include <krpc_cnano/services/ui.h>
