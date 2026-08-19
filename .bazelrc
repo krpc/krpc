@@ -19,6 +19,13 @@ build:macos --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused
 
 build --java_runtime_version=remotejdk_11
 
+# rules_python's default launcher is itself a python script, so every py_binary
+# and py_test starts under whatever python3 sits on PATH before handing over to
+# the interpreter the build fetched. The script launcher goes straight to that
+# one, which leaves no system python in the build at all -- and none to find on
+# a Windows runner, which has no python3 on PATH to start with.
+common --@rules_python//python/config_settings:bootstrap_impl=script
+
 # Pin the locale for build actions and tests. Several tools change behaviour with
 # it: the code generators read and write UTF-8 sources, C and Lua case folding and
 # number formatting go through the C library, and .NET formats numbers using the
