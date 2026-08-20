@@ -1,60 +1,57 @@
 " Java build tools "
 
-def _add_runfile(sub_commands, path, runfile_path):
-    sub_commands.extend([
-        "mkdir -p `dirname %s`" % runfile_path,
-        'ln -f -s "`pwd`/%s" "`pwd`/%s"' % (path, runfile_path),
-    ])
+load("@rules_python//python:defs.bzl", "py_test")
 
-def _java_checkstyle_impl(ctx):
-    out = ctx.outputs.executable
-    properties = ctx.file.properties
-    srcs = ctx.files.srcs
-    checkstyle = ctx.executable.checkstyle
-    checkstyle_runfiles = ctx.attr.checkstyle.default_runfiles.files.to_list()
-    runfiles = [checkstyle] + checkstyle_runfiles + [properties] + srcs
-    sub_commands = []
-
-    runfiles_dir = out.path + ".runfiles/_main"
-    sub_commands.append("rm -rf %s" % runfiles_dir)
-    _add_runfile(sub_commands, checkstyle.short_path, runfiles_dir + "/" + checkstyle.basename)
-    for f in checkstyle_runfiles:
-        _add_runfile(sub_commands, f.short_path, runfiles_dir + "/" + checkstyle.basename + ".runfiles/_main/" + f.short_path)
-
-    args = ["-c", "/google_checks.xml", "-p", properties.short_path]
-    args.extend([x.short_path for x in srcs])
-    sub_commands.append("%s/%s %s" % (runfiles_dir, checkstyle.basename, " ".join(args)))
-
+def _config_impl(ctx):
+    config = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.write(
-        ctx.outputs.executable,
-        content = " &&\n".join(sub_commands) + "\n",
-        is_executable = True,
+        output = config,
+        content = json.encode({
+            "checkstyle": ctx.executable.checkstyle.short_path,
+            "properties": ctx.file.properties.short_path,
+            "srcs": [src.short_path for src in ctx.files.srcs],
+        }),
     )
+    return DefaultInfo(files = depset([config]))
 
-    return DefaultInfo(
-        executable = ctx.outputs.executable,
-        runfiles = ctx.runfiles(files = runfiles),
-    )
-
-_java_checkstyle_test = rule(
-    implementation = _java_checkstyle_impl,
+# checkstyle is a java_binary, whose label names both a launcher and the jars it
+# runs, so the path of the launcher within the runfiles tree is not something
+# location expansion can resolve; only a rule can ask for it.
+_java_checkstyle_config = rule(
+    implementation = _config_impl,
     attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "properties": attr.label(
-            default = Label("//tools/build/checkstyle:default.properties"),
-            allow_single_file = True,
+        "checkstyle": attr.label(
+            default = Label("//tools/build/checkstyle"),
+            executable = True,
+            cfg = "target",
         ),
-        "checkstyle": attr.label(default = Label("//tools/build/checkstyle"), executable = True, cfg = "exec"),
+        "properties": attr.label(allow_single_file = True),
+        "srcs": attr.label_list(allow_files = True),
     },
-    test = True,
 )
 
-# The check runs from a generated shell script, which Windows has no way to
-# launch, so it is Linux-only and a Windows build skips it. Style is a property
-# of the sources rather than of the platform, so checking it once is enough.
 # buildifier: disable=function-docstring
-def java_checkstyle_test(**kwargs):
-    _java_checkstyle_test(
-        target_compatible_with = ["@platforms//os:linux"],
+def java_checkstyle_test(
+        name,
+        srcs,
+        properties = Label("//tools/build/checkstyle:default.properties"),
+        **kwargs):
+    config = name + "-config"
+    _java_checkstyle_config(
+        name = config,
+        properties = properties,
+        srcs = srcs,
+        testonly = True,
+    )
+    py_test(
+        name = name,
+        srcs = [Label("//tools/build:run_checkstyle.py")],
+        main = Label("//tools/build:run_checkstyle.py"),
+        args = ["$(rootpath :%s)" % config],
+        data = [
+            config,
+            properties,
+            Label("//tools/build/checkstyle"),
+        ] + srcs,
         **kwargs
     )
