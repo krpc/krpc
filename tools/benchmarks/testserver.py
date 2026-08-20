@@ -12,6 +12,7 @@ running instead.
 import contextlib
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import time
@@ -80,27 +81,43 @@ def running(executable, frame_pacing=True):
     second, which is what a round trip has to be measured against to be the client's cost
     rather than the rate of the loop it landed in. ``run_client.py`` has the long version.
     """
-    # The server's output goes to a file rather than a pipe, so that nothing has to keep
-    # reading it for the server to stay unblocked once the run is under way. It is shown if
-    # the server fails to start, where it is the only account of why.
-    with tempfile.NamedTemporaryFile(
-        mode="r", suffix=".log", prefix="testserver-"
-    ) as log:
+    with _log() as (sink, log):
         command = [os.path.abspath(executable)]
         if not frame_pacing:
             command.append("--no-frame-pacing")
-        with open(log.name, "w", encoding="utf-8") as sink:
-            process = subprocess.Popen(  # pylint: disable=consider-using-with
-                command,
-                stdout=sink,
-                stderr=subprocess.STDOUT,
-                env=_environment(),
-            )
+        process = subprocess.Popen(  # pylint: disable=consider-using-with
+            command,
+            stdout=sink,
+            stderr=subprocess.STDOUT,
+            env=_environment(),
+        )
         try:
             yield _wait_for_ports(process, log)
         finally:
             process.terminate()
             process.wait()
+
+
+@contextlib.contextmanager
+def _log():
+    """A file for a server's output, open for writing and for reading.
+
+    The output goes to a file rather than a pipe, so that nothing has to keep reading it for
+    the server to stay unblocked once the run is under way. It is shown if the server fails to
+    start, where it is the only account of why.
+
+    Writer and reader are separate handles on a named file, so what is temporary is the
+    directory holding it rather than the file itself: Windows allows no second handle on the
+    one a temporary file keeps open.
+    """
+    directory = tempfile.mkdtemp(prefix="krpc-benchmark-log-")
+    try:
+        path = os.path.join(directory, "testserver.log")
+        with open(path, "w", encoding="utf-8") as sink:
+            with open(path, "r", encoding="utf-8") as reader:
+                yield sink, reader
+    finally:
+        shutil.rmtree(directory, ignore_errors=True)
 
 
 def _environment():
