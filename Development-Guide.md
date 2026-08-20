@@ -283,7 +283,8 @@ The tests reuse the running game rather than restarting it, and leave it running
 things to know: a game the tests did not start is never modified, so it must already have the mods
 the tests ask for (which is why the whole suite cannot run this way — it needs a relaunch per mod
 set, and `--no-launch` will fail instead); and if a test run is killed rather than interrupted it
-cannot stop a game it did start, so clean up with `pkill -f KSP.x86_64`.
+cannot stop a game it did start, so clean up with `pkill -f KSP.x86_64` (`taskkill /f /im
+KSP_x64.exe` on Windows).
 
 The `krpctest` and python client packages are also on the GitHub releases page, for testing
 against KSP from outside a checkout of this repository. Installing them with `pip` provides the

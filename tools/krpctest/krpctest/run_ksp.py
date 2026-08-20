@@ -15,15 +15,12 @@ import sys
 import time
 from importlib.resources import files
 
-from krpctest.env import get_ksp_dir
+from krpctest.env import get_ksp_dir, get_ksp_executable, kill_ksp
 from krpctest.game import copy_blank_save
 from krpctest.install import MODS, install
 from krpctest.version import __version__
 
-# The Linux binary name, log location and pkill fallback below are inherited from the
-# existing test framework (krpctest.__init__). They are the natural seam for future
-# cross-platform (Windows/macOS) support.
-_KSP_BINARY = "KSP.x86_64"
+# The game writes its log beside itself, whatever platform it was built for.
 _KSP_LOG = "KSP.log"
 
 
@@ -54,7 +51,7 @@ def _terminate(proc):
         except Exception:  # pylint: disable=broad-except
             pass
     if proc.poll() is None:
-        subprocess.call(["pkill", "-f", "KSP[.]x86_64"])
+        kill_ksp()
 
 
 def _follow_log(path, needle, proc):
@@ -209,7 +206,7 @@ def main():
         _stage_blank_save(args.load_game, ksp_dir)
 
     proc = subprocess.Popen(  # pylint: disable=consider-using-with
-        [os.path.join(ksp_dir, _KSP_BINARY), *ksp_args], cwd=ksp_dir
+        [get_ksp_executable(ksp_dir), *ksp_args], cwd=ksp_dir
     )
     try:
         _follow_log(os.path.join(ksp_dir, _KSP_LOG), "krpc", proc)
