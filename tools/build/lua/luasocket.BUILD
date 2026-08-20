@@ -13,6 +13,7 @@ cc_library(
     srcs = [
         "src/auxiliar.c",
         "src/buffer.c",
+        "src/compat.c",
         "src/except.c",
         "src/inet.c",
         "src/io.c",
@@ -28,10 +29,18 @@ cc_library(
         # unix domain sockets, which windows has no equivalent of.
         "//conditions:default": [
             "src/unix.c",
+            "src/unixdgram.c",
+            "src/unixstream.c",
             "src/usocket.c",
         ],
     }),
-    local_defines = ["LUASOCKET_DEBUG"] + select({
+    local_defines = [
+        "LUASOCKET_DEBUG",
+        # The modules are linked into the interpreter rather than loaded from shared
+        # objects, so nothing resolves their entry points at run time and none of them
+        # needs exporting. Left to itself the header asks for a dllexport.
+        "LUASOCKET_API=extern",
+    ] + select({
         "@platforms//os:osx": ["UNIX_HAS_SUN_LEN"],
         "//conditions:default": [],
     }),

@@ -443,9 +443,9 @@ http_archive(
 http_archive(
     name = "lua_luasocket",
     build_file = "//tools/build/lua:luasocket.BUILD",
-    sha256 = "8b67d9b5b545e1b694753dab7bd6cdbc24c290f2b21ba1e14c77b32817ea1249",
-    strip_prefix = "luasocket-3.0-rc1",
-    url = "https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.0-rc1.tar.gz",
+    sha256 = "bf033aeb9e62bcaa8d007df68c119c966418e8c9ef7e4f2d7e96bddeca9cca6e",
+    strip_prefix = "luasocket-3.1.0",
+    url = "https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.1.0.tar.gz",
 )
 
 http_archive(

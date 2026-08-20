@@ -12,7 +12,10 @@ function Connection:_init(address, port)
 end
 
 function Connection:connect()
-  self._socket = socket.tcp()
+  -- The server listens on IPv4, so the socket is opened for that family rather than for
+  -- whichever one an address resolves to first: a name commonly resolves to the IPv6
+  -- loopback ahead of the IPv4 one, and the attempt on it is slow to give up.
+  self._socket = socket.tcp4()
   result,err = self._socket:connect(self._address, self._port)
   if result == nil then
     error('Socket error: ' .. err)
