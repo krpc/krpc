@@ -1,3 +1,6 @@
+## [v3.11.0]
+- Remove `luarocks` (the Lua client and its dependencies are built by Bazel)
+
 ## [v3.10.0]
 - Remove `librsvg2-bin` (the SVG images are drawn by libvips, fetched as a wheel
   by the Bazel build)
