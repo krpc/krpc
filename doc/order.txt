@@ -637,6 +637,9 @@ SpaceCenter.EditorVessel.Facility
 SpaceCenter.EditorVessel.Size
 SpaceCenter.EditorVessel.Mass
 SpaceCenter.EditorVessel.DryMass
+SpaceCenter.EditorVessel.CenterOfMass
+SpaceCenter.EditorVessel.MomentOfInertia
+SpaceCenter.EditorVessel.InertiaTensor
 SpaceCenter.EditorVessel.Cost
 SpaceCenter.EditorVessel.CrewCapacity
 SpaceCenter.EditorVessel.Parts

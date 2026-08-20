@@ -62,29 +62,81 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Whether the part's rigidbody is the one physics uses. In the editor a part
+        /// still has a rigidbody, but the game leaves it as an unconfigured placeholder
+        /// weighing Unity's default of one tonne.
+        /// </summary>
+        public static bool HasPhysicsBody (this Part part)
+        {
+            return part.rb != null && !HighLogic.LoadedSceneIsEditor;
+        }
+
+        /// <summary>
+        /// The mass of the part, including resources and crew, in tonnes.
+        /// </summary>
+        public static float PhysicsMass (this Part part)
+        {
+            if (part.IsMassless ())
+                return 0f;
+            if (part.HasPhysicsBody ())
+                return part.rb.mass;
+            part.UpdateMass ();
+            return part.mass + part.GetResourceMass () + part.CrewMass ();
+        }
+
+        /// <summary>
+        /// The mass of the crew assigned to the part, in tonnes.
+        /// </summary>
+        public static float CrewMass (this Part part)
+        {
+            return AssignedCrewCount (part) * PhysicsGlobals.KerbalCrewMass;
+        }
+
+        /// <summary>
         /// The mass of the part, including resources, in kg.
         /// </summary>
         public static float WetMass (this Part part)
         {
-            if (part.IsMassless ())
-                return 0f;
-            // A part only has a rigidbody once physics is running. In the editor the
-            // part's own mass fields carry the same figures.
-            if (part.rb != null)
-                return part.rb.mass * 1000f;
-            return (part.mass + part.GetResourceMass ()) * 1000f;
+            return part.PhysicsMass () * 1000f;
         }
 
         /// <summary>
-        /// The mass of the part, excluding resources.
+        /// The mass of the part, excluding resources, in kg. Includes crew, as the
+        /// rigidbody mass in flight does.
         /// </summary>
         public static float DryMass (this Part part)
         {
             if (part.IsMassless ())
                 return 0f;
-            if (part.rb != null)
+            if (part.HasPhysicsBody ())
                 return Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f);
-            return Mathf.Max (0f, part.mass * 1000f);
+            part.UpdateMass ();
+            return Mathf.Max (0f, (part.mass + part.CrewMass ()) * 1000f);
+        }
+
+        /// <summary>
+        /// How many crew occupy the part. In the editor that is the assignment on the
+        /// craft's manifest, which is what the game will seat when the vessel is launched.
+        /// </summary>
+        static int AssignedCrewCount (Part part)
+        {
+            if (!HighLogic.LoadedSceneIsEditor)
+                return part.protoModuleCrew.Count;
+            var manifest = ShipConstruction.ShipManifest;
+            if (manifest == null)
+                return 0;
+            var partManifest = manifest.GetPartCrewManifest (part.craftID);
+            if (partManifest == null)
+                return 0;
+            var crew = partManifest.GetPartCrew ();
+            if (crew == null)
+                return 0;
+            int count = 0;
+            for (int i = 0; i < crew.Length; i++) {
+                if (crew [i] != null)
+                    count++;
+            }
+            return count;
         }
 
         /// <summary>
@@ -132,7 +184,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Vector3d CenterOfMass (this Part part)
         {
-            return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
+            return part.WorldCenterOfMass ();
         }
 
         /// <summary>

@@ -26,6 +26,20 @@ class TestEditor(krpctest.TestCase):
         self.assertEqual(3, vessel.crew_capacity)
         self.assertGreater(min(vessel.size), 0)
 
+    def test_mass_properties(self):
+        vessel = self.space_center.editor.vessel
+        kerbin = self.space_center.bodies["Kerbin"]
+        com = vessel.center_of_mass(kerbin.reference_frame)
+        self.assertEqual(3, len(com))
+        moi = vessel.moment_of_inertia
+        self.assertEqual(3, len(moi))
+        self.assertGreater(min(moi), 0)
+        tensor = vessel.inertia_tensor
+        self.assertEqual(9, len(tensor))
+        self.assertAlmostEqual(moi[0], tensor[0], delta=1)
+        self.assertAlmostEqual(moi[1], tensor[4], delta=1)
+        self.assertAlmostEqual(moi[2], tensor[8], delta=1)
+
     def test_name_and_description(self):
         vessel = self.space_center.editor.vessel
         name = vessel.name
