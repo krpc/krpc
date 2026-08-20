@@ -81,8 +81,27 @@ pip.parse(
     hub_name = "pypi",
     python_version = "3.12",
     requirements_lock = "//tools/build/python:requirements_lock.txt",
+    whl_modifications = {
+        "@whl_mods//:black.json": "black",
+        "@whl_mods//:pytokens.json": "pytokens",
+    },
 )
-use_repo(pip, "pypi")
+
+# black and pytokens ship mypyc-compiled extension modules alongside the python
+# sources they were built from. Windows resolves a DLL through a path capped at
+# 260 characters, which the runfiles tree of a deeply nested target overruns, so
+# discard the extensions and import the sources instead.
+pip.whl_mods(
+    data_exclude_glob = ["site-packages/**/*.pyd"],
+    hub_name = "whl_mods",
+    whl_name = "black",
+)
+pip.whl_mods(
+    data_exclude_glob = ["site-packages/**/*.pyd"],
+    hub_name = "whl_mods",
+    whl_name = "pytokens",
+)
+use_repo(pip, "pypi", "whl_mods")
 
 http_archive(
     name = "com_google_googletest",

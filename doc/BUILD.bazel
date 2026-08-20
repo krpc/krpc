@@ -271,9 +271,6 @@ py_test(
     # directory, which is not a valid package name, and it aborts.
     legacy_create_init = False,
     main = "check_scripts_mypy.py",
-    # The example scripts are type-checked against a client generated for one
-    # platform, so a second one has nothing more to say about them.
-    target_compatible_with = ["@platforms//os:linux"],
     deps = [
         "//client/python:krpc_lib",
         "@pypi//mypy",
