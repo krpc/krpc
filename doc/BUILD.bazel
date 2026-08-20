@@ -283,9 +283,6 @@ sphinx_spelling_test(
     srcs = [":srcs"],
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
-    # Generated bash test wrapper (grep + writable-dictionary hack); convertible
-    # to python later, but Linux-only for now.
-    target_compatible_with = ["@platforms//os:linux"],
 )
 
 sphinx_linkcheck_test(
@@ -294,8 +291,6 @@ sphinx_linkcheck_test(
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
     tags = ["requires-network"],
-    # Generated bash test wrapper; convertible to python later, Linux-only now.
-    target_compatible_with = ["@platforms//os:linux"],
 )
 
 test_suite(
