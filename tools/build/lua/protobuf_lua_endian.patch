@@ -1,0 +1,28 @@
+Guard the endian header, which MSVC does not have.
+
+pb.c only reads the byte order to decide whether it can memcpy a fixed width
+field straight out of the buffer. Windows is little endian on every architecture
+it supports, so it can answer that without a header.
+
+--- a/protobuf/pb.c
++++ b/protobuf/pb.c
+@@ -26,6 +26,10 @@
+ #include <lualib.h>
+ #include <lauxlib.h>
+ 
++#if defined(_WIN32)
++#define IS_LITTLE_ENDIAN
++#else
++
+ #if defined(_ALLBSD_SOURCE) || defined(__APPLE__)
+ #include <machine/endian.h>
+ #else
+@@ -36,6 +40,8 @@
+ #define IS_LITTLE_ENDIAN
+ #endif
+ 
++#endif
++
+ #define IOSTRING_META "protobuf.IOString"
+ 
+ #define checkiostring(L) \

@@ -50,24 +50,23 @@ builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
 Note: on Windows, pass `--config=windows` to Bazel. The whole tree builds under MSVC, and CI runs
 `//core:test` and every client's test suite there. Targets that need POSIX tools are tagged
-Linux-only and skip on Windows: the serial transport's tests (socat), the lua client (luarocks),
-clang-tidy for the C and C++ clients (the LLVM toolchain) and the pdf documentation (make,
-texlive). A Windows machine needs some setting up before any of that works, described under
-"On Windows" below. You can also build the C# projects using an IDE (see the section below named
-"Building the C# projects using an IDE"), or build the whole project using a docker container (see
-the section below named "Building using Docker").
+Linux-only and skip on Windows: the serial transport's tests (socat), clang-tidy for the C and
+C++ clients (the LLVM toolchain) and the pdf documentation (make, texlive). A Windows machine needs
+some setting up before any of that works, described under "On Windows" below. You can also build
+the C# projects using an IDE (see the section below named "Building the C# projects using an IDE"),
+or build the whole project using a docker container (see the section below named "Building using
+Docker").
 
 ### Setting up your Environment
 
 The Bazel build is hermetic: it automatically downloads the toolchains and dependencies for C#
-(rules_dotnet), Python (rules_python), Java (rules_jvm_external), C/C++ (an LLVM toolchain) and
-protobuf. You therefore do **not** need Mono, the .NET SDK, a system Python, a JDK, Maven or a C++
-compiler installed to build and test the project with Bazel.
+(rules_dotnet), Python (rules_python), Java (rules_jvm_external), C/C++ (an LLVM toolchain), Lua
+and protobuf. You therefore do **not** need Mono, the .NET SDK, a system Python, a JDK, Maven, Lua,
+LuaRocks or a C++ compiler installed to build and test the project with Bazel.
 
 A few components are not hermetic and need supporting packages installed on your system:
 
  * Bazel (installed via bazelisk, below)
- * Lua and LuaRocks (for building the Lua client)
  * pdflatex, latexmk, graphviz and enchant (for building and checking the documentation)
  * socat (for the serial transport tests, see "Running the Tests" below)
 
@@ -81,7 +80,7 @@ sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 
 Then install the supporting packages:
 ```
-sudo apt-get install luarocks socat \
+sudo apt-get install socat \
   latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
   texlive-latex-extra texlive-fonts-extra tex-gyre graphviz libenchant-2-2
 ```

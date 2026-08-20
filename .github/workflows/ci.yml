@@ -123,10 +123,9 @@ jobs:
           path: ${{ matrix.path }}
 
   # The Linux matrix above, for Windows. Windows has no equivalent of the
-  # entries whose every target needs a POSIX tool -- the lua client, the serial
-  # transport, the pdf documentation -- because there would be nothing left in
-  # them to run. Nothing here uploads an artifact: the releases are built on
-  # Linux.
+  # entries whose every target needs a POSIX tool -- the serial transport, the
+  # pdf documentation -- because there would be nothing left in them to run.
+  # Nothing here uploads an artifact: the releases are built on Linux.
   windows:
     name: windows-${{ matrix.name }}
     strategy:
@@ -158,6 +157,9 @@ jobs:
           - name: test-client-python
             build: //client/python:python
             test: //client/python:test
+          - name: test-client-lua
+            build: //client/lua:lua
+            test: //client/lua:test
           - name: test-client-websockets
             test: //client/websockets:test
           - name: test-tools

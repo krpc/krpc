@@ -1,9 +1,28 @@
+load("@bazel_skylib//rules:expand_template.bzl", "expand_template")
 load("//:config.bzl", "lua_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
-load("//tools/build:lua.bzl", "lua_binary", "lua_test")
+load("//tools/build:lua.bzl", "lua_binary", "lua_library", "lua_test")
 load("//tools/build:pkg.bzl", "pkg_zip")
 
 exports_files(["CHANGELOG.md"])
+
+# The client's own modules, laid out where require expects to find them. The schema is
+# generated, and is the one module whose source path is not already its module path.
+lua_library(
+    name = "modules",
+    srcs = glob(["krpc/**/*.lua"]) + ["//protobuf:lua"],
+    path_map = {
+        "client/lua/": "",
+        "protobuf/KRPC.lua": "krpc/schema/KRPC.lua",
+    },
+)
+
+lua_deps = [
+    ":modules",
+    "//tools/build/lua:luasocket",
+    "//tools/build/lua:penlight",
+    "//tools/build/lua:protobuf",
+]
 
 pkg_zip(
     name = "lua",
@@ -18,12 +37,14 @@ pkg_zip(
     visibility = ["//visibility:public"],
 )
 
-genrule(
+expand_template(
     name = "rockspec",
-    srcs = ["rockspec.tmpl"],
-    outs = ["krpc-" + lua_version + "-0.rockspec"],
-    cmd = "sed 's/%VERSION%/" + version + "/g' $(locations :rockspec.tmpl) | sed 's/%LUA_VERSION%/" + lua_version + "/g' > $@",
-    output_to_bindir = True,
+    out = "krpc-" + lua_version + "-0.rockspec",
+    substitutions = {
+        "%LUA_VERSION%": lua_version,
+        "%VERSION%": version,
+    },
+    template = "rockspec.tmpl",
 )
 
 pkg_zip(
@@ -61,32 +82,19 @@ client_test(
     test_executable = ":luatest",
 )
 
-# The benchmark program, run by //tools/benchmarks:lua. Not a test: it measures. The script
-# is run from outside the rock tree, so it does not ship in the released rock.
+# The benchmark program, run by //tools/benchmarks:lua. Not a test: it measures. The
+# script is not part of the client, so it is not in the module tree the client is.
 lua_binary(
     name = "benchmark",
-    src = ":src",
     main = "benchmark.lua",
-    rockspec = ":rockspec",
     visibility = ["//tools/benchmarks:__pkg__"],
-    deps = [
-        "@lua_luafilesystem//file",
-        "@lua_luasocket//file",
-        "@lua_penlight//file",
-        "@lua_protobuf//file",
-    ],
+    deps = lua_deps,
 )
 
 lua_test(
     name = "luatest",
     size = "small",
-    src = ":src",
-    rockspec = ":rockspec",
+    main = "krpc/test/init.lua",
     tags = ["requires-network"],
-    deps = [
-        "@lua_luafilesystem//file",
-        "@lua_luasocket//file",
-        "@lua_penlight//file",
-        "@lua_protobuf//file",
-    ],
+    deps = lua_deps,
 )

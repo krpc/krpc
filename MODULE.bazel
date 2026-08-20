@@ -202,16 +202,14 @@ http_archive(
     url = "https://jpa.kapsi.fi/nanopb/download/nanopb-0.4.9.1-linux-x86.tar.gz",
 )
 
+# The protoc plugin that generates the schema, and the runtime it generates for: the
+# same release supplies both, so the lua client's dependency on it is this repository
+# too (see //tools/build/lua).
 http_archive(
     name = "protoc_lua",
-    build_file_content = """
-filegroup(
-    name = 'plugin',
-    srcs = [
-        'protoc-plugin/protoc-gen-lua'
-    ],
-    visibility = ['//visibility:public']
-)""",
+    build_file = "//tools/build/lua:protobuf_lua.BUILD",
+    patch_args = ["-p1"],
+    patches = ["//tools/build/lua:protobuf_lua_endian.patch"],
     sha256 = "28f4daa026effb81cebfdf580b0fc5732e520c0f4ade53e940052d89cddf4264",
     strip_prefix = "protobuf-lua-1.1.2",
     url = "https://github.com/djungelorm/protobuf-lua/archive/v1.1.2.tar.gz",
@@ -428,40 +426,50 @@ filegroup(
 #   RULES_JVM_EXTERNAL_REPIN=1 bazel run @unpinned_maven//:pin
 
 # ----------------------- Lua packages ---------------------------------------------------
+#
+# Lua and the libraries the client needs, built from source by //tools/build/lua. The
+# versions are the ones the rockspecs on luarocks.org name; the sources come from the
+# upstream releases those rockspecs point at, as a rock is a container the build would
+# only have to unpack again.
 
-http_file(
-    name = "lua_protobuf",
-    downloaded_file_path = "protobuf-1.1.2-0.src.rock",
-    sha256 = "bae53a6fdfef5e7e99fc7db07eb958002878c768b2951af93e47f40da1724005",
-    url = "https://github.com/djungelorm/protobuf-lua/releases/download/v1.1.2/protobuf-1.1.2-0.src.rock",
+http_archive(
+    name = "lua",
+    build_file = "//tools/build/lua:lua.BUILD",
+    sha256 = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333",
+    strip_prefix = "lua-5.1.5",
+    url = "https://www.lua.org/ftp/lua-5.1.5.tar.gz",
 )
 
-http_file(
+http_archive(
     name = "lua_luasocket",
-    downloaded_file_path = "luasocket-3.0rc1-2.src.rock",
-    sha256 = "3882f2a1e1c6145ceb43ead385b861b97fa2f8d487e8669ec5b747406ab251c7",
-    url = "https://luarocks.org/manifests/luasocket/luasocket-3.0rc1-2.src.rock",
+    build_file = "//tools/build/lua:luasocket.BUILD",
+    sha256 = "8b67d9b5b545e1b694753dab7bd6cdbc24c290f2b21ba1e14c77b32817ea1249",
+    strip_prefix = "luasocket-3.0-rc1",
+    url = "https://github.com/lunarmodules/luasocket/archive/refs/tags/v3.0-rc1.tar.gz",
 )
 
-http_file(
+http_archive(
     name = "lua_luafilesystem",
-    downloaded_file_path = "luafilesystem-1.9.0-1.src.rock",
-    sha256 = "3de68d619f6ad95a27f4728814375447d921305194b7050dee6199057c31282f",
-    url = "https://luarocks.org/manifests/hisham/luafilesystem-1.9.0-1.src.rock",
+    build_file = "//tools/build/lua:luafilesystem.BUILD",
+    sha256 = "1142c1876e999b3e28d1c236bf21ffd9b023018e336ac25120fb5373aade1450",
+    strip_prefix = "luafilesystem-1_9_0",
+    url = "https://github.com/lunarmodules/luafilesystem/archive/refs/tags/v1_9_0.tar.gz",
 )
 
-http_file(
+http_archive(
     name = "lua_penlight",
-    downloaded_file_path = "penlight-1.15.0-1.src.rock",
-    sha256 = "ba138b8bbc916f42adb5b876c48d254114f416e8867902f8c34fea2788140973",
-    url = "https://luarocks.org/manifests/tieske/penlight-1.15.0-1.src.rock",
+    build_file = "//tools/build/lua:penlight.BUILD",
+    sha256 = "b7a2c3e65799a649d29e9927a337f99cca2a5fc46367a0ce101435be74e53b39",
+    strip_prefix = "Penlight-1.15.0",
+    url = "https://github.com/lunarmodules/Penlight/archive/refs/tags/1.15.0.tar.gz",
 )
 
-http_file(
+http_archive(
     name = "lua_luaunit",
-    downloaded_file_path = "luaunit-3.3-1.src.rock",
-    sha256 = "dd0629d14f63b00774f3e2808d980a98912eabbae10422a3b3c2884e0c7182bf",
-    url = "https://luarocks.org/manifests/bluebird75/luaunit-3.3-1.src.rock",
+    build_file = "//tools/build/lua:luaunit.BUILD",
+    sha256 = "0e8cbee70800c66efee1c54cbbdc4eabfebb134f241267cded13b1d6d7bc2cb6",
+    strip_prefix = "luaunit-LUAUNIT_V3_3",
+    url = "https://github.com/bluebird75/luaunit/archive/refs/tags/LUAUNIT_V3_3.tar.gz",
 )
 
 # ----------------------- Module Manager -------------------------------------------------
