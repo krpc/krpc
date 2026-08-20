@@ -1,4 +1,5 @@
-"""Filesystem locations shared by the test framework and the install/run entrypoints.
+"""Filesystem locations and the game's executable, shared by the test framework and the
+install/run entrypoints.
 
 This is a leaf module (it imports nothing from the rest of krpctest) so that
 ``krpctest.install`` and ``krpctest.run_ksp`` can reuse these helpers without creating an
@@ -6,6 +7,40 @@ import cycle with the ``krpctest`` package.
 """
 
 import os
+import subprocess
+import sys
+
+# What the game's executable is called here. An install is built for one platform, and the
+# name it gives the executable is what says which.
+_KSP_EXECUTABLE = "KSP_x64.exe" if sys.platform == "win32" else "KSP.x86_64"
+
+
+def get_ksp_executable(ksp_dir=None):
+    """The game's executable within the install. An install for another platform names its
+    executable something else, so say that rather than leaving the caller to report that a
+    file it never named is missing."""
+    ksp_dir = get_ksp_dir(ksp_dir)
+    path = os.path.join(ksp_dir, _KSP_EXECUTABLE)
+    if not os.path.exists(path):
+        raise RuntimeError(
+            "No %s in %s. That is what the game's executable is called on this platform, so "
+            "the install is either for another one or not a KSP install."
+            % (_KSP_EXECUTABLE, ksp_dir)
+        )
+    return path
+
+
+def kill_ksp():
+    """Kill any running game, by name rather than by handle. The last resort of a run whose
+    own game will not stop, so it does not outlive the run that started it."""
+    if sys.platform == "win32":
+        command = ["taskkill", "/f", "/im", _KSP_EXECUTABLE]
+    else:
+        command = ["pkill", "-f", "KSP[.]x86_64"]
+    try:
+        subprocess.call(command)
+    except OSError:
+        pass
 
 
 def get_ksp_dir(ksp_dir=None):

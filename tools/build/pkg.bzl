@@ -3,10 +3,16 @@
 load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:zip.bzl", _rules_pkg_zip = "pkg_zip")
 
-# buildifier: disable=function-docstring-header
-def _apply_path_map(path_map, path):
-    """ Apply the path mappings to a path.
-        Replaces the longest prefix match from the mapping. """
+def apply_path_map(path_map, path):
+    """Apply the path mappings to a path.
+
+    Args:
+      path_map: the replacement for each path prefix it applies to.
+      path: the path to map.
+
+    Returns:
+      The path, with the longest matching prefix replaced.
+    """
     matchlen = 0
     match = path
     for x, y in path_map.items():
@@ -44,7 +50,7 @@ def _stage_files_impl(ctx):
     outs = []
     executable_outs = []
     for src in ctx.files.srcs:
-        mapped = _apply_path_map(ctx.attr.path_map, src.short_path)
+        mapped = apply_path_map(ctx.attr.path_map, src.short_path)
         if _apply_exclude(ctx.attr.exclude, src.short_path):
             continue
         if mapped.startswith(".."):

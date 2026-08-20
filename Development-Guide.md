@@ -50,24 +50,23 @@ builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
 Note: on Windows, pass `--config=windows` to Bazel. The whole tree builds under MSVC, and CI runs
 `//core:test` and every client's test suite there. Targets that need POSIX tools are tagged
-Linux-only and skip on Windows: the serial transport's tests (socat), the lua client (luarocks), the
-C and C++ lint rules (the LLVM toolchain) and the pdf documentation (make, texlive). Under Git Bash,
-set `MSYS2_ARG_CONV_EXCL="*"` so it does not rewrite Bazel's `//pkg:target` patterns. On Windows you
-can also build the C# projects using an IDE (see the section below named "Building the C# projects
-using an IDE"), or build the whole project using a docker container (see the section below named
-"Building using Docker").
+Linux-only and skip on Windows: the serial transport's tests (socat), clang-tidy for the C and
+C++ clients (the LLVM toolchain) and the pdf documentation (make, texlive). A Windows machine needs
+some setting up before any of that works, described under "On Windows" below. You can also build
+the C# projects using an IDE (see the section below named "Building the C# projects using an IDE"),
+or build the whole project using a docker container (see the section below named "Building using
+Docker").
 
 ### Setting up your Environment
 
 The Bazel build is hermetic: it automatically downloads the toolchains and dependencies for C#
-(rules_dotnet), Python (rules_python), Java (rules_jvm_external), C/C++ (an LLVM toolchain) and
-protobuf. You therefore do **not** need Mono, the .NET SDK, a system Python, a JDK, Maven or a C++
-compiler installed to build and test the project with Bazel.
+(rules_dotnet), Python (rules_python), Java (rules_jvm_external), C/C++ (an LLVM toolchain), Lua
+and protobuf. You therefore do **not** need Mono, the .NET SDK, a system Python, a JDK, Maven, Lua,
+LuaRocks or a C++ compiler installed to build and test the project with Bazel.
 
 A few components are not hermetic and need supporting packages installed on your system:
 
  * Bazel (installed via bazelisk, below)
- * Lua and LuaRocks (for building the Lua client)
  * pdflatex, latexmk, graphviz and enchant (for building and checking the documentation)
  * socat (for the serial transport tests, see "Running the Tests" below)
 
@@ -81,16 +80,18 @@ sudo mv bazelisk-linux-amd64 /usr/local/bin/bazel
 
 Then install the supporting packages:
 ```
-sudo apt-get install luarocks socat \
+sudo apt-get install socat \
   latexmk texlive-latex-base texlive-latex-recommended texlive-fonts-recommended \
   texlive-latex-extra texlive-fonts-extra tex-gyre graphviz libenchant-2-2
 ```
 
 By default the Bazel build downloads its own hermetic LLVM toolchain to build the C/C++ clients.
 Pass `--config=system-llvm` to build them against a system LLVM install instead (as CI does; this
-requires an LLVM install at the path in `MODULE.bazel`'s `llvm.toolchain_root`). Building the C/C++
-clients through their standalone CMake build, rather than via Bazel, additionally needs CMake 3.15+,
-a C++17 compiler and the protobuf, nanopb and ASIO development libraries.
+requires an LLVM install at the path in `MODULE.bazel`'s `llvm.toolchain_root`). Windows is the
+exception: the C/C++ clients are built with MSVC there, which has to be installed (see "On Windows"
+below). Building the C/C++ clients through their standalone CMake build, rather than via Bazel,
+additionally needs CMake 3.15+, a C++17 compiler and the protobuf, nanopb and ASIO development
+libraries.
 
 You do **not** need to set up any KSP libraries by hand to build the project. The Bazel build
 downloads a stripped set of KSP assemblies (the `@ksp` archive, from the
@@ -104,6 +105,56 @@ equivalent `--ksp-dir` option). For example:
 ```
 export KSP_DIR="$HOME/.local/share/Steam/steamapps/common/Kerbal Space Program"
 ```
+
+#### On Windows
+
+Windows needs four things set up that other platforms do not. The CI runners come with all of them,
+so this applies to a developer machine.
+
+**Symlinks.** Bazel is run with `--windows_enable_symlinks` and `--enable_runfiles` (both from
+`.bazelrc`), which rules_dotnet and the runfiles trees need. Creating a symlink is a privileged
+operation on Windows unless Developer Mode is on, and without it Bazel fails while unpacking its
+own dependencies. Turn it on under Settings > System > For developers, or from an elevated prompt:
+
+```
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppModelUnlock" /t REG_DWORD /f ^
+  /v AllowDevelopmentWithoutDevLicense /d 1
+```
+
+**Long paths.** rules_python builds a virtual environment for its own tools whose paths run past the
+260 character limit that Windows applies by default. The failure is reported as a symlink privilege
+error rather than a length one, because Python disables its unprivileged symlink path for the rest
+of the process once a call fails. Raise the limit from an elevated prompt:
+
+```
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\FileSystem" /t REG_DWORD /f ^
+  /v LongPathsEnabled /d 1
+```
+
+Both settings take effect for processes started afterwards, so run `bazel shutdown` before building
+again.
+
+**MSVC.** The C and C++ clients are built with MSVC on Windows rather than with the LLVM toolchain
+Bazel downloads elsewhere, so Visual Studio Build Tools with the C++ workload and the Windows SDK
+have to be installed:
+
+```
+winget install --id Microsoft.VisualStudio.2022.BuildTools ^
+  --override "--quiet --wait --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended"
+```
+
+Bazel caches the result of looking for a compiler, so if it was run before the install, point
+`BAZEL_VC` at `...\BuildTools\VC` to have it look again.
+
+**A shell.** Bazel needs a bash to run test and shell rules, and finds one on PATH. It is not on
+PATH under PowerShell, so set `BAZEL_SH` to the one Git for Windows ships:
+
+```
+$env:BAZEL_SH = 'C:\Program Files\Git\usr\bin\bash.exe'
+```
+
+Under Git Bash instead, set `MSYS2_ARG_CONV_EXCL="*"` so that Bazel's `//pkg:target` patterns are
+not rewritten into paths (`//core:test` otherwise reaches Bazel as `/core:test`).
 
 ### Building using Bazel
 
@@ -231,7 +282,8 @@ The tests reuse the running game rather than restarting it, and leave it running
 things to know: a game the tests did not start is never modified, so it must already have the mods
 the tests ask for (which is why the whole suite cannot run this way — it needs a relaunch per mod
 set, and `--no-launch` will fail instead); and if a test run is killed rather than interrupted it
-cannot stop a game it did start, so clean up with `pkill -f KSP.x86_64`.
+cannot stop a game it did start, so clean up with `pkill -f KSP.x86_64` (`taskkill /f /im
+KSP_x64.exe` on Windows).
 
 The `krpctest` and python client packages are also on the GitHub releases page, for testing
 against KSP from outside a checkout of this repository. Installing them with `pip` provides the

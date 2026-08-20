@@ -105,7 +105,8 @@ bazel run //:test-ingame -- --no-launch service/RemoteTech/test/test_remotetech.
  * Only works for tests whose mod set the running game already has.
  * `//:run-ksp` builds, installs, launches, tails the kRPC log. `--load-game` brings the server up;
    other `--load-*` switch vessel or launch a craft (`-- --help`). Re-run after any C# change.
- * Run *killed* rather than interrupted → cleanup hook skipped → `pkill -f KSP.x86_64`.
+ * Run *killed* rather than interrupted → cleanup hook skipped → `pkill -f KSP.x86_64`,
+   `taskkill /f /im KSP_x64.exe` on Windows.
  * Trace from in-game with `KRPC.Utils.Logger.WriteLine("…")`, then grep `$KSP_DIR/KSP.log`.
 
 ## Writing

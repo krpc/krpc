@@ -1,0 +1,68 @@
+"""A hermetic lua: the interpreter, with every C module the client needs linked in, and
+the pure lua libraries it loads, each laid out as a module tree."""
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("//tools/build:lua.bzl", "lua_library")
+
+exports_files([
+    "lua.BUILD",
+    "luafilesystem.BUILD",
+    "luasocket.BUILD",
+    "luasocket_windows_unix.patch",
+    "luaunit.BUILD",
+    "penlight.BUILD",
+    "protobuf_lua.BUILD",
+    "protobuf_lua_endian.patch",
+    "run_lua.py.tmpl",
+])
+
+# The C modules are linked in and registered by linit.c rather than built as shared
+# objects and found through LUA_CPATH. One binary is the whole of what a lua program
+# here needs from C, and it builds the same way under every compiler: no export
+# attributes, no import libraries, and no exporting the interpreter's own symbols so
+# that a module loaded into it can resolve them.
+cc_binary(
+    name = "lua",
+    srcs = ["linit.c"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@lua//:interpreter",
+        "@lua_luafilesystem//:lfs",
+        "@lua_luasocket//:luasocket",
+        "@protoc_lua//:pb",
+    ],
+)
+
+lua_library(
+    name = "luasocket",
+    srcs = ["@lua_luasocket//:lua_srcs"],
+    path_map = {
+        # The modules named for a protocol live under socket/, the three named in their
+        # own right at the root of the tree. Longest prefix wins, so the three override
+        # the general rule above them.
+        "src/": "socket/",
+        "src/ltn12.lua": "ltn12.lua",
+        "src/mime.lua": "mime.lua",
+        "src/socket.lua": "socket.lua",
+    },
+    visibility = ["//visibility:public"],
+)
+
+lua_library(
+    name = "penlight",
+    srcs = ["@lua_penlight//:lua_srcs"],
+    path_map = {"lua/": ""},
+    visibility = ["//visibility:public"],
+)
+
+lua_library(
+    name = "protobuf",
+    srcs = ["@protoc_lua//:lua_srcs"],
+    visibility = ["//visibility:public"],
+)
+
+lua_library(
+    name = "luaunit",
+    srcs = ["@lua_luaunit//:lua_srcs"],
+    visibility = ["//visibility:public"],
+)

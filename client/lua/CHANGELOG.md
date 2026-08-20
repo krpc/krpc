@@ -13,6 +13,7 @@
   class it is, a float or a double is packed without building a protobuf field encoder for it,
   the size of a message is read directly rather than by handing each byte to a decoder until it
   stops raising an error, and the client connection disables Nagle's algorithm (#1056)
+- Require luasocket 3.0 or later (#1060)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)

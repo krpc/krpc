@@ -46,8 +46,5 @@ def check_documented_test(name, members, srcs, **kwargs):
         main = Label("//doc:check_documented.py"),
         args = ["$(rootpath :%s)" % config],
         data = [config, members] + srcs,
-        # What is documented is a property of the sources rather than of the
-        # platform a build runs on, so checking it once is enough.
-        target_compatible_with = ["@platforms//os:linux"],
         **kwargs
     )
