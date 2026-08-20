@@ -50,12 +50,12 @@ builds, and support for many languages. (See below for a Bazel cheat sheet.)
 
 Note: on Windows, pass `--config=windows` to Bazel. The whole tree builds under MSVC, and CI runs
 `//core:test` and every client's test suite there. Targets that need POSIX tools are tagged
-Linux-only and skip on Windows: the serial transport's tests (socat), the lua client (luarocks), the
-C and C++ lint rules (the LLVM toolchain) and the pdf documentation (make, texlive). A Windows
-machine needs some setting up before any of that works, described under "On Windows" below. You
-can also build the C# projects using an IDE (see the section below named "Building the C# projects
-using an IDE"), or build the whole project using a docker container (see the section below named
-"Building using Docker").
+Linux-only and skip on Windows: the serial transport's tests (socat), the lua client (luarocks),
+clang-tidy for the C and C++ clients (the LLVM toolchain) and the pdf documentation (make,
+texlive). A Windows machine needs some setting up before any of that works, described under
+"On Windows" below. You can also build the C# projects using an IDE (see the section below named
+"Building the C# projects using an IDE"), or build the whole project using a docker container (see
+the section below named "Building using Docker").
 
 ### Setting up your Environment
 

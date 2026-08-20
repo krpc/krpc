@@ -53,6 +53,19 @@ use_repo(llvm, "llvm_system", "llvm_toolchain", "llvm_toolchain_llvm")
 
 register_toolchains("@llvm_toolchain//:all")
 
+# clang-format for the lint rules on Windows, where toolchains_llvm downloads no
+# toolchain and so declares no LLVM tools. This is the binary from the same LLVM
+# release, packaged as a python wheel (a zip) by the clang-format project. Keep
+# the version in step with llvm_version above, so a source formatted on one
+# platform is formatted on the other.
+http_archive(
+    name = "clang_format_windows",
+    build_file_content = "exports_files(['clang_format/data/bin/clang-format.exe'])",
+    sha256 = "2584cac1070c058432c6374bac0099464e8c2f5e61bbe51cd8ad58c883e0911f",
+    type = "zip",
+    url = "https://files.pythonhosted.org/packages/08/e0/0bd989900eadb896520442f80d6af1a67bbc5fd0ace965a425c979c3943d/clang_format-20.1.3-py2.py3-none-win_amd64.whl",
+)
+
 bazel_dep(name = "rules_jvm_external", version = "7.0")
 
 maven = use_extension("@rules_jvm_external//:extensions.bzl", "maven")
