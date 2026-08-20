@@ -1,0 +1,79 @@
+Build the unix domain socket module on Windows.
+
+Windows has supported AF_UNIX since Windows 10, and the module reaches the
+sockets through the same socket_* layer as the TCP module, which wsocket.c
+already implements for Winsock. What is left is the address, whose structure
+comes from a different header and is passed whole rather than cut short at the
+path, and starting Winsock, which the TCP module would otherwise be the only
+one to do.
+
+--- a/src/unix.c
++++ b/src/unix.c
+@@ -47,6 +47,14 @@
+ LUASOCKET_API int luaopen_socket_unix(lua_State *L)
+ {
+     int i;
++#ifdef _WIN32
++    /* Winsock has to be started before a socket can be created, and this module can
++     * be the first one required. Starting it again is counted, not refused. */
++    if (!socket_open()) {
++        lua_pushstring(L, "unable to initialize library");
++        lua_error(L);
++    }
++#endif
+     lua_newtable(L);
+     int socket_unix_table = lua_gettop(L);
+ 
+
+--- a/src/unixdgram.c
++++ b/src/unixdgram.c
+@@ -12,7 +12,14 @@
+ #include <string.h>
+ #include <stdlib.h>
+ 
++#ifdef _WIN32
++#include <afunix.h>
++/* Windows takes the whole address structure and reads the path as the null
++ * terminated string inside it, rather than as all the length covers. */
++#define SUN_LEN(address) sizeof(*(address))
++#else
+ #include <sys/un.h>
++#endif
+ 
+ #define UNIXDGRAM_DATAGRAMSIZE 8192
+ 
+
+--- a/src/unixstream.c
++++ b/src/unixstream.c
+@@ -10,7 +10,11 @@
+ #include "unixstream.h"
+ 
+ #include <string.h>
++#ifdef _WIN32
++#include <afunix.h>
++#else
+ #include <sys/un.h>
++#endif
+ 
+ /*=========================================================================*\
+ * Internal function prototypes
+@@ -194,6 +198,10 @@
+         + len + 1;
+     err = socket_bind(&un->sock, (SA *) &local, local.sun_len);
+ 
++#elif defined(_WIN32)
++    /* Windows takes the whole address structure and reads the path as the null
++     * terminated string inside it, rather than as all the length covers. */
++    err = socket_bind(&un->sock, (SA *) &local, sizeof(local));
+ #else
+     err = socket_bind(&un->sock, (SA *) &local,
+             sizeof(local.sun_family) + len);
+@@ -248,6 +256,8 @@
+     remote.sun_len = sizeof(remote.sun_family) + sizeof(remote.sun_len)
+         + len + 1;
+     err = socket_connect(&un->sock, (SA *) &remote, remote.sun_len, &un->tm);
++#elif defined(_WIN32)
++    err = socket_connect(&un->sock, (SA *) &remote, sizeof(remote), &un->tm);
+ #else
+     err = socket_connect(&un->sock, (SA *) &remote,
+             sizeof(remote.sun_family) + len, &un->tm);

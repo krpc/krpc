@@ -24,15 +24,12 @@ cc_library(
         "src/tcp.c",
         "src/timeout.c",
         "src/udp.c",
+        "src/unix.c",
+        "src/unixdgram.c",
+        "src/unixstream.c",
     ] + glob(["src/*.h"]) + select({
         "@platforms//os:windows": ["src/wsocket.c"],
-        # unix domain sockets, which windows has no equivalent of.
-        "//conditions:default": [
-            "src/unix.c",
-            "src/unixdgram.c",
-            "src/unixstream.c",
-            "src/usocket.c",
-        ],
+        "//conditions:default": ["src/usocket.c"],
     }),
     local_defines = [
         "LUASOCKET_DEBUG",

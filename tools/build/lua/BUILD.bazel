@@ -8,6 +8,7 @@ exports_files([
     "lua.BUILD",
     "luafilesystem.BUILD",
     "luasocket.BUILD",
+    "luasocket_windows_unix.patch",
     "luaunit.BUILD",
     "penlight.BUILD",
     "protobuf_lua.BUILD",

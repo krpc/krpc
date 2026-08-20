@@ -24,9 +24,7 @@ int luaopen_lfs(lua_State *L);
 int luaopen_mime_core(lua_State *L);
 int luaopen_protobuf_pb(lua_State *L);
 int luaopen_socket_core(lua_State *L);
-#ifndef _WIN32
 int luaopen_socket_unix(lua_State *L);
-#endif
 
 static const luaL_Reg lualibs[] = {
   {"", luaopen_base},
@@ -45,9 +43,7 @@ static const luaL_Reg preloadedlibs[] = {
   {"mime.core", luaopen_mime_core},
   {"protobuf.pb", luaopen_protobuf_pb},
   {"socket.core", luaopen_socket_core},
-#ifndef _WIN32
   {"socket.unix", luaopen_socket_unix},
-#endif
   {NULL, NULL}
 };
 
