@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.Net.Sockets;
 using NUnit.Framework;
 
 namespace KRPC.Client.Test
@@ -43,6 +45,22 @@ namespace KRPC.Client.Test
         public virtual void TearDown ()
         {
             Connection.Dispose ();
+        }
+
+        /// <summary>
+        /// A port nothing is listening on, for the tests that connect to the wrong one. Binding
+        /// a port and giving it straight back leaves one that a connection is refused on, and
+        /// leaves it in the range the system hands out. A port derived from the server's own can
+        /// land anywhere, including on a low one, and a connection to those is dropped rather
+        /// than refused on Windows, which leaves the client waiting.
+        /// </summary>
+        public static ushort UnusedPort ()
+        {
+            var listener = new TcpListener (IPAddress.Loopback, 0);
+            listener.Start ();
+            var port = (ushort)((IPEndPoint)listener.LocalEndpoint).Port;
+            listener.Stop ();
+            return port;
         }
 
         public static ushort RPCPort {

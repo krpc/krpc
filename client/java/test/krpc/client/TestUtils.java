@@ -2,6 +2,9 @@ package krpc.client;
 
 import com.google.protobuf.ByteString;
 import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 
 class TestUtils {
 
@@ -48,8 +51,21 @@ class TestUtils {
       case STREAM:
         return getStreamPort();
       default:
-        // A port number that is neither of the server's, which nothing is listening on
-        return getRpcPort() ^ getStreamPort();
+        return unusedPort();
+    }
+  }
+
+  /**
+   * A port nothing is listening on. Binding a port and giving it straight back leaves one that a
+   * connection is refused on, and leaves it in the range the system hands out. A port derived from
+   * the server's own can land anywhere, including on a low one, and a connection to those is
+   * dropped rather than refused on Windows, which leaves the client waiting.
+   */
+  private static int unusedPort() {
+    try (ServerSocket socket = new ServerSocket(0, 1, InetAddress.getLoopbackAddress())) {
+      return socket.getLocalPort();
+    } catch (IOException exn) {
+      throw new UncheckedIOException(exn);
     }
   }
 

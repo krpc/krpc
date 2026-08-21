@@ -1,5 +1,8 @@
 #pragma once
 
+#include <asio/io_context.hpp>
+#include <asio/ip/address.hpp>
+#include <asio/ip/tcp.hpp>
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
 
@@ -18,6 +21,12 @@ class server_test : public ::testing::Test {
   int get_stream_port() const;
   const char* get_rpc_path() const;
   const char* get_stream_path() const;
+  /** A port nothing is listening on, for the tests that connect to the wrong one. Binding a
+      port and giving it straight back leaves one that a connection is refused on, and leaves
+      it in the range the system hands out. A port derived from the server's own can land
+      anywhere, including on a low one, and a connection to those is dropped rather than
+      refused on Windows, which leaves the client waiting. */
+  static int unused_port();
   krpc::Client conn;
   krpc::services::KRPC krpc;
   krpc::services::TestService test_service;
@@ -46,4 +55,12 @@ inline int server_test::get_rpc_port() const {
 inline int server_test::get_stream_port() const {
   char* env_stream_port = std::getenv("STREAM_PORT");
   return env_stream_port == nullptr ? 50001 : std::stoi(env_stream_port);
+}
+
+inline int server_test::unused_port() {
+  asio::io_context io_context;
+  asio::ip::tcp::acceptor acceptor(io_context);
+  acceptor.open(asio::ip::tcp::v4());
+  acceptor.bind(asio::ip::tcp::endpoint(asio::ip::make_address("127.0.0.1"), 0));
+  return acceptor.local_endpoint().port();
 }

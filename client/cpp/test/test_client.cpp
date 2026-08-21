@@ -69,16 +69,21 @@ TEST_F(test_client, test_version) {
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
 }
 
+// These connect by port, so they are skipped where the server is listening on socket paths:
+// there is no port to get wrong then, and the one they would fall back on is a guess that
+// says nothing about the client.
 TEST_F(test_client, test_wrong_rpc_port) {
-  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost",
-                             get_rpc_port() ^ get_stream_port(), get_stream_port()),
+  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost", unused_port(),
+                             get_stream_port()),
                std::exception);
 }
 
 TEST_F(test_client, test_wrong_stream_port) {
-  ASSERT_THROW(krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(),
-                             get_rpc_port() ^ get_stream_port()),
-               std::exception);
+  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
+  ASSERT_THROW(
+      krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(), unused_port()),
+      std::exception);
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {

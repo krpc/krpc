@@ -23,17 +23,30 @@ namespace KRPC.Client.Test
         [Test]
         public void WrongRpcPort ()
         {
+            SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongRPCPort",
-                rpcPort: RPCPort ^ StreamPort, streamPort: StreamPort));
+                rpcPort: UnusedPort (), streamPort: StreamPort));
         }
 
         [Test]
         public void WrongStreamPort ()
         {
+            SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongStreamPort",
-                rpcPort: RPCPort, streamPort: RPCPort ^ StreamPort));
+                rpcPort: RPCPort, streamPort: UnusedPort ()));
+        }
+
+        /// <summary>
+        /// Skip a test that connects by port when the server is listening on socket paths.
+        /// There is no port to get wrong then, and the one such a test would fall back on is
+        /// a guess that nothing is listening on, so it says nothing about the client.
+        /// </summary>
+        static void SkipWithoutPorts ()
+        {
+            if (RPCPath != null)
+                Assert.Ignore ("the server is listening on socket paths rather than on ports");
         }
 
         [Test]

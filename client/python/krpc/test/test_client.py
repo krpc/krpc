@@ -1,4 +1,5 @@
 import math
+import os
 import unittest
 import socket
 import threading
@@ -21,22 +22,30 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegex(status.version, r"^[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertGreater(status.bytes_read, 0)
 
+    @unittest.skipIf(
+        os.getenv("RPC_PATH") is not None,
+        "the server is listening on socket paths rather than on ports",
+    )
     def test_wrong_rpc_port(self) -> None:
         with self.assertRaises(socket.error):
             krpc.connect(
                 name="python_client_test_wrong_rpc_port",
                 address="localhost",
-                rpc_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
+                rpc_port=ServerTestCase.unused_port(),
                 stream_port=ServerTestCase.stream_port(),
             )
 
+    @unittest.skipIf(
+        os.getenv("RPC_PATH") is not None,
+        "the server is listening on socket paths rather than on ports",
+    )
     def test_wrong_stream_port(self) -> None:
         with self.assertRaises(socket.error):
             krpc.connect(
                 name="python_client_test_wrong_stream_port",
                 address="localhost",
                 rpc_port=ServerTestCase.rpc_port(),
-                stream_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
+                stream_port=ServerTestCase.unused_port(),
             )
 
     def test_wrong_rpc_server(self) -> None:

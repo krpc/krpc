@@ -1,4 +1,5 @@
 import os
+import socket
 from typing import Optional
 import krpc
 from krpc.client import Client
@@ -43,6 +44,17 @@ class ServerTestCase:
             stream_port=ports[stream] if stream is not None else None,
             use_pregenerated_stubs=use_pregenerated_stubs,
         )
+
+    @staticmethod
+    def unused_port() -> int:
+        """A port nothing is listening on, for the tests that connect to the wrong one.
+        Binding a port and giving it straight back leaves one that a connection is refused
+        on, and leaves it in the range the system hands out. A port derived from the
+        server's own can land anywhere, including on a low one, and a connection to those
+        is dropped rather than refused on Windows, which leaves the client waiting."""
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.bind(("localhost", 0))
+            return int(sock.getsockname()[1])
 
     @staticmethod
     def rpc_port() -> int:
