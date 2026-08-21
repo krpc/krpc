@@ -9,15 +9,16 @@ function LocalConnection:_init(path)
   self:super(path, 0)
 end
 
--- luasocket carries its unix domain sockets in a module of its own, which it builds only
--- where the platform has the address family. It is asked for when a socket is opened rather
--- than when this module is loaded, so that a platform without it can still connect over
--- TCP/IP.
+-- luasocket carries its unix domain sockets in a module of its own, which it builds
+-- everywhere but Windows, where it comes from a rock of its own. It is asked for when a
+-- socket is opened rather than when this module is loaded, so that an installation
+-- without it can still connect over TCP/IP.
 local function unix_socket()
   local found, unix = pcall(require, 'socket.unix')
   if not found then
     error('This luasocket has no socket.unix module, so it cannot open a unix domain ' ..
-          'socket; connect over TCP/IP with krpc.connect instead')
+          'socket. On Windows it comes from the luasocket-unix-windows rock; install ' ..
+          'that, or connect over TCP/IP with krpc.connect instead')
   end
   return unix()
 end

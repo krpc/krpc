@@ -92,8 +92,10 @@ Reference
    thereafter.
 
    Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and
-   Windows Server 2019 or later. On Windows this needs a luasocket built with
-   its ``socket.unix`` module, which the one luarocks installs leaves out.
+   Windows Server 2019 or later. This needs luasocket's ``socket.unix`` module,
+   which luasocket builds itself everywhere but Windows; there it comes from the
+   ``luasocket-unix-windows`` rock, which ``luarocks install krpc`` pulls in. A
+   luasocket built by hand needs that module built with it.
 
    :param string name: A descriptive name for the connection. This is passed to
                        the server and appears, for example, in the client
