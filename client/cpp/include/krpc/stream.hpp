@@ -104,7 +104,10 @@ inline T Stream<T>::operator()() {
   // A null value is signaled out-of-band by is_null; leave value default-constructed
   // (an empty optional, or an object with id 0).
   T value{};
-  if (!impl->is_null()) decoder::decode(value, data, impl->get_client());
+  // Unqualified, so that the overload for a type a service defines is found by argument
+  // dependent lookup where this template is used, rather than having to be declared before it
+  using decoder::decode;
+  if (!impl->is_null()) decode(value, data, impl->get_client());
   return value;
 }
 
@@ -151,7 +154,8 @@ inline int Stream<T>::add_callback(const Callback& callback) {
   check_exists();
   auto callback_wrapper = [this, callback](const std::string& data) {
     T value{};
-    if (!this->impl->is_null()) decoder::decode(value, data, this->impl->get_client());
+    using decoder::decode;
+    if (!this->impl->is_null()) decode(value, data, this->impl->get_client());
     callback(value);
   };
   return impl->add_callback(callback_wrapper);
