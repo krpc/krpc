@@ -161,9 +161,8 @@ class TestEditorLaunchVessel(krpctest.TestCase):
         mass = editor_vessel.mass
         moi = editor_vessel.moment_of_inertia
         root = editor_vessel.parts.root
-        frame = root.reference_frame
-        com = editor_vessel.center_of_mass(frame)
-        part_com = root.center_of_mass(frame)
+        com = editor_vessel.center_of_mass(root.reference_frame)
+        part_com = root.center_of_mass(root.reference_frame)
         self.space_center.editor.launch_vessel("LaunchPad")
         flight = self.space_center.active_vessel
         self.assertEqual(craft, flight.name)
@@ -175,10 +174,9 @@ class TestEditorLaunchVessel(krpctest.TestCase):
                 flight_moi[i],
                 delta=max(abs(moi[i]) * 0.05, 1),
             )
-        flight_root = flight.parts.root
-        flight_frame = flight_root.reference_frame
-        flight_com = flight.center_of_mass(flight_frame)
-        flight_part_com = flight_root.center_of_mass(flight_frame)
+        root = flight.parts.root
+        flight_com = flight.center_of_mass(root.reference_frame)
+        flight_part_com = root.center_of_mass(root.reference_frame)
         for i in range(3):
             self.assertAlmostEqual(com[i], flight_com[i], delta=0.5)
             self.assertAlmostEqual(part_com[i], flight_part_com[i], delta=0.2)
