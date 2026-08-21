@@ -22,8 +22,17 @@ from the LuaSocket sources so that require 'socket.unix' works on Windows too, a
 installs nothing else: LuaSocket itself provides the rest.
 
 Note that Windows implements the stream sockets only, so socket.unix.dgram reports
-an unsupported address family in place of returning a socket.]],
-  homepage = "https://github.com/lunarmodules/luasocket",
+an unsupported address family in place of returning a socket.
+
+This rock is a stopgap published by the kRPC project, not by LuaSocket, and the
+change it applies is offered upstream. Remove it once a LuaSocket release builds
+socket.unix on Windows itself: both would own socket/unix.dll, which LuaRocks
+reports as a conflict rather than choosing between. Report problems with it to the
+issue tracker below rather than to LuaSocket, which did not build it.
+
+Built from LuaSocket: https://github.com/lunarmodules/luasocket]],
+  homepage = "https://krpc.github.io/krpc",
+  issues_url = "https://github.com/krpc/krpc/issues",
   license = "MIT"
 }
 -- Everywhere else LuaSocket ships the module itself, and two rocks installing the
