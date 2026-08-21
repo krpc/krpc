@@ -92,7 +92,7 @@ TEST_F(test_client, test_wrong_rpc_server) {
   } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
                  "Connection request was for the rpc server, but this is the stream server. "
-                 "Did you connect to the wrong port number?");
+                 "Did you connect to the wrong port number or socket path?");
   }
 }
 
@@ -106,7 +106,7 @@ TEST_F(test_client, test_wrong_stream_server) {
   } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
                  "Connection request was for the stream server, but this is the rpc server. "
-                 "Did you connect to the wrong port number?");
+                 "Did you connect to the wrong port number or socket path?");
   }
 }
 

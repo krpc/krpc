@@ -64,7 +64,7 @@ public class ConnectionTest {
             TestUtils.getStreamPort(), TestUtils.getStreamPort()));
     assertTrue(e.getMessage().contains(
         "Connection request was for the rpc server, but this is the stream server. "
-        + "Did you connect to the wrong port number?"));
+        + "Did you connect to the wrong port number or socket path?"));
   }
 
   @Test
@@ -74,7 +74,7 @@ public class ConnectionTest {
             TestUtils.getRpcPort(), TestUtils.getRpcPort()));
     assertTrue(e.getMessage().contains(
         "Connection request was for the stream server, but this is the rpc server. "
-        + "Did you connect to the wrong port number?"));
+        + "Did you connect to the wrong port number or socket path?"));
   }
 
   @Test

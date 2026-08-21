@@ -43,7 +43,7 @@ namespace KRPC.Client.Test
                           "CSharpClientTestWrongRPCServer",
                           rpcPort: StreamPort, streamPort: StreamPort));
             Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace KRPC.Client.Test
                           "CSharpClientTestWrongStreamServer",
                           rpcPort: RPCPort, streamPort: RPCPort));
             Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]
