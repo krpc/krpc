@@ -61,6 +61,15 @@ void LocalConnection::connect() {
   connect_generic(socket, asio::local::stream_protocol::endpoint(path));
 }
 
+void Connection::close() {
+  // A connection that was never opened, or has already been closed, has no socket to close
+  if (socket.is_open()) socket.close();
+  // What was read but not consumed belongs to a connection that is gone, so it is dropped
+  // rather than handed out by a later read
+  filled = 0;
+  consumed = 0;
+}
+
 void Connection::send(const char* data, size_t length) {
   asio::write(socket, asio::buffer(data, length));
 }

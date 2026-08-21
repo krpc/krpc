@@ -27,6 +27,7 @@ class Connection {
   virtual ~Connection() = default;
   /** Open the connection to the server. */
   virtual void connect();
+  /** Close the connection. Sending or receiving on it afterwards reports the failure. */
   void close();
   /** Send data to the connection. Blocks until all data has been sent. */
   void send(const char* data, size_t length);

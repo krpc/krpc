@@ -8,6 +8,7 @@
 #include <asio/write.hpp>
 #include <atomic>
 #include <cstddef>
+#include <exception>
 #include <memory>
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
@@ -151,7 +152,44 @@ TYPED_TEST_P(connection_test, receive_two_messages_from_one_read) {
   }
 }
 
+TYPED_TEST_P(connection_test, send_on_closed_connection) {
+  auto connection = this->connect();
+  connection->close();
+  ASSERT_THROW(connection->send("foo"), std::exception);
+}
+
+TYPED_TEST_P(connection_test, receive_on_closed_connection) {
+  auto connection = this->connect();
+  connection->close();
+  ASSERT_THROW(connection->receive(1), std::exception);
+}
+
+TYPED_TEST_P(connection_test, receive_message_on_closed_connection) {
+  auto connection = this->connect();
+  connection->close();
+  krpc::schema::Response received;
+  ASSERT_THROW(connection->receive_message(received), std::exception);
+}
+
+TYPED_TEST_P(connection_test, close_twice) {
+  auto connection = this->connect();
+  connection->close();
+  connection->close();
+}
+
+TYPED_TEST_P(connection_test, close_drops_what_was_read_but_not_taken) {
+  // A read brings in a block rather than the bytes asked for, so a connection can be closed
+  // with data still in hand. It belongs to a connection that is gone, so it is not handed out.
+  auto connection = this->connect();
+  connection->send("foobar");
+  ASSERT_EQ("foo", connection->receive(3));
+  connection->close();
+  ASSERT_THROW(connection->receive(3), std::exception);
+}
+
 REGISTER_TYPED_TEST_SUITE_P(connection_test, send_receive, long_send_receive,
                             send_receive_in_pieces, partial_receive,
                             partial_receive_with_nothing_waiting, receive_message,
-                            receive_two_messages_from_one_read);
+                            receive_two_messages_from_one_read, send_on_closed_connection,
+                            receive_on_closed_connection, receive_message_on_closed_connection,
+                            close_twice, close_drops_what_was_read_but_not_taken);
