@@ -152,6 +152,23 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Executes a procedure call from within a compiled server-side expression and
+        /// returns the raw return value. Errors are thrown rather than returned, so that
+        /// they propagate to the stream or event evaluating the expression. Throws
+        /// YieldException if the procedure yields, in which case the expression
+        /// evaluation is abandoned and retried on the next update.
+        /// </summary>
+        public object ExecuteExpressionCall (ProcedureSignature procedure, object instance, object[] arguments)
+        {
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+            var returnValue = procedure.Handler.Invoke (instance, arguments);
+            if (procedure.HasReturnType)
+                CheckReturnValue (procedure, returnValue);
+            return returnValue;
+        }
+
+        /// <summary>
         /// Executes a procedure call and returns the result.
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.

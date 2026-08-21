@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service.KRPC;
+using KRPC.Service.Messages;
 using NUnit.Framework;
 using LinqExpression = System.Linq.Expressions.Expression;
 
@@ -63,9 +65,165 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual ("foo", Eval<string> (Expression.ConstantString ("foo")));
         }
 
+        static ulong AddInstance (object obj)
+        {
+            return global::KRPC.Service.ObjectStore.Instance.AddInstance (obj);
+        }
+
+        static ProcedureCall BuildProcedureCall (string procedure, params Argument[] args)
+        {
+            var call = new ProcedureCall ("TestService", procedure);
+            foreach (var arg in args)
+                call.Arguments.Add (arg);
+            return call;
+        }
+
+        [SetUp]
+        public void SetUpGameScene ()
+        {
+            global::KRPC.Service.CallContext.GameScene = global::KRPC.Service.GameScene.Flight;
+        }
+
         [Test]
         public void Call ()
         {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            obj.IntProperty = 42;
+            var expr = Expression.Call (BuildProcedureCall ("TestClass_get_IntProperty", new Argument (0, obj)));
+            Assert.AreEqual (42, Eval<int> (expr));
+            var method = Expression.Call (BuildProcedureCall (
+                "TestClass_FloatToString", new Argument (0, obj), new Argument (1, 0.5f)));
+            Assert.AreEqual ("foo0.5", Eval<string> (method));
+        }
+
+        [Test]
+        public void CallDefaultArgument ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var expr = Expression.Call (BuildProcedureCall ("TestClass_IntToString", new Argument (0, obj)));
+            Assert.AreEqual ("foo42", Eval<string> (expr));
+        }
+
+        [Test]
+        public void CallMissingArgument ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Call (BuildProcedureCall ("TestClass_FloatToString", new Argument (0, obj))));
+        }
+
+        [Test]
+        public void CallWrongGameScene ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var expr = Expression.Call (BuildProcedureCall (
+                "TestClass_MethodAvailableInSpecifiedGameScene", new Argument (0, obj)));
+            Assert.Throws<global::KRPC.Service.RPCException> (() => Eval<string> (expr));
+        }
+
+        [Test]
+        public void CallWithArguments ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var expr = Expression.CallWithArguments (
+                BuildProcedureCall ("TestClass_FloatToString"),
+                new Dictionary<int, Expression> {
+                    { 0, Expression.ConstantObject (AddInstance (obj)) },
+                    { 1, Expression.ConstantFloat (3.5f) }
+                });
+            Assert.AreEqual ("foo3.5", Eval<string> (expr));
+        }
+
+        [Test]
+        public void CallWithArgumentsPartial ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            // Instance provided by an expression; float argument from the encoded call
+            var expr = Expression.CallWithArguments (
+                BuildProcedureCall ("TestClass_FloatToString", new Argument (1, 0.5f)),
+                new Dictionary<int, Expression> {
+                    { 0, Expression.ConstantObject (AddInstance (obj)) }
+                });
+            Assert.AreEqual ("foo0.5", Eval<string> (expr));
+            // Instance from the encoded call; float argument from an expression
+            var expr2 = Expression.CallWithArguments (
+                BuildProcedureCall ("TestClass_FloatToString", new Argument (0, obj)),
+                new Dictionary<int, Expression> {
+                    { 1, Expression.ConstantFloat (1.5f) }
+                });
+            Assert.AreEqual ("foo1.5", Eval<string> (expr2));
+        }
+
+        [Test]
+        public void CallWithArgumentsDefaultArgument ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var expr = Expression.CallWithArguments (
+                BuildProcedureCall ("TestClass_IntToString"),
+                new Dictionary<int, Expression> {
+                    { 0, Expression.ConstantObject (AddInstance (obj)) }
+                });
+            Assert.AreEqual ("foo42", Eval<string> (expr));
+        }
+
+        [Test]
+        public void CallWithArgumentsNumericConversion ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            // int expression implicitly converted to the float parameter
+            var expr = Expression.CallWithArguments (
+                BuildProcedureCall ("TestClass_FloatToString"),
+                new Dictionary<int, Expression> {
+                    { 0, Expression.ConstantObject (AddInstance (obj)) },
+                    { 1, Expression.ConstantInt (3) }
+                });
+            Assert.AreEqual ("foo3", Eval<string> (expr));
+        }
+
+        [Test]
+        public void CallWithArgumentsWrongType ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.CallWithArguments (
+                    BuildProcedureCall ("TestClass_FloatToString"),
+                    new Dictionary<int, Expression> {
+                        { 0, Expression.ConstantObject (AddInstance (obj)) },
+                        { 1, Expression.ConstantString ("nope") }
+                    }));
+        }
+
+        [Test]
+        public void CallPerElement ()
+        {
+            var objs = new [] {
+                new global::KRPC.Test.Service.TestService.TestClass ("a"),
+                new global::KRPC.Test.Service.TestService.TestClass ("b"),
+                new global::KRPC.Test.Service.TestService.TestClass ("c")
+            };
+            for (int i = 0; i < objs.Length; i++)
+                objs [i].IntProperty = i + 1;
+            var objects = Expression.CreateList (
+                objs.Select (x => Expression.ConstantObject (AddInstance (x))).ToList ());
+            var param = Expression.Parameter ("x", Type.ClassType ("TestService", "TestClass"));
+            var getProperty = Expression.CallWithArguments (
+                BuildProcedureCall ("TestClass_get_IntProperty"),
+                new Dictionary<int, Expression> { { 0, param } });
+
+            // Select the property value of each object in the list
+            var selected = Eval<List<int>> (Expression.ToList (Expression.Select (
+                objects, Expression.Function (new List<Expression> { param }, getProperty))));
+            CollectionAssert.AreEqual (new [] { 1, 2, 3 }, selected);
+
+            // Whether any object's property satisfies a predicate
+            var equalsTwo = Expression.Function (
+                new List<Expression> { param },
+                Expression.Equal (getProperty, Expression.ConstantInt (2)));
+            Assert.IsTrue (Eval<bool> (Expression.Any (objects, equalsTwo)));
+            var equalsFour = Expression.Function (
+                new List<Expression> { param },
+                Expression.Equal (getProperty, Expression.ConstantInt (4)));
+            Assert.IsFalse (Eval<bool> (Expression.Any (objects, equalsFour)));
         }
 
         [Test]
