@@ -9,8 +9,6 @@ exports_files(["CHANGELOG.md"])
 copts = [
     "-Werror",
     "-Xlint:all",
-    "-target 1.9",
-    "-source 1.9",
 ]
 
 filegroup(
