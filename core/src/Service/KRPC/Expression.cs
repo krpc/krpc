@@ -420,7 +420,7 @@ namespace KRPC.Service.KRPC
                 .GetMethods ()
                 .Single (m => m.Name == "Create" && m.GetGenericArguments ().Length == elements.Count);
             if (method == null)
-                throw new ArgumentException ("Tuple contructor not found for these element types");
+                throw new ArgumentException ("Tuple constructor not found for these element types");
             method = method.MakeGenericMethod (elementTypes);
             return new Expression (LinqExpression.Call (method, elements.Select (x => x.internalExpression).ToArray ()));
         }
