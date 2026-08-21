@@ -10,7 +10,33 @@ namespace KRPC.Client.Test
         [SetUp]
         public virtual void SetUp ()
         {
-            Connection = new Connection ("CSharpClientTest", rpcPort: RPCPort, streamPort: StreamPort);
+            Connection = Connect ("CSharpClientTest");
+        }
+
+        /// <summary>
+        /// Connect over whichever transport the harness started the server with, which it
+        /// tells us about by port or by socket path. The rpc and stream arguments name which
+        /// of the server's two endpoints each connection should go to, so a test can
+        /// deliberately connect them the wrong way round.
+        /// </summary>
+        public static Connection Connect (string name, string rpc = "rpc", string stream = "stream")
+        {
+            if (RPCPath != null) {
+                return Connection.ConnectLocal (
+                    name, rpc == "rpc" ? RPCPath : StreamPath,
+                    stream == null ? null : (stream == "rpc" ? RPCPath : StreamPath));
+            }
+            return new Connection (
+                name, rpcPort: rpc == "rpc" ? RPCPort : StreamPort,
+                streamPort: stream == null ? 0 : (stream == "rpc" ? RPCPort : StreamPort));
+        }
+
+        public static string RPCPath {
+            get { return Environment.GetEnvironmentVariable ("RPC_PATH"); }
+        }
+
+        public static string StreamPath {
+            get { return Environment.GetEnvironmentVariable ("STREAM_PATH"); }
         }
 
         [TearDown]

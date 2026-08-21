@@ -17,8 +17,8 @@ namespace KRPC.Client
     public class Connection : IConnection, IDisposable
     {
         object invokeLock = new object ();
-        TcpClient rpcClient;
-        TcpClient streamClient;
+        Socket rpcSocket;
+        Socket streamSocket;
         NetworkStream rpcStream;
         CodedOutputStream codedRpcStream;
         MessageReader rpcReader;
@@ -39,20 +39,84 @@ namespace KRPC.Client
         /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
         /// </summary>
         public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
+            : this (name, Connect (address ?? IPAddress.Loopback, rpcPort),
+                    streamPort == 0 ? null
+                    : new Func<Socket> (() => Connect (address ?? IPAddress.Loopback, streamPort)))
         {
-            if (address == null)
-                address = IPAddress.Loopback;
+        }
 
-            // Every request carries the one call, which is filled in for each of them.
-            request.Calls.Add (call);
+        /// <summary>
+        /// Connect to a kRPC server on the same machine, over unix domain sockets named by
+        /// the given paths rather than over TCP. An empty path stands for the one the server
+        /// uses unless it was configured with another. If streamPath is null, does not
+        /// connect to the stream server. The connection behaves identically once established.
+        /// Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and later.
+        /// </summary>
+        public static Connection ConnectLocal (string name = "", string rpcPath = "", string streamPath = "")
+        {
+            return new Connection (
+                name, ConnectToPath (PathOrDefault (rpcPath, "rpc")),
+                streamPath == null ? null
+                : new Func<Socket> (() => ConnectToPath (PathOrDefault (streamPath, "stream"))));
+        }
 
-            rpcClient = new TcpClient ();
-            rpcClient.Connect (address, rpcPort);
+        /// <summary>
+        /// The path to connect to for a socket of the given name: the one asked for, or the
+        /// server's default where none was.
+        /// </summary>
+        static string PathOrDefault (string path, string name)
+        {
+            return string.IsNullOrEmpty (path) ? DefaultPath (name) : path;
+        }
+
+        static Socket Connect (IPAddress address, int port)
+        {
+            var socket = new Socket (address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            socket.Connect (address, port);
             // A call writes a request and then waits for its response, so there is never a
             // second small write for Nagle's algorithm to hold the first one back for. Left on,
             // it can only delay a request the server is already waiting for.
-            rpcClient.NoDelay = true;
-            rpcStream = rpcClient.GetStream ();
+            socket.NoDelay = true;
+            return socket;
+        }
+
+        static Socket ConnectToPath (string path)
+        {
+            var socket = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
+            socket.Connect (new UnixEndPoint (path));
+            return socket;
+        }
+
+        /// <summary>
+        /// A default path for a socket of the given name, matching the one the server uses
+        /// unless it was configured with another.
+        /// </summary>
+        static string DefaultPath (string name)
+        {
+            var windows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var directory = Environment.GetEnvironmentVariable (
+                windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
+            if (string.IsNullOrEmpty (directory))
+                directory = System.IO.Path.Combine (System.IO.Path.GetTempPath (),
+                    "krpc-" + Environment.UserName);
+            else
+                directory = System.IO.Path.Combine (directory, "krpc");
+            return System.IO.Path.Combine (directory, name);
+        }
+
+        /// <summary>
+        /// Perform the connection handshake over an already opened rpc socket. The
+        /// handshake is the same whatever carries it. The stream socket is opened only once
+        /// the rpc connection has been accepted, so that a rejected connection does not
+        /// leave a second one behind.
+        /// </summary>
+        Connection (string name, Socket rpc, Func<Socket> openStreamSocket)
+        {
+            // Every request carries the one call, which is filled in for each of them.
+            request.Calls.Add (call);
+
+            rpcSocket = rpc;
+            rpcStream = new NetworkStream (rpcSocket);
             codedRpcStream = new CodedOutputStream (rpcStream, true);
             rpcReader = new MessageReader (rpcStream);
             var connectionRequest = new ConnectionRequest ();
@@ -67,11 +131,9 @@ namespace KRPC.Client
             if (response.Status != ConnectionResponse.Types.Status.Ok)
                 throw new ConnectionException (response.Message);
 
-            if (streamPort != 0) {
-                streamClient = new TcpClient ();
-                streamClient.Connect (address, streamPort);
-                streamClient.NoDelay = true;
-                var streamStream = streamClient.GetStream ();
+            if (openStreamSocket != null) {
+                streamSocket = openStreamSocket ();
+                var streamStream = new NetworkStream (streamSocket);
                 connectionRequest = new ConnectionRequest ();
                 connectionRequest.Type = Type.Stream;
                 connectionRequest.ClientIdentifier = response.ClientIdentifier;
@@ -120,9 +182,9 @@ namespace KRPC.Client
         {
             if (!disposed) {
                 if (disposing) {
-                    rpcClient.Close ();
-                    if (streamClient != null)
-                        streamClient.Close ();
+                    rpcSocket.Close ();
+                    if (streamSocket != null)
+                        streamSocket.Close ();
                     // Join the update thread, so that it has ended by the time this returns
                     // rather than at some later point of its own choosing. This has to come
                     // after the sockets are closed: the thread spends its time blocked in a

@@ -195,6 +195,23 @@ Client API Reference
        * **stream_port** -- The port number of the Stream Server. Defaults to 50001. This should
          match the stream port number of the server you want to connect to.
 
+   .. method:: static Connection ConnectLocal(string name = "", string rpcPath = "", string streamPath = "")
+
+      Connect to a kRPC server running on the same machine, over unix domain sockets rather than
+      TCP/IP. The connection behaves identically once established. Unix domain sockets are
+      available on Linux and macOS; on Windows, use the constructor above.
+
+      :parameters:
+
+       * **name** -- A descriptive name for the connection. This is passed to the server and appears
+         in the in-game server window.
+       * **rpcPath** -- The path of the socket the RPC Server is listening on. This should match the
+         RPC socket path shown in the in-game server window. Leave empty for the path the server
+         uses unless it was configured with another.
+       * **streamPath** -- The path of the socket the Stream Server is listening on. This should
+         match the stream socket path shown in the in-game server window. Defaults as ``rpcPath``
+         does. Pass ``null`` to connect without stream support.
+
    .. method:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 
       Create a new stream from the given lambda expression.
