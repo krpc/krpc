@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
+using KRPC.Server;
 using KRPC.Server.LocalSocket;
 using NUnit.Framework;
 
@@ -22,7 +23,10 @@ namespace KRPC.Test.Server.LocalSocket
         [TearDown]
         public void TearDown ()
         {
-            File.Delete (path);
+            if (Directory.Exists (path))
+                Directory.Delete (path, true);
+            else
+                File.Delete (path);
         }
 
         Socket Connect ()
@@ -209,6 +213,100 @@ namespace KRPC.Test.Server.LocalSocket
             server.Start ();
             Assert.IsTrue (server.Running);
             server.Stop ();
+        }
+
+        [Test]
+        public void StartFailsWhenAnotherServerIsListening ()
+        {
+            // The socket file alone does not say whether the server that made it is still
+            // there, and taking the path from one that is would leave it unreachable with
+            // nothing to say where its clients had gone
+            var running = new LocalSocketServer (path);
+            running.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
+            running.Start ();
+            var second = new LocalSocketServer (path);
+            second.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
+            Assert.Throws<ServerException> (() => second.Start ());
+            Assert.IsFalse (second.Running);
+            Assert.IsTrue (running.Running);
+            // The first server still has the path
+            using (var client = Connect ())
+                Assert.IsTrue (client.Connected);
+            running.Stop ();
+        }
+
+        [Test]
+        public void StartDoesNotDeleteAFileThatIsNotASocket ()
+        {
+            // A mistyped path points at a file that is nothing to do with the server, and
+            // whatever is in it is not the server's to remove
+            File.WriteAllText (path, "not a socket");
+            var server = new LocalSocketServer (path);
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
+            Assert.Throws<ServerException> (() => server.Start ());
+            Assert.IsFalse (server.Running);
+            Assert.AreEqual ("not a socket", File.ReadAllText (path));
+        }
+
+        [Test]
+        public void StartFailsWhenThePathIsADirectory ()
+        {
+            Directory.CreateDirectory (path);
+            var server = new LocalSocketServer (path);
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
+            Assert.Throws<ServerException> (() => server.Start ());
+            Assert.IsFalse (server.Running);
+            Assert.IsTrue (Directory.Exists (path));
+        }
+
+        [Test]
+        [Platform (Exclude = "Win", Reason = "made with the link command POSIX has")]
+        public void StartReportsAPathItCannotAsk ()
+        {
+            // A link with nothing on the end of it answers a connection with neither a server
+            // nor a refusal, which says only that the question went unanswered
+            Link ("/nowhere-at-all", path);
+            var server = new LocalSocketServer (path);
+            server.OnClientRequestingConnection += (s, e) => {
+                return;
+            };
+            var exn = Assert.Throws<ServerException> (() => server.Start ());
+            Assert.That (exn.Message, Does.Contain ("Could not find out"));
+            Assert.IsFalse (server.Running);
+        }
+
+        [Test]
+        [Platform (Exclude = "Win", Reason = "made with the link command POSIX has")]
+        public void StartDoesNotFollowASymbolicLinkToWhatItPointsAt ()
+        {
+            // Removing the link would be one thing, removing what someone pointed it at another
+            var target = path + "-target";
+            File.WriteAllText (target, "precious");
+            try {
+                Link (target, path);
+                var server = new LocalSocketServer (path);
+                server.OnClientRequestingConnection += (s, e) => {
+                    return;
+                };
+                Assert.Throws<ServerException> (() => server.Start ());
+                Assert.AreEqual ("precious", File.ReadAllText (target));
+            } finally {
+                File.Delete (target);
+            }
+        }
+
+        static void Link (string target, string name)
+        {
+            using (var link = System.Diagnostics.Process.Start ("ln", "-s " + target + " " + name))
+                link.WaitForExit ();
         }
 
         [Test]

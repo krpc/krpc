@@ -31,6 +31,9 @@ namespace KRPC.Server.LocalSocket
         [DllImport ("ws2_32.dll", EntryPoint = "listen")]
         static extern int WinsockListen (IntPtr socket, int backlog);
 
+        [DllImport ("ws2_32.dll", EntryPoint = "connect")]
+        static extern int WinsockConnect (IntPtr socket, byte[] address, int addressLength);
+
         [DllImport ("ws2_32.dll", EntryPoint = "WSAGetLastError")]
         static extern int WinsockLastError ();
 
@@ -70,18 +73,51 @@ namespace KRPC.Server.LocalSocket
         {
             if (socket == null)
                 throw new ArgumentNullException (nameof (socket));
-
-            // The address is encoded once, here as everywhere, and copied into the whole of the
-            // field the system expects, with the room left over already zero
-            var endPoint = new UnixEndPoint (path).Serialize ();
-            var address = new byte [UnixEndPoint.AddressLength];
-            for (int i = 0; i < endPoint.Size; i++)
-                address [i] = endPoint [i];
-
+            var address = Address (path);
             if (WinsockBind (socket.Handle, address, address.Length) == Failed)
                 throw new SocketException (WinsockLastError ());
             if (WinsockListen (socket.Handle, backlog) == Failed)
                 throw new SocketException (WinsockLastError ());
+        }
+
+        /// <summary>
+        /// Connect the socket to the given path, whichever way this runtime allows.
+        /// </summary>
+        public static void Connect (Socket socket, string path)
+        {
+            if (socket == null)
+                throw new ArgumentNullException (nameof (socket));
+            if (!NeedsWinsock) {
+                socket.Connect (new UnixEndPoint (path));
+                return;
+            }
+            ConnectThroughWinsock (socket, path);
+        }
+
+        /// <summary>
+        /// Connect by calling winsock, whatever runtime this is, as with the bind above.
+        /// </summary>
+        public static void ConnectThroughWinsock (Socket socket, string path)
+        {
+            if (socket == null)
+                throw new ArgumentNullException (nameof (socket));
+            var address = Address (path);
+            if (WinsockConnect (socket.Handle, address, address.Length) == Failed)
+                throw new SocketException (WinsockLastError ());
+        }
+
+        /// <summary>
+        /// The path as the socket address winsock is handed. It is encoded once, here as
+        /// everywhere, and copied into the whole of the field the system expects, with the room
+        /// left over already zero.
+        /// </summary>
+        static byte[] Address (string path)
+        {
+            var endPoint = new UnixEndPoint (path).Serialize ();
+            var address = new byte [UnixEndPoint.AddressLength];
+            for (int i = 0; i < endPoint.Size; i++)
+                address [i] = endPoint [i];
+            return address;
         }
     }
 }

@@ -149,9 +149,7 @@ namespace KRPC.Server.LocalSocket
                 var directory = Path.GetDirectoryName (ListenPath);
                 if (!string.IsNullOrEmpty (directory))
                     Directory.CreateDirectory (directory);
-                // A socket file left behind by a previous run, for example one killed
-                // rather than stopped, would otherwise make the bind fail forever
-                File.Delete (ListenPath);
+                ClearStaleSocketFile ();
                 listener = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
                 UnixSocket.BindAndListen (listener, ListenPath, 16);
             } catch (SocketException exn) {
@@ -178,6 +176,57 @@ namespace KRPC.Server.LocalSocket
             EventHandlerExtensions.Invoke (OnStarted, this);
             Logger.WriteLine ("LocalSocketServer: started successfully", Logger.Severity.Debug);
             Logger.WriteLine ("LocalSocketServer: listening on " + ListenPath, Logger.Severity.Debug);
+        }
+
+        /// <summary>
+        /// Remove a socket file left behind by a run that was killed rather than stopped, which
+        /// would otherwise make the bind fail for good. The file outlives the server that made
+        /// it and says nothing about whether that server is still there, so the only way to tell
+        /// one still in use from one merely left over is to see whether anything answers on it.
+        /// </summary>
+        void ClearStaleSocketFile ()
+        {
+            // A directory at the path is nothing this could remove, and the bind reports it
+            if (!File.Exists (ListenPath))
+                return;
+            var error = ConnectError (ListenPath);
+            if (!error.HasValue)
+                throw new ServerException (
+                    "Another server is already listening on " + ListenPath);
+            // Only a refusal means nothing is there to answer. Anything else leaves the
+            // question open, and a path that cannot be asked is not one to delete.
+            if (error.Value != SocketError.ConnectionRefused)
+                throw new ServerException (
+                    "Could not find out whether a server is listening on " + ListenPath +
+                    "; connecting to it reported '" + error.Value + "'");
+            // A socket carries no content, so a path holding some is not one and belongs to
+            // whoever put it there. A symbolic link counts as holding the path it names, so
+            // one is reported rather than followed to whatever is on the end of it.
+            if (new FileInfo (ListenPath).Length > 0)
+                throw new ServerException (
+                    ListenPath + " already exists and is not a socket");
+            try {
+                File.Delete (ListenPath);
+            } catch (UnauthorizedAccessException exn) {
+                throw new ServerException (
+                    "Could not remove the socket file left at " + ListenPath + "; " + exn.Message);
+            }
+        }
+
+        /// <summary>
+        /// What connecting to the given path reports, or null if the connection was made and
+        /// so a server is listening there.
+        /// </summary>
+        static SocketError? ConnectError (string path)
+        {
+            using (var socket = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified)) {
+                try {
+                    UnixSocket.Connect (socket, path);
+                } catch (SocketException exn) {
+                    return exn.SocketErrorCode;
+                }
+                return null;
+            }
         }
 
         /// <summary>
