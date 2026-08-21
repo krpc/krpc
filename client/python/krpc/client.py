@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import cast, Callable, Generator, Iterable, Iterator, Optional, Type
+from typing import cast, Any, Callable, Generator, Iterable, Iterator, Optional, Type
 from types import TracebackType
 from contextlib import contextmanager
 import sys
@@ -211,6 +211,43 @@ class Client(krpc.services.Client):
             yield stream
         finally:
             stream.remove()
+
+    def add_expression_stream(self, expression: Any) -> Stream:
+        """Add a stream to the server that evaluates a server side expression
+        (a KRPC.Expression object) on each update and streams the value it
+        evaluates to. The type of the stream's values is reported by the
+        server, from the expression's return type."""
+        if self._stream_connection is None:
+            raise StreamError("Not connected to stream server")
+        return_type = self._types.as_type(self._expression_return_type(expression))
+        stream = self.krpc.add_expression_stream(expression, False)
+        return krpc.stream.Stream.from_stream_id(self, stream.id, return_type)
+
+    @contextmanager
+    def expression_stream(self, expression: Any) -> Iterator[Stream]:
+        """'with' support for add_expression_stream"""
+        stream = self.add_expression_stream(expression)
+        try:
+            yield stream
+        finally:
+            stream.remove()
+
+    def _expression_return_type(self, expression: Any) -> KRPC.Type:
+        """Build the protocol buffer type message describing the type of the
+        values a server side expression evaluates to, by introspecting its
+        return type on the server."""
+
+        def build(remote_type: Any) -> KRPC.Type:
+            typ = KRPC.Type()
+            typ.code = remote_type.code.value
+            service = remote_type.service
+            if service:
+                typ.service = service
+                typ.name = remote_type.name
+            typ.types.extend([build(t) for t in remote_type.types])
+            return typ
+
+        return build(expression.return_type)
 
     @property
     def stream_update_condition(self) -> threading.Condition:
