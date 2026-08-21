@@ -6,6 +6,7 @@ Lua
 
    lua/client
    lua/api/krpc
+   lua/api/stdlib
    lua/api/space-center
    lua/api/drawing
    lua/api/ui

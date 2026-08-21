@@ -358,6 +358,63 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void SkipAndTake ()
+        {
+            var expr = Expression.ToList (Expression.Take (
+                Expression.Skip (list, Expression.ConstantInt (2)),
+                Expression.ConstantInt (2)));
+            CollectionAssert.AreEqual (new [] { 3, 4 }, Eval<List<int>> (expr));
+        }
+
+        [Test]
+        public void SelectManyOp ()
+        {
+            var param = Expression.Parameter ("x", Type.Int ());
+            var func = Expression.Function (
+                new List<Expression> { param },
+                Expression.CreateList (new List<Expression> {
+                    param, Expression.Multiply (param, Expression.ConstantInt (10))
+                }));
+            var expr = Expression.ToList (Expression.SelectMany (list, func));
+            CollectionAssert.AreEqual (
+                new [] { 1, 10, 2, 20, 3, 30, 4, 40, 5, 50 }, Eval<List<int>> (expr));
+        }
+
+        [Test]
+        public void BuildDictionaryOp ()
+        {
+            var param = Expression.Parameter ("x", Type.Int ());
+            var keyFunc = Expression.Function (
+                new List<Expression> { param }, Expression.ConvertToString (param));
+            var valueFunc = Expression.Function (
+                new List<Expression> { param },
+                Expression.Multiply (param, Expression.ConstantInt (2)));
+            var expr = Expression.BuildDictionary (list, keyFunc, valueFunc);
+            var dictionary = Eval<Dictionary<string, int>> (expr);
+            Assert.AreEqual (5, dictionary.Count);
+            Assert.AreEqual (2, dictionary ["1"]);
+            Assert.AreEqual (10, dictionary ["5"]);
+        }
+
+        [Test]
+        public void Strings ()
+        {
+            Assert.AreEqual ("1.5", Eval<string> (
+                Expression.ConvertToString (Expression.ConstantDouble (1.5))));
+            Assert.AreEqual ("42", Eval<string> (
+                Expression.ConvertToString (Expression.ConstantInt (42))));
+            Assert.AreEqual ("a2", Eval<string> (Expression.ConcatStrings (
+                new List<Expression> {
+                    Expression.ConstantString ("a"),
+                    Expression.ConvertToString (Expression.ConstantInt (2))
+                })));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.ConcatStrings (new List<Expression> {
+                    Expression.ConstantString ("a"), Expression.ConstantInt (2)
+                }));
+        }
+
+        [Test]
         public void BuildListInLoop ()
         {
             // result = []; for x in [1..5]: result.add(x * 2)

@@ -33,6 +33,7 @@ pkg_zip(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-ui",
         "//:COPYING",
         "//:COPYING.LESSER",
@@ -106,6 +107,13 @@ clientgen_cpp(
 )
 
 clientgen_cpp(
+    name = "services-stdlib",
+    out = "include/krpc/services/stdlib.hpp",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
+)
+
+clientgen_cpp(
     name = "services-lidar",
     out = "include/krpc/services/lidar.hpp",
     defs = "//service/LiDAR:ServiceDefinitions",
@@ -142,7 +150,8 @@ hdrs = glob(["include/**/*.hpp"]) + [
     ":services-infernalrobotics",
     ":services-kerbalalarmclock",
     ":services-remotetech",
-    ":services-ui",
+    ":services-stdlib",
+        ":services-ui",
     ":services-lidar",
     ":services-debug",
     ":services-dockingcamera",

@@ -21,6 +21,7 @@ py_library(
         ":services-remotetech",
         ":services-spacecenter",
         ":services-testservice",
+        ":services-stdlib",
         ":services-ui",
     ],
     visibility = ["//visibility:public"],
@@ -123,6 +124,7 @@ py_sdist(
         ":services-remotetech",
         ":services-spacecenter",
         ":services-testservice",
+        ":services-stdlib",
         ":services-ui",
         "//:COPYING",
         "//:COPYING.LESSER",
@@ -191,6 +193,13 @@ clientgen_python(
     out = "krpc/services/ui.py",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+)
+
+clientgen_python(
+    name = "services-stdlib",
+    out = "krpc/services/stdlib.py",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
 )
 
 clientgen_python(

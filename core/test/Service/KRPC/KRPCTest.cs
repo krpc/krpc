@@ -27,10 +27,10 @@ namespace KRPC.Test.Service.KRPC
         {
             var services = global::KRPC.Service.KRPC.KRPC.GetServices ();
             Assert.IsNotNull (services);
-            Assert.AreEqual (5, services.ServicesList.Count);
+            Assert.AreEqual (6, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (109, service.Procedures.Count);
+            Assert.AreEqual (115, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
             Assert.AreEqual (2, service.Enumerations.Count);
 

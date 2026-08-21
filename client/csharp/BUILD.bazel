@@ -52,7 +52,8 @@ srcs = glob(["src/**/*.cs"]) + [
     ":services-infernalrobotics",
     ":services-kerbalalarmclock",
     ":services-remotetech",
-    ":services-ui",
+    ":services-stdlib",
+        ":services-ui",
     ":services-lidar",
     ":services-debug",
     ":services-dockingcamera",
@@ -172,6 +173,13 @@ clientgen_csharp(
     out = "Services/UI.cs",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+)
+
+clientgen_csharp(
+    name = "services-stdlib",
+    out = "Services/StdLib.cs",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
 )
 
 clientgen_csharp(

@@ -1,5 +1,6 @@
 try:
     from krpc.services.krpc import KRPC
+    from krpc.services.stdlib import StdLib
     from krpc.services.testservice import TestService
     from krpc.services.spacecenter import SpaceCenter
     from krpc.services.drawing import Drawing
@@ -12,6 +13,7 @@ try:
     from krpc.services.debug import Debug
 except ImportError as exn:
     KRPC = lambda _: None
+    StdLib = lambda _: None
     TestService = lambda _: None
     SpaceCenter = lambda _: None
     Drawing = lambda _: None
@@ -27,6 +29,7 @@ except ImportError as exn:
 class Client:
     def __init__(self) -> None:
         self.krpc = KRPC(self)
+        self.std_lib = StdLib(self)
         self.test_service = TestService(self)
         self.space_center = SpaceCenter(self)
         self.drawing = Drawing(self)
@@ -40,6 +43,7 @@ class Client:
 
         self._services = {
             "KRPC": self.krpc,
+            "StdLib": self.std_lib,
             "TestService": self.test_service,
             "SpaceCenter": self.space_center,
             "Drawing": self.drawing,

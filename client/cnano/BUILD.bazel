@@ -33,6 +33,7 @@ pkg_zip(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-ui",
         "//:COPYING",
         "//:COPYING.LESSER",
@@ -107,6 +108,13 @@ clientgen_cnano(
 )
 
 clientgen_cnano(
+    name = "services-stdlib",
+    out = "include/krpc_cnano/services/stdlib.h",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
+)
+
+clientgen_cnano(
     name = "services-lidar",
     out = "include/krpc_cnano/services/lidar.h",
     defs = "//service/LiDAR:ServiceDefinitions",
@@ -143,7 +151,8 @@ hdrs = glob(["include/**/*.h"]) + [
     ":services-infernalrobotics",
     ":services-kerbalalarmclock",
     ":services-remotetech",
-    ":services-ui",
+    ":services-stdlib",
+        ":services-ui",
     ":services-lidar",
     ":services-debug",
     ":services-dockingcamera",

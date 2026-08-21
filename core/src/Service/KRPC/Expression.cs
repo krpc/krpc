@@ -1166,6 +1166,155 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// Skip the first count values of a collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
+        /// </summary>
+        /// <returns>The collection without its first count values.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="count">The number of values to skip.</param>
+        [KRPCMethod]
+        public static Expression Skip (Expression arg, Expression count)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (count, null))
+                throw new ArgumentNullException (nameof (count));
+            var sourceType = GetEnumerableValueType (arg);
+            var skip = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == "Skip" && x.GetParameters ().Length == 2);
+            skip = skip.MakeGenericMethod (sourceType);
+            return new Expression (LinqExpression.Call (skip, arg, count));
+        }
+
+        /// <summary>
+        /// Take only the first count values of a collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
+        /// </summary>
+        /// <returns>The first count values of the collection.</returns>
+        /// <param name="arg">The collection.</param>
+        /// <param name="count">The number of values to take.</param>
+        [KRPCMethod]
+        public static Expression Take (Expression arg, Expression count)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (count, null))
+                throw new ArgumentNullException (nameof (count));
+            var sourceType = GetEnumerableValueType (arg);
+            var take = typeof (Enumerable).GetMethods ().Single (
+                x => x.Name == "Take" && x.GetParameters () [1].ParameterType == typeof (int));
+            take = take.MakeGenericMethod (sourceType);
+            return new Expression (LinqExpression.Call (take, arg, count));
+        }
+
+        /// <summary>
+        /// Run a function returning a collection on every element in the
+        /// collection, and flatten the results into a single collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
+        /// </summary>
+        /// <returns>The flattened collection of function results.</returns>
+        /// <param name="arg">The list or set.</param>
+        /// <param name="func">The function, taking an element of the collection
+        /// and returning a collection.</param>
+        [KRPCMethod]
+        public static Expression SelectMany (Expression arg, Expression func)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (func, null))
+                throw new ArgumentNullException (nameof (func));
+            var sourceType = GetEnumerableValueType (arg);
+            var funcResultType = func.Type.GetGenericArguments () [1];
+            if (!typeof (IEnumerable).IsAssignableFrom (funcResultType))
+                throw new InvalidOperationException ("The function must return a collection");
+            var resultType = funcResultType.GetGenericArguments () [0];
+            var selectMany = typeof (Enumerable)
+                .GetMethods ()
+                .Single (x => x.Name == "SelectMany" &&
+                         x.GetParameters ().Length == 2 &&
+                         x.GetParameters () [1].ParameterType.GetGenericArguments ().Length == 2);
+            selectMany = selectMany.MakeGenericMethod (sourceType, resultType);
+            return new Expression (LinqExpression.Call (selectMany, arg, func));
+        }
+
+        /// <summary>
+        /// Build a dictionary from a collection, by running a function computing
+        /// the key and a function computing the value on every element.
+        /// </summary>
+        /// <returns>The dictionary.</returns>
+        /// <param name="arg">The list or set.</param>
+        /// <param name="keyFunc">The function computing an element's key.</param>
+        /// <param name="valueFunc">The function computing an element's value.</param>
+        [KRPCMethod]
+        public static Expression BuildDictionary (Expression arg, Expression keyFunc, Expression valueFunc)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            if (ReferenceEquals (keyFunc, null))
+                throw new ArgumentNullException (nameof (keyFunc));
+            if (ReferenceEquals (valueFunc, null))
+                throw new ArgumentNullException (nameof (valueFunc));
+            var sourceType = GetEnumerableValueType (arg);
+            var keyType = keyFunc.Type.GetGenericArguments () [1];
+            var valueType = valueFunc.Type.GetGenericArguments () [1];
+            CheckIsFunction (keyFunc, sourceType, keyType);
+            CheckIsFunction (valueFunc, sourceType, valueType);
+            var toDictionary = typeof (Enumerable)
+                .GetMethods ()
+                .Single (x => x.Name == "ToDictionary" &&
+                         x.GetParameters ().Length == 3 &&
+                         x.GetParameters () [2].ParameterType.Name.StartsWith ("Func`", StringComparison.Ordinal));
+            toDictionary = toDictionary.MakeGenericMethod (sourceType, keyType, valueType);
+            return new Expression (LinqExpression.Call (toDictionary, arg, keyFunc, valueFunc));
+        }
+
+        internal static string ConvertToStringHelper (object value)
+        {
+            return Convert.ToString (value, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// Convert a value to its string representation.
+        /// </summary>
+        /// <param name="arg">The value to convert.</param>
+        [KRPCMethod]
+        public static Expression ConvertToString (Expression arg)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            var method = typeof (Expression).GetMethod (
+                nameof (ConvertToStringHelper), BindingFlags.Static | BindingFlags.NonPublic);
+            return new Expression (LinqExpression.Call (
+                method, LinqExpression.Convert (arg, typeof (object))));
+        }
+
+        /// <summary>
+        /// Concatenate strings.
+        /// Use <see cref="ConvertToString"/> to convert other values to strings.
+        /// </summary>
+        /// <returns>The concatenated string.</returns>
+        /// <param name="args">The strings to concatenate, in order.</param>
+        [KRPCMethod]
+        public static Expression ConcatStrings (IList<Expression> args)
+        {
+            if (ReferenceEquals (args, null))
+                throw new ArgumentNullException (nameof (args));
+            foreach (var arg in args)
+                if (arg.Type != typeof (string))
+                    throw new InvalidOperationException (
+                        "All values to concatenate must be strings; " +
+                        "use ConvertToString to convert them");
+            var concat = typeof (string).GetMethod ("Concat", new [] { typeof (string []) });
+            return new Expression (LinqExpression.Call (
+                concat,
+                LinqExpression.NewArrayInit (
+                    typeof (string), args.Select (x => x.internalExpression))));
+        }
+
+        /// <summary>
         /// Determine if a collection contains a value.
         /// </summary>
         /// <returns>Whether the collection contains a value.</returns>
