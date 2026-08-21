@@ -26,7 +26,7 @@ namespace KRPC.Client.Test
             SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongRPCPort",
-                rpcPort: UnusedPort (), streamPort: StreamPort));
+                rpcPort: UnusedPort (), streamPort: StreamPort, timeout: ConnectTimeout));
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace KRPC.Client.Test
             SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongStreamPort",
-                rpcPort: RPCPort, streamPort: UnusedPort ()));
+                rpcPort: RPCPort, streamPort: UnusedPort (), timeout: ConnectTimeout));
         }
 
         /// <summary>

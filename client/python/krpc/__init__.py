@@ -39,16 +39,19 @@ def connect(
     rpc_port: int = DEFAULT_RPC_PORT,
     stream_port: int = DEFAULT_STREAM_PORT,
     use_pregenerated_stubs: bool = True,
+    timeout: Optional[float] = None,
 ) -> Client:
     """
     Connect to a kRPC server on the specified IP address and port numbers.
     If stream_port is None, does not connect to the stream server.
     Optionally give the kRPC server the supplied name to identify the client.
+    If timeout is given, gives up after that many seconds of waiting for a
+    connection, rather than waiting indefinitely.
     """
 
-    rpc_connection = Connection(address, rpc_port)
+    rpc_connection = Connection(address, rpc_port, timeout)
     stream_connection = (
-        Connection(address, stream_port) if stream_port is not None else None
+        Connection(address, stream_port, timeout) if stream_port is not None else None
     )
     return _connect(name, rpc_connection, stream_connection, use_pregenerated_stubs)
 

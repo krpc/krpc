@@ -181,7 +181,7 @@ Client API Reference
    A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
    class.
 
-   .. method:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
+   .. method:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, System.TimeSpan timeout = default)
 
       Connect to a kRPC server.
 
@@ -194,6 +194,9 @@ Client API Reference
          RPC port number of the server you want to connect to.
        * **stream_port** -- The port number of the Stream Server. Defaults to 50001. This should
          match the stream port number of the server you want to connect to.
+       * **timeout** -- How long to wait for a connection before giving up. Defaults to zero,
+         which waits indefinitely. A network that drops a connection attempt rather than refusing
+         it otherwise leaves the client waiting.
 
    .. method:: static Connection ConnectLocal(string name = "", string rpcPath = "", string streamPath = "")
 

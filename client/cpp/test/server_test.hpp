@@ -3,6 +3,7 @@
 #include <asio/io_context.hpp>
 #include <asio/ip/address.hpp>
 #include <asio/ip/tcp.hpp>
+#include <chrono>  // NOLINT(build/c++11)
 #include <krpc.hpp>
 #include <krpc/services/krpc.hpp>
 
@@ -27,6 +28,10 @@ class server_test : public ::testing::Test {
       anywhere, including on a low one, and a connection to those is dropped rather than
       refused on Windows, which leaves the client waiting. */
   static int unused_port();
+  /** How long a connection to a port nothing is listening on is waited for. It is normally
+      refused at once; where the system drops the attempt instead, this bounds the wait
+      rather than leaving the test to hang. */
+  static constexpr std::chrono::milliseconds connect_timeout{std::chrono::seconds(10)};
   krpc::Client conn;
   krpc::services::KRPC krpc;
   krpc::services::TestService test_service;

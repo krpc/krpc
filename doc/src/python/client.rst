@@ -196,7 +196,7 @@ expression returns true:
 Client API Reference
 --------------------
 
-.. function:: krpc.connect([name=None], [address='127.0.0.1'], [rpc_port=50000], [stream_port=50001], [use_pregenerated_stubs=True])
+.. function:: krpc.connect([name=None], [address='127.0.0.1'], [rpc_port=50000], [stream_port=50001], [use_pregenerated_stubs=True], [timeout=None])
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc.client.Client`
    object, through which the server can be communicated with.
@@ -213,6 +213,9 @@ Client API Reference
                            the client, which include type hints. If set to ``False``, or if the
                            server provides a service with no bundled stub, the service is generated
                            dynamically at runtime. Defaults to ``True``.
+   :param float timeout: How many seconds to wait for a connection before giving up. Defaults to
+                           ``None``, which waits indefinitely. A network that drops a connection
+                           attempt rather than refusing it otherwise leaves the client waiting.
 
 .. class:: krpc.client.Client
 

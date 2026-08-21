@@ -5,8 +5,16 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
+import java.time.Duration;
 
 class TestUtils {
+
+  /**
+   * How long a connection to a port nothing is listening on is waited for. It is normally
+   * refused at once; where the system drops the attempt instead, this bounds the wait rather
+   * than leaving the test to hang.
+   */
+  private static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
 
   /** One of the endpoints a connection can be made to. */
   public enum Endpoint {
@@ -39,7 +47,9 @@ class TestUtils {
   public static Connection connect(String name, Endpoint rpc, Endpoint stream)
       throws IOException {
     if (System.getenv("RPC_PATH") == null) {
-      return Connection.newInstance(name, "localhost", getPort(rpc), getPort(stream));
+      Duration timeout =
+          rpc == Endpoint.NONE || stream == Endpoint.NONE ? CONNECT_TIMEOUT : Duration.ZERO;
+      return Connection.newInstance(name, "localhost", getPort(rpc), getPort(stream), timeout);
     }
     return Connection.newLocalInstance(name, getPath(rpc), getPath(stream));
   }

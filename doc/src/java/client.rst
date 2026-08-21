@@ -188,6 +188,8 @@ Client API Reference
    .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort)
    .. method:: static Connection newInstance(String name, java.net.InetAddress address)
    .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort)
+   .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort, java.time.Duration timeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort, java.time.Duration timeout)
 
       Create a connection to the server, using the given connection details.
 
@@ -200,6 +202,10 @@ Client API Reference
                            the RPC port number of the server you want to connect to.
       :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
                               match the stream port number of the server you want to connect to.
+      :param java.time.Duration timeout: How long to wait for a connection before giving up.
+                                         Defaults to zero, which waits indefinitely. A network
+                                         that drops a connection attempt rather than refusing it
+                                         otherwise leaves the client waiting.
 
    .. method:: static Connection newLocalInstance()
    .. method:: static Connection newLocalInstance(String name)

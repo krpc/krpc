@@ -33,6 +33,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 address="localhost",
                 rpc_port=ServerTestCase.unused_port(),
                 stream_port=ServerTestCase.stream_port(),
+                timeout=ServerTestCase.CONNECT_TIMEOUT,
             )
 
     @unittest.skipIf(
@@ -46,6 +47,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 address="localhost",
                 rpc_port=ServerTestCase.rpc_port(),
                 stream_port=ServerTestCase.unused_port(),
+                timeout=ServerTestCase.CONNECT_TIMEOUT,
             )
 
     def test_wrong_rpc_server(self) -> None:

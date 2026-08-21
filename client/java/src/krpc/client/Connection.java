@@ -14,6 +14,7 @@ import java.net.UnixDomainSocketAddress;
 import java.nio.channels.Channels;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +46,7 @@ public class Connection implements AutoCloseable {
   private static InetAddress DEFAULT_ADDRESS = InetAddress.getLoopbackAddress();
   private static int DEFAULT_RPC_PORT = 50000;
   private static int DEFAULT_STREAM_PORT = 50001;
+  private static Duration DEFAULT_TIMEOUT = Duration.ZERO;
 
   /**
    * Connect to a kRPC server using a blank client name, on the default
@@ -112,6 +114,30 @@ public class Connection implements AutoCloseable {
 
   /**
    * Connect to a kRPC server using the given client name, on the given
+   * address, RPC port number and stream port, waiting no longer than the given
+   * timeout for each connection.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to.
+   * @param rpcPort
+   *            The RPC port to connect to.
+   * @param streamPort
+   *            The stream port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, InetAddress address, int rpcPort, int streamPort, Duration timeout)
+      throws IOException {
+    return new Connection(name, address, rpcPort, streamPort, timeout);
+  }
+
+  /**
+   * Connect to a kRPC server using the given client name, on the given
    * address, RPC port number {@value #DEFAULT_RPC_PORT} and stream port
    * number {@value #DEFAULT_STREAM_PORT}.
    *
@@ -149,6 +175,31 @@ public class Connection implements AutoCloseable {
       String name, String address, int rpcPort, int streamPort)
       throws IOException {
     return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort);
+  }
+
+  /**
+   * Connect to a kRPC server using the given client name, on the given
+   * address, RPC port number and stream port, waiting no longer than the given
+   * timeout for each connection.
+   *
+   * @param name
+   *            The name of the client.
+   * @param address
+   *            The server address to connect to. Can be either the name of
+   *            the host or a textual representation of its IP address.
+   * @param rpcPort
+   *            The RPC port to connect to.
+   * @param streamPort
+   *            The stream port to connect to.
+   * @param timeout
+   *            How long to wait for a connection. Zero waits indefinitely.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newInstance(
+      String name, String address, int rpcPort, int streamPort, Duration timeout)
+      throws IOException {
+    return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort, timeout);
   }
 
   /**
@@ -198,8 +249,21 @@ public class Connection implements AutoCloseable {
     SocketChannel open() throws IOException;
   }
 
-  private static SocketChannel open(InetAddress address, int port) throws IOException {
-    return SocketChannel.open(new InetSocketAddress(address, port));
+  private static SocketChannel open(InetAddress address, int port, Duration timeout)
+      throws IOException {
+    if (timeout.isZero()) {
+      return SocketChannel.open(new InetSocketAddress(address, port));
+    }
+    // A network that drops a connection attempt rather than refusing it leaves the client
+    // waiting, so bound the wait where one was asked for.
+    SocketChannel channel = SocketChannel.open();
+    try {
+      channel.socket().connect(new InetSocketAddress(address, port), (int) timeout.toMillis());
+    } catch (IOException exn) {
+      channel.close();
+      throw exn;
+    }
+    return channel;
   }
 
   private static SocketChannel openLocal(String path) throws IOException {
@@ -222,7 +286,13 @@ public class Connection implements AutoCloseable {
 
   private Connection(String name, InetAddress address, int rpcPort, int streamPort)
       throws IOException {
-    this(name, open(address, rpcPort), () -> open(address, streamPort));
+    this(name, address, rpcPort, streamPort, DEFAULT_TIMEOUT);
+  }
+
+  private Connection(
+      String name, InetAddress address, int rpcPort, int streamPort, Duration timeout)
+      throws IOException {
+    this(name, open(address, rpcPort, timeout), () -> open(address, streamPort, timeout));
   }
 
   /**

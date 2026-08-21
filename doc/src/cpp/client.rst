@@ -242,7 +242,7 @@ Client API Reference
 
 .. namespace:: krpc
 
-.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int rpc_port = 50000, unsigned int stream_port = 50001)
+.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int rpc_port = 50000, unsigned int stream_port = 50001, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero())
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc::Client` object,
    through which the server can be communicated with.
@@ -257,6 +257,9 @@ Client API Reference
         should match the RPC port number of the server you want to connect to.
       * **stream_port** (*unsigned int*) -- The port number of the Stream Server. Defaults
         to 50001. This should match the stream port number of the server you want to connect to.
+      * **timeout** (*std::chrono::milliseconds*) -- How long to wait for a connection before
+        giving up. Defaults to zero, which waits indefinitely. A network that drops a connection
+        attempt rather than refusing it otherwise leaves the client waiting.
 
 .. function:: Client connect_local(const std::string& name = "", const std::string& rpc_path = "", const std::string& stream_path = "")
 

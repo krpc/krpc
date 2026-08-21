@@ -19,9 +19,10 @@ class StreamImpl;
 Client::Client() : lock(new std::mutex), exception_throwers_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
-               unsigned int stream_port)
-    : Client(name, std::make_shared<Connection>(address, rpc_port),
-             stream_port == 0 ? nullptr : std::make_shared<Connection>(address, stream_port)) {}
+               unsigned int stream_port, std::chrono::milliseconds timeout)
+    : Client(name, std::make_shared<Connection>(address, rpc_port, timeout),
+             stream_port == 0 ? nullptr
+                              : std::make_shared<Connection>(address, stream_port, timeout)) {}
 
 Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
                const std::shared_ptr<Connection>& stream)

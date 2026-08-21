@@ -48,6 +48,13 @@ namespace KRPC.Client.Test
         }
 
         /// <summary>
+        /// How long a connection to a port nothing is listening on is waited for. It is normally
+        /// refused at once; where the system drops the attempt instead, this bounds the wait
+        /// rather than leaving the test to hang.
+        /// </summary>
+        public static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds (10);
+
+        /// <summary>
         /// A port nothing is listening on, for the tests that connect to the wrong one. Binding
         /// a port and giving it straight back leaves one that a connection is refused on, and
         /// leaves it in the range the system hands out. A port derived from the server's own can

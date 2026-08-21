@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>  // NOLINT(build/c++11)
 #include <string>
 
 #include "krpc/client.hpp"   // IWYU pragma: export
@@ -14,9 +15,12 @@ namespace krpc {
  * If stream_port is 0, does not connect to the stream server.
  * Optionally give the kRPC server the supplied name to identify the client
  * (up to 32 bytes of UTF-8 encoded text).
+ * If timeout is non-zero, gives up after waiting that long for a connection, rather
+ * than waiting indefinitely.
  */
 Client connect(const std::string& name = "", const std::string& address = "127.0.0.1",
-               unsigned int rpc_port = 50000, unsigned int stream_port = 50001);
+               unsigned int rpc_port = 50000, unsigned int stream_port = 50001,
+               std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
 
 /**
  * Connect to a kRPC server on the same machine, over unix domain sockets named by the

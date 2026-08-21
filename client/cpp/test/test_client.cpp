@@ -75,15 +75,15 @@ TEST_F(test_client, test_version) {
 TEST_F(test_client, test_wrong_rpc_port) {
   if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
   ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost", unused_port(),
-                             get_stream_port()),
+                             get_stream_port(), connect_timeout),
                std::exception);
 }
 
 TEST_F(test_client, test_wrong_stream_port) {
   if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
-  ASSERT_THROW(
-      krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(), unused_port()),
-      std::exception);
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(),
+                             unused_port(), connect_timeout),
+               std::exception);
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {

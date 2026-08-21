@@ -14,9 +14,12 @@ _READ_SIZE = 8192
 
 
 class Connection:
-    def __init__(self, address: str, port: int) -> None:
+    def __init__(
+        self, address: str, port: int, timeout: Optional[float] = None
+    ) -> None:
         self._address = address
         self._port = port
+        self._timeout = timeout
         self._socket: socket.socket = None  # type: ignore[assignment]
         # Data read from the socket that has not been consumed yet
         self._buffer = bytearray()
@@ -28,7 +31,12 @@ class Connection:
         """Open a socket to the server. Everything above this is transport agnostic,
         so a different transport only has to replace this."""
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # A network that drops a connection attempt rather than refusing it leaves the
+        # client waiting, so bound the wait where one was asked for.
+        sock.settimeout(self._timeout)
         sock.connect((self._address, self._port))
+        # Whatever bound was put on connecting, sending and receiving block
+        sock.settimeout(None)
         # The protocol is strictly request/response, so waiting for more data to
         # coalesce with can only add latency
         sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)

@@ -37,11 +37,13 @@ namespace KRPC.Client
         /// Connect to a kRPC server on the specified IP address and port numbers. If
         /// streamPort is 0, does not connect to the stream server.
         /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
+        /// If timeout is non-zero, gives up after waiting that long for a connection, rather
+        /// than waiting indefinitely.
         /// </summary>
-        public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
-            : this (name, Connect (address ?? IPAddress.Loopback, rpcPort),
+        public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, TimeSpan timeout = default (TimeSpan))
+            : this (name, Connect (address ?? IPAddress.Loopback, rpcPort, timeout),
                     streamPort == 0 ? null
-                    : new Func<Socket> (() => Connect (address ?? IPAddress.Loopback, streamPort)))
+                    : new Func<Socket> (() => Connect (address ?? IPAddress.Loopback, streamPort, timeout)))
         {
         }
 
@@ -69,10 +71,21 @@ namespace KRPC.Client
             return string.IsNullOrEmpty (path) ? DefaultPath (name) : path;
         }
 
-        static Socket Connect (IPAddress address, int port)
+        static Socket Connect (IPAddress address, int port, TimeSpan timeout)
         {
             var socket = new Socket (address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            socket.Connect (address, port);
+            if (timeout == TimeSpan.Zero) {
+                socket.Connect (address, port);
+            } else {
+                // A network that drops a connection attempt rather than refusing it leaves the
+                // client waiting, so bound the wait where one was asked for.
+                var pending = socket.BeginConnect (address, port, null, null);
+                if (!pending.AsyncWaitHandle.WaitOne (timeout)) {
+                    socket.Close ();
+                    throw new SocketException ((int)SocketError.TimedOut);
+                }
+                socket.EndConnect (pending);
+            }
             // A call writes a request and then waits for its response, so there is never a
             // second small write for Nagle's algorithm to hold the first one back for. Left on,
             // it can only delay a request the server is already waiting for.

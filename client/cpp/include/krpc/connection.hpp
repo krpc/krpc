@@ -23,7 +23,8 @@ namespace krpc {
 
 class Connection {
  public:
-  Connection(const std::string& address, unsigned int port);
+  Connection(const std::string& address, unsigned int port,
+             std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
   virtual ~Connection() = default;
   /** Open the connection to the server. */
   virtual void connect();
@@ -65,6 +66,8 @@ class Connection {
 
   const std::string address;
   const unsigned int port;
+  // How long to wait for the connection to be made. Zero waits indefinitely.
+  const std::chrono::milliseconds timeout;
   asio::ip::tcp::resolver resolver;
   // Data read from the socket, how much of it there is and how much has been consumed. Reads
   // are made a block at a time rather than exactly the bytes wanted, so that a message costs

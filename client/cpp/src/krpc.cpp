@@ -1,5 +1,6 @@
 #include "krpc.hpp"
 
+#include <chrono>  // NOLINT(build/c++11)
 #include <cstdlib>
 #include <memory>
 #include <string>
@@ -9,8 +10,8 @@
 namespace krpc {
 
 Client connect(const std::string& name, const std::string& address, unsigned int rpc_port,
-               unsigned int stream_port) {
-  return Client(name, address, rpc_port, stream_port);
+               unsigned int stream_port, std::chrono::milliseconds timeout) {
+  return Client(name, address, rpc_port, stream_port, timeout);
 }
 
 namespace {

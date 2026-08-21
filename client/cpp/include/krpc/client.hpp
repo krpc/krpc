@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>              // NOLINT(build/c++11)
 #include <condition_variable>  // NOLINT(build/c++11)
 #include <cstdint>
 #include <functional>
@@ -24,7 +25,8 @@ class Client {
  public:
   Client();
   Client(const std::string& name, const std::string& address, unsigned int rpc_port = 50000,
-         unsigned int stream_port = 50001);
+         unsigned int stream_port = 50001,
+         std::chrono::milliseconds timeout = std::chrono::milliseconds::zero());
   /** Perform the connection handshake over the given connections, which have been built
       but not yet opened. The handshake is the same whatever carries it. */
   Client(const std::string& name, std::shared_ptr<Connection> rpc_connection,
