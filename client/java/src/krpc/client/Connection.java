@@ -9,7 +9,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
-import java.net.Socket;
+import java.net.InetSocketAddress;
+import java.net.UnixDomainSocketAddress;
+import java.nio.channels.Channels;
+import java.nio.channels.SocketChannel;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +23,7 @@ import krpc.schema.KRPC;
 public class Connection implements AutoCloseable {
   private final Object connectionLock = new Object();
 
-  private Socket rpcSocket;
+  private SocketChannel rpcChannel;
   private CodedOutputStream rpcOutputStream;
   private CodedInputStream rpcInputStream;
   StreamManager streamManager;
@@ -147,11 +151,90 @@ public class Connection implements AutoCloseable {
     return new Connection(name, InetAddress.getByName(address), rpcPort, streamPort);
   }
 
+  /**
+   * Connect to a kRPC server on the same machine, over unix domain sockets rather than
+   * TCP/IP, using a blank client name and the default socket paths.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newLocalInstance() throws IOException {
+    return newLocalInstance(EMPTY_NAME);
+  }
+
+  /**
+   * Connect to a kRPC server on the same machine, over unix domain sockets rather than
+   * TCP/IP, using the given client name and the default socket paths.
+   *
+   * @param name
+   *            The name of the client.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newLocalInstance(String name) throws IOException {
+    return newLocalInstance(name, defaultPath("rpc"), defaultPath("stream"));
+  }
+
+  /**
+   * Connect to a kRPC server on the same machine, over the unix domain sockets named by
+   * the given paths rather than over TCP/IP. The connection behaves identically once
+   * established.
+   *
+   * @param name
+   *            The name of the client.
+   * @param rpcPath
+   *            The path of the socket the RPC server is listening on.
+   * @param streamPath
+   *            The path of the socket the stream server is listening on.
+   *
+   * @return A connection to the kRPC server.
+   */
+  public static Connection newLocalInstance(String name, String rpcPath, String streamPath)
+      throws IOException {
+    return new Connection(name, openLocal(rpcPath), () -> openLocal(streamPath));
+  }
+
+  /** Opens the connection to the stream server. */
+  private interface StreamOpener {
+    SocketChannel open() throws IOException;
+  }
+
+  private static SocketChannel open(InetAddress address, int port) throws IOException {
+    return SocketChannel.open(new InetSocketAddress(address, port));
+  }
+
+  private static SocketChannel openLocal(String path) throws IOException {
+    return SocketChannel.open(UnixDomainSocketAddress.of(path));
+  }
+
+  /**
+   * A default path for a socket of the given name, matching the one the server uses unless
+   * it was configured with another.
+   */
+  private static String defaultPath(String name) {
+    boolean windows = System.getProperty("os.name", "").startsWith("Windows");
+    String directory = System.getenv(windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
+    if (directory == null || directory.isEmpty()) {
+      return Paths.get(System.getProperty("java.io.tmpdir"),
+          "krpc-" + System.getProperty("user.name"), name).toString();
+    }
+    return Paths.get(directory, "krpc", name).toString();
+  }
+
   private Connection(String name, InetAddress address, int rpcPort, int streamPort)
       throws IOException {
-    rpcSocket = new Socket(address, rpcPort);
-    rpcOutputStream = CodedOutputStream.newInstance(rpcSocket.getOutputStream());
-    rpcInputStream = CodedInputStream.newInstance(rpcSocket.getInputStream());
+    this(name, open(address, rpcPort), () -> open(address, streamPort));
+  }
+
+  /**
+   * Perform the connection handshake over an already opened rpc socket. The handshake is the
+   * same whatever carries it. The stream socket is opened only once the rpc connection has
+   * been accepted, so that a rejected connection does not leave a second one behind.
+   */
+  private Connection(String name, SocketChannel rpc, StreamOpener openStreamChannel)
+      throws IOException {
+    rpcChannel = rpc;
+    rpcOutputStream = CodedOutputStream.newInstance(Channels.newOutputStream(rpcChannel));
+    rpcInputStream = CodedInputStream.newInstance(Channels.newInputStream(rpcChannel));
 
     KRPC.ConnectionRequest request = KRPC.ConnectionRequest.newBuilder()
         .setType(KRPC.ConnectionRequest.Type.RPC)
@@ -168,11 +251,11 @@ public class Connection implements AutoCloseable {
     }
     ByteString clientIdentifier = response.getClientIdentifier();
 
-    Socket streamSocket = new Socket(address, streamPort);
+    SocketChannel streamChannel = openStreamChannel.open();
     CodedOutputStream streamOutputStream =
-        CodedOutputStream.newInstance(streamSocket.getOutputStream());
+        CodedOutputStream.newInstance(Channels.newOutputStream(streamChannel));
     final CodedInputStream streamInputStream =
-        CodedInputStream.newInstance(streamSocket.getInputStream());
+        CodedInputStream.newInstance(Channels.newInputStream(streamChannel));
 
     request = KRPC.ConnectionRequest.newBuilder()
         .setType(KRPC.ConnectionRequest.Type.STREAM)
@@ -188,14 +271,14 @@ public class Connection implements AutoCloseable {
       throw new ConnectionException(response.getMessage());
     }
 
-    streamManager = new StreamManager(this, streamSocket);
+    streamManager = new StreamManager(this, streamChannel);
   }
 
   /** Close the connection. */
   @Override
   public void close() throws IOException {
     synchronized (connectionLock) {
-      rpcSocket.close();
+      rpcChannel.close();
     }
     streamManager.close();
   }

@@ -3,7 +3,8 @@ package krpc.client;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.CodedInputStream;
 import java.io.IOException;
-import java.net.Socket;
+import java.nio.channels.Channels;
+import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,15 +21,15 @@ import krpc.schema.KRPC.Type;
 
 class StreamManager {
   private Connection connection;
-  private Socket socket;
+  private SocketChannel channel;
   private KRPC krpc;
   private Object updateLock;
   private Map<Long, StreamImpl> streams = new HashMap<Long, StreamImpl>();
   private Thread updateThread;
 
-  StreamManager(Connection connection, Socket socket) {
+  StreamManager(Connection connection, SocketChannel channel) {
     this.connection = connection;
-    this.socket = socket;
+    this.channel = channel;
     krpc = KRPC.newInstance(connection);
     updateLock = new Object();
     updateThread = new Thread(new UpdateThread(this));
@@ -36,7 +37,7 @@ class StreamManager {
   }
 
   void close() throws IOException {
-    socket.close();
+    channel.close();
   }
 
   StreamImpl addStream(Type returnType, ProcedureCall call) throws RPCException {
@@ -129,7 +130,7 @@ class StreamManager {
     public void run() {
       try {
         CodedInputStream inputStream =
-            CodedInputStream.newInstance(manager.socket.getInputStream());
+            CodedInputStream.newInstance(Channels.newInputStream(manager.channel));
         while (true) {
           int size = inputStream.readRawVarint32();
           byte[] data = inputStream.readRawBytes(size);

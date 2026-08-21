@@ -201,6 +201,24 @@ Client API Reference
       :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
                               match the stream port number of the server you want to connect to.
 
+   .. method:: static Connection newLocalInstance()
+   .. method:: static Connection newLocalInstance(String name)
+   .. method:: static Connection newLocalInstance(String name, String rpcPath, String streamPath)
+
+      Create a connection to a server running on the same machine, over unix domain sockets rather
+      than TCP/IP. The connection behaves identically once established.
+
+      Unix domain sockets are available on Linux and macOS. On Windows, use
+      :meth:`Connection.newInstance`.
+
+      :param String name: A descriptive name for the connection. This is passed to the server and
+                          appears in the in-game server window.
+      :param String rpcPath: The path of the socket the RPC Server is listening on. This should
+                             match the RPC socket path shown in the in-game server window.
+      :param String streamPath: The path of the socket the Stream Server is listening on. This
+                                should match the stream socket path shown in the in-game server
+                                window.
+
    .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
 
       Create a stream for a static method call to the given class.
