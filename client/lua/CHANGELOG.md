@@ -24,6 +24,8 @@
   the size of a message is read directly rather than by handing each byte to a decoder until it
   stops raising an error, and the client connection disables Nagle's algorithm (#1056)
 - Require luasocket 3.0 or later (#1060)
+- Fix a type occasionally being built a second time rather than reused, which could leave
+  an enumeration or class type in a service unusable (#1068)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)
