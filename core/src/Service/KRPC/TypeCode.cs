@@ -54,6 +54,10 @@ namespace KRPC.Service.KRPC
         /// </summary>
         Enumeration = 101,
         /// <summary>
+        /// A structure defined by a service.
+        /// </summary>
+        Struct = 102,
+        /// <summary>
         /// A tuple. The value types are given by <see cref="Type.Types"/>.
         /// </summary>
         Tuple = 300,

@@ -71,6 +71,28 @@ namespace KRPC.Test.Service.KRPC
             return global::KRPC.Service.ObjectStore.Instance.AddInstance (obj);
         }
 
+        /// <summary>
+        /// An expression constructing a TestStruct whose object field is the instance
+        /// with the given identifier, with a value in every other field.
+        /// </summary>
+        static Expression BuildTestStruct (ulong objectId)
+        {
+            return Expression.CreateStruct (
+                Type.StructType ("TestService", "TestStruct"),
+                new List<Expression> {
+                    Expression.ConstantInt (42),
+                    Expression.ConstantString ("bar"),
+                    Expression.Cast (
+                        Expression.ConstantInt (1),
+                        Type.EnumerationType ("TestService", "TestEnum")),
+                    Expression.ConstantObject (objectId),
+                    Expression.CreateList (new List<Expression> {
+                        Expression.ConstantString ("a"),
+                        Expression.ConstantString ("b")
+                    })
+                });
+        }
+
         static ProcedureCall BuildProcedureCall (string procedure, params Argument[] args)
         {
             var call = new ProcedureCall ("TestService", procedure);
@@ -911,6 +933,97 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (
                 System.Tuple.Create (1, false),
                 Eval<System.Tuple<int, bool>> (tuple));
+        }
+
+        [Test]
+        public void CreateStruct ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var value = Eval<global::KRPC.Test.Service.TestService.TestStruct> (
+                BuildTestStruct (AddInstance (obj)));
+            Assert.AreEqual (42, value.IntField);
+            Assert.AreEqual ("bar", value.StringField);
+            Assert.AreEqual (global::KRPC.Test.Service.TestService.TestEnum.Y, value.EnumField);
+            Assert.AreSame (obj, value.ObjectField);
+            Assert.AreEqual (new List<string> { "a", "b" }, value.ListField);
+        }
+
+        [Test]
+        public void CreateStructWithTheWrongNumberOfFieldValues ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateStruct (
+                    Type.StructType ("TestService", "TestStruct"),
+                    new List<Expression> { Expression.ConstantInt (42) }));
+        }
+
+        [Test]
+        public void CreateStructWithAFieldValueOfTheWrongType ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.CreateStruct (
+                    Type.StructType ("TestService", "TestNestedStruct"),
+                    new List<Expression> {
+                        Expression.ConstantString ("not a structure"),
+                        Expression.ConstantInt (1)
+                    }));
+        }
+
+        [Test]
+        public void CreateStructOfATypeThatIsNotAStructure ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateStruct (
+                    Type.Int (), new List<Expression> { Expression.ConstantInt (42) }));
+        }
+
+        [Test]
+        public void GetField ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var value = BuildTestStruct (AddInstance (obj));
+            Assert.AreEqual (42, Eval<int> (Expression.GetField (value, "IntField")));
+            Assert.AreEqual ("bar", Eval<string> (Expression.GetField (value, "StringField")));
+            Assert.AreSame (
+                obj,
+                Eval<global::KRPC.Test.Service.TestService.TestClass> (
+                    Expression.GetField (value, "ObjectField")));
+        }
+
+        [Test]
+        public void GetFieldOfANestedStruct ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var nested = Expression.CreateStruct (
+                Type.StructType ("TestService", "TestNestedStruct"),
+                new List<Expression> {
+                    BuildTestStruct (AddInstance (obj)),
+                    Expression.ConstantInt (7)
+                });
+            Assert.AreEqual (
+                "bar",
+                Eval<string> (Expression.GetField (
+                    Expression.GetField (nested, "StructField"), "StringField")));
+            Assert.AreEqual (7, Eval<int> (Expression.GetField (nested, "IntField")));
+        }
+
+        [Test]
+        public void GetFieldTheStructureDoesNotHave ()
+        {
+            var value = BuildTestStruct (AddInstance (
+                new global::KRPC.Test.Service.TestService.TestClass ("foo")));
+            // NotAField is a property of the C# struct, but is not marked as a field of it
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetField (value, "NotAField"));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetField (value, "NoSuchField"));
+        }
+
+        [Test]
+        public void GetFieldOfAValueThatIsNotAStructure ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.GetField (tuple, "IntField"));
         }
 
         [Test]

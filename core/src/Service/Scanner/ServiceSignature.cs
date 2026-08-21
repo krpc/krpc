@@ -226,7 +226,7 @@ namespace KRPC.Service.Scanner
             }
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (structType, out deprecatedReason);
-            Structs [name] = new StructSignature (Name, name, fields, structType.GetDocumentation (), deprecated, deprecatedReason);
+            Structs [name] = new StructSignature (Name, name, structType, fields, structType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 

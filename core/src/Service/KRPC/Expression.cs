@@ -807,6 +807,43 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// Construct a structure.
+        /// </summary>
+        /// <returns>The structure.</returns>
+        /// <param name="type">The type of the structure.</param>
+        /// <param name="fieldValues">The values of the structure's fields,
+        /// in the order the structure declares them.</param>
+        [KRPCMethod]
+        public static Expression CreateStruct (Type type, IList<Expression> fieldValues)
+        {
+            if (ReferenceEquals (type, null))
+                throw new ArgumentNullException (nameof (type));
+            if (ReferenceEquals (fieldValues, null))
+                throw new ArgumentNullException (nameof (fieldValues));
+            var structType = type.InternalType;
+            if (!TypeUtils.IsAStructType (structType))
+                throw new ArgumentException (structType + " is not a structure type");
+            var fields = TypeUtils.GetStructFields (structType);
+            if (fieldValues.Count != fields.Count)
+                throw new ArgumentException (
+                    structType + " has " + fields.Count + " fields, got " +
+                    fieldValues.Count + " field values");
+            var bindings = new MemberBinding [fields.Count];
+            for (var i = 0; i < fields.Count; i++) {
+                var field = fields [i];
+                var value = ConvertElement (fieldValues [i], field.PropertyType);
+                if (!field.PropertyType.IsAssignableFrom (value.Type))
+                    throw new InvalidOperationException (
+                        "Incorrect expression type for field " + field.Name + " of " +
+                        structType + ". Expected an expression of type " +
+                        field.PropertyType + ", got " + value.Type);
+                bindings [i] = LinqExpression.Bind (field, value);
+            }
+            return new Expression (
+                LinqExpression.MemberInit (LinqExpression.New (structType), bindings));
+        }
+
+        /// <summary>
         /// Construct a list.
         /// </summary>
         /// <returns>The list.</returns>
@@ -1063,6 +1100,28 @@ namespace KRPC.Service.KRPC
             }
             var method = argType.GetMethod ("get_Item");
             return new Expression (LinqExpression.Call (arg, method, index));
+        }
+
+        /// <summary>
+        /// Access a field of a structure.
+        /// </summary>
+        /// <returns>The value of the field.</returns>
+        /// <param name="arg">The structure.</param>
+        /// <param name="name">The name of the field to access.</param>
+        [KRPCMethod]
+        public static Expression GetField (Expression arg, string name)
+        {
+            if (ReferenceEquals (arg, null))
+                throw new ArgumentNullException (nameof (arg));
+            var argType = arg.Type;
+            if (!TypeUtils.IsAStructType (argType))
+                throw new ArgumentException (argType + " is not a structure type");
+            var field = TypeUtils.GetStructFields (argType)
+                .FirstOrDefault (property => property.Name == name);
+            if (field == null)
+                throw new ArgumentException (
+                    argType + " does not have a field called \"" + name + "\"");
+            return new Expression (LinqExpression.Property (arg, field));
         }
 
         /// <summary>

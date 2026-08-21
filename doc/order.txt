@@ -66,6 +66,7 @@ KRPC.Expression.Continue
 KRPC.Expression.Return
 KRPC.Expression.ReturnNothing
 KRPC.Expression.CreateTuple
+KRPC.Expression.CreateStruct
 KRPC.Expression.CreateList
 KRPC.Expression.CreateSet
 KRPC.Expression.CreateDictionary
@@ -80,6 +81,7 @@ KRPC.Expression.ToList
 KRPC.Expression.ToSet
 KRPC.Expression.BuildDictionary
 KRPC.Expression.Get
+KRPC.Expression.GetField
 KRPC.Expression.ConvertToString
 KRPC.Expression.ConcatStrings
 KRPC.Expression.Count

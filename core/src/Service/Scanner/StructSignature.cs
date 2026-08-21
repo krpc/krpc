@@ -42,12 +42,18 @@ namespace KRPC.Service.Scanner
         public string DeprecatedReason { get; private set; }
 
         /// <summary>
+        /// The CLR type of the structure.
+        /// </summary>
+        public Type UnderlyingType { get; private set; }
+
+        /// <summary>
         /// Create a structure signature
         /// </summary>
-        public StructSignature (string serviceName, string structName, IList<StructFieldSignature> fields, string documentation, bool deprecated, string deprecatedReason)
+        public StructSignature (string serviceName, string structName, Type structType, IList<StructFieldSignature> fields, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = structName;
             FullyQualifiedName = serviceName + "." + Name;
+            UnderlyingType = structType;
             Fields = fields;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;

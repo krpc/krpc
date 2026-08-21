@@ -48,6 +48,17 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void StructType ()
+        {
+            var type = Type.StructType ("TestService", "TestStruct");
+            Assert.AreEqual (typeof (global::KRPC.Test.Service.TestService.TestStruct), type.InternalType);
+            Assert.AreEqual (TypeCode.Struct, type.Code);
+            Assert.AreEqual ("TestService", type.Service);
+            Assert.AreEqual ("TestStruct", type.Name);
+            Assert.AreEqual (0, type.Types.Count);
+        }
+
+        [Test]
         public void UnknownServiceOrName ()
         {
             Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
@@ -56,6 +67,8 @@ namespace KRPC.Test.Service.KRPC
                 () => Type.ClassType ("TestService", "NoSuchClass"));
             Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
                 () => Type.EnumerationType ("TestService", "NoSuchEnum"));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Type.StructType ("TestService", "NoSuchStruct"));
         }
 
         [Test]

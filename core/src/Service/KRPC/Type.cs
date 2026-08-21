@@ -134,6 +134,22 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// The type of a structure defined by a service.
+        /// </summary>
+        /// <param name="service">The name of the service the structure is defined in.</param>
+        /// <param name="name">The name of the structure.</param>
+        [KRPCMethod]
+        public static Type StructType (string service, string name)
+        {
+            var serviceSignature = GetServiceSignature (service);
+            StructSignature str;
+            if (!serviceSignature.Structs.TryGetValue (name, out str))
+                throw new ArgumentException (
+                    "Structure \"" + name + "\" not found in service \"" + service + "\"");
+            return new Type (str.UnderlyingType);
+        }
+
+        /// <summary>
         /// A tuple type.
         /// </summary>
         /// <param name="valueTypes">The types of the elements of the tuple.</param>
@@ -226,6 +242,8 @@ namespace KRPC.Service.KRPC
                     return TypeCode.Class;
                 if (TypeUtils.IsAnEnumType (type))
                     return TypeCode.Enumeration;
+                if (TypeUtils.IsAStructType (type))
+                    return TypeCode.Struct;
                 if (TypeUtils.IsATupleCollectionType (type))
                     return TypeCode.Tuple;
                 if (TypeUtils.IsAListCollectionType (type))
@@ -240,8 +258,8 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// For a class or enumeration type, the name of the service it is defined in.
-        /// An empty string otherwise.
+        /// For a class, enumeration or structure type, the name of the service it is
+        /// defined in. An empty string otherwise.
         /// </summary>
         [KRPCProperty]
         public string Service {
@@ -251,18 +269,21 @@ namespace KRPC.Service.KRPC
                     return TypeUtils.GetClassServiceName (type);
                 if (TypeUtils.IsAnEnumType (type))
                     return TypeUtils.GetEnumServiceName (type);
+                if (TypeUtils.IsAStructType (type))
+                    return TypeUtils.GetStructServiceName (type);
                 return string.Empty;
             }
         }
 
         /// <summary>
-        /// For a class or enumeration type, its name. An empty string otherwise.
+        /// For a class, enumeration or structure type, its name. An empty string otherwise.
         /// </summary>
         [KRPCProperty]
         public string Name {
             get {
                 var type = InternalType;
-                if (TypeUtils.IsAClassType (type) || TypeUtils.IsAnEnumType (type))
+                if (TypeUtils.IsAClassType (type) || TypeUtils.IsAnEnumType (type) ||
+                    TypeUtils.IsAStructType (type))
                     return type.Name;
                 return string.Empty;
             }
