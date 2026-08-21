@@ -31,6 +31,12 @@ cc_library(
         "@platforms//os:windows": ["src/wsocket.c"],
         "//conditions:default": ["src/usocket.c"],
     }),
+    # Upstream sources, compiled unmodified. The warnings the toolchain's -Wall
+    # finds in them are not ours to fix.
+    copts = select({
+        "@platforms//os:windows": ["/w"],
+        "//conditions:default": ["-w"],
+    }),
     local_defines = [
         "LUASOCKET_DEBUG",
         # The modules are linked into the interpreter rather than loaded from shared

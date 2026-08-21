@@ -27,7 +27,9 @@ def regenerate(clang_format, config, src):
     with tempfile.TemporaryDirectory() as tmp:
         copy = os.path.join(tmp, os.path.basename(src))
         shutil.copyfile(src, copy)
-        Cog().main(["cog", "-r", copy])
+        # --verbosity=0: cog announces every file it rewrites, and this rewrites one
+        # per source in a scratch copy nobody sees.
+        Cog().main(["cog", "-r", "--verbosity=0", copy])
         subprocess.run(
             [clang_format, "-i", "--style=file:" + config, copy],
             check=True,
