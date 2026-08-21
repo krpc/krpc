@@ -424,6 +424,18 @@ Run a specific test, e.g. the python client tests:
 bazel test //client/python:test
 ```
 
+Each client's `:test` suite is made up of targets grouped by what a test depends on, so that a
+test which is the same whatever carries a call is not run once per transport:
+
+ * `:unit` -- what the client does regardless of the transport it talks over, and without a
+   server to talk to: encoding and decoding values, and the types they are carried as.
+ * `:communication-tcpip`, `:communication-localsocket` (and `:communication-serialio` and
+   `:communication-arduino` for the cnano client) -- the transport itself, run against a server
+   the test listens on rather than a kRPC server.
+ * `:client-tcpip`, `:client-localsocket` (and `:client-serialio` for the cnano client) -- the
+   client end to end against a `TestServer`, one target per transport it can reach one over.
+ * `:lint` -- whatever the language has, where it has one.
+
 You can also pass options to `bazel test` to change the way it behaves:
 
  * Pass ``--subcommands`` to see the actual commands that are being run.
