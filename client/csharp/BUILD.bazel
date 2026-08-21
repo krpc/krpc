@@ -325,6 +325,7 @@ csharp_nunit_test(
     srcs = [
         "test/ConnectionTest.cs",
         "test/EventTest.cs",
+        "test/ExpressionCompilerTest.cs",
         "test/ExpressionStreamTest.cs",
         "test/ObjectTest.cs",
         "test/ServerTestCase.cs",
