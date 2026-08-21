@@ -117,6 +117,62 @@ class TestExpression(ServerTestCase, unittest.TestCase):
             event.wait(2)
             self.assertTrue(event.stream())
 
+    def test_expression_stream_struct(self) -> None:
+        expression = self.conn.krpc.Expression
+        expr = expression.call(
+            self.conn.get_call(
+                self.conn.test_service.counter_struct, "TestExpression.struct"
+            )
+        )
+        with self.conn.expression_stream(expr) as stream:
+            value = stream()
+            self.assertIsInstance(value, self.conn.test_service.TestStruct)
+            self.assertEqual("TestExpression.struct", value.string_field)
+            with stream.condition:
+                stream.wait()
+            self.assertGreater(stream().int_field, value.int_field)
+
+    def test_expression_struct_field(self) -> None:
+        expression = self.conn.krpc.Expression
+        struct = expression.call(
+            self.conn.get_call(
+                self.conn.test_service.counter_struct, "TestExpression.field"
+            )
+        )
+        expr = expression.get_field(struct, "StringField")
+        with self.conn.expression_stream(expr) as stream:
+            self.assertEqual("TestExpression.field", stream())
+
+    def test_expression_create_struct(self) -> None:
+        expression = self.conn.krpc.Expression
+        types = self.conn.krpc.Type
+        test_enum = self.conn.test_service.TestEnum
+        struct = expression.create_struct(
+            types.struct_type("TestService", "TestStruct"),
+            [
+                expression.constant_int(3),
+                expression.constant_string("built"),
+                expression.cast(
+                    expression.constant_int(test_enum.value_c.value),
+                    types.enumeration_type("TestService", "TestEnum"),
+                ),
+                expression.create_list([expression.constant_int(7)]),
+            ],
+        )
+        expr = expression.call_with_arguments(
+            self.conn.get_call(
+                self.conn.test_service.struct_echo,
+                self.conn.test_service.TestStruct(0, "", test_enum.value_a, []),
+            ),
+            {0: struct},
+        )
+        with self.conn.expression_stream(expr) as stream:
+            value = stream()
+            self.assertEqual(3, value.int_field)
+            self.assertEqual("built", value.string_field)
+            self.assertEqual(test_enum.value_c, value.enum_field)
+            self.assertEqual([7], value.list_field)
+
     def test_return_type_introspection(self) -> None:
         expression = self.conn.krpc.Expression
         type_code = self.conn.krpc.TypeCode

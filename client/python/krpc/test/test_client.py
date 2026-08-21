@@ -618,6 +618,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set(
                 [
                     "krpc",
+                    "std_lib",
                     "test_service",
                     # The server-side benchmarks the test server exposes. It has no
                     # pre-generated stubs, so this is also the client building a service
@@ -627,6 +628,9 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "add_stream",
                     "expression_stream",
                     "add_expression_stream",
+                    "add_event",
+                    "compile_expression",
+                    "run_function",
                     "stream_update_condition",
                     "wait_for_stream_update",
                     "add_stream_update_callback",
@@ -657,6 +661,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "get_status",
                     "add_stream",
                     "add_expression_stream",
+                    "run_function",
                     "start_stream",
                     "set_stream_rate",
                     "remove_stream",

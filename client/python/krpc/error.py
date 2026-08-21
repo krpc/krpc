@@ -10,5 +10,10 @@ class StreamError(RuntimeError):
     """Raised when an error occurs in a stream operation"""
 
 
+class ExpressionCompilationError(RuntimeError):
+    """Error raised when a python function cannot be compiled
+    into a server side expression"""
+
+
 class EncodingError(RuntimeError):
     """Raised when an error occurs encoding or decoding a message"""
