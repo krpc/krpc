@@ -72,16 +72,21 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// The mass of the part, including resources and crew, in tonnes.
+        /// The mass of the part, including resources, crew and physicsless children,
+        /// in tonnes. A physicsless part reports zero; its mass is on the nearest
+        /// ancestor that is simulated, as it is on that ancestor's rigidbody in flight.
+        /// Launch clamps are included, so a vessel's inertia sees them the way
+        /// flight does.
         /// </summary>
         public static float PhysicsMass (this Part part)
         {
-            if (part.IsMassless ())
+            if (part.physicalSignificance == Part.PhysicalSignificance.NONE)
                 return 0f;
             if (part.HasPhysicsBody ())
                 return part.rb.mass;
             part.UpdateMass ();
-            return part.mass + part.GetResourceMass () + part.CrewMass ();
+            return part.mass + part.GetResourceMass () + part.CrewMass () +
+                part.GetPhysicslessChildMass ();
         }
 
         /// <summary>
@@ -97,6 +102,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static float WetMass (this Part part)
         {
+            if (part.IsMassless ())
+                return 0f;
             return part.PhysicsMass () * 1000f;
         }
 
@@ -111,7 +118,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             if (part.HasPhysicsBody ())
                 return Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f);
             part.UpdateMass ();
-            return Mathf.Max (0f, (part.mass + part.CrewMass ()) * 1000f);
+            return Mathf.Max (0f, (part.mass + part.CrewMass () + part.GetPhysicslessChildMass ()) * 1000f);
         }
 
         /// <summary>
@@ -184,7 +191,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         /// </summary>
         public static Vector3d CenterOfMass (this Part part)
         {
-            return part.WorldCenterOfMass ();
+            return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
         }
 
         /// <summary>

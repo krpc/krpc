@@ -119,6 +119,12 @@ namespace KRPC.SpaceCenter.Services
         /// <returns>The position as a vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vector is in.</param>
+        /// <remarks>
+        /// This is the editor scene's world-space center of mass expressed in
+        /// <paramref name="referenceFrame"/>. A celestial body frame is not a
+        /// position on that body: the editor is not placed in the solar system
+        /// the way a vessel in flight is.
+        /// </remarks>
         [KRPCMethod]
         public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
         {
@@ -128,7 +134,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
         /// The inertia values in the returned 3-tuple are around the pitch, roll and yaw
-        /// directions of the root part respectively.
+        /// directions of the root part's reference transform respectively.
         /// </summary>
         [KRPCProperty]
         public Tuple3 MomentOfInertia {
@@ -137,7 +143,8 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// The inertia tensor of the vessel around its center of mass, in the root
-        /// part's axes. Returns the 3x3 matrix as a list of elements, in row-major order.
+        /// part's reference transform. Returns the 3x3 matrix as a list of elements,
+        /// in row-major order.
         /// </summary>
         [KRPCProperty]
         public IList<double> InertiaTensor {

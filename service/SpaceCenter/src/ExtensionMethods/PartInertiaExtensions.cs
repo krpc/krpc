@@ -6,24 +6,27 @@ namespace KRPC.SpaceCenter.ExtensionMethods
     static class PartInertiaExtensions
     {
         /// <summary>
-        /// The world-space center of mass of the part. In flight this is the
-        /// rigidbody's. In the editor it is the volume-weighted center of the
-        /// part's colliders.
+        /// Integrals of a collision mesh in its own unscaled space, keyed by
+        /// <see cref="Object.GetInstanceID"/>. Volume, centroid and covariance
+        /// belong to the mesh; the collider's scale is applied when a solid is
+        /// built from the cache.
+        /// </summary>
+        static readonly Dictionary<int, MeshIntegral> MeshIntegrals =
+            new Dictionary<int, MeshIntegral> ();
+
+        /// <summary>
+        /// The world-space center of mass of a part in the editor:
+        /// <c>transform.position + rotation * CoMOffset</c>, which is what the
+        /// editor's own CoM marker sums and what the rigidbody uses in flight.
         /// </summary>
         public static Vector3 WorldCenterOfMass (this Part part)
         {
-            if (part.HasPhysicsBody ())
-                return part.rb.worldCenterOfMass;
-            Vector3 local;
-            float volume;
-            if (TryColliderCenter (part, out local, out volume) && volume > 0f)
-                return part.transform.TransformPoint (local);
-            return part.transform.position;
+            return part.transform.position + part.transform.rotation * part.CoMOffset;
         }
 
         /// <summary>
         /// The world-space center of mass of a vessel in the editor, weighted by
-        /// each part's mass including resources and crew.
+        /// each part's mass including resources, crew and physicsless children.
         /// </summary>
         public static Vector3 WorldCenterOfMass (this ShipConstruct ship)
         {
@@ -40,8 +43,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             }
             if (mass > 0f)
                 return com / mass;
-            var root = RootPart (parts);
-            return root != null ? root.transform.position : Vector3.zero;
+            var transform = ship.VesselTransform ();
+            return transform != null ? transform.position : Vector3.zero;
         }
 
         /// <summary>
@@ -65,9 +68,10 @@ namespace KRPC.SpaceCenter.ExtensionMethods
 
         /// <summary>
         /// Inertia tensor of a vessel in the editor about its center of mass, in
-        /// the root part's axes, in tonne.m^2. The parallel-axis contribution of
-        /// each part is measured from the part's origin, not its center of mass,
-        /// which is how KSP assembles a vessel's tensor in flight.
+        /// the root part's reference transform, in tonne.m^2. Those are the same
+        /// pitch, roll and yaw axes a vessel reports in flight. The parallel-axis
+        /// contribution of each part is measured from the part's origin, not its
+        /// center of mass, which is how KSP assembles a vessel's tensor in flight.
         /// </summary>
         public static Matrix4x4 ComputeInertiaTensor (this ShipConstruct ship)
         {
@@ -75,10 +79,9 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             if (parts.Count == 0)
                 return Matrix4x4.zero;
 
-            var root = RootPart (parts);
-            if (root == null)
+            var vesselTransform = ship.VesselTransform ();
+            if (vesselTransform == null)
                 return Matrix4x4.zero;
-            var vesselTransform = root.transform;
             var com = ship.WorldCenterOfMass ();
 
             Matrix4x4 inertiaTensor = Matrix4x4.zero;
@@ -101,6 +104,19 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return inertiaTensor;
         }
 
+        /// <summary>
+        /// The transform <see cref="ComputeInertiaTensor"/> reports axes in. The
+        /// root part's reference transform, falling back to its model transform.
+        /// </summary>
+        public static Transform VesselTransform (this ShipConstruct ship)
+        {
+            var root = RootPart (ship.Parts);
+            if (root == null)
+                return null;
+            var reference = root.GetReferenceTransform ();
+            return reference != null ? reference : root.transform;
+        }
+
         static Part RootPart (IList<Part> parts)
         {
             if (parts == null || parts.Count == 0)
@@ -109,22 +125,6 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             while (part.parent != null)
                 part = part.parent;
             return part;
-        }
-
-        static bool TryColliderCenter (Part part, out Vector3 localCom, out float volume)
-        {
-            localCom = Vector3.zero;
-            volume = 0f;
-            var solids = CollectSolids (part);
-            for (int i = 0; i < solids.Count; i++) {
-                var solid = solids [i];
-                localCom += solid.Center * solid.Volume;
-                volume += solid.Volume;
-            }
-            if (volume <= 0f)
-                return false;
-            localCom /= volume;
-            return true;
         }
 
         static bool TryColliderInertia (Part part, float mass, out Matrix4x4 tensor)
@@ -160,6 +160,21 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             public Matrix4x4 InertiaPerMass;
         }
 
+        struct MeshIntegral
+        {
+            public bool IsBox;
+            public Vector3 BoxCenter;
+            public Vector3 BoxSize;
+            public float Volume;
+            public Vector3 FirstMoment;
+            public float Ixx;
+            public float Iyy;
+            public float Izz;
+            public float Ixy;
+            public float Ixz;
+            public float Iyz;
+        }
+
         static List<Solid> CollectSolids (Part part)
         {
             var solids = new List<Solid> ();
@@ -174,7 +189,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             }
             for (int i = 0; i < colliders.Length; i++) {
                 var collider = colliders [i];
-                if (collider == null || !collider.enabled || collider.isTrigger)
+                if (collider == null || !collider.enabled)
                     continue;
                 if (!collider.gameObject.activeInHierarchy)
                     continue;
@@ -194,7 +209,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             solid = default (Solid);
             if (box == null)
                 return false;
-            var size = Vector3.Scale (box.size, Abs (box.transform.lossyScale));
+            return SolidFromBox (part, box.transform, box.center, box.size, out solid);
+        }
+
+        static bool SolidFromBox (
+            Part part, Transform from, Vector3 localCenter, Vector3 localSize, out Solid solid)
+        {
+            solid = default (Solid);
+            var size = Vector3.Scale (localSize, Abs (from.lossyScale));
             var volume = Mathf.Abs (size.x * size.y * size.z);
             if (volume <= 0f)
                 return false;
@@ -203,8 +225,8 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             var z2 = size.z * size.z;
             var diagonal = new Vector3 ((y2 + z2) / 12f, (x2 + z2) / 12f, (x2 + y2) / 12f);
             solid.Volume = volume;
-            solid.Center = PartLocalPoint (part, box.transform, box.center);
-            solid.InertiaPerMass = RotateTensor (diagonal.ToDiagonalMatrix (), PartLocalRotation (part, box.transform));
+            solid.Center = PartLocalPoint (part, from, localCenter);
+            solid.InertiaPerMass = RotateTensor (diagonal.ToDiagonalMatrix (), PartLocalRotation (part, from));
             return true;
         }
 
@@ -213,17 +235,16 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             solid = default (Solid);
             if (sphere == null)
                 return false;
-            var radii = sphere.radius * Abs (sphere.transform.lossyScale);
-            var volume = (4f / 3f) * Mathf.PI * radii.x * radii.y * radii.z;
+            // A SphereCollider stays a sphere; Unity scales its radius by the
+            // largest absolute component of lossyScale, not per axis.
+            var radius = sphere.radius * Max (Abs (sphere.transform.lossyScale));
+            var volume = (4f / 3f) * Mathf.PI * radius * radius * radius;
             if (volume <= 0f)
                 return false;
-            var x2 = radii.x * radii.x;
-            var y2 = radii.y * radii.y;
-            var z2 = radii.z * radii.z;
-            var diagonal = new Vector3 ((y2 + z2) / 5f, (x2 + z2) / 5f, (x2 + y2) / 5f);
+            var diagonal = Vector3.one * (0.4f * radius * radius);
             solid.Volume = volume;
             solid.Center = PartLocalPoint (part, sphere.transform, sphere.center);
-            solid.InertiaPerMass = RotateTensor (diagonal.ToDiagonalMatrix (), PartLocalRotation (part, sphere.transform));
+            solid.InertiaPerMass = diagonal.ToDiagonalMatrix ();
             return true;
         }
 
@@ -289,37 +310,41 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             var mesh = meshCollider.sharedMesh;
             if (mesh == null)
                 return false;
-            var vertices = mesh.vertices;
-            var triangles = mesh.triangles;
-            if (vertices == null || triangles == null || triangles.Length < 3)
+
+            MeshIntegral integral;
+            if (!TryGetMeshIntegral (mesh, out integral))
+                return false;
+            if (integral.IsBox)
+                return SolidFromBox (part, meshCollider.transform, integral.BoxCenter, integral.BoxSize, out solid);
+
+            var scale = meshCollider.transform.lossyScale;
+            var ax = Mathf.Abs (scale.x);
+            var ay = Mathf.Abs (scale.y);
+            var az = Mathf.Abs (scale.z);
+            var det = ax * ay * az;
+            if (det <= 1e-12f)
                 return false;
 
-            var colliderTransform = meshCollider.transform;
-            float volume = 0f;
-            var firstMoment = Vector3.zero;
-            float ixx = 0f, iyy = 0f, izz = 0f, ixy = 0f, ixz = 0f, iyz = 0f;
-            for (int i = 0; i < triangles.Length; i += 3) {
-                var a = PartLocalPoint (part, colliderTransform, vertices [triangles [i]]);
-                var b = PartLocalPoint (part, colliderTransform, vertices [triangles [i + 1]]);
-                var c = PartLocalPoint (part, colliderTransform, vertices [triangles [i + 2]]);
-                AddTetrahedron (a, b, c, ref volume, ref firstMoment,
-                    ref ixx, ref iyy, ref izz, ref ixy, ref ixz, ref iyz);
-            }
-            if (volume < 0f) {
-                volume = -volume;
-                firstMoment = -firstMoment;
-                ixx = -ixx;
-                iyy = -iyy;
-                izz = -izz;
-                ixy = -ixy;
-                ixz = -ixz;
-                iyz = -iyz;
-            }
+            var volume = integral.Volume * det;
             if (volume <= 1e-8f)
                 return false;
 
+            // Second moments about the origin, then scale: x'^2 dV' = |det| sx^2 x^2 dV.
+            var pxx = (integral.Iyy + integral.Izz - integral.Ixx) * 0.5f;
+            var pyy = (integral.Ixx + integral.Izz - integral.Iyy) * 0.5f;
+            var pzz = (integral.Ixx + integral.Iyy - integral.Izz) * 0.5f;
+            var ixx = det * (scale.y * scale.y * pyy + scale.z * scale.z * pzz);
+            var iyy = det * (scale.x * scale.x * pxx + scale.z * scale.z * pzz);
+            var izz = det * (scale.x * scale.x * pxx + scale.y * scale.y * pyy);
+            var ixy = det * scale.x * scale.y * integral.Ixy;
+            var ixz = det * scale.x * scale.z * integral.Ixz;
+            var iyz = det * scale.y * scale.z * integral.Iyz;
+
+            var firstMoment = new Vector3 (
+                                  scale.x * det * integral.FirstMoment.x,
+                                  scale.y * det * integral.FirstMoment.y,
+                                  scale.z * det * integral.FirstMoment.z);
             var com = firstMoment / volume;
-            // Shift the origin-based tensor onto the mesh's own center of mass.
             ixx -= volume * (com.y * com.y + com.z * com.z);
             iyy -= volume * (com.x * com.x + com.z * com.z);
             izz -= volume * (com.x * com.x + com.y * com.y);
@@ -337,10 +362,72 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             tensor [2, 0] = ixz / volume;
             tensor [2, 1] = iyz / volume;
             tensor [2, 2] = izz / volume;
+
+            var unscaledCom = integral.FirstMoment / integral.Volume;
             solid.Volume = volume;
-            solid.Center = com;
-            solid.InertiaPerMass = tensor;
+            solid.Center = PartLocalPoint (part, meshCollider.transform, unscaledCom);
+            solid.InertiaPerMass = RotateTensor (tensor, PartLocalRotation (part, meshCollider.transform));
             return true;
+        }
+
+        static bool TryGetMeshIntegral (Mesh mesh, out MeshIntegral integral)
+        {
+            var id = mesh.GetInstanceID ();
+            if (MeshIntegrals.TryGetValue (id, out integral))
+                return integral.Volume > 1e-8f;
+
+            if (!mesh.isReadable) {
+                var bounds = mesh.bounds;
+                integral = new MeshIntegral {
+                    IsBox = true,
+                    BoxCenter = bounds.center,
+                    BoxSize = bounds.size,
+                    Volume = Mathf.Abs (bounds.size.x * bounds.size.y * bounds.size.z)
+                };
+                MeshIntegrals [id] = integral;
+                return integral.Volume > 0f;
+            }
+
+            var vertices = mesh.vertices;
+            var triangles = mesh.triangles;
+            if (vertices == null || triangles == null || triangles.Length < 3) {
+                integral = default (MeshIntegral);
+                return false;
+            }
+
+            float volume = 0f;
+            var firstMoment = Vector3.zero;
+            float ixx = 0f, iyy = 0f, izz = 0f, ixy = 0f, ixz = 0f, iyz = 0f;
+            for (int i = 0; i < triangles.Length; i += 3) {
+                AddTetrahedron (
+                    vertices [triangles [i]],
+                    vertices [triangles [i + 1]],
+                    vertices [triangles [i + 2]],
+                    ref volume, ref firstMoment,
+                    ref ixx, ref iyy, ref izz, ref ixy, ref ixz, ref iyz);
+            }
+            if (volume < 0f) {
+                volume = -volume;
+                firstMoment = -firstMoment;
+                ixx = -ixx;
+                iyy = -iyy;
+                izz = -izz;
+                ixy = -ixy;
+                ixz = -ixz;
+                iyz = -iyz;
+            }
+            integral = new MeshIntegral {
+                Volume = volume,
+                FirstMoment = firstMoment,
+                Ixx = ixx,
+                Iyy = iyy,
+                Izz = izz,
+                Ixy = ixy,
+                Ixz = ixz,
+                Iyz = iyz
+            };
+            MeshIntegrals [id] = integral;
+            return volume > 1e-8f;
         }
 
         /// <summary>
@@ -393,6 +480,11 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         static Vector3 Abs (Vector3 v)
         {
             return new Vector3 (Mathf.Abs (v.x), Mathf.Abs (v.y), Mathf.Abs (v.z));
+        }
+
+        static float Max (Vector3 v)
+        {
+            return Mathf.Max (v.x, Mathf.Max (v.y, v.z));
         }
     }
 }

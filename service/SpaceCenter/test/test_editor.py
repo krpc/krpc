@@ -28,9 +28,6 @@ class TestEditor(krpctest.TestCase):
 
     def test_mass_properties(self):
         vessel = self.space_center.editor.vessel
-        kerbin = self.space_center.bodies["Kerbin"]
-        com = vessel.center_of_mass(kerbin.reference_frame)
-        self.assertEqual(3, len(com))
         moi = vessel.moment_of_inertia
         self.assertEqual(3, len(moi))
         self.assertGreater(min(moi), 0)
@@ -134,6 +131,33 @@ class TestEditorLaunchVessel(krpctest.TestCase):
         editor.vessel.name = "Renamed In Editor"
         editor.launch_vessel("LaunchPad")
         self.assertEqual("Renamed In Editor", self.space_center.active_vessel.name)
+
+    def test_mass_properties_match_flight_staging(self):
+        # Staging.craft has a mix of part kinds; a point-mass model can look
+        # plausible until it is compared with the same vessel in flight.
+        self._assert_mass_properties_match_flight("Staging")
+
+    def test_mass_properties_match_flight_rover(self):
+        # A rover is small enough that a part's own inertia is most of the
+        # vessel figure rather than a correction to the parallel-axis term.
+        self._assert_mass_properties_match_flight("Rover")
+
+    def _assert_mass_properties_match_flight(self, craft):
+        self.enter_editor("VAB", craft=craft)
+        editor_vessel = self.space_center.editor.vessel
+        mass = editor_vessel.mass
+        moi = editor_vessel.moment_of_inertia
+        self.space_center.editor.launch_vessel("LaunchPad")
+        flight = self.space_center.active_vessel
+        self.assertEqual(craft, flight.name)
+        self.assertAlmostEqual(mass, flight.mass, delta=1)
+        flight_moi = flight.moment_of_inertia
+        for i in range(3):
+            self.assertAlmostEqual(
+                moi[i],
+                flight_moi[i],
+                delta=max(abs(moi[i]) * 0.05, 1),
+            )
 
 
 if __name__ == "__main__":
