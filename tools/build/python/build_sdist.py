@@ -11,8 +11,17 @@ import argparse
 import glob
 import os
 import shutil
+import stat
 import subprocess
 import sys
+
+
+def _remove_readonly(func, path, _exception):
+    """Clear the read-only attribute and try again. The build dir is copied out of the
+    build's own output tree, which is read-only, and Windows refuses to delete a read-only
+    file; elsewhere only the containing directory has to be writable, so this never fires."""
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
 
 
 def main():
@@ -26,7 +35,7 @@ def main():
     hatchling = os.path.abspath(opts.hatchling)
 
     if os.path.exists(opts.build):
-        shutil.rmtree(opts.build)
+        shutil.rmtree(opts.build, onexc=_remove_readonly)
     # symlinks=False dereferences the staged symlinks into real files.
     shutil.copytree(opts.staging, opts.build, symlinks=False)
 

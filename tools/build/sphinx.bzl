@@ -1,5 +1,7 @@
 " sphinx documentation tools "
 
+load("@rules_python//python:defs.bzl", "py_test")
+
 # buildifier: disable=function-docstring-header
 def _get_src_dir(srcs, short_path = False):
     """ Given a list of input files, get the path of the src dir,
@@ -96,95 +98,59 @@ sphinx_build = rule(
     },
 )
 
-def _spelling_impl(ctx):
-    srcs = ctx.files.srcs
-    src_dir = _get_src_dir(srcs, short_path = True)
-    out = ctx.outputs.executable
-    sphinx_build = ctx.executable.sphinx_build
-    opts = " ".join(["-D%s=%s" % x for x in ctx.attr.opts.items()])
-    sub_commands = []
-
-    sphinx_commands = [
-        # Fail the build if sphinx fails anywhere in the pipe, not just at tee.
-        "set -o pipefail",
-        # sphinxcontrib-spelling requires the dictionary to be a readable, writable regular file,
-        # but Bazel stages inputs as read-only symlinks. Replace the symlink with a writable copy.
-        'cp "`pwd`/doc/srcs/dictionary.txt" "`pwd`/doc/srcs/dictionary.txt.tmp"',
-        'rm "`pwd`/doc/srcs/dictionary.txt"',
-        'mv "`pwd`/doc/srcs/dictionary.txt.tmp" "`pwd`/doc/srcs/dictionary.txt"',
-        "chmod 644 `pwd`/doc/srcs/dictionary.txt",
-        # -W treats warnings as errors: the spelling builder logs each misspelling as a warning, so
-        # this fails the build (via its exit code) on any misspelling as well as any other warning.
-        # -t spelling asks conf.py for the spellchecker, which only this builder
-        # has any use for.
-        "%s -b spelling -t spelling -E -N -T -W %s ./out %s 2>&1 | tee stdout" % (sphinx_build.short_path, src_dir, opts),
-    ]
-    sub_commands.append("(" + "; ".join(sphinx_commands) + ")")
-
+def _test_config_impl(ctx):
+    config = ctx.actions.declare_file(ctx.label.name + ".json")
     ctx.actions.write(
-        output = out,
-        content = " &&\n".join(sub_commands) + "\n",
-        is_executable = True,
+        output = config,
+        content = json.encode({
+            "sphinx_build": ctx.executable.sphinx_build.short_path,
+            "builder": ctx.attr.builder,
+            "src_dir": _get_src_dir(ctx.files.srcs, short_path = True),
+            "opts": ctx.attr.opts,
+        }),
     )
+    return DefaultInfo(files = depset([config]))
 
-    return DefaultInfo(
-        executable = out,
-        runfiles = ctx.runfiles(files = [sphinx_build] + srcs).merge(ctx.attr.sphinx_build[DefaultInfo].default_runfiles),
-    )
-
-sphinx_spelling_test = rule(
-    implementation = _spelling_impl,
+# sphinx-build is a py_binary, whose label names both a launcher and the sources
+# it runs, so the path of the launcher within the runfiles tree is not something
+# location expansion can resolve; only a rule can ask for it. Which of the staged
+# files sits beside conf.py, and so what to give sphinx as its source directory,
+# is likewise settled when the graph is built rather than when the test runs.
+_sphinx_test_config = rule(
+    implementation = _test_config_impl,
     attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "sphinx_build": attr.label(
-            executable = True,
-            mandatory = True,
-            cfg = "exec",
-        ),
+        "builder": attr.string(mandatory = True),
         "opts": attr.string_dict(),
+        "sphinx_build": attr.label(executable = True, mandatory = True, cfg = "target"),
+        "srcs": attr.label_list(allow_files = True),
     },
-    test = True,
 )
 
-def _linkcheck_impl(ctx):
-    srcs = ctx.files.srcs
-    src_dir = _get_src_dir(srcs, short_path = True)
-    out = ctx.outputs.executable
-    sphinx_build = ctx.executable.sphinx_build
-    opts = " ".join(["-D%s=%s" % x for x in ctx.attr.opts.items()])
-    sub_commands = []
-
-    sphinx_commands = [
-        "%s -b linkcheck -E -N -T %s ./out %s" % (sphinx_build.short_path, src_dir, opts),
-        "ret=$?",
-        "lines=`cat ./out/output.txt | wc -l`",
-        'echo "Link checker messages ($lines lines):"',
-        "cat ./out/output.txt",
-        "if [ $ret -ne 0 ]; then exit 1; fi",
-    ]
-    sub_commands.append("(" + "; ".join(sphinx_commands) + ")")
-
-    ctx.actions.write(
-        output = out,
-        content = " &&\n".join(sub_commands) + "\n",
-        is_executable = True,
+def _sphinx_test(name, builder, srcs, sphinx_build, opts, kwargs):
+    config = name + "-config"
+    _sphinx_test_config(
+        name = config,
+        builder = builder,
+        opts = opts,
+        sphinx_build = sphinx_build,
+        srcs = srcs,
+        testonly = True,
+    )
+    py_test(
+        name = name,
+        srcs = [Label("//tools/build:run_sphinx_test.py")],
+        main = Label("//tools/build:run_sphinx_test.py"),
+        args = ["$(rootpath :%s)" % config],
+        data = [config, sphinx_build] + srcs,
+        **kwargs
     )
 
-    return DefaultInfo(
-        executable = out,
-        runfiles = ctx.runfiles(files = [sphinx_build] + srcs).merge(ctx.attr.sphinx_build[DefaultInfo].default_runfiles),
-    )
+# Check the prose for misspellings.
+# buildifier: disable=function-docstring
+def sphinx_spelling_test(name, srcs, sphinx_build, opts = {}, **kwargs):
+    _sphinx_test(name, "spelling", srcs, sphinx_build, opts, kwargs)
 
-sphinx_linkcheck_test = rule(
-    implementation = _linkcheck_impl,
-    attrs = {
-        "srcs": attr.label_list(allow_files = True),
-        "sphinx_build": attr.label(
-            executable = True,
-            mandatory = True,
-            cfg = "exec",
-        ),
-        "opts": attr.string_dict(),
-    },
-    test = True,
-)
+# Check that every link the documentation makes can still be followed.
+# buildifier: disable=function-docstring
+def sphinx_linkcheck_test(name, srcs, sphinx_build, opts = {}, **kwargs):
+    _sphinx_test(name, "linkcheck", srcs, sphinx_build, opts, kwargs)

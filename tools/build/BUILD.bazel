@@ -4,7 +4,9 @@ package(default_visibility = ["//visibility:public"])
 
 exports_files([
     "csproj_test.py",
+    "run_checkstyle.py",
     "run_client_test.py",
+    "run_sphinx_test.py",
 ])
 
 py_binary(

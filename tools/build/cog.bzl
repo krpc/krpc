@@ -9,7 +9,13 @@ block edited without regenerating is caught in CI. cog itself is run manually.
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
 
-_LINT_ONLY_ON = ["@platforms//os:linux"]
+# The check needs nothing but cog, clang-format and the sources, and
+# //tools/build/llvm has a clang-format binary for Linux and Windows alike.
+_COG_ONLY_ON = select({
+    "@platforms//os:linux": [],
+    "@platforms//os:windows": [],
+    "//conditions:default": ["@platforms//:incompatible"],
+})
 
 def _cog_impl(ctx):
     fmt = ctx.files._clang_format[0]
@@ -62,11 +68,11 @@ def cog_test(name, srcs, config = None, **kwargs):
         config = config or Label("//:.clang-format"),
         tags = ["manual"],
         testonly = True,
-        target_compatible_with = _LINT_ONLY_ON,
+        target_compatible_with = _COG_ONLY_ON,
     )
     build_test(
         name = name,
         targets = [":" + check],
-        target_compatible_with = _LINT_ONLY_ON,
+        target_compatible_with = _COG_ONLY_ON,
         **kwargs
     )

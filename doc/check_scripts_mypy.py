@@ -65,6 +65,10 @@ def main():
     cache_dir = os.path.join(os.environ.get("TEST_TMPDIR", "."), "mypy_cache")
     stdout, stderr, status = api.run(
         [
+            # The scripts are checked for one platform, so that a member
+            # typeshed only declares on some of them, such as socket.AF_UNIX,
+            # resolves the same way wherever the test runs.
+            "--platform=linux",
             "--ignore-missing-imports",
             "--follow-imports=silent",
             "--no-error-summary",

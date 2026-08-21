@@ -1,0 +1,46 @@
+"""Runs a lua script against the interpreter and module trees the build staged.
+
+Template instantiated by the lua_test and lua_binary macros in //tools/build:lua.bzl,
+which substitute the interpreter, the roots to search for modules and the script. The
+parameters are baked in rather than passed as arguments, as the script may be invoked
+via the client_test harness, which does not forward arguments.
+"""
+
+import os
+import subprocess
+import sys
+
+# Runfiles-root-relative paths, resolved against this file's own location rather than
+# the working directory: a client_test runs its client from the harness's runfiles tree
+# and does not move into it.
+INTERPRETER = "@INTERPRETER@"
+ROOTS = "@ROOTS@".split()
+SCRIPT = "@SCRIPT@"
+ARGS = "@ARGS@".split()
+
+
+def main() -> int:
+    root = os.path.abspath(os.path.join(os.path.dirname(__file__), "@RUNFILES@"))
+    path = []
+    for tree in ROOTS:
+        tree = os.path.join(root, tree)
+        # A module is either a file named for it or a directory with an init.lua in it,
+        # which is how require 'protobuf' reaches protobuf/init.lua.
+        path.append(os.path.join(tree, "?.lua"))
+        path.append(os.path.join(tree, "?/init.lua"))
+
+    environment = dict(os.environ)
+    environment["LUA_PATH"] = ";".join(path)
+    # Nothing is loaded dynamically and nothing should run before the script does, so
+    # neither of these is allowed to carry in a setting from the machine running this.
+    environment["LUA_CPATH"] = ""
+    environment.pop("LUA_INIT", None)
+
+    command = [os.path.join(root, INTERPRETER), os.path.join(root, SCRIPT)]
+    return subprocess.run(
+        command + ARGS + sys.argv[1:], env=environment, check=False
+    ).returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main())

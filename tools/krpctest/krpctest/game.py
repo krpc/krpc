@@ -20,7 +20,7 @@ from importlib.resources import files
 
 import krpc
 
-from krpctest.env import get_ksp_dir
+from krpctest.env import get_ksp_dir, get_ksp_executable, kill_ksp
 
 # Progress messages (game loading, mod set in use) go to this logger at INFO. The pytest
 # plugin surfaces them live via pytest's log_cli; outside pytest, INFO is dropped by
@@ -189,7 +189,7 @@ def _launch_ksp(required):
     ksp_dir = get_ksp_dir()
     log.info("launching KSP")
     _owned_ksp = subprocess.Popen(  # pylint: disable=consider-using-with
-        [os.path.join(ksp_dir, "KSP.x86_64"), "--krpctest-load-game=krpctest"],
+        [get_ksp_executable(ksp_dir), "--krpctest-load-game=krpctest"],
         cwd=ksp_dir,
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
@@ -217,7 +217,7 @@ def _stop_ksp():
             pass
     if proc.poll() is None:
         # The handle didn't map to the live process; fall back to a name match.
-        subprocess.call(["pkill", "-f", "KSP[.]x86_64"])
+        kill_ksp()
 
 
 atexit.register(_stop_ksp)

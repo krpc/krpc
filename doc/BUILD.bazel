@@ -271,9 +271,6 @@ py_test(
     # directory, which is not a valid package name, and it aborts.
     legacy_create_init = False,
     main = "check_scripts_mypy.py",
-    # The example scripts are type-checked against a client generated for one
-    # platform, so a second one has nothing more to say about them.
-    target_compatible_with = ["@platforms//os:linux"],
     deps = [
         "//client/python:krpc_lib",
         "@pypi//mypy",
@@ -286,9 +283,6 @@ sphinx_spelling_test(
     srcs = [":srcs"],
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
-    # Generated bash test wrapper (grep + writable-dictionary hack); convertible
-    # to python later, but Linux-only for now.
-    target_compatible_with = ["@platforms//os:linux"],
 )
 
 sphinx_linkcheck_test(
@@ -297,8 +291,6 @@ sphinx_linkcheck_test(
     opts = {"version": version},
     sphinx_build = ":sphinx-build",
     tags = ["requires-network"],
-    # Generated bash test wrapper; convertible to python later, Linux-only now.
-    target_compatible_with = ["@platforms//os:linux"],
 )
 
 test_suite(

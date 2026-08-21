@@ -48,11 +48,11 @@ RUN apt-get update && \
     apt-get clean
 
 # Install other build tools. gcc/g++/ccache/cmake are for the CMake consumer
-# jobs; luarocks for the Linux-only lua rules and socat for the serial ones;
-# graphviz for the documentation's dot graphs.
+# jobs; socat for the serial transport tests; graphviz for the documentation's
+# dot graphs; unzip for the CI steps that unpack a release archive.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    gcc g++ ccache cmake luarocks socat graphviz && \
+    gcc g++ ccache cmake socat graphviz unzip && \
     apt-get clean
 
 # Install system LLVM (clang-20) from apt.llvm.org for CI's C/C++ client build and

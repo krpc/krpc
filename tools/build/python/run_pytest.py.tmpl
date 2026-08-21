@@ -25,7 +25,14 @@ def main() -> int:
     pkg_dir = os.path.join(extract_dir, pkg)
     # Make the package under test importable
     sys.path.insert(0, pkg_dir)
-    return pytest.main(["--import-mode=importlib", pkg_dir])
+    # Name the package's own pyproject.toml as the config file, which also makes
+    # the package directory pytest's rootdir. Bazel extracts the sdist inside the
+    # execroot, so left to search for one pytest settles on the repository root:
+    # it would apply //pytest.ini, which configures the integration tests, and
+    # root collection at the execroot, where Bazel creates and deletes scratch
+    # directories while other actions run.
+    config = os.path.join(pkg_dir, "pyproject.toml")
+    return pytest.main(["--import-mode=importlib", "-c", config, pkg_dir])
 
 
 if __name__ == "__main__":
