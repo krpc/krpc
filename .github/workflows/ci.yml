@@ -365,10 +365,14 @@ jobs:
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-serialio
       - name: build-system-tcpip
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-tcpip
+      - name: build-system-localsocket
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip system-localsocket
       - name: build-fetch-serialio
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-serialio
       - name: build-fetch-tcpip
         run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-tcpip
+      - name: build-fetch-localsocket
+        run: client/cnano/test-cmake-linux.sh krpc-cnano-*.zip fetch-localsocket
 
   windows-build-client-cnano-cmake:
     needs: linux-test-client-cnano
@@ -391,12 +395,18 @@ jobs:
       - name: build-system-tcpip
         shell: bash
         run: client/cnano/test-cmake-windows.sh system-tcpip
+      - name: build-system-localsocket
+        shell: bash
+        run: client/cnano/test-cmake-windows.sh system-localsocket
       - name: build-fetch-serialio
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch-serialio
       - name: build-fetch-tcpip
         shell: bash
         run: client/cnano/test-cmake-windows.sh fetch-tcpip
+      - name: build-fetch-localsocket
+        shell: bash
+        run: client/cnano/test-cmake-windows.sh fetch-localsocket
 
   linux-build-client-cnano-vcpkg:
     needs: linux-test-client-cnano

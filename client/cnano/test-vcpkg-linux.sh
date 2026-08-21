@@ -48,7 +48,7 @@ sed -i \
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
 # Install via the overlay port and build the consumer project against it, once per transport the
-# port offers. Where the library is built for TCP/IP the consumer opens a connection, which is
+# port offers. Where the library is built for a socket the consumer opens a connection, which is
 # what proves the transport reaches a program through the package vcpkg installed.
 out=$(pwd)/bazel-bin/client/cnano/test-vcpkg
 rm -rf "$out"
@@ -70,3 +70,4 @@ function run_scenario {
 
 run_scenario serialio "krpc-cnano"
 run_scenario tcpip "krpc-cnano[tcp]"
+run_scenario localsocket "krpc-cnano[localsocket]"
