@@ -87,8 +87,8 @@ the client disconnects.
 
 A stream can be created for any method call by calling :meth:`Connection.AddStream` and passing it
 a lambda expression that invokes the desired method. This lambda expression must take zero arguments
-and be either a method call expression or a parameter call expression. It returns a stream object of
-type :type:`Stream`. The most recent value of the stream can be obtained by calling
+and be a method call or property access, which may be multiplied by a constant. It returns a stream
+object of type :type:`Stream`. The most recent value of the stream can be obtained by calling
 :meth:`Stream.Get`. A stream can be stopped and removed from the server by calling
 :meth:`Stream.Remove` on the stream object. All of a clients streams are automatically stopped when
 it disconnects.

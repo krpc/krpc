@@ -1,4 +1,5 @@
 ## [v0.7.0] - unreleased
+- Stream expressions can include multiplication (#1062)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
 - Reduce the cost of a remote procedure call. A value is encoded and decoded without a

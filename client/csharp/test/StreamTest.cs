@@ -70,6 +70,76 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void MultiplyByOne ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            obj.IntProperty = 42;
+            var x = Connection.AddStream (() => obj.IntProperty * 1);
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (42, x.Get ());
+                Wait ();
+            }
+            Assert.AreEqual (
+                Connection.AddStream (() => obj.IntProperty), x);
+            var call = Connection.GetCall (() => obj.IntProperty * 1);
+            Assert.AreEqual (
+                Connection.GetCall (() => obj.IntProperty).Procedure, call.Procedure);
+            Assert.Throws<ArgumentException> (
+                () => Connection.GetCall (() => obj.IntProperty * 2));
+        }
+
+        [Test]
+        public void MultiplyByConstant ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            obj.IntProperty = 42;
+            var x = Connection.AddStream (() => obj.IntProperty * 2);
+            var y = Connection.AddStream (() => 3 * obj.IntProperty);
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (84, x.Get ());
+                Assert.AreEqual (126, y.Get ());
+                Wait ();
+            }
+            Assert.AreNotEqual (
+                Connection.AddStream (() => obj.IntProperty), x);
+            Assert.AreEqual (
+                Connection.AddStream (() => obj.IntProperty * 2), x);
+        }
+
+        [Test]
+        public void MultiplyPromotesType ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            obj.IntProperty = 42;
+            var x = Connection.AddStream (() => obj.IntProperty * 1.0);
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (42.0, x.Get ());
+                Wait ();
+            }
+        }
+
+        [Test]
+        public void MultiplyMethodCall ()
+        {
+            var x = Connection.AddStream (
+                () => Connection.TestService ().StringToInt32 ("42") * 1);
+            for (int i = 0; i < 5; i++) {
+                Assert.AreEqual (42, x.Get ());
+                Wait ();
+            }
+        }
+
+        [Test]
+        public void MultiplyTwoRemoteCalls ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            obj.IntProperty = 42;
+            var exn = Assert.Throws<ArgumentException> (
+                          () => Connection.AddStream (() => obj.IntProperty * obj.IntProperty));
+            Assert.That (exn.Message, Does.Contain ("Cannot multiply two remote calls"));
+        }
+
+        [Test]
         public void NullableValue ()
         {
             var x = Connection.AddStream (() => Connection.TestService ().EchoNullableInt (null));
