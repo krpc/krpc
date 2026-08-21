@@ -283,6 +283,8 @@ namespace KRPC.Client
                 throw new ArgumentException ("Invalid expression. Cannot multiply two remote calls.");
             if (rpc == null)
                 throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
+            if (!ExpressionUtils.IsConstantMultiplyWrapper (expression.Body, rpc))
+                throw new ArgumentException ("Invalid expression. The factor must be a constant.");
 
             var methodCallExpression = rpc as MethodCallExpression;
             if (methodCallExpression != null)

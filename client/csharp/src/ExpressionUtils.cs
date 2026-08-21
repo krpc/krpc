@@ -70,6 +70,29 @@ namespace KRPC.Client
             return true;
         }
 
+        // The non-call side of a multiply must be a constant (or a conversion of one).
+        internal static bool IsConstantMultiplyWrapper (Expression body, Expression rpc)
+        {
+            if (ReferenceEquals (body, rpc))
+                return true;
+
+            var unary = body as UnaryExpression;
+            if (unary != null && (unary.NodeType == ExpressionType.Convert ||
+                unary.NodeType == ExpressionType.ConvertChecked))
+                return IsConstantMultiplyWrapper (unary.Operand, rpc);
+
+            var binary = body as BinaryExpression;
+            if (binary != null && (binary.NodeType == ExpressionType.Multiply ||
+                binary.NodeType == ExpressionType.MultiplyChecked)) {
+                if (IsConstantMultiplyWrapper (binary.Left, rpc))
+                    return IsConstantFactor (binary.Right);
+                if (IsConstantMultiplyWrapper (binary.Right, rpc))
+                    return IsConstantFactor (binary.Left);
+            }
+
+            return false;
+        }
+
         internal static bool IsIdentityWrapper (Expression body, Expression rpc)
         {
             if (ReferenceEquals (body, rpc))
@@ -108,16 +131,17 @@ namespace KRPC.Client
             return member.GetCustomAttributes (typeof(RPCAttribute), false).Length == 1;
         }
 
+        static bool IsConstantFactor (Expression expression)
+        {
+            object value;
+            return TryConstantValue (expression, out value);
+        }
+
         static bool IsMultiplicativeIdentity (Expression expression)
         {
             object value;
-            try {
-                var lambda = Expression.Lambda<Func<object>> (
-                                 Expression.Convert (expression, typeof(object)));
-                value = lambda.Compile () ();
-            } catch (System.Exception) {
+            if (!TryConstantValue (expression, out value) || value == null)
                 return false;
-            }
             if (value is int)
                 return (int)value == 1;
             if (value is long)
@@ -131,6 +155,24 @@ namespace KRPC.Client
             if (value is ulong)
                 return (ulong)value == 1ul;
             return false;
+        }
+
+        static bool TryConstantValue (Expression expression, out object value)
+        {
+            while (true) {
+                var unary = expression as UnaryExpression;
+                if (unary == null || (unary.NodeType != ExpressionType.Convert &&
+                    unary.NodeType != ExpressionType.ConvertChecked))
+                    break;
+                expression = unary.Operand;
+            }
+            var constant = expression as ConstantExpression;
+            if (constant == null) {
+                value = null;
+                return false;
+            }
+            value = constant.Value;
+            return true;
         }
 
         sealed class Replacer : ExpressionVisitor

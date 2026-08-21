@@ -140,6 +140,20 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void MultiplyByVariable ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("jeb");
+            obj.IntProperty = 42;
+            int n = 1;
+            var exn = Assert.Throws<ArgumentException> (
+                          () => Connection.AddStream (() => obj.IntProperty * n));
+            Assert.That (exn.Message, Does.Contain ("The factor must be a constant"));
+            n = 2;
+            Assert.Throws<ArgumentException> (
+                () => Connection.AddStream (() => obj.IntProperty * n));
+        }
+
+        [Test]
         public void NullableValue ()
         {
             var x = Connection.AddStream (() => Connection.TestService ().EchoNullableInt (null));
