@@ -81,7 +81,9 @@
     <Compile Include="Service\GameStateTest.cs" />
     <Compile Include="Service\ITestService.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.cs" />
+    <Compile Include="Service\KRPC\ExpressionTreePrinterTest.cs" />
     <Compile Include="Service\KRPC\KRPCTest.cs" />
+    <Compile Include="Service\KRPC\TypeTest.cs" />
     <Compile Include="Service\MessageAssert.cs" />
     <Compile Include="Service\MortalObject.cs" />
     <Compile Include="Service\ObjectStoreTest.cs" />
@@ -89,6 +91,7 @@
     <Compile Include="Service\ProcedureParameterTest.cs" />
     <Compile Include="Service\ScannerTest.cs" />
     <Compile Include="Service\ServicesTest.cs" />
+    <Compile Include="Service\StdLib\StdLibTest.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\TestService2.cs" />
     <Compile Include="Service\TestService3.cs" />

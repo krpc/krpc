@@ -327,6 +327,7 @@ csharp_nunit_test(
         "test/EventTest.cs",
         "test/ExpressionCompilerTest.cs",
         "test/ExpressionStreamTest.cs",
+        "test/ExpressionTreeTest.cs",
         "test/ObjectTest.cs",
         "test/ServerTestCase.cs",
         "test/StreamTest.cs",

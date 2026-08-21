@@ -32,6 +32,9 @@
 #include <time.h>
 #endif
 
+/* The generated TestService header names KRPC::Expression, whose type is declared here. */
+#include <krpc_cnano/services/krpc.h>
+
 #include "services/test_service.h"
 
 /* How long one timed loop should run for. Long enough that the clock and a stray scheduling

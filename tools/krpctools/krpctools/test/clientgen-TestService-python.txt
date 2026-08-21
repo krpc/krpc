@@ -9,6 +9,7 @@ from krpc.types import TypeBase, ClassBase, WrappedClass, DocEnum, StaticMethod
 from krpc.event import Event
 if TYPE_CHECKING:
     from krpc.services import Client
+from krpc.services import krpc as _service_krpc
 
 
 class DeprecatedEnum(DocEnum):
@@ -914,6 +915,32 @@ class TestService:
             "DoubleToString",
             [value],
             [self._client._types.double_type],
+            self._client._types.string_type
+        )
+
+    def dump_expression_tree(self, expression: _service_krpc.Expression) -> str:
+        """
+        Returns a dump of the expression tree of the given server side expression,
+        as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+        verify the trees that the expression API generates.
+        """
+        return self._client._invoke(
+            "TestService",
+            "DumpExpressionTree",
+            [expression],
+            [self._client._types.class_type("KRPC", "Expression")],
+            self._client._types.string_type
+        )
+
+    def _return_type_dump_expression_tree(self) -> TypeBase:
+        return self._client._types.string_type
+
+    def _build_call_dump_expression_tree(self, expression: _service_krpc.Expression) -> KRPC_pb2.ProcedureCall:
+        return self._client._build_call(
+            "TestService",
+            "DumpExpressionTree",
+            [expression],
+            [self._client._types.class_type("KRPC", "Expression")],
             self._client._types.string_type
         )
 

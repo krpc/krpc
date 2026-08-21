@@ -746,6 +746,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "throw_argument_exception",
                     "throw_argument_null_exception",
                     "throw_argument_out_of_range_exception",
+                    "dump_expression_tree",
                     "on_timer",
                     "on_timer_using_lambda",
                     "deprecated_procedure",

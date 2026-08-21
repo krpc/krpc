@@ -245,6 +245,7 @@ client_tests = [
     "krpc/test/test_event.py",
     "krpc/test/test_expression.py",
     "krpc/test/test_expressioncompiler.py",
+    "krpc/test/test_expressiontree.py",
     "krpc/test/test_objects.py",
     "krpc/test/test_stream.py",
     "krpc/test/test_threading.py",
