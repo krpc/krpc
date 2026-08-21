@@ -323,6 +323,23 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// A conditional value. Evaluates to the second argument if the condition is
+        /// true, and the third argument otherwise.
+        /// Numeric operands of differing types are converted to a common type.
+        /// </summary>
+        /// <param name="condition">The condition. Must evaluate to a boolean value.</param>
+        /// <param name="ifTrue">The value when the condition is true.</param>
+        /// <param name="ifFalse">The value when the condition is false.</param>
+        [KRPCMethod]
+        public static Expression Conditional(Expression condition, Expression ifTrue, Expression ifFalse)
+        {
+            LinqExpression left = ifTrue;
+            LinqExpression right = ifFalse;
+            PromoteOperands (ref left, ref right);
+            return new Expression(LinqExpression.Condition(condition, left, right));
+        }
+
+        /// <summary>
         /// Numerical addition.
         /// Numeric operands of differing types are converted to a common type.
         /// </summary>

@@ -243,6 +243,24 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void Conditional ()
+        {
+            Assert.AreEqual (1, Eval<int> (Expression.Conditional (
+                Expression.ConstantBool (true),
+                Expression.ConstantInt (1), Expression.ConstantInt (2))));
+            Assert.AreEqual (2, Eval<int> (Expression.Conditional (
+                Expression.ConstantBool (false),
+                Expression.ConstantInt (1), Expression.ConstantInt (2))));
+            // Branches of differing numeric types promote to a common type
+            Assert.AreEqual (2.5, Eval<double> (Expression.Conditional (
+                Expression.ConstantBool (false),
+                Expression.ConstantInt (1), Expression.ConstantDouble (2.5))));
+            Assert.AreEqual ("a", Eval<string> (Expression.Conditional (
+                Expression.ConstantBool (true),
+                Expression.ConstantString ("a"), Expression.ConstantString ("b"))));
+        }
+
+        [Test]
         public void NumericPromotion ()
         {
             // Mixed-type arithmetic promotes to the wider operand type
