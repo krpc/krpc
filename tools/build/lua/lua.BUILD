@@ -7,6 +7,13 @@ supplies its own linit.c in place of the one here.
 
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
+# Upstream sources, compiled unmodified. The warnings the toolchain's -Wall finds in
+# them are not ours to fix.
+_NO_WARNINGS = select({
+    "@platforms//os:windows": ["/w"],
+    "//conditions:default": ["-w"],
+})
+
 cc_library(
     name = "lua",
     srcs = glob(
@@ -23,6 +30,7 @@ cc_library(
         ],
     ),
     hdrs = glob(["src/*.h"]),
+    copts = _NO_WARNINGS,
     defines = select({
         # MSVC deprecates the C library functions lua calls throughout (fopen, getenv,
         # tmpnam), which is otherwise a warning on nearly every file.
@@ -51,6 +59,7 @@ cc_library(
     name = "interpreter",
     srcs = ["src/lua.c"],
     alwayslink = True,
+    copts = _NO_WARNINGS,
     visibility = ["//visibility:public"],
     deps = [":lua"],
 )
