@@ -28,8 +28,8 @@ The handshake is identical to :doc:`tcpip`, differing only in how the connection
 
 1. Open a unix domain socket to the path the RPC server is listening on. The server window shows
    the path, which by default is ``krpc/rpc`` inside the directory named by the
-   ``XDG_RUNTIME_DIR`` environment variable, or by ``LOCALAPPDATA`` on Windows, falling back to
-   ``krpc-<user>/rpc`` inside the system temporary directory.
+   ``XDG_RUNTIME_DIR`` environment variable, or by ``LOCALAPPDATA`` on Windows. See
+   `Default Socket Paths`_ for the whole rule.
 
 2. Send a ``ConnectionRequest`` message with its ``type`` field set to ``ConnectionRequest.RPC``,
    exactly as for TCP/IP.
@@ -46,6 +46,29 @@ As for :doc:`tcpip`, open a second connection, this time to the stream server's 
 
 Connecting to the stream server is optional. If the client doesn't require stream functionality,
 there is no need to connect.
+
+Default Socket Paths
+--------------------
+
+The server and its clients each work the default paths out for themselves, without either telling
+the other, so they only meet if they agree at every step. A client that computes a path by hand
+follows the same rule, for a socket named ``rpc`` or ``stream``:
+
+1. If ``XDG_RUNTIME_DIR`` is set and not empty, the path is ``krpc/<name>`` inside it. On Windows
+   ``LOCALAPPDATA`` is read instead, as there is no runtime directory there.
+
+2. Otherwise the path is ``krpc-<user>/<name>`` inside ``/tmp``, where ``<user>`` is the name of
+   the account running the process. The directory is fixed rather than the one ``TMPDIR`` asks
+   for, because the server and the client are separate processes and that variable moves the
+   directory for one of them and not the other. Windows always names a directory in
+   ``LOCALAPPDATA`` and so never reaches this step, which is why it is the one place the system
+   temporary directory is used.
+
+The user name is that of the account running the process, taken from the account database rather
+than from ``USER`` alone, which is unset in a process started without a login shell. A client whose
+language leaves it nothing but the environment to ask, and finds nothing there, reports that rather
+than building a path with the name left out, which would be shared between accounts instead of
+belonging to one.
 
 Socket Paths
 ------------

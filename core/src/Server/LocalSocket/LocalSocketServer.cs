@@ -110,17 +110,22 @@ namespace KRPC.Server.LocalSocket
         /// the user running the game, so that sockets are neither shared between
         /// accounts nor left in a directory anyone can write to. Windows has no runtime
         /// directory for this, so its per-user application data directory stands in.
+        ///
+        /// A client works the same path out for itself, so the two only meet if they
+        /// agree on every step. The fallback therefore names a fixed directory rather
+        /// than asking for the temporary one, which TMPDIR moves for one process and not
+        /// the other. Windows always names a directory in LOCALAPPDATA and so never
+        /// reaches the fallback, leaving it nothing fixed to insist on there.
         /// </summary>
         public static string DefaultPath (string name)
         {
             var windows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             var directory = Environment.GetEnvironmentVariable (
                 windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
-            if (string.IsNullOrEmpty (directory))
-                directory = Path.Combine (Path.GetTempPath (), "krpc-" + Environment.UserName);
-            else
-                directory = Path.Combine (directory, "krpc");
-            return Path.Combine (directory, name);
+            if (!string.IsNullOrEmpty (directory))
+                return Path.Combine (directory, "krpc", name);
+            var temporary = windows ? Path.GetTempPath () : "/tmp";
+            return Path.Combine (temporary, "krpc-" + Environment.UserName, name);
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
+import getpass
 import os
 import socket
-import tempfile
 from google.protobuf.internal.encoder import _VarintEncoder
 from google.protobuf.internal.decoder import _DecodeVarint
 from krpc.schema import KRPC_pb2 as KRPC
@@ -49,7 +49,7 @@ def default_path(name):
     directory = os.environ.get("XDG_RUNTIME_DIR")
     if directory:
         return os.path.join(directory, "krpc", name)
-    return os.path.join(tempfile.gettempdir(), "krpc-" + os.environ["USER"], name)
+    return os.path.join("/tmp", "krpc-" + getpass.getuser(), name)
 
 
 # Open a unix domain socket to the RPC server

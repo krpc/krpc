@@ -272,14 +272,16 @@ public class Connection implements AutoCloseable {
 
   /**
    * A default path for a socket of the given name, matching the one the server uses unless
-   * it was configured with another.
+   * it was configured with another. The fallback names a fixed directory rather than asking
+   * for the temporary one, which java.io.tmpdir and TMPDIR move for the client and not the
+   * server.
    */
   private static String defaultPath(String name) {
     boolean windows = System.getProperty("os.name", "").startsWith("Windows");
     String directory = System.getenv(windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
     if (directory == null || directory.isEmpty()) {
-      return Paths.get(System.getProperty("java.io.tmpdir"),
-          "krpc-" + System.getProperty("user.name"), name).toString();
+      String temporary = windows ? System.getProperty("java.io.tmpdir") : "/tmp";
+      return Paths.get(temporary, "krpc-" + System.getProperty("user.name"), name).toString();
     }
     return Paths.get(directory, "krpc", name).toString();
   }

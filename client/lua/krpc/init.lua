@@ -16,13 +16,29 @@ local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
 
 -- A default path for a socket of the given name, matching the one the server uses unless
--- it was configured with another.
+-- it was configured with another. Windows has no runtime directory for this, so its
+-- per-user application data directory stands in. The fallback names a fixed directory
+-- rather than the temporary one, which TMPDIR moves for the client and not the server.
 local function default_path(name)
-  local directory = os.getenv('XDG_RUNTIME_DIR')
+  local windows = package.config:sub(1, 1) == '\\'
+  local separator = windows and '\\' or '/'
+  local directory = os.getenv(windows and 'LOCALAPPDATA' or 'XDG_RUNTIME_DIR')
   if directory ~= nil and directory ~= '' then
-    return directory .. '/krpc/' .. name
+    return directory .. separator .. 'krpc' .. separator .. name
   end
-  return '/tmp/krpc-' .. (os.getenv('USER') or '') .. '/' .. name
+  local temporary = '/tmp'
+  local user = os.getenv('USER') or os.getenv('LOGNAME')
+  if windows then
+    temporary = os.getenv('TMP') or os.getenv('TEMP') or '.'
+    user = os.getenv('USERNAME')
+  end
+  -- Lua has the environment and nothing else to ask, and a path without a user name in it
+  -- would be shared between accounts rather than belonging to this one
+  if user == nil or user == '' then
+    error('Could not work out which user this is, so there is no default socket path to ' ..
+          'connect to; pass rpc_path instead')
+  end
+  return temporary .. separator .. 'krpc-' .. user .. separator .. name
 end
 
 -- The handshake is the same whatever carries it

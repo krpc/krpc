@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using KRPC.Server.LocalSocket;
@@ -81,6 +82,41 @@ namespace KRPC.Test.Server.LocalSocket
                 var path = LocalSocketServer.DefaultPath (name);
                 Assert.IsTrue (path.EndsWith (name, StringComparison.Ordinal));
                 Assert.IsTrue (LocalSocketServer.PathLength (path) <= LocalSocketServer.MaximumPathLength);
+            }
+        }
+
+        [Test]
+        [Platform (Exclude = "Win", Reason = "the directory it falls back to is one only POSIX has")]
+        public void DefaultPathFallsBackToAFixedDirectory ()
+        {
+            // A client works the same path out in a process of its own, where TMPDIR may
+            // well say something else, so the fallback cannot be whichever temporary
+            // directory this process was pointed at
+            var runtimeDirectory = Environment.GetEnvironmentVariable ("XDG_RUNTIME_DIR");
+            var temporaryDirectory = Environment.GetEnvironmentVariable ("TMPDIR");
+            try {
+                Environment.SetEnvironmentVariable ("XDG_RUNTIME_DIR", null);
+                Environment.SetEnvironmentVariable ("TMPDIR", "/somewhere/else");
+                Assert.AreEqual ("/tmp/krpc-" + Environment.UserName + "/rpc",
+                                 LocalSocketServer.DefaultPath ("rpc"));
+            } finally {
+                Environment.SetEnvironmentVariable ("XDG_RUNTIME_DIR", runtimeDirectory);
+                Environment.SetEnvironmentVariable ("TMPDIR", temporaryDirectory);
+            }
+        }
+
+        [Test]
+        public void DefaultPathUsesTheRuntimeDirectoryWhenThereIsOne ()
+        {
+            var variable = Environment.OSVersion.Platform == PlatformID.Win32NT ?
+                "LOCALAPPDATA" : "XDG_RUNTIME_DIR";
+            var directory = Environment.GetEnvironmentVariable (variable);
+            try {
+                Environment.SetEnvironmentVariable (variable, Path.Combine ("/run", "user"));
+                Assert.AreEqual (Path.Combine ("/run", "user", "krpc", "rpc"),
+                                 LocalSocketServer.DefaultPath ("rpc"));
+            } finally {
+                Environment.SetEnvironmentVariable (variable, directory);
             }
         }
     }

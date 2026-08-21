@@ -25,12 +25,15 @@ DEFAULT_STREAM_PATH = ""
 def _default_path(name: str) -> str:
     """A default path for a socket of the given name, matching the one the server uses
     unless it was configured with another. Windows has no runtime directory for this, so
-    its per-user application data directory stands in."""
-    variable = "LOCALAPPDATA" if sys.platform == "win32" else "XDG_RUNTIME_DIR"
-    directory = os.environ.get(variable)
+    its per-user application data directory stands in. The fallback names a fixed
+    directory rather than asking for the temporary one, which TMPDIR moves for the client
+    and not the server."""
+    windows = sys.platform == "win32"
+    directory = os.environ.get("LOCALAPPDATA" if windows else "XDG_RUNTIME_DIR")
     if directory:
         return os.path.join(directory, "krpc", name)
-    return os.path.join(tempfile.gettempdir(), "krpc-" + getpass.getuser(), name)
+    temporary = tempfile.gettempdir() if windows else "/tmp"
+    return os.path.join(temporary, "krpc-" + getpass.getuser(), name)
 
 
 def connect(

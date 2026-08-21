@@ -102,19 +102,19 @@ namespace KRPC.Client
 
         /// <summary>
         /// A default path for a socket of the given name, matching the one the server uses
-        /// unless it was configured with another.
+        /// unless it was configured with another. The fallback names a fixed directory
+        /// rather than asking for the temporary one, which TMPDIR moves for the client
+        /// and not the server.
         /// </summary>
         static string DefaultPath (string name)
         {
             var windows = Environment.OSVersion.Platform == PlatformID.Win32NT;
             var directory = Environment.GetEnvironmentVariable (
                 windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
-            if (string.IsNullOrEmpty (directory))
-                directory = System.IO.Path.Combine (System.IO.Path.GetTempPath (),
-                    "krpc-" + Environment.UserName);
-            else
-                directory = System.IO.Path.Combine (directory, "krpc");
-            return System.IO.Path.Combine (directory, name);
+            if (!string.IsNullOrEmpty (directory))
+                return System.IO.Path.Combine (directory, "krpc", name);
+            var temporary = windows ? System.IO.Path.GetTempPath () : "/tmp";
+            return System.IO.Path.Combine (temporary, "krpc-" + Environment.UserName, name);
         }
 
         /// <summary>
