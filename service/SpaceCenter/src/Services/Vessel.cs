@@ -771,7 +771,7 @@ namespace KRPC.SpaceCenter.Services
         /// in the vessels reference frame (<see cref="ReferenceFrame"/>).
         /// Returns the 3x3 matrix as a list of elements, in row-major order.
         /// </summary>
-        [KRPCProperty]
+        [KRPCProperty (GameScene = GameScene.Flight)]
         public IList<double> InertiaTensor {
             get { return ComputeInertiaTensor ().ToList (); }
         }

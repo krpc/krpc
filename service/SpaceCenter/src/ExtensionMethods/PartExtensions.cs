@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -62,29 +63,112 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
+        /// Whether the part's rigidbody is the one physics uses. In the editor a part
+        /// still has a rigidbody, but the game leaves it as an unconfigured placeholder
+        /// weighing Unity's default of one tonne.
+        /// </summary>
+        public static bool HasPhysicsBody (this Part part)
+        {
+            return part.rb != null && !HighLogic.LoadedSceneIsEditor;
+        }
+
+        /// <summary>
+        /// The mass of the part, including resources, crew and physicsless children,
+        /// in tonnes. A physicsless part reports zero; its mass is on the nearest
+        /// ancestor that is simulated, as it is on that ancestor's rigidbody in flight.
+        /// Launch clamps are included, so a vessel's inertia sees them the way
+        /// flight does.
+        /// </summary>
+        public static float PhysicsMass (this Part part)
+        {
+            if (part.physicalSignificance == Part.PhysicalSignificance.NONE)
+                return 0f;
+            if (part.HasPhysicsBody ())
+                return part.rb.mass;
+            part.UpdateMass ();
+            return part.mass + part.GetResourceMass () + part.CrewMass () +
+                part.PhysicslessChildMass ();
+        }
+
+        /// <summary>
+        /// The mass of the physicsless parts hanging off the part, in tonnes. Physics
+        /// gives their mass to the nearest ancestor it simulates, and a physicsless part
+        /// can carry more of them, so the whole subtree counts.
+        /// </summary>
+        static float PhysicslessChildMass (this Part part)
+        {
+            float mass = 0f;
+            var children = part.children;
+            for (int i = 0; i < children.Count; i++) {
+                var child = children [i];
+                if (child.physicalSignificance != Part.PhysicalSignificance.NONE)
+                    continue;
+                child.UpdateMass ();
+                mass += child.mass + child.GetResourceMass () + child.CrewMass () +
+                    child.PhysicslessChildMass ();
+            }
+            return mass;
+        }
+
+        /// <summary>
+        /// The mass of the crew in the part, in tonnes, including what they carry. A
+        /// Kerbal's inventory and resources are part of the mass physics sees in flight,
+        /// and of the figure the game gives for a vessel in the editor.
+        /// </summary>
+        public static float CrewMass (this Part part)
+        {
+            float mass = 0f;
+            var crew = AssignedCrew (part);
+            for (int i = 0; i < crew.Count; i++) {
+                var member = crew [i];
+                if (member == null)
+                    continue;
+                mass += PhysicsGlobals.KerbalCrewMass + member.InventoryMass () + member.ResourceMass ();
+            }
+            return mass;
+        }
+
+        /// <summary>
         /// The mass of the part, including resources, in kg.
         /// </summary>
         public static float WetMass (this Part part)
         {
             if (part.IsMassless ())
                 return 0f;
-            // A part only has a rigidbody once physics is running. In the editor the
-            // part's own mass fields carry the same figures.
-            if (part.rb != null)
-                return part.rb.mass * 1000f;
-            return (part.mass + part.GetResourceMass ()) * 1000f;
+            return part.PhysicsMass () * 1000f;
         }
 
         /// <summary>
-        /// The mass of the part, excluding resources.
+        /// The mass of the part, excluding resources, in kg. Includes crew, as the
+        /// rigidbody mass in flight does.
         /// </summary>
         public static float DryMass (this Part part)
         {
             if (part.IsMassless ())
                 return 0f;
-            if (part.rb != null)
+            if (part.HasPhysicsBody ())
                 return Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f);
-            return Mathf.Max (0f, part.mass * 1000f);
+            part.UpdateMass ();
+            return Mathf.Max (0f, (part.mass + part.CrewMass () + part.PhysicslessChildMass ()) * 1000f);
+        }
+
+        static readonly ProtoCrewMember [] NoCrew = new ProtoCrewMember [0];
+
+        /// <summary>
+        /// The crew who occupy the part. In the editor that is the assignment on the
+        /// craft's manifest, which is what the game will seat when the vessel is launched.
+        /// </summary>
+        static IList<ProtoCrewMember> AssignedCrew (Part part)
+        {
+            if (!HighLogic.LoadedSceneIsEditor)
+                return part.protoModuleCrew;
+            var manifest = ShipConstruction.ShipManifest;
+            if (manifest == null)
+                return NoCrew;
+            var partManifest = manifest.GetPartCrewManifest (part.craftID);
+            if (partManifest == null)
+                return NoCrew;
+            return partManifest.GetPartCrew () ?? NoCrew;
         }
 
         /// <summary>

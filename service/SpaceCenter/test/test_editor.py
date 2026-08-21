@@ -26,6 +26,17 @@ class TestEditor(krpctest.TestCase):
         self.assertEqual(3, vessel.crew_capacity)
         self.assertGreater(min(vessel.size), 0)
 
+    def test_mass_properties(self):
+        vessel = self.space_center.editor.vessel
+        moi = vessel.moment_of_inertia
+        self.assertEqual(3, len(moi))
+        self.assertGreater(min(moi), 0)
+        tensor = vessel.inertia_tensor
+        self.assertEqual(9, len(tensor))
+        self.assertAlmostEqual(moi[0], tensor[0], delta=1)
+        self.assertAlmostEqual(moi[1], tensor[4], delta=1)
+        self.assertAlmostEqual(moi[2], tensor[8], delta=1)
+
     def test_name_and_description(self):
         vessel = self.space_center.editor.vessel
         name = vessel.name
@@ -120,6 +131,46 @@ class TestEditorLaunchVessel(krpctest.TestCase):
         editor.vessel.name = "Renamed In Editor"
         editor.launch_vessel("LaunchPad")
         self.assertEqual("Renamed In Editor", self.space_center.active_vessel.name)
+
+    def test_mass_properties_match_flight_staging(self):
+        # Staging.craft has a mix of part kinds; a point-mass model can look
+        # plausible until it is compared with the same vessel in flight.
+        self._assert_mass_properties_match_flight("Staging")
+
+    def test_mass_properties_match_flight_rover(self):
+        # A rover is small enough that a part's own inertia is most of the
+        # vessel figure rather than a correction to the parallel-axis term.
+        self._assert_mass_properties_match_flight("Rover")
+
+    def test_part_masses_match_flight(self):
+        # Parts.craft carries the two cases a vessel-wide figure hides: physicsless
+        # parts, whose mass physics puts on the part they hang off, and a crewed pod,
+        # where a Kerbal weighs what they carry as well as themselves.
+        self.enter_editor("VAB", craft="Parts")
+        editor_parts = self.space_center.editor.vessel.parts.all
+        editor_mass = sum(part.mass for part in editor_parts)
+        self.space_center.editor.launch_vessel("LaunchPad")
+        flight_parts = self.space_center.active_vessel.parts.all
+        self.assertAlmostEqual(
+            editor_mass, sum(part.mass for part in flight_parts), delta=1
+        )
+
+    def _assert_mass_properties_match_flight(self, craft):
+        self.enter_editor("VAB", craft=craft)
+        editor_vessel = self.space_center.editor.vessel
+        mass = editor_vessel.mass
+        moi = editor_vessel.moment_of_inertia
+        self.space_center.editor.launch_vessel("LaunchPad")
+        flight = self.space_center.active_vessel
+        self.assertEqual(craft, flight.name)
+        self.assertAlmostEqual(mass, flight.mass, delta=1)
+        flight_moi = flight.moment_of_inertia
+        for i in range(3):
+            self.assertAlmostEqual(
+                moi[i],
+                flight_moi[i],
+                delta=max(abs(moi[i]) * 0.05, 1),
+            )
 
 
 if __name__ == "__main__":

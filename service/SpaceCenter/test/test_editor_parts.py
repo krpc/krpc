@@ -76,6 +76,14 @@ class TestEditorParts(krpctest.TestCase):
         self.assertGreater(part.mass, 0)
         self.assertGreater(part.dry_mass, 0)
         self.assertGreaterEqual(part.mass, part.dry_mass)
+        # Unity's unconfigured rigidbody weighs one tonne; a command pod is heavier.
+        self.assertGreater(part.dry_mass, 2000)
+        self.assertNotAlmostEqual(1000, part.mass, delta=1)
+        moi = part.moment_of_inertia
+        self.assertEqual(3, len(moi))
+        self.assertGreater(min(moi), 0)
+        tensor = part.inertia_tensor
+        self.assertEqual(9, len(tensor))
         self.assertGreater(part.impact_tolerance, 0)
         self.assertGreater(part.max_temperature, 0)
         self.assertGreater(part.max_skin_temperature, 0)
@@ -94,7 +102,6 @@ class TestEditorParts(krpctest.TestCase):
             "thermal_mass",
             "dynamic_pressure",
             "shielded",
-            "moment_of_inertia",
             "reference_frame",
         ):
             self.assertRaises(RuntimeError, getattr, part, name)

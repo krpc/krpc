@@ -67,8 +67,21 @@
     already has rather than loading a new one, so a part it leaves alone keeps working.
     Leaving the editor destroys the vessel it had open, and everything reached through
     it (#1051)
+  - Add `EditorVessel.CenterOfMass`, `EditorVessel.MomentOfInertia` and
+    `EditorVessel.InertiaTensor`, which report how the mass of the vessel under
+    construction is distributed, as `Vessel` does in flight. A part's inertia is
+    not available from physics in the editor, so it is worked out from the part's
+    colliders. `Part.MomentOfInertia` and `Part.InertiaTensor` are available in
+    the editor as well (#1059)
+  - `Part.Mass` and `Part.DryMass` no longer report 1000 kg for every part in the
+    editor. The rigidbody the game attaches there is an unconfigured placeholder
+    weighing Unity's default of one tonne, and the mass is now taken from the
+    part itself, including crew (#1059)
 
 - Vessels and crew
+  - `Vessel.InertiaTensor` is restricted to the flight scene, as
+    `Vessel.MomentOfInertia` already is. Outside flight it summed the parts'
+    rigidbodies and returned zeros (#1059)
   - Add `CrewMember.EVA`, which sends a Kerbal outside through the hatch of the part it is
     in and returns the vessel it becomes (#319)
   - Add `Vessel.Terminate`, which removes a vessel and its parts from the game without

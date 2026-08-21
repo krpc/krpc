@@ -5,6 +5,7 @@ using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using UnityEngine;
 using Parts = KRPC.SpaceCenter.Services.Parts;
 using Tuple3 = System.Tuple<double, double, double>;
 
@@ -110,6 +111,49 @@ namespace KRPC.SpaceCenter.Services
                 InternalShipConstruct.GetShipMass (out dryMass, out fuelMass, ShipConstruction.ShipManifest);
                 return dryMass * 1000f;
             }
+        }
+
+        /// <summary>
+        /// The position of the center of mass of the vessel, in the given reference frame.
+        /// </summary>
+        /// <returns>The position as a vector.</returns>
+        /// <param name="referenceFrame">The reference frame that the returned
+        /// position vector is in.</param>
+        /// <remarks>
+        /// This is the editor scene's world-space center of mass expressed in
+        /// <paramref name="referenceFrame"/>. A celestial body frame is not a
+        /// position on that body: the editor is not placed in the solar system
+        /// the way a vessel in flight is.
+        /// </remarks>
+        [KRPCMethod]
+        public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
+        {
+            return referenceFrame.PositionFromWorldSpace (InternalShipConstruct.WorldCenterOfMass ()).ToTuple ();
+        }
+
+        /// <summary>
+        /// The moment of inertia of the vessel around its center of mass in <math>kg.m^2</math>.
+        /// The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+        /// directions of the root part's reference transform respectively.
+        /// </summary>
+        [KRPCProperty]
+        public Tuple3 MomentOfInertia {
+            get { return ComputeInertiaTensor ().Diagonal ().ToTuple (); }
+        }
+
+        /// <summary>
+        /// The inertia tensor of the vessel around its center of mass, in the root
+        /// part's reference transform. Returns the 3x3 matrix as a list of elements,
+        /// in row-major order.
+        /// </summary>
+        [KRPCProperty]
+        public IList<double> InertiaTensor {
+            get { return ComputeInertiaTensor ().ToList (); }
+        }
+
+        Matrix4x4 ComputeInertiaTensor ()
+        {
+            return InternalShipConstruct.ComputeInertiaTensor ().MultiplyScalar (1000f);
         }
 
         /// <summary>
