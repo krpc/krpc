@@ -31,9 +31,9 @@ namespace KRPC.SpaceCenter.Services
         readonly global::CelestialBody body;
         readonly Guid vesselId;
         readonly ManeuverNode node;
-        readonly uint partId;
-        // The part object is what finds the KSP part again and says whether it is still
-        // there; the identifier beside it is what the frame is identified by.
+        // The part object finds the KSP part again, says whether it is still
+        // there, and is what the frame is identified by. A part is named by
+        // flight id in flight and by craft id in the editor.
         readonly Parts.Part servicePart;
         ModuleRef dockingPortRef;
         readonly Thruster thruster;
@@ -59,14 +59,10 @@ namespace KRPC.SpaceCenter.Services
             this.body = body;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
-            if (part != null) {
-                partId = part.flightID;
+            if (part != null)
                 servicePart = new Parts.Part (part);
-            }
             if (dockingPort != null) {
-                var dockingPortPart = dockingPort.part;
-                partId = dockingPortPart.flightID;
-                servicePart = new Parts.Part (dockingPortPart);
+                servicePart = new Parts.Part (dockingPort.part);
                 dockingPortRef = ModuleRef.ForModule (dockingPort);
             }
             this.thruster = thruster;
@@ -99,7 +95,7 @@ namespace KRPC.SpaceCenter.Services
             body == other.body &&
             vesselId == other.vesselId &&
             node == other.node &&
-            partId == other.partId &&
+            Equals (servicePart, other.servicePart) &&
             dockingPortRef == other.dockingPortRef &&
             thruster == other.thruster &&
             orbit == other.orbit &&
@@ -127,7 +123,8 @@ namespace KRPC.SpaceCenter.Services
             hash ^= vesselId.GetHashCode ();
             if (node != null)
                 hash ^= RuntimeHelpers.GetHashCode (node);
-            hash ^= partId.GetHashCode ();
+            if (servicePart != null)
+                hash ^= servicePart.GetHashCode ();
             hash ^= dockingPortRef.GetHashCode ();
             if (thruster != null)
                 hash ^= thruster.GetHashCode ();

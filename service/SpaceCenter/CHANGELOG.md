@@ -77,6 +77,10 @@
     editor. The rigidbody the game attaches there is an unconfigured placeholder
     weighing Unity's default of one tonne, and the mass is now taken from the
     part itself, including crew (#1059)
+  - `Part.Position`, `Part.CenterOfMass`, `Part.ReferenceFrame` and
+    `Part.CenterOfMassReferenceFrame` are available in the editor, so the
+    center of mass of a design can be related to the parts it is made of
+    (#1064)
 
 - Vessels and crew
   - `Vessel.InertiaTensor` is restricted to the flight scene, as

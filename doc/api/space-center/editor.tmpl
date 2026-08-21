@@ -11,10 +11,10 @@ Editor
 {% append services['SpaceCenter'].classes['EditorVessel'].members['Parts'] %}
 .. note:: Only the parts of {{ see('T:SpaceCenter.Part') }} that describe the design are
           available in the editor. Those that need a vessel in flight or running physics,
-          such as {{ see('M:SpaceCenter.Part.Position') }} and the thermal members, are
-          restricted to the flight scene. {{ see('M:SpaceCenter.Part.MomentOfInertia') }}
-          and {{ see('M:SpaceCenter.Part.InertiaTensor') }} are available, as they can
-          be worked out from the design.
+          such as the thermal members, are restricted to the flight scene.
+          {{ see('M:SpaceCenter.Part.Position') }}, {{ see('M:SpaceCenter.Part.CenterOfMass') }},
+          the part's reference frames, {{ see('M:SpaceCenter.Part.MomentOfInertia') }}
+          and {{ see('M:SpaceCenter.Part.InertiaTensor') }} are available.
 {% endappend %}
 {% append services['SpaceCenter'].classes['EditorVessel'].members['Resources'] %}
 .. note:: This is a view of what the vessel can hold as designed. The flow-state
