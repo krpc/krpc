@@ -164,6 +164,39 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// A constant value of an object type, i.e. an instance of a class defined
+        /// by a service. The object is given by its object identifier — the value
+        /// used to reference the object over the communication protocol, which
+        /// client libraries make available on their remote object wrappers.
+        /// </summary>
+        /// <param name="value">The object identifier of the object.</param>
+        [KRPCMethod]
+        public static Expression ConstantObject (ulong value)
+        {
+            if (value == 0)
+                throw new ArgumentNullException (nameof (value));
+            var instance = ObjectStore.Instance.GetInstance (value);
+            if (instance == null)
+                throw new ArgumentException ("No object with identifier " + value);
+            return new Expression (LinqExpression.Constant (instance, GetClassType (instance)));
+        }
+
+        /// <summary>
+        /// The service-defined class type of an object, i.e. the closest type in its
+        /// hierarchy annotated as a kRPC class.
+        /// </summary>
+        static System.Type GetClassType (object instance)
+        {
+            var type = instance.GetType ();
+            while (type != null && !TypeUtils.IsAClassType (type))
+                type = type.BaseType;
+            if (type == null)
+                throw new ArgumentException (
+                    instance.GetType () + " is not an instance of a class defined by a service");
+            return type;
+        }
+
+        /// <summary>
         /// An RPC call.
         /// </summary>
         /// <param name="call"></param>

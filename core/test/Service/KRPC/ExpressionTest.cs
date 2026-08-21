@@ -69,6 +69,30 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void ConstantObject ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var id = global::KRPC.Service.ObjectStore.Instance.AddInstance (obj);
+            var expr = Expression.ConstantObject (id);
+            Assert.AreEqual (typeof (global::KRPC.Test.Service.TestService.TestClass), ((LinqExpression)expr).Type);
+            Assert.AreSame (obj, Eval<global::KRPC.Test.Service.TestService.TestClass> (expr));
+            Assert.IsTrue (Eval<bool> (Expression.Equal (
+                Expression.ConstantObject (id), Expression.ConstantObject (id))));
+        }
+
+        [Test]
+        public void ConstantObjectInvalid ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentNullException> (
+                () => Expression.ConstantObject (0));
+            Assert.Throws<System.ArgumentException> (
+                () => Expression.ConstantObject (ulong.MaxValue));
+            var id = global::KRPC.Service.ObjectStore.Instance.AddInstance (new object ());
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.ConstantObject (id));
+        }
+
+        [Test]
         public void Equal ()
         {
             Assert.IsTrue (Eval<bool> (Expression.Equal (
