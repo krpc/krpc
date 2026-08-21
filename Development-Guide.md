@@ -327,7 +327,7 @@ What each one measures:
 
    Every case is measured over both transports a client can reach a server on, TCP/IP and a unix
    domain socket, and the report has a block per transport: which one carries a call is part of
-   what the call costs. A machine without unix domain sockets is measured over TCP/IP alone.
+   what the call costs.
 
    `:cnano` measures the client built for a socket rather than for the serial port it is usually
    built for. The server reads a serial port on a poll whose interval is longer than everything

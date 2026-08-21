@@ -106,6 +106,8 @@ linux
 localhost
 lua
 luarocks
+luasocket
+macOS
 mach
 massless
 maths
@@ -186,6 +188,7 @@ unchecks
 undocked
 undocking
 undocks
+unix
 unowned
 unpaused
 unserialize

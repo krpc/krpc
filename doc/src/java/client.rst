@@ -214,8 +214,8 @@ Client API Reference
       Create a connection to a server running on the same machine, over unix domain sockets rather
       than TCP/IP. The connection behaves identically once established.
 
-      Unix domain sockets are available on Linux and macOS. On Windows, use
-      :meth:`Connection.newInstance`.
+      Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
+      Server 2019 or later.
 
       :param String name: A descriptive name for the connection. This is passed to the server and
                           appears in the in-game server window.

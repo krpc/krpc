@@ -267,7 +267,8 @@ Client API Reference
    domain sockets rather than TCP/IP. It returns a :class:`krpc::Client` object, just as
    :func:`krpc::connect` does, and the connection behaves identically thereafter.
 
-   Unix domain sockets are available on Linux and macOS. On Windows, use :func:`krpc::connect`.
+   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
+   2019 or later.
 
    :parameters:
 

@@ -202,7 +202,7 @@ Client API Reference
 
       Connect to a kRPC server running on the same machine, over unix domain sockets rather than
       TCP/IP. The connection behaves identically once established. Unix domain sockets are
-      available on Linux and macOS; on Windows, use the constructor above.
+      available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.
 
       :parameters:
 

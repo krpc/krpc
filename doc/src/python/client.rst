@@ -217,6 +217,32 @@ Client API Reference
                            ``None``, which waits indefinitely. A network that drops a connection
                            attempt rather than refusing it otherwise leaves the client waiting.
 
+.. function:: krpc.connect_local([name=None], [rpc_path], [stream_path], [use_pregenerated_stubs=True])
+
+   This function creates a connection to a kRPC server running on the same machine, over unix
+   domain sockets rather than TCP/IP. It returns a :class:`krpc.client.Client` object, just as
+   :func:`krpc.connect` does, and the connection behaves identically thereafter.
+
+   Use this when the script runs on the same machine as the game and the server is configured to
+   use the local socket protocol. A script that makes many calls in quick succession completes
+   more of them per physics update this way; one that makes a call and then waits sees no
+   difference, as the wait is governed by the game's update rate.
+
+   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
+   2019 or later. Python's socket module does not expose the address family on Windows, so the
+   client opens the socket through winsock itself.
+
+   :param str name: A descriptive name for the connection. This is passed to the server and appears
+                    in the in-game server window.
+   :param str rpc_path: The path of the socket the RPC server is listening on. This should match
+                        the RPC socket path shown in the in-game server window. Defaults to the
+                        path the server uses unless it was configured with another.
+   :param str stream_path: The path of the socket the Stream Server is listening on. This should
+                           match the stream socket path shown in the in-game server window.
+                           Defaults as ``rpc_path`` does. Pass ``None`` to connect without stream
+                           support.
+   :param bool use_pregenerated_stubs: As for :func:`krpc.connect`.
+
 .. class:: krpc.client.Client
 
    This class provides the interface for communicating with the server. It is dynamically populated
