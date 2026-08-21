@@ -33,10 +33,39 @@ namespace KRPC.Service
         }
 
         public override void UpdateInternal() {
-            if (continuation != null && continuation())
-                Trigger();
+            if (continuation != null) {
+                try {
+                    bool triggered = continuation ();
+                    // Replace an error left by an earlier update with a value. The
+                    // client holds the last thing the stream sent it, and would go on
+                    // reporting the error on every wait if it were only dropped here
+                    if (Result.HasError) {
+                        Result.Reset ();
+                        Result.Value = false;
+                        Changed = true;
+                    }
+                    if (triggered)
+                        Trigger ();
+                } catch (YieldException e) {
+                    // Evaluating the expression again from the start is the only way
+                    // to resume it, and that repeats everything it did before the
+                    // procedure paused, so report the pause rather than retrying
+                    SetError (new InvalidOperationException (
+                        global::KRPC.Service.KRPC.Expression.YieldedMessage, e));
+                } catch (System.Exception e) {
+                    SetError (e);
+                }
+            }
             if (shouldRemove)
                 Core.Instance.RemoveStream (Id);
+        }
+
+        void SetError (System.Exception exn)
+        {
+            var result = Result;
+            result.Reset ();
+            result.Error = Services.Instance.HandleException (exn);
+            Changed = true;
         }
 
         public void Trigger () {
@@ -51,7 +80,7 @@ namespace KRPC.Service
         public override void Sent () {
             Changed = false;
             var result = Result;
-            if ((bool)result.Value)
+            if (result.HasValue && (bool)result.Value)
                 result.Value = false;
         }
     }

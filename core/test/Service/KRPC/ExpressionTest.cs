@@ -227,6 +227,38 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void ReturnType ()
+        {
+            Assert.AreEqual (TypeCode.Double, Expression.ConstantDouble (1.2).ReturnType.Code);
+            Assert.AreEqual (TypeCode.Bool, Expression.Equal (
+                Expression.ConstantInt (1), Expression.ConstantInt (2)).ReturnType.Code);
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var call = Expression.Call (BuildProcedureCall ("TestClass_get_IntProperty", new Argument (0, obj)));
+            Assert.AreEqual (TypeCode.SInt32, call.ReturnType.Code);
+            var objConstant = Expression.ConstantObject (AddInstance (obj));
+            var objType = objConstant.ReturnType;
+            Assert.AreEqual (TypeCode.Class, objType.Code);
+            Assert.AreEqual ("TestService", objType.Service);
+            Assert.AreEqual ("TestClass", objType.Name);
+            var listType = list.ReturnType;
+            Assert.AreEqual (TypeCode.List, listType.Code);
+            Assert.AreEqual (TypeCode.SInt32, listType.Types [0].Code);
+        }
+
+        [Test]
+        public void ReturnTypeOfLazyCollection ()
+        {
+            var param = Expression.Parameter ("x", Type.Int ());
+            var func = Expression.Function (
+                new List<Expression> { param },
+                Expression.Multiply (param, Expression.ConstantInt (2)));
+            var selected = Expression.Select (list, func);
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => { var unused = selected.ReturnType; });
+            Assert.AreEqual (TypeCode.List, Expression.ToList (selected).ReturnType.Code);
+        }
+
+        [Test]
         public void ConstantObject ()
         {
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
