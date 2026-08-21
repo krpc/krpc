@@ -1,8 +1,8 @@
 ## [v0.7.0] - unreleased
 - Support structure types, which a service defines as a compound value with named fields. A
   value of one is a named tuple, so its fields can be read by name and it is also the tuple of
-  their values; a tuple or list with one element per field is accepted where one is expected
-  (#1066)
+  their values; a tuple or list with one element per field is accepted where one is expected.
+  It compares, orders and hashes as the tuple of its field values does (#1066)
 - A service definition that names a type this client does not know about, as one from a newer
   server may, now skips the member that names it with a warning, rather than failing to
   connect (#1066)

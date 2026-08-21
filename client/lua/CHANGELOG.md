@@ -1,7 +1,8 @@
 ## [v0.7.0] - unreleased
 - Support structure types, which a service defines as a compound value with named fields. A
   value of one is built from the values of its fields in order and gives them named access; a
-  list with one element per field is accepted where one is expected (#1066)
+  list with one element per field is accepted where one is expected. It compares for
+  equality and orders by its fields in turn (#1066)
 - A service definition that names a type this client does not know about, as one from a newer
   server may, now skips the member that names it with a warning, rather than failing to
   connect (#1066)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+#include <functional>
 #include <limits>
 #include <map>
 #include <set>
@@ -11,6 +13,7 @@
 #include <krpc/encoder.hpp>
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
+#include <krpc/hash.hpp>
 #include <krpc/object.hpp>
 #include <krpc/service.hpp>
 #include <krpc/stream.hpp>
@@ -670,6 +673,29 @@ value(value), old_value(old_value) {}
     bool operator!=(const DeprecatedStruct& other) const {
       return !(*this == other);
     }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const DeprecatedStruct& other) const {
+      if (value < other.value)
+        return true;
+      if (other.value < value)
+        return false;
+      if (old_value < other.old_value)
+        return true;
+      return false;
+    }
+
+    bool operator>(const DeprecatedStruct& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const DeprecatedStruct& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const DeprecatedStruct& other) const {
+      return !(*this < other);
+    }
   };
 
   /**
@@ -696,6 +722,37 @@ int_field(int_field), string_field(string_field), enum_field(enum_field), list_f
     bool operator!=(const TestStruct& other) const {
       return !(*this == other);
     }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const TestStruct& other) const {
+      if (int_field < other.int_field)
+        return true;
+      if (other.int_field < int_field)
+        return false;
+      if (string_field < other.string_field)
+        return true;
+      if (other.string_field < string_field)
+        return false;
+      if (enum_field < other.enum_field)
+        return true;
+      if (other.enum_field < enum_field)
+        return false;
+      if (list_field < other.list_field)
+        return true;
+      return false;
+    }
+
+    bool operator>(const TestStruct& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const TestStruct& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const TestStruct& other) const {
+      return !(*this < other);
+    }
   };
 
   /**
@@ -717,6 +774,33 @@ struct_field(struct_field), object_field(object_field), string_field(string_fiel
 
     bool operator!=(const TestNestedStruct& other) const {
       return !(*this == other);
+    }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const TestNestedStruct& other) const {
+      if (struct_field < other.struct_field)
+        return true;
+      if (other.struct_field < struct_field)
+        return false;
+      if (object_field < other.object_field)
+        return true;
+      if (other.object_field < object_field)
+        return false;
+      if (string_field < other.string_field)
+        return true;
+      return false;
+    }
+
+    bool operator>(const TestNestedStruct& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const TestNestedStruct& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const TestNestedStruct& other) const {
+      return !(*this < other);
     }
   };
 };
@@ -851,6 +935,37 @@ namespace decoder {
 
 }  // namespace decoder
 
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+inline std::size_t hash_value(const services::TestService::DeprecatedStruct& value) {
+  std::size_t seed = 0;
+  hash_combine(&seed, hash_value(value.value));
+  hash_combine(&seed, hash_value(value.old_value));
+  return seed;
+}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+inline std::size_t hash_value(const services::TestService::TestStruct& value) {
+  std::size_t seed = 0;
+  hash_combine(&seed, hash_value(value.int_field));
+  hash_combine(&seed, hash_value(value.string_field));
+  hash_combine(&seed, hash_value(value.enum_field));
+  hash_combine(&seed, hash_value(value.list_field));
+  return seed;
+}
+
+inline std::size_t hash_value(const services::TestService::TestNestedStruct& value) {
+  std::size_t seed = 0;
+  hash_combine(&seed, hash_value(value.struct_field));
+  hash_combine(&seed, hash_value(value.object_field));
+  hash_combine(&seed, hash_value(value.string_field));
+  return seed;
+}
+
 // The encoder and decoder for a collection call encode and decode on the type it
 // contains without qualifying them, so the ones above, which are declared after those
 // templates, are only reachable through argument dependent lookup. That searches the
@@ -892,6 +1007,10 @@ namespace services {
   inline void decode(TestService::DeprecatedStruct& value, const std::string& data, Client* client) {
     decoder::decode(value, data, client);
   }
+
+  inline std::size_t hash_value(const TestService::DeprecatedStruct& value) {
+    return krpc::hash_value(value);
+  }
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
@@ -904,12 +1023,20 @@ namespace services {
     decoder::decode(value, data, client);
   }
 
+  inline std::size_t hash_value(const TestService::TestStruct& value) {
+    return krpc::hash_value(value);
+  }
+
   inline std::string encode(const TestService::TestNestedStruct& value) {
     return encoder::encode(value);
   }
 
   inline void decode(TestService::TestNestedStruct& value, const std::string& data, Client* client) {
     decoder::decode(value, data, client);
+  }
+
+  inline std::size_t hash_value(const TestService::TestNestedStruct& value) {
+    return krpc::hash_value(value);
   }
 
 }  // namespace services
@@ -2851,3 +2978,37 @@ inline ::krpc::schema::ProcedureCall TestService::TestClass::static_nullable_obj
 }  // namespace services
 
 }  // namespace krpc
+
+// A structure is a type of this program's own, so unlike a tuple it can be given a std::hash,
+// and an unordered container of one needs nothing further.
+namespace std {
+
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+template <>
+struct hash<krpc::services::TestService::DeprecatedStruct> {
+  std::size_t operator()(const krpc::services::TestService::DeprecatedStruct& value) const {
+    return krpc::hash_value(value);
+  }
+};
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
+template <>
+struct hash<krpc::services::TestService::TestStruct> {
+  std::size_t operator()(const krpc::services::TestService::TestStruct& value) const {
+    return krpc::hash_value(value);
+  }
+};
+
+template <>
+struct hash<krpc::services::TestService::TestNestedStruct> {
+  std::size_t operator()(const krpc::services::TestService::TestNestedStruct& value) const {
+    return krpc::hash_value(value);
+  }
+};
+
+}  // namespace std

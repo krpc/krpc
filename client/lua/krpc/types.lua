@@ -600,6 +600,28 @@ function Types.StructBase:__eq(other)
   return true
 end
 
+--- Ordered by the fields in turn, which is how a tuple of the same values would be ordered
+--- if Lua ordered tables. A field whose type Lua does not order, such as a collection or an
+--- enumeration value, raises when the two values differ. Two values that are unequal but
+--- order neither way, as two NaNs are, move on to the next field.
+function Types.StructBase:__lt(other)
+  for _, name in ipairs(self._field_names) do
+    if self[name] ~= other[name] then
+      if self[name] < other[name] then
+        return true
+      end
+      if other[name] < self[name] then
+        return false
+      end
+    end
+  end
+  return false
+end
+
+function Types.StructBase:__le(other)
+  return not (other < self)
+end
+
 function Types.StructBase:__tostring()
   local parts = {}
   for i, name in ipairs(self._field_names) do

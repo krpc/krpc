@@ -879,7 +879,7 @@ public class TestService {
      * @deprecated Use TestStruct instead.
      */
     @Deprecated
-    public static class DeprecatedStruct implements RemoteStruct {
+    public static class DeprecatedStruct implements RemoteStruct, Comparable<DeprecatedStruct> {
         private final int value;
         private final int oldValue;
 
@@ -946,12 +946,30 @@ public class TestService {
         public int hashCode() {
             return java.util.Objects.hash(value, oldValue);
         }
+
+        /**
+         * Compares this DeprecatedStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(DeprecatedStruct other) {
+            int result;
+            result = RemoteStruct.compareFields(value, other.value);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(oldValue, other.oldValue);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
     }
 
     /**
      * Struct documentation string.
      */
-    public static class TestStruct implements RemoteStruct {
+    public static class TestStruct implements RemoteStruct, Comparable<TestStruct> {
         private final int intField;
         private final String stringField;
         private final krpc.client.services.TestService.TestEnum enumField;
@@ -1030,12 +1048,38 @@ public class TestService {
         public int hashCode() {
             return java.util.Objects.hash(intField, stringField, enumField, listField);
         }
+
+        /**
+         * Compares this TestStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(TestStruct other) {
+            int result;
+            result = RemoteStruct.compareFields(intField, other.intField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(stringField, other.stringField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(enumField, other.enumField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(listField, other.listField);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
+        }
     }
 
     /**
      * Nested struct documentation string.
      */
-    public static class TestNestedStruct implements RemoteStruct {
+    public static class TestNestedStruct implements RemoteStruct, Comparable<TestNestedStruct> {
         private final krpc.client.services.TestService.TestStruct structField;
         private final krpc.client.services.TestService.TestClass objectField;
         private final String stringField;
@@ -1101,6 +1145,28 @@ public class TestService {
         @Override
         public int hashCode() {
             return java.util.Objects.hash(structField, objectField, stringField);
+        }
+
+        /**
+         * Compares this TestNestedStruct with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo(TestNestedStruct other) {
+            int result;
+            result = RemoteStruct.compareFields(structField, other.structField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(objectField, other.objectField);
+            if (result != 0) {
+                return result;
+            }
+            result = RemoteStruct.compareFields(stringField, other.stringField);
+            if (result != 0) {
+                return result;
+            }
+            return 0;
         }
     }
 

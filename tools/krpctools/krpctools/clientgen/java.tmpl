@@ -134,7 +134,7 @@ public class {{ service_name }} {
 {% endif %}
 {% if struct.deprecated %}    @Deprecated
 {% endif %}
-    public static class {{ struct_name }} implements RemoteStruct {
+    public static class {{ struct_name }} implements RemoteStruct, Comparable<{{ struct_name }}> {
         {% for field in struct['fields'] %}
         private final {{ field.type }} {{ field.name }};
         {% endfor %}
@@ -202,6 +202,22 @@ public class {{ service_name }} {
         @Override
         public int hashCode() {
             return java.util.Objects.hash({% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %});
+        }
+
+        /**
+         * Compares this {{ struct_name }} with the given one, by its fields in turn, which is
+         * how a tuple of the same values compares.
+         */
+        @Override
+        public int compareTo({{ struct_name }} other) {
+            int result;
+            {% for field in struct['fields'] %}
+            result = RemoteStruct.compareFields({{ field.name }}, other.{{ field.name }});
+            if (result != 0) {
+                return result;
+            }
+            {% endfor %}
+            return 0;
         }
     }
     {% endfor %}

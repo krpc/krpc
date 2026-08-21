@@ -296,6 +296,48 @@ public class ConnectionTest {
   }
 
   @Test
+  public void testStructComparison() {
+    java.util.List<Integer> items = new ArrayList<Integer>();
+    TestService.TestStruct a =
+        new TestService.TestStruct(1, "jeb", TestService.TestEnum.VALUE_A, items);
+    TestService.TestStruct b =
+        new TestService.TestStruct(1, "jeb", TestService.TestEnum.VALUE_A, items);
+    final TestService.TestStruct c =
+        new TestService.TestStruct(2, "jeb", TestService.TestEnum.VALUE_A, items);
+
+    assertEquals(a, b);
+    assertEquals(a.hashCode(), b.hashCode());
+
+    // Ordered by the fields in turn, as a tuple of the same values is
+    assertEquals(0, a.compareTo(b));
+    assertTrue(a.compareTo(c) < 0);
+    assertTrue(c.compareTo(a) > 0);
+
+    java.util.List<TestService.TestStruct> sorted = new ArrayList<>(Arrays.asList(c, a));
+    java.util.Collections.sort(sorted);
+    assertEquals(a, sorted.get(0));
+
+    assertEquals(2, new HashSet<>(Arrays.asList(a, b, c)).size());
+  }
+
+  @Test
+  public void testStructComparisonOfCollectionFieldThrows() {
+    // A collection has no ordering, so comparing two structures whose collection fields
+    // differ throws, exactly as comparing two such tuples does
+    TestService.TestStruct a = new TestService.TestStruct(
+        1, "jeb", TestService.TestEnum.VALUE_A, Arrays.asList(new Integer[] { 1 }));
+    TestService.TestStruct b = new TestService.TestStruct(
+        1, "jeb", TestService.TestEnum.VALUE_A, Arrays.asList(new Integer[] { 2 }));
+    assertThrows(ClassCastException.class, () -> a.compareTo(b));
+    assertThrows(
+        ClassCastException.class,
+        () -> new Pair<Integer, java.util.List<Integer>>(1, Arrays.asList(new Integer[] { 1 }))
+            .compareTo(
+                new Pair<Integer, java.util.List<Integer>>(
+                    1, Arrays.asList(new Integer[] { 2 }))));
+  }
+
+  @Test
   @SuppressWarnings("serial")
   public void testCollectionsNested() throws RPCException {
     assertEquals(new HashMap<String, List<Integer>>(),

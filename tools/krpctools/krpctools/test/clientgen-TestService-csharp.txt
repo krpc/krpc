@@ -794,7 +794,7 @@ namespace KRPC.Client.Services.TestService
     [Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
     [global::System.Obsolete ("Use TestStruct instead.")]
-    public struct DeprecatedStruct : IEquatable<DeprecatedStruct>
+    public struct DeprecatedStruct : IEquatable<DeprecatedStruct>, IComparable<DeprecatedStruct>
     {
         /// <summary>
         /// Construct a DeprecatedStruct from the values of its fields.
@@ -858,6 +858,56 @@ namespace KRPC.Client.Services.TestService
         {
             return !lhs.Equals (rhs);
         }
+
+        /// <summary>
+        /// Compares this DeprecatedStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two DeprecatedStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (DeprecatedStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (Value, other.Value);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (OldValue, other.OldValue);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first DeprecatedStruct orders before the second.
+        /// </summary>
+        public static bool operator < (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first DeprecatedStruct orders after the second.
+        /// </summary>
+        public static bool operator > (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first DeprecatedStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first DeprecatedStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (DeprecatedStruct lhs, DeprecatedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
     }
 
     /// <summary>
@@ -865,7 +915,7 @@ namespace KRPC.Client.Services.TestService
     /// </summary>
     [Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
-    public struct TestStruct : IEquatable<TestStruct>
+    public struct TestStruct : IEquatable<TestStruct>, IComparable<TestStruct>
     {
         /// <summary>
         /// Construct a TestStruct from the values of its fields.
@@ -933,6 +983,62 @@ namespace KRPC.Client.Services.TestService
         {
             return !lhs.Equals (rhs);
         }
+
+        /// <summary>
+        /// Compares this TestStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two TestStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (TestStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<int>.Default.Compare (IntField, other.IntField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<string>.Default.Compare (StringField, other.StringField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.TestService.TestEnum>.Default.Compare (EnumField, other.EnumField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::System.Collections.Generic.IList<int>>.Default.Compare (ListField, other.ListField);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestStruct orders before the second.
+        /// </summary>
+        public static bool operator < (TestStruct lhs, TestStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestStruct orders after the second.
+        /// </summary>
+        public static bool operator > (TestStruct lhs, TestStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (TestStruct lhs, TestStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (TestStruct lhs, TestStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
     }
 
     /// <summary>
@@ -940,7 +1046,7 @@ namespace KRPC.Client.Services.TestService
     /// </summary>
     [Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
-    public struct TestNestedStruct : IEquatable<TestNestedStruct>
+    public struct TestNestedStruct : IEquatable<TestNestedStruct>, IComparable<TestNestedStruct>
     {
         /// <summary>
         /// Construct a TestNestedStruct from the values of its fields.
@@ -1000,6 +1106,59 @@ namespace KRPC.Client.Services.TestService
         public static bool operator != (TestNestedStruct lhs, TestNestedStruct rhs)
         {
             return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this TestNestedStruct with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two TestNestedStructs that are equal can still throw here.
+        /// </summary>
+        public int CompareTo (TestNestedStruct other)
+        {
+            int result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.TestService.TestStruct>.Default.Compare (StructField, other.StructField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<global::KRPC.Client.Services.TestService.TestClass>.Default.Compare (ObjectField, other.ObjectField);
+            if (result != 0)
+                return result;
+            result = global::System.Collections.Generic.Comparer<string>.Default.Compare (StringField, other.StringField);
+            if (result != 0)
+                return result;
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedStruct orders before the second.
+        /// </summary>
+        public static bool operator < (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedStruct orders after the second.
+        /// </summary>
+        public static bool operator > (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedStruct does not order after the second.
+        /// </summary>
+        public static bool operator <= (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first TestNestedStruct does not order before the second.
+        /// </summary>
+        public static bool operator >= (TestNestedStruct lhs, TestNestedStruct rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
         }
     }
 

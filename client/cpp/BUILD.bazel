@@ -190,6 +190,7 @@ cc_test(
         "test/test_decoder.cpp",
         "test/test_encode_decode.cpp",
         "test/test_encoder.cpp",
+        "test/test_hash.cpp",
         ":services-test-service",
     ],
     includes = ["test"],

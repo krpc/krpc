@@ -309,6 +309,25 @@ function TestClient:test_struct_default_value()
     service.struct_default())
 end
 
+function TestClient:test_struct_comparison()
+  local service = self.conn.test_service
+  local a = service.TestStruct(1, 'jeb', service.TestEnum.value_a, List{})
+  local b = service.TestStruct(1, 'jeb', service.TestEnum.value_a, List{})
+  local c = service.TestStruct(2, 'jeb', service.TestEnum.value_a, List{})
+
+  luaunit.assertEquals(a, b)
+  -- Ordered by the fields in turn
+  luaunit.assertTrue(a < c)
+  luaunit.assertTrue(c > a)
+  luaunit.assertTrue(a <= b)
+  luaunit.assertTrue(a >= b)
+  luaunit.assertFalse(c < a)
+
+  local values = {c, a}
+  table.sort(values)
+  luaunit.assertEquals(a, values[1])
+end
+
 function TestClient:test_collections_default_values()
   luaunit.assertEquals(List{1, false}, self.conn.test_service.tuple_default())
   luaunit.assertEquals(List{1, 2, 3}, self.conn.test_service.list_default())

@@ -227,6 +227,35 @@ class TestTypes(unittest.TestCase):
         self.assertEqual(int, typ.value_type.python_type)
         self.check_protobuf_type(Type.UINT32, "", "", 0, typ.value_type.protobuf_type)
 
+    def test_struct_comparison(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "ComparableStruct")
+        typ.set_fields([("count", types.uint32_type), ("name", types.string_type)])
+        one = typ.python_type(1, "jeb")
+        same = typ.python_type(1, "jeb")
+        two = typ.python_type(2, "jeb")
+        self.assertEqual(one, same)
+        self.assertNotEqual(one, two)
+        # A structure is ordered and hashed as the tuple of its field values is, and equals
+        # that tuple
+        self.assertEqual((1, "jeb"), one)
+        self.assertLess(one, two)
+        self.assertGreater(two, one)
+        self.assertEqual([one, two], sorted([two, one]))
+        self.assertEqual(hash(one), hash(same))
+        self.assertEqual({one, two}, {one, same, two})
+
+    def test_struct_holding_an_unhashable_value(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "UnhashableStruct")
+        typ.set_fields([("items", types.list_type(types.sint32_type))])
+        value = typ.python_type([1, 2])
+        self.assertEqual(typ.python_type([1, 2]), value)
+        # A list cannot be hashed, so neither can a structure holding one, exactly as a
+        # tuple holding one cannot
+        self.assertRaises(TypeError, hash, value)
+        self.assertRaises(TypeError, hash, ([1, 2],))
+
     def test_coerce_to_struct(self) -> None:
         types = Types()
         typ = types.struct_type("ServiceName", "StructName")
