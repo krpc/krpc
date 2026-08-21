@@ -48,6 +48,71 @@ namespace KRPC.Service.KRPC
             get { return internalExpression.Type; }
         }
 
+        static bool IsNumericType (System.Type type)
+        {
+            return
+                type == typeof (double) ||
+                type == typeof (float) ||
+                type == typeof (int) ||
+                type == typeof (long) ||
+                type == typeof (uint) ||
+                type == typeof (ulong);
+        }
+
+        /// <summary>
+        /// The common type both operands are implicitly convertible to, following C#'s
+        /// binary numeric promotion rules.
+        /// </summary>
+        static System.Type CommonNumericType (System.Type type0, System.Type type1)
+        {
+            if (type0 == typeof (double) || type1 == typeof (double))
+                return typeof (double);
+            if (type0 == typeof (float) || type1 == typeof (float))
+                return typeof (float);
+            if (type0 == typeof (ulong) || type1 == typeof (ulong)) {
+                var other = type0 == typeof (ulong) ? type1 : type0;
+                if (other == typeof (uint))
+                    return typeof (ulong);
+                throw new InvalidOperationException (
+                    "No implicit conversion between " + type0 + " and " + type1 + ". " +
+                    "Use a cast to convert one of the operands.");
+            }
+            if (type0 == typeof (long) || type1 == typeof (long))
+                return typeof (long);
+            if (type0 == typeof (uint) || type1 == typeof (uint)) {
+                var other = type0 == typeof (uint) ? type1 : type0;
+                return other == typeof (int) ? typeof (long) : typeof (uint);
+            }
+            return typeof (int);
+        }
+
+        /// <summary>
+        /// Convert the operands of a binary operation to a common numeric type,
+        /// when they are numeric operands of differing types.
+        /// </summary>
+        static void PromoteOperands (ref LinqExpression arg0, ref LinqExpression arg1)
+        {
+            if (arg0 == null || arg1 == null)
+                return;
+            var type0 = arg0.Type;
+            var type1 = arg1.Type;
+            if (type0 == type1 || !IsNumericType (type0) || !IsNumericType (type1))
+                return;
+            var common = CommonNumericType (type0, type1);
+            if (type0 != common)
+                arg0 = LinqExpression.Convert (arg0, common);
+            if (type1 != common)
+                arg1 = LinqExpression.Convert (arg1, common);
+        }
+
+        static Expression NumericBinaryOp (Func<LinqExpression, LinqExpression, LinqExpression> op, Expression arg0, Expression arg1)
+        {
+            LinqExpression left = arg0;
+            LinqExpression right = arg1;
+            PromoteOperands (ref left, ref right);
+            return new Expression (op (left, right));
+        }
+
         /// <summary>
         /// A constant value of double precision floating point type.
         /// </summary>
@@ -144,69 +209,74 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Equality comparison.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression Equal(Expression arg0, Expression arg1)
         {
-            return new Expression(
-                LinqExpression.Equal(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.Equal, arg0, arg1);
         }
 
         /// <summary>
         /// Inequality comparison.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression NotEqual(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.NotEqual(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.NotEqual, arg0, arg1);
         }
 
         /// <summary>
         /// Greater than numerical comparison.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression GreaterThan(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.GreaterThan(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.GreaterThan, arg0, arg1);
         }
 
         /// <summary>
         /// Greater than or equal numerical comparison.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression GreaterThanOrEqual(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.GreaterThanOrEqual(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.GreaterThanOrEqual, arg0, arg1);
         }
 
         /// <summary>
         /// Less than numerical comparison.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression LessThan(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.LessThan(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.LessThan, arg0, arg1);
         }
 
         /// <summary>
         /// Less than or equal numerical comparison.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression LessThanOrEqual(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.LessThanOrEqual(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.LessThanOrEqual, arg0, arg1);
         }
 
         /// <summary>
@@ -254,50 +324,55 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Numerical addition.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression Add(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.Add(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.Add, arg0, arg1);
         }
 
         /// <summary>
         /// Numerical subtraction.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression Subtract(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.Subtract(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.Subtract, arg0, arg1);
         }
 
         /// <summary>
         /// Numerical multiplication.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression Multiply(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.Multiply(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.Multiply, arg0, arg1);
         }
 
         /// <summary>
         /// Numerical division.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
         [KRPCMethod]
         public static Expression Divide(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.Divide(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.Divide, arg0, arg1);
         }
 
         /// <summary>
         /// Numerical modulo operator.
+        /// Numeric operands of differing types are converted to a common type.
         /// </summary>
         /// <param name="arg0"></param>
         /// <param name="arg1"></param>
@@ -305,7 +380,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression Modulo(Expression arg0, Expression arg1)
         {
-            return new Expression(LinqExpression.Modulo(arg0, arg1));
+            return NumericBinaryOp(LinqExpression.Modulo, arg0, arg1);
         }
 
         /// <summary>

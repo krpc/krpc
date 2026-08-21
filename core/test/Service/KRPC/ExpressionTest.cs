@@ -243,6 +243,39 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void NumericPromotion ()
+        {
+            // Mixed-type arithmetic promotes to the wider operand type
+            Assert.AreEqual (5.5, Eval<double> (Expression.Multiply (
+                Expression.ConstantDouble (2.75), Expression.ConstantInt (2))));
+            Assert.AreEqual (5.5, Eval<double> (Expression.Multiply (
+                Expression.ConstantInt (2), Expression.ConstantDouble (2.75))));
+            Assert.AreEqual (3.5f, Eval<float> (Expression.Add (
+                Expression.ConstantFloat (1.5f), Expression.ConstantInt (2))));
+            Assert.AreEqual (2.5, Eval<double> (Expression.Divide (
+                Expression.ConstantDouble (5), Expression.ConstantFloat (2f))));
+            Assert.AreEqual (1.5, Eval<double> (Expression.Modulo (
+                Expression.ConstantDouble (7.5), Expression.ConstantInt (2))));
+            Assert.AreEqual (-1.5, Eval<double> (Expression.Subtract (
+                Expression.ConstantInt (1), Expression.ConstantDouble (2.5))));
+        }
+
+        [Test]
+        public void NumericPromotionComparison ()
+        {
+            Assert.IsTrue (Eval<bool> (Expression.GreaterThan (
+                Expression.ConstantDouble (2.5), Expression.ConstantInt (2))));
+            Assert.IsFalse (Eval<bool> (Expression.GreaterThan (
+                Expression.ConstantInt (2), Expression.ConstantDouble (2.5))));
+            Assert.IsTrue (Eval<bool> (Expression.LessThanOrEqual (
+                Expression.ConstantInt (2), Expression.ConstantFloat (2f))));
+            Assert.IsTrue (Eval<bool> (Expression.Equal (
+                Expression.ConstantInt (2), Expression.ConstantDouble (2))));
+            Assert.IsTrue (Eval<bool> (Expression.NotEqual (
+                Expression.ConstantFloat (2.5f), Expression.ConstantInt (2))));
+        }
+
+        [Test]
         public void LeftShift ()
         {
             Assert.AreEqual (1, Eval<int> (Expression.LeftShift (
