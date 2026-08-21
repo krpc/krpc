@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using KRPC.SpaceCenter.Services;
 using UnityEngine;
@@ -110,11 +111,21 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// The mass of the crew assigned to the part, in tonnes.
+        /// The mass of the crew in the part, in tonnes, including what they carry. A
+        /// Kerbal's inventory and resources are part of the mass physics sees in flight,
+        /// and of the figure the game gives for a vessel in the editor.
         /// </summary>
         public static float CrewMass (this Part part)
         {
-            return AssignedCrewCount (part) * PhysicsGlobals.KerbalCrewMass;
+            float mass = 0f;
+            var crew = AssignedCrew (part);
+            for (int i = 0; i < crew.Count; i++) {
+                var member = crew [i];
+                if (member == null)
+                    continue;
+                mass += PhysicsGlobals.KerbalCrewMass + member.InventoryMass () + member.ResourceMass ();
+            }
+            return mass;
         }
 
         /// <summary>
@@ -141,29 +152,23 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             return Mathf.Max (0f, (part.mass + part.CrewMass () + part.PhysicslessChildMass ()) * 1000f);
         }
 
+        static readonly ProtoCrewMember [] NoCrew = new ProtoCrewMember [0];
+
         /// <summary>
-        /// How many crew occupy the part. In the editor that is the assignment on the
+        /// The crew who occupy the part. In the editor that is the assignment on the
         /// craft's manifest, which is what the game will seat when the vessel is launched.
         /// </summary>
-        static int AssignedCrewCount (Part part)
+        static IList<ProtoCrewMember> AssignedCrew (Part part)
         {
             if (!HighLogic.LoadedSceneIsEditor)
-                return part.protoModuleCrew.Count;
+                return part.protoModuleCrew;
             var manifest = ShipConstruction.ShipManifest;
             if (manifest == null)
-                return 0;
+                return NoCrew;
             var partManifest = manifest.GetPartCrewManifest (part.craftID);
             if (partManifest == null)
-                return 0;
-            var crew = partManifest.GetPartCrew ();
-            if (crew == null)
-                return 0;
-            int count = 0;
-            for (int i = 0; i < crew.Length; i++) {
-                if (crew [i] != null)
-                    count++;
-            }
-            return count;
+                return NoCrew;
+            return partManifest.GetPartCrew () ?? NoCrew;
         }
 
         /// <summary>

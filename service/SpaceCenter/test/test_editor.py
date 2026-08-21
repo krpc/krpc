@@ -142,6 +142,19 @@ class TestEditorLaunchVessel(krpctest.TestCase):
         # vessel figure rather than a correction to the parallel-axis term.
         self._assert_mass_properties_match_flight("Rover")
 
+    def test_part_masses_match_flight(self):
+        # Parts.craft carries the two cases a vessel-wide figure hides: physicsless
+        # parts, whose mass physics puts on the part they hang off, and a crewed pod,
+        # where a Kerbal weighs what they carry as well as themselves.
+        self.enter_editor("VAB", craft="Parts")
+        editor_parts = self.space_center.editor.vessel.parts.all
+        editor_mass = sum(part.mass for part in editor_parts)
+        self.space_center.editor.launch_vessel("LaunchPad")
+        flight_parts = self.space_center.active_vessel.parts.all
+        self.assertAlmostEqual(
+            editor_mass, sum(part.mass for part in flight_parts), delta=1
+        )
+
     def _assert_mass_properties_match_flight(self, craft):
         self.enter_editor("VAB", craft=craft)
         editor_vessel = self.space_center.editor.vessel
