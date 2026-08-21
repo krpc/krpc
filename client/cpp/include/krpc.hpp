@@ -18,4 +18,14 @@ namespace krpc {
 Client connect(const std::string& name = "", const std::string& address = "127.0.0.1",
                unsigned int rpc_port = 50000, unsigned int stream_port = 50001);
 
+/**
+ * Connect to a kRPC server on the same machine, over unix domain sockets named by the
+ * given paths rather than over TCP. An empty path stands for the one the server uses
+ * unless it was configured with another. The connection behaves identically once
+ * established.
+ * Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and later.
+ */
+Client connect_local(const std::string& name = "", const std::string& rpc_path = "",
+                     const std::string& stream_path = "");
+
 }  // namespace krpc

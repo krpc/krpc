@@ -25,6 +25,10 @@ class Client {
   Client();
   Client(const std::string& name, const std::string& address, unsigned int rpc_port = 50000,
          unsigned int stream_port = 50001);
+  /** Perform the connection handshake over the given connections, which have been built
+      but not yet opened. The handshake is the same whatever carries it. */
+  Client(const std::string& name, std::shared_ptr<Connection> rpc_connection,
+         const std::shared_ptr<Connection>& stream_connection);
 
   schema::ProcedureResult invoke(const schema::Request& request);
   schema::ProcedureResult invoke(const schema::ProcedureCall& call);

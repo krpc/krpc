@@ -49,8 +49,7 @@ static bool is_version(const char* value) {
 TEST_F(test_client, test_default_ctor) { krpc::Client client; }
 
 TEST_F(test_client, test_shared_ptr) {
-  auto client = std::make_shared<krpc::Client>("C++ClientTest", "localhost", get_rpc_port(),
-                                               get_stream_port());
+  auto client = std::make_shared<krpc::Client>(connect());
   krpc::services::KRPC krpc(client.get());
   krpc::schema::Status status = krpc.get_status();
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
@@ -59,7 +58,7 @@ TEST_F(test_client, test_shared_ptr) {
 
 TEST_F(test_client, test_std_container) {
   std::vector<krpc::Client> clients;
-  clients.push_back(krpc::connect("C++ClientTest", "localhost", get_rpc_port(), get_stream_port()));
+  clients.push_back(connect());
   krpc::services::KRPC krpc(&(clients[0]));
   krpc::schema::Status status = krpc.get_status();
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
@@ -83,9 +82,7 @@ TEST_F(test_client, test_wrong_stream_port) {
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {
-  auto fn = [this]() {
-    krpc::connect("C++ClientTestWrongRpcServer", "localhost", get_stream_port(), get_stream_port());
-  };
+  auto fn = [this]() { connect("C++ClientTestWrongRpcServer", "stream", "stream"); };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
@@ -97,9 +94,7 @@ TEST_F(test_client, test_wrong_rpc_server) {
 }
 
 TEST_F(test_client, test_wrong_stream_server) {
-  auto fn = [this]() {
-    krpc::connect("C++ClientTestWrongStreamServer", "localhost", get_rpc_port(), get_rpc_port());
-  };
+  auto fn = [this]() { connect("C++ClientTestWrongStreamServer", "rpc", "rpc"); };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
@@ -380,8 +375,7 @@ TEST_F(test_client, test_test_service_enum_members) {
 // thrower, and must be reported rather than looked up past the end of the map. This client
 // deliberately never constructs the TestService object, so nothing registers its exceptions.
 TEST_F(test_client, test_unknown_exception_type) {
-  krpc::Client client = krpc::connect("C++ClientTestUnknownExceptionType", "localhost",
-                                      get_rpc_port(), get_stream_port());
+  krpc::Client client = connect("C++ClientTestUnknownExceptionType");
   try {
     client.invoke("TestService", "ThrowCustomException");
     FAIL() << "expected an exception";

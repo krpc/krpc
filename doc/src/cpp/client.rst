@@ -258,6 +258,25 @@ Client API Reference
       * **stream_port** (*unsigned int*) -- The port number of the Stream Server. Defaults
         to 50001. This should match the stream port number of the server you want to connect to.
 
+.. function:: Client connect_local(const std::string& name = "", const std::string& rpc_path = "", const std::string& stream_path = "")
+
+   This function creates a connection to a kRPC server running on the same machine, over unix
+   domain sockets rather than TCP/IP. It returns a :class:`krpc::Client` object, just as
+   :func:`krpc::connect` does, and the connection behaves identically thereafter.
+
+   Unix domain sockets are available on Linux and macOS. On Windows, use :func:`krpc::connect`.
+
+   :parameters:
+
+      * **name** (*std::string*) -- A descriptive name for the connection. This is passed to the
+        server and appears in the in-game server window.
+      * **rpc_path** (*std::string*) -- The path of the socket the RPC Server is listening on. This
+        should match the RPC socket path shown in the in-game server window. Leave empty for the
+        path the server uses unless it was configured with another.
+      * **stream_path** (*std::string*) -- The path of the socket the Stream Server is listening
+        on. This should match the stream socket path shown in the in-game server window. Defaults
+        as ``rpc_path`` does.
+
 .. class:: Client
 
    This class provides the interface for communicating with the server. It is used by service class

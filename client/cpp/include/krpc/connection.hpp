@@ -9,6 +9,7 @@
 #ifndef ASIO_STANDALONE
 #define ASIO_STANDALONE
 #endif
+#include <asio/generic/stream_protocol.hpp>
 #include <asio/io_context.hpp>
 #include <asio/ip/tcp.hpp>
 
@@ -23,7 +24,9 @@ namespace krpc {
 class Connection {
  public:
   Connection(const std::string& address, unsigned int port);
-  void connect();
+  virtual ~Connection() = default;
+  /** Open the connection to the server. */
+  virtual void connect();
   void close();
   /** Send data to the connection. Blocks until all data has been sent. */
   void send(const char* data, size_t length);
@@ -39,6 +42,12 @@ class Connection {
   std::string partial_receive(size_t length,
                               std::chrono::milliseconds timeout = std::chrono::milliseconds(10));
 
+ protected:
+  asio::io_context io_context;
+  // A protocol agnostic socket, so that the same connection can carry either a TCP
+  // or a unix domain socket and everything above it is unchanged
+  asio::generic::stream_protocol::socket socket;
+
  private:
   /** How much is read from the socket at a time. */
   static const size_t READ_SIZE = 8192;
@@ -53,8 +62,6 @@ class Connection {
   /** How much has been read but not consumed yet. */
   size_t available() const { return filled - consumed; }
 
-  asio::io_context io_context;
-  asio::ip::tcp::socket socket;
   const std::string address;
   const unsigned int port;
   asio::ip::tcp::resolver resolver;
@@ -64,6 +71,17 @@ class Connection {
   std::vector<char> buffer;
   size_t filled = 0;
   size_t consumed = 0;
+};
+
+/** A connection to a server on the same machine, over a unix domain socket. Only opening
+    the socket differs from a TCP connection, so that is all this replaces. */
+class LocalConnection : public Connection {
+ public:
+  explicit LocalConnection(const std::string& path);
+  void connect() override;
+
+ private:
+  const std::string path;
 };
 
 }  // namespace krpc

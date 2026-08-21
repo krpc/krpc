@@ -6,6 +6,7 @@
 #include <asio/buffer.hpp>
 #include <asio/connect.hpp>  // IWYU pragma: keep
 #include <asio/error_code.hpp>
+#include <asio/local/stream_protocol.hpp>
 #include <asio/read.hpp>  // IWYU pragma: keep
 #include <asio/steady_timer.hpp>
 #include <asio/write.hpp>  // IWYU pragma: keep
@@ -29,14 +30,35 @@ namespace krpc {
 Connection::Connection(const std::string& address, unsigned int port)
     : socket(io_context), address(address), port(port), resolver(io_context) {}
 
+// The socket is protocol agnostic, so it is connected through an endpoint of the same kind,
+// which holds the address of any protocol as the system lays it out. The socket takes its
+// protocol from the endpoint it is connected to, so nothing here is specific to one.
+static void connect_generic(asio::generic::stream_protocol::socket& socket,
+                            const asio::generic::stream_protocol::endpoint& endpoint) {
+  socket.connect(endpoint);
+}
+
 void Connection::connect() {
   std::ostringstream port_str;
   port_str << port;
   auto endpoints = resolver.resolve(asio::ip::tcp::v4(), address, port_str.str());
-  asio::connect(socket, endpoints);
-  // The protocol is strictly request and response, so holding a write back to coalesce it with
-  // a later one can only add latency.
-  socket.set_option(asio::ip::tcp::no_delay(true));
+  for (auto& endpoint : endpoints) {
+    connect_generic(socket, endpoint.endpoint());
+    // The protocol is strictly request and response, so holding a write back to coalesce it with
+    // a later one can only add latency.
+    socket.set_option(asio::ip::tcp::no_delay(true));
+    return;
+  }
+  throw ConnectionError("could not resolve " + address);
+}
+
+LocalConnection::LocalConnection(const std::string& path) : Connection(path, 0), path(path) {}
+
+void LocalConnection::connect() {
+  // The generic endpoint copies the address in as raw bytes, which the analyzer cannot follow, so
+  // it takes the address family it later reads back to be uninitialized.
+  // NOLINTNEXTLINE(clang-analyzer-core.uninitialized.UndefReturn)
+  connect_generic(socket, asio::local::stream_protocol::endpoint(path));
 }
 
 void Connection::send(const char* data, size_t length) {
