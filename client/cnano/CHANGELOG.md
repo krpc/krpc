@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. One
+  is generated as a C struct with a member per field, named for the field it carries (#1066)
 - **Breaking:** Support null for any nullable type; a nullable non-class return adds a `bool*
   returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)
 - Add `KRPC_COMMUNICATION_TCP`, which builds the library to communicate with a server over

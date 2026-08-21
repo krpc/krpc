@@ -1,7 +1,7 @@
 # pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
 from __future__ import annotations
 import warnings
-from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
+from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
 import krpc.schema
 from krpc.schema import KRPC_pb2
@@ -29,6 +29,18 @@ class {{enum_name}}(DocEnum):
     {% for enum_value in enumeration['values'] %}
     {{enum_value['name']}} = {{enum_value['value']}}{% if enum_value.documentation %}, {{ enum_value.documentation }}{% endif %}
 
+    {% endfor %}
+
+
+{% endfor %}
+{% for struct_name, struct in structs.items() %}
+class {{struct_name}}(NamedTuple):
+{% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
+{% endif %}
+    {% for field in struct['fields'] %}
+    {{field.name}}: {{ field.spec }}
+{% if field.documentation %}{{ field.documentation | indent(width=4) }}
+{% endif %}
     {% endfor %}
 
 
@@ -165,12 +177,13 @@ class {{ service_name }}:
 
     def __init__(self, client: Client) -> None:
         self._client = client
-        # The classes, enumerations and exceptions the service defines are put on the
-        # service here, so that reaching one is an ordinary attribute lookup and nothing
-        # has to intercept the lookups that do not name one - which is every call, as a
-        # call goes through a procedure or a property. A class is bound to the client it
-        # is reached through, so that its static methods use that client.
+        # The classes, enumerations, structures and exceptions the service defines are
+        # put on the service here, so that reaching one is an ordinary attribute lookup
+        # and nothing has to intercept the lookups that do not name one - which is every
+        # call, as a call goes through a procedure or a property. A class is bound to the
+        # client it is reached through, so that its static methods use that client.
         self.__dict__.update(self._enumerations)
+        self.__dict__.update(self._structs)
         self.__dict__.update(self._exceptions)
         for name, class_type in self._classes.items():
             self.__dict__[name] = WrappedClass(client, class_type)
@@ -199,6 +212,11 @@ class {{ service_name }}:
     _enumerations = {
     {% for enum_name in enumerations.keys() %}
         "{{ enum_name }}": {{ enum_name }},
+    {% endfor %}
+    }
+    _structs = {
+    {% for struct_name in structs.keys() %}
+        "{{ struct_name }}": {{ struct_name }},
     {% endfor %}
     }
     _exceptions = {

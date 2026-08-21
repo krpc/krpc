@@ -103,6 +103,41 @@ namespace KRPC.Test.Service
             Assert.AreEqual (documentation, cls.Documentation);
         }
 
+        public static void HasNoDocumentation (Struct str)
+        {
+            Assert.AreEqual (string.Empty, str.Documentation);
+        }
+
+        public static void HasDocumentation (Struct str, string documentation)
+        {
+            Assert.AreEqual (documentation, str.Documentation);
+        }
+
+        public static void HasFields (Struct str, int count)
+        {
+            Assert.AreEqual (count, str.Fields.Count);
+        }
+
+        public static void HasField (Struct str, int position, string name, Type type)
+        {
+            HasField (str, position, name, type, string.Empty);
+        }
+
+        public static void HasField (Struct str, int position, string name, Type type, string documentation)
+        {
+            Assert.Less (position, str.Fields.Count);
+            var field = str.Fields [position];
+            Assert.AreEqual (name, field.Name);
+            Assert.AreEqual (type, field.Type);
+            Assert.AreEqual (documentation, field.Documentation);
+        }
+
+        public static void IsNotDeprecated (Struct str)
+        {
+            Assert.IsFalse (str.Deprecated);
+            Assert.AreEqual (string.Empty, str.DeprecatedReason);
+        }
+
         public static void HasValues (Enumeration enumeration, int count)
         {
             Assert.AreEqual (count, enumeration.Values.Count);

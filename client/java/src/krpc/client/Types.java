@@ -34,6 +34,15 @@ public class Types {
       .build();
   }
 
+  /** Create a struct type with the given name. */
+  public static Type createStruct(String service, String name) {
+    return Type.newBuilder()
+      .setCode(TypeCode.STRUCT)
+      .setService(service)
+      .setName(name)
+      .build();
+  }
+
   /** Create a tuple type with the given element types. */
   public static Type createTuple(Type... valueTypes) {
     Type.Builder type = Type.newBuilder();

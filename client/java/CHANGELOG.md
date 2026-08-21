@@ -1,4 +1,7 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. One
+  is generated as a class carrying its fields, with a constructor taking them in the order the
+  structure declares them, getters and equality over them (#1066)
 - **Breaking:** Requires Java 17 or later, up from Java 9, for the unix domain sockets the
   local socket protocol is carried over (#1065)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the boxed type

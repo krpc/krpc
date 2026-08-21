@@ -1,4 +1,9 @@
 ## [v0.7.0] - unreleased
+- Add structure types: a compound value with named fields, whose value is sent to the client in
+  full rather than as a reference to an object that stays on the server. A structure is declared
+  with `KRPCStruct` on a C# `struct`, its fields are the properties annotated with
+  `KRPCProperty`, and its value is encoded as the values of those fields in the order the
+  structure declares them (#1066)
 - Add a communication protocol carrying protocol buffer messages over a unix domain socket, for
   clients running on the same machine as the game. It carries the same messages as the TCP/IP
   protocol over a cheaper path: a client that makes many calls in quick succession completes

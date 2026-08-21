@@ -115,6 +115,22 @@ namespace KRPC.Service.KRPC
                     }
                     service.Enumerations.Add (enm);
                 }
+                foreach (var structSignature in serviceSignature.Structs.Values) {
+                    var str = new Messages.Struct (structSignature.Name);
+                    if (structSignature.Documentation.Length > 0)
+                        str.Documentation = structSignature.Documentation;
+                    str.Deprecated = structSignature.Deprecated;
+                    str.DeprecatedReason = structSignature.DeprecatedReason;
+                    foreach (var fieldSignature in structSignature.Fields) {
+                        var field = new StructField (fieldSignature.Name, fieldSignature.Type);
+                        if (fieldSignature.Documentation.Length > 0)
+                            field.Documentation = fieldSignature.Documentation;
+                        field.Deprecated = fieldSignature.Deprecated;
+                        field.DeprecatedReason = fieldSignature.DeprecatedReason;
+                        str.Fields.Add (field);
+                    }
+                    service.Structs.Add (str);
+                }
                 foreach (var exnSignature in serviceSignature.Exceptions.Values) {
                     var exn = new Messages.Exception (exnSignature.Name);
                     if (exnSignature.Documentation.Length > 0)

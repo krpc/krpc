@@ -359,6 +359,48 @@ TEST_F(test_client, test_collections_of_objects) {
   ASSERT_EQ("value=bob", l3[1].get_value());
 }
 
+TEST_F(test_client, test_structs) {
+  krpc::services::TestService::TestStruct value(
+      42, "jeb", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
+  auto result = test_service.struct_echo(value);
+  ASSERT_EQ(value, result);
+  ASSERT_EQ(42, result.int_field);
+  ASSERT_EQ("jeb", result.string_field);
+  ASSERT_EQ(krpc::services::TestService::TestEnum::value_b, result.enum_field);
+  ASSERT_EQ(std::vector<int32_t>({1, 2, 3}), result.list_field);
+}
+
+TEST_F(test_client, test_nested_structs) {
+  auto obj = test_service.create_test_object("bob");
+  krpc::services::TestService::TestNestedStruct value(
+      krpc::services::TestService::TestStruct(1, "jeb",
+                                              krpc::services::TestService::TestEnum::value_a, {}),
+      obj, "bill");
+  auto result = test_service.nested_struct_echo(value);
+  ASSERT_EQ(value, result);
+  ASSERT_EQ(1, result.struct_field.int_field);
+  ASSERT_EQ(obj, result.object_field);
+  ASSERT_EQ("bill", result.string_field);
+}
+
+TEST_F(test_client, test_collections_of_structs) {
+  std::vector<krpc::services::TestService::TestStruct> values{
+      krpc::services::TestService::TestStruct(0, "jeb",
+                                              krpc::services::TestService::TestEnum::value_c, {}),
+      krpc::services::TestService::TestStruct(1, "bob",
+                                              krpc::services::TestService::TestEnum::value_c, {})};
+  auto result = test_service.increment_list_of_structs(values);
+  ASSERT_EQ(2, result.size());
+  ASSERT_EQ(1, result[0].int_field);
+  ASSERT_EQ(2, result[1].int_field);
+}
+
+TEST_F(test_client, test_struct_default_value) {
+  krpc::services::TestService::TestStruct value(
+      42, "jeb", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
+  ASSERT_EQ(value, test_service.struct_default());
+}
+
 TEST_F(test_client, test_collections_default_values) {
   std::tuple<int, bool> t{1, false};
   ASSERT_EQ(t, test_service.tuple_default());

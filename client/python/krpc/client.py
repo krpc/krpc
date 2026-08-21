@@ -4,8 +4,9 @@ from types import TracebackType
 from contextlib import contextmanager
 import sys
 import threading
+import warnings
 from krpc.connection import Connection
-from krpc.definitions import CLASS, ENUMERATION, Definition, register_all
+from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_all
 from krpc.error import StreamError
 from krpc.event import Event
 from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
@@ -21,10 +22,13 @@ import krpc.schema.KRPC_pb2 as KRPC
 import krpc.services
 
 
-def _stub_definitions(name: str, service: object) -> Iterator[Definition]:
+def _stub_definitions(
+    service_info: KRPC.Service, service: object
+) -> Iterator[Definition]:
     """The types of a service whose stubs were generated ahead of time, as records that can be
     registered in a type registry. The stubs already provide the python types, so registering
     them is what lets a dynamically created service use them."""
+    name = service_info.name
 
     def register_class(class_name: str, python_type: type) -> Callable[[Types], None]:
         def register(types: Types) -> None:
@@ -37,6 +41,32 @@ def _stub_definitions(name: str, service: object) -> Iterator[Definition]:
     ) -> Callable[[Types], None]:
         def register(types: Types) -> None:
             types.register_enum_type(name, enum_name, python_type)
+
+        return register
+
+    def register_struct(
+        struct: KRPC.Struct, python_type: type
+    ) -> Callable[[Types], None]:
+        field_names = python_type._fields  # type: ignore[attr-defined]
+        build_as: Optional[type] = python_type
+        if len(struct.fields) < len(field_names):
+            # Fields are only ever appended to a structure, so a server that declares fewer
+            # of them than the stubs is an older one. Its values cannot be built as the stub
+            # type, so a plain named tuple of the fields it does declare is used instead
+            warnings.warn(
+                "Reading the struct %s.%s as a plain named tuple, as the server declares "
+                "fewer fields for it than this client was generated against"
+                % (name, struct.name)
+            )
+            field_names = field_names[: len(struct.fields)]
+            build_as = None
+
+        def register(types: Types) -> None:
+            fields = [
+                (field_name, types.as_type(field.type))
+                for field_name, field in zip(field_names, struct.fields)
+            ]
+            types.struct_type(name, struct.name).set_fields(fields, build_as)
 
         return register
 
@@ -53,6 +83,21 @@ def _stub_definitions(name: str, service: object) -> Iterator[Definition]:
             enum_name,
             [],
             register_enumeration(enum_name, python_type),
+        )
+    # The field types of a structure come from the service definition rather than from the
+    # stubs, so that the same code decodes a structure whether its stubs were generated
+    # ahead of time or not. Only the type a value is built as comes from the stubs
+    structs = service._structs  # type: ignore[attr-defined]
+    for struct in service_info.structs:
+        python_type = structs.get(struct.name)
+        if python_type is None:
+            continue
+        yield Definition(
+            STRUCT,
+            name,
+            struct.name,
+            [field.type for field in struct.fields],
+            register_struct(struct, python_type),
         )
 
 
@@ -90,7 +135,7 @@ class Client(krpc.services.Client):
             if use_pregenerated_stubs:
                 service = self._services.get(service_info.name)
             if service is not None:
-                definitions.extend(_stub_definitions(service_info.name, service))
+                definitions.extend(_stub_definitions(service_info, service))
             else:
                 dynamic_services.append(service_info)
                 definitions.extend(service_definitions(service_info))

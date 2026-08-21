@@ -111,6 +111,22 @@ namespace KRPC.Service.Scanner
                 }
             }
 
+            // Scan for structures annotated with KRPCStruct. Every one found is validated,
+            // including its fields, whether or not any procedure refers to it
+            foreach (var structType in Reflection.GetTypesWith<KRPCStructAttribute> ()) {
+                try {
+                    CurrentAssembly = structType.Assembly;
+                    TypeUtils.ValidateKRPCStruct (structType);
+                    var serviceName = TypeUtils.GetStructServiceName (structType);
+                    if (!signatures.ContainsKey (serviceName))
+                        HandleError(errors, "service " + serviceName, "Service does not exist, when loading struct");
+                    var service = signatures [serviceName];
+                    service.AddStruct (structType);
+                } catch (ServiceException exn) {
+                    HandleError(errors, string.Empty, exn);
+                }
+            }
+
             // Scan for classes annotated with KRPCException
             foreach (var exnType in Reflection.GetTypesWith<KRPCExceptionAttribute> ()) {
                 try {

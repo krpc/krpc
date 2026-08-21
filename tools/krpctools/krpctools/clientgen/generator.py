@@ -1,6 +1,14 @@
 import collections
 import jinja2
 from krpc.attributes import Attributes
+from krpc.definitions import topological_order
+from krpc.types import (
+    DictionaryType,
+    ListType,
+    SetType,
+    StructType,
+    TupleType,
+)
 from krpc.utils import snake_case
 from ..utils import lower_camel_case, indent, single_line, as_type, decode_default_value
 from .docparser import flatten_deprecation_reason
@@ -103,6 +111,7 @@ class Generator:
             "properties": {},
             "classes": {},
             "enumerations": {},
+            "structs": {},
             "exceptions": {},
         }
 
@@ -136,6 +145,29 @@ class Generator:
                 "deprecated": enumeration.get("deprecated", False),
                 "deprecated_reason": self.parse_deprecation_reason(
                     enumeration.get("deprecated_reason", "")
+                ),
+            }
+
+        for name, struct in self._get_defs("structs"):
+            context["structs"][name] = {
+                "fields": [
+                    {
+                        "name": self.parse_name(x["name"]),
+                        "remote_name": x["name"],
+                        "krpc_type": self.as_type(x["type"]),
+                        "type": self.parse_type(self.as_type(x["type"])),
+                        "documentation": self.parse_documentation(x["documentation"]),
+                        "deprecated": x.get("deprecated", False),
+                        "deprecated_reason": self.parse_deprecation_reason(
+                            x.get("deprecated_reason", "")
+                        ),
+                    }
+                    for x in struct["fields"]
+                ],
+                "documentation": self.parse_documentation(struct["documentation"]),
+                "deprecated": struct.get("deprecated", False),
+                "deprecated_reason": self.parse_deprecation_reason(
+                    struct.get("deprecated_reason", "")
                 ),
             }
 
@@ -306,6 +338,9 @@ class Generator:
         context["procedures"] = sort_dict(context["procedures"])
         context["properties"] = sort_dict(context["properties"])
         context["enumerations"] = sort_dict(context["enumerations"])
+        context["structs"] = _ordered_structs(
+            sort_dict(context["structs"]), self.service_name
+        )
         context["classes"] = sort_dict(context["classes"])
         context["exceptions"] = sort_dict(context["exceptions"])
         for cls in context["classes"].values():
@@ -314,6 +349,10 @@ class Generator:
             cls["properties"] = sort_dict(cls["properties"])
 
         return context
+
+    def as_type(self, type_info):
+        """Convert a type parsed from the service definitions into a type object"""
+        return as_type(self.types, type_info)
 
     def get_return_type(self, procedure):
         if "return_type" not in procedure:
@@ -334,3 +373,37 @@ class Generator:
 
     def parse_default_value(self, value, typ):
         return self.language.parse_default_value(value, typ)
+
+
+def _ordered_structs(structs, service_name):
+    """The given structures, which are the ones the named service defines, ordered so that
+    each follows the ones its fields carry. A generated declaration of a structure names the
+    types of its fields, and C and C++ need a type to be declared before it is named."""
+
+    def dependencies(item):
+        _, struct = item
+        names = set()
+        for field in struct["fields"]:
+            names.update(_struct_names_in(field["krpc_type"]))
+        return [
+            (name, structs[name])
+            for service, name in sorted(names)
+            if service == service_name and name in structs
+        ]
+
+    ordered = topological_order(structs.items(), lambda item: item[0], dependencies)
+    return collections.OrderedDict(ordered)
+
+
+def _struct_names_in(typ):
+    """The service and name of every structure the given type is, or holds in a collection"""
+    if isinstance(typ, StructType):
+        yield (typ.protobuf_type.service, typ.protobuf_type.name)
+    elif isinstance(typ, TupleType):
+        for value_type in typ.value_types:
+            yield from _struct_names_in(value_type)
+    elif isinstance(typ, (ListType, SetType)):
+        yield from _struct_names_in(typ.value_type)
+    elif isinstance(typ, DictionaryType):
+        yield from _struct_names_in(typ.key_type)
+        yield from _struct_names_in(typ.value_type)

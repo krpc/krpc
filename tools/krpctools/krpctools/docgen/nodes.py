@@ -16,6 +16,7 @@ class Appendable:
 
 
 class Service(Appendable):
+    # pylint: disable=too-many-arguments,too-many-locals
     def __init__(
         self,
         name,
@@ -26,6 +27,7 @@ class Service(Appendable):
         documentation,
         sort,
         types,
+        structs=None,
         deprecated=False,
         deprecated_reason="",
     ):
@@ -80,6 +82,10 @@ class Service(Appendable):
             ename: Enumeration(name, ename, sort=sort, **einfo)
             for (ename, einfo) in enumerations.items()
         }
+        self.structs = {
+            sname: Struct(name, sname, types=types, **sinfo)
+            for (sname, sinfo) in (structs or {}).items()
+        }
         self.exceptions = {
             ename: ExceptionNode(name, ename, **einfo)
             for (ename, einfo) in exceptions.items()
@@ -94,6 +100,8 @@ class Service(Appendable):
             del self.classes[member_name]
         if member_name in self.enumerations:
             del self.enumerations[member_name]
+        if member_name in self.structs:
+            del self.structs[member_name]
         if member_name in self.exceptions:
             del self.exceptions[member_name]
         del self.members[member_name]
@@ -408,6 +416,60 @@ class EnumerationValue(Appendable):
         self.deprecated = deprecated
         self.deprecated_reason = deprecated_reason
         self.cref = "M:%s.%s.%s" % (service_name, enum_name, name)
+
+
+class Struct(Appendable):
+    def __init__(
+        self,
+        service_name,
+        name,
+        fields,
+        documentation,
+        types,
+        deprecated=False,
+        deprecated_reason="",
+    ):
+        super().__init__()
+        self.types = types
+        self.service_name = service_name
+        self.name = name
+        self.fullname = service_name + "." + name
+        # The fields keep the order the structure declares them in, which is the order their
+        # values are encoded in, rather than being sorted like the members of a class
+        self.fields = OrderedDict(
+            (field["name"], StructField(service_name, name, types=types, **field))
+            for field in fields
+        )
+        self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
+        self.cref = "T:%s.%s" % (service_name, name)
+
+
+class StructField(Appendable):
+    # pylint: disable=redefined-builtin
+    def __init__(
+        self,
+        service_name,
+        struct_name,
+        name,
+        type,
+        documentation,
+        types,
+        deprecated=False,
+        deprecated_reason="",
+    ):
+        super().__init__()
+        self.types = types
+        self.service_name = service_name
+        self.struct_name = struct_name
+        self.name = name
+        self.fullname = service_name + "." + struct_name + "." + name
+        self.type = as_type(self.types, type)
+        self.documentation = documentation
+        self.deprecated = deprecated
+        self.deprecated_reason = deprecated_reason
+        self.cref = "M:%s.%s.%s" % (service_name, struct_name, name)
 
 
 class ExceptionNode(Appendable):

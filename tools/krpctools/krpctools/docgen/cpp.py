@@ -2,6 +2,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -19,6 +20,8 @@ from .nodes import (
     ClassProperty,
     Enumeration,
     EnumerationValue,
+    Struct,
+    StructField,
 )
 from ..lang.cpp import CppLanguage
 
@@ -56,6 +59,8 @@ class CppDomain(Domain):
             return ":class:`%s`" % self.type(typ)
         if isinstance(typ, EnumerationType):
             return ":class:`%s`" % self.type(typ)
+        if isinstance(typ, StructType):
+            return ":class:`%s`" % self.type(typ)
         if isinstance(typ, ListType):
             return "std::vector<%s>" % self.type_description(typ.value_type)
         if isinstance(typ, DictionaryType):
@@ -82,6 +87,7 @@ class CppDomain(Domain):
                 ClassStaticMethod,
                 ClassProperty,
                 EnumerationValue,
+                StructField,
             )
         ):
             name[-1] = snake_case(name[-1])
@@ -100,6 +106,10 @@ class CppDomain(Domain):
             prefix = "enum"
         elif isinstance(obj, EnumerationValue):
             prefix = "enumerator"
+        elif isinstance(obj, Struct):
+            prefix = "struct"
+        elif isinstance(obj, StructField):
+            prefix = "member"
         else:
             raise RuntimeError(str(obj))
         return ":%s:`%s`" % (prefix, self.ref(obj))

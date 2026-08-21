@@ -63,6 +63,47 @@ local function default_service(name, enum_service_name, in_a_list)
   return svc
 end
 
+-- A type code from a later version of the protocol than this client knows about
+local UNKNOWN_TYPE_CODE = 9999
+
+--- A service defining a structure with a single field, whose type the given function sets
+local function struct_service(name, set_field_type)
+  local svc = schema.Service()
+  svc.name = name
+  local struct = svc.structs:add()
+  struct.name = 'Thing'
+  local field = struct.fields:add()
+  field.name = 'Value'
+  set_field_type(field.type)
+  return svc
+end
+
+--- A service with a procedure taking a parameter of another service's structure
+local function struct_using_service(name, struct_service_name)
+  local svc = schema.Service()
+  svc.name = name
+  local procedure = svc.procedures:add()
+  procedure.name = 'Frob'
+  local parameter = procedure.parameters:add()
+  parameter.name = 'thing'
+  parameter.type.code = Types.STRUCT
+  parameter.type.service = struct_service_name
+  parameter.type.name = 'Thing'
+  return svc
+end
+
+local function unknown_field_type(typ)
+  typ.code = UNKNOWN_TYPE_CODE
+end
+
+local function struct_field_type(service_name)
+  return function (typ)
+    typ.code = Types.STRUCT
+    typ.service = service_name
+    typ.name = 'Thing'
+  end
+end
+
 local function create_services(svcs)
   local client = FakeClient()
   for _,svc in ipairs(svcs) do
@@ -111,6 +152,28 @@ end
 
 function TestServiceDefinitions:test_used_inside_a_collection()
   self:check_services({default_service('ServiceA', 'ServiceB', true), enum_service('ServiceB')}, true)
+end
+
+function TestServiceDefinitions:check_struct_is_skipped(svcs)
+  local _, created = create_services(svcs)
+  luaunit.assertNil(created['ServiceA'].frob)
+end
+
+function TestServiceDefinitions:test_procedure_naming_a_skipped_struct_is_skipped()
+  local _, created = create_services({
+    struct_service('ServiceB', unknown_field_type),
+    struct_using_service('ServiceA', 'ServiceB')
+  })
+  luaunit.assertNil(created['ServiceA'].frob)
+  luaunit.assertNil(created['ServiceB'].Thing)
+end
+
+function TestServiceDefinitions:test_struct_holding_a_skipped_struct_is_skipped()
+  self:check_struct_is_skipped({
+    struct_service('ServiceC', unknown_field_type),
+    struct_service('ServiceB', struct_field_type('ServiceC')),
+    struct_using_service('ServiceA', 'ServiceB')
+  })
 end
 
 return TestServiceDefinitions

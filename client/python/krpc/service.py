@@ -19,10 +19,20 @@ from krpc.definitions import (
     CLASS,
     ENUMERATION,
     EXCEPTION,
+    STRUCT,
     Definition,
     decode_default_value,
 )
-from krpc.types import Types, TypeBase, DynamicType, DynamicClassBase, DefaultArgument
+from krpc.types import (
+    Types,
+    TypeBase,
+    DynamicType,
+    DynamicClassBase,
+    DefaultArgument,
+    UnknownTypeError,
+    check_type_is_known,
+    is_a_known_type,
+)
 from krpc.utils import snake_case
 from krpc.attributes import Attributes
 import krpc.schema.KRPC_pb2 as KRPC
@@ -294,6 +304,29 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
 
         return register
 
+    def register_struct(struct: KRPC.Struct) -> Callable[[Types], None]:
+        doc = _documentation(struct, name)
+        field_names = _update_names(
+            *[snake_case(field.name) for field in struct.fields]
+        )
+
+        def register(types: Types) -> None:
+            # A structure whose fields cannot all be resolved is left without any, so that
+            # whatever names it is skipped rather than the whole service failing to build
+            if not all(is_a_known_type(field.type) for field in struct.fields):
+                warnings.warn(
+                    "Skipping the struct %s.%s, as the type of one of its fields is not a "
+                    "type this client knows about" % (name, struct.name)
+                )
+                return
+            fields = [
+                (field_name, types.as_type(field.type))
+                for field_name, field in zip(field_names, struct.fields)
+            ]
+            types.struct_type(name, struct.name, doc).set_fields(fields)
+
+        return register
+
     for cls in service.classes:
         yield Definition(CLASS, name, cls.name, [], register_class(cls))
     for enumeration in service.enumerations:
@@ -304,6 +337,29 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
         yield Definition(
             EXCEPTION, name, exception.name, [], register_exception(exception)
         )
+    # A structure is registered after the definitions its field types name, as building its
+    # fields resolves those types
+    for struct in service.structs:
+        yield Definition(
+            STRUCT,
+            name,
+            struct.name,
+            [field.type for field in struct.fields],
+            register_struct(struct),
+        )
+
+
+def _skipping_unknown_types(
+    what: str, build: Callable[..., None], *args: object  # type: ignore[type-arg]
+) -> None:
+    """Run one step of building a service, skipping it with a warning if it names a type this
+    client does not know about, rather than failing to create the service at all. That is
+    what a definition from a newer server looks like, where a member has been added whose
+    type is from a later version of the protocol."""
+    try:
+        build(*args)
+    except UnknownTypeError as exn:
+        warnings.warn("Skipping %s: %s" % (what, exn))
 
 
 def create_service(client: Client, service: KRPC.Service) -> object:
@@ -336,10 +392,19 @@ def create_service(client: Client, service: KRPC.Service) -> object:
     for exception in service.exceptions:
         cls._add_service_exception(exception)
 
+    # Add structure types to service
+    for struct in service.structs:
+        if client._types.struct_type(service.name, struct.name).has_fields:
+            cls._add_service_struct(struct)
+
     # Add procedures
     for procedure in service.procedures:
         if Attributes.is_a_procedure(procedure.name):
-            cls._add_service_procedure(procedure)
+            _skipping_unknown_types(
+                "%s.%s" % (service.name, procedure.name),
+                cls._add_service_procedure,
+                procedure,
+            )
 
     # Add properties
     properties: DefaultDict[str, List[Optional[KRPC.Procedure]]] = defaultdict(
@@ -353,21 +418,39 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             else:
                 properties[name][1] = procedure
     for name, procedures in properties.items():
-        cls._add_service_property(name, procedures[0], procedures[1])
+        _skipping_unknown_types(
+            "%s.%s" % (service.name, name),
+            cls._add_service_property,
+            name,
+            procedures[0],
+            procedures[1],
+        )
 
     # Add class methods
     for procedure in service.procedures:
         if Attributes.is_a_class_method(procedure.name):
             class_name = Attributes.get_class_name(procedure.name)
             method_name = Attributes.get_class_member_name(procedure.name)
-            cls._add_service_class_method(class_name, method_name, procedure)
+            _skipping_unknown_types(
+                "%s.%s.%s" % (service.name, class_name, method_name),
+                cls._add_service_class_method,
+                class_name,
+                method_name,
+                procedure,
+            )
 
     # Add static class methods
     for procedure in service.procedures:
         if Attributes.is_a_class_static_method(procedure.name):
             class_name = Attributes.get_class_name(procedure.name)
             method_name = Attributes.get_class_member_name(procedure.name)
-            cls._add_service_class_static_method(class_name, method_name, procedure)
+            _skipping_unknown_types(
+                "%s.%s.%s" % (service.name, class_name, method_name),
+                cls._add_service_class_static_method,
+                class_name,
+                method_name,
+                procedure,
+            )
 
     # Add class properties
     class_properties: DefaultDict[Tuple[str, str], List[Optional[KRPC.Procedure]]] = (
@@ -383,8 +466,13 @@ def create_service(client: Client, service: KRPC.Service) -> object:
             else:
                 class_properties[key][1] = procedure
     for (class_name, property_name), procedures in class_properties.items():
-        cls._add_service_class_property(
-            class_name, property_name, procedures[0], procedures[1]
+        _skipping_unknown_types(
+            "%s.%s.%s" % (service.name, class_name, property_name),
+            cls._add_service_class_property,
+            class_name,
+            property_name,
+            procedures[0],
+            procedures[1],
         )
 
     return cls()  # type: ignore[operator]
@@ -416,6 +504,12 @@ class ServiceBase(DynamicType):
         setattr(cls, enumeration.name, enumeration_type.python_type)
 
     @classmethod
+    def _add_service_struct(cls, struct: KRPC.Struct) -> None:
+        """Add a structure type"""
+        struct_type = cls._client._types.struct_type(cls._name, struct.name)
+        setattr(cls, struct.name, struct_type.python_type)
+
+    @classmethod
     def _add_service_exception(cls, exception: KRPC.Exception) -> None:
         """Add an exception type"""
         exception_type = cls._client._types.exception_type(cls._name, exception.name)
@@ -433,6 +527,15 @@ class ServiceBase(DynamicType):
         param_types = [
             cls._client._types.as_type(param.type) for param in procedure.parameters
         ]
+        return_type: Optional[TypeBase] = None
+        if not Types.is_none_type(procedure.return_type):
+            return_type = cls._client._types.as_type(procedure.return_type)
+        # Checked before anything is built from the types, so that a procedure naming a
+        # structure whose definition was skipped is skipped along with it
+        for typ in param_types:
+            check_type_is_known(typ)
+        if return_type is not None:
+            check_type_is_known(return_type)
         param_required = [not param.has_default_value for param in procedure.parameters]
         param_default: List[Optional[object]] = []
         for param, typ in zip(procedure.parameters, param_types):
@@ -449,9 +552,6 @@ class ServiceBase(DynamicType):
                 )
             else:
                 param_default.append(None)
-        return_type: Optional[TypeBase] = None
-        if not Types.is_none_type(procedure.return_type):
-            return_type = cls._client._types.as_type(procedure.return_type)
         return param_names, param_types, param_required, param_default, return_type
 
     @classmethod

@@ -28,6 +28,7 @@ import krpc.client.Connection;
 import krpc.client.Encoder;
 import krpc.client.RemoteEnum;
 import krpc.client.RemoteObject;
+import krpc.client.RemoteStruct;
 import krpc.client.RPCInfo;
 import krpc.client.RPCException;
 import krpc.client.Types;
@@ -124,6 +125,83 @@ public class {{ service_name }} {
             {% endfor %}
             }
             return null;
+        }
+    }
+    {% endfor %}
+    {% for struct_name,struct in structs.items() %}
+
+{% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
+{% endif %}
+{% if struct.deprecated %}    @Deprecated
+{% endif %}
+    public static class {{ struct_name }} implements RemoteStruct {
+        {% for field in struct['fields'] %}
+        private final {{ field.type }} {{ field.name }};
+        {% endfor %}
+
+        public {{ struct_name }}({% for field in struct['fields'] %}{{ field.type }} {{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}) {
+            {% for field in struct['fields'] %}
+            this.{{ field.name }} = {{ field.name }};
+            {% endfor %}
+        }
+        {% for field in struct['fields'] %}
+
+{% if field.documentation %}{{ field.documentation | indent(width=8) }}
+{% endif %}
+{% if field.deprecated %}        @Deprecated
+{% endif %}
+        public {{ field.type }} get{{ field.accessor_name }}() {
+            return {{ field.name }};
+        }
+        {% endfor %}
+
+        private static final java.util.List<krpc.schema.KRPC.Type> FIELD_TYPES =
+            java.util.Collections.unmodifiableList(java.util.Arrays.asList(
+                {% for field in struct['fields'] %}
+                {{ field.spec }}{% if not loop.last %},{% endif %}
+
+                {% endfor %}
+            ));
+
+        /** The types of the fields, in the order they are encoded in. */
+        public static java.util.List<krpc.schema.KRPC.Type> fieldTypes() {
+            return FIELD_TYPES;
+        }
+
+        /** Build a {{ struct_name }} from the values of its fields. */
+        @SuppressWarnings("unchecked")
+        public static {{ struct_name }} fromFieldValues(Object[] values) {
+            return new {{ struct_name }}(
+                {% for field in struct['fields'] %}
+                ({{ field.type }}) values[{{ loop.index0 }}]{% if not loop.last %},{% endif %}
+
+                {% endfor %}
+            );
+        }
+
+        @Override
+        public Object[] fieldValues() {
+            return new Object[] {
+                {% for field in struct['fields'] %}
+                {{ field.name }}{% if not loop.last %},{% endif %}
+
+                {% endfor %}
+            };
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof {{ struct_name }})) {
+                return false;
+            }
+            {{ struct_name }} other = ({{ struct_name }}) obj;
+            return {% for field in struct['fields'] %}java.util.Objects.equals(this.{{ field.name }}, other.{{ field.name }}){% if not loop.last %}
+                && {% endif %}{% endfor %};
+        }
+
+        @Override
+        public int hashCode() {
+            return java.util.Objects.hash({% for field in struct['fields'] %}{{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %});
         }
     }
     {% endfor %}

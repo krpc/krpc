@@ -83,6 +83,18 @@ function ServiceBase:_parse_procedure(procedure)
 
   local param_names = seq.copy(seq.map(function (x) return service.to_snake_case(x.name) end, procedure.parameters))
   local param_types = seq.copy(seq.map(function (x) return self._client._types:as_type(x.type) end, procedure.parameters))
+  local return_type = nil
+  if procedure:HasField('return_type') then
+    return_type = self._client._types:as_type(procedure.return_type)
+  end
+  -- Checked before anything is built from the types, so that a procedure naming a structure
+  -- whose definition was skipped is skipped along with it
+  for _,typ in ipairs(param_types) do
+    Types.check_type_is_known(typ)
+  end
+  if return_type ~= nil then
+    Types.check_type_is_known(return_type)
+  end
   local param_required = seq.copy(seq.map(function (x) return not x.has_default_value end, procedure.parameters))
   local param_default = List{}
   for param,typ in seq.zip(procedure.parameters, param_types) do
@@ -95,10 +107,6 @@ function ServiceBase:_parse_procedure(procedure)
     else
       param_default:append(nil)
     end
-  end
-  local return_type = nil
-  if procedure:HasField('return_type') then
-    return_type = self._client._types:as_type(procedure.return_type)
   end
   return param_names, param_types, param_required, param_default, return_type
 end
@@ -115,6 +123,24 @@ function service.register_definitions(types, svc)
     end
     types:enumeration_type(svc.name, enum.name):set_values(values)
   end
+  for _,struct in ipairs(svc.structs) do
+    -- A structure whose fields cannot all be resolved is left without any, so that whatever
+    -- names it is skipped rather than the whole service failing to build
+    local known = true
+    for _,field in ipairs(struct.fields) do
+      known = known and Types.is_a_known_type(field.type)
+    end
+    if known then
+      local fields = {}
+      for i,field in ipairs(struct.fields) do
+        fields[i] = { service.to_snake_case(field.name), types:as_type(field.type) }
+      end
+      types:struct_type(svc.name, struct.name):set_fields(fields)
+    else
+      io.stderr:write('Skipping the struct ' .. svc.name .. '.' .. struct.name .. ', as the ' ..
+                      'type of one of its fields is not a type this client knows about\n')
+    end
+  end
 end
 
 -- The types a service defines are registered from its definitions, before any service is
@@ -129,6 +155,11 @@ end
 --- Add an enumeration type
 function ServiceBase:_add_service_enumeration(enum)
   self[enum.name] = self._client._types:enumeration_type(self._name, enum.name).lua_type
+end
+
+--- Add a structure type
+function ServiceBase:_add_service_struct(struct)
+  self[struct.name] = self._client._types:struct_type(self._name, struct.name).lua_type
 end
 
 --- Add a procedure
@@ -198,6 +229,20 @@ function ServiceBase:_add_service_class_property(class_name, property_name, gett
   return class_cls:_add_property(property_name, getter, setter)
 end
 
+--- Run one step of building a service, skipping it with a warning if it names a type this
+--- client does not know about, rather than failing to create the service at all. That is what
+--- a definition from a newer server looks like, where a member has been added whose type is
+--- from a later version of the protocol.
+local function _skipping_unknown_types(what, build)
+  local ok, err = pcall(build)
+  if not ok then
+    if type(err) ~= 'string' or not err:find(Types.UNKNOWN_TYPE_ERROR, 1, true) then
+      error(err)
+    end
+    io.stderr:write('Skipping ' .. what .. ': ' .. tostring(err) .. '\n')
+  end
+end
+
 --- Create a new service type
 function service.create_service(client, service)
   local cls = class(ServiceBase)
@@ -215,10 +260,19 @@ function service.create_service(client, service)
     cls:_add_service_enumeration(enum)
   end
 
+  -- Add structure types to service
+  for _,struct in ipairs(service.structs) do
+    if client._types:struct_type(service.name, struct.name).lua_type ~= nil then
+      cls:_add_service_struct(struct)
+    end
+  end
+
   -- Add procedures
   for _,procedure in ipairs(service.procedures) do
     if Attributes.is_a_procedure(procedure.name) then
-      cls:_add_service_procedure(procedure)
+      _skipping_unknown_types(service.name .. '.' .. procedure.name, function ()
+        cls:_add_service_procedure(procedure)
+      end)
     end
   end
 
@@ -238,7 +292,9 @@ function service.create_service(client, service)
     end
   end
   for name, procedures in pairs(properties) do
-    cls:_add_service_property(name, procedures['get'], procedures['set'])
+    _skipping_unknown_types(service.name .. '.' .. name, function ()
+      cls:_add_service_property(name, procedures['get'], procedures['set'])
+    end)
   end
 
   -- Add class methods
@@ -246,7 +302,9 @@ function service.create_service(client, service)
     if Attributes.is_a_class_method(procedure.name) then
       local class_name = Attributes.get_class_name(procedure.name)
       local method_name = Attributes.get_class_member_name(procedure.name)
-      cls:_add_service_class_method(class_name, method_name, procedure)
+      _skipping_unknown_types(service.name .. '.' .. class_name .. '.' .. method_name, function ()
+        cls:_add_service_class_method(class_name, method_name, procedure)
+      end)
     end
   end
 
@@ -255,7 +313,9 @@ function service.create_service(client, service)
     if Attributes.is_a_class_static_method(procedure.name) then
       local class_name = Attributes.get_class_name(procedure.name)
       local method_name = Attributes.get_class_member_name(procedure.name)
-      cls:_add_service_class_static_method(class_name, method_name, procedure)
+      _skipping_unknown_types(service.name .. '.' .. class_name .. '.' .. method_name, function ()
+        cls:_add_service_class_static_method(class_name, method_name, procedure)
+      end)
     end
   end
 
@@ -278,7 +338,9 @@ function service.create_service(client, service)
   end
   for key, procedures in pairs(properties) do
     local class_name, _, property_name = stringx.partition(key, '.')
-    cls:_add_service_class_property(class_name, property_name, procedures['get'], procedures['set'])
+    _skipping_unknown_types(service.name .. '.' .. key, function ()
+      cls:_add_service_class_property(class_name, property_name, procedures['get'], procedures['set'])
+    end)
   end
 
   return cls()

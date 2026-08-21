@@ -350,6 +350,70 @@ namespace KRPC.Client.Test
         }
 
         [Test]
+        public void Structs ()
+        {
+            var value = new TestStruct (42, "jeb", TestEnum.ValueB, new List<int> { 1, 2, 3 });
+            var result = Connection.TestService ().StructEcho (value);
+            Assert.AreEqual (value, result);
+            Assert.AreEqual (value.GetHashCode (), result.GetHashCode ());
+            Assert.AreEqual (42, result.IntField);
+            Assert.AreEqual ("jeb", result.StringField);
+            Assert.AreEqual (TestEnum.ValueB, result.EnumField);
+            CollectionAssert.AreEqual (new List<int> { 1, 2, 3 }, result.ListField);
+        }
+
+        [Test]
+        public void NestedStructs ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("bob");
+            var value = new TestNestedStruct (
+                new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> ()), obj, "bill");
+            var result = Connection.TestService ().NestedStructEcho (value);
+            Assert.AreEqual (value, result);
+            Assert.AreEqual (1, result.StructField.IntField);
+            Assert.AreEqual (obj, result.ObjectField);
+            Assert.AreEqual ("bill", result.StringField);
+        }
+
+        [Test]
+        public void CollectionsOfStructs ()
+        {
+            var values = new List<TestStruct> {
+                new TestStruct (0, "jeb", TestEnum.ValueC, new List<int> ()),
+                new TestStruct (1, "bob", TestEnum.ValueC, new List<int> ())
+            };
+            var result = Connection.TestService ().IncrementListOfStructs (values);
+            CollectionAssert.AreEqual (
+                new List<TestStruct> {
+                    new TestStruct (1, "jeb", TestEnum.ValueC, new List<int> ()),
+                    new TestStruct (2, "bob", TestEnum.ValueC, new List<int> ())
+                },
+                result);
+        }
+
+        [Test]
+        public void NullableStructs ()
+        {
+            Assert.IsNull (Connection.TestService ().StructEchoNullable (null));
+            var value = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> ());
+            var result = Connection.TestService ().StructEchoNullable (value);
+            Assert.IsTrue (result.HasValue);
+            Assert.AreEqual (value, result.Value);
+        }
+
+        [Test]
+        public void StructDefaultValue ()
+        {
+            var result = Connection.TestService ().StructDefault ();
+            Assert.AreEqual (
+                new TestStruct (42, "jeb", TestEnum.ValueB, new List<int> { 1, 2, 3 }), result);
+            Assert.AreEqual (42, result.IntField);
+            Assert.AreEqual ("jeb", result.StringField);
+            Assert.AreEqual (TestEnum.ValueB, result.EnumField);
+            CollectionAssert.AreEqual (new List<int> { 1, 2, 3 }, result.ListField);
+        }
+
+        [Test]
         public void CollectionsDefaultValues ()
         {
             Assert.AreEqual (new Tuple<int,bool> (1, false), Connection.TestService ().TupleDefault ());

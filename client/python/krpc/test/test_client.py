@@ -424,6 +424,82 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual("value=jeb", objs[0].get_value())
         self.assertEqual("value=bob", objs[1].get_value())
 
+    def test_structs(self) -> None:
+        service = self.conn.test_service
+        value = service.TestStruct(
+            int_field=42,
+            string_field="jeb",
+            enum_field=service.TestEnum.value_b,
+            list_field=[1, 2, 3],
+        )
+        result = service.struct_echo(value)
+        self.assertEqual(value, result)
+        # A structure has named fields, and is a tuple of their values
+        self.assertEqual(42, result.int_field)
+        self.assertEqual(service.TestEnum.value_b, result.enum_field)
+        self.assertEqual(
+            (42, "jeb", service.TestEnum.value_b, [1, 2, 3]), tuple(result)
+        )
+        # A tuple of the field values coerces to the structure
+        self.assertEqual(
+            value, service.struct_echo((42, "jeb", service.TestEnum.value_b, [1, 2, 3]))
+        )
+
+    def test_nested_structs(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("bob")
+        value = service.TestNestedStruct(
+            struct_field=service.TestStruct(
+                int_field=1,
+                string_field="jeb",
+                enum_field=service.TestEnum.value_a,
+                list_field=[],
+            ),
+            object_field=obj,
+            string_field="bill",
+        )
+        result = service.nested_struct_echo(value)
+        self.assertEqual(value, result)
+        self.assertEqual(1, result.struct_field.int_field)
+        self.assertEqual("value=bob", result.object_field.get_value())
+
+    def test_collections_of_structs(self) -> None:
+        service = self.conn.test_service
+        values = [
+            service.TestStruct(
+                int_field=i,
+                string_field="jeb",
+                enum_field=service.TestEnum.value_c,
+                list_field=[i],
+            )
+            for i in range(3)
+        ]
+        result = service.increment_list_of_structs(values)
+        self.assertEqual([1, 2, 3], [x.int_field for x in result])
+
+    def test_nullable_structs(self) -> None:
+        service = self.conn.test_service
+        self.assertIsNone(service.struct_echo_nullable(None))
+        value = service.TestStruct(
+            int_field=1,
+            string_field="jeb",
+            enum_field=service.TestEnum.value_a,
+            list_field=[],
+        )
+        self.assertEqual(value, service.struct_echo_nullable(value))
+
+    def test_struct_default_value(self) -> None:
+        service = self.conn.test_service
+        self.assertEqual(
+            service.TestStruct(
+                int_field=42,
+                string_field="jeb",
+                enum_field=service.TestEnum.value_b,
+                list_field=[1, 2, 3],
+            ),
+            service.struct_default(),
+        )
+
     def test_colllections_default_values(self) -> None:
         self.assertEqual((1, False), self.conn.test_service.tuple_default())
         self.assertEqual([1, 2, 3], self.conn.test_service.list_default())
@@ -629,6 +705,14 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "set_default",
                     "add_to_object_list",
                     "counter",
+                    "TestStruct",
+                    "TestNestedStruct",
+                    "struct_echo",
+                    "nested_struct_echo",
+                    "increment_list_of_structs",
+                    "struct_default",
+                    "struct_echo_nullable",
+                    "counter_struct",
                     "CustomException",
                     "throw_custom_exception",
                     "reset_custom_exception_later",
@@ -647,6 +731,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "DeprecatedClass",
                     "DeprecatedEnum",
                     "DeprecatedException",
+                    "DeprecatedStruct",
                     "double_special_defaults",
                     "float_special_defaults",
                     "int32_special_defaults",

@@ -24,13 +24,14 @@ namespace KRPC.Test.Utils
         {
             Assert.AreEqual (5, Reflection.GetTypesWith<KRPCServiceAttribute> ().Count ());
             Assert.AreEqual (6, Reflection.GetTypesWith<KRPCClassAttribute> ().Count ());
+            Assert.AreEqual (2, Reflection.GetTypesWith<KRPCStructAttribute> ().Count ());
             Assert.AreEqual (0, Reflection.GetTypesWith<KRPCPropertyAttribute> ().Count ());
         }
 
         [Test]
         public void GetMethodsWithAttribute ()
         {
-            Assert.AreEqual (34, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
+            Assert.AreEqual (38, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService)).Count ());
             Assert.AreEqual (8, Reflection.GetMethodsWith<KRPCMethodAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(TestService.TestClass)).Count ());
             Assert.AreEqual (0, Reflection.GetMethodsWith<KRPCProcedureAttribute> (typeof(string)).Count ());

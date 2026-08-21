@@ -274,6 +274,110 @@ namespace TestServer
             return x;
         }
 
+        /// <summary>
+        /// Struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestStruct
+        {
+            /// <summary>
+            /// Struct IntField documentation string.
+            /// </summary>
+            [KRPCProperty]
+            public int IntField { get; set; }
+
+            [KRPCProperty]
+            public string StringField { get; set; }
+
+            [KRPCProperty]
+            public TestEnum EnumField { get; set; }
+
+            [KRPCProperty]
+            public IList<int> ListField { get; set; }
+        }
+
+        /// <summary>
+        /// Nested struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestNestedStruct
+        {
+            [KRPCProperty]
+            public TestStruct StructField { get; set; }
+
+            [KRPCProperty]
+            public TestClass ObjectField { get; set; }
+
+            [KRPCProperty]
+            public string StringField { get; set; }
+        }
+
+        [KRPCProcedure]
+        public static TestStruct StructEcho (TestStruct x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static TestNestedStruct NestedStructEcho (TestNestedStruct x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static IList<TestStruct> IncrementListOfStructs (IList<TestStruct> l)
+        {
+            if (l == null)
+                throw new ArgumentNullException (nameof (l));
+            return l.Select (x => new TestStruct {
+                IntField = x.IntField + 1,
+                StringField = x.StringField,
+                EnumField = x.EnumField,
+                ListField = x.ListField
+            }).ToList ();
+        }
+
+        public static class CreateStructDefault
+        {
+            public static object Create ()
+            {
+                return new TestStruct {
+                    IntField = 42,
+                    StringField = "jeb",
+                    EnumField = TestEnum.ValueB,
+                    ListField = new List<int> { 1, 2, 3 }
+                };
+            }
+        }
+
+        [KRPCProcedure]
+        public static TestStruct StructDefault (
+            [KRPCDefaultValue (typeof(CreateStructDefault))] TestStruct x)
+        {
+            return x;
+        }
+
+        [KRPCProcedure]
+        public static TestStruct? StructEchoNullable (TestStruct? x)
+        {
+            return x;
+        }
+
+        /// <summary>
+        /// Returns a struct whose IntField counts the number of times it has been called,
+        /// so that a stream on it changes on every update.
+        /// </summary>
+        [KRPCProcedure]
+        public static TestStruct CounterStruct (string id = "")
+        {
+            return new TestStruct {
+                IntField = Counter (id),
+                StringField = id,
+                EnumField = TestEnum.ValueA,
+                ListField = new List<int> ()
+            };
+        }
+
         [KRPCProcedure]
         public static int BlockingProcedure (int n, int sum = 0)
         {
@@ -635,6 +739,27 @@ namespace TestServer
             /// </summary>
             [Obsolete ("Use <see cref='ValueA'/> instead.")]
             ValueB
+        }
+
+        /// <summary>
+        /// Deprecated struct documentation string.
+        /// </summary>
+        [KRPCStruct]
+        [Obsolete ("Use <see cref='TestStruct'/> instead.")]
+        public struct DeprecatedStruct
+        {
+            /// <summary>
+            /// Deprecated struct Value documentation string.
+            /// </summary>
+            [KRPCProperty]
+            public int Value { get; set; }
+
+            /// <summary>
+            /// Deprecated struct OldValue documentation string.
+            /// </summary>
+            [KRPCProperty]
+            [Obsolete ("Use <see cref='Value'/> instead.")]
+            public int OldValue { get; set; }
         }
 
         /// <summary>

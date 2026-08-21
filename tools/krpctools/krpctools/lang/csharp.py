@@ -4,6 +4,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -171,7 +172,7 @@ class CsharpLanguage(Language):
                 self._parse_type(typ.key_type),
                 self._parse_type(typ.value_type),
             )
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "global::KRPC.Client.Services.%s.%s" % (
                 typ.protobuf_type.service,
                 typ.protobuf_type.name,
@@ -197,6 +198,12 @@ class CsharpLanguage(Language):
             )
         if value is None:
             return "null"
+        if isinstance(typ, StructType):
+            values = (
+                self.parse_default_value(x, typ.field_types[i])
+                for i, x in enumerate(value)
+            )
+            return "new %s (%s)" % (self.parse_type(typ), ", ".join(values))
         if isinstance(typ, TupleType):
             values = (
                 self.parse_default_value(x, typ.value_types[i])

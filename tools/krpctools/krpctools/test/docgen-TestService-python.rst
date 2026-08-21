@@ -80,6 +80,18 @@ Service documentation string.
 
 
 
+.. staticmethod:: counter_struct([id = ''])
+
+   Returns a struct whose IntField counts the number of times it has been called,
+   so that a stream on it changes on every update.
+
+   :param str id:
+   :rtype: :class:`TestStruct`
+   
+
+
+
+
 .. staticmethod:: create_test_object(value)
 
 
@@ -315,6 +327,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: increment_list_of_structs(l)
+
+
+
+   :param list l:
+   :rtype: list(:class:`TestStruct`)
+   
+
+
+
+
 .. staticmethod:: increment_nested_collection(d)
 
 
@@ -400,6 +423,17 @@ Service documentation string.
 
    :param list x:
    :rtype: list(int)
+   
+
+
+
+
+.. staticmethod:: nested_struct_echo(x)
+
+
+
+   :param TestNestedStruct x:
+   :rtype: :class:`TestNestedStruct`
    
 
 
@@ -553,6 +587,39 @@ Service documentation string.
 
    :param str value:
    :rtype: int
+   
+
+
+
+
+.. staticmethod:: struct_default([x = TestStruct(42, 'jeb', TestEnum.value_b, [1, 2, 3])])
+
+
+
+   :param TestStruct x:
+   :rtype: :class:`TestStruct`
+   
+
+
+
+
+.. staticmethod:: struct_echo(x)
+
+
+
+   :param TestStruct x:
+   :rtype: :class:`TestStruct`
+   
+
+
+
+
+.. staticmethod:: struct_echo_nullable(x)
+
+
+
+   :param TestStruct x:
+   :rtype: :class:`TestStruct`
    
 
 
@@ -817,6 +884,82 @@ Service documentation string.
 
       Deprecated enum ValueB documentation string.
 
+
+
+.. class:: TestStruct
+
+   Struct documentation string.
+
+
+   .. attribute:: int_field
+
+      Struct IntField documentation string.
+
+      :rtype: int
+
+   .. attribute:: string_field
+
+
+
+      :rtype: str
+
+   .. attribute:: enum_field
+
+
+
+      :rtype: :class:`TestEnum`
+
+   .. attribute:: list_field
+
+
+
+      :rtype: list(int)
+
+
+.. class:: TestNestedStruct
+
+   Nested struct documentation string.
+
+
+   .. attribute:: struct_field
+
+
+
+      :rtype: :class:`TestStruct`
+
+   .. attribute:: object_field
+
+
+
+      :rtype: :class:`TestClass`
+
+   .. attribute:: string_field
+
+
+
+      :rtype: str
+
+
+.. class:: DeprecatedStruct
+
+   .. warning:: Deprecated. Use :class:`TestStruct` instead.
+
+   Deprecated struct documentation string.
+
+
+   .. attribute:: value
+
+      Deprecated struct Value documentation string.
+
+      :rtype: int
+
+   .. attribute:: old_value
+
+      .. warning:: Deprecated. Use :attr:`DeprecatedStruct.value` instead.
+
+      Deprecated struct OldValue documentation string.
+
+      :rtype: int
 
 
 .. class:: CustomException

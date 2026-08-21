@@ -74,6 +74,17 @@ Service documentation string.
 
 
 
+.. staticmethod:: counter_struct([id = ''])
+
+   Returns a struct whose IntField counts the number of times it has been called,
+   so that a stream on it changes on every update.
+
+   :param string id:
+   :rtype: :class:`TestService.TestStruct`
+
+
+
+
 .. staticmethod:: create_test_object(value)
 
 
@@ -289,6 +300,16 @@ Service documentation string.
 
 
 
+.. staticmethod:: increment_list_of_structs(l)
+
+
+
+   :param List l:
+   :rtype: List
+
+
+
+
 .. staticmethod:: increment_nested_collection(d)
 
 
@@ -367,6 +388,16 @@ Service documentation string.
 
    :param List x:
    :rtype: List
+
+
+
+
+.. staticmethod:: nested_struct_echo(x)
+
+
+
+   :param TestService.TestNestedStruct x:
+   :rtype: :class:`TestService.TestNestedStruct`
 
 
 
@@ -506,6 +537,36 @@ Service documentation string.
 
    :param string value:
    :rtype: number
+
+
+
+
+.. staticmethod:: struct_default([x = {42, 'jeb', TestService.TestEnum.value_b, {1, 2, 3}}])
+
+
+
+   :param TestService.TestStruct x:
+   :rtype: :class:`TestService.TestStruct`
+
+
+
+
+.. staticmethod:: struct_echo(x)
+
+
+
+   :param TestService.TestStruct x:
+   :rtype: :class:`TestService.TestStruct`
+
+
+
+
+.. staticmethod:: struct_echo_nullable(x)
+
+
+
+   :param TestService.TestStruct x:
+   :rtype: :class:`TestService.TestStruct`
 
 
 
@@ -747,6 +808,82 @@ Service documentation string.
 
       Deprecated enum ValueB documentation string.
 
+
+
+.. class:: TestStruct
+
+   Struct documentation string.
+
+
+   .. attribute:: int_field: number
+
+      Struct IntField documentation string.
+
+      :rtype: number
+
+   .. attribute:: string_field: string
+
+
+
+      :rtype: string
+
+   .. attribute:: enum_field: TestService.TestEnum
+
+
+
+      :rtype: :class:`TestService.TestEnum`
+
+   .. attribute:: list_field: List
+
+
+
+      :rtype: List
+
+
+.. class:: TestNestedStruct
+
+   Nested struct documentation string.
+
+
+   .. attribute:: struct_field: TestService.TestStruct
+
+
+
+      :rtype: :class:`TestService.TestStruct`
+
+   .. attribute:: object_field: TestService.TestClass
+
+
+
+      :rtype: :class:`TestService.TestClass`
+
+   .. attribute:: string_field: string
+
+
+
+      :rtype: string
+
+
+.. class:: DeprecatedStruct
+
+   .. warning:: Deprecated. Use :class:`TestService.TestStruct` instead.
+
+   Deprecated struct documentation string.
+
+
+   .. attribute:: value: number
+
+      Deprecated struct Value documentation string.
+
+      :rtype: number
+
+   .. attribute:: old_value: number
+
+      .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
+
+      Deprecated struct OldValue documentation string.
+
+      :rtype: number
 
 
 .. class:: CustomException

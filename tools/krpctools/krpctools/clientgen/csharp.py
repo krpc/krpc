@@ -1,6 +1,6 @@
 # pylint: disable=no-name-in-module
 from krpc.schema.KRPC_pb2 import Type
-from krpc.types import ValueType, EnumerationType
+from krpc.types import ValueType, EnumerationType, StructType
 from .generator import Generator
 from ..lang.csharp import CsharpLanguage
 from ..utils import as_type
@@ -14,7 +14,7 @@ class CsharpGenerator(Generator):
     def _is_nullable_value_type(typ):
         # C# reference types (string, byte[], classes and collections) carry null
         # naturally; only genuine value types need the nullable form T?.
-        if isinstance(typ, EnumerationType):
+        if isinstance(typ, (EnumerationType, StructType)):
             return True
         if isinstance(typ, ValueType):
             return typ.protobuf_type.code not in (Type.STRING, Type.BYTES)
@@ -43,7 +43,18 @@ class CsharpGenerator(Generator):
                 continue
             ctype = parameter["type"]
             default_value = parameter["default_value"]
-            if (
+            if isinstance(typ, StructType):
+                # A structure is a value type, and its default value is not a compile-time
+                # constant, so the parameter takes the nullable form and the default is
+                # applied where the value is encoded
+                if not ctype.endswith("?"):
+                    parameter["type"] = ctype + "?"
+                parameter["name_value"] = "%s ?? %s" % (
+                    parameter["name"],
+                    default_value,
+                )
+                parameter["default_value"] = "null"
+            elif (
                 ctype.startswith("systemAlias::Tuple")
                 or ctype.startswith("global::System.Collections.Generic.IList")
                 or ctype.startswith("genericCollectionsAlias::ISet")

@@ -1,4 +1,10 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. A
+  value of one is built from the values of its fields in order and gives them named access; a
+  list with one element per field is accepted where one is expected (#1066)
+- A service definition that names a type this client does not know about, as one from a newer
+  server may, now skips the member that names it with a warning, rather than failing to
+  connect (#1066)
 - **Breaking:** Support `Types.none` for any nullable type (#1017)
 - Add `krpc.connect_local`, which connects to a server on the same machine over a unix
   domain socket rather than TCP/IP. The connection behaves identically once established.

@@ -1,4 +1,7 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. One
+  is generated as a `struct` carrying its fields as members, with a constructor taking them in
+  the order the structure declares them and equality over them (#1066)
 - **Breaking:** Support null for any nullable type; nullable non-class values use
   `std::optional`, changing generated signatures (#1017)
 - Add `krpc::connect_local`, which connects to a server on the same machine over unix
