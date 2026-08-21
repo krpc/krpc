@@ -86,7 +86,7 @@ jobs:
             artifact: client-python
             path: bazel-bin/client/python/krpc-python-*.tar.gz
           - name: test-client-lua
-            build: //client/lua:lua
+            build: //client/lua:lua //tools/build/lua:luasocket-unix-windows-rockspec
             test: //client/lua:test
             artifact: client-lua
             path: bazel-bin/client/lua/krpc-lua-*.zip

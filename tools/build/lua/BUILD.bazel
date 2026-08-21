@@ -4,9 +4,14 @@ the pure lua libraries it loads, each laid out as a module tree."""
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("//tools/build:lua.bzl", "lua_library")
 
+# The luasocket release fetched by @lua_luasocket in MODULE.bazel. The rock below is
+# built from the same one, and its version tracks it.
+luasocket_version = "3.1.0"
+
 exports_files([
     "lua.BUILD",
     "luafilesystem.BUILD",
+    "luasocket-unix-windows.rockspec.tmpl",
     "luasocket.BUILD",
     "luasocket_windows_unix.patch",
     "luaunit.BUILD",
@@ -64,5 +69,27 @@ lua_library(
 lua_library(
     name = "luaunit",
     srcs = ["@lua_luaunit//:lua_srcs"],
+    visibility = ["//visibility:public"],
+)
+
+# socket.unix on its own, as a rock a Windows user can install: luasocket builds the
+# module only on unix, macOS and Haiku, and Windows has had the address family since
+# Windows 10. The rock is built from the same release and the same patch as the
+# luasocket here, so its rockspec carries that patch inline rather than a copy of it.
+genrule(
+    name = "luasocket-unix-windows-rockspec",
+    srcs = [
+        "luasocket-unix-windows.rockspec.tmpl",
+        "luasocket_windows_unix.patch",
+    ],
+    outs = ["luasocket-unix-windows-%s-1.rockspec" % luasocket_version],
+    cmd = " ".join([
+        "$(execpath //tools/build:render_template)",
+        "--out $@",
+        "--template $(execpath luasocket-unix-windows.rockspec.tmpl)",
+        "--string %VERSION%=" + luasocket_version,
+        "--file %PATCH%=$(execpath luasocket_windows_unix.patch)",
+    ]),
+    tools = ["//tools/build:render_template"],
     visibility = ["//visibility:public"],
 )
