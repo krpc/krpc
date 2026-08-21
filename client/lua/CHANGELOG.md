@@ -1,5 +1,9 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Support `Types.none` for any nullable type (#1017)
+- Add `krpc.connect_local`, which connects to a server on the same machine over a unix
+  domain socket rather than TCP/IP. The connection behaves identically once established.
+  On Windows this needs luasocket's `socket.unix` module, which luasocket does not build
+  there, so the client now depends on the `luasocket-unix-windows` rock as well (#1065)
 - Fix a service failing to load when one of its procedures defaults to a member of an
   enumeration defined by a service that had not been loaded yet (#1044)
 - Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire,
