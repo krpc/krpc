@@ -43,6 +43,8 @@ inline krpc_connection_config_t server_address() {
   config.port = port == nullptr ? 50000 : static_cast<uint16_t>(std::atoi(port));
   return config;
 }
+#elif defined(KRPC_COMMUNICATION_LOCALSOCKET)
+inline const char* server_address() { return std::getenv("RPC_PATH"); }
 #else
 inline const char* server_address() { return std::getenv("PORT"); }
 #endif

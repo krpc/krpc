@@ -23,37 +23,48 @@ namespace KRPC.Client.Test
         [Test]
         public void WrongRpcPort ()
         {
+            SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongRPCPort",
-                rpcPort: RPCPort ^ StreamPort, streamPort: StreamPort));
+                rpcPort: UnusedPort (), streamPort: StreamPort, timeout: ConnectTimeout));
         }
 
         [Test]
         public void WrongStreamPort ()
         {
+            SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongStreamPort",
-                rpcPort: RPCPort, streamPort: RPCPort ^ StreamPort));
+                rpcPort: RPCPort, streamPort: UnusedPort (), timeout: ConnectTimeout));
+        }
+
+        /// <summary>
+        /// Skip a test that connects by port when the server is listening on socket paths.
+        /// There is no port to get wrong then, and the one such a test would fall back on is
+        /// a guess that nothing is listening on, so it says nothing about the client.
+        /// </summary>
+        static void SkipWithoutPorts ()
+        {
+            if (RPCPath != null)
+                Assert.Ignore ("the server is listening on socket paths rather than on ports");
         }
 
         [Test]
         public void WrongRPCServer ()
         {
-            var exn = Assert.Throws<ConnectionException> (() => new Connection (
-                          "CSharpClientTestWrongRPCServer",
-                          rpcPort: StreamPort, streamPort: StreamPort));
+            var exn = Assert.Throws<ConnectionException> (() => Connect (
+                          "CSharpClientTestWrongRPCServer", rpc: "stream", stream: "stream"));
             Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]
         public void WrongStreamServer ()
         {
-            var exn = Assert.Throws<ConnectionException> (() => new Connection (
-                          "CSharpClientTestWrongStreamServer",
-                          rpcPort: RPCPort, streamPort: RPCPort));
+            var exn = Assert.Throws<ConnectionException> (() => Connect (
+                          "CSharpClientTestWrongStreamServer", rpc: "rpc", stream: "rpc"));
             Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]

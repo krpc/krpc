@@ -64,9 +64,11 @@ if(KRPC_FETCH_ASIO)
     INTERFACE_INCLUDE_DIRECTORIES "${asio_SOURCE_DIR}/asio/include")
   set(asio_FETCHED TRUE)
 else()
-  find_package(Asio)
+  # Unix domain sockets, which the local socket transport is carried over, reached Windows
+  # in ASIO 1.20.
+  find_package(Asio 1.20.0)
   if(NOT Asio_FOUND)
-    message(FATAL_ERROR "ASIO not found. Install ASIO, set ASIO_ROOT to its location, "
+    message(FATAL_ERROR "ASIO 1.20.0 or later not found. Install ASIO, set ASIO_ROOT to its location, "
             "or set KRPC_FETCH_ASIO=ON (or KRPC_FETCH_DEPS=ON) to download it automatically via FetchContent.")
   endif()
 endif()

@@ -161,10 +161,12 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
+        ":client-localsocket",
         ":client-serialio",
         ":client-tcpip",
         ":cog",
         ":communication-arduino",
+        ":communication-localsocket",
         ":communication-serialio",
         ":communication-tcpip",
         ":lint",
@@ -185,10 +187,10 @@ cog_test(
     ],
 )
 
-# The library built for each of the transports that can be tested here. Both enable server error
-# messages, so that the tests cover decoding them and a failure says what the server objected to;
-# the default build, with them disabled, is covered by the krpc_cnano library itself. The TCP/IP
-# one is not testonly, as the benchmark program is built on it too.
+# The library built for each of the transports that can be tested here. They all enable server
+# error messages, so that the tests cover decoding them and a failure says what the server
+# objected to; the default build, with them disabled, is covered by the krpc_cnano library itself.
+# The socket ones are not testonly, as a benchmark program is built on each of them too.
 cc_library(
     name = "krpc_cnano_serialio",
     testonly = True,
@@ -210,6 +212,22 @@ cc_library(
     includes = ["include"],
     # The sockets are winsock's on Windows, which is a library of its own rather
     # than part of the C runtime.
+    linkopts = select({
+        "@platforms//os:windows": ["ws2_32.lib"],
+        "//conditions:default": [],
+    }),
+    deps = ["@c_nanopb//:nanopb"],
+)
+
+cc_library(
+    name = "krpc_cnano_localsocket",
+    srcs = srcs + [":protobuf"],
+    hdrs = hdrs + [":protobuf"],
+    defines = [
+        "KRPC_COMMUNICATION_LOCALSOCKET",
+        "KRPC_ERROR_MESSAGES",
+    ],
+    includes = ["include"],
     linkopts = select({
         "@platforms//os:windows": ["ws2_32.lib"],
         "//conditions:default": [],
@@ -259,7 +277,7 @@ cc_test(
 cc_test(
     name = "communication-tcpip",
     size = "small",
-    srcs = ["test/test_communication_tcp.cpp"],
+    srcs = ["test/test_communication_socket.cpp"],
     deps = [
         ":krpc_cnano_tcpip",
         "@cpp_googletest//:gtest",
@@ -294,10 +312,25 @@ cc_test(
     deps = ["@cpp_googletest//:gtest"],
 )
 
-# The client end to end against a TestServer, once per transport. The two differ in more than
-# the socket: a serial port carries both of the connections to a server over the one link, so
-# its messages are wrapped in a multiplexed message saying which they belong to, where a
-# transport that opens a connection per server sends the messages themselves.
+# Builds the library for a unix domain socket, together with the tests it shares with the other
+# socket transport, and exercises it against a socket the test itself listens on.
+cc_test(
+    name = "communication-localsocket",
+    size = "small",
+    srcs = [
+        "test/test_communication_localsocket.cpp",
+        "test/test_communication_socket.cpp",
+    ],
+    deps = [
+        ":krpc_cnano_localsocket",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The client end to end against a TestServer, once per transport. They differ in more than the
+# socket: a serial port carries both of the connections to a server over the one link, so its
+# messages are wrapped in a multiplexed message saying which they belong to, where a transport
+# that opens a connection per server sends the messages themselves.
 client_test(
     name = "client-serialio",
     size = "small",
@@ -320,6 +353,17 @@ client_test(
         "requires-network",
     ],
     test_executable = ":cnanotest-tcpip",
+)
+
+# And again over a unix domain socket. The framing is the one TCP/IP uses, so what this adds is
+# the client reaching a server the way that transport does, against a server serving it.
+client_test(
+    name = "client-localsocket",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    server_type = "localsocket",
+    tags = ["local"],
+    test_executable = ":cnanotest-localsocket",
 )
 
 client_test_srcs = [
@@ -352,7 +396,21 @@ cc_binary(
     ],
 )
 
-# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures.
+cc_binary(
+    name = "cnanotest-localsocket",
+    testonly = True,
+    srcs = client_test_srcs,
+    includes = ["test"],
+    deps = [
+        ":krpc_cnano_localsocket",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures. One per
+# transport, since this client is compiled for the one it talks over rather than choosing when
+# it connects, and the runner measures both.
 cc_binary(
     name = "benchmark",
     srcs = [
@@ -362,6 +420,17 @@ cc_binary(
     includes = ["test"],
     visibility = ["//tools/benchmarks:__pkg__"],
     deps = [":krpc_cnano_tcpip"],
+)
+
+cc_binary(
+    name = "benchmark-localsocket",
+    srcs = [
+        "benchmark/benchmark.c",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [":krpc_cnano_localsocket"],
 )
 
 test_suite(

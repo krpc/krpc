@@ -15,11 +15,18 @@ On Windows:
 
     vcpkg install krpc-cnano:x64-windows
 
-The library communicates over a serial port unless the "tcp" feature is asked
-for, which builds it to communicate over TCP/IP instead:
+The library communicates over a serial port unless a transport feature is asked
+for. The "tcp" feature builds it to communicate over TCP/IP instead:
 
     vcpkg install "krpc-cnano[tcp]"
     vcpkg install "krpc-cnano[tcp]:x64-windows"
+
+The "localsocket" feature builds it to communicate over a unix domain socket
+with a server on the same machine, which is available on Linux, macOS, and
+Windows 10 1803 and later:
+
+    vcpkg install "krpc-cnano[localsocket]"
+    vcpkg install "krpc-cnano[localsocket]:x64-windows"
 
 Then pass the vcpkg toolchain file when configuring your CMake project:
 

@@ -1,8 +1,15 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Support null for any nullable type; nullable non-class values use
   `std::optional`, changing generated signatures (#1017)
+- Add `krpc::connect_local`, which connects to a server on the same machine over unix
+  domain sockets rather than TCP/IP. The connection behaves identically once established
+  (#1065)
+- Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for. A
+  network that drops a connection attempt rather than refusing it otherwise leaves the client
+  waiting indefinitely (#1065)
 - Fix a service with a collection of enumerations in a procedure signature failing to
   compile (#1044)
+- Fix `krpc::Connection::close` failing to link; it was declared but never defined (#1065)
 - Reduce the cost of a remote procedure call. A response is read a block at a time and
   parsed straight out of the read buffer, the request a call is built into and the response
   it is answered by are kept from one call to the next, the arguments of a call are sized up

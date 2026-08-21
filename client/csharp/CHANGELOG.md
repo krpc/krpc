@@ -1,6 +1,12 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
+- Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
+  domain sockets rather than TCP/IP. The connection behaves identically once established
+  (#1065)
+- Add a `timeout` parameter to the `Connection` constructor, bounding how long a connection is
+  waited for. A network that drops a connection attempt rather than refusing it otherwise leaves
+  the client waiting indefinitely (#1065)
 - Reduce the cost of a remote procedure call. A value is encoded and decoded without a
   protobuf stream of its own, its bytes are written into a buffer of their own rather than one
   the thread keeps, a response is read a block at a time and parsed straight out of the read

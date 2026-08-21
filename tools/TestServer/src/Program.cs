@@ -47,6 +47,8 @@ namespace TestServer
             ushort rpcPort = 0;
             ushort streamPort = 0;
             string portName = string.Empty;
+            string rpcPath = string.Empty;
+            string streamPath = string.Empty;
             uint baudRate = 9600;
             ushort dataBits = 8;
             SerialPorts.Parity parity = SerialPorts.Parity.None;
@@ -70,6 +72,12 @@ namespace TestServer
                 }, {
                     "stream-port=", "For TCP based protocols, the port number to use for the stream server. If unspecified, use an ephemeral port.",
                     (ushort v) => streamPort = v
+                }, {
+                    "rpc-path=", "For local socket protocols, the path of the socket to use for the RPC server.",
+                    v => rpcPath = v
+                }, {
+                    "stream-path=", "For local socket protocols, the path of the socket to use for the stream server.",
+                    v => streamPath = v
                 }, {
                     "port=", "For SerialIO based protocols, the port name to communicate on.",
                     v => portName = v
@@ -150,6 +158,8 @@ namespace TestServer
             TCPServer rpcTcpServer = null;
             TCPServer streamTcpServer = null;
             KRPC.Server.SerialIO.ByteServer serialServer = null;
+            KRPC.Server.LocalSocket.LocalSocketServer rpcSocketServer = null;
+            KRPC.Server.LocalSocket.LocalSocketServer streamSocketServer = null;
             if (type == "protobuf" || type == "websockets" || type == "websockets-echo") {
                 rpcTcpServer = new TCPServer (bindAddress, rpcPort);
                 streamTcpServer = new TCPServer (bindAddress, streamPort);
@@ -157,6 +167,10 @@ namespace TestServer
             if (type == "serialio")
                 serialServer = new KRPC.Server.SerialIO.ByteServer (
                     portName, baudRate, dataBits, parity, stopBits);
+            if (type == "localsocket") {
+                rpcSocketServer = new KRPC.Server.LocalSocket.LocalSocketServer (rpcPath);
+                streamSocketServer = new KRPC.Server.LocalSocket.LocalSocketServer (streamPath);
+            }
 
             Server server;
             if (type == "protobuf") {
@@ -175,6 +189,10 @@ namespace TestServer
                 var rpcServer = new KRPC.Server.SerialIO.RPCServer (serialServer);
                 var streamServer = new KRPC.Server.SerialIO.StreamServer ();
                 server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverSerialIO, "TestServer", rpcServer, streamServer);
+            } else if (type == "localsocket") {
+                var rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcSocketServer);
+                var streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamSocketServer);
+                server = new Server (Guid.NewGuid (), Protocol.ProtocolBuffersOverLocalSocket, "TestServer", rpcServer, streamServer);
             } else {
                 Logger.WriteLine ("Server type '" + type + "' not supported", Logger.Severity.Error);
                 return;
@@ -193,6 +211,10 @@ namespace TestServer
             }
             if (serialServer != null) {
                 Logger.WriteLine ("port = " + serialServer.Address);
+            }
+            if (rpcSocketServer != null) {
+                Logger.WriteLine ("rpc_path = " + rpcSocketServer.Address);
+                Logger.WriteLine ("stream_path = " + streamSocketServer.Address);
             }
             Logger.WriteLine ("Server started successfully");
 

@@ -1,5 +1,6 @@
 package krpc.client;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import krpc.client.services.TestService;
@@ -8,9 +9,10 @@ import krpc.client.services.TestService;
  * Benchmarks for the java client, run by {@code //tools/benchmarks:java}.
  *
  * <p>Measures what this client costs from inside it: the round trip for a procedure call, and
- * what a call carrying a collection of values costs. The runner starts a TestServer, passes the
- * ports in the environment and reads the JSON printed here; see tools/benchmarks/run_client.py
- * for the contract and for what happens to these numbers afterwards.
+ * what a call carrying a collection of values costs. The runner starts a TestServer, says in
+ * the environment where it is listening and which transport that is, and reads the JSON printed
+ * here; see tools/benchmarks/run_client.py for the contract and for what happens to these
+ * numbers afterwards.
  */
 public final class Benchmark {
 
@@ -102,6 +104,22 @@ public final class Benchmark {
   private static int port(String name, int fallback) {
     String value = System.getenv(name);
     return value == null ? fallback : Integer.parseInt(value);
+  }
+
+  /**
+   * Connects over whichever transport the runner started the server with, which it names by
+   * socket path or by port. Both are measured, since which one carries a call is part of what it
+   * costs.
+   */
+  private static Connection connect() throws IOException {
+    String rpcPath = System.getenv("RPC_PATH");
+    if (rpcPath != null) {
+      return Connection.newLocalInstance(
+          "java_client_benchmark", rpcPath, System.getenv("STREAM_PATH"));
+    }
+    return Connection.newInstance(
+        "java_client_benchmark", "localhost", port("RPC_PORT", 50000),
+        port("STREAM_PORT", 50001));
   }
 
   private static double secondsSince(long start) {
@@ -208,9 +226,7 @@ public final class Benchmark {
 
   /** Run the benchmarks and print them for the runner to read. */
   public static void main(String[] args) throws Exception {
-    Connection connection = Connection.newInstance(
-        "java_client_benchmark", "localhost", port("RPC_PORT", 50000),
-        port("STREAM_PORT", 50001));
+    Connection connection = connect();
     TestService testService = TestService.newInstance(connection);
 
     List<Integer> values = new ArrayList<>(LIST_VALUES);

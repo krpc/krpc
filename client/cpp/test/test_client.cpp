@@ -49,8 +49,7 @@ static bool is_version(const char* value) {
 TEST_F(test_client, test_default_ctor) { krpc::Client client; }
 
 TEST_F(test_client, test_shared_ptr) {
-  auto client = std::make_shared<krpc::Client>("C++ClientTest", "localhost", get_rpc_port(),
-                                               get_stream_port());
+  auto client = std::make_shared<krpc::Client>(connect());
   krpc::services::KRPC krpc(client.get());
   krpc::schema::Status status = krpc.get_status();
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
@@ -59,7 +58,7 @@ TEST_F(test_client, test_shared_ptr) {
 
 TEST_F(test_client, test_std_container) {
   std::vector<krpc::Client> clients;
-  clients.push_back(krpc::connect("C++ClientTest", "localhost", get_rpc_port(), get_stream_port()));
+  clients.push_back(connect());
   krpc::services::KRPC krpc(&(clients[0]));
   krpc::schema::Status status = krpc.get_status();
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
@@ -70,43 +69,44 @@ TEST_F(test_client, test_version) {
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
 }
 
+// These connect by port, so they are skipped where the server is listening on socket paths:
+// there is no port to get wrong then, and the one they would fall back on is a guess that
+// says nothing about the client.
 TEST_F(test_client, test_wrong_rpc_port) {
-  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost",
-                             get_rpc_port() ^ get_stream_port(), get_stream_port()),
+  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost", unused_port(),
+                             get_stream_port(), connect_timeout),
                std::exception);
 }
 
 TEST_F(test_client, test_wrong_stream_port) {
+  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
   ASSERT_THROW(krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(),
-                             get_rpc_port() ^ get_stream_port()),
+                             unused_port(), connect_timeout),
                std::exception);
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {
-  auto fn = [this]() {
-    krpc::connect("C++ClientTestWrongRpcServer", "localhost", get_stream_port(), get_stream_port());
-  };
+  auto fn = [this]() { connect("C++ClientTestWrongRpcServer", "stream", "stream"); };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
   } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
                  "Connection request was for the rpc server, but this is the stream server. "
-                 "Did you connect to the wrong port number?");
+                 "Did you connect to the wrong port number or socket path?");
   }
 }
 
 TEST_F(test_client, test_wrong_stream_server) {
-  auto fn = [this]() {
-    krpc::connect("C++ClientTestWrongStreamServer", "localhost", get_rpc_port(), get_rpc_port());
-  };
+  auto fn = [this]() { connect("C++ClientTestWrongStreamServer", "rpc", "rpc"); };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
   } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
                  "Connection request was for the stream server, but this is the rpc server. "
-                 "Did you connect to the wrong port number?");
+                 "Did you connect to the wrong port number or socket path?");
   }
 }
 
@@ -380,8 +380,7 @@ TEST_F(test_client, test_test_service_enum_members) {
 // thrower, and must be reported rather than looked up past the end of the map. This client
 // deliberately never constructs the TestService object, so nothing registers its exceptions.
 TEST_F(test_client, test_unknown_exception_type) {
-  krpc::Client client = krpc::connect("C++ClientTestUnknownExceptionType", "localhost",
-                                      get_rpc_port(), get_stream_port());
+  krpc::Client client = connect("C++ClientTestUnknownExceptionType");
   try {
     client.invoke("TestService", "ThrowCustomException");
     FAIL() << "expected an exception";

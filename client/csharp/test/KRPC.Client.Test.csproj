@@ -28,12 +28,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConnectionTest.cs" />
+    <Compile Include="ConnectionTestCase.cs" />
     <Compile Include="EncoderTest.cs" />
     <Compile Include="EventTest.cs" />
+    <Compile Include="LocalSocketConnectionTest.cs" />
+    <Compile Include="MessageReaderTest.cs" />
     <Compile Include="ObjectTest.cs" />
     <Compile Include="ServerTestCase.cs" />
+    <Compile Include="StandInServer.cs" />
     <Compile Include="StreamTest.cs" />
+    <Compile Include="TCPIPConnectionTest.cs" />
     <Compile Include="TestingTools.cs" />
+    <Compile Include="UnixEndPointTest.cs" />
     <Compile Include="$(bazel-bin)\client\csharp\Services\TestService.cs">
       <Link>Services\TestService.cs</Link>
     </Compile>

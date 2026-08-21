@@ -1,9 +1,10 @@
 // Benchmarks for the C++ client, run by //tools/benchmarks:cpp.
 //
 // Measures what this client costs from inside it: the round trip for a procedure call, and what
-// a call carrying a collection of values costs. The runner starts a TestServer, passes the ports
-// in the environment and reads the JSON printed here; see tools/benchmarks/run_client.py for the
-// contract and for what happens to these numbers afterwards.
+// a call carrying a collection of values costs. The runner starts a TestServer, says in the
+// environment where it is listening and which transport that is, and reads the JSON printed
+// here; see tools/benchmarks/run_client.py for the contract and for what happens to these
+// numbers afterwards.
 
 #include <krpc.hpp>
 
@@ -65,6 +66,19 @@ double seconds_since(clock_type::time_point start) {
 int port(const char* name, int fallback) {
   const char* value = std::getenv(name);
   return value == nullptr ? fallback : std::stoi(value);
+}
+
+// Connect over whichever transport the runner started the server with, which it names by socket
+// path or by port. Both are measured, since which one carries a call is part of what it costs.
+krpc::Client connect_to_server() {
+  const char* rpc_path = std::getenv("RPC_PATH");
+  if (rpc_path != nullptr) {
+    const char* stream_path = std::getenv("STREAM_PATH");
+    return krpc::connect_local("cpp_client_benchmark", rpc_path,
+                               stream_path == nullptr ? "" : stream_path);
+  }
+  return krpc::connect("cpp_client_benchmark", "localhost", port("RPC_PORT", 50000),
+                       port("STREAM_PORT", 50001));
 }
 
 // Call for a short while and return the milliseconds one call took.
@@ -154,8 +168,7 @@ void emit(const std::vector<Case>& cases) {
 }  // namespace
 
 int main() {
-  krpc::Client conn = krpc::connect("cpp_client_benchmark", "localhost",
-                                    port("RPC_PORT", 50000), port("STREAM_PORT", 50001));
+  krpc::Client conn = connect_to_server();
   krpc::services::TestService test_service(&conn);
 
   std::vector<int32_t> values;

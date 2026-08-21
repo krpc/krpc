@@ -13,9 +13,9 @@ namespace KRPC.Client.Benchmark
     ///
     /// Measures what this client costs from inside it: the round trip for a procedure call,
     /// and what a call carrying a collection of values costs. The runner starts a TestServer,
-    /// passes the ports in the environment and reads the JSON printed here; see
-    /// tools/benchmarks/run_client.py for the contract and for what happens to these numbers
-    /// afterwards.
+    /// says in the environment where it is listening and which transport that is, and reads
+    /// the JSON printed here; see tools/benchmarks/run_client.py for the contract and for what
+    /// happens to these numbers afterwards.
     /// </summary>
     static class Benchmark
     {
@@ -78,6 +78,23 @@ namespace KRPC.Client.Benchmark
             var value = Environment.GetEnvironmentVariable (name);
             ushort port;
             return value != null && ushort.TryParse (value, out port) ? port : fallback;
+        }
+
+        // Connect over whichever transport the runner started the server with, which it names
+        // by socket path or by port. Both are measured, since which one carries a call is part
+        // of what it costs.
+        static Connection Connect ()
+        {
+            var rpcPath = Environment.GetEnvironmentVariable ("RPC_PATH");
+            if (rpcPath != null) {
+                return Connection.ConnectLocal (
+                    "csharp_client_benchmark", rpcPath,
+                    Environment.GetEnvironmentVariable ("STREAM_PATH"));
+            }
+            return new Connection (
+                "csharp_client_benchmark",
+                rpcPort: Port ("RPC_PORT", 50000),
+                streamPort: Port ("STREAM_PORT", 50001));
         }
 
         /// <summary>
@@ -182,10 +199,7 @@ namespace KRPC.Client.Benchmark
 
         public static void Main ()
         {
-            using (var connection = new Connection (
-                       "csharp_client_benchmark",
-                       rpcPort: Port ("RPC_PORT", 50000),
-                       streamPort: Port ("STREAM_PORT", 50001))) {
+            using (var connection = Connect ()) {
                 var testService = connection.TestService ();
                 var values = new List<int> (ListValues);
                 for (var i = 0; i < ListValues; i++)

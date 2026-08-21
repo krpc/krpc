@@ -20,7 +20,12 @@ dependencies = {
   "lua >= 5.1, < 5.3",
   "luasocket >= 3.0",
   "protobuf",
-  "penlight"
+  "penlight",
+  platforms = {
+    -- luasocket builds its socket.unix module everywhere but Windows, and
+    -- krpc.connect_local opens its socket through that module.
+    windows = { "luasocket-unix-windows >= 3.1.0" }
+  }
 }
 build = {
   type = "builtin",

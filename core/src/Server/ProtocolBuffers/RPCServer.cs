@@ -42,7 +42,7 @@ namespace KRPC.Server.ProtocolBuffers
                     var name = request.Type.ToString ().ToLowerInvariant ();
                     WriteErrorConnectionResponse (client, Status.WrongType,
                         "Connection request was for the " + name + " server, but this is the rpc server. " +
-                        "Did you connect to the wrong port number?");
+                        "Did you connect to the wrong port number or socket path?");
                 } else {
                     return new RPCClient (request.ClientName, args.Client);
                 }

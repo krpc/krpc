@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import krpc.client.TestUtils.Endpoint;
 import krpc.client.services.KRPC;
 import krpc.client.services.TestService;
 import krpc.schema.KRPC.Error;
@@ -46,35 +47,31 @@ public class ConnectionTest {
   }
 
   @Test(expected = IOException.class)
-  public void testWrongRpcPort() throws IOException {
-    Connection.newInstance("JavaClientTestWrongRpcPort", "localhost",
-        TestUtils.getRpcPort() ^ TestUtils.getStreamPort(), TestUtils.getStreamPort());
+  public void testNoServerOnRpcEndpoint() throws IOException {
+    TestUtils.connect("JavaClientTestNoRpcServer", Endpoint.NONE, Endpoint.STREAM);
   }
 
   @Test(expected = IOException.class)
-  public void testWrongStreamPort() throws IOException {
-    Connection.newInstance("JavaClientTestWrongStreamPort", "localhost",
-        TestUtils.getRpcPort(), TestUtils.getRpcPort() ^ TestUtils.getStreamPort());
+  public void testNoServerOnStreamEndpoint() throws IOException {
+    TestUtils.connect("JavaClientTestNoStreamServer", Endpoint.RPC, Endpoint.NONE);
   }
 
   @Test
   public void testWrongRpcServer() {
     ConnectionException e = assertThrows(ConnectionException.class, () ->
-        Connection.newInstance("JavaClientTestWrongRpcServer", "localhost",
-            TestUtils.getStreamPort(), TestUtils.getStreamPort()));
+        TestUtils.connect("JavaClientTestWrongRpcServer", Endpoint.STREAM, Endpoint.STREAM));
     assertTrue(e.getMessage().contains(
         "Connection request was for the rpc server, but this is the stream server. "
-        + "Did you connect to the wrong port number?"));
+        + "Did you connect to the wrong port number or socket path?"));
   }
 
   @Test
   public void testWrongStreamServer() {
     ConnectionException e = assertThrows(ConnectionException.class, () ->
-        Connection.newInstance("JavaClientTestWrongStreamServer", "localhost",
-            TestUtils.getRpcPort(), TestUtils.getRpcPort()));
+        TestUtils.connect("JavaClientTestWrongStreamServer", Endpoint.RPC, Endpoint.RPC));
     assertTrue(e.getMessage().contains(
         "Connection request was for the stream server, but this is the rpc server. "
-        + "Did you connect to the wrong port number?"));
+        + "Did you connect to the wrong port number or socket path?"));
   }
 
   @Test

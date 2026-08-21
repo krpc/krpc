@@ -26,9 +26,8 @@ end
 function TestClient:test_wrong_rpc_server()
   luaunit.assertErrorMsgContains(
     'Connection request was for the rpc server, but this is the stream server. ' ..
-    'Did you connect to the wrong port number?',
-    krpc.connect, 'LuaClientTestWrongRpcServer',
-    'localhost', self.get_stream_port(), self.get_stream_port())
+    'Did you connect to the wrong port number or socket path?',
+    self.connect_to_stream_server, 'LuaClientTestWrongRpcServer')
 end
 
 function TestClient:test_value_parameters()

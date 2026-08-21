@@ -33,7 +33,7 @@ sed -i \
 sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/vcpkg.json"
 
 # Install via the overlay port and build the consumer project against it, once per transport the
-# port offers. Where the library is built for TCP/IP the consumer opens a connection, which is
+# port offers. Where the library is built for a socket the consumer opens a connection, which is
 # what proves the transport, and the winsock library it needs, reach a program through the
 # package vcpkg installed.
 function run_scenario {
@@ -52,3 +52,4 @@ function run_scenario {
 
 run_scenario serialio "krpc-cnano:x64-windows"
 run_scenario tcpip "krpc-cnano[tcp]:x64-windows"
+run_scenario localsocket "krpc-cnano[localsocket]:x64-windows"

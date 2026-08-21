@@ -12,6 +12,7 @@ option(KRPC_FETCH_PROTOBUF   "Use FetchContent for protobuf (for protoc; only us
 option(KRPC_FETCH_ABSL       "Use FetchContent for abseil (only relevant when KRPC_FETCH_PROTOBUF=ON)"             OFF)
 option(KRPC_REGENERATE_PROTO "Re-run protoc+nanopb to regenerate proto sources (requires Python protobuf package)" OFF)
 option(KRPC_COMMUNICATION_TCP "Communicate with the server over TCP/IP instead of a serial port" OFF)
+option(KRPC_COMMUNICATION_LOCALSOCKET "Communicate with a server on the same machine over a unix domain socket instead of a serial port" OFF)
 
 if(KRPC_FETCH_DEPS)
   set(KRPC_FETCH_NANOPB ON)
@@ -140,11 +141,23 @@ target_link_libraries(krpc_cnano PUBLIC
   "$<INSTALL_INTERFACE:nanopb::protobuf-nanopb-static>")
 
 # Which transport the library talks to the server over. The headers pick a serial port for the
-# platform on their own; TCP/IP has to be asked for, and on Windows brings in winsock. The
-# definition is public so that a program using the library is built for the same transport it is,
-# which decides the type of the connection and of the argument that opens it.
+# platform on their own; a socket has to be asked for, and on Windows brings in winsock.
+# The definition is public so that a program using the library is built for the same transport it
+# is, which decides the type of the connection and of the argument that opens it.
+if(KRPC_COMMUNICATION_TCP AND KRPC_COMMUNICATION_LOCALSOCKET)
+  message(FATAL_ERROR
+    "KRPC_COMMUNICATION_TCP and KRPC_COMMUNICATION_LOCALSOCKET are both on, and the library "
+    "carries one transport at a time: each defines the type of a connection and the function "
+    "that opens one, so building for both defines them twice. Turn one of them off.")
+endif()
+
 if(KRPC_COMMUNICATION_TCP)
   target_compile_definitions(krpc_cnano PUBLIC KRPC_COMMUNICATION_TCP)
+  target_link_libraries(krpc_cnano PUBLIC "$<$<PLATFORM_ID:Windows>:ws2_32>")
+endif()
+
+if(KRPC_COMMUNICATION_LOCALSOCKET)
+  target_compile_definitions(krpc_cnano PUBLIC KRPC_COMMUNICATION_LOCALSOCKET)
   target_link_libraries(krpc_cnano PUBLIC "$<$<PLATFORM_ID:Windows>:ws2_32>")
 endif()
 

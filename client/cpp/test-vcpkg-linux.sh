@@ -53,32 +53,11 @@ rm -rf "$out"
 mkdir -p "$out"
 "$vcpkg_bin" install krpc --overlay-ports="$tmpport" --x-install-root="$out/vcpkg_installed"
 
-# Consumer test: a small project that uses find_package(krpc CONFIG REQUIRED)
-mkdir -p "$out/consumer"
-
-cat > "$out/consumer/main.cpp" << 'EOF'
-#include <iostream>
-#include <krpc.hpp>
-#include <krpc/services/krpc.hpp>
-int main() {
-    // Compile+link test only — no server connection.
-    std::cout << "krpc library linked OK" << std::endl;
-    return 0;
-}
-EOF
-
-cat > "$out/consumer/CMakeLists.txt" << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_consumer_test LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
-find_package(krpc CONFIG REQUIRED)
-add_executable(test_app main.cpp)
-target_link_libraries(test_app PRIVATE krpc::krpc)
-EOF
-
-mkdir -p "$out/consumer/build"
-cmake -S "$out/consumer" -B "$out/consumer/build" \
+# Build the consumer project against it, to verify the package config and targets work
+# end-to-end. The program opens a connection over each of the transports the client offers,
+# which is what proves both of them reach a program through the package vcpkg installed.
+cmake -S "$scriptroot/test-consumer" -B "$out/consumer" \
   "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
   "-DVCPKG_INSTALLED_DIR=$out/vcpkg_installed" \
   -DCMAKE_BUILD_TYPE=Release
-cmake --build "$out/consumer/build" --parallel "$(nproc)"
+cmake --build "$out/consumer" --parallel "$(nproc)"
