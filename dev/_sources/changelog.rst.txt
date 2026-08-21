@@ -250,7 +250,7 @@ C-nano client
 C# client
 ^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as properties, with a constructor taking them in the order the structure declares them and equality over them (:issue:`1066`)
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as properties, with a constructor taking them in the order the structure declares them. It implements ``IEquatable`` and ``IComparable`` and carries the equality and relational operators, ordering by its fields in turn as a ``System.Tuple`` of the same values does (:issue:`1066`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
 * Add ``Connection.ConnectLocal``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
 * Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
@@ -261,7 +261,8 @@ C# client
 C++ client
 ^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as members, with a constructor taking them in the order the structure declares them and equality over them (:issue:`1066`)
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as members, with a constructor taking them in the order the structure declares them, and equality, ordering and a ``std::hash`` over them, comparing its fields in turn as a ``std::tuple`` of the same values does (:issue:`1066`)
+* Add ``krpc::hash_value`` and the ``krpc::hash`` function object, which hash any type the client carries. The standard library hashes neither ``std::tuple`` nor its containers, which is what a kRPC tuple and the collection types are, so a tuple could not be the key of an unordered container: ``std::unordered_set<std::tuple<double, double, double>, krpc::hash>`` now can be (:issue:`1067`)
 * :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
 * Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
 * Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
@@ -274,7 +275,7 @@ C++ client
 Java client
 ^^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. One is generated as a class carrying its fields, with a constructor taking them in the order the structure declares them, getters and equality over them (:issue:`1066`)
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a class carrying its fields, with a constructor taking them in the order the structure declares them, getters, ``equals``, ``hashCode`` and ``Comparable``, comparing its fields in turn as a javatuples tuple of the same values does (:issue:`1066`)
 * :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for the unix domain sockets the local socket protocol is carried over (:issue:`1065`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
 * Add ``Connection.newLocalInstance``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
@@ -284,7 +285,7 @@ Java client
 Lua client
 ^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. A value of one is built from the values of its fields in order and gives them named access; a list with one element per field is accepted where one is expected (:issue:`1066`)
+* Support structure types, which a service defines as a compound value with named fields. A value of one is built from the values of its fields in order and gives them named access; a list with one element per field is accepted where one is expected. It compares for equality and orders by its fields in turn (:issue:`1066`)
 * A service definition that names a type this client does not know about, as one from a newer server may, now skips the member that names it with a warning, rather than failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
 * Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket rather than TCP/IP. The connection behaves identically once established. On Windows this needs luasocket's ``socket.unix`` module, which luasocket does not build there, so the client now depends on the ``luasocket-unix-windows`` rock as well (:issue:`1065`)
@@ -298,7 +299,7 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
-* Support structure types, which a service defines as a compound value with named fields. A value of one is a named tuple, so its fields can be read by name and it is also the tuple of their values; a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
+* Support structure types, which a service defines as a compound value with named fields. A value of one is a named tuple, so its fields can be read by name and it is also the tuple of their values; a tuple or list with one element per field is accepted where one is expected. It compares, orders and hashes as the tuple of its field values does (:issue:`1066`)
 * A service definition that names a type this client does not know about, as one from a newer server may, now skips the member that names it with a warning, rather than failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
