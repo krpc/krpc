@@ -190,7 +190,7 @@ cog_test(
 # The library built for each of the transports that can be tested here. They all enable server
 # error messages, so that the tests cover decoding them and a failure says what the server
 # objected to; the default build, with them disabled, is covered by the krpc_cnano library itself.
-# The TCP/IP one is not testonly, as the benchmark program is built on it too.
+# The socket ones are not testonly, as a benchmark program is built on each of them too.
 cc_library(
     name = "krpc_cnano_serialio",
     testonly = True,
@@ -221,7 +221,6 @@ cc_library(
 
 cc_library(
     name = "krpc_cnano_localsocket",
-    testonly = True,
     srcs = srcs + [":protobuf"],
     hdrs = hdrs + [":protobuf"],
     defines = [
@@ -409,7 +408,9 @@ cc_binary(
     ],
 )
 
-# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures.
+# The benchmark program, run by //tools/benchmarks:cnano. Not a test: it measures. One per
+# transport, since this client is compiled for the one it talks over rather than choosing when
+# it connects, and the runner measures both.
 cc_binary(
     name = "benchmark",
     srcs = [
@@ -419,6 +420,17 @@ cc_binary(
     includes = ["test"],
     visibility = ["//tools/benchmarks:__pkg__"],
     deps = [":krpc_cnano_tcpip"],
+)
+
+cc_binary(
+    name = "benchmark-localsocket",
+    srcs = [
+        "benchmark/benchmark.c",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    visibility = ["//tools/benchmarks:__pkg__"],
+    deps = [":krpc_cnano_localsocket"],
 )
 
 test_suite(

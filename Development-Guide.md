@@ -325,10 +325,16 @@ What each one measures:
    `TestServer`. Measuring a client means timing it from inside that client, so each is its own
    program in its own language, printing results for `run_client.py` to turn into the usual table.
 
-   `:cnano` measures the client built for TCP/IP rather than for the serial port it is usually
+   Every case is measured over both transports a client can reach a server on, TCP/IP and a unix
+   domain socket, and the report has a block per transport: which one carries a call is part of
+   what the call costs. A machine without unix domain sockets is measured over TCP/IP alone.
+
+   `:cnano` measures the client built for a socket rather than for the serial port it is usually
    built for. The server reads a serial port on a poll whose interval is longer than everything
    these cases measure put together, so over a serial port the figures would be that poll rather
-   than the client.
+   than the client. This client picks its transport with a compile-time macro, so it comes as a
+   program per transport (`//client/cnano:benchmark` and `:benchmark-localsocket`) rather than
+   one that chooses when it connects.
 
    They run against a server started with `--no-frame-pacing`, which runs its update loop as
    fast as it will go: paced, a round trip is inflated by the part of each update that does not
