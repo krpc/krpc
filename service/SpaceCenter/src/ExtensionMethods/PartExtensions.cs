@@ -86,7 +86,27 @@ namespace KRPC.SpaceCenter.ExtensionMethods
                 return part.rb.mass;
             part.UpdateMass ();
             return part.mass + part.GetResourceMass () + part.CrewMass () +
-                part.GetPhysicslessChildMass ();
+                part.PhysicslessChildMass ();
+        }
+
+        /// <summary>
+        /// The mass of the physicsless parts hanging off the part, in tonnes. Physics
+        /// gives their mass to the nearest ancestor it simulates, and a physicsless part
+        /// can carry more of them, so the whole subtree counts.
+        /// </summary>
+        static float PhysicslessChildMass (this Part part)
+        {
+            float mass = 0f;
+            var children = part.children;
+            for (int i = 0; i < children.Count; i++) {
+                var child = children [i];
+                if (child.physicalSignificance != Part.PhysicalSignificance.NONE)
+                    continue;
+                child.UpdateMass ();
+                mass += child.mass + child.GetResourceMass () + child.CrewMass () +
+                    child.PhysicslessChildMass ();
+            }
+            return mass;
         }
 
         /// <summary>
@@ -118,7 +138,7 @@ namespace KRPC.SpaceCenter.ExtensionMethods
             if (part.HasPhysicsBody ())
                 return Mathf.Max (0f, (part.rb.mass - part.resourceMass) * 1000f);
             part.UpdateMass ();
-            return Mathf.Max (0f, (part.mass + part.CrewMass () + part.GetPhysicslessChildMass ()) * 1000f);
+            return Mathf.Max (0f, (part.mass + part.CrewMass () + part.PhysicslessChildMass ()) * 1000f);
         }
 
         /// <summary>
