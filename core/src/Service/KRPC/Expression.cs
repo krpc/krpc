@@ -762,7 +762,9 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// A named parameter of type double.
+        /// A named parameter, for use within a function.
+        /// Bind a value to it by name using <see cref="Invoke"/>, or by using it
+        /// as a parameter of a <see cref="Function"/>.
         /// </summary>
         /// <returns>A named parameter.</returns>
         /// <param name="name">The name of the parameter.</param>
@@ -779,8 +781,8 @@ namespace KRPC.Service.KRPC
         /// A function.
         /// The body may be a single expression, or a block of statements; a
         /// function whose body does not produce a value performs its statements
-        /// for their effects. <see cref="Return"/> and <see cref="ReturnNothing"/>
-        /// statements within the body end the function's evaluation.
+        /// for their effects. Return and ReturnNothing statements within the
+        /// body end the function's evaluation.
         /// </summary>
         /// <returns>A function.</returns>
         /// <param name="parameters">The parameters of the function.</param>
@@ -1296,9 +1298,9 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Minimum of all elements in a collection.
+        /// Average of all elements in a collection.
         /// </summary>
-        /// <returns>The minimum elements in the collection.</returns>
+        /// <returns>The average of the elements in the collection.</returns>
         /// <param name="arg">The list or set.</param>
         [KRPCMethod]
         public static Expression Average (Expression arg)
@@ -1313,10 +1315,12 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Run a function on every element in the collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
         /// </summary>
-        /// <returns>The modified collection.</returns>
+        /// <returns>The collection of function results.</returns>
         /// <param name="arg">The list or set.</param>
-        /// <param name="func">The function.</param>
+        /// <param name="func">The function, taking an element of the collection.</param>
         [KRPCMethod]
         public static Expression Select (Expression arg, Expression func)
         {
@@ -1336,11 +1340,14 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Run a function on every element in the collection.
+        /// Keep the elements of a collection for which a boolean predicate function
+        /// returns true.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
         /// </summary>
-        /// <returns>The modified collection.</returns>
+        /// <returns>The filtered collection.</returns>
         /// <param name="arg">The list or set.</param>
-        /// <param name="func">The function.</param>
+        /// <param name="func">The predicate function, taking an element of the collection.</param>
         [KRPCMethod]
         public static Expression Where (Expression arg, Expression func)
         {
@@ -1908,8 +1915,8 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// A while loop. Evaluates the body repeatedly, for as long as the
-        /// condition evaluates to true. <see cref="Break"/> and
-        /// <see cref="Continue"/> statements within the body apply to this loop.
+        /// condition evaluates to true. Break and Continue statements within
+        /// the body apply to this loop.
         /// </summary>
         /// <param name="condition">The condition. Must evaluate to a boolean value.</param>
         /// <param name="body">The statement to evaluate on each iteration.</param>
@@ -1932,8 +1939,8 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// A loop over the values of a collection. Evaluates the body once per
-        /// value, with the variable set to the value. <see cref="Break"/> and
-        /// <see cref="Continue"/> statements within the body apply to this loop.
+        /// value, with the variable set to the value. Break and Continue
+        /// statements within the body apply to this loop.
         /// </summary>
         /// <param name="variable">The loop variable, created with <see cref="Variable"/>.
         /// Must also be declared in an enclosing block.</param>

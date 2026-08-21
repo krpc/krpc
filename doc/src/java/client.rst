@@ -172,6 +172,18 @@ expression returns true:
 
 .. literalinclude:: /scripts/client/java/CustomEvent.java
 
+Expression Streams
+------------------
+
+Expressions can also be used to stream the result of a computation from the server, by calling
+:meth:`Connection.addStream` with an expression object. Values are computed on the server on
+each stream update, so complex telemetry can be received without the round trip latency of
+multiple RPCs, and without the values changing between calls. The expression can evaluate to
+any type that can be sent to a client, including collections and objects. For example, the
+following streams the vessel's altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/java/ExpressionStream.java
+
 Client API Reference
 --------------------
 
@@ -232,6 +244,18 @@ Client API Reference
    .. method:: Stream<T> addStream(RemoteObject instance, String method, Object... args)
 
       Create a stream for a method call to the given remote object.
+
+   .. method:: Stream<T> addStream(KRPC.Expression expression)
+
+      Create a stream from a server side expression, decoding values using the type reported
+      by the server.
+
+   .. method:: T runFunction(KRPC.Expression expression)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces, decoded using the type reported by the server, or null for a function with no
+      result. This is the intended way to use functions with side effects, which would
+      otherwise re-run on every update of an event or stream.
 
    .. method:: krpc.schema.KRPC.ProcedureCall getCall(Class<?> clazz, String method, Object... args)
 

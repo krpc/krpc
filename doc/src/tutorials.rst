@@ -16,3 +16,4 @@ of kRPC.
    tutorials/user-interface
    tutorials/object-lifetime
    tutorials/autopilot
+   tutorials/server-side-functions
