@@ -828,7 +828,7 @@
 
 .. struct:: DeprecatedStruct
 
-   .. warning:: Deprecated. Use the TestStruct struct instead.
+   .. warning:: Deprecated. Use :type:`TestStruct` instead.
 
    Deprecated struct documentation string.
 
@@ -839,7 +839,7 @@
 
    .. property:: int OldValue { get; set; }
 
-      .. warning:: Deprecated. Use the Value field instead.
+      .. warning:: Deprecated. Use :prop:`DeprecatedStruct.Value` instead.
 
       Deprecated struct OldValue documentation string.
 

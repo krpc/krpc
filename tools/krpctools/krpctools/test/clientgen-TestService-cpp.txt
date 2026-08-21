@@ -644,9 +644,9 @@ class TestService : public Service {
   /**
    * Deprecated struct documentation string.
    *
-   * \deprecated Use the TestStruct struct instead.
+   * \deprecated Use TestStruct instead.
    */
-  struct [[deprecated("Use the TestStruct struct instead.")]] DeprecatedStruct {
+  struct [[deprecated("Use TestStruct instead.")]] DeprecatedStruct {
     /**
      * Deprecated struct Value documentation string.
      */
@@ -654,9 +654,9 @@ class TestService : public Service {
     /**
      * Deprecated struct OldValue documentation string.
      *
-     * \deprecated Use the Value field instead.
+     * \deprecated Use DeprecatedStruct::value instead.
      */
-    int32_t old_value [[deprecated("Use the Value field instead.")]];
+    int32_t old_value [[deprecated("Use DeprecatedStruct::value instead.")]];
 
     DeprecatedStruct() : value(), old_value() {}
 

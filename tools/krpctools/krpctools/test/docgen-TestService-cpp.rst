@@ -844,7 +844,7 @@
 .. namespace:: krpc::services::TestService
 .. struct:: DeprecatedStruct
 
-   .. warning:: Deprecated. Use the TestStruct struct instead.
+   .. warning:: Deprecated. Use :struct:`TestStruct` instead.
 
    Deprecated struct documentation string.
 
@@ -855,7 +855,7 @@
 
    .. member:: int32_t old_value
 
-      .. warning:: Deprecated. Use the Value field instead.
+      .. warning:: Deprecated. Use :member:`DeprecatedStruct::value` instead.
 
       Deprecated struct OldValue documentation string.
 

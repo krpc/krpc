@@ -1,3 +1,4 @@
+from krpc.utils import snake_case
 from krpc.types import (
     ValueType,
     ClassType,
@@ -138,6 +139,11 @@ class CnanoDomain(Domain):
 
     def ref(self, obj):
         name = obj.fullname.split(".")
+        if isinstance(obj, StructField):
+            # A field is documented inside the declaration of its structure, and the C
+            # domain addresses it through that declaration rather than by a name of its own
+            field = snake_case(name.pop())
+            return "krpc_" + "_".join(name) + "_t." + field
         ref = "krpc_" + "_".join(name)
         if isinstance(obj, EnumerationValue):
             ref = ref.upper()

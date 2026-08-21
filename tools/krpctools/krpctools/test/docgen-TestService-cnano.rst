@@ -1024,7 +1024,7 @@ Service documentation string.
 
 .. type:: krpc_TestService_DeprecatedStruct_t
 
-   .. warning:: Deprecated. Use the TestStruct struct instead.
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestStruct_t` instead.
 
    Deprecated struct documentation string.
 
@@ -1035,7 +1035,7 @@ Service documentation string.
 
    .. member:: int32_t old_value
 
-      .. warning:: Deprecated. Use the Value field instead.
+      .. warning:: Deprecated. Use :member:`krpc_TestService_DeprecatedStruct_t.value` instead.
 
       Deprecated struct OldValue documentation string.
 

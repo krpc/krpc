@@ -876,7 +876,7 @@ public class TestService {
     /**
      * Deprecated struct documentation string.
      *
-     * @deprecated Use the TestStruct struct instead.
+     * @deprecated Use TestStruct instead.
      */
     @Deprecated
     public static class DeprecatedStruct implements RemoteStruct {
@@ -898,7 +898,7 @@ public class TestService {
         /**
          * Deprecated struct OldValue documentation string.
          *
-         * @deprecated Use the Value field instead.
+         * @deprecated Use DeprecatedStruct.value instead.
          */
         @Deprecated
         public int getOldValue() {

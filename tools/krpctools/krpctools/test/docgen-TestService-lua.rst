@@ -866,7 +866,7 @@ Service documentation string.
 
 .. class:: DeprecatedStruct
 
-   .. warning:: Deprecated. Use the TestStruct struct instead.
+   .. warning:: Deprecated. Use :class:`TestService.TestStruct` instead.
 
    Deprecated struct documentation string.
 
@@ -879,7 +879,7 @@ Service documentation string.
 
    .. attribute:: old_value: number
 
-      .. warning:: Deprecated. Use the Value field instead.
+      .. warning:: Deprecated. Use :attr:`TestService.DeprecatedStruct.value` instead.
 
       Deprecated struct OldValue documentation string.
 

@@ -793,7 +793,7 @@ namespace KRPC.Client.Services.TestService
     /// </summary>
     [Serializable]
     [global::KRPC.Client.Attributes.KRPCStruct]
-    [global::System.Obsolete ("Use the TestStruct struct instead.")]
+    [global::System.Obsolete ("Use TestStruct instead.")]
     public struct DeprecatedStruct : IEquatable<DeprecatedStruct>
     {
         /// <summary>
@@ -813,7 +813,7 @@ namespace KRPC.Client.Services.TestService
         /// <summary>
         /// Deprecated struct OldValue documentation string.
         /// </summary>
-        [global::System.Obsolete ("Use the Value field instead.")]
+        [global::System.Obsolete ("Use DeprecatedStruct.Value instead.")]
         public int OldValue { get; private set; }
 
         /// <summary>

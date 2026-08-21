@@ -745,7 +745,7 @@ namespace TestServer
         /// Deprecated struct documentation string.
         /// </summary>
         [KRPCStruct]
-        [Obsolete ("Use the TestStruct struct instead.")]
+        [Obsolete ("Use <see cref='TestStruct'/> instead.")]
         public struct DeprecatedStruct
         {
             /// <summary>
@@ -758,7 +758,7 @@ namespace TestServer
             /// Deprecated struct OldValue documentation string.
             /// </summary>
             [KRPCProperty]
-            [Obsolete ("Use the Value field instead.")]
+            [Obsolete ("Use <see cref='Value'/> instead.")]
             public int OldValue { get; set; }
         }
 

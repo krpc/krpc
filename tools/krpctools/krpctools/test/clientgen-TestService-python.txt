@@ -42,7 +42,7 @@ Enum ValueC documentation string.
 
 class DeprecatedStruct(NamedTuple):
     """
-    Deprecated. Use the TestStruct struct instead.
+    Deprecated. Use TestStruct instead.
 
     Deprecated struct documentation string.
     """
@@ -52,7 +52,7 @@ class DeprecatedStruct(NamedTuple):
     """
     old_value: int
     """
-    Deprecated. Use the Value field instead.
+    Deprecated. Use DeprecatedStruct.value instead.
 
     Deprecated struct OldValue documentation string.
     """

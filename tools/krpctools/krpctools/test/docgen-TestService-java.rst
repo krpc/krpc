@@ -666,7 +666,7 @@
 
 .. type:: public class DeprecatedStruct
 
-   .. warning:: Deprecated. Use the TestStruct struct instead.
+   .. warning:: Deprecated. Use :type:`TestStruct` instead.
 
    Deprecated struct documentation string.
 
@@ -677,7 +677,7 @@
 
    .. method:: int getOldValue()
 
-      .. warning:: Deprecated. Use the Value field instead.
+      .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
 
       Deprecated struct OldValue documentation string.
 
