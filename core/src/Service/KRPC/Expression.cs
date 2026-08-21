@@ -743,10 +743,19 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression Function (IList<Expression> parameters, Expression body)
         {
+            if (ReferenceEquals (parameters, null))
+                throw new ArgumentNullException (nameof (parameters));
             if (ReferenceEquals (body, null))
                 throw new ArgumentNullException (nameof (body));
             var boundBody = BindReturns (body.internalExpression);
-            return new Expression (LinqExpression.Lambda (boundBody, parameters.Select(x => (ParameterExpression)(x.internalExpression)).ToArray()));
+            var parameterNodes = new ParameterExpression [parameters.Count];
+            for (int i = 0; i < parameters.Count; i++) {
+                parameterNodes [i] = parameters [i].internalExpression as ParameterExpression;
+                if (parameterNodes [i] == null)
+                    throw new ArgumentException (
+                        "Expected a parameter, created with Parameter");
+            }
+            return new Expression (LinqExpression.Lambda (boundBody, parameterNodes));
         }
 
         /// <summary>
@@ -779,12 +788,22 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentNullException (nameof (function));
             if (ReferenceEquals (args, null))
                 throw new ArgumentNullException (nameof (args));
-            var funcArgs = new LinqExpression [args.Count];
+            var lambda = function.internalExpression as LambdaExpression;
+            if (lambda == null)
+                throw new ArgumentException ("Expected a function, created with Function");
+            var funcArgs = new LinqExpression [lambda.Parameters.Count];
             var i = 0;
-            foreach (var param in ((LambdaExpression)function.internalExpression).Parameters) {
-                funcArgs [i] = args [param.Name].internalExpression;
+            foreach (var param in lambda.Parameters) {
+                Expression argument;
+                if (!args.TryGetValue (param.Name, out argument) || ReferenceEquals (argument, null))
+                    throw new ArgumentException (
+                        "No argument given for the function's parameter " + param.Name);
+                funcArgs [i] = argument.internalExpression;
                 i++;
             }
+            if (args.Count != funcArgs.Length)
+                throw new ArgumentException (
+                    "The function takes " + funcArgs.Length + " arguments, got " + args.Count);
             return new Expression (LinqExpression.Invoke (function, funcArgs));
         }
 
@@ -796,12 +815,15 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression CreateTuple (IList<Expression> elements)
         {
+            if (ReferenceEquals (elements, null))
+                throw new ArgumentNullException (nameof (elements));
             var elementTypes = elements.Select (e => e.Type).ToArray ();
             var method = typeof (Tuple)
                 .GetMethods ()
-                .Single (m => m.Name == "Create" && m.GetGenericArguments ().Length == elements.Count);
+                .FirstOrDefault (m => m.Name == "Create" && m.GetGenericArguments ().Length == elements.Count);
             if (method == null)
-                throw new ArgumentException ("Tuple constructor not found for these element types");
+                throw new ArgumentException (
+                    "A tuple cannot have " + elements.Count + " elements");
             method = method.MakeGenericMethod (elementTypes);
             return new Expression (LinqExpression.Call (method, elements.Select (x => x.internalExpression).ToArray ()));
         }
@@ -851,7 +873,8 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression CreateList (IList<Expression> values)
         {
-            var valueType = values.First ().Type;
+            CheckHasValues (values, "list", "CreateEmptyList");
+            var valueType = CommonType (values, "values of a list");
             var listType = typeof (List<>).MakeGenericType (valueType);
             var ctor = listType.GetConstructor (new [] { typeof (IEnumerable<>).MakeGenericType (valueType) });
             var args = LinqExpression.NewArrayInit (valueType, values.Select (x => x.internalExpression));
@@ -866,7 +889,8 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression CreateSet (HashSet<Expression> values)
         {
-            var valueType = values.First ().Type;
+            CheckHasValues (values, "set", "CreateEmptySet");
+            var valueType = CommonType (values, "values of a set");
             var setType = typeof (HashSet<>).MakeGenericType (valueType);
             var ctor = setType.GetConstructor (new [] { typeof (IEnumerable<>).MakeGenericType (valueType) });
             var args = LinqExpression.NewArrayInit (valueType, values.Select (x => x.internalExpression));
@@ -882,13 +906,50 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression CreateDictionary (IList<Expression> keys, IList<Expression> values)
         {
-            var keyType = keys.First ().Type;
-            var valueType = values.First ().Type;
+            CheckHasValues (keys, "dictionary", "CreateEmptyDictionary");
+            CheckHasValues (values, "dictionary", "CreateEmptyDictionary");
+            if (keys.Count != values.Count)
+                throw new ArgumentException (
+                    "A dictionary needs as many values as keys, got " + keys.Count +
+                    " keys and " + values.Count + " values");
+            var keyType = CommonType (keys, "keys of a dictionary");
+            var valueType = CommonType (values, "values of a dictionary");
             var method = typeof(Expression).GetMethod("CreateDictionaryHelper", BindingFlags.Static | BindingFlags.NonPublic);
             method = method.MakeGenericMethod (keyType, valueType);
             var keysArg = LinqExpression.NewArrayInit (keyType, keys.Select (x => x.internalExpression));
             var valuesArg = LinqExpression.NewArrayInit (valueType, values.Select (x => x.internalExpression));
             return new Expression (LinqExpression.Call (method, keysArg, valuesArg));
+        }
+
+        /// <summary>
+        /// Check that a collection is being constructed from at least one value. The
+        /// element type is taken from the values, so an empty collection has to be
+        /// constructed by the factory that is given the type instead.
+        /// </summary>
+        static void CheckHasValues (ICollection<Expression> values, string kind, string emptyFactory)
+        {
+            if (ReferenceEquals (values, null))
+                throw new ArgumentNullException (nameof (values));
+            if (values.Count == 0)
+                throw new ArgumentException (
+                    "Cannot determine the element type of an empty " + kind +
+                    ". Use " + emptyFactory + " to construct one.");
+        }
+
+        /// <summary>
+        /// The type of the values a collection is being constructed from, which must all
+        /// be of the same type. A set's values arrive unordered, so which of them names
+        /// the element type cannot be left to whichever one comes out first.
+        /// </summary>
+        static System.Type CommonType (IEnumerable<Expression> values, string what)
+        {
+            var type = values.First ().Type;
+            foreach (var value in values)
+                if (value.Type != type)
+                    throw new ArgumentException (
+                        "The " + what + " must all be of the same type, got " +
+                        type + " and " + value.Type);
+            return type;
         }
 
         static Dictionary<Key, Value> CreateDictionaryHelper<Key, Value> (Key[] keys, Value[] values)
@@ -1090,6 +1151,7 @@ namespace KRPC.Service.KRPC
         {
             if (ReferenceEquals (arg, null))
                 throw new ArgumentNullException (nameof (arg));
+            CheckIsNotAString (arg);
             var argType = arg.Type;
             if (argType.Name.StartsWith("Tuple`", StringComparison.Ordinal)) {
                 var tupleIndex = LinqExpression.Lambda<Func<int>> (index).Compile () ();
@@ -1099,6 +1161,9 @@ namespace KRPC.Service.KRPC
                 return new Expression (LinqExpression.Property (arg, property));
             }
             var method = argType.GetMethod ("get_Item");
+            if (method == null)
+                throw new InvalidOperationException (
+                    argType + " does not have elements that can be accessed by index");
             return new Expression (LinqExpression.Call (arg, method, index));
         }
 
@@ -1147,6 +1212,9 @@ namespace KRPC.Service.KRPC
         {
             CheckIsEnumerable (arg);
             var sum = typeof (Enumerable).GetMethod ("Sum", new [] { arg.Type });
+            if (sum == null)
+                throw new InvalidOperationException (
+                    "Sum is not defined over a collection of type " + arg.Type);
             return new Expression (LinqExpression.Call (sum, arg));
         }
 
@@ -1160,6 +1228,9 @@ namespace KRPC.Service.KRPC
         {
             CheckIsEnumerable (arg);
             var max = typeof (Enumerable).GetMethod ("Max", new [] { arg.Type });
+            if (max == null)
+                throw new InvalidOperationException (
+                    "Max is not defined over a collection of type " + arg.Type);
             return new Expression (LinqExpression.Call (max, arg));
         }
 
@@ -1173,6 +1244,9 @@ namespace KRPC.Service.KRPC
         {
             CheckIsEnumerable (arg);
             var min = typeof (Enumerable).GetMethod ("Min", new [] { arg.Type });
+            if (min == null)
+                throw new InvalidOperationException (
+                    "Min is not defined over a collection of type " + arg.Type);
             return new Expression (LinqExpression.Call (min, arg));
         }
 
@@ -1186,6 +1260,9 @@ namespace KRPC.Service.KRPC
         {
             CheckIsEnumerable (arg);
             var average = typeof (Enumerable).GetMethod ("Average", new [] { arg.Type });
+            if (average == null)
+                throw new InvalidOperationException (
+                    "Average is not defined over a collection of type " + arg.Type);
             return new Expression (LinqExpression.Call (average, arg));
         }
 
@@ -1862,8 +1939,23 @@ namespace KRPC.Service.KRPC
 
         static void CheckIsEnumerable (Expression collection)
         {
+            if (ReferenceEquals (collection, null))
+                throw new ArgumentNullException (nameof (collection));
+            CheckIsNotAString (collection);
             if (!typeof (IEnumerable).IsAssignableFrom (collection.Type))
                 throw new InvalidOperationException ("Expected an enumerable collection type");
+        }
+
+        /// <summary>
+        /// A string satisfies IEnumerable but is not one of the collection types the
+        /// algebra works over, and the collection operations fail inside themselves
+        /// when given one. Reject it where it is passed instead.
+        /// </summary>
+        static void CheckIsNotAString (Expression expression)
+        {
+            if (expression.Type == typeof (string))
+                throw new InvalidOperationException (
+                    "A string is not a collection. Use the string operations instead.");
         }
 
         static System.Type GetEnumerableValueType (Expression collection)

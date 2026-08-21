@@ -647,6 +647,65 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void OperationsThatDoNotApplyAreReported ()
+        {
+            var strings = Expression.CreateList (new List<Expression> {
+                Expression.ConstantString ("a"),
+                Expression.ConstantString ("b")
+            });
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Sum (strings));
+            StringAssert.Contains ("Sum is not defined", exn.Message);
+
+            exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Get (Expression.ConstantInt (1), Expression.ConstantInt (0)));
+            StringAssert.Contains ("accessed by index", exn.Message);
+
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Function (
+                    new List<Expression> { Expression.ConstantInt (1) },
+                    Expression.ConstantInt (2)));
+        }
+
+        [Test]
+        public void CollectionValuesMustShareAType ()
+        {
+            var mixed = new List<Expression> {
+                Expression.ConstantInt (1),
+                Expression.ConstantString ("a")
+            };
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateList (mixed));
+            StringAssert.Contains ("values of a list", exn.Message);
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateSet (new HashSet<Expression> (mixed)));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateDictionary (
+                    mixed, new List<Expression> {
+                        Expression.ConstantInt (1),
+                        Expression.ConstantInt (2)
+                    }));
+        }
+
+        [Test]
+        public void StringIsNotACollection ()
+        {
+            var text = Expression.ConstantString ("hello");
+            var builders = new System.Func<Expression> [] {
+                () => Expression.Count (text),
+                () => Expression.ToList (text),
+                () => Expression.Contains (text, Expression.ConstantString ("h")),
+                () => Expression.Get (text, Expression.ConstantInt (0))
+            };
+            foreach (var build in builders) {
+                var builder = build;
+                var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                    () => builder ());
+                StringAssert.Contains ("A string is not a collection", exn.Message);
+            }
+        }
+
+        [Test]
         public void ConstantObjectInvalid ()
         {
             Assert.Throws<global::KRPC.Service.KRPC.ArgumentNullException> (
