@@ -41,31 +41,29 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_wrong_rpc_server(self) -> None:
         with self.assertRaises(krpc.error.ConnectionError) as cm:
-            krpc.connect(
+            ServerTestCase.connect(
                 name="python_client_test_wrong_rpc_server",
-                address="localhost",
-                rpc_port=ServerTestCase.stream_port(),
-                stream_port=ServerTestCase.stream_port(),
+                rpc="stream",
+                stream="stream",
             )
         self.assertEqual(
             "Connection request was for the rpc server, "
             + "but this is the stream server. "
-            + "Did you connect to the wrong port number?",
+            + "Did you connect to the wrong port number or socket path?",
             str(cm.exception),
         )
 
     def test_wrong_stream_server(self) -> None:
         with self.assertRaises(krpc.error.ConnectionError) as cm:
-            krpc.connect(
+            ServerTestCase.connect(
                 name="python_client_test_wrong_stream_server",
-                address="localhost",
-                rpc_port=ServerTestCase.rpc_port(),
-                stream_port=ServerTestCase.rpc_port(),
+                rpc="rpc",
+                stream="rpc",
             )
         self.assertEqual(
             "Connection request was for the stream server, "
             + "but this is the rpc server. "
-            + "Did you connect to the wrong port number?",
+            + "Did you connect to the wrong port number or socket path?",
             str(cm.exception),
         )
 
@@ -121,11 +119,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
     # The runtime DeprecationWarning is a feature of the dynamically-created
     # services, so these tests use a connection without the pre-generated stubs.
     def test_deprecated_procedure_warns(self) -> None:
-        conn = krpc.connect(
+        conn = ServerTestCase.connect(
             name="python_client_test_dynamic",
-            address="localhost",
-            rpc_port=self.rpc_port(),
-            stream_port=self.stream_port(),
             use_pregenerated_stubs=False,
         )
         try:

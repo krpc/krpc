@@ -3,6 +3,7 @@ from typing import Optional
 import socket
 import select
 import google.protobuf
+from krpc import winsock
 from krpc.encoder import Encoder
 from krpc.decoder import Decoder
 
@@ -21,11 +22,17 @@ class Connection:
         self._buffer = bytearray()
 
     def connect(self) -> None:
-        self._socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self._socket.connect((self._address, self._port))
+        self._socket = self._open()
+
+    def _open(self) -> socket.socket:
+        """Open a socket to the server. Everything above this is transport agnostic,
+        so a different transport only has to replace this."""
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((self._address, self._port))
         # The protocol is strictly request/response, so waiting for more data to
         # coalesce with can only add latency
-        self._socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+        return sock
 
     def close(self) -> None:
         if self._socket is not None:
@@ -109,3 +116,19 @@ class Connection:
                 raise socket.error("Connection closed")
             return data
         return b""
+
+
+class LocalConnection(Connection):
+    """A connection to a server on the same machine, over a unix domain socket."""
+
+    def __init__(self, path: str) -> None:
+        super().__init__(path, 0)
+
+    def _open(self) -> socket.socket:
+        # Windows has the address family but the socket module does not expose it, so there
+        # the socket is opened by calling winsock directly.
+        if not hasattr(socket, "AF_UNIX"):
+            return winsock.connect(self._address)
+        sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+        sock.connect(self._address)
+        return sock
