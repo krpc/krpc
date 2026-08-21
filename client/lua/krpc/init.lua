@@ -1,5 +1,6 @@
 local Client = require 'krpc.client'
 local Connection = require 'krpc.connection'
+local LocalConnection = require 'krpc.localconnection'
 local encoder = require 'krpc.encoder'
 local decoder = require 'krpc.decoder'
 local limits = require 'krpc.limits'
@@ -14,13 +15,20 @@ krpc.limits = limits
 local DEFAULT_ADDRESS = '127.0.0.1'
 local DEFAULT_RPC_PORT = 50000
 
-function krpc.connect(name, address, rpc_port)
-  name = name or ''
-  address = address or DEFAULT_ADDRESS
-  rpc_port = rpc_port or DEFAULT_RPC_PORT
+-- A default path for a socket of the given name, matching the one the server uses unless
+-- it was configured with another.
+local function default_path(name)
+  local directory = os.getenv('XDG_RUNTIME_DIR')
+  if directory ~= nil and directory ~= '' then
+    return directory .. '/krpc/' .. name
+  end
+  return '/tmp/krpc-' .. (os.getenv('USER') or '') .. '/' .. name
+end
 
-  -- Connect to RPC server
-  local rpc_connection = Connection(address, rpc_port)
+-- The handshake is the same whatever carries it
+local function connect_using(rpc_connection, name)
+  name = name or ''
+
   rpc_connection:connect()
   local request = schema.ConnectionRequest()
   request.type = schema.CONNECTIONREQUEST_TYPE_RPC_ENUM.number
@@ -35,6 +43,19 @@ function krpc.connect(name, address, rpc_port)
   local client_identifier = response.client_identifier
 
   return Client(rpc_connection)
+end
+
+function krpc.connect(name, address, rpc_port)
+  address = address or DEFAULT_ADDRESS
+  rpc_port = rpc_port or DEFAULT_RPC_PORT
+  return connect_using(Connection(address, rpc_port), name)
+end
+
+-- Connect to a server on the same machine, over a unix domain socket named by the
+-- given path rather than over TCP. The path defaults to the one the server uses.
+function krpc.connect_local(name, rpc_path)
+  rpc_path = rpc_path or default_path('rpc')
+  return connect_using(LocalConnection(rpc_path), name)
 end
 
 return krpc

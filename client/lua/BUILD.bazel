@@ -71,14 +71,56 @@ pkg_zip(
 
 test_suite(
     name = "test",
-    tests = [":client"],
+    tests = [
+        ":client-localsocket",
+        ":client-tcpip",
+        ":communication-localsocket",
+        ":communication-tcpip",
+        ":unit",
+    ],
 )
 
+# What the client does regardless of the transport it talks over: encoding and decoding
+# values and the types they are carried as. It needs no server, so it runs on its own
+# rather than under the harness that starts one.
+lua_test(
+    name = "unit",
+    size = "small",
+    main = "krpc/test/unit.lua",
+    deps = lua_deps,
+)
+
+# The transport, one test each. Both run against a server the test listens on itself, so
+# neither needs a kRPC server.
+lua_test(
+    name = "communication-tcpip",
+    size = "small",
+    main = "krpc/test/connection_tcpip.lua",
+    tags = ["requires-network"],
+    deps = lua_deps,
+)
+
+lua_test(
+    name = "communication-localsocket",
+    size = "small",
+    main = "krpc/test/connection_localsocket.lua",
+    deps = lua_deps,
+)
+
+# The client end to end against a TestServer, once per transport it can reach one over.
 client_test(
-    name = "client",
+    name = "client-tcpip",
     size = "small",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
+    test_executable = ":luatest",
+)
+
+client_test(
+    name = "client-localsocket",
+    size = "small",
+    server_executable = "//tools/TestServer",
+    server_type = "localsocket",
     test_executable = ":luatest",
 )
 
@@ -94,7 +136,7 @@ lua_binary(
 lua_test(
     name = "luatest",
     size = "small",
-    main = "krpc/test/init.lua",
+    main = "krpc/test/client.lua",
     tags = ["requires-network"],
     deps = lua_deps,
 )

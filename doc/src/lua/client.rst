@@ -84,6 +84,25 @@ Reference
                           notation. Defaults to '127.0.0.1'.
    :param number rpc_port: The port number of the RPC Server. Defaults to 50000.
 
+.. function:: krpc.connect_local([name], [rpc_path])
+
+   This function connects to a kRPC server running on the same machine, over a
+   unix domain socket rather than TCP/IP. It returns a :class:`Client` object,
+   just as :func:`krpc.connect` does, and the connection behaves identically
+   thereafter.
+
+   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and
+   Windows Server 2019 or later. On Windows this needs a luasocket built with
+   its ``socket.unix`` module, which the one luarocks installs leaves out.
+
+   :param string name: A descriptive name for the connection. This is passed to
+                       the server and appears, for example, in the client
+                       connection dialog on the in-game server window.
+   :param string rpc_path: The path of the socket the RPC Server is listening
+                           on. This should match the RPC socket path shown in
+                           the in-game server window. Defaults to the path the
+                           server uses unless it was configured with another.
+
 .. class:: Client
 
    This class provides the interface for communicating with the server. It is
