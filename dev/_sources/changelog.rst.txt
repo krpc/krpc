@@ -15,6 +15,7 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* Add structure types: a compound value with named fields, whose value is sent to the client in full rather than as a reference to an object that stays on the server. A structure is declared with ``KRPCStruct`` on a C# ``struct``, its fields are the properties annotated with ``KRPCProperty``, and its value is encoded as the values of those fields in the order the structure declares them (:issue:`1066`)
 * Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game. It carries the same messages as the TCP/IP protocol over a cheaper path: a client that makes many calls in quick succession completes around 20% more of them per physics update, and around 35% more when the values are large. A client that makes one call and then waits is unaffected, as the wait is governed by the game's update rate. Available on Linux, macOS, and Windows 10 1803 and later (:issue:`1065`)
 * Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are now read and written on their own threads rather than on the thread that runs the game. Data waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (:issue:`1035`)
 * Add ``KRPC.ObjectDestroyedException``, raised when the game object that an object refers to no longer exists (:issue:`1051`)
@@ -236,6 +237,7 @@ Debug service
 C-nano client
 ^^^^^^^^^^^^^
 
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a C struct with a member per field, named for the field it carries (:issue:`1066`)
 * :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
 * Add ``KRPC_COMMUNICATION_TCP``, which builds the library to communicate with a server over TCP/IP rather than over a serial port, leaving the server on its default protocol. A connection is opened with the address and port the server is listening on, held in a ``krpc_connection_config_t``, in place of the name of a port. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_TCP=ON``, which also links the winsock library it needs on Windows (:issue:`1055`)
 * Add a ``tcp`` feature to the vcpkg port, which installs the library built to communicate over TCP/IP; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
@@ -248,6 +250,7 @@ C-nano client
 C# client
 ^^^^^^^^^
 
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as properties, with a constructor taking them in the order the structure declares them and equality over them (:issue:`1066`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
 * Add ``Connection.ConnectLocal``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
 * Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
@@ -258,6 +261,7 @@ C# client
 C++ client
 ^^^^^^^^^^
 
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a ``struct`` carrying its fields as members, with a constructor taking them in the order the structure declares them and equality over them (:issue:`1066`)
 * :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
 * Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
 * Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
@@ -270,6 +274,7 @@ C++ client
 Java client
 ^^^^^^^^^^^
 
+* Support structure types, which a service defines as a compound value with named fields. One is generated as a class carrying its fields, with a constructor taking them in the order the structure declares them, getters and equality over them (:issue:`1066`)
 * :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for the unix domain sockets the local socket protocol is carried over (:issue:`1065`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
 * Add ``Connection.newLocalInstance``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
@@ -279,6 +284,8 @@ Java client
 Lua client
 ^^^^^^^^^^
 
+* Support structure types, which a service defines as a compound value with named fields. A value of one is built from the values of its fields in order and gives them named access; a list with one element per field is accepted where one is expected (:issue:`1066`)
+* A service definition that names a type this client does not know about, as one from a newer server may, now skips the member that names it with a warning, rather than failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
 * Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket rather than TCP/IP. The connection behaves identically once established. On Windows this needs luasocket's ``socket.unix`` module, which luasocket does not build there, so the client now depends on the ``luasocket-unix-windows`` rock as well (:issue:`1065`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
@@ -290,6 +297,8 @@ Lua client
 Python client
 ^^^^^^^^^^^^^
 
+* Support structure types, which a service defines as a compound value with named fields. A value of one is a named tuple, so its fields can be read by name and it is also the tuple of their values; a tuple or list with one element per field is accepted where one is expected (:issue:`1066`)
+* A service definition that names a type this client does not know about, as one from a newer server may, now skips the member that names it with a warning, rather than failing to connect (:issue:`1066`)
 * :breaking:`Breaking` Support ``None`` for any nullable type (:issue:`1017`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
 * Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Python names none of them itself, and a generated stub whose parameter defaults to one now names the constant rather than writing out the decimal value (:issue:`1045`)
@@ -301,6 +310,7 @@ Python client
 krpctools
 ^^^^^^^^^
 
+* Generate and document the structure types a service defines, for every client (:issue:`1066`)
 * :breaking:`Breaking` A generator module given to ``krpc-clientgen`` by path is constructed with the definitions of every service that was loaded, rather than with those of the single service it generates (:issue:`1044`)
 * Support for nullable values across all types (:issue:`1017`)
 * Generate an enumeration default value as the member it names, instead of a cast of its integer value (:issue:`1044`)

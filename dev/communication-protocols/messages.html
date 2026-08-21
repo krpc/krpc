@@ -920,6 +920,7 @@ with the format:</p>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">6</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">7</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">deprecated_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">8</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">Struct</span><span class="w"> </span><span class="na">structs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">9</span><span class="p">;</span>
 <span class="p">}</span>
 </pre></div>
 </div>
@@ -933,6 +934,8 @@ service.</p></li>
 defined by the service.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">exceptions</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Exception</span></code> messages, one for each <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a>
 defined by the service.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">structs</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">Struct</span></code> messages, one for each <a class="reference internal" href="../extending.html#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a>
+defined by the service.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the service, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the service is deprecated. Deprecated services remain fully functional;
 this field is informational.</p></li>
@@ -941,7 +944,7 @@ this field is informational.</p></li>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>See the <a class="reference internal" href="../extending.html#extending"><span class="std std-ref">Extending kRPC</span></a> documentation for more details about <a class="reference internal" href="../extending.html#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>,
-<a class="reference internal" href="../extending.html#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a> and <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a>.</p>
+<a class="reference internal" href="../extending.html#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a>, <a class="reference internal" href="../extending.html#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> and <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a>.</p>
 </div>
 <section id="procedures">
 <h3>Procedures<a class="headerlink" href="#procedures" title="Link to this heading">#</a></h3>
@@ -1090,6 +1093,66 @@ functional; this field is informational.</p></li>
 empty.</p></li>
 </ul>
 </section>
+<section id="structures">
+<span id="communication-protocol-structures"></span><h3>Structures<a class="headerlink" href="#structures" title="Link to this heading">#</a></h3>
+<p>A structure is a compound value with named fields. Unlike a class, whose value on the wire is an
+identifier for an object that stays on the server, a structure’s value is the values of its fields,
+sent inline. Details about each <a class="reference internal" href="../extending.html#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> are specified in a <code class="docutils literal notranslate"><span class="pre">Struct</span></code> message,
+with the format:</p>
+<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">Struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="k">repeated</span><span class="w"> </span><span class="n">StructField</span><span class="w"> </span><span class="na">fields</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">deprecated_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kd">message</span><span class="w"> </span><span class="nc">StructField</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">documentation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">bool</span><span class="w"> </span><span class="na">deprecated</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">deprecated_reason</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The fields are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the structure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fields</span></code> - A list of <code class="docutils literal notranslate"><span class="pre">StructField</span></code> messages, one for each field of the structure, in the
+order their values are encoded in. The fields are:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code> - The name of the field.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code> - The type of the field, as a <a class="reference internal" href="#communication-protocol-type"><span class="std std-ref">Type message</span></a>. A field may have any type a parameter or return value may
+have, including a class, a collection or another structure.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the field, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the field is deprecated. Deprecated fields remain fully functional;
+this field is informational.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> - If the field is deprecated, the reason for its deprecation. May be
+empty.</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">documentation</span></code> - Documentation for the structure, as <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa288481%28v=vs.71%29.aspx">C# XML documentation</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deprecated</span></code> - Whether the structure is deprecated. Deprecated structures remain fully
+functional; this field is informational.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">deprecated_reason</span></code> - If the structure is deprecated, the reason for its deprecation. May be
+empty.</p></li>
+</ul>
+<p>A value of a structure type is encoded as a <code class="docutils literal notranslate"><span class="pre">Tuple</span></code> message whose items are the encoded values of
+the structure’s fields, in the order the <code class="docutils literal notranslate"><span class="pre">fields</span></code> list gives them. This is the same encoding as a
+tuple of the field types, so a client can encode and decode a structure with the codec it already
+has for tuples, and the field names exist only in the definition above.</p>
+<p>Two rules follow from that encoding, and a client author should rely on them:</p>
+<ul class="simple">
+<li><p>Fields are only ever appended to a structure. A value may therefore carry more items than the
+fields a client knows about, when it was generated against an older definition of the structure,
+and those extra items are to be ignored. Fewer items than the known fields means the definitions
+do not match, and is an error.</p></li>
+<li><p>A field is never null. Null is signaled out-of-band by the <code class="docutils literal notranslate"><span class="pre">is_null</span></code> field of the enclosing
+<code class="docutils literal notranslate"><span class="pre">Argument</span></code> or <code class="docutils literal notranslate"><span class="pre">ProcedureResult</span></code> message, which can say that a whole structure value is null
+but says nothing about its fields.</p></li>
+</ul>
+</section>
 <section id="exceptions">
 <h3>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading">#</a></h3>
 <p>Details about each <a class="reference internal" href="../extending.html#attribute-KRPCException" title="KRPCException attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCException</span></code></a> are specified in an <code class="docutils literal notranslate"><span class="pre">Exception</span></code> message, with the
@@ -1156,6 +1219,7 @@ therefore be used to split the name into its constituent parts.</p>
 <span class="w">    </span><span class="c1">// Objects</span>
 <span class="w">    </span><span class="na">CLASS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
 <span class="w">    </span><span class="na">ENUMERATION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
+<span class="w">    </span><span class="na">STRUCT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">102</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Messages</span>
 <span class="w">    </span><span class="na">EVENT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
@@ -1175,9 +1239,11 @@ therefore be used to split the name into its constituent parts.</p>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">code</span></code> field specifies the type. <code class="docutils literal notranslate"><span class="pre">NONE</span></code> is used as the return type for procedures that do
 not return a value.</p>
-<p>For <code class="docutils literal notranslate"><span class="pre">CLASS</span></code> and <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> types the <code class="docutils literal notranslate"><span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> fields specify the service that
-defines the class/enumeration and the name of the class/enumeration. For all other types these
-fields are empty.</p>
+<p>For <code class="docutils literal notranslate"><span class="pre">CLASS</span></code>, <code class="docutils literal notranslate"><span class="pre">ENUMERATION</span></code> and <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> types the <code class="docutils literal notranslate"><span class="pre">service</span></code> and <code class="docutils literal notranslate"><span class="pre">name</span></code> fields specify the
+service that defines the class, enumeration or structure and its name. For all other types these
+fields are empty. A <code class="docutils literal notranslate"><span class="pre">STRUCT</span></code> type carries no more than that, so the fields of a structure have to
+be read from the <a class="reference internal" href="#communication-protocol-structures"><span class="std std-ref">Struct message</span></a> in the definition of the
+service that names it.</p>
 <p>For collection types the <code class="docutils literal notranslate"><span class="pre">types</span></code> repeated field will contain the sub-types:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">TUPLE</span></code> types contain 1 or more types in the <code class="docutils literal notranslate"><span class="pre">types</span></code> field.</p></li>
@@ -1294,6 +1360,7 @@ not used to represent null on the wire.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#procedures">Procedures</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#classes">Classes</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enumerations">Enumerations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#structures">Structures</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#exceptions">Exceptions</a></li>
 </ul>
 </li>

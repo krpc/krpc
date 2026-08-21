@@ -999,6 +999,75 @@ service if it has its <code class="docutils literal notranslate"><span class="pr
 </dd></dl>
 
 <dl class="csharp attribute">
+<dt class="sig sig-object csharp" id="attribute-KRPCStruct">
+<span class="sig-name descname"><span class="pre">KRPCStruct</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Service</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCStruct" title="Link to this definition">#</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>Service</strong> – Optional name of the service to add this structure to. If omitted, the
+structure is added to the service that contains its definition.</p></li>
+</ul>
+</dd>
+</dl>
+<p>This <a class="reference external" href="https://msdn.microsoft.com/en-us/library/aa287992.aspx">attribute</a> is applied to a
+<code class="docutils literal notranslate"><span class="pre">struct</span></code>. It adds the structure and its fields to the server. A structure is a compound value
+with named fields, whose value is sent to the client in full rather than as a reference to an
+object that stays on the server.</p>
+<p>The fields of the structure are its <code class="docutils literal notranslate"><span class="pre">public</span></code> instance properties that are annotated with
+<a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a> and have both a getter and a setter, in the order they are declared.
+A property that is not annotated is not a field, and is not visible to a client.</p>
+<p>A <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> must be part of a service, just like a
+<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a>. Similarly, a <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a> can be declared outside of a
+service if it has its <code class="docutils literal notranslate"><span class="pre">Service</span></code> parameter set to the name of the service that it is part of.</p>
+<p>The struct type to which this attribute is applied must satisfy the following criteria:</p>
+<ul class="simple">
+<li><p>The struct must be <code class="docutils literal notranslate"><span class="pre">public</span></code> and must not be generic.</p></li>
+<li><p>The name of the struct must be a valid <a class="reference internal" href="#service-api-identifiers"><span class="std std-ref">kRPC identifier</span></a>.</p></li>
+<li><p>The struct must either be declared inside a <a class="reference internal" href="#attribute-KRPCService" title="KRPCService attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCService</span></code></a>, or have its <code class="docutils literal notranslate"><span class="pre">Service</span></code>
+parameter set to the name of the service it is part of.</p></li>
+<li><p>It must have at least one field, and the type of every field must be a <a class="reference internal" href="#service-api-serializable-types"><span class="std std-ref">serializable type</span></a>.</p></li>
+<li><p>A field must not be nullable and must not restrict the game scenes it is available in, so
+neither the <code class="docutils literal notranslate"><span class="pre">Nullable</span></code> nor the <code class="docutils literal notranslate"><span class="pre">GameScene</span></code> parameter of its <a class="reference internal" href="#attribute-KRPCProperty" title="KRPCProperty attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCProperty</span></code></a>
+attribute may be set.</p></li>
+<li><p>The structure must not contain itself, whether directly or through the fields of another
+structure that it contains.</p></li>
+</ul>
+<p>Fields may only be <strong>appended</strong> to a structure. Reordering them, removing one or changing the
+type of one is a breaking change for clients generated against the previous definition, as the
+value of a structure is sent as the values of its fields in order.</p>
+<p><strong>Choosing between a structure and a class.</strong> A structure sends the values of all of its fields
+whenever it is sent, in a single procedure call. Use one for compound data whose fields are
+almost always wanted together, such as a position and a velocity. Use a
+<a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a> for something with mutable state, or whose members are expensive enough
+that a client should be able to ask for them one at a time.</p>
+<p><strong>Examples</strong></p>
+<ul>
+<li><p>Declare a structure with three fields:</p>
+<div class="highlight-csharp notranslate"><div class="highlight"><pre><span></span><span class="na">[KRPCStruct]</span>
+<span class="k">public</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">LaunchSiteInfo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">Name</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">CelestialBody</span><span class="w"> </span><span class="n">Body</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+
+<span class="w">    </span><span class="na">[KRPCProperty]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">Latitude</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">get</span><span class="p">;</span><span class="w"> </span><span class="k">set</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This can be used from a python client as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">krpc</span>
+<span class="n">conn</span> <span class="o">=</span> <span class="n">krpc</span><span class="o">.</span><span class="n">connect</span><span class="p">()</span>
+<span class="n">site</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">space_center</span><span class="o">.</span><span class="n">launch_sites</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">site</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">site</span><span class="o">.</span><span class="n">latitude</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="csharp attribute">
 <dt class="sig sig-object csharp" id="attribute-KRPCException">
 <span class="sig-name descname"><span class="pre">KRPCException</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">Service</span></em>, <span class="pre">Type</span> <em><span class="pre">MappedException</span></em><span class="sig-paren">)</span><a class="headerlink" href="#attribute-KRPCException" title="Link to this definition">#</a></dt>
 <dd><dl class="field-list simple">
@@ -1116,6 +1185,7 @@ following types are serializable:</p>
 and <code class="docutils literal notranslate"><span class="pre">byte[]</span></code></p></li>
 <li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCClass" title="KRPCClass attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCClass</span></code></a></p></li>
 <li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCEnum" title="KRPCEnum attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCEnum</span></code></a></p></li>
+<li><p>Any type annotated with <a class="reference internal" href="#attribute-KRPCStruct" title="KRPCStruct attribute"><code class="xref csharp csharp-attr docutils literal notranslate"><span class="pre">KRPCStruct</span></code></a></p></li>
 <li><p>Collections of serializable types:</p>
 <ul>
 <li><p><code class="docutils literal notranslate"><span class="pre">System.Collections.Generic.IList&lt;T&gt;</span></code> where <code class="docutils literal notranslate"><span class="pre">T</span></code> is a serializable type</p></li>
