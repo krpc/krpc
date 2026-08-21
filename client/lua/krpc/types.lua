@@ -118,11 +118,23 @@ function _set_protobuf_type(src, dst)
   end
 end
 
+-- The key a type is cached under, built from the type code, the names and the types nested
+-- inside it in turn. It is built here rather than by serializing the message, as the protobuf
+-- library writes the fields of a message in the order its own table happens to hold them,
+-- which is not the same order every time.
+local function _type_key(protobuf_type)
+  local parts = { protobuf_type.code, protobuf_type.service, protobuf_type.name }
+  for _, typ in ipairs(protobuf_type.types) do
+    parts[#parts + 1] = '(' .. _type_key(typ) .. ')'
+  end
+  return table.concat(parts, ',')
+end
+
 function Types:as_type(protobuf_type)
   -- Return a type object given a protocol buffer type
 
   -- Get cached type
-  local key = protobuf_type:SerializeToString()
+  local key = _type_key(protobuf_type)
   if self._types:get(key) then
     return self._types:get(key)
   end
