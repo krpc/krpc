@@ -15,6 +15,7 @@ v0.7.0 - unreleased
 Core
 ^^^^
 
+* Add a communication protocol carrying protocol buffer messages over a unix domain socket, for clients running on the same machine as the game. It carries the same messages as the TCP/IP protocol over a cheaper path: a client that makes many calls in quick succession completes around 20% more of them per physics update, and around 35% more when the values are large. A client that makes one call and then waits is unaffected, as the wait is governed by the game's update rate. Available on Linux, macOS, and Windows 10 1803 and later (:issue:`1065`)
 * Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are now read and written on their own threads rather than on the thread that runs the game. Data waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (:issue:`1035`)
 * Add ``KRPC.ObjectDestroyedException``, raised when the game object that an object refers to no longer exists (:issue:`1051`)
 * Objects whose game objects the game no longer has are removed from the object store when a game state is loaded, and using an object that has been removed raises ``KRPC.ObjectDestroyedException`` rather than an argument error (:issue:`1051`)
@@ -28,6 +29,8 @@ Server
 ^^^^^^
 
 * :breaking:`Breaking` KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility code for older versions of the game has been removed (:issue:`1048`)
+* Servers can now use the local socket protocol, chosen in the server window like any other. The RPC and stream sockets default to paths in a directory belonging to the user running the game, and no network port is opened (:issue:`1065`)
+* Fix the end of a long serial port name being neither visible nor editable in the server window; the field now scrolls sideways to follow the caret (:issue:`1065`)
 * The server is stopped whenever no game is loaded, so a client is disconnected when the player quits to the main menu rather than being left waiting on a call that never returns. It starts again with the next game if it is set to start automatically. State held for clients is released at the same time, so user interface elements no longer stay on the screen for the whole of the main menu (:issue:`1041`)
 * Fix setting ``KRPC.GameScene`` from one editor straight to the other leaving the flight camera unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is being constructed now, as the game's own switch editor button does (:issue:`1038`)
 * Sweep objects whose game objects no longer exist out of the object store when the game loads, quickloads or reverts a game state, or changes scene, when it destroys a part or a vessel, and when a client removes something it owns such as a drawing, a user interface element or a force, so an object that has become useless is let go of promptly rather than at the next load (:issue:`1051`)
@@ -236,6 +239,7 @@ C-nano client
 * :breaking:`Breaking` Support null for any nullable type; a nullable non-class return adds a ``bool* returnValueIsNull`` out-parameter and a nullable argument is a pointer (:issue:`1017`)
 * Add ``KRPC_COMMUNICATION_TCP``, which builds the library to communicate with a server over TCP/IP rather than over a serial port, leaving the server on its default protocol. A connection is opened with the address and port the server is listening on, held in a ``krpc_connection_config_t``, in place of the name of a port. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_TCP=ON``, which also links the winsock library it needs on Windows (:issue:`1055`)
 * Add a ``tcp`` feature to the vcpkg port, which installs the library built to communicate over TCP/IP; ``vcpkg install "krpc-cnano[tcp]"`` (:issue:`1055`)
+* Add ``KRPC_COMMUNICATION_LOCALSOCKET``, which builds the library to communicate over a unix domain socket with a server on the same machine, opened with the path of the server's RPC socket in place of a serial port name. CMake builds of the library ask for it with ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON``, which also links the winsock library it needs on Windows, and the vcpkg port with the ``localsocket`` feature; ``vcpkg install "krpc-cnano[localsocket]"`` (:issue:`1065`)
 * Add ``KRPC_SINGLE_CONNECTION``, for a ``KRPC_COMMUNICATION_CUSTOM`` communication mechanism that opens a connection of its own to each server. Messages are then sent as they are, rather than wrapped in the multiplexed message a serial port needs to say which of the connections it carries a message belongs to (:issue:`1055`)
 * Reduce the cost of a remote procedure call. A message is sent and received through a buffer rather than a piece at a time, taking a call from tens of reads and writes down to one write and two reads, and a message is measured as it is encoded rather than by a pass over it first (:issue:`1056`)
 * Add ``KRPC_BUFFER_SIZE``, how much of a message to hold in memory while it is written to or read from the connection. It bounds the memory a call costs and never the size of a message, but a message that fits is cheaper to send, so it is worth setting above the largest call a program makes. Defaults to 1024 bytes, and to 128 on Arduino (:issue:`1056`)
@@ -245,6 +249,8 @@ C# client
 ^^^^^^^^^
 
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the nullable form (``int?``) (:issue:`1017`)
+* Add ``Connection.ConnectLocal``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
+* Add a ``timeout`` parameter to the ``Connection`` constructor, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
 * Reduce the cost of a remote procedure call. A value is encoded and decoded without a protobuf stream of its own, its bytes are written into a buffer of their own rather than one the thread keeps, a response is read a block at a time and parsed straight out of the read buffer, the request a call is built into is kept from one call to the next, and the client connections disable Nagle's algorithm (:issue:`1056`)
 * Reduce the cost of a call that returns a collection or an object. What kind of value a type carries, and how to build one, is worked out the first time the type is seen rather than for every value encoded or decoded, and a collection works out how to encode and decode its items once for the collection rather than once for every item (:issue:`1056`)
 
@@ -253,7 +259,10 @@ C++ client
 ^^^^^^^^^^
 
 * :breaking:`Breaking` Support null for any nullable type; nullable non-class values use ``std::optional``, changing generated signatures (:issue:`1017`)
+* Add ``krpc::connect_local``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
+* Add a ``timeout`` parameter to ``krpc::connect``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
 * Fix a service with a collection of enumerations in a procedure signature failing to compile (:issue:`1044`)
+* Fix ``krpc::Connection::close`` failing to link; it was declared but never defined (:issue:`1065`)
 * Reduce the cost of a remote procedure call. A response is read a block at a time and parsed straight out of the read buffer, the request a call is built into and the response it is answered by are kept from one call to the next, the arguments of a call are sized up front, and the client connections disable Nagle's algorithm. ``Client::invoke``, ``Client::build_request`` and ``Client::build_call`` name a service and a procedure with ``std::string_view``, so a call no longer builds a string for either (:issue:`1056`)
 * Reduce the cost of a call that carries a collection. A value is read without setting up a protobuf stream for it, the message a collection is carried in is kept from one call to the next rather than allocated and freed for each, and a list is given room for its values up front (:issue:`1056`)
 
@@ -261,13 +270,17 @@ C++ client
 Java client
 ^^^^^^^^^^^
 
+* :breaking:`Breaking` Requires Java 17 or later, up from Java 9, for the unix domain sockets the local socket protocol is carried over (:issue:`1065`)
 * :breaking:`Breaking` Support ``null`` for any nullable type; nullable value types use the boxed type (``Integer``, ``Double``, …) (:issue:`1017`)
+* Add ``Connection.newLocalInstance``, which connects to a server on the same machine over unix domain sockets rather than TCP/IP. The connection behaves identically once established (:issue:`1065`)
+* Add ``Connection.newInstance`` overloads taking a ``timeout``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
 
 
 Lua client
 ^^^^^^^^^^
 
 * :breaking:`Breaking` Support ``Types.none`` for any nullable type (:issue:`1017`)
+* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket rather than TCP/IP. The connection behaves identically once established. On Windows this needs luasocket's ``socket.unix`` module, which luasocket does not build there, so the client now depends on the ``luasocket-unix-windows`` rock as well (:issue:`1065`)
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
 * Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Lua names none of them itself, as ``math.maxinteger`` and ``math.mininteger`` need Lua 5.3, and a parameter that defaults to one is now documented as the constant rather than the decimal value (:issue:`1045`)
 * Reduce the cost of a remote procedure call. The request carrying a call is written as the bytes it comes to, rather than built as a protocol buffer message and serialized, and so are the lists, sets, tuples and dictionaries a call carries, which are read back the same way. A value is encoded and decoded by looking up its type code rather than by asking the type what class it is, a float or a double is packed without building a protobuf field encoder for it, the size of a message is read directly rather than by handing each byte to a decoder until it stops raising an error, and the client connection disables Nagle's algorithm (:issue:`1056`)
@@ -281,6 +294,8 @@ Python client
 * Fix a service failing to load when one of its procedures defaults to a member of an enumeration defined by a service that had not been loaded yet (:issue:`1044`)
 * Add ``krpc.limits``, naming the extremes of the numeric types kRPC carries over the wire, such as ``krpc.limits.SINT32_MAX`` and ``krpc.limits.DOUBLE_LOWEST``. Python names none of them itself, and a generated stub whose parameter defaults to one now names the constant rather than writing out the decimal value (:issue:`1045`)
 * Reduce the cost of a remote procedure call. Type objects are cached by the arguments naming them and their python type and type code read as plain attributes, values are encoded and decoded through a lookup on their type code rather than a chain of comparisons, floats and doubles are packed directly and short varints without going through protobuf's varint routines, a request is built as a single message, a response is read in one system call and taken out of the read buffer in one pass, a service reaches its procedures by ordinary attribute lookup, and the client connections disable Nagle's algorithm. A collection works out how to encode and decode its items once for the collection rather than once for every item (:issue:`1056`)
+* Add ``krpc.connect_local``, which connects to a server on the same machine over a unix domain socket rather than TCP/IP. The connection behaves identically once established. Windows is supported as well as Linux and macOS, even though python names no unix domain address family there (:issue:`1065`)
+* Add a ``timeout`` parameter to ``krpc.connect``, bounding how long a connection is waited for. A network that drops a connection attempt rather than refusing it otherwise leaves the client waiting indefinitely (:issue:`1065`)
 
 
 krpctools

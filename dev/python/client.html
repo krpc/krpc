@@ -962,7 +962,7 @@ expression returns true:</p>
 <h2>Client API Reference<a class="headerlink" href="#client-api-reference" title="Link to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="krpc.connect">
-<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50001</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50000</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_port</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50001</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect" title="Link to this definition">#</a></dt>
 <dd><p>This function creates a connection to a kRPC server. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a>
 object, through which the server can be communicated with.</p>
 <dl class="field-list simple">
@@ -980,6 +980,40 @@ match the stream port number of the server you want to connect to.</p></li>
 the client, which include type hints. If set to <code class="docutils literal notranslate"><span class="pre">False</span></code>, or if the
 server provides a service with no bundled stub, the service is generated
 dynamically at runtime. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>timeout</strong> (<em>float</em>) – How many seconds to wait for a connection before giving up. Defaults to
+<code class="docutils literal notranslate"><span class="pre">None</span></code>, which waits indefinitely. A network that drops a connection
+attempt rather than refusing it otherwise leaves the client waiting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="krpc.connect_local">
+<span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">rpc_path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">stream_path</span></span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="n"><span class="pre">use_pregenerated_stubs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.connect_local" title="Link to this definition">#</a></dt>
+<dd><p>This function creates a connection to a kRPC server running on the same machine, over unix
+domain sockets rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.client.Client" title="krpc.client.Client"><code class="xref py py-class docutils literal notranslate"><span class="pre">krpc.client.Client</span></code></a> object, just as
+<a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically thereafter.</p>
+<p>Use this when the script runs on the same machine as the game and the server is configured to
+use the local socket protocol. A script that makes many calls in quick succession completes
+more of them per physics update this way; one that makes a call and then waits sees no
+difference, as the wait is governed by the game’s update rate.</p>
+<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
+2019 or later. Python’s socket module does not expose the address family on Windows, so the
+client opens the socket through winsock itself.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – A descriptive name for the connection. This is passed to the server and appears
+in the in-game server window.</p></li>
+<li><p><strong>rpc_path</strong> (<em>str</em>) – The path of the socket the RPC server is listening on. This should match
+the RPC socket path shown in the in-game server window. Defaults to the
+path the server uses unless it was configured with another.</p></li>
+<li><p><strong>stream_path</strong> (<em>str</em>) – The path of the socket the Stream Server is listening on. This should
+match the stream socket path shown in the in-game server window.
+Defaults as <code class="docutils literal notranslate"><span class="pre">rpc_path</span></code> does. Pass <code class="docutils literal notranslate"><span class="pre">None</span></code> to connect without stream
+support.</p></li>
+<li><p><strong>use_pregenerated_stubs</strong> (<em>bool</em>) – As for <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref py py-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a>.</p></li>
 </ul>
 </dd>
 </dl>

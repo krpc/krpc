@@ -6,7 +6,7 @@ Java Client
 
 This client provides a Java API for interacting with a kRPC server. A jar containing the
 ``krpc.client`` package can be `downloaded from GitHub <https://github.com/krpc/krpc/releases>`_.
-It requires Java 9 or later.
+It requires Java 17 or later.
 
 Getting Started
 ---------------
@@ -188,6 +188,8 @@ Client API Reference
    .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort)
    .. method:: static Connection newInstance(String name, java.net.InetAddress address)
    .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort)
+   .. method:: static Connection newInstance(String name, String address, int rpcPort, int streamPort, java.time.Duration timeout)
+   .. method:: static Connection newInstance(String name, java.net.InetAddress address, int rpcPort, int streamPort, java.time.Duration timeout)
 
       Create a connection to the server, using the given connection details.
 
@@ -200,6 +202,28 @@ Client API Reference
                            the RPC port number of the server you want to connect to.
       :param int stream_port: The port number of the Stream Server. Defaults to 50001. This should
                               match the stream port number of the server you want to connect to.
+      :param java.time.Duration timeout: How long to wait for a connection before giving up.
+                                         Defaults to zero, which waits indefinitely. A network
+                                         that drops a connection attempt rather than refusing it
+                                         otherwise leaves the client waiting.
+
+   .. method:: static Connection newLocalInstance()
+   .. method:: static Connection newLocalInstance(String name)
+   .. method:: static Connection newLocalInstance(String name, String rpcPath, String streamPath)
+
+      Create a connection to a server running on the same machine, over unix domain sockets rather
+      than TCP/IP. The connection behaves identically once established.
+
+      Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
+      Server 2019 or later.
+
+      :param String name: A descriptive name for the connection. This is passed to the server and
+                          appears in the in-game server window.
+      :param String rpcPath: The path of the socket the RPC Server is listening on. This should
+                             match the RPC socket path shown in the in-game server window.
+      :param String streamPath: The path of the socket the Stream Server is listening on. This
+                                should match the stream socket path shown in the in-game server
+                                window.
 
    .. method:: Stream<T> addStream(Class<?> clazz, String method, Object... args)
 

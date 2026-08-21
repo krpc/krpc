@@ -972,7 +972,7 @@ expression returns true:</p>
 class.</p>
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-Connection.Connection">
-<span class="sig-name descname"><span class="pre">Connection</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.net.ipaddress" title="System.Net.IPAddress"><span class="pre">Net.IPAddress</span></a> <em><span class="pre">address</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">rpcPort</span></em><em> <span class="pre">=</span> <span class="pre">50000</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">streamPort</span></em><em> <span class="pre">=</span> <span class="pre">50001</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Connection" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">Connection</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.net.ipaddress" title="System.Net.IPAddress"><span class="pre">Net.IPAddress</span></a> <em><span class="pre">address</span></em><em> <span class="pre">=</span> <span class="pre">null</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">rpcPort</span></em><em> <span class="pre">=</span> <span class="pre">50000</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.int32" title="System.Int32"><span class="pre">Int32</span></a> <em><span class="pre">streamPort</span></em><em> <span class="pre">=</span> <span class="pre">50001</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.timespan" title="System.TimeSpan"><span class="pre">TimeSpan</span></a> <em><span class="pre">timeout</span></em><em> <span class="pre">=</span> <span class="pre">default</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.Connection" title="Link to this definition">#</a></dt>
 <dd><p>Connect to a kRPC server.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -984,6 +984,31 @@ in the in-game server window.</p></li>
 RPC port number of the server you want to connect to.</p></li>
 <li><p><strong>stream_port</strong> – The port number of the Stream Server. Defaults to 50001. This should
 match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>timeout</strong> – How long to wait for a connection before giving up. Defaults to zero,
+which waits indefinitely. A network that drops a connection attempt rather than refusing
+it otherwise leaves the client waiting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-Connection.ConnectLocal">
+<em><span class="pre">static</span></em> <a class="reference internal" href="#class-Connection" title="Connection class"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">ConnectLocal</span></span> <span class="sig-paren">(</span><a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">name</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">rpcPath</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em>, <a class="reference external" href="https://docs.microsoft.com/en-us/dotnet/api/system.string" title="System.String"><span class="pre">String</span></a> <em><span class="pre">streamPath</span></em><em> <span class="pre">=</span> <span class="pre">&quot;&quot;</span></em><span class="sig-paren">)</span><a class="headerlink" href="#method-Connection.ConnectLocal" title="Link to this definition">#</a></dt>
+<dd><p>Connect to a kRPC server running on the same machine, over unix domain sockets rather than
+TCP/IP. The connection behaves identically once established. Unix domain sockets are
+available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – A descriptive name for the connection. This is passed to the server and appears
+in the in-game server window.</p></li>
+<li><p><strong>rpcPath</strong> – The path of the socket the RPC Server is listening on. This should match the
+RPC socket path shown in the in-game server window. Leave empty for the path the server
+uses unless it was configured with another.</p></li>
+<li><p><strong>streamPath</strong> – The path of the socket the Stream Server is listening on. This should
+match the stream socket path shown in the in-game server window. Defaults as <code class="docutils literal notranslate"><span class="pre">rpcPath</span></code>
+does. Pass <code class="docutils literal notranslate"><span class="pre">null</span></code> to connect without stream support.</p></li>
 </ul>
 </dd>
 </dl>

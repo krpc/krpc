@@ -693,7 +693,7 @@
 <h1>Java Client<a class="headerlink" href="#java-client" title="Link to this heading">#</a></h1>
 <p>This client provides a Java API for interacting with a kRPC server. A jar containing the
 <code class="docutils literal notranslate"><span class="pre">krpc.client</span></code> package can be <a class="reference external" href="https://github.com/krpc/krpc/releases">downloaded from GitHub</a>.
-It requires Java 9 or later.</p>
+It requires Java 17 or later.</p>
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading">#</a></h2>
 <p>The kRPC client library depends on the <a class="reference external" href="https://github.com/google/protobuf/tree/master/java">protobuf</a> and <a class="reference external" href="http://www.javatuples.org">javatuples</a> libraries. A prebuilt jar for protobuf is available via <a class="reference external" href="http://search.maven.org/#search|ga|1|g%3A%22com.google.protobuf%22%20a%3A%22protobuf-java%22">Maven</a>.</p>
@@ -716,7 +716,7 @@ It requires Java 9 or later.</p>
 </div>
 <p>To compile this program using javac on the command line, save the source as <code class="docutils literal notranslate"><span class="pre">Example.java</span></code> and run
 the following:</p>
-<pre class="literal-block">javac -cp krpc-java-0.7.0-373-0a30687.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
+<pre class="literal-block">javac -cp krpc-java-0.7.0-400-09f78aa.jar:protobuf-java-4.35.1.jar:javatuples-1.2.jar Example.java</pre>
 <p>Note that you may need to change the paths to the JAR files.</p>
 <section id="connecting-to-the-server">
 <h3>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h3>
@@ -1043,6 +1043,16 @@ class.</p>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int)">
 <span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/package-summary.html" title="java.net.package-summary"><span class="pre">net</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html" title="java.net.InetAddress"><span class="pre">InetAddress</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, String, int, int, java.time.Duration)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html" title="java.time.package-summary"><span class="pre">time</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html" title="java.time.Duration"><span class="pre">Duration</span></a><em> <span class="pre">timeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, String, int, int, java.time.Duration)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int, java.time.Duration)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/package-summary.html" title="java.net.package-summary"><span class="pre">net</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/net/InetAddress.html" title="java.net.InetAddress"><span class="pre">InetAddress</span></a><em> <span class="pre">address</span></em>, <span class="pre">int</span><em> <span class="pre">rpcPort</span></em>, <span class="pre">int</span><em> <span class="pre">streamPort</span></em>, <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/package-summary.html" title="java.time.package-summary"><span class="pre">time</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html" title="java.time.Duration"><span class="pre">Duration</span></a><em> <span class="pre">timeout</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int, java.time.Duration)" title="Link to this definition">#</a></dt>
 <dd><p>Create a connection to the server, using the given connection details.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1056,6 +1066,42 @@ object. Defaults to 127.0.0.1.</p></li>
 the RPC port number of the server you want to connect to.</p></li>
 <li><p><strong>stream_port</strong> (<span><code class="xref java java-type docutils literal notranslate"><span class="pre">int</span></code></span>) – The port number of the Stream Server. Defaults to 50001. This should
 match the stream port number of the server you want to connect to.</p></li>
+<li><p><strong>timeout</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/time/Duration.html" title="java.time.Duration"><code class="xref java java-type docutils literal notranslate"><span class="pre">java.time.Duration</span></code></a></span>) – How long to wait for a connection before giving up.
+Defaults to zero, which waits indefinitely. A network
+that drops a connection attempt rather than refusing it
+otherwise leaves the client waiting.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newLocalInstance()">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newLocalInstance</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newLocalInstance()" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newLocalInstance(String)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newLocalInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newLocalInstance(String)" title="Link to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.Connection.newLocalInstance(String, String, String)">
+<span class="pre">static</span> <a class="reference internal" href="#krpc.client.Connection" title="krpc.client.Connection"><span class="pre">Connection</span></a> <span class="sig-name descname"><span class="pre">newLocalInstance</span></span><span class="sig-paren">(</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">name</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">rpcPath</span></em>, <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><span class="pre">String</span></a><em> <span class="pre">streamPath</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.Connection.newLocalInstance(String, String, String)" title="Link to this definition">#</a></dt>
+<dd><p>Create a connection to a server running on the same machine, over unix domain sockets rather
+than TCP/IP. The connection behaves identically once established.</p>
+<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
+Server 2019 or later.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – A descriptive name for the connection. This is passed to the server and
+appears in the in-game server window.</p></li>
+<li><p><strong>rpcPath</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The path of the socket the RPC Server is listening on. This should
+match the RPC socket path shown in the in-game server window.</p></li>
+<li><p><strong>streamPath</strong> (<span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/String.html" title="java.lang.String"><code class="xref java java-type docutils literal notranslate"><span class="pre">String</span></code></a></span>) – The path of the socket the Stream Server is listening on. This
+should match the stream socket path shown in the in-game server
+window.</p></li>
 </ul>
 </dd>
 </dl>

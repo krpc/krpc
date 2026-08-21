@@ -769,6 +769,33 @@ notation. Defaults to ‘127.0.0.1’.</p></li>
 </dl>
 </dd></dl>
 
+<dl class="lua function">
+<dt class="sig sig-object lua" id="krpc.krpc.connect_local">
+<span class="property"> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">connect_local</span></span><span class="sig-paren">(</span><span class="optional">[</span><em class="sig-param"><span class="pre">name</span></em><span class="optional">]</span><span class="optional">[</span>, <em class="sig-param"><span class="pre">rpc_path</span></em><span class="optional">]</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.krpc.connect_local" title="Link to this definition">#</a></dt>
+<dd><p>This function connects to a kRPC server running on the same machine, over a
+unix domain socket rather than TCP/IP. It returns a <a class="reference internal" href="#krpc.Client" title="krpc.Client"><code class="xref lua lua-class docutils literal notranslate"><span class="pre">Client</span></code></a> object,
+just as <a class="reference internal" href="#krpc.connect" title="krpc.connect"><code class="xref lua lua-func docutils literal notranslate"><span class="pre">krpc.connect()</span></code></a> does, and the connection behaves identically
+thereafter.</p>
+<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and
+Windows Server 2019 or later. This needs luasocket’s <code class="docutils literal notranslate"><span class="pre">socket.unix</span></code> module,
+which luasocket builds itself everywhere but Windows; there it comes from the
+<code class="docutils literal notranslate"><span class="pre">luasocket-unix-windows</span></code> rock, which <code class="docutils literal notranslate"><span class="pre">luarocks</span> <span class="pre">install</span> <span class="pre">krpc</span></code> pulls in. A
+luasocket built by hand needs that module built with it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – A descriptive name for the connection. This is passed to
+the server and appears, for example, in the client
+connection dialog on the in-game server window.</p></li>
+<li><p><strong>rpc_path</strong> (<span><code class="xref lua lua-class docutils literal notranslate"><span class="pre">string</span></code></span>) – The path of the socket the RPC Server is listening
+on. This should match the RPC socket path shown in
+the in-game server window. Defaults to the path the
+server uses unless it was configured with another.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="lua class">
 <dt class="sig sig-object lua" id="krpc.Client">
 <span class="property"><span class="pre">class</span> </span><span class="sig-prename descclassname"><span class="pre">krpc.</span></span><span class="sig-name descname"><span class="pre">Client</span></span><a class="headerlink" href="#krpc.Client" title="Link to this definition">#</a></dt>

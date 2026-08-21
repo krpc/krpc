@@ -1444,10 +1444,10 @@
       </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.boiloff_rate">boiloff_rate (Part attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.BOLD">BOLD (Java field)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="java/api/ui/text.html#krpc.client.services.UI.FontStyle.BOLD_AND_ITALIC">BOLD_AND_ITALIC (Java field)</a>
 </li>
       <li><a href="lua/api/krpc/expressions.html#KRPC.Type.bool">bool() (Type static method)</a>, <a href="python/api/krpc/expressions.html#KRPC.Type.bool">[1]</a>
@@ -1497,6 +1497,8 @@
 
       <ul>
         <li><a href="python/client.html#krpc.connect">krpc.connect()</a>
+</li>
+        <li><a href="python/client.html#krpc.connect_local">krpc.connect_local()</a>
 </li>
       </ul></li>
       <li><a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.burn_time">burn_time (EditorVessel attribute)</a>
@@ -5486,6 +5488,15 @@
         <li><a href="python/client.html#krpc.connect">built-in function</a>
 </li>
       </ul></li>
+      <li>
+    krpc.connect_local()
+
+      <ul>
+        <li><a href="python/client.html#krpc.connect_local">built-in function</a>
+</li>
+      </ul></li>
+      <li><a href="lua/client.html#krpc.krpc.connect_local">krpc.connect_local() (in module krpc)</a>
+</li>
       <li><a href="python/client.html#krpc.event.Event">krpc.event.Event (built-in class)</a>
 </li>
       <li><a href="lua/client.html#krpc.krpc.Client.krpc">krpc.krpc.Client.krpc (attribute)</a>
@@ -5542,7 +5553,9 @@
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc6ClientD0Ev">krpc::Client::~Client (C++ function)</a>
 </li>
-      <li><a href="cpp/client.html#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjj">krpc::connect (C++ function)</a>
+      <li><a href="cpp/client.html#_CPPv4N4krpc7connectERKNSt6stringERKNSt6stringEjjNSt6chrono12millisecondsE">krpc::connect (C++ function)</a>
+</li>
+      <li><a href="cpp/client.html#_CPPv4N4krpc13connect_localERKNSt6stringERKNSt6stringERKNSt6stringE">krpc::connect_local (C++ function)</a>
 </li>
       <li><a href="cpp/client.html#_CPPv4N4krpc5EventE">krpc::Event (C++ class)</a>
 </li>
@@ -10380,12 +10393,12 @@
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text11set_visibleEb">krpc::services::UI::Text::set_visible (C++ function)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text13set_word_wrapEb">krpc::services::UI::Text::set_word_wrap (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text4sizeEv">krpc::services::UI::Text::size (C++ function)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text5styleEv">krpc::services::UI::Text::style (C++ function)</a>
 </li>
       <li><a href="cpp/api/ui/text.html#_CPPv4N4krpc8services2UI4Text7visibleEv">krpc::services::UI::Text::visible (C++ function)</a>
@@ -16182,11 +16195,21 @@
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int)">newInstance(String, java.net.InetAddress, int, int) (Java method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, java.net.InetAddress, int, int, java.time.Duration)">newInstance(String, java.net.InetAddress, int, int, java.time.Duration) (Java method)</a>
+</li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String)">newInstance(String, String) (Java method)</a>
 </li>
       <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int)">newInstance(String, String, int, int) (Java method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="java/client.html#krpc.client.Connection.newInstance(String, String, int, int, java.time.Duration)">newInstance(String, String, int, int, java.time.Duration) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance()">newLocalInstance() (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String)">newLocalInstance(String) (Java method)</a>
+</li>
+      <li><a href="java/client.html#krpc.client.Connection.newLocalInstance(String, String, String)">newLocalInstance(String, String, String) (Java method)</a>
 </li>
       <li><a href="lua/api/space-center/camera.html#SpaceCenter.Camera.next_camera">next_camera() (Camera method)</a>, <a href="python/api/space-center/camera.html#SpaceCenter.Camera.next_camera">[1]</a>
 </li>

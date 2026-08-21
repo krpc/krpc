@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Protocol Buffers over Serial IO &#8212; kRPC vdev documentation</title>
+    <title>Protocol Buffers over a Local Socket &#8212; kRPC vdev documentation</title>
   
   
   
@@ -43,7 +43,7 @@
     <script src="../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/serialio';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'communication-protocols/localsocket';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://krpc.github.io/krpc/switcher.json';
@@ -54,11 +54,11 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <script src="../_static/external-links.js?v=e8892020"></script>
     <script src="../_static/build-info.js?v=19ceb065"></script>
-    <link rel="canonical" href="https://krpc.github.io/krpc/dev/communication-protocols/serialio.html" />
+    <link rel="canonical" href="https://krpc.github.io/krpc/dev/communication-protocols/localsocket.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Messaging Protocol" href="messages.html" />
-    <link rel="prev" title="Protocol Buffers over WebSockets" href="websockets.html" />
+    <link rel="next" title="Protocol Buffers over WebSockets" href="websockets.html" />
+    <link rel="prev" title="Protocol Buffers over TCP/IP" href="tcpip.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="dev" />
@@ -541,9 +541,9 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tcpip.html">Protocol Buffers over TCP/IP</a></li>
-<li class="toctree-l1"><a class="reference internal" href="localsocket.html">Protocol Buffers over a Local Socket</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Protocol Buffers over a Local Socket</a></li>
 <li class="toctree-l1"><a class="reference internal" href="websockets.html">Protocol Buffers over WebSockets</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Protocol Buffers over Serial IO</a></li>
+<li class="toctree-l1"><a class="reference internal" href="serialio.html">Protocol Buffers over Serial IO</a></li>
 <li class="toctree-l1"><a class="reference internal" href="messages.html">Messaging Protocol</a></li>
 </ul>
 </div>
@@ -588,7 +588,7 @@
     
     <li class="breadcrumb-item"><a href="../communication-protocols.html" class="nav-link">Communication Protocols</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over Serial IO</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Protocol Buffers over a Local Socket</span></li>
   </ul>
 </nav>
 </div>
@@ -605,140 +605,106 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="protocol-buffers-over-serial-io">
-<h1>Protocol Buffers over Serial IO<a class="headerlink" href="#protocol-buffers-over-serial-io" title="Link to this heading">#</a></h1>
-<p>This communication protocol allows microcontrollers and other devices that communicate over a serial
-port to interact with a kRPC server, for example an Arduino.</p>
+  <section id="protocol-buffers-over-a-local-socket">
+<h1>Protocol Buffers over a Local Socket<a class="headerlink" href="#protocol-buffers-over-a-local-socket" title="Link to this heading">#</a></h1>
+<p>This communication protocol allows a client running on the same machine as the game to interact
+with a kRPC server over a unix domain socket, rather than a TCP/IP connection.</p>
+<p>Compared to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, a local socket carries the same messages over a cheaper path: it does not
+go through the network stack, so a client that makes many calls in quick succession gets more of
+them done per physics update. A client that makes one call and then waits sees no difference, as
+the wait is governed by the game’s update rate rather than by the connection.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>If a client library is available for your language, you do not need to implement this
 protocol.</p>
 </div>
-<section id="configuring-the-server">
-<h2>Configuring the Server<a class="headerlink" href="#configuring-the-server" title="Link to this heading">#</a></h2>
-<p>Unlike the TCP/IP and WebSockets protocols, the serial IO protocol is not enabled by default. To use
-it, add a new server from the in-game server configuration window and select
-<em>Protobuf over SerialIO</em> as the protocol. The configuration window allows the serial port name and
-baud rate (which defaults to 9600) to be set.</p>
-</section>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows
+Server 2019 or later.</p>
+</div>
 <section id="sending-and-receiving-messages">
 <h2>Sending and Receiving Messages<a class="headerlink" href="#sending-and-receiving-messages" title="Link to this heading">#</a></h2>
-<p>Communication with the server is performed via Protocol Buffer messages, encoded according to the
-protobuf binary format. When sending messages to and from the server, they are prefixed with their
-size, in bytes, encoded as a Protocol Buffers varint.</p>
-<p>To send a message to the server:</p>
-<ol class="arabic simple">
-<li><p>Encode the message using the Protocol Buffers format.</p></li>
-<li><p>Get the length of the encoded message data (in bytes) and encode that as a Protocol Buffers
-varint.</p></li>
-<li><p>Write the encoded length followed by the encoded message data to the serial port.</p></li>
-</ol>
-<p>To receive a message from the server, do the reverse:</p>
-<ol class="arabic simple">
-<li><p>Read the size of the message as a Protocol Buffers encoded varint from the serial port.</p></li>
-<li><p>Decode the message size.</p></li>
-<li><p>Read message size bytes of message data from the serial port.</p></li>
-<li><p>Decode the message data.</p></li>
-</ol>
-<p>Unlike the TCP/IP and WebSockets protocols, all messages sent to the server after the initial
-connection handshake are wrapped in a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> message, and all messages received
-from the server after the handshake are wrapped in a <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> message:</p>
-<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">MultiplexedRequest</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">ConnectionRequest</span><span class="w"> </span><span class="na">connection_request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="n">Request</span><span class="w"> </span><span class="na">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="kd">message</span><span class="w"> </span><span class="nc">MultiplexedResponse</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">Response</span><span class="w"> </span><span class="na">response</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="n">StreamUpdate</span><span class="w"> </span><span class="na">stream_update</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+<p>Identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>: messages are encoded according to the protobuf binary format, and are
+prefixed with their size in bytes encoded as a Protocol Buffers varint.</p>
 </section>
-<section id="connecting-to-the-server">
-<h2>Connecting to the Server<a class="headerlink" href="#connecting-to-the-server" title="Link to this heading">#</a></h2>
-<p>There is a single serial port connection for both RPC calls and stream updates. To establish a
-connection, a client must do the following:</p>
-<ol class="arabic">
-<li><p>Open a connection to the serial port.</p></li>
-<li><p>Send a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> message to the server with its <code class="docutils literal notranslate"><span class="pre">connection_request</span></code> field
-populated. The <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message is defined as:</p>
-<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionRequest</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">Type</span><span class="w"> </span><span class="na">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="na">client_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Type</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="na">RPC</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="na">STREAM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="p">};</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> field should be set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code> and the <code class="docutils literal notranslate"><span class="pre">client_name</span></code> field can
-be set to the name of the client to display on the in-game UI. The <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> should
-be left blank.</p>
-</li>
-<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> message from the server. This message is defined as:</p>
-<div class="highlight-protobuf notranslate"><div class="highlight"><pre><span></span><span class="kd">message</span><span class="w"> </span><span class="nc">ConnectionResponse</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">Status</span><span class="w"> </span><span class="na">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">  </span><span class="kd">enum</span><span class="w"> </span><span class="n">Status</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="na">OK</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">    </span><span class="na">MALFORMED_MESSAGE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-<span class="w">    </span><span class="na">TIMEOUT</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">    </span><span class="na">WRONG_TYPE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="kt">string</span><span class="w"> </span><span class="kd">message</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">bytes</span><span class="w"> </span><span class="na">client_identifier</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>If the <code class="docutils literal notranslate"><span class="pre">status</span></code> field is set to <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code> then the connection was successful.
-If not, the <code class="docutils literal notranslate"><span class="pre">message</span></code> field contains a description of what went wrong.</p>
-<p>The server waits up to 3 seconds for the complete connection request message to arrive after
-its first bytes are received. If it does not arrive in time, the server responds with the
-<code class="docutils literal notranslate"><span class="pre">TIMEOUT</span></code> status.</p>
-</li>
+<section id="connecting-to-the-rpc-server">
+<h2>Connecting to the RPC Server<a class="headerlink" href="#connecting-to-the-rpc-server" title="Link to this heading">#</a></h2>
+<p>The handshake is identical to <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, differing only in how the connection is opened:</p>
+<ol class="arabic simple">
+<li><p>Open a unix domain socket to the path the RPC server is listening on. The server window shows
+the path, which by default is <code class="docutils literal notranslate"><span class="pre">krpc/rpc</span></code> inside the directory named by the
+<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> environment variable, or by <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> on Windows. See
+<a class="reference internal" href="#default-socket-paths">Default Socket Paths</a> for the whole rule.</p></li>
+<li><p>Send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> message with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to <code class="docutils literal notranslate"><span class="pre">ConnectionRequest.RPC</span></code>,
+exactly as for TCP/IP.</p></li>
+<li><p>Receive a <code class="docutils literal notranslate"><span class="pre">ConnectionResponse</span></code> message, check that <code class="docutils literal notranslate"><span class="pre">status</span></code> is <code class="docutils literal notranslate"><span class="pre">ConnectionResponse.OK</span></code>,
+and keep the 16-byte <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> for the stream connection.</p></li>
 </ol>
 </section>
-<section id="receiving-stream-updates">
-<h2>Receiving Stream Updates<a class="headerlink" href="#receiving-stream-updates" title="Link to this heading">#</a></h2>
-<p>Clients can receive <a class="reference internal" href="messages.html#communication-protocol-streams"><span class="std std-ref">Streams</span></a> over the same serial port connection used
-for RPC calls. Stream updates arrive as <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> messages with the <code class="docutils literal notranslate"><span class="pre">stream_update</span></code>
-field populated. After sending an RPC request, the client should inspect each received
-<code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> to determine whether it contains a <code class="docutils literal notranslate"><span class="pre">response</span></code> (the result of an RPC call)
-or a <code class="docutils literal notranslate"><span class="pre">stream_update</span></code> (a stream result).</p>
+<section id="connecting-to-the-stream-server">
+<h2>Connecting to the Stream Server<a class="headerlink" href="#connecting-to-the-stream-server" title="Link to this heading">#</a></h2>
+<p>As for <a class="reference internal" href="tcpip.html"><span class="doc">Protocol Buffers over TCP/IP</span></a>, open a second connection, this time to the stream server’s socket path
+(<code class="docutils literal notranslate"><span class="pre">krpc/stream</span></code> by default), and send a <code class="docutils literal notranslate"><span class="pre">ConnectionRequest</span></code> with its <code class="docutils literal notranslate"><span class="pre">type</span></code> field set to
+<code class="docutils literal notranslate"><span class="pre">ConnectionRequest.STREAM</span></code> and its <code class="docutils literal notranslate"><span class="pre">client_identifier</span></code> field set to the value received above.</p>
+<p>Connecting to the stream server is optional. If the client doesn’t require stream functionality,
+there is no need to connect.</p>
+</section>
+<section id="default-socket-paths">
+<h2>Default Socket Paths<a class="headerlink" href="#default-socket-paths" title="Link to this heading">#</a></h2>
+<p>The server and its clients each work the default paths out for themselves, without either telling
+the other, so they only meet if they agree at every step. A client that computes a path by hand
+follows the same rule, for a socket named <code class="docutils literal notranslate"><span class="pre">rpc</span></code> or <code class="docutils literal notranslate"><span class="pre">stream</span></code>:</p>
+<ol class="arabic simple">
+<li><p>If <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> is set and not empty, the path is <code class="docutils literal notranslate"><span class="pre">krpc/&lt;name&gt;</span></code> inside it. On Windows
+<code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> is read instead, as there is no runtime directory there.</p></li>
+<li><p>Otherwise the path is <code class="docutils literal notranslate"><span class="pre">krpc-&lt;user&gt;/&lt;name&gt;</span></code> inside <code class="docutils literal notranslate"><span class="pre">/tmp</span></code>, where <code class="docutils literal notranslate"><span class="pre">&lt;user&gt;</span></code> is the name of
+the account running the process. The directory is fixed rather than the one <code class="docutils literal notranslate"><span class="pre">TMPDIR</span></code> asks
+for, because the server and the client are separate processes and that variable moves the
+directory for one of them and not the other. Windows always names a directory in
+<code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> and so never reaches this step, which is why it is the one place the system
+temporary directory is used.</p></li>
+</ol>
+<p>The user name is that of the account running the process, taken from the account database rather
+than from <code class="docutils literal notranslate"><span class="pre">USER</span></code> alone, which is unset in a process started without a login shell. A client whose
+language leaves it nothing but the environment to ask, and finds nothing there, reports that rather
+than building a path with the name left out, which would be shared between accounts instead of
+belonging to one.</p>
+</section>
+<section id="socket-paths">
+<h2>Socket Paths<a class="headerlink" href="#socket-paths" title="Link to this heading">#</a></h2>
+<p>A socket path is limited to 100 bytes, as the address is copied into a fixed size structure by the
+operating system. The limit is on the bytes a path takes rather than the characters it is written
+with, so a path using characters that take more than one byte reaches it sooner. The server
+reports a path that is too long rather than failing to start with an unhelpful error.</p>
+<p>The socket file is created when the server starts and removed when it stops. A server whose process
+is killed rather than stopped leaves the file behind; the next server to use that path removes it
+before binding, so a stale file does not prevent a restart. The file alone does not say whether the
+server that made it is still there, so that server connects to the path first and refuses to start
+if anything answers, rather than taking a path another server is listening on and leaving it
+unreachable. A path holding content is not a socket at all and is left alone.</p>
+<p>Access to the server is controlled by the permissions on the socket and on the directory holding it.
+<code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> and <code class="docutils literal notranslate"><span class="pre">LOCALAPPDATA</span></code> are private to the account they belong to, so sockets
+placed there are reachable only by that user. The <code class="docutils literal notranslate"><span class="pre">/tmp</span></code> fallback is named after the user rather
+than restricted to them: it is created with whatever the process <code class="docutils literal notranslate"><span class="pre">umask</span></code> allows, which can leave
+the socket open to the user’s group. Where that matters, set <code class="docutils literal notranslate"><span class="pre">XDG_RUNTIME_DIR</span></code> or configure the
+paths.</p>
 </section>
 <section id="invoking-remote-procedures">
 <h2>Invoking Remote Procedures<a class="headerlink" href="#invoking-remote-procedures" title="Link to this heading">#</a></h2>
 <p>See <a class="reference internal" href="messages.html"><span class="doc">Messaging Protocol</span></a>.</p>
-<p>To send a procedure call, wrap the <code class="docutils literal notranslate"><span class="pre">Request</span></code> message in a <code class="docutils literal notranslate"><span class="pre">MultiplexedRequest</span></code> and set its
-<code class="docutils literal notranslate"><span class="pre">request</span></code> field. Receive the result as a <code class="docutils literal notranslate"><span class="pre">MultiplexedResponse</span></code> and read the <code class="docutils literal notranslate"><span class="pre">Response</span></code> from
-its <code class="docutils literal notranslate"><span class="pre">response</span></code> field.</p>
-</section>
-<section id="buffering-and-data-rates">
-<span id="communication-protocol-serialio-buffering"></span><h2>Buffering and Data Rates<a class="headerlink" href="#buffering-and-data-rates" title="Link to this heading">#</a></h2>
-<p>A serial port carries data far more slowly than the game produces it. At the default 9600 baud it
-carries roughly a thousand bytes per second. The server therefore buffers up to a megabyte of data
-in each direction, and the two directions behave differently when their buffer fills:</p>
-<ul class="simple">
-<li><p>Data received from the port is buffered until the game reads it. When the buffer fills, the
-server stops reading from the port until the game catches up. Nothing is lost, but the client
-sees the port carry its data more slowly.</p></li>
-<li><p>Data written by the game is buffered until the port has sent it. When this buffer fills, which
-means the game has been producing data faster than the port can send for a sustained period,
-the server drops the connection and stops. It can be started again from the in-game
-configuration window. The easiest way to hit this limit is to request streams whose updates add
-up to more than the port’s data rate, as an update to a stream is sent every game update.</p></li>
-</ul>
-<p>To stay within the port’s capacity, keep the number and size of streams small relative to the baud
-rate, or configure a higher baud rate.</p>
 </section>
 <section id="examples">
 <h2>Examples<a class="headerlink" href="#examples" title="Link to this heading">#</a></h2>
-<p>The following Python code connects to a server on serial port <code class="docutils literal notranslate"><span class="pre">/dev/ttyUSB0</span></code> using the name
-“Jeb”. It then invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC, receives and decodes the result, and prints out
-the server version number from the response.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">serial</span>
+<p>The following Python code connects to the RPC server over a local socket using the name “Jeb”, then
+invokes the <code class="docutils literal notranslate"><span class="pre">KRPC.GetStatus</span></code> RPC and prints the server version number from the response. The
+message encoding is identical to the TCP/IP protocol; only the socket differs.</p>
+<p>It is written for the socket API as POSIX has it, so it runs on Linux and macOS. The protocol is
+the same on Windows, where the address family has to be reached through winsock, as Python’s
+socket module does not expose it.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">getpass</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">socket</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.encoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_VarintEncoder</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">google.protobuf.internal.decoder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_DecodeVarint</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">krpc.schema</span><span class="w"> </span><span class="kn">import</span> <span class="n">KRPC_pb2</span> <span class="k">as</span> <span class="n">KRPC</span>
@@ -756,60 +722,68 @@ the server version number from the response.</p>
     <span class="k">return</span> <span class="n">_DecodeVarint</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a message, prefixed with its size, to a serial port&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">msg</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Send a message, prefixed with its size, to a socket&quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">SerializeToString</span><span class="p">()</span>
     <span class="n">size</span> <span class="o">=</span> <span class="n">encode_varint</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
-    <span class="n">port</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">data</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">sendall</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="n">data</span><span class="p">)</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">recv_message</span><span class="p">(</span><span class="n">port</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Receive a message, prefixed with its size, from a serial port&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Receive a message, prefixed with its size, from a socket&quot;&quot;&quot;</span>
     <span class="c1"># Receive the size of the message data</span>
     <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">+=</span> <span class="n">port</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">+=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
             <span class="n">size</span> <span class="o">=</span> <span class="n">decode_varint</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             <span class="k">break</span>
         <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
             <span class="k">pass</span>
     <span class="c1"># Receive the message data</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">port</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
     <span class="c1"># Decode the message</span>
     <span class="n">msg</span> <span class="o">=</span> <span class="n">msg_type</span><span class="p">()</span>
     <span class="n">msg</span><span class="o">.</span><span class="n">ParseFromString</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">msg</span>
 
 
-<span class="c1"># Open a connection to the serial port</span>
-<span class="n">conn</span> <span class="o">=</span> <span class="n">serial</span><span class="o">.</span><span class="n">Serial</span><span class="p">(</span><span class="s2">&quot;/dev/ttyUSB0&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">default_path</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The path the server listens on, unless it was configured with another&quot;&quot;&quot;</span>
+    <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;XDG_RUNTIME_DIR&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">directory</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s2">&quot;krpc&quot;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;/tmp&quot;</span><span class="p">,</span> <span class="s2">&quot;krpc-&quot;</span> <span class="o">+</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">(),</span> <span class="n">name</span><span class="p">)</span>
 
-<span class="c1"># Send a connection request wrapped in a MultiplexedRequest</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">MultiplexedRequest</span><span class="p">()</span>
-<span class="n">request</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
-<span class="n">request</span><span class="o">.</span><span class="n">connection_request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">&quot;Jeb&quot;</span>
-<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+
+<span class="c1"># Open a unix domain socket to the RPC server</span>
+<span class="n">rpc_conn</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">rpc_conn</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">default_path</span><span class="p">(</span><span class="s2">&quot;rpc&quot;</span><span class="p">))</span>
+
+<span class="c1"># Send an RPC connection request</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="p">()</span>
+<span class="n">request</span><span class="o">.</span><span class="n">type</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionRequest</span><span class="o">.</span><span class="n">RPC</span>
+<span class="n">request</span><span class="o">.</span><span class="n">client_name</span> <span class="o">=</span> <span class="s2">&quot;Jeb&quot;</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 
 <span class="c1"># Receive the connection response</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="p">)</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="p">)</span>
 
 <span class="c1"># Check the connection was successful</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ConnectionResponse</span><span class="o">.</span><span class="n">OK</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Connection failed: &quot;</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connected to server&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Connected to RPC server&quot;</span><span class="p">)</span>
 
-<span class="c1"># Invoke the KRPC.GetStatus RPC, wrapped in a MultiplexedRequest</span>
+<span class="c1"># Invoke the KRPC.GetStatus RPC</span>
 <span class="n">call</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">ProcedureCall</span><span class="p">()</span>
 <span class="n">call</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="s2">&quot;KRPC&quot;</span>
 <span class="n">call</span><span class="o">.</span><span class="n">procedure</span> <span class="o">=</span> <span class="s2">&quot;GetStatus&quot;</span>
-<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">MultiplexedRequest</span><span class="p">()</span>
-<span class="n">request</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">call</span><span class="p">])</span>
-<span class="n">send_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
+<span class="n">request</span> <span class="o">=</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Request</span><span class="p">()</span>
+<span class="n">request</span><span class="o">.</span><span class="n">calls</span><span class="o">.</span><span class="n">extend</span><span class="p">([</span><span class="n">call</span><span class="p">])</span>
+<span class="n">send_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">request</span><span class="p">)</span>
 
-<span class="c1"># Receive the MultiplexedResponse</span>
-<span class="n">multiplexed_response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">MultiplexedResponse</span><span class="p">)</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">multiplexed_response</span><span class="o">.</span><span class="n">response</span>
+<span class="c1"># Receive the response</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">recv_message</span><span class="p">(</span><span class="n">rpc_conn</span><span class="p">,</span> <span class="n">KRPC</span><span class="o">.</span><span class="n">Response</span><span class="p">)</span>
 
 <span class="c1"># Check for an error in the response</span>
 <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">HasField</span><span class="p">(</span><span class="s2">&quot;error&quot;</span><span class="p">):</span>
@@ -842,20 +816,20 @@ the server version number from the response.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="websockets.html"
+       href="tcpip.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Protocol Buffers over WebSockets</p>
+        <p class="prev-next-title">Protocol Buffers over TCP/IP</p>
       </div>
     </a>
     <a class="right-next"
-       href="messages.html"
+       href="websockets.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Messaging Protocol</p>
+        <p class="prev-next-title">Protocol Buffers over WebSockets</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -878,12 +852,12 @@ the server version number from the response.</p>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuring-the-server">Configuring the Server</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#sending-and-receiving-messages">Sending and Receiving Messages</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-server">Connecting to the Server</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#receiving-stream-updates">Receiving Stream Updates</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-rpc-server">Connecting to the RPC Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#connecting-to-the-stream-server">Connecting to the Stream Server</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-socket-paths">Default Socket Paths</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#socket-paths">Socket Paths</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#invoking-remote-procedures">Invoking Remote Procedures</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffering-and-data-rates">Buffering and Data Rates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 </ul>
   </nav></div>
@@ -891,7 +865,7 @@ the server version number from the response.</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../_sources/communication-protocols/serialio.rst.txt">
+    <a href="../_sources/communication-protocols/localsocket.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>

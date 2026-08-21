@@ -725,8 +725,8 @@ that they are built using the C++ compiler. This allows the library to use the C
 </pre></div>
 </div>
 </div></div>
-<p>The library communicates over a serial port unless the <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature is asked for, which builds
-it to communicate over TCP/IP instead:</p>
+<p>The library communicates over a serial port unless a transport feature is asked for. The <code class="docutils literal notranslate"><span class="pre">tcp</span></code>
+feature builds it to communicate over TCP/IP instead:</p>
 <div class="sphinx-tabs docutils container">
 <div aria-label="Tabbed content" role="tablist"><button aria-controls="panel-1-1-0" aria-selected="true" class="sphinx-tabs-tab" id="tab-1-1-0" name="1-0" role="tab" tabindex="0">Linux</button><button aria-controls="panel-1-1-1" aria-selected="false" class="sphinx-tabs-tab" id="tab-1-1-1" name="1-1" role="tab" tabindex="-1">Windows</button></div><div aria-labelledby="tab-1-1-0" class="sphinx-tabs-panel" id="panel-1-1-0" name="1-0" role="tabpanel" tabindex="0"><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;krpc-cnano[tcp]&quot;</span>
 </pre></div>
@@ -735,6 +735,11 @@ it to communicate over TCP/IP instead:</p>
 </pre></div>
 </div>
 </div></div>
+<p>The <code class="docutils literal notranslate"><span class="pre">localsocket</span></code> feature builds it to communicate over a unix domain socket with a server on
+the same machine:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vcpkg<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;krpc-cnano[localsocket]&quot;</span>
+</pre></div>
+</div>
 </section>
 <section id="cmake">
 <h3>CMake<a class="headerlink" href="#cmake" title="Link to this heading">#</a></h3>
@@ -800,6 +805,14 @@ CMake builds of the library should ask for it with <code class="docutils literal
 installs with the <code class="docutils literal notranslate"><span class="pre">tcp</span></code> feature, rather than by defining it directly, so that programs
 linking the library are built for the same transport and, on Windows, are linked against
 winsock along with it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_LOCALSOCKET</span></code> – Specifies that the library should be built to
+communicate over a unix domain socket, for a server running on the same machine. The
+connection is opened with the path of the server’s RPC socket in place of a serial port
+name. Not auto-detected, as a serial port is the usual choice on the platforms that
+provide both. CMake builds of the library should ask for it with
+<code class="docutils literal notranslate"><span class="pre">-DKRPC_COMMUNICATION_LOCALSOCKET=ON</span></code>, and vcpkg installs with the <code class="docutils literal notranslate"><span class="pre">localsocket</span></code>
+feature, rather than by defining it directly, so that programs linking the library are
+built for the same transport.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code> – Allows you to provide your own implementation for the
 communication mechanism.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">KRPC_SINGLE_CONNECTION</span></code> – Only meaningful alongside <code class="docutils literal notranslate"><span class="pre">KRPC_COMMUNICATION_CUSTOM</span></code>. A serial
