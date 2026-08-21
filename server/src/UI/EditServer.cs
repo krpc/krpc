@@ -75,13 +75,15 @@ namespace KRPC.UI
         readonly object parityComboId = new object ();
         readonly object stopBitsComboId = new object ();
 
-        // Names for the socket path fields, unique in the same way and for the same reason,
-        // and how far each has been scrolled sideways. A path is longer than the field it is
-        // edited in is wide, so the field is a window onto it that follows the caret.
+        // Names for the fields whose value is too long for the field it is edited in, unique
+        // in the same way and for the same reason, and how far each has been scrolled
+        // sideways. The field is a window onto its value that follows the caret.
         readonly string rpcPathFieldName;
         readonly string streamPathFieldName;
+        readonly string portNameFieldName;
         float rpcPathScroll;
         float streamPathScroll;
+        float portNameScroll;
 
         public EditServer (MainWindow mainWindow, Configuration.Server server)
         {
@@ -89,6 +91,7 @@ namespace KRPC.UI
             id = server.Id;
             rpcPathFieldName = "rpc_path " + id;
             streamPathFieldName = "stream_path " + id;
+            portNameFieldName = "port " + id;
 
             name = server.Name;
             protocol = server.Protocol;
@@ -208,8 +211,9 @@ namespace KRPC.UI
                 DrawFieldLabel (portLabelText);
                 if (!settings.ContainsKey("port"))
                     settings["port"] = new KRPC.IO.Ports.SerialPort ().PortName;
-                settings["port"] = GUILayoutExtensions.ValidatedTextField (
-                    settings["port"], portNameMaxLength, window.stretchyTextFieldStyle,
+                settings["port"] = GUILayoutExtensions.ValidatedScrollingTextField (
+                    portNameFieldName, settings["port"], ref portNameScroll,
+                    portNameMaxLength, window.stretchyTextFieldStyle,
                     settings["port"].Length > 0, window.errorColor);
                 GUILayout.EndHorizontal();
 
