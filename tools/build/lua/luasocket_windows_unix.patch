@@ -7,6 +7,12 @@ comes from a different header and is passed whole rather than cut short at the
 path, and starting Winsock, which the TCP module would otherwise be the only
 one to do.
 
+The rockspec and the makefile build the module on the unix platforms alone, so
+both gain a Windows build of it: wsocket.c in place of usocket.c, and inet.c,
+which carries the inet_aton that options.c calls and Winsock has no library
+function for. The serial module has no Windows implementation and stays where
+it is.
+
 --- a/src/unix.c
 +++ b/src/unix.c
 @@ -47,6 +47,14 @@
@@ -77,3 +83,72 @@ one to do.
  #else
      err = socket_connect(&un->sock, (SA *) &remote,
              sizeof(remote.sun_family) + len, &un->tm);
+
+--- a/src/makefile
++++ b/src/makefile
+@@ -325,7 +325,8 @@
+ 	options.$(O) \
+ 	timeout.$(O) \
+ 	io.$(O) \
+-	usocket.$(O) \
++	inet.$(O) \
++	$(SOCKET) \
+ 	unixstream.$(O) \
+ 	unixdgram.$(O) \
+ 	compat.$(O) \
+@@ -373,16 +374,16 @@
+ 	$(MAKE) all-unix PLAT=macosx
+ 
+ win32:
+-	$(MAKE) all PLAT=win32
++	$(MAKE) all-windows PLAT=win32
+ 
+ win64:
+-	$(MAKE) all PLAT=win64
++	$(MAKE) all-windows PLAT=win64
+ 
+ linux:
+ 	$(MAKE) all-unix PLAT=linux
+ 
+ mingw:
+-	$(MAKE) all PLAT=mingw
++	$(MAKE) all-windows PLAT=mingw
+ 
+ solaris:
+ 	$(MAKE) all-unix PLAT=solaris
+@@ -403,6 +404,8 @@
+ 
+ all-unix: all $(UNIX_SO) $(SERIAL_SO)
+ 
++all-windows: all $(UNIX_SO)
++
+ $(UNIX_SO): $(UNIX_OBJS)
+ 	$(LD) $(UNIX_OBJS) $(LDFLAGS)$@
+ 
+
+--- a/luasocket-scm-3.rockspec
++++ b/luasocket-scm-3.rockspec
+@@ -114,6 +114,23 @@
+     modules["socket.core"].sources[#modules["socket.core"].sources+1] = "src/wsocket.c"
+     modules["socket.core"].libraries = { "ws2_32" }
+     modules["socket.core"].libdirs = {}
++    modules["socket.unix"] = {
++      sources = {
++        "src/buffer.c"
++        , "src/compat.c"
++        , "src/auxiliar.c"
++        , "src/options.c"
++        , "src/timeout.c"
++        , "src/io.c"
++        , "src/inet.c"
++        , "src/wsocket.c"
++        , "src/unix.c"
++        , "src/unixdgram.c"
++        , "src/unixstream.c" },
++      defines = defines[plat],
++      libraries = { "ws2_32" },
++      incdir = "/src"
++    }
+   end
+   return { modules = modules }
+ end
