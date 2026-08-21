@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- Add `Connection.runFunction`, which runs a server side function on the server within a
+  single physics tick and returns the value it produces, and `Connection.addStream` taking a
+  server side function, which streams the value one computes. Both decode the value using the
+  type the server reports for the function (#1069)
+- `RemoteObject.id`, the identifier used to reference an object over the communication
+  protocol, is now public, matching the C# client, so that it can be passed to
+  `Expression.constantObject` (#1069)
 - Support structure types, which a service defines as a compound value with named fields. One
   is generated as a class carrying its fields, with a constructor taking them in the order the
   structure declares them, getters, `equals`, `hashCode` and `Comparable`, comparing its fields

@@ -1,4 +1,34 @@
 ## [v0.7.0] - unreleased
+- Add server side functions: a program the client builds on the server out of the operations
+  the `KRPC.Expression` class provides, and then evaluates there. A function can call the
+  procedures of any service, including on each value of a collection (#517), pass objects
+  around as constants (#503), compute over operands of differing numeric types (#521), process
+  collections, and declare local variables, loop, branch, assign and return early. It can build
+  and read the tuples and structures a service defines, and produce a value of any type kRPC
+  carries (#1069)
+- Add `KRPC.RunFunction`, which evaluates a server side function exactly once within a single
+  physics tick and returns the value it produces, encoded for its own type. This is the way to
+  run a function that changes the game, which an event or a stream would repeat on every update
+  (#1069)
+- Add `KRPC.AddExpressionStream`, which streams the value a server side function computes on
+  each update rather than the result of a single procedure call. `KRPC.Expression.ReturnType`
+  reports the type of those values, so a client that does not know it in advance can decode
+  them (#1069)
+- Add the `StdLib` service, a standard library for use within server side functions: scalar
+  mathematics, and vector and quaternion operations over the tuples the SpaceCenter service
+  uses for positions, directions and rotations. It is written as an ordinary service, which is
+  how anything else extends what a server side function can do (#1069)
+- Expand `KRPC.Type` to name the class, enumeration, structure and collection types a service
+  defines, alongside the value types it did not cover, and to report what a type is through its
+  `Code`, `Service`, `Name` and `Types` properties (#1069)
+- Fix `KRPC.Expression.Count`, which failed for every collection a procedure returns and worked
+  only for a collection built within the expression itself (#1069)
+- **Breaking:** the index into a tuple given to `KRPC.Expression.Get` must be a constant. It was
+  evaluated while the expression was being built, so a procedure call in that position ran once,
+  there, rather than whenever the expression is evaluated (#1069)
+- An error raised while evaluating an event's expression is reported to the client as an error
+  on the event's stream, rather than propagating out of the update that evaluates every stream
+  and stopping the rest of them (#1069)
 - Add structure types: a compound value with named fields, whose value is sent to the client in
   full rather than as a reference to an object that stays on the server. A structure is declared
   with `KRPCStruct` on a C# `struct`, its fields are the properties annotated with
