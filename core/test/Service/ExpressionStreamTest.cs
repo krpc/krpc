@@ -121,5 +121,17 @@ namespace KRPC.Test.Service
             CollectionAssert.AreEqual (new [] { 2, 4 }, (List<int>)stream.Result.Value);
         }
 
+        [Test]
+        public void UnboundMarkerRejected ()
+        {
+            // Rejected when the stream is created, rather than producing an error
+            // result on every update.
+            var expr = Expression.Block (new List<Expression> {
+                Expression.Break (),
+                Expression.ConstantInt (1)
+            });
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => new ExpressionStream (expr));
+        }
     }
 }

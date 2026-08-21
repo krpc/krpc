@@ -227,6 +227,281 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void BlockVariablesAndWhile ()
+        {
+            // sum = 0; i = 0
+            // while i < 5: i += 1; if i == 3: continue; if i == 5: break; sum += i
+            // value of block = sum = 1 + 2 + 4 = 7
+            var sum = Expression.Variable ("sum", Type.Int ());
+            var i = Expression.Variable ("i", Type.Int ());
+            var body = Expression.Block (new List<Expression> {
+                Expression.Assign (i, Expression.Add (i, Expression.ConstantInt (1))),
+                Expression.IfThen (
+                    Expression.Equal (i, Expression.ConstantInt (3)), Expression.Continue ()),
+                Expression.IfThen (
+                    Expression.Equal (i, Expression.ConstantInt (5)), Expression.Break ()),
+                Expression.Assign (sum, Expression.Add (sum, i))
+            });
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { sum, i },
+                new List<Expression> {
+                    Expression.Assign (sum, Expression.ConstantInt (0)),
+                    Expression.Assign (i, Expression.ConstantInt (0)),
+                    Expression.While (
+                        Expression.LessThan (i, Expression.ConstantInt (5)), body),
+                    sum
+                });
+            Assert.AreEqual (7, Eval<int> (expr));
+        }
+
+        [Test]
+        public void ForEachLoop ()
+        {
+            // total = 0; for x in [1, 2, 3, 4, 5]: if x == 4: break; total += x
+            var total = Expression.Variable ("total", Type.Int ());
+            var x = Expression.Variable ("x", Type.Int ());
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { total, x },
+                new List<Expression> {
+                    Expression.Assign (total, Expression.ConstantInt (0)),
+                    Expression.ForEach (x, list, Expression.Block (new List<Expression> {
+                        Expression.IfThen (
+                            Expression.Equal (x, Expression.ConstantInt (4)), Expression.Break ()),
+                        Expression.Assign (total, Expression.Add (total, x))
+                    })),
+                    total
+                });
+            Assert.AreEqual (6, Eval<int> (expr));
+        }
+
+        [Test]
+        public void IfThenElseStatements ()
+        {
+            var result = Expression.Variable ("result", Type.String ());
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { result },
+                new List<Expression> {
+                    Expression.IfThenElse (
+                        Expression.ConstantBool (false),
+                        Expression.Assign (result, Expression.ConstantString ("then")),
+                        Expression.Assign (result, Expression.ConstantString ("else"))),
+                    result
+                });
+            Assert.AreEqual ("else", Eval<string> (expr));
+        }
+
+        [Test]
+        public void FunctionWithStatementsAndEarlyReturn ()
+        {
+            var x = Expression.Parameter ("x", Type.Int ());
+            var function = Expression.Function (
+                new List<Expression> { x },
+                Expression.Block (new List<Expression> {
+                    Expression.IfThen (
+                        Expression.GreaterThan (x, Expression.ConstantInt (2)),
+                        Expression.Return (Expression.ConstantInt (100))),
+                    Expression.Multiply (x, Expression.ConstantInt (2))
+                }));
+            Assert.AreEqual (4, Eval<int> (Expression.Invoke (
+                function, new Dictionary<string, Expression> { { "x", Expression.ConstantInt (2) } })));
+            Assert.AreEqual (100, Eval<int> (Expression.Invoke (
+                function, new Dictionary<string, Expression> { { "x", Expression.ConstantInt (3) } })));
+        }
+
+        [Test]
+        public void FunctionClosesOverVariables ()
+        {
+            // v = 10; f = () => v + 1; v = 20; f() == 21
+            var v = Expression.Variable ("v", Type.Int ());
+            var function = Expression.Function (
+                new List<Expression> (),
+                Expression.Add (v, Expression.ConstantInt (1)));
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { v },
+                new List<Expression> {
+                    Expression.Assign (v, Expression.ConstantInt (20)),
+                    Expression.Invoke (function, new Dictionary<string, Expression> ())
+                });
+            Assert.AreEqual (21, Eval<int> (expr));
+        }
+
+        [Test]
+        public void FunctionReusedAcrossExpressions ()
+        {
+            var x = Expression.Parameter ("x", Type.Int ());
+            var function = Expression.Function (
+                new List<Expression> { x },
+                Expression.Multiply (x, Expression.ConstantInt (3)));
+            var first = Expression.Invoke (
+                function, new Dictionary<string, Expression> { { "x", Expression.ConstantInt (1) } });
+            var second = Expression.Add (
+                Expression.Invoke (
+                    function, new Dictionary<string, Expression> { { "x", Expression.ConstantInt (2) } }),
+                Expression.ConstantInt (1));
+            Assert.AreEqual (3, Eval<int> (first));
+            Assert.AreEqual (7, Eval<int> (second));
+        }
+
+        [Test]
+        public void VoidCallStatement ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("effects");
+            obj.IntProperty = 1;
+            var expr = Expression.Block (new List<Expression> {
+                Expression.Call (BuildProcedureCall (
+                    "TestClass_set_IntProperty", new Argument (0, obj), new Argument (1, 42))),
+                Expression.Call (BuildProcedureCall (
+                    "TestClass_get_IntProperty", new Argument (0, obj)))
+            });
+            Assert.AreEqual (42, Eval<int> (expr));
+            Assert.AreEqual (42, obj.IntProperty);
+        }
+
+        [Test]
+        public void BuildListInLoop ()
+        {
+            // result = []; for x in [1..5]: result.add(x * 2)
+            var result = Expression.Variable ("result", Type.ListType (Type.Int ()));
+            var x = Expression.Variable ("x", Type.Int ());
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { result, x },
+                new List<Expression> {
+                    Expression.Assign (result, Expression.CreateEmptyList (Type.Int ())),
+                    Expression.ForEach (x, list,
+                        Expression.ListAdd (result, Expression.Multiply (x, Expression.ConstantInt (2)))),
+                    result
+                });
+            CollectionAssert.AreEqual (new [] { 2, 4, 6, 8, 10 }, Eval<IList<int>> (expr));
+        }
+
+        [Test]
+        public void CollectionMutation ()
+        {
+            var numbers = Expression.Variable ("numbers", Type.ListType (Type.Int ()));
+            var expr = Expression.BlockWithVariables (
+                new List<Expression> { numbers },
+                new List<Expression> {
+                    Expression.Assign (numbers, Expression.CreateEmptyList (Type.Int ())),
+                    Expression.ListAdd (numbers, Expression.ConstantInt (1)),
+                    Expression.ListAdd (numbers, Expression.ConstantInt (2)),
+                    Expression.ListSet (numbers, Expression.ConstantInt (0), Expression.ConstantInt (10)),
+                    numbers
+                });
+            CollectionAssert.AreEqual (new [] { 10, 2 }, Eval<IList<int>> (expr));
+
+            var values = Expression.Variable ("values", Type.DictionaryType (Type.String (), Type.Int ()));
+            var dictionaryExpr = Expression.BlockWithVariables (
+                new List<Expression> { values },
+                new List<Expression> {
+                    Expression.Assign (values, Expression.CreateEmptyDictionary (Type.String (), Type.Int ())),
+                    Expression.DictionarySet (values, Expression.ConstantString ("a"), Expression.ConstantInt (1)),
+                    Expression.DictionarySet (values, Expression.ConstantString ("a"), Expression.ConstantInt (2)),
+                    Expression.Get (values, Expression.ConstantString ("a"))
+                });
+            Assert.AreEqual (2, Eval<int> (dictionaryExpr));
+
+            var seen = Expression.Variable ("seen", Type.SetType (Type.Int ()));
+            var setExpr = Expression.BlockWithVariables (
+                new List<Expression> { seen },
+                new List<Expression> {
+                    Expression.Assign (seen, Expression.CreateEmptySet (Type.Int ())),
+                    Expression.SetAdd (seen, Expression.ConstantInt (1)),
+                    Expression.SetAdd (seen, Expression.ConstantInt (1)),
+                    Expression.Count (seen)
+                });
+            Assert.AreEqual (1, Eval<int> (setExpr));
+        }
+
+        [Test]
+        public void RunFunctionValue ()
+        {
+            var bytes = global::KRPC.Service.KRPC.KRPC.RunFunction (
+                Expression.Multiply (Expression.ConstantInt (6), Expression.ConstantInt (7)));
+            var value = global::KRPC.Server.ProtocolBuffers.Encoder.Decode (
+                Google.Protobuf.ByteString.CopyFrom (bytes), typeof (int));
+            Assert.AreEqual (42, value);
+        }
+
+        [Test]
+        public void RunFunctionEffects ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("run");
+            obj.IntProperty = 1;
+            var bytes = global::KRPC.Service.KRPC.KRPC.RunFunction (
+                Expression.Call (BuildProcedureCall (
+                    "TestClass_set_IntProperty", new Argument (0, obj), new Argument (1, 5))));
+            Assert.AreEqual (0, bytes.Length);
+            Assert.AreEqual (5, obj.IntProperty);
+        }
+
+        [Test]
+        public void BreakOutsideLoop ()
+        {
+            var expr = Expression.Block (new List<Expression> {
+                Expression.Break (),
+                Expression.ConstantInt (1)
+            });
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Eval<int> (expr));
+        }
+
+        static Expression StatementWithMarker (Expression marker)
+        {
+            return Expression.Block (new List<Expression> {
+                marker,
+                Expression.ConstantInt (1)
+            });
+        }
+
+        [Test]
+        public void UnboundMarkersAreRejectedWhenRunAsAFunction ()
+        {
+            // An unbound marker compiles, so it is caught before compiling rather than
+            // being left to throw on every evaluation.
+            foreach (var marker in new [] {
+                Expression.Break (), Expression.Continue (),
+                Expression.Return (Expression.ConstantInt (1))
+            }) {
+                var expr = StatementWithMarker (marker);
+                Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                    () => global::KRPC.Service.KRPC.KRPC.RunFunction (expr));
+            }
+        }
+
+        [Test]
+        public void UnboundMarkersAreRejectedWhenAddedAsAnEvent ()
+        {
+            var expr = Expression.Block (new List<Expression> {
+                Expression.Break (),
+                Expression.ConstantBool (true)
+            });
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => global::KRPC.Service.KRPC.KRPC.AddEvent (expr));
+        }
+
+        [Test]
+        public void MarkersBoundByTheirLoopOrFunctionAreAccepted ()
+        {
+            // The same markers, correctly enclosed, must still be allowed through.
+            var i = Expression.Variable ("i", Type.Int ());
+            var loop = Expression.BlockWithVariables (
+                new List<Expression> { i },
+                new List<Expression> {
+                    Expression.Assign (i, Expression.ConstantInt (0)),
+                    Expression.While (
+                        Expression.LessThan (i, Expression.ConstantInt (3)),
+                        Expression.Block (new List<Expression> {
+                            Expression.Assign (i, Expression.Add (i, Expression.ConstantInt (1))),
+                            Expression.IfThen (
+                                Expression.Equal (i, Expression.ConstantInt (2)),
+                                Expression.Break ())
+                        })),
+                    i
+                });
+            Assert.DoesNotThrow (() => global::KRPC.Service.KRPC.KRPC.RunFunction (loop));
+        }
+
+        [Test]
         public void ReturnType ()
         {
             Assert.AreEqual (TypeCode.Double, Expression.ConstantDouble (1.2).ReturnType.Code);

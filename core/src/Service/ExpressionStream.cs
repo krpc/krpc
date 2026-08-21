@@ -14,6 +14,7 @@ namespace KRPC.Service
         {
             // Check that the type of the value produced can be sent to the client
             expression.GetValidReturnType ();
+            expression.CheckMarkersBound ();
             evaluate = expression.Evaluator;
         }
 

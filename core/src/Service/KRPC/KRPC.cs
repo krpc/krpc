@@ -294,6 +294,37 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
+        /// Evaluate a server side expression once and return the value it
+        /// produces, encoded using the protocol buffer serialization scheme for
+        /// its return type. The whole evaluation happens within a single physics
+        /// tick. An expression that does not produce a value is evaluated for
+        /// its effects, and an empty result is returned.
+        /// </summary>
+        /// <remarks>
+        /// Procedures that pause execution and resume on a later tick cannot be
+        /// used within the expression.
+        /// </remarks>
+        [KRPCProcedure]
+        public static byte[] RunFunction (Expression expression)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            expression.CheckMarkersBound ();
+            var internalExpression = (LinqExpression)expression;
+            try {
+                if (internalExpression.Type == typeof (void)) {
+                    expression.Runner ();
+                    return new byte [0];
+                }
+                expression.GetValidReturnType ();
+                var value = expression.Evaluator ();
+                return Server.ProtocolBuffers.Encoder.Encode (value).ToByteArray ();
+            } catch (YieldException) {
+                throw new InvalidOperationException (Expression.YieldedMessage);
+            }
+        }
+
+        /// <summary>
         /// Create an event from a server side expression.
         /// The expression must evaluate to a boolean value.
         /// </summary>
@@ -309,6 +340,7 @@ namespace KRPC.Service.KRPC
                 throw new ArgumentNullException (nameof (expression));
             if (((LinqExpression)expression).Type != typeof(bool))
                 throw new ArgumentException ("The expression must evaluate to a boolean value");
+            expression.CheckMarkersBound ();
             var func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
             return new Event((evnt) => func()).Message;
         }
