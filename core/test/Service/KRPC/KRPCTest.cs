@@ -30,9 +30,9 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreEqual (5, services.ServicesList.Count);
 
             var service = services.ServicesList.First (x => x.Name == "KRPC");
-            Assert.AreEqual (70, service.Procedures.Count);
+            Assert.AreEqual (84, service.Procedures.Count);
             Assert.AreEqual (2, service.Classes.Count);
-            Assert.AreEqual (1, service.Enumerations.Count);
+            Assert.AreEqual (2, service.Enumerations.Count);
 
             int foundProcedures = 0;
             foreach (var proc in service.Procedures) {

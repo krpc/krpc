@@ -36,12 +36,18 @@ namespace KRPC.Service.Scanner
         public string DeprecatedReason { get; private set; }
 
         /// <summary>
+        /// The CLR type of the class.
+        /// </summary>
+        public Type UnderlyingType { get; private set; }
+
+        /// <summary>
         /// Create a class signature
         /// </summary>
-        public ClassSignature (string serviceName, string className, string documentation, bool deprecated, string deprecatedReason)
+        public ClassSignature (string serviceName, string className, Type classType, string documentation, bool deprecated, string deprecatedReason)
         {
             Name = className;
             FullyQualifiedName = serviceName + "." + Name;
+            UnderlyingType = classType;
             Documentation = DocumentationUtils.ResolveCrefs (documentation);
             Deprecated = deprecated;
             DeprecatedReason = deprecatedReason;
