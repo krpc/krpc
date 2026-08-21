@@ -956,7 +956,7 @@ Part
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
       in the parts reference frame (:func:`Part::reference_frame`).
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::vector<double> inertia_tensor()
 
@@ -964,7 +964,7 @@ Part
       (:func:`Part::reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: ReferenceFrame reference_frame()
 

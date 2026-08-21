@@ -202,6 +202,41 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_CenterOfMass(krpc_connection_t connection, krpc_tuple_double_double_double_t * result, krpc_SpaceCenter_ReferenceFrame_t referenceFrame)
+
+      The position of the center of mass of the vessel, in the given reference frame.
+
+      :Parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the editor scene's world-space center of mass expressed in
+         *referenceFrame*. A celestial body frame is not a
+         position on that body: the editor is not placed in the solar system
+         the way a vessel in flight is.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+      directions of the root part's reference transform respectively.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_InertiaTensor(krpc_connection_t connection, krpc_list_double_t * result)
+
+      The inertia tensor of the vessel around its center of mass, in the root
+      part's reference transform. Returns the 3x3 matrix as a list of elements,
+      in row-major order.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Cost(krpc_connection_t connection, float * result)
 
       The total cost of the vessel, including resources, in funds.
@@ -225,7 +260,9 @@ Editor
       .. note:: Only the parts of :type:`krpc_SpaceCenter_Part_t` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as :func:`krpc_SpaceCenter_Part_Position` and the thermal members, are
-                restricted to the flight scene.
+                restricted to the flight scene. :func:`krpc_SpaceCenter_Part_MomentOfInertia`
+                and :func:`krpc_SpaceCenter_Part_InertiaTensor` are available, as they can
+                be worked out from the design.
 
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
 

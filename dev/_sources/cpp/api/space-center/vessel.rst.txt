@@ -486,7 +486,7 @@ Vessel
       in the vessels reference frame (:func:`Vessel::reference_frame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight
 
    .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> available_torque()
 

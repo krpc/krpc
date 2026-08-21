@@ -496,7 +496,7 @@ Vessel
       in the vessels reference frame (:meth:`Vessel.getReferenceFrame()`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> getAvailableTorque()
 

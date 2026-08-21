@@ -1123,7 +1123,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: inertia_tensor
 
@@ -1133,7 +1133,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: list(float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. attribute:: reference_frame
 

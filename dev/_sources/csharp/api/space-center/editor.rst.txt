@@ -197,6 +197,41 @@ Editor
 
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. method:: System.Tuple<double,double,double> CenterOfMass(ReferenceFrame referenceFrame)
+
+      The position of the center of mass of the vessel, in the given reference frame.
+
+      :parameters:
+
+       * **referenceFrame** -- The reference frame that the returned position vector is in.
+
+      :returns: The position as a vector.
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the editor scene's world-space center of mass expressed in
+         *referenceFrame*. A celestial body frame is not a
+         position on that body: the editor is not placed in the solar system
+         the way a vessel in flight is.
+
+   .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+      directions of the root part's reference transform respectively.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. property:: System.Collections.Generic.IList<double> InertiaTensor { get; }
+
+      The inertia tensor of the vessel around its center of mass, in the root
+      part's reference transform. Returns the 3x3 matrix as a list of elements,
+      in row-major order.
+
+      :Game Scenes: Editor Vab, Editor Sph
+
    .. property:: float Cost { get; }
 
       The total cost of the vessel, including resources, in funds.
@@ -220,7 +255,9 @@ Editor
       .. note:: Only the parts of :type:`Part` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as :meth:`Part.Position` and the thermal members, are
-                restricted to the flight scene.
+                restricted to the flight scene. :prop:`Part.MomentOfInertia`
+                and :prop:`Part.InertiaTensor` are available, as they can
+                be worked out from the design.
 
    .. property:: Resources Resources { get; }
 

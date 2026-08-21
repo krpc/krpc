@@ -43,6 +43,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'python/api/space-center/editor';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
@@ -1013,6 +1014,71 @@ plane hangar reports the space plane hangar.</p>
 </dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.center_of_mass">
+<span class="sig-name descname"><span class="pre">center_of_mass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.EditorVessel.center_of_mass" title="Link to this definition">#</a></dt>
+<dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_frame</strong> (<a class="reference internal" href="reference-frame.html#SpaceCenter.ReferenceFrame" title="SpaceCenter.ReferenceFrame"><em>ReferenceFrame</em></a>) – The reference frame that the returned position vector is in.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-even">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-even"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the editor scene’s world-space center of mass expressed in
+<em>reference_frame</em>. A celestial body frame is not a
+position on that body: the editor is not placed in the solar system
+the way a vessel in flight is.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.moment_of_inertia">
+<span class="sig-name descname"><span class="pre">moment_of_inertia</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.moment_of_inertia" title="Link to this definition">#</a></dt>
+<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
+The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+directions of the root part’s reference transform respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>tuple(float, float, float)</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="SpaceCenter.EditorVessel.inertia_tensor">
+<span class="sig-name descname"><span class="pre">inertia_tensor</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.inertia_tensor" title="Link to this definition">#</a></dt>
+<dd><p>The inertia tensor of the vessel around its center of mass, in the root
+part’s reference transform. Returns the 3x3 matrix as a list of elements,
+in row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Attribute<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Read-only, cannot be set</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>list(float)</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.EditorVessel.cost">
 <span class="sig-name descname"><span class="pre">cost</span></span><a class="headerlink" href="#SpaceCenter.EditorVessel.cost" title="Link to this definition">#</a></dt>
@@ -1068,7 +1134,9 @@ that make up the vessel.</p>
 <p>Only the parts of <a class="reference internal" href="parts.html#SpaceCenter.Part" title="SpaceCenter.Part"><code class="xref py py-class docutils literal notranslate"><span class="pre">Part</span></code></a> that describe the design are
 available in the editor. Those that need a vessel in flight or running physics,
 such as <a class="reference internal" href="parts.html#SpaceCenter.Part.position" title="SpaceCenter.Part.position"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Part.position()</span></code></a> and the thermal members, are
-restricted to the flight scene.</p>
+restricted to the flight scene. <a class="reference internal" href="parts.html#SpaceCenter.Part.moment_of_inertia" title="SpaceCenter.Part.moment_of_inertia"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.moment_of_inertia</span></code></a>
+and <a class="reference internal" href="parts.html#SpaceCenter.Part.inertia_tensor" title="SpaceCenter.Part.inertia_tensor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Part.inertia_tensor</span></code></a> are available, as they can
+be worked out from the design.</p>
 </div>
 </dd></dl>
 

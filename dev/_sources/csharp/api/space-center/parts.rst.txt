@@ -966,7 +966,7 @@ Part
       The moment of inertia of the part in :math:`kg.m^2` around its center of mass
       in the parts reference frame (:prop:`Part.ReferenceFrame`).
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: System.Collections.Generic.IList<double> InertiaTensor { get; }
 
@@ -974,7 +974,7 @@ Part
       (:prop:`Part.ReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. property:: ReferenceFrame ReferenceFrame { get; }
 

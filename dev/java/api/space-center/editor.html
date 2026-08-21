@@ -43,6 +43,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'java/api/space-center/editor';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
@@ -973,6 +974,58 @@ plane hangar reports the space plane hangar.</p>
 </dd></dl>
 
 <dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorVessel.centerOfMass(ReferenceFrame)">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">centerOfMass</span></span><span class="sig-paren">(</span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><span class="pre">ReferenceFrame</span></a><em> <span class="pre">referenceFrame</span></em><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorVessel.centerOfMass(ReferenceFrame)" title="Link to this definition">#</a></dt>
+<dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> (<span><a class="reference internal" href="reference-frame.html#krpc.client.services.SpaceCenter.ReferenceFrame" title="krpc.client.services.SpaceCenter.ReferenceFrame"><code class="xref java java-type docutils literal notranslate"><span class="pre">ReferenceFrame</span></code></a></span>) – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the editor scene’s world-space center of mass expressed in
+<em>referenceFrame</em>. A celestial body frame is not a
+position on that body: the editor is not placed in the solar system
+the way a vessel in flight is.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorVessel.getMomentOfInertia()">
+ <span class="pre">org</span><span class="pre">.</span><span class="pre">javatuples</span><span class="pre">.</span><a class="reference external" href="http://www.javatuples.org/apidocs/org/javatuples/Triplet.html" title="org.javatuples.Triplet"><span class="pre">Triplet</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">,</span> <a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getMomentOfInertia</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorVessel.getMomentOfInertia()" title="Link to this definition">#</a></dt>
+<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
+The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+directions of the root part’s reference transform respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorVessel.getInertiaTensor()">
+ <span class="pre">java</span><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/package-summary.html" title="java.util.package-summary"><span class="pre">util</span></a><span class="pre">.</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/util/List.html" title="java.util.List"><span class="pre">List</span></a><span class="pre">&lt;</span><a class="reference external" href="http://docs.oracle.com/javase/8/docs/api/java/lang/Double.html" title="java.lang.Double"><span class="pre">Double</span></a><span class="pre">&gt;</span> <span class="sig-name descname"><span class="pre">getInertiaTensor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorVessel.getInertiaTensor()" title="Link to this definition">#</a></dt>
+<dd><p>The inertia tensor of the vessel around its center of mass, in the root
+part’s reference transform. Returns the 3x3 matrix as a list of elements,
+in row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.EditorVessel.getCost()">
  <span class="pre">float</span> <span class="sig-name descname"><span class="pre">getCost</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.EditorVessel.getCost()" title="Link to this definition">#</a></dt>
 <dd><p>The total cost of the vessel, including resources, in funds.</p>
@@ -1009,7 +1062,9 @@ that make up the vessel.</p>
 <p>Only the parts of <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><code class="xref java java-type docutils literal notranslate"><span class="pre">Part</span></code></a> that describe the design are
 available in the editor. Those that need a vessel in flight or running physics,
 such as <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.position(ReferenceFrame)</span></code></a> and the thermal members, are
-restricted to the flight scene.</p>
+restricted to the flight scene. <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Part.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getMomentOfInertia()</span></code></a>
+and <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getInertiaTensor()" title="krpc.client.services.SpaceCenter.Part.getInertiaTensor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getInertiaTensor()</span></code></a> are available, as they can
+be worked out from the design.</p>
 </div>
 </dd></dl>
 

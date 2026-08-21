@@ -485,7 +485,7 @@ Vessel
       in the vessels reference frame (:prop:`Vessel.ReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-      :Game Scenes: All
+      :Game Scenes: Flight
 
    .. property:: System.Tuple<System.Tuple<double,double,double>,System.Tuple<double,double,double>> AvailableTorque { get; }
 

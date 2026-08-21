@@ -213,6 +213,43 @@ Editor
       :rtype: float
       :Game Scenes: Editor Vab, Editor Sph
 
+   .. method:: center_of_mass(reference_frame)
+
+      The position of the center of mass of the vessel, in the given reference frame.
+
+      :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
+      :returns: The position as a vector.
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+
+      .. note::
+
+         This is the editor scene's world-space center of mass expressed in
+         *reference_frame*. A celestial body frame is not a
+         position on that body: the editor is not placed in the solar system
+         the way a vessel in flight is.
+
+   .. attribute:: moment_of_inertia
+
+      The moment of inertia of the vessel around its center of mass in :math:`kg.m^2`.
+      The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+      directions of the root part's reference transform respectively.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: tuple(float, float, float)
+      :Game Scenes: Editor Vab, Editor Sph
+
+   .. attribute:: inertia_tensor
+
+      The inertia tensor of the vessel around its center of mass, in the root
+      part's reference transform. Returns the 3x3 matrix as a list of elements,
+      in row-major order.
+
+      :Attribute: Read-only, cannot be set
+      :rtype: list(float)
+      :Game Scenes: Editor Vab, Editor Sph
+
    .. attribute:: cost
 
       The total cost of the vessel, including resources, in funds.
@@ -242,7 +279,9 @@ Editor
       .. note:: Only the parts of :class:`Part` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
                 such as :meth:`Part.position` and the thermal members, are
-                restricted to the flight scene.
+                restricted to the flight scene. :attr:`Part.moment_of_inertia`
+                and :attr:`Part.inertia_tensor` are available, as they can
+                be worked out from the design.
 
    .. attribute:: resources
 

@@ -43,6 +43,7 @@
     <script src="../../../_static/documentation_options.js?v=3ce10a4d"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'cnano/api/space-center/editor';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.20.0';
@@ -973,6 +974,58 @@ plane hangar reports the space plane hangar.</p>
 </dd></dl>
 
 <dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_CenterOfMass</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span>, <a class="reference internal" href="reference-frame.html#c.krpc_SpaceCenter_ReferenceFrame_t" title="krpc_SpaceCenter_ReferenceFrame_t"><span class="n"><span class="pre">krpc_SpaceCenter_ReferenceFrame_t</span></span></a><span class="w"> </span><span class="n"><span class="pre">referenceFrame</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass" title="Link to this definition">#</a><br /></dt>
+<dd><p>The position of the center of mass of the vessel, in the given reference frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>referenceFrame</strong> – The reference frame that the returned position vector is in.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The position as a vector.</p>
+</dd>
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is the editor scene’s world-space center of mass expressed in
+<em>referenceFrame</em>. A celestial body frame is not a
+position on that body: the editor is not placed in the solar system
+the way a vessel in flight is.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_MomentOfInertia</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_tuple_double_double_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia" title="Link to this definition">#</a><br /></dt>
+<dd><p>The moment of inertia of the vessel around its center of mass in <span class="math notranslate nohighlight">\(kg.m^2\)</span>.
+The inertia values in the returned 3-tuple are around the pitch, roll and yaw
+directions of the root part’s reference transform respectively.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_InertiaTensor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="n"><span class="pre">krpc_list_double_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor" title="Link to this definition">#</a><br /></dt>
+<dd><p>The inertia tensor of the vessel around its center of mass, in the root
+part’s reference transform. Returns the 3x3 matrix as a list of elements,
+in row-major order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Editor Vab, Editor Sph</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="c function">
 <dt class="sig sig-object c" id="c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Cost">
 <a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_EditorVessel_Cost</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span>, <span class="kt"><span class="pre">float</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n"><span class="pre">result</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Cost" title="Link to this definition">#</a><br /></dt>
 <dd><p>The total cost of the vessel, including resources, in funds.</p>
@@ -1009,7 +1062,9 @@ that make up the vessel.</p>
 <p>Only the parts of <a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_t</span></code></a> that describe the design are
 available in the editor. Those that need a vessel in flight or running physics,
 such as <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Position()</span></code> and the thermal members, are
-restricted to the flight scene.</p>
+restricted to the flight scene. <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia()</span></code>
+and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_InertiaTensor()</span></code> are available, as they can
+be worked out from the design.</p>
 </div>
 </dd></dl>
 

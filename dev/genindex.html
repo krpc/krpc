@@ -1651,11 +1651,15 @@
 </li>
       <li><a href="python/api/space-center/flight.html#SpaceCenter.Flight.center_of_mass">center_of_mass (Flight attribute)</a>
 </li>
-      <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.center_of_mass">center_of_mass() (Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.center_of_mass">[1]</a>
+      <li><a href="lua/api/space-center/editor.html#SpaceCenter.EditorVessel.center_of_mass">center_of_mass() (EditorVessel method)</a>, <a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.center_of_mass">[1]</a>
+
+      <ul>
+        <li><a href="lua/api/space-center/parts.html#SpaceCenter.Part.center_of_mass">(Part method)</a>, <a href="python/api/space-center/parts.html#SpaceCenter.Part.center_of_mass">[1]</a>
 </li>
+      </ul></li>
       <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.center_of_mass_reference_frame">center_of_mass_reference_frame (Part attribute)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.centerOfMass(ReferenceFrame)">centerOfMass(ReferenceFrame) (Java method)</a>
+      <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.centerOfMass(ReferenceFrame)">centerOfMass(ReferenceFrame) (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.centerOfMass(ReferenceFrame)">[1]</a>
 </li>
       <li><a href="python/api/ui/dropdown.html#UI.Dropdown.changed">changed (Dropdown attribute)</a>
 
@@ -3868,7 +3872,7 @@
 </li>
       <li><a href="java/api/space-center/waypoints.html#krpc.client.services.SpaceCenter.Waypoint.getIndex()">getIndex() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getInertiaTensor()">getInertiaTensor() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getInertiaTensor()">[1]</a>
+      <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getInertiaTensor()">getInertiaTensor() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getInertiaTensor()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getInertiaTensor()">[2]</a>
 </li>
       <li><a href="java/api/debug/debug.html#krpc.client.services.Debug.Debug.getInfiniteElectricity()">getInfiniteElectricity() (Java method)</a>
 </li>
@@ -4076,7 +4080,7 @@
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getModules()">getModules() (Java method)</a>
 </li>
-      <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getMomentOfInertia()">getMomentOfInertia() (Java method)</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()">[1]</a>
+      <li><a href="java/api/space-center/editor.html#krpc.client.services.SpaceCenter.EditorVessel.getMomentOfInertia()">getMomentOfInertia() (Java method)</a>, <a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Part.getMomentOfInertia()">[1]</a>, <a href="java/api/space-center/vessel.html#krpc.client.services.SpaceCenter.Vessel.getMomentOfInertia()">[2]</a>
 </li>
       <li><a href="java/api/space-center/parts.html#krpc.client.services.SpaceCenter.Wheel.getMotorEnabled()">getMotorEnabled() (Java method)</a>
 </li>
@@ -5060,9 +5064,11 @@
 </li>
       <li><a href="python/api/space-center/waypoints.html#SpaceCenter.Waypoint.index">index (Waypoint attribute)</a>
 </li>
-      <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.inertia_tensor">inertia_tensor (Part attribute)</a>
+      <li><a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.inertia_tensor">inertia_tensor (EditorVessel attribute)</a>
 
       <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.inertia_tensor">(Part attribute)</a>
+</li>
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.inertia_tensor">(Vessel attribute)</a>
 </li>
       </ul></li>
@@ -7672,6 +7678,8 @@
 </li>
       <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel9burn_timeEv">krpc::services::SpaceCenter::EditorVessel::burn_time (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel14center_of_massE14ReferenceFrame">krpc::services::SpaceCenter::EditorVessel::center_of_mass (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel4costEv">krpc::services::SpaceCenter::EditorVessel::cost (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel13crew_capacityEv">krpc::services::SpaceCenter::EditorVessel::crew_capacity (C++ function)</a>
@@ -7690,7 +7698,11 @@
 </li>
       <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel8facilityEv">krpc::services::SpaceCenter::EditorVessel::facility (C++ function)</a>
 </li>
+      <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel14inertia_tensorEv">krpc::services::SpaceCenter::EditorVessel::inertia_tensor (C++ function)</a>
+</li>
       <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel4massEv">krpc::services::SpaceCenter::EditorVessel::mass (C++ function)</a>
+</li>
+      <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel17moment_of_inertiaEv">krpc::services::SpaceCenter::EditorVessel::moment_of_inertia (C++ function)</a>
 </li>
       <li><a href="cpp/api/space-center/editor.html#_CPPv4N4krpc8services11SpaceCenter12EditorVessel4nameEv">krpc::services::SpaceCenter::EditorVessel::name (C++ function)</a>
 </li>
@@ -12588,6 +12600,8 @@
 </li>
       <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BurnTime">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_BurnTime (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CenterOfMass (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Cost">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Cost (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CrewCapacity">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_CrewCapacity (C function)</a>
@@ -12606,7 +12620,11 @@
 </li>
       <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Facility">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Facility (C function)</a>
 </li>
+      <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_InertiaTensor (C function)</a>
+</li>
       <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Mass">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Mass (C function)</a>
+</li>
+      <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_MomentOfInertia (C function)</a>
 </li>
       <li><a href="cnano/api/space-center/editor.html#c.krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Name">krpc_SpaceCenter_EditorVessel_t.krpc_SpaceCenter_EditorVessel_Name (C function)</a>
 </li>
@@ -15988,9 +16006,11 @@
 </li>
       <li><a href="java/api/krpc/expressions.html#krpc.client.services.KRPC.Expression.modulo(Connection, Expression, Expression)">modulo(Connection, Expression, Expression) (Java method)</a>
 </li>
-      <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.moment_of_inertia">moment_of_inertia (Part attribute)</a>
+      <li><a href="python/api/space-center/editor.html#SpaceCenter.EditorVessel.moment_of_inertia">moment_of_inertia (EditorVessel attribute)</a>
 
       <ul>
+        <li><a href="python/api/space-center/parts.html#SpaceCenter.Part.moment_of_inertia">(Part attribute)</a>
+</li>
         <li><a href="python/api/space-center/vessel.html#SpaceCenter.Vessel.moment_of_inertia">(Vessel attribute)</a>
 </li>
       </ul></li>
@@ -19058,10 +19078,10 @@
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.can_rotate">SpaceCenter.SpaceCenter.DockingPort.can_rotate (attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.docked_part">SpaceCenter.SpaceCenter.DockingPort.docked_part (attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.has_shield">SpaceCenter.SpaceCenter.DockingPort.has_shield (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/parts.html#SpaceCenter.SpaceCenter.DockingPort.maximum_rotation">SpaceCenter.SpaceCenter.DockingPort.maximum_rotation (attribute)</a>
@@ -19112,7 +19132,11 @@
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.facility">SpaceCenter.SpaceCenter.EditorVessel.facility (attribute)</a>
 </li>
+      <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.inertia_tensor">SpaceCenter.SpaceCenter.EditorVessel.inertia_tensor (attribute)</a>
+</li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.mass">SpaceCenter.SpaceCenter.EditorVessel.mass (attribute)</a>
+</li>
+      <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.moment_of_inertia">SpaceCenter.SpaceCenter.EditorVessel.moment_of_inertia (attribute)</a>
 </li>
       <li><a href="lua/api/space-center/editor.html#SpaceCenter.SpaceCenter.EditorVessel.name">SpaceCenter.SpaceCenter.EditorVessel.name (attribute)</a>
 </li>

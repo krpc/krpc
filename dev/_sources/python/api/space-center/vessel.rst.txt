@@ -541,7 +541,7 @@ Vessel
 
       :Attribute: Read-only, cannot be set
       :rtype: list(float)
-   
+      :Game Scenes: Flight
 
    .. attribute:: available_torque
 

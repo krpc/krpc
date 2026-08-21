@@ -486,7 +486,7 @@ Vessel
       in the vessels reference frame (:func:`krpc_SpaceCenter_Vessel_ReferenceFrame`).
       Returns the 3x3 matrix as a list of elements, in row-major order.
 
-   
+      :Game Scenes: Flight
 
    .. function:: krpc_error_t krpc_SpaceCenter_Vessel_AvailableTorque(krpc_connection_t connection, krpc_tuple_tuple_double_double_double_tuple_double_double_double_t * result)
 
