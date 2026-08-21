@@ -262,6 +262,7 @@ client_test(
 test_srcs = [
     "test/test_client.cpp",
     "test/test_event.cpp",
+    "test/test_expression_stream.cpp",
     "test/test_object.cpp",
     "test/test_services.cpp",
     "test/test_stream.cpp",

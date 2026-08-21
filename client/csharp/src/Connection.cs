@@ -250,6 +250,68 @@ namespace KRPC.Client
         }
 
         /// <summary>
+        /// Run a function on the server, within a single physics tick, and return the
+        /// value it produces. The type parameter must correspond to the expression's
+        /// return type.
+        /// </summary>
+        public TResult RunFunction<TResult> (Services.KRPC.Expression expression)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            var data = Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (expression);
+            return (TResult)Encoder.Decode (ByteString.CopyFrom (data), typeof(TResult), this);
+        }
+
+        /// <summary>
+        /// Run a function on the server, within a single physics tick, and return the
+        /// value it produces. The lambda expression is compiled using
+        /// <see ref="CompileExpression"/>.
+        /// </summary>
+        public TResult RunFunction<TResult> (Expression<Func<TResult>> expression)
+        {
+            return RunFunction<TResult> (CompileExpression (expression));
+        }
+
+        /// <summary>
+        /// Run a function with no result on the server, within a single physics tick,
+        /// for its effects. The lambda expression is compiled using
+        /// <see ref="CompileExpression"/>.
+        /// </summary>
+        public void RunFunction (Expression<Action> expression)
+        {
+            CheckDisposed ();
+            var compiled = ExpressionCompiler.Compile (this, expression);
+            Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (compiled);
+        }
+
+        /// <summary>
+        /// Run a function with no result on the server, within a single physics tick,
+        /// for its effects.
+        /// </summary>
+        public void RunFunction (Services.KRPC.Expression expression)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (expression);
+        }
+
+        /// <summary>
+        /// Create a stream from a server side expression. On each update, the value
+        /// of the stream is the result of evaluating the expression on the server.
+        /// The type parameter must correspond to the expression's return type.
+        /// </summary>
+        public Stream<TResult> AddStream<TResult> (Services.KRPC.Expression expression)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            var stream = Services.KRPC.ExtensionMethods.KRPC (this).AddExpressionStream (expression, false);
+            return new Stream<TResult> (this, stream.Id);
+        }
+
+        /// <summary>
         /// Invoke a remote procedure.
         /// Should not be called directly. This interface is used by service client stubs.
         /// </summary>
