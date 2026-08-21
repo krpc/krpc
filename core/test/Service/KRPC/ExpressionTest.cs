@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.KRPC;
 using KRPC.Service.Messages;
+using Moq;
 using NUnit.Framework;
 using LinqExpression = System.Linq.Expressions.Expression;
 
@@ -119,6 +120,27 @@ namespace KRPC.Test.Service.KRPC
             var expr = Expression.Call (BuildProcedureCall (
                 "TestClass_MethodAvailableInSpecifiedGameScene", new Argument (0, obj)));
             Assert.Throws<global::KRPC.Service.RPCException> (() => Eval<string> (expr));
+        }
+
+        [Test]
+        public void CallNullReturnAllowed ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
+            var expr = Expression.Call (BuildProcedureCall (
+                "TestClass_get_ObjectProperty", new Argument (0, obj)));
+            Assert.IsNull (Eval<global::KRPC.Test.Service.TestService.TestClass> (expr));
+        }
+
+        [Test]
+        public void CallNullReturnNotAllowed ()
+        {
+            var mock = new Mock<global::KRPC.Test.Service.ITestService> (MockBehavior.Strict);
+            mock.Setup (x => x.ReturnNullWhenNotAllowed ())
+                .Returns ((global::KRPC.Test.Service.TestService.TestClass)null);
+            global::KRPC.Test.Service.TestService.Service = mock.Object;
+            var expr = Expression.Call (BuildProcedureCall ("ReturnNullWhenNotAllowed"));
+            Assert.Throws<global::KRPC.Service.RPCException> (
+                () => Eval<global::KRPC.Test.Service.TestService.TestClass> (expr));
         }
 
         [Test]

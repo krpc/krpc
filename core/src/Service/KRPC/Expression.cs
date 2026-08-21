@@ -382,48 +382,60 @@ namespace KRPC.Service.KRPC
                 }
             }
 
+            // Invoke the procedure's method directly, with typed arguments, so that
+            // evaluating the expression does not box the arguments or allocate an
+            // argument array, and the JIT can inline the method. The game scene
+            // check and null return value check match those made for ordinary RPCs.
             var hasInstance = procedure.Handler.HasInstance;
-            LinqExpression instanceExpr;
-            if (!hasInstance)
-                instanceExpr = LinqExpression.Constant (null, typeof (object));
-            else if (exprValues [0] != null)
-                instanceExpr = LinqExpression.Convert (exprValues [0], typeof (object));
-            else
-                instanceExpr = LinqExpression.Constant (constValues [0], typeof (object));
-
+            var method = procedure.Handler.Method;
             var firstArgument = hasInstance ? 1 : 0;
-            var numArguments = numParameters - firstArgument;
-            LinqExpression argumentsExpr;
-            if (exprValues.Skip (firstArgument).All (x => x == null)) {
-                // All argument values are known now, so embed the argument array as a
-                // constant to avoid constructing it on every evaluation
-                argumentsExpr = LinqExpression.Constant (
-                    constValues.Skip (firstArgument).ToArray ());
+            var methodParameters = method.GetParameters ();
+            var arguments = new LinqExpression [numParameters - firstArgument];
+            for (int i = firstArgument; i < numParameters; i++) {
+                // A nullable value-type parameter is declared as its underlying type T,
+                // so build the argument as the method's own Nullable<T> parameter type
+                var parameterType = methodParameters [i - firstArgument].ParameterType;
+                var expr = exprValues [i];
+                if (expr == null)
+                    arguments [i - firstArgument] =
+                        LinqExpression.Constant (constValues [i], parameterType);
+                else
+                    arguments [i - firstArgument] = expr.Type == parameterType
+                        ? expr : LinqExpression.Convert (expr, parameterType);
+            }
+            LinqExpression callExpr;
+            if (hasInstance) {
+                var instanceExpr = exprValues [0] ??
+                    LinqExpression.Constant (constValues [0], parameters [0].Type);
+                callExpr = LinqExpression.Call (instanceExpr, method, arguments);
             } else {
-                var elements = new LinqExpression [numArguments];
-                for (int i = 0; i < numArguments; i++) {
-                    var expr = exprValues [firstArgument + i];
-                    elements [i] = expr != null
-                        ? (LinqExpression)LinqExpression.Convert (expr, typeof (object))
-                        : LinqExpression.Constant (constValues [firstArgument + i], typeof (object));
-                }
-                argumentsExpr = LinqExpression.NewArrayInit (typeof (object), elements);
+                callExpr = LinqExpression.Call (method, arguments);
             }
 
-            var servicesExpr = LinqExpression.Constant(services);
-            var executeCallMethod = typeof(Services).GetMethod ("ExecuteExpressionCall");
-            var procedureExpr = LinqExpression.Constant(procedure);
-            var result = LinqExpression.Call(
-                servicesExpr, executeCallMethod,
-                new[] { procedureExpr, instanceExpr, argumentsExpr });
+            var procedureExpr = LinqExpression.Constant (procedure);
+            var sceneCheck = LinqExpression.Call (
+                typeof (Services).GetMethod ("CheckExpressionGameScene"), procedureExpr);
+
             if (!procedure.HasReturnType)
-                return new Expression (LinqExpression.Block (typeof (void), result));
+                return new Expression (LinqExpression.Block (typeof (void), sceneCheck, callExpr));
+
             var returnType = procedure.ReturnType;
-            // A nullable value-type return may be null, so evaluate it as Nullable<T> so the
-            // null is representable rather than faulting the conversion.
-            if (procedure.ReturnIsNullable && returnType.IsValueType)
-                returnType = typeof(System.Nullable<>).MakeGenericType(returnType);
-            return new Expression(LinqExpression.Convert(result, returnType));
+            var nullAllowed = procedure.ReturnIsNullable && TypeUtils.IsAClassType (returnType);
+            if (returnType.IsValueType || nullAllowed)
+                return new Expression (LinqExpression.Block (sceneCheck, callExpr));
+
+            // The return type is a reference type that must not be null; check the
+            // value on every evaluation
+            var returnValue = LinqExpression.Variable (returnType, "returnValue");
+            var returnValueCheck = LinqExpression.Call (
+                typeof (Services).GetMethod ("CheckExpressionReturnValue"),
+                procedureExpr, returnValue);
+            return new Expression (LinqExpression.Block (
+                new [] { returnValue },
+                sceneCheck,
+                LinqExpression.Assign (returnValue, callExpr),
+                returnValueCheck,
+                returnValue));
         }
 
         /// <summary>

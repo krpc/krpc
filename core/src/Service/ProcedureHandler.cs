@@ -16,6 +16,7 @@ namespace KRPC.Service
 
         public ProcedureHandler (MethodInfo methodInfo, bool returnIsNullable)
         {
+            Method = methodInfo;
             invoker = BuildInvoker (methodInfo);
             parameters = methodInfo.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
             ReturnType = methodInfo.ReturnType;
@@ -23,6 +24,8 @@ namespace KRPC.Service
         }
 
         public bool HasInstance { get => false; }
+
+        public MethodInfo Method { get; private set; }
 
         public object Invoke (object instance, object[] arguments)
         {

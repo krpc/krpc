@@ -152,20 +152,30 @@ namespace KRPC.Service
         }
 
         /// <summary>
-        /// Executes a procedure call from within a compiled server-side expression and
-        /// returns the raw return value. Errors are thrown rather than returned, so that
-        /// they propagate to the stream or event evaluating the expression. Throws
-        /// YieldException if the procedure yields, in which case the expression
-        /// evaluation is abandoned and retried on the next update.
+        /// Checks that a procedure is available in the current game scene, throwing
+        /// RPCException if not. Called from compiled server-side expressions, which
+        /// invoke the procedure's method directly rather than through
+        /// <see cref="ExecuteCall(ProcedureSignature, Func{object})"/>, before each
+        /// invocation. The error is thrown rather than returned, so that it
+        /// propagates to the stream or event evaluating the expression.
         /// </summary>
-        public object ExecuteExpressionCall (ProcedureSignature procedure, object instance, object[] arguments)
+        public static void CheckExpressionGameScene (ProcedureSignature procedure)
         {
             if ((CallContext.GameScene & procedure.GameScene) == 0)
                 throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
-            var returnValue = procedure.Handler.Invoke (instance, arguments);
-            if (procedure.HasReturnType)
-                CheckReturnValue (procedure, returnValue);
-            return returnValue;
+        }
+
+        /// <summary>
+        /// Checks a return value produced by a procedure invoked from a compiled
+        /// server-side expression, throwing RPCException if it is null and the
+        /// procedure is not permitted to return null. The invocation is a direct,
+        /// statically typed call, so a null value is the only way the result can
+        /// fail to conform to the procedure's return type.
+        /// </summary>
+        public static void CheckExpressionReturnValue (ProcedureSignature procedure, object returnValue)
+        {
+            if (ReferenceEquals (returnValue, null))
+                CheckReturnValue (procedure, null);
         }
 
         /// <summary>
