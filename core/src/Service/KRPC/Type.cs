@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using KRPC.Service.Attributes;
 using KRPC.Service.Scanner;
+using KRPC.Utils;
 
 namespace KRPC.Service.KRPC
 {
@@ -11,13 +12,32 @@ namespace KRPC.Service.KRPC
     /// target types of casts.
     /// </summary>
     [KRPCClass (Service = "KRPC")]
-    public class Type
+    public class Type : Equatable<Type>
     {
         internal System.Type InternalType { get; private set; }
 
         internal Type (System.Type type)
         {
             InternalType = type;
+        }
+
+        /// <summary>
+        /// A type is an immutable description with no per-client state, so two
+        /// objects naming the same type are the same value. The object store keys
+        /// on equality, so naming a type repeatedly reuses a single object
+        /// identifier rather than allocating one for every mention of it.
+        /// </summary>
+        public override bool Equals (Type other)
+        {
+            return !ReferenceEquals (other, null) && InternalType == other.InternalType;
+        }
+
+        /// <summary>
+        /// Hash the type.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            return InternalType.GetHashCode ();
         }
 
         /// <summary>

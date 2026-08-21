@@ -114,6 +114,9 @@ class _Compiler:
         if client._expression_metadata is None:
             client._expression_metadata = Metadata(client)
         self._metadata: Metadata = client._expression_metadata
+        # Naming a type is a round trip, so the objects naming them are shared
+        # by every function compiled for this connection
+        self._remote_types: Dict[bytes, Any] = client._expression_remote_types
 
     def compile(self) -> Any:
         node = self._parse()
@@ -1507,7 +1510,7 @@ class _Compiler:
 
     def _remote_type(self, node: Optional[ast.AST], ptype: Optional[KRPC.Type]) -> Any:
         try:
-            return remote_type(self._type, ptype)
+            return remote_type(self._type, ptype, self._remote_types)
         except ValueError as exc:
             raise self._error(node, str(exc)) from exc
 

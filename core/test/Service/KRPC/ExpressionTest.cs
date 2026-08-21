@@ -688,6 +688,30 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void ConstantsAreShared ()
+        {
+            // A compiled function mentions the same literals over and over, so each
+            // value gets one entry in the object store rather than one per mention
+            var store = global::KRPC.Service.ObjectStore.Instance;
+            Assert.AreEqual (store.AddInstance (Expression.ConstantInt (1)),
+                             store.AddInstance (Expression.ConstantInt (1)));
+            Assert.AreEqual (store.AddInstance (Expression.ConstantString ("a")),
+                             store.AddInstance (Expression.ConstantString ("a")));
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantInt (1)),
+                                store.AddInstance (Expression.ConstantInt (2)));
+            // Constants of equal value but differing type stay distinct
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantInt (1)),
+                                store.AddInstance (Expression.ConstantDouble (1)));
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantDouble (1)),
+                                store.AddInstance (Expression.ConstantFloat (1)));
+            // Negative zero is a distinct constant, though it compares equal to zero
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantDouble (0)),
+                                store.AddInstance (Expression.ConstantDouble (-0.0)));
+            Assert.AreNotEqual (store.AddInstance (Expression.ConstantFloat (0)),
+                                store.AddInstance (Expression.ConstantFloat (-0.0f)));
+        }
+
+        [Test]
         public void StringIsNotACollection ()
         {
             var text = Expression.ConstantString ("hello");

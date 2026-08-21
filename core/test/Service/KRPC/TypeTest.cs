@@ -26,6 +26,22 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void EqualTypesShareAnObjectIdentifier ()
+        {
+            // A type is an immutable description, so naming one repeatedly reuses a
+            // single entry in the object store rather than allocating one each time
+            var store = global::KRPC.Service.ObjectStore.Instance;
+            Assert.AreEqual (store.AddInstance (Type.Double ()),
+                             store.AddInstance (Type.Double ()));
+            Assert.AreEqual (store.AddInstance (Type.ListType (Type.Double ())),
+                             store.AddInstance (Type.ListType (Type.Double ())));
+            Assert.AreNotEqual (store.AddInstance (Type.Int ()),
+                                store.AddInstance (Type.Long ()));
+            Assert.AreNotEqual (store.AddInstance (Type.ListType (Type.Int ())),
+                                store.AddInstance (Type.SetType (Type.Int ())));
+        }
+
+        [Test]
         public void ClassType ()
         {
             var type = Type.ClassType ("TestService", "TestClass");

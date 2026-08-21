@@ -149,6 +149,51 @@ namespace KRPC.Service.KRPC
             markersChecked = true;
         }
 
+        static readonly Dictionary<Tuple<System.Type, object>, Expression> constants =
+            new Dictionary<Tuple<System.Type, object>, Expression> ();
+
+        /// <summary>
+        /// A constant expression of the given type and value, shared with every other
+        /// constant of that type and value, so that the object store gives them all a
+        /// single object identifier. The key includes the type so that constants of
+        /// equal value but differing type stay distinct. Sharing is safe because the
+        /// trees are immutable.
+        /// </summary>
+        static Expression Constant (System.Type type, object value)
+        {
+            var key = Tuple.Create (type, KeyOfConstant (value));
+            Expression constant;
+            if (!constants.TryGetValue (key, out constant)) {
+                constant = new Expression (LinqExpression.Constant (value, type));
+                constants [key] = constant;
+            }
+            return constant;
+        }
+
+        /// <summary>
+        /// The part of a constant's key that stands for its value. A floating point
+        /// value is keyed on its bits, because Equals makes -0.0 and 0.0 the same key
+        /// while they are different constants.
+        /// </summary>
+        static object KeyOfConstant (object value)
+        {
+            if (value is double)
+                return BitConverter.DoubleToInt64Bits ((double)value);
+            if (value is float)
+                return BitConverter.ToInt32 (BitConverter.GetBytes ((float)value), 0);
+            return value;
+        }
+
+        /// <summary>
+        /// Drop the shared constants. They are registered with the object store, which is
+        /// emptied once no server is left for a client to hold an identifier through, so
+        /// they live no longer than the identifiers naming them.
+        /// </summary>
+        internal static void ClearConstants ()
+        {
+            constants.Clear ();
+        }
+
         static bool IsNumericType (System.Type type)
         {
             return
@@ -221,7 +266,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantDouble(double value)
         {
-            return new Expression(LinqExpression.Constant(value));
+            return Constant (typeof (double), value);
         }
 
         /// <summary>
@@ -231,7 +276,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantFloat(float value)
         {
-            return new Expression(LinqExpression.Constant(value));
+            return Constant (typeof (float), value);
         }
 
         /// <summary>
@@ -241,7 +286,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantInt(int value)
         {
-            return new Expression(LinqExpression.Constant(value));
+            return Constant (typeof (int), value);
         }
 
         /// <summary>
@@ -251,7 +296,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantBool (bool value)
         {
-            return new Expression (LinqExpression.Constant (value));
+            return Constant (typeof (bool), value);
         }
 
         /// <summary>
@@ -261,7 +306,7 @@ namespace KRPC.Service.KRPC
         [KRPCMethod]
         public static Expression ConstantString (string value)
         {
-            return new Expression (LinqExpression.Constant (value));
+            return Constant (typeof (string), value);
         }
 
         /// <summary>

@@ -96,12 +96,31 @@ class Metadata:
                     self.members[key] = (service.name, procedure)
 
 
-def remote_type(types: Any, ptype: Optional[KRPC.Type]) -> Any:
+def remote_type(
+    types: Any,
+    ptype: Optional[KRPC.Type],
+    cache: Optional[Dict[bytes, Any]] = None,
+) -> Any:
     """Build a KRPC.Type remote object describing the given protocol buffer
     type, using the KRPC.Type factory methods. Raises ValueError for types
-    that have no remote representation."""
+    that have no remote representation.
+
+    Each factory call is a round trip to the server, and a function names the
+    same few types over and over, so the object built for a type is kept in
+    cache and reused."""
     if ptype is None:
         raise ValueError("cannot determine the type of a value")
+    if cache is None:
+        cache = {}
+    key = ptype.SerializeToString()
+    if key in cache:
+        return cache[key]
+    remote = _build_remote_type(types, ptype, cache)
+    cache[key] = remote
+    return remote
+
+
+def _build_remote_type(types: Any, ptype: KRPC.Type, cache: Dict[bytes, Any]) -> Any:
     code = ptype.code
     if code == KRPC.Type.DOUBLE:
         return types.double()
@@ -128,15 +147,15 @@ def remote_type(types: Any, ptype: Optional[KRPC.Type]) -> Any:
     if code == KRPC.Type.STRUCT:
         return types.struct_type(ptype.service, ptype.name)
     if code == KRPC.Type.TUPLE:
-        return types.tuple_type([remote_type(types, sub) for sub in ptype.types])
+        return types.tuple_type([remote_type(types, sub, cache) for sub in ptype.types])
     if code == KRPC.Type.LIST:
-        return types.list_type(remote_type(types, ptype.types[0]))
+        return types.list_type(remote_type(types, ptype.types[0], cache))
     if code == KRPC.Type.SET:
-        return types.set_type(remote_type(types, ptype.types[0]))
+        return types.set_type(remote_type(types, ptype.types[0], cache))
     if code == KRPC.Type.DICTIONARY:
         return types.dictionary_type(
-            remote_type(types, ptype.types[0]),
-            remote_type(types, ptype.types[1]),
+            remote_type(types, ptype.types[0], cache),
+            remote_type(types, ptype.types[1], cache),
         )
     raise ValueError("unsupported type")
 
