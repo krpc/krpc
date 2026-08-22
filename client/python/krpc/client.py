@@ -10,7 +10,12 @@ from krpc.definitions import CLASS, ENUMERATION, STRUCT, Definition, register_al
 from krpc.error import StreamError
 from krpc.event import Event
 from krpc.types import Types, TypeBase, DefaultArgument, EXCEPTION_TYPES
-from krpc.service import create_service, service_definitions
+from krpc.service import (
+    create_service,
+    extended_stub_classes,
+    merge_service,
+    service_definitions,
+)
 from krpc.streammanager import StreamManager
 from krpc.stream import Stream
 from krpc.encoder import Encoder
@@ -20,6 +25,24 @@ from krpc.error import RPCError
 import krpc.streammanager
 import krpc.schema.KRPC_pb2 as KRPC
 import krpc.services
+
+
+def _client_class(service_name: str, class_name: str, python_type: type) -> type:
+    """One client's subclass of a pre-generated class, for the members it adds to it.
+
+    The subclass names the class it stands for, which is what coerces an object between two
+    connections that each have a subclass of their own."""
+    return type(
+        python_type.__name__,
+        (python_type,),
+        {
+            "_service_name": service_name,
+            "_class_name": class_name,
+            "__doc__": python_type.__doc__,
+            "__module__": python_type.__module__,
+            "__qualname__": python_type.__qualname__,
+        },
+    )
 
 
 def _stub_definitions(
@@ -70,8 +93,14 @@ def _stub_definitions(
 
         return register
 
+    # A pre-generated class is shared by every client in the process, so a member built for
+    # one client cannot go on it. The client's own subclass is what carries the members that
+    # only the server's definition declares
+    extended = extended_stub_classes(service_info, service)
     classes = service._classes  # type: ignore[attr-defined]
     for class_name, python_type in classes.items():
+        if class_name in extended:
+            python_type = _client_class(name, class_name, python_type)
         yield Definition(
             CLASS, name, class_name, [], register_class(class_name, python_type)
         )
@@ -130,12 +159,14 @@ class Client(krpc.services.Client):
         # Load services
         definitions = []
         dynamic_services = []
+        stub_services = []
         for service_info in services:
             service = None
             if use_pregenerated_stubs:
                 service = self._services.get(service_info.name)
             if service is not None:
                 definitions.extend(_stub_definitions(service_info, service))
+                stub_services.append((service_info, service))
             else:
                 dynamic_services.append(service_info)
                 definitions.extend(service_definitions(service_info))
@@ -149,6 +180,9 @@ class Client(krpc.services.Client):
             setattr(
                 self, snake_case(service_info.name), create_service(self, service_info)
             )
+        # Add the class members that only the server's definition declares
+        for service_info, service in stub_services:
+            merge_service(self, service_info, service)
 
         # Set up stream update thread
         if stream_connection is not None:
