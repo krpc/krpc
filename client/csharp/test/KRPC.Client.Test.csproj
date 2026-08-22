@@ -31,6 +31,9 @@
     <Compile Include="ConnectionTestCase.cs" />
     <Compile Include="EncoderTest.cs" />
     <Compile Include="EventTest.cs" />
+    <Compile Include="ExpressionCompilerTest.cs" />
+    <Compile Include="ExpressionStreamTest.cs" />
+    <Compile Include="ExpressionTreeTest.cs" />
     <Compile Include="LocalSocketConnectionTest.cs" />
     <Compile Include="MessageReaderTest.cs" />
     <Compile Include="ObjectTest.cs" />

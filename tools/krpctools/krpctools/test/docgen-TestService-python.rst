@@ -179,6 +179,19 @@ Service documentation string.
 
 
 
+.. staticmethod:: dump_expression_tree(expression)
+
+   Returns a dump of the expression tree of the given server side expression,
+   as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+   verify the trees that the expression API generates.
+
+   :param KRPC.Expression expression:
+   :rtype: str
+   
+
+
+
+
 .. staticmethod:: echo_nullable_int(value)
 
 

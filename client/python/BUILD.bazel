@@ -20,6 +20,7 @@ py_library(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-testservice",
         ":services-ui",
     ],
@@ -122,6 +123,7 @@ py_sdist(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-testservice",
         ":services-ui",
         "//:COPYING",
@@ -194,6 +196,13 @@ clientgen_python(
 )
 
 clientgen_python(
+    name = "services-stdlib",
+    out = "krpc/services/stdlib.py",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
+)
+
+clientgen_python(
     name = "services-lidar",
     out = "krpc/services/lidar.py",
     defs = "//service/LiDAR:ServiceDefinitions",
@@ -234,6 +243,9 @@ client_tests = [
     "krpc/test/test_client.py",
     "krpc/test/test_documentation.py",
     "krpc/test/test_event.py",
+    "krpc/test/test_expression.py",
+    "krpc/test/test_expressioncompiler.py",
+    "krpc/test/test_expressiontree.py",
     "krpc/test/test_objects.py",
     "krpc/test/test_stream.py",
     "krpc/test/test_threading.py",

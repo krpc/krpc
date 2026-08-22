@@ -271,11 +271,76 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Create an event from a server side expression.
+        /// Add a stream that evaluates an expression on each update and streams its
+        /// value, and return the stream's identifier. The type of the stream's
+        /// values is given by <see cref="Expression.ReturnType"/>.
         /// </summary>
+        /// <remarks>
+        /// Each update is evaluated within a single physics tick, so procedures that
+        /// pause execution and resume on a later tick cannot be used within the
+        /// expression. Calling one produces an error on the stream.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Messages.Stream AddExpressionStream (Expression expression, bool start = true)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            var expressionStream = new ExpressionStream (expression);
+            var core = Core.Instance;
+            var stream = new Messages.Stream (core.AddStream (CallContext.Client, expressionStream, false));
+            if (start)
+                core.StartStream (CallContext.Client, stream.Id);
+            return stream;
+        }
+
+        /// <summary>
+        /// Evaluate a server side expression once and return the value it
+        /// produces, encoded using the protocol buffer serialization scheme for
+        /// its return type. The whole evaluation happens within a single physics
+        /// tick. An expression that does not produce a value is evaluated for
+        /// its effects, and an empty result is returned.
+        /// </summary>
+        /// <remarks>
+        /// Procedures that pause execution and resume on a later tick cannot be
+        /// used within the expression.
+        /// </remarks>
+        [KRPCProcedure]
+        public static byte[] RunFunction (Expression expression)
+        {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            expression.CheckMarkersBound ();
+            var internalExpression = (LinqExpression)expression;
+            try {
+                if (internalExpression.Type == typeof (void)) {
+                    expression.Runner ();
+                    return new byte [0];
+                }
+                expression.GetValidReturnType ();
+                var value = expression.Evaluator ();
+                return Server.ProtocolBuffers.Encoder.Encode (value).ToByteArray ();
+            } catch (YieldException) {
+                throw new InvalidOperationException (Expression.YieldedMessage);
+            }
+        }
+
+        /// <summary>
+        /// Create an event from a server side expression.
+        /// The expression must evaluate to a boolean value.
+        /// </summary>
+        /// <remarks>
+        /// Each update is evaluated within a single physics tick, so procedures that
+        /// pause execution and resume on a later tick cannot be used within the
+        /// expression. Calling one produces an error on the event's stream.
+        /// </remarks>
         [KRPCProcedure]
         public static Messages.Event AddEvent(Expression expression)
         {
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            if (((LinqExpression)expression).Type != typeof(bool))
+                throw new ArgumentException ("The expression must evaluate to a boolean value");
+            expression.CheckMarkersBound ();
             var func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
             return new Event((evnt) => func()).Message;
         }

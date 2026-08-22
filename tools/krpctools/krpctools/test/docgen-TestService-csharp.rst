@@ -160,6 +160,18 @@
 
       :Game Scenes: All
 
+   .. method:: string DumpExpressionTree(KRPC.Expression expression)
+
+      Returns a dump of the expression tree of the given server side expression,
+      as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+      verify the trees that the expression API generates.
+
+      :parameters:
+
+
+
+      :Game Scenes: All
+
    .. method:: int EchoNullableInt(int value)
 
 

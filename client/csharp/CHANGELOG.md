@@ -1,4 +1,18 @@
 ## [v0.7.0] - unreleased
+- Add `Connection.CompileExpression`, which compiles a lambda taking no arguments into a
+  server side function that computes the same result on the server. Calls the lambda makes on
+  remote objects and services are evaluated on the server on every evaluation; everything else
+  is evaluated once, when the function is compiled. Operators, conditionals, casts,
+  `System.Math` methods, string concatenation, collection and tuple constructors, structure
+  construction and the LINQ operators are accepted; an unsupported construct throws
+  `ExpressionCompilationException`, naming it (#1069)
+- Add `Connection.RunFunction`, which runs a server side function on the server within a
+  single physics tick and returns the value it produces, with overloads for a function that
+  produces none, and `Connection.AddStream<T>` taking a server side function, which streams
+  the value one computes. `Connection.AddEvent` creates an event from one (#1069)
+- All three accept a lambda directly, compiling it first, and `Connection.AddStream` now
+  compiles any lambda that is not a single call or property access rather than rejecting it
+  (#521)
 - Support structure types, which a service defines as a compound value with named fields. One
   is generated as a `struct` carrying its fields as properties, with a constructor taking them
   in the order the structure declares them. It implements `IEquatable` and `IComparable` and

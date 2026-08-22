@@ -21,7 +21,10 @@ from ..utils import as_type
 
 class StubLanguage(PythonLanguage):
     """How a generated stub module names the types it uses: another service's through the module
-    its stubs are imported from, and its own service's directly."""
+    its stubs are imported from, and its own service's directly.
+
+    The module another service's stubs are imported from is aliased, so that a service whose name
+    is also that of a module the stubs use, such as KRPC, does not hide it."""
 
     def __init__(self, service):
         super().__init__()
@@ -31,7 +34,7 @@ class StubLanguage(PythonLanguage):
         if isinstance(typ, (ClassType, EnumerationType, StructType)):
             name = typ.protobuf_type.name
             if typ.protobuf_type.service != self.module:
-                name = typ.protobuf_type.service.lower() + "." + name
+                name = "_service_" + typ.protobuf_type.service.lower() + "." + name
             return name
         return super().parse_type(typ)
 

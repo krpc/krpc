@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- Add `krpc::run_function`, which runs a server side function on the server within a single
+  physics tick and returns the value it produces, and `krpc::add_expression_stream`, which
+  streams the value one computes. Both are given the type of the value as a template argument
+  (#1069)
+- Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
+  failing to compile. The decoder for such a type is generated into the service's own header,
+  which is included after the stream's, so the stream could not find it (#1069)
 - Support structure types, which a service defines as a compound value with named fields. One
   is generated as a `struct` carrying its fields as members, with a constructor taking them in
   the order the structure declares them, and equality, ordering and a `std::hash` over them,

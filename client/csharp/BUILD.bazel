@@ -52,6 +52,7 @@ srcs = glob(["src/**/*.cs"]) + [
     ":services-infernalrobotics",
     ":services-kerbalalarmclock",
     ":services-remotetech",
+    ":services-stdlib",
     ":services-ui",
     ":services-lidar",
     ":services-debug",
@@ -172,6 +173,13 @@ clientgen_csharp(
     out = "Services/UI.cs",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+)
+
+clientgen_csharp(
+    name = "services-stdlib",
+    out = "Services/StdLib.cs",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
 )
 
 clientgen_csharp(
@@ -317,6 +325,9 @@ csharp_nunit_test(
     srcs = [
         "test/ConnectionTest.cs",
         "test/EventTest.cs",
+        "test/ExpressionCompilerTest.cs",
+        "test/ExpressionStreamTest.cs",
+        "test/ExpressionTreeTest.cs",
         "test/ObjectTest.cs",
         "test/ServerTestCase.cs",
         "test/StreamTest.cs",

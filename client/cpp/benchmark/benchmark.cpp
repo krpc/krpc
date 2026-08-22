@@ -18,6 +18,9 @@
 #include <utility>
 #include <vector>
 
+// The generated TestService header names KRPC::Expression, whose type is declared here.
+#include <krpc/services/krpc.hpp>
+
 #include "services/test_service.hpp"
 
 namespace {

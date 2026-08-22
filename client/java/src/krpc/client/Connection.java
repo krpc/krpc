@@ -528,6 +528,90 @@ public class Connection implements AutoCloseable {
   }
 
   /**
+   * Create a stream from a server side expression. On each update, the value
+   * of the stream is the result of evaluating the expression on the server.
+   * The type parameter must correspond to the expression's return type,
+   * which is reported by the server.
+   *
+   * @param expression
+   *            The expression to evaluate on each stream update.
+   *
+   * @return A stream object.
+   */
+  public <T> Stream<T> addStream(krpc.client.services.KRPC.Expression expression)
+      throws StreamException, RPCException {
+    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
+    KRPC.Type returnType = expressionReturnType(expression);
+    if (returnType == null) {
+      throw new StreamException("The expression does not evaluate to a value");
+    }
+    KRPC.Stream stream = krpcService.addExpressionStream(expression, false);
+    return new Stream<T>(this, returnType, stream.getId());
+  }
+
+  /**
+   * Run a function on the server, within a single physics tick, and return
+   * the value it produces, or null for a function with no result. The type
+   * of the value is reported by the server.
+   *
+   * @param expression
+   *            The expression to evaluate.
+   *
+   * @return The value the expression evaluates to.
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T runFunction(krpc.client.services.KRPC.Expression expression)
+      throws RPCException {
+    krpc.client.services.KRPC krpcService = krpc.client.services.KRPC.newInstance(this);
+    byte[] data = krpcService.runFunction(expression);
+    KRPC.Type returnType = expressionReturnType(expression);
+    if (returnType == null) {
+      return null;
+    }
+    return (T) Encoder.decode(ByteString.copyFrom(data), returnType, this);
+  }
+
+  /**
+   * The protocol buffer type message describing the type of the values a server
+   * side expression evaluates to, by expression object identifier, and null for
+   * an expression that evaluates to no value at all. Introspecting a type is a
+   * round trip per property of every type it is built from, and an expression's
+   * return type does not change, so it is introspected once.
+   */
+  private final Map<Long, KRPC.Type> expressionReturnTypes = new HashMap<Long, KRPC.Type>();
+
+  private KRPC.Type expressionReturnType(krpc.client.services.KRPC.Expression expression)
+      throws RPCException {
+    synchronized (expressionReturnTypes) {
+      if (!expressionReturnTypes.containsKey(expression.id)) {
+        expressionReturnTypes.put(
+            expression.id,
+            expression.getHasReturnType() ? buildType(expression.getReturnType()) : null);
+      }
+      return expressionReturnTypes.get(expression.id);
+    }
+  }
+
+  /**
+   * Build the protocol buffer type message describing the type of the values
+   * a server side expression evaluates to, by introspecting its return type
+   * on the server.
+   */
+  private KRPC.Type buildType(krpc.client.services.KRPC.Type remoteType) throws RPCException {
+    KRPC.Type.Builder builder = KRPC.Type.newBuilder();
+    builder.setCode(KRPC.Type.TypeCode.forNumber(remoteType.getCode().getValue()));
+    String service = remoteType.getService();
+    if (!service.isEmpty()) {
+      builder.setService(service);
+      builder.setName(remoteType.getName());
+    }
+    for (krpc.client.services.KRPC.Type subType : remoteType.getTypes()) {
+      builder.addTypes(buildType(subType));
+    }
+    return builder.build();
+  }
+
+  /**
    * Get the procedure call message for a static method call.
    *
    * @param clazz

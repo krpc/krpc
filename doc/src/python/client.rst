@@ -193,6 +193,67 @@ expression returns true:
 
 .. literalinclude:: /scripts/client/python/Event.py
 
+Expression Streams
+------------------
+
+Expressions can also be used to stream the result of a computation from the server, by
+calling :meth:`krpc.client.Client.add_expression_stream`. Values are computed on the server on
+each stream update, so complex telemetry can be received without the round trip latency of
+multiple RPCs, and without the values changing between calls. The expression can evaluate to
+any type that can be sent to a client, including collections and objects. For example, the
+following streams the vessel's altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/python/ExpressionStream.py
+
+.. _python-client-compiling-expressions:
+
+Compiling Python Functions to Expressions
+-----------------------------------------
+
+Instead of building an expression from the factory methods directly, a python function or
+lambda that takes no arguments can be compiled into a server side expression using
+:meth:`krpc.client.Client.compile_expression`. :meth:`krpc.client.Client.add_event` and
+:meth:`krpc.client.Client.add_expression_stream` also accept functions directly:
+
+.. literalinclude:: /scripts/client/python/CompiledExpression.py
+
+The compiler translates the function's source code into an expression that computes the same
+result on the server:
+
+* Remote procedure calls made by the function — attribute accesses and method calls on remote
+  objects and services — become calls embedded in the expression, re-invoked on each
+  evaluation. This includes calls on the elements of collections inside comprehensions.
+* All other values — captured variables, literals, and any sub-expression that does not involve
+  the server — are evaluated once, when the expression is compiled, and embedded as constants.
+* Arithmetic and comparison operators (with python's true division semantics, and ``//`` as
+  floor division), bitwise operators, boolean operators, conditional expressions
+  (``a if condition else b``), assignment expressions (``:=``), tuple/list/set/dictionary
+  constructors, indexing, slices (without a step), f-strings (without format specifiers) and
+  ``in`` are translated to the corresponding expression operators. Note that ``and`` and
+  ``or`` do not short-circuit when evaluated on the server.
+* Comprehensions — including dictionary comprehensions and multiple ``for`` clauses — with
+  optional conditions, and the builtin functions ``len``, ``sum``, ``min``, ``max``, ``any``,
+  ``all``, ``sorted`` (with an optional ``key`` lambda), ``abs``, ``round``, ``int``,
+  ``float`` and ``str``, are translated to the server's operations. Calls to ``math`` module
+  functions with server side arguments are compiled to the ``StdLib`` service's procedures.
+* Reading an attribute of a structure a service defines reads that field of it on the server,
+  and calling the structure type — with its field values given by position, by field name, or
+  both — builds one there.
+* Local function definitions with annotated parameter types, and lambdas without parameters
+  assigned to names, compile to server side functions, and calls to them to invocations.
+* A plain function may contain statements: ``if``/``elif``/``else``, ``while`` and ``for``
+  loops with ``break`` and ``continue``, early returns, local variables — including mutation,
+  augmented assignment such as ``total += x``, appending to lists and sets, and assignment to
+  list and dictionary elements — assignment to the properties of remote objects and services,
+  and remote calls as statements for their effects. Local variables take their type from
+  their first assignment; annotate assignments of empty collections, for example
+  ``result: list[int] = []``. A function that returns a value must end with a return
+  statement.
+
+Anything else — ``try`` statements, string formatting, calls to client side functions with
+server side arguments — cannot run on the server, and raises
+:class:`krpc.error.ExpressionCompilationError` describing the unsupported construct.
+
 Client API Reference
 --------------------
 
@@ -260,6 +321,43 @@ Client API Reference
       server when it goes out of scope. The function to be streamed should be passed as *func*, and
       its arguments as *args* and *kwargs*.
 
+   .. method:: add_expression_stream(expression)
+
+      Create a stream that evaluates the given server side expression (a ``KRPC.Expression``
+      object) on each update and streams the value it evaluates to. The type of the stream's
+      values is reported by the server, from the expression's return type. Returns a
+      :class:`krpc.stream.Stream` object.
+
+   .. method:: expression_stream(expression)
+
+      Allows use of the ``with`` statement to create an expression stream and automatically
+      remove it from the server when it goes out of scope.
+
+   .. method:: compile_expression(func)
+
+      Compile a python function or lambda, taking no arguments, into a server side expression
+      (a ``KRPC.Expression`` object) that computes the same result on the server. Remote
+      procedure calls made by the function are re-invoked on each evaluation of the
+      expression; other values are captured when the expression is compiled. Raises
+      :class:`krpc.error.ExpressionCompilationError` for constructs that cannot run on the
+      server.
+
+   .. method:: add_event(expression)
+
+      Create an event from a server side expression, that must evaluate to a boolean value.
+      The expression may also be given as a python function or lambda taking no arguments,
+      which is compiled using :meth:`compile_expression`. Returns a
+      :class:`krpc.event.Event` object.
+
+   .. method:: run_function(function)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces, or ``None`` for a function with no result. The function may be given as a
+      ``KRPC.Expression`` object, or as a python function or lambda taking no arguments,
+      which is compiled using :meth:`compile_expression`. This is the intended way to use
+      functions with side effects, which would otherwise re-run on every update of an event
+      or stream.
+
    .. attribute:: stream_update_condition
 
       A condition variable (of type ``threading.Condition``) that is notified whenever a stream
@@ -313,6 +411,12 @@ Client API Reference
 
       Some of this functionality is used internally by the python client (for example to create and
       remove streams) and therefore does not need to be used directly from application code.
+
+.. class:: krpc.error.ExpressionCompilationError
+
+   Raised when a python function cannot be compiled into a server side expression. The error
+   message describes the unsupported construct. See
+   :ref:`python-client-compiling-expressions`.
 
 .. class:: krpc.stream.Stream
 

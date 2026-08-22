@@ -1,4 +1,19 @@
 ## [v0.7.0] - unreleased
+- Add `Client.compile_expression`, which compiles a python function or lambda taking no
+  arguments into a server side function that computes the same result on the server. Calls the
+  function makes on remote objects and services are evaluated on the server on every
+  evaluation; everything else is evaluated once, when the function is compiled. Most of the
+  language is accepted: operators, comparisons, conditionals, comprehensions, f-strings,
+  slices, the builtins, `math` module calls, and, for a function with a body, `if`, `while`,
+  `for` with `break` and `continue`, local variables, assignment to remote properties and
+  early `return`. An unsupported construct raises `ExpressionCompilationError`, naming it
+  (#1069)
+- Add `Client.run_function`, which runs a server side function on the server within a single
+  physics tick and returns the value it produces, and `Client.add_expression_stream` and the
+  `Client.expression_stream` context manager, which stream the value one computes. Both decode
+  the value using the type the server reports for the function. `Client.add_event` creates an
+  event from one (#1069)
+- All four accept a python function or lambda directly, compiling it first (#1069)
 - Support structure types, which a service defines as a compound value with named fields. A
   value of one is a named tuple, so its fields can be read by name and it is also the tuple of
   their values; a tuple or list with one element per field is accepted where one is expected.

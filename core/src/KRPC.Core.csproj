@@ -120,6 +120,7 @@
     <Compile Include="Service\DocumentationUtils.cs" />
     <Compile Include="Service\Event.cs" />
     <Compile Include="Service\EventStream.cs" />
+    <Compile Include="Service\ExpressionStream.cs" />
     <Compile Include="Service\GameScene.cs" />
     <Compile Include="Service\GameState.cs" />
     <Compile Include="Service\IProcedureHandler.cs" />
@@ -127,11 +128,13 @@
     <Compile Include="Service\KRPC\ArgumentNullException.cs" />
     <Compile Include="Service\KRPC\ArgumentOutOfRangeException.cs" />
     <Compile Include="Service\KRPC\Expression.cs" />
+    <Compile Include="Service\KRPC\ExpressionTreePrinter.cs" />
     <Compile Include="Service\KRPC\GameScene.cs" />
     <Compile Include="Service\KRPC\InvalidOperationException.cs" />
     <Compile Include="Service\KRPC\KRPC.cs" />
     <Compile Include="Service\KRPC\ObjectDestroyedException.cs" />
     <Compile Include="Service\KRPC\Type.cs" />
+    <Compile Include="Service\KRPC\TypeCode.cs" />
     <Compile Include="Service\Messages\Argument.cs" />
     <Compile Include="Service\Messages\Class.cs" />
     <Compile Include="Service\Messages\Enumeration.cs" />
@@ -174,6 +177,7 @@
     <Compile Include="Service\Scanner\StructSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Services.cs" />
+    <Compile Include="Service\StdLib\StdLib.cs" />
     <Compile Include="Service\Stream.cs" />
     <Compile Include="Service\StreamContinuation.cs" />
     <Compile Include="Service\TypeUtils.cs" />
