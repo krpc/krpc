@@ -42,6 +42,7 @@
     <Compile Include="CoreTest.cs" />
     <Compile Include="ScriptedClient.cs" />
     <Compile Include="TickHoldTest.cs" />
+    <Compile Include="UpdateEventsTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
     <Compile Include="Server\HTTP\RequestTest.cs" />
     <Compile Include="Server\HTTP\ResponseTest.cs" />

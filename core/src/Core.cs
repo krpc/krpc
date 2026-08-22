@@ -95,6 +95,17 @@ namespace KRPC
         /// </summary>
         public event EventHandler<ClientDisconnectedEventArgs> OnClientDisconnected;
 
+        /// <summary>
+        /// Event triggered at the start of an update, before it executes any calls.
+        /// </summary>
+        public event EventHandler OnBeforeCalls;
+
+        /// <summary>
+        /// Event triggered once an update has executed the calls it received, before it
+        /// produces stream updates.
+        /// </summary>
+        public event EventHandler OnAfterCalls;
+
         internal void RPCClientConnected (IClient<Request,Response> client)
         {
             rpcClients [client.Guid] = client;
@@ -382,7 +393,13 @@ namespace KRPC
             ulong startBytesRead = BytesRead;
             ulong startBytesWritten = BytesWritten;
 
+            // The events bracket the call phase rather than being raised from inside it, so that
+            // they are raised exactly once per update whatever the update does: the poll loop
+            // runs many times over while a client holds the tick. Raising OnAfterCalls before
+            // the stream update also means streams observe whatever the handlers did.
+            EventHandlerExtensions.Invoke (OnBeforeCalls, this);
             RPCServerUpdate ();
+            EventHandlerExtensions.Invoke (OnAfterCalls, this);
             StreamServerUpdate ();
 
             var timeElapsed = updateTimer.ElapsedSeconds ();
