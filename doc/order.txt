@@ -9,6 +9,8 @@ KRPC.RemoveStream
 KRPC.StartStream
 KRPC.SetStreamRate
 KRPC.AddEvent
+KRPC.HoldTick
+KRPC.ReleaseTick
 KRPC.GameScene
 KRPC.GameScene.SpaceCenter
 KRPC.GameScene.Flight

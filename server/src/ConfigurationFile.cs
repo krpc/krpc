@@ -78,6 +78,10 @@ namespace KRPC
         [Persistent] bool adaptiveRateControl;
         [Persistent] bool blockingRecv;
         [Persistent] uint recvTimeout;
+        // Defaulted here as well as in Configuration, since a settings file written before this
+        // setting existed has nothing to load into it, and a zero timeout would end every hold
+        // the moment it was taken.
+        [Persistent] uint tickHoldTimeout = 1000000;
 
         public ConfigurationFile (string filePath, Configuration configuration) : base (filePath, "KRPCConfiguration")
         {
@@ -109,6 +113,7 @@ namespace KRPC
             adaptiveRateControl = Configuration.AdaptiveRateControl;
             blockingRecv = Configuration.BlockingRecv;
             recvTimeout = Configuration.RecvTimeout;
+            tickHoldTimeout = Configuration.TickHoldTimeout;
 
         }
 
@@ -142,6 +147,7 @@ namespace KRPC
             Configuration.AdaptiveRateControl = adaptiveRateControl;
             Configuration.BlockingRecv = blockingRecv;
             Configuration.RecvTimeout = recvTimeout;
+            Configuration.TickHoldTimeout = tickHoldTimeout;
             Logger.WriteLine ("Loaded configuration", Logger.Severity.Debug);
         }
     }

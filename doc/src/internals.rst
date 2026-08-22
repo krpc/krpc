@@ -55,3 +55,65 @@ that the maximum time per update setting (above) is still observed.
 This behavior is enabled by the **blocking receives** option. **Receive
 timeout** sets the maximum amount of time the server will wait for a new RPC
 from a client.
+
+The receive timeout decides how much work a client may do between calls before
+it stops being waited for. A client that takes longer than the timeout to send
+its next call is not waiting when the server looks, so the server returns from
+the FixedUpdate and that call is executed in the next one: the client is served
+one RPC per update, however many it makes. The default timeout is one
+millisecond, which is easy for a program written in Python or Lua to exceed.
+
+Holding a tick
+--------------
+
+A control loop reads the game state, computes with it and writes the result
+back, and the computing happens between the calls. Once it takes longer than the
+receive timeout, every call in an iteration costs a whole update: an iteration of
+five calls takes five of them, and the values written were computed from a state
+five updates old.
+
+The ``HoldTick`` procedure holds the game on its current physics tick, and
+``ReleaseTick`` lets it move on. Every call made in between is executed
+before the game advances, so the reads, the computing and the writes all happen
+in the state of a single tick:
+
+.. code-block:: python
+
+   while True:
+       conn.krpc.hold_tick()
+       try:
+           pitch = vessel.flight().pitch
+           vessel.control.pitch = control_law(pitch)
+       finally:
+           conn.krpc.release_tick()
+
+Releasing the tick even when the code in between fails, as the ``finally`` above
+does, matters: until the hold is released the game is waiting, and a program that
+leaves one behind stops the game until the hold times out.
+
+What this costs is real time. The game renders no frame, takes no input and runs
+no physics while the tick is held, so a hold of five milliseconds costs five
+milliseconds of every update it happens in, and a hold of a hundred leaves the
+game running at about ten frames a second. What it does not cost is the
+simulation: physics runs on a fixed time step, so a game whose ticks are held
+simply runs slower than real time rather than differently. For a control loop
+that is usually the right trade, and for anything else it is not.
+
+The rest of the behavior worth knowing:
+
+* **Tick hold timeout** sets how long a client may hold a tick before the server
+  takes it back, one second by default. A hold also ends if the client
+  disconnects.
+* Only one client can hold the tick at a time, and only a client making a call
+  can hold it. Both a second client's attempt and a hold attempted from a stream
+  or an event are refused.
+* The maximum time per update and one RPC per update settings do not apply while
+  a tick is held, and an update that held one is not counted by adaptive rate
+  control.
+* Streams do not update while a tick is held, since the server sends stream
+  updates after it has finished executing calls. Read with calls inside a hold
+  rather than from streams, and do not wait for a stream or an event, which
+  cannot arrive until the hold has ended.
+* Calling a procedure that takes more than one tick to finish, such as staging
+  or warping, ends the hold: such a call can only finish in the tick that the
+  hold is holding back.

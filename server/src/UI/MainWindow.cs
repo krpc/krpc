@@ -33,6 +33,7 @@ namespace KRPC.UI
         bool showAdvancedServerOptions;
         string maxTimePerUpdate;
         string recvTimeout;
+        string tickHoldTimeout;
         // Style settings
         internal readonly Color errorColor = Color.yellow;
         internal GUIStyle labelStyle, stretchyLabelStyle, fixedLabelStyle, textFieldStyle, longTextFieldStyle, stretchyTextFieldStyle,
@@ -46,6 +47,7 @@ namespace KRPC.UI
         float scaledIndentWidth;
         const int maxTimePerUpdateMaxLength = 20;
         const int recvTimeoutMaxLength = 20;
+        const int tickHoldTimeoutMaxLength = 20;
         // Text strings
         const string advancedModeText = "Show advanced settings";
         const string startAllServersText = "Start server";
@@ -76,6 +78,7 @@ namespace KRPC.UI
         const string adaptiveRateControlText = "Adaptive rate control";
         const string blockingRecvText = "Blocking receives";
         const string recvTimeoutText = "Receive timeout";
+        const string tickHoldTimeoutText = "Tick hold timeout";
         const string microsecondsUnitText = "us";
         const string debugLoggingText = "Debug logging";
         const string showInfoWindowText = "Show info";
@@ -145,6 +148,7 @@ namespace KRPC.UI
             Errors = new List<string> ();
             maxTimePerUpdate = config.Configuration.MaxTimePerUpdate.ToString ();
             recvTimeout = config.Configuration.RecvTimeout.ToString ();
+            tickHoldTimeout = config.Configuration.TickHoldTimeout.ToString ();
 
             if (core.Servers.Count == 1)
                 expandServers.Add (core.Servers [0].Id);
@@ -458,6 +462,11 @@ namespace KRPC.UI
 
                 GUILayout.BeginHorizontal ();
                 GUILayout.Space (scaledIndentWidth);
+                DrawTickHoldTimeout ();
+                GUILayout.EndHorizontal ();
+
+                GUILayout.BeginHorizontal ();
+                GUILayout.Space (scaledIndentWidth);
                 DrawDebugLogging ();
                 GUILayout.EndHorizontal ();
             }
@@ -549,6 +558,23 @@ namespace KRPC.UI
             if (blockingRecv != config.Configuration.BlockingRecv) {
                 config.Configuration.BlockingRecv = blockingRecv;
                 config.Save ();
+            }
+        }
+
+        void DrawTickHoldTimeout ()
+        {
+            GUILayout.Label (tickHoldTimeoutText, fixedLabelStyle);
+            uint value;
+            bool valid = uint.TryParse (tickHoldTimeout, out value);
+            var newTickHoldTimeout = GUILayoutExtensions.FilterDigits (
+                GUILayoutExtensions.ValidatedTextField (tickHoldTimeout, tickHoldTimeoutMaxLength, longTextFieldStyle, valid, errorColor));
+            GUILayout.Label (microsecondsUnitText, labelStyle);
+            if (newTickHoldTimeout != tickHoldTimeout) {
+                tickHoldTimeout = newTickHoldTimeout;
+                if (uint.TryParse (tickHoldTimeout, out value)) {
+                    config.Configuration.TickHoldTimeout = value;
+                    config.Save ();
+                }
             }
         }
 
