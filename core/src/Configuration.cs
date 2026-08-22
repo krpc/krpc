@@ -47,6 +47,7 @@ namespace KRPC
             AdaptiveRateControl = true;
             BlockingRecv = true;
             RecvTimeout = 1000;
+            TickHoldTimeout = 1000000;
         }
 
         /// <summary>
@@ -257,6 +258,12 @@ namespace KRPC
         /// Timeout when waiting for data from a client
         /// </summary>
         public uint RecvTimeout { get; set; }
+
+        /// <summary>
+        /// How long a client may hold the game on one frame before the server takes the
+        /// frame back
+        /// </summary>
+        public uint TickHoldTimeout { get; set; }
 
         /// <summary>
         /// Whether debug logging is enable
