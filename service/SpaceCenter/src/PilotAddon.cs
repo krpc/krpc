@@ -260,10 +260,6 @@ namespace KRPC.SpaceCenter
         /// </summary>
         static bool clearedManualInputs;
         /// <summary>
-        /// Control inputs that have been set by the auto-pilot.
-        /// </summary>
-        static IDictionary<Vessel, ControlInputs> autoPilotInputs = new Dictionary<Vessel, ControlInputs> ();
-        /// <summary>
         /// FlyByWire callbacks for vessels.
         /// </summary>
         static IDictionary<Vessel, Action<FlightCtrlState>> controlDelegates = new Dictionary<Vessel, Action<FlightCtrlState>> ();
@@ -279,6 +275,11 @@ namespace KRPC.SpaceCenter
         /// however many AutoPilot objects come and go.
         /// </summary>
         static IDictionary<Guid, AttitudeController> attitudeControllers = new Dictionary<Guid, AttitudeController> ();
+        /// <summary>
+        /// The same controllers as a list, so that the per-tick loop can walk them without
+        /// allocating an enumerator over the dictionary every tick.
+        /// </summary>
+        static List<AttitudeController> controllers = new List<AttitudeController> ();
 
         /// <summary>
         /// Wake the addon
@@ -287,6 +288,8 @@ namespace KRPC.SpaceCenter
         {
             Clear ();
             GameEvents.onVesselDestroy.Add (OnVesselDestroy);
+            Core.Instance.OnBeforeCalls += RunBeforeCalls;
+            Core.Instance.OnAfterCalls += RunAfterCalls;
         }
 
         /// <summary>
@@ -294,8 +297,39 @@ namespace KRPC.SpaceCenter
         /// </summary>
         public void OnDestroy ()
         {
+            Core.Instance.OnBeforeCalls -= RunBeforeCalls;
+            Core.Instance.OnAfterCalls -= RunAfterCalls;
             GameEvents.onVesselDestroy.Remove (OnVesselDestroy);
             Clear ();
+        }
+
+        static void RunBeforeCalls (object sender, EventArgs args)
+        {
+            StepControllers (Services.AutoPilotUpdateMode.BeforeCalls);
+        }
+
+        static void RunAfterCalls (object sender, EventArgs args)
+        {
+            StepControllers (Services.AutoPilotUpdateMode.AfterCalls);
+        }
+
+        /// <summary>
+        /// Run the control loop of every auto-pilot set to run at this point in the update.
+        /// One failing vessel must not stop the others, nor the server: these run from a Core
+        /// event, so an exception here would escape into the server's update.
+        /// </summary>
+        static void StepControllers (Services.AutoPilotUpdateMode mode)
+        {
+            for (int i = 0; i < controllers.Count; i++) {
+                if (controllers [i].UpdateMode != mode)
+                    continue;
+                try {
+                    controllers [i].Step ();
+                } catch (Exception exn) {
+                    KRPC.Utils.Logger.WriteLine (
+                        "Auto-pilot failed: " + exn, KRPC.Utils.Logger.Severity.Error);
+                }
+            }
         }
 
         static void Clear ()
@@ -303,10 +337,10 @@ namespace KRPC.SpaceCenter
             currentInputs.Clear ();
             manualInputs.Clear ();
             manualInputClients.Clear ();
-            autoPilotInputs.Clear ();
             controlDelegates.Clear ();
             remoteTechSanctionedDelegates.Clear ();
             attitudeControllers.Clear ();
+            controllers.Clear ();
         }
 
         /// <summary>
@@ -331,8 +365,11 @@ namespace KRPC.SpaceCenter
             remoteTechSanctionedDelegates.Remove (vessel);
             currentInputs.Remove (vessel);
             manualInputs.Remove (vessel);
-            autoPilotInputs.Remove (vessel);
-            attitudeControllers.Remove (vessel.id);
+            AttitudeController controller;
+            if (attitudeControllers.TryGetValue (vessel.id, out controller)) {
+                controllers.Remove (controller);
+                attitudeControllers.Remove (vessel.id);
+            }
         }
 
         /// <summary>
@@ -344,6 +381,7 @@ namespace KRPC.SpaceCenter
             if (!attitudeControllers.TryGetValue (vessel.id, out controller)) {
                 controller = new AttitudeController (vessel);
                 attitudeControllers [vessel.id] = controller;
+                controllers.Add (controller);
             }
             return controller;
         }
@@ -429,12 +467,16 @@ namespace KRPC.SpaceCenter
             HandleThrottle (vessel, manualInputs [vessel]);
             inputs.Add (manualInputs [vessel]);
 
-            // Auto-pilot inputs
-            if (!autoPilotInputs.ContainsKey (vessel))
-                autoPilotInputs [vessel] = new ControlInputs (vessel);
+            // Auto-pilot inputs. The control loop itself runs at the point in the server's
+            // update that the vessel's update mode selects; this applies whatever it last
+            // produced. With no server running nothing else drives it, so it runs here.
             var attitudeController = FindAttitudeController (vessel.id);
-            if (attitudeController != null && attitudeController.Fly (autoPilotInputs [vessel]))
-                inputs.Add (autoPilotInputs [vessel]);
+            if (attitudeController != null) {
+                if (!Core.Instance.AnyRunning)
+                    attitudeController.Step ();
+                if (attitudeController.OutputValid)
+                    inputs.Add (attitudeController.Output);
+            }
 
             // Apply the merged custom axes to the vessel's axis groups
             inputs.ApplyCustomAxes ();

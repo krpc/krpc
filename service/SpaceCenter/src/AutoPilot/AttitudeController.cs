@@ -8,8 +8,8 @@ namespace KRPC.SpaceCenter.AutoPilot
 {
     /// <summary>
     /// Controller to hold a vessels attitude in a chosen orientation.
-    /// One per vessel, owned by <see cref="PilotAddon"/> and driven by it every physics tick via
-    /// <see cref="Fly"/>; the <see cref="Services.AutoPilot"/> API objects are transient views
+    /// One per vessel, owned by <see cref="PilotAddon"/> and driven by it once per physics tick
+    /// via <see cref="Step"/>; the <see cref="Services.AutoPilot"/> API objects are transient views
     /// onto it. Engagement is controller state: which client (if any) currently has the
     /// auto-pilot flying the vessel.
     ///
@@ -38,6 +38,17 @@ namespace KRPC.SpaceCenter.AutoPilot
         // game), used to auto-disengage when that client disconnects.
         bool engaged;
         IClient engagedClient;
+        // The fixed time the control loop last ran at, NaN until it has run. Ticks are
+        // identified by Time.fixedTime rather than counted, because it is the same value for
+        // every script in a physics tick however they are ordered, and does not advance while
+        // the game is paused.
+        float lastStepFixedTime = float.NaN;
+        // How long the last output stays usable. The loop runs once per tick, but the tick it is
+        // applied in is not always the tick it ran in, and a program driving it by hand may miss
+        // one; holding the last command over a short gap is smoother than dropping to zero.
+        // Past this the command is stale and the auto-pilot contributes nothing, so a program
+        // that stops driving it cannot leave a deflection latched on the vessel.
+        const float OutputHoldTime = 0.1f;
         public readonly PIDController PitchPID = new PIDController ();
         public readonly PIDController RollPID = new PIDController ();
         public readonly PIDController YawPID = new PIDController ();
@@ -254,6 +265,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         public AttitudeController (Vessel vessel)
         {
             this.vessel = new Services.Vessel (vessel);
+            Output = new PilotAddon.ControlInputs (vessel);
             Reset ();
         }
 
@@ -460,6 +472,8 @@ namespace KRPC.SpaceCenter.AutoPilot
         public double RollEngageAngle { get; set; }
 
         public bool AutoTune { get; set; }
+
+        public Services.AutoPilotUpdateMode UpdateMode { get; set; }
 
         public Services.RateFilterMode PitchYawRateFilterMode {
             get { return pitchYawRateFilterMode; }
@@ -684,6 +698,7 @@ namespace KRPC.SpaceCenter.AutoPilot
         {
             engaged = false;
             engagedClient = null;
+            lastStepFixedTime = float.NaN;
         }
 
         /// <summary>
@@ -706,6 +721,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             RollStartAngle = 20.0;
             RollEngageAngle = 15.0;
             AutoTune = true;
+            UpdateMode = Services.AutoPilotUpdateMode.AfterCalls;
             pitchYawRateFilterMode = Services.RateFilterMode.Automatic;
             rollRateFilterMode = Services.RateFilterMode.Automatic;
             pitchYawOscillationFrequency = DefaultOscillationFrequency;
@@ -769,23 +785,41 @@ namespace KRPC.SpaceCenter.AutoPilot
 
 
         /// <summary>
-        /// Run one tick of the auto-pilot, writing the control outputs to
-        /// <paramref name="state"/>. Called by <see cref="PilotAddon"/> for every vessel every
-        /// physics tick; does nothing and returns false while not engaged. If the client that
-        /// engaged the auto-pilot has disconnected, disengages instead.
+        /// The control outputs the last <see cref="Step"/> produced. Held here rather than
+        /// written into the vessel's flight control state directly, because the tick the loop
+        /// runs in is chosen by <see cref="UpdateMode"/> while the point the game takes control
+        /// inputs at is fixed, so the two are separate steps.
         /// </summary>
-        public bool Fly (PilotAddon.ControlInputs state)
+        public PilotAddon.ControlInputs Output { get; private set; }
+
+        /// <summary>
+        /// Whether <see cref="Output"/> is recent enough to fly the vessel with.
+        /// </summary>
+        public bool OutputValid {
+            get { return engaged && Time.fixedTime - lastStepFixedTime <= OutputHoldTime; }
+        }
+
+        /// <summary>
+        /// Run one tick of the control loop, writing its result to <see cref="Output"/>. Does
+        /// nothing while not engaged, or when it has already run on this physics tick. If the
+        /// client that engaged the auto-pilot has disconnected, disengages instead.
+        /// </summary>
+        public void Step ()
         {
             if (!engaged)
-                return false;
+                return;
             if (engagedClient != null && !engagedClient.Connected) {
                 Disengage ();
-                return false;
+                return;
             }
+            // The loop's numerics assume one step per physics tick: the integrators, the rate
+            // filters and the oscillation detectors all advance by a fixed dt.
+            if (lastStepFixedTime == Time.fixedTime)
+                return;
+            lastStepFixedTime = Time.fixedTime;
             // The auto-pilot fights stock SAS, so hold it off while engaged.
             vessel.InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
-            Update (state);
-            return true;
+            Update (Output);
         }
 
         void Update (PilotAddon.ControlInputs state)

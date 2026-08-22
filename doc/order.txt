@@ -1339,6 +1339,8 @@ SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode
 SpaceCenter.AutoPilot.Engaged
+SpaceCenter.AutoPilot.UpdateMode
+SpaceCenter.AutoPilot.Update
 SpaceCenter.AutoPilot.ShowInfoUI
 SpaceCenter.AutoPilot.Reset
 SpaceCenter.AutoPilot.ReferenceFrame
@@ -1399,6 +1401,10 @@ SpaceCenter.AutoPilot.PitchYawOscillationDetectedFrequency
 SpaceCenter.AutoPilot.RollOscillationDetectedFrequency
 SpaceCenter.AutoPilot.DiagnosticLogging
 SpaceCenter.AutoPilot.DiagnosticLog
+SpaceCenter.AutoPilotUpdateMode
+SpaceCenter.AutoPilotUpdateMode.AfterCalls
+SpaceCenter.AutoPilotUpdateMode.BeforeCalls
+SpaceCenter.AutoPilotUpdateMode.Manual
 SpaceCenter.RateFilterMode
 SpaceCenter.RateFilterMode.Automatic
 SpaceCenter.RateFilterMode.Off

@@ -162,6 +162,43 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
+        /// When the auto-pilot's control loop runs within a server update, relative to the
+        /// calls the update executes. Defaults to
+        /// <see cref="AutoPilotUpdateMode.AfterCalls"/>.
+        /// </summary>
+        /// <remarks>
+        /// The loop runs once per physics tick; this chooses where in the tick that is.
+        /// Together with <c>KRPC.HoldTick</c> it lets a program place the loop exactly within
+        /// its own read, compute and write. When no server is running the loop runs at the
+        /// point the game takes control inputs at, whatever the mode, so a vessel is never left
+        /// without control input.
+        /// </remarks>
+        [KRPCProperty]
+        public AutoPilotUpdateMode UpdateMode {
+            get { return Controller.UpdateMode; }
+            set { Controller.UpdateMode = value; }
+        }
+
+        /// <summary>
+        /// Run one tick of the auto-pilot's control loop now. Does nothing if it has already run
+        /// on this physics tick. Throws an exception if the auto-pilot is not engaged.
+        /// </summary>
+        /// <remarks>
+        /// For <see cref="AutoPilotUpdateMode.Manual"/>, where the loop runs only when this is
+        /// called. In the other modes this runs it early; either way it runs once per tick. On a
+        /// tick it is not called for, the vessel keeps the control output of the last tick it did
+        /// run on, and after a tenth of a second of that the auto-pilot stops contributing any
+        /// control input at all.
+        /// </remarks>
+        [KRPCMethod]
+        public void Update ()
+        {
+            if (!Engaged)
+                throw new InvalidOperationException ("The auto-pilot is not engaged");
+            Controller.Step ();
+        }
+
+        /// <summary>
         /// Whether an in-game window showing the auto-pilot's state (engagement, attitude error,
         /// target, angular rate, inner-loop PID gains and oscillation suppression) is displayed for
         /// this vessel. Defaults to <c>false</c>. This is a debugging aid; the window is reset to
@@ -470,6 +507,12 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Wait (double timeout = -1)
         {
+            // Waiting takes more than one tick and the caller is blocked in this call for all of
+            // them, so it cannot run the loop itself and the vessel would never converge.
+            if (Controller.UpdateMode == AutoPilotUpdateMode.Manual)
+                throw new InvalidOperationException (
+                    "The auto-pilot only flies the vessel on the ticks it is updated on, " +
+                    "so it cannot be waited on");
             var deadline = timeout >= 0 ? DateTime.UtcNow + TimeSpan.FromSeconds (timeout) : DateTime.MaxValue;
             WaitWithDeadline (deadline);
         }
