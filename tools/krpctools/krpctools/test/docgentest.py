@@ -62,6 +62,11 @@ class DocGenTestCase:
                 "{{ macros.enumeration(services['%s'].enumerations['%s']) }}"
                 % (service_name, enm)
             )
+        for struct in defs[service_name].get("structs", {}).keys():
+            rst_content.append(
+                "{{ macros.struct(services['%s'].structs['%s']) }}"
+                % (service_name, struct)
+            )
         for exn in defs[service_name]["exceptions"].keys():
             rst_content.append(
                 "{{ macros.exception(services['%s'].exceptions['%s']) }}"

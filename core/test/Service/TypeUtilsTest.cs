@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using KRPC.Service;
+using KRPC.Service.Attributes;
 using KRPC.Service.Messages;
 using NUnit.Framework;
 using Newtonsoft.Json;
@@ -41,6 +43,9 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IList<IDictionary<int,string>>))]
         [TestCase (typeof(IList<TestService.TestClass>))]
         [TestCase (typeof(IList<TestService.TestEnum>))]
+        [TestCase (typeof(TestService.TestStruct))]
+        [TestCase (typeof(TestService.TestNestedStruct))]
+        [TestCase (typeof(IList<TestService.TestStruct>))]
         public void IsAValidType (Type type)
         {
             Assert.IsTrue (TypeUtils.IsAValidType (type));
@@ -52,6 +57,8 @@ namespace KRPC.Test.Service
         [TestCase (typeof(IDictionary<TestService.TestClass,string>))]
         [TestCase (typeof(IList<TestService.TestEnumWithoutAttribute>))]
         [TestCase (typeof(IEnumerable<string>))]
+        [TestCase (typeof(StructWithoutFields))]
+        [TestCase (typeof(IList<StructWithoutFields>))]
         public void IsNotAValidType (Type type)
         {
             Assert.IsFalse (TypeUtils.IsAValidType (type));
@@ -343,6 +350,109 @@ namespace KRPC.Test.Service
             Assert.AreEqual (name, TypeUtils.GetEnumServiceName (type));
         }
 
+        [TestCase (typeof(TestService.TestStruct))]
+        [TestCase (typeof(TestService.TestNestedStruct))]
+        public void IsAStructType (Type type)
+        {
+            Assert.IsTrue (TypeUtils.IsAStructType (type));
+        }
+
+        [TestCase (typeof(string))]
+        [TestCase (typeof(long))]
+        [TestCase (typeof(Status))]
+        [TestCase (typeof(TestService.TestClass))]
+        [TestCase (typeof(TestService.TestEnum))]
+        [TestCase (typeof(StructWithoutFields))]
+        [TestCase (typeof(IList<TestService.TestStruct>))]
+        public void IsNotAStructType (Type type)
+        {
+            Assert.IsFalse (TypeUtils.IsAStructType (type));
+        }
+
+        [TestCase (typeof(TestService.TestStruct), "TestService")]
+        [TestCase (typeof(TestService.TestNestedStruct), "TestService")]
+        public void GetStructServiceName (Type type, string name)
+        {
+            Assert.AreEqual (name, TypeUtils.GetStructServiceName (type));
+        }
+
+        [Test]
+        public void GetStructFields ()
+        {
+            CollectionAssert.AreEqual (
+                new [] { "IntField", "StringField", "EnumField", "ObjectField", "ListField" },
+                TypeUtils.GetStructFields (typeof(TestService.TestStruct)).Select (x => x.Name).ToList ());
+            CollectionAssert.AreEqual (
+                new [] { "StructField", "IntField" },
+                TypeUtils.GetStructFields (typeof(TestService.TestNestedStruct)).Select (x => x.Name).ToList ());
+        }
+
+        [TestCase (typeof(TestService.TestStruct))]
+        [TestCase (typeof(TestService.TestNestedStruct))]
+        public void ValidKRPCStruct (Type type)
+        {
+            Assert.DoesNotThrow (() => TypeUtils.ValidateKRPCStruct (type));
+        }
+
+        [Test]
+        public void ValidateKRPCStructWithoutTheAttribute ()
+        {
+            Assert.Throws<ArgumentException> (
+                () => TypeUtils.ValidateKRPCStruct (typeof(StructWithoutFields)));
+        }
+
+        // Structures whose fields break one of the rules. They do not carry the KRPCStruct
+        // attribute, as the scanner finds every type that does and would report them for every
+        // test in this assembly rather than only here.
+
+        public struct StructWithoutFields
+        {
+            public int NotAField { get; set; }
+        }
+
+        public struct StructWithAnInvalidFieldType
+        {
+            [KRPCProperty]
+            public TestService.TestEnumWithoutAttribute Field { get; set; }
+        }
+
+        public struct StructWithAFieldWithoutASetter
+        {
+            [KRPCProperty]
+            public int Field {
+                get { return 0; }
+            }
+        }
+
+        public struct StructWithANullableField
+        {
+            [KRPCProperty (Nullable = true)]
+            public TestService.TestClass Field { get; set; }
+        }
+
+        public struct StructWithAGameSceneField
+        {
+            [KRPCProperty (GameScene = GameScene.Flight)]
+            public int Field { get; set; }
+        }
+
+        [TestCase (typeof(StructWithoutFields))]
+        [TestCase (typeof(StructWithAnInvalidFieldType))]
+        [TestCase (typeof(StructWithAFieldWithoutASetter))]
+        [TestCase (typeof(StructWithANullableField))]
+        [TestCase (typeof(StructWithAGameSceneField))]
+        public void InvalidStructFields (Type type)
+        {
+            Assert.Throws<ServiceException> (() => TypeUtils.ValidateStructFields (type));
+        }
+
+        [TestCase (typeof(TestService.TestStruct))]
+        [TestCase (typeof(TestService.TestNestedStruct))]
+        public void ValidStructFields (Type type)
+        {
+            Assert.DoesNotThrow (() => TypeUtils.ValidateStructFields (type));
+        }
+
         [TestCase ("IdentifierName")]
         [TestCase ("Foo123")]
         public void ValidIdentifier (string identifier)
@@ -386,6 +496,11 @@ namespace KRPC.Test.Service
         [TestCase ("{\"code\":\"LIST\",\"types\":[" +
                    "{\"code\":\"ENUMERATION\",\"service\":\"TestService\",\"name\":\"TestEnum\"}" +
                    "]}", typeof(IList<TestService.TestEnum>))]
+        [TestCase ("{\"code\":\"STRUCT\",\"service\":\"TestService\",\"name\":\"TestStruct\"}",
+                   typeof(TestService.TestStruct))]
+        [TestCase ("{\"code\":\"LIST\",\"types\":[" +
+                   "{\"code\":\"STRUCT\",\"service\":\"TestService\",\"name\":\"TestStruct\"}" +
+                   "]}", typeof(IList<TestService.TestStruct>))]
         public void SerializeType (string name, Type type)
         {
             Assert.AreEqual (name, JsonConvert.SerializeObject (TypeUtils.SerializeType (type)));

@@ -325,10 +325,16 @@ What each one measures:
    `TestServer`. Measuring a client means timing it from inside that client, so each is its own
    program in its own language, printing results for `run_client.py` to turn into the usual table.
 
-   `:cnano` measures the client built for TCP/IP rather than for the serial port it is usually
+   Every case is measured over both transports a client can reach a server on, TCP/IP and a unix
+   domain socket, and the report has a block per transport: which one carries a call is part of
+   what the call costs.
+
+   `:cnano` measures the client built for a socket rather than for the serial port it is usually
    built for. The server reads a serial port on a poll whose interval is longer than everything
    these cases measure put together, so over a serial port the figures would be that poll rather
-   than the client.
+   than the client. This client picks its transport with a compile-time macro, so it comes as a
+   program per transport (`//client/cnano:benchmark` and `:benchmark-localsocket`) rather than
+   one that chooses when it connects.
 
    They run against a server started with `--no-frame-pacing`, which runs its update loop as
    fast as it will go: paced, a round trip is inflated by the part of each update that does not
@@ -417,6 +423,18 @@ Run a specific test, e.g. the python client tests:
 ```
 bazel test //client/python:test
 ```
+
+Each client's `:test` suite is made up of targets grouped by what a test depends on, so that a
+test which is the same whatever carries a call is not run once per transport:
+
+ * `:unit` -- what the client does regardless of the transport it talks over, and without a
+   server to talk to: encoding and decoding values, and the types they are carried as.
+ * `:communication-tcpip`, `:communication-localsocket` (and `:communication-serialio` and
+   `:communication-arduino` for the cnano client) -- the transport itself, run against a server
+   the test listens on rather than a kRPC server.
+ * `:client-tcpip`, `:client-localsocket` (and `:client-serialio` for the cnano client) -- the
+   client end to end against a `TestServer`, one target per transport it can reach one over.
+ * `:lint` -- whatever the language has, where it has one.
 
 You can also pass options to `bazel test` to change the way it behaves:
 

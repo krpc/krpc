@@ -114,6 +114,13 @@ namespace KRPC
                         rpcServer = new KRPC.Server.WebSockets.RPCServer (rpcTcpServer);
                         streamServer = new KRPC.Server.WebSockets.StreamServer (streamTcpServer);
                     }
+                } else if (serverProtocol == Protocol.ProtocolBuffersOverLocalSocket) {
+                    var rpcSocketServer = new KRPC.Server.LocalSocket.LocalSocketServer (
+                        Settings.GetValueOrDefault ("rpc_path", KRPC.Server.LocalSocket.LocalSocketServer.DefaultPath ("rpc")));
+                    var streamSocketServer = new KRPC.Server.LocalSocket.LocalSocketServer (
+                        Settings.GetValueOrDefault ("stream_path", KRPC.Server.LocalSocket.LocalSocketServer.DefaultPath ("stream")));
+                    rpcServer = new KRPC.Server.ProtocolBuffers.RPCServer (rpcSocketServer);
+                    streamServer = new KRPC.Server.ProtocolBuffers.StreamServer (streamSocketServer);
                 } else {
                     uint baudRate = 0;
                     ushort dataBits = 0;

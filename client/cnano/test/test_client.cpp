@@ -412,6 +412,74 @@ TEST_F(test_client, test_collections) {
   }
 }
 
+TEST_F(test_client, test_structs) {
+  krpc_TestService_TestStruct_t value = {0, NULL, 0, KRPC_NULL_LIST};
+  value.int_field = 42;
+  value.string_field = (char*)"jeb";
+  value.enum_field = KRPC_TESTSERVICE_TESTENUM_VALUEB;
+  value.list_field.size = 3;
+  value.list_field.items = new int32_t[3]{1, 2, 3};
+
+  krpc_TestService_TestStruct_t result = {0, NULL, 0, KRPC_NULL_LIST};
+  ASSERT_EQ(KRPC_OK, krpc_TestService_StructEcho(conn, &result, &value));
+  ASSERT_EQ(42, result.int_field);
+  ASSERT_STREQ("jeb", result.string_field);
+  ASSERT_EQ(KRPC_TESTSERVICE_TESTENUM_VALUEB, result.enum_field);
+  ASSERT_EQ(3u, result.list_field.size);
+  ASSERT_EQ(1, result.list_field.items[0]);
+  ASSERT_EQ(3, result.list_field.items[2]);
+
+  delete[] value.list_field.items;
+  krpc_free(result.string_field);
+  KRPC_FREE_LIST(result.list_field);
+}
+
+TEST_F(test_client, test_nested_structs) {
+  krpc_TestService_TestClass_t obj = KRPC_NULL;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_CreateTestObject(conn, &obj, "bob"));
+
+  krpc_TestService_TestNestedStruct_t value = {{0, NULL, 0, KRPC_NULL_LIST}, KRPC_NULL, NULL};
+  value.struct_field.int_field = 1;
+  value.struct_field.string_field = (char*)"jeb";
+  value.object_field = obj;
+  value.string_field = (char*)"bill";
+
+  krpc_TestService_TestNestedStruct_t result = {{0, NULL, 0, KRPC_NULL_LIST}, KRPC_NULL, NULL};
+  ASSERT_EQ(KRPC_OK, krpc_TestService_NestedStructEcho(conn, &result, &value));
+  ASSERT_EQ(1, result.struct_field.int_field);
+  ASSERT_STREQ("jeb", result.struct_field.string_field);
+  ASSERT_EQ(obj, result.object_field);
+  ASSERT_STREQ("bill", result.string_field);
+
+  krpc_free(result.struct_field.string_field);
+  KRPC_FREE_LIST(result.struct_field.list_field);
+  krpc_free(result.string_field);
+}
+
+TEST_F(test_client, test_collections_of_structs) {
+  krpc_TestService_TestStruct_t items[2] = {{0, NULL, 0, KRPC_NULL_LIST},
+                                            {0, NULL, 0, KRPC_NULL_LIST}};
+  items[0].int_field = 0;
+  items[0].string_field = (char*)"jeb";
+  items[1].int_field = 1;
+  items[1].string_field = (char*)"bob";
+  krpc_list_TestService_TestStruct_t list = KRPC_NULL_LIST;
+  list.size = 2;
+  list.items = items;
+
+  krpc_list_TestService_TestStruct_t result = KRPC_NULL_LIST;
+  ASSERT_EQ(KRPC_OK, krpc_TestService_IncrementListOfStructs(conn, &result, &list));
+  ASSERT_EQ(2u, result.size);
+  ASSERT_EQ(1, result.items[0].int_field);
+  ASSERT_EQ(2, result.items[1].int_field);
+
+  for (size_t i = 0; i < result.size; i++) {
+    krpc_free(result.items[i].string_field);
+    KRPC_FREE_LIST(result.items[i].list_field);
+  }
+  KRPC_FREE_LIST(result);
+}
+
 TEST_F(test_client, test_nested_collections) {
   {
     krpc_dictionary_string_list_int32_t dictionary = KRPC_NULL_DICTIONARY;

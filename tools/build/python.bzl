@@ -73,10 +73,11 @@ py_sdist = rule(
 )
 
 # buildifier: disable=function-docstring
-def py_test(name, src, pkg, deps = [], **kwargs):
+def py_test(name, src, pkg, tests = [], deps = [], **kwargs):
     # The test parameters are baked into a generated test script, rather than
     # passed as arguments, as the test may be invoked via the client_test
-    # harness which does not forward arguments
+    # harness which does not forward arguments. tests names the files to run,
+    # relative to the package directory in the sdist; empty runs all of them.
     runner_template = Label("//tools/build/python:run_pytest.py.tmpl")
     native.genrule(
         name = name + "-main",
@@ -85,7 +86,7 @@ def py_test(name, src, pkg, deps = [], **kwargs):
             runner_template,
         ],
         outs = [name + "_main.py"],
-        cmd = 'sed -e "s|@SDIST@|$(rootpath %s)|" -e "s|@PKG@|%s|" $(location %s) > $@' % (src, pkg, runner_template),
+        cmd = 'sed -e "s|@SDIST@|$(rootpath %s)|" -e "s|@PKG@|%s|" -e "s|@TESTS@|%s|" $(location %s) > $@' % (src, pkg, " ".join(tests), runner_template),
     )
     _native_py_test(
         name = name,

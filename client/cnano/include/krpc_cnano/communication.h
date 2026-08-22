@@ -4,7 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#if !defined(KRPC_COMMUNICATION_CUSTOM) && !defined(KRPC_COMMUNICATION_TCP)
+#if !defined(KRPC_COMMUNICATION_CUSTOM) && !defined(KRPC_COMMUNICATION_TCP) && \
+    !defined(KRPC_COMMUNICATION_LOCALSOCKET)
 #if defined(ARDUINO)
 #define KRPC_COMMUNICATION_ARDUINO
 #ifndef __cplusplus
@@ -36,6 +37,16 @@ extern "C" {
 
 #ifdef KRPC_COMMUNICATION_POSIX
 typedef int krpc_connection_t;
+typedef char krpc_connection_config_t;
+#endif
+
+/* A unix domain socket, for a server on the same machine. The connection is a socket, held as
+   an integer wide enough for both a POSIX file descriptor and a Windows SOCKET so that the
+   winsock headers stay out of this one, and the configuration is the path of the socket, named
+   as a serial port is. Like any other socket it opens a connection of its own per server, so it
+   is not multiplexed. */
+#ifdef KRPC_COMMUNICATION_LOCALSOCKET
+typedef uintptr_t krpc_connection_t;
 typedef char krpc_connection_config_t;
 #endif
 

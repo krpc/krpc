@@ -88,6 +88,33 @@ class TestStream(ServerTestCase, unittest.TestCase):
                         self.fail("Timed out waiting for stream to update")
                     i += 1
 
+    def test_struct_counter(self) -> None:
+        service = self.conn.test_service
+        with self.conn.stream(
+            service.counter_struct, "TestStream.test_struct_counter"
+        ) as x:
+            count = -1
+            for _ in range(5):
+                self.assertLess(count, x().int_field)
+                count = x().int_field
+                i = 0
+                while count == x().int_field:
+                    self.wait()
+                    if i > 1000:
+                        self.fail("Timed out waiting for stream to update")
+                    i += 1
+
+    def test_unchanging_struct_sends_one_update(self) -> None:
+        # The server compares a struct field by field, so a struct whose list field is a
+        # different object every frame still counts as unchanged and is sent once
+        updates = []
+        with self.conn.stream(self.conn.test_service.struct_default) as x:
+            x.add_callback(updates.append)
+            x.start()
+            for _ in range(20):
+                self.wait()
+        self.assertEqual(1, len(updates))
+
     def test_nested(self) -> None:
         with self.conn.stream(self.conn.test_service.float_to_string, 0.123) as x0:
             with self.conn.stream(self.conn.test_service.float_to_string, 1.234) as x1:

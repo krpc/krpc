@@ -55,6 +55,14 @@
       :param int divisor:
    
 
+   .. method:: TestStruct counterStruct(String id)
+
+      Returns a struct whose IntField counts the number of times it has been called,
+      so that a stream on it changes on every update.
+
+      :param String id:
+   
+
    .. method:: TestClass createTestObject(String value)
 
 
@@ -211,6 +219,13 @@
       :param java.util.List<Integer> l:
    
 
+   .. method:: java.util.List<TestStruct> incrementListOfStructs(java.util.List<TestStruct> l)
+
+
+
+      :param java.util.List<TestStruct> l:
+   
+
    .. method:: java.util.Map<String,java.util.List<Integer>> incrementNestedCollection(java.util.Map<String,java.util.List<Integer>> d)
 
 
@@ -267,6 +282,13 @@
 
 
       :param java.util.List<Integer> x:
+   
+
+   .. method:: TestNestedStruct nestedStructEcho(TestNestedStruct x)
+
+
+
+      :param TestNestedStruct x:
    
 
    .. method:: TestClass notNullableObject(TestClass value)
@@ -368,6 +390,27 @@
 
 
       :param String value:
+   
+
+   .. method:: TestStruct structDefault(TestStruct x)
+
+
+
+      :param TestStruct x:
+   
+
+   .. method:: TestStruct structEcho(TestStruct x)
+
+
+
+      :param TestStruct x:
+   
+
+   .. method:: TestStruct structEchoNullable(TestStruct x)
+
+
+
+      :param TestStruct x:
    
 
    .. method:: int throwArgumentException()
@@ -579,6 +622,64 @@
 
       Deprecated enum ValueB documentation string.
 
+
+
+.. type:: public class TestStruct
+
+   Struct documentation string.
+
+
+   .. method:: int getIntField()
+
+      Struct IntField documentation string.
+
+   .. method:: String getStringField()
+
+
+
+   .. method:: TestEnum getEnumField()
+
+
+
+   .. method:: java.util.List<Integer> getListField()
+
+
+
+
+.. type:: public class TestNestedStruct
+
+   Nested struct documentation string.
+
+
+   .. method:: TestStruct getStructField()
+
+
+
+   .. method:: TestClass getObjectField()
+
+
+
+   .. method:: String getStringField()
+
+
+
+
+.. type:: public class DeprecatedStruct
+
+   .. warning:: Deprecated. Use :type:`TestStruct` instead.
+
+   Deprecated struct documentation string.
+
+
+   .. method:: int getValue()
+
+      Deprecated struct Value documentation string.
+
+   .. method:: int getOldValue()
+
+      .. warning:: Deprecated. Use :meth:`DeprecatedStruct.getValue()` instead.
+
+      Deprecated struct OldValue documentation string.
 
 
 .. type:: public class CustomException

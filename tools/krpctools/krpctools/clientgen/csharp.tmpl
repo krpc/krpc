@@ -144,6 +144,128 @@ namespace KRPC.Client.Services.{{ service_name }}
         {% endfor %}
     }
     {% endfor %}
+    {% for struct_name,struct in structs.items() %}
+
+{% if struct.documentation %}{{ struct.documentation | indent(width=4) }}
+{% endif %}
+    [Serializable]
+    [global::KRPC.Client.Attributes.KRPCStruct]
+{% if struct.deprecated %}    [global::System.Obsolete{% if struct.deprecated_reason %} ("{{ struct.deprecated_reason }}"){% endif %}]
+{% endif %}
+    public struct {{ struct_name }} : IEquatable<{{ struct_name }}>, IComparable<{{ struct_name }}>
+    {
+        /// <summary>
+        /// Construct a {{ struct_name }} from the values of its fields.
+        /// </summary>
+        public {{ struct_name }} ({% for field in struct['fields'] %}{{ field.type }} {{ field.name | lower_camel_case }}{% if not loop.last %}, {% endif %}{% endfor %}) : this ()
+        {
+            {% for field in struct['fields'] %}
+            {{ field.name }} = {{ field.name | lower_camel_case }};
+            {% endfor %}
+        }
+        {% for field in struct['fields'] %}
+
+{% if field.documentation %}{{ field.documentation | indent(width=8) }}
+{% endif %}
+{% if field.deprecated %}        [global::System.Obsolete{% if field.deprecated_reason %} ("{{ field.deprecated_reason }}"){% endif %}]
+{% endif %}
+        public {{ field.type }} {{ field.name }} { get; private set; }
+        {% endfor %}
+
+        /// <summary>
+        /// Returns true if this {{ struct_name }} is equal to the given object.
+        /// </summary>
+        public override bool Equals (object obj)
+        {
+            return obj is {{ struct_name }} && Equals (({{ struct_name }})obj);
+        }
+
+        /// <summary>
+        /// Returns true if this {{ struct_name }} is equal to the given one.
+        /// </summary>
+        public bool Equals ({{ struct_name }} other)
+        {
+            return {% for field in struct['fields'] %}global::KRPC.Client.ValueUtils.Equal ({{ field.name }}, other.{{ field.name }}){% if not loop.last %} && {% endif %}{% endfor %};
+        }
+
+        /// <summary>
+        /// Returns a hash code for this {{ struct_name }}.
+        /// </summary>
+        public override int GetHashCode ()
+        {
+            int hash = 17;
+            {% for field in struct['fields'] %}
+            hash = hash * 31 + global::KRPC.Client.ValueUtils.HashCode ({{ field.name }});
+            {% endfor %}
+            return hash;
+        }
+
+        /// <summary>
+        /// Returns true if the two {{ struct_name }} values are equal.
+        /// </summary>
+        public static bool operator == ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Returns true if the two {{ struct_name }} values are not equal.
+        /// </summary>
+        public static bool operator != ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return !lhs.Equals (rhs);
+        }
+
+        /// <summary>
+        /// Compares this {{ struct_name }} with the given one, by its fields in turn, which is
+        /// how a tuple of the same values compares. A field whose type has no ordering, such as
+        /// a collection, throws unless the two values are the same object, as it does in a
+        /// tuple, so two {{ struct_name }}s that are equal can still throw here.
+        /// </summary>
+        public int CompareTo ({{ struct_name }} other)
+        {
+            int result;
+            {% for field in struct['fields'] %}
+            result = global::System.Collections.Generic.Comparer<{{ field.type }}>.Default.Compare ({{ field.name }}, other.{{ field.name }});
+            if (result != 0)
+                return result;
+            {% endfor %}
+            return 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first {{ struct_name }} orders before the second.
+        /// </summary>
+        public static bool operator < ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return lhs.CompareTo (rhs) < 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first {{ struct_name }} orders after the second.
+        /// </summary>
+        public static bool operator > ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return lhs.CompareTo (rhs) > 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first {{ struct_name }} does not order after the second.
+        /// </summary>
+        public static bool operator <= ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return lhs.CompareTo (rhs) <= 0;
+        }
+
+        /// <summary>
+        /// Returns true if the first {{ struct_name }} does not order before the second.
+        /// </summary>
+        public static bool operator >= ({{ struct_name }} lhs, {{ struct_name }} rhs)
+        {
+            return lhs.CompareTo (rhs) >= 0;
+        }
+    }
+    {% endfor %}
     {% for exception_name,exception in exceptions.items() %}
 
 {% if exception.documentation %}{{ exception.documentation | indent(width=4) }}

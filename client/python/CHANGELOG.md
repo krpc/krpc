@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. A
+  value of one is a named tuple, so its fields can be read by name and it is also the tuple of
+  their values; a tuple or list with one element per field is accepted where one is expected.
+  It compares, orders and hashes as the tuple of its field values does (#1066)
+- A service definition that names a type this client does not know about, as one from a newer
+  server may, now skips the member that names it with a warning, rather than failing to
+  connect (#1066)
 - **Breaking:** Support `None` for any nullable type (#1017)
 - Fix a service failing to load when one of its procedures defaults to a member of an
   enumeration defined by a service that had not been loaded yet (#1044)
@@ -15,6 +22,13 @@
   reaches its procedures by ordinary attribute lookup, and the client connections disable
   Nagle's algorithm. A collection works out how to encode and decode its items once for
   the collection rather than once for every item (#1056)
+- Add `krpc.connect_local`, which connects to a server on the same machine over a unix domain
+  socket rather than TCP/IP. The connection behaves identically once established. Windows is
+  supported as well as Linux and macOS, even though python names no unix domain address family
+  there (#1065)
+- Add a `timeout` parameter to `krpc.connect`, bounding how long a connection is waited for. A
+  network that drops a connection attempt rather than refusing it otherwise leaves the client
+  waiting indefinitely (#1065)
 
 ## [v0.6.0]
 - **Breaking:** Requires Python 3.10+ (#837)

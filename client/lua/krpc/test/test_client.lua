@@ -26,9 +26,8 @@ end
 function TestClient:test_wrong_rpc_server()
   luaunit.assertErrorMsgContains(
     'Connection request was for the rpc server, but this is the stream server. ' ..
-    'Did you connect to the wrong port number?',
-    krpc.connect, 'LuaClientTestWrongRpcServer',
-    'localhost', self.get_stream_port(), self.get_stream_port())
+    'Did you connect to the wrong port number or socket path?',
+    self.connect_to_stream_server, 'LuaClientTestWrongRpcServer')
 end
 
 function TestClient:test_value_parameters()
@@ -262,6 +261,73 @@ function TestClient:test_collections_of_objects()
   luaunit.assertEquals("value=bob", l[2]:get_value())
 end
 
+function TestClient:test_structs()
+  local service = self.conn.test_service
+  local value = service.TestStruct(42, 'jeb', service.TestEnum.value_b, List{1, 2, 3})
+  local result = service.struct_echo(value)
+  luaunit.assertEquals(value, result)
+  luaunit.assertEquals(42, result.int_field)
+  luaunit.assertEquals('jeb', result.string_field)
+  luaunit.assertEquals(service.TestEnum.value_b, result.enum_field)
+  luaunit.assertEquals(List{1, 2, 3}, result.list_field)
+end
+
+function TestClient:test_nested_structs()
+  local service = self.conn.test_service
+  local obj = service.create_test_object('bob')
+  local value = service.TestNestedStruct(
+    service.TestStruct(1, 'jeb', service.TestEnum.value_a, List{}), obj, 'bill')
+  local result = service.nested_struct_echo(value)
+  luaunit.assertEquals(value, result)
+  luaunit.assertEquals(1, result.struct_field.int_field)
+  luaunit.assertEquals(obj, result.object_field)
+  luaunit.assertEquals('bill', result.string_field)
+end
+
+function TestClient:test_collections_of_structs()
+  local service = self.conn.test_service
+  local values = List{
+    service.TestStruct(0, 'jeb', service.TestEnum.value_c, List{}),
+    service.TestStruct(1, 'bob', service.TestEnum.value_c, List{})}
+  local result = service.increment_list_of_structs(values)
+  luaunit.assertEquals(2, #result)
+  luaunit.assertEquals(1, result[1].int_field)
+  luaunit.assertEquals(2, result[2].int_field)
+end
+
+function TestClient:test_nullable_structs()
+  local service = self.conn.test_service
+  luaunit.assertEquals(Types.none, service.struct_echo_nullable(Types.none))
+  local value = service.TestStruct(1, 'jeb', service.TestEnum.value_a, List{})
+  luaunit.assertEquals(value, service.struct_echo_nullable(value))
+end
+
+function TestClient:test_struct_default_value()
+  local service = self.conn.test_service
+  luaunit.assertEquals(
+    service.TestStruct(42, 'jeb', service.TestEnum.value_b, List{1, 2, 3}),
+    service.struct_default())
+end
+
+function TestClient:test_struct_comparison()
+  local service = self.conn.test_service
+  local a = service.TestStruct(1, 'jeb', service.TestEnum.value_a, List{})
+  local b = service.TestStruct(1, 'jeb', service.TestEnum.value_a, List{})
+  local c = service.TestStruct(2, 'jeb', service.TestEnum.value_a, List{})
+
+  luaunit.assertEquals(a, b)
+  -- Ordered by the fields in turn
+  luaunit.assertTrue(a < c)
+  luaunit.assertTrue(c > a)
+  luaunit.assertTrue(a <= b)
+  luaunit.assertTrue(a >= b)
+  luaunit.assertFalse(c < a)
+
+  local values = {c, a}
+  table.sort(values)
+  luaunit.assertEquals(a, values[1])
+end
+
 function TestClient:test_collections_default_values()
   luaunit.assertEquals(List{1, false}, self.conn.test_service.tuple_default())
   luaunit.assertEquals(List{1, 2, 3}, self.conn.test_service.list_default())
@@ -362,14 +428,18 @@ function TestClient:test_test_service_service_members()
     members,
     {'DeprecatedClass',
      'DeprecatedEnum',
+     'DeprecatedStruct',
      'TestClass',
      'TestEnum',
+     'TestNestedStruct',
+     'TestStruct',
      'add_multiple_values',
      'add_to_object_list',
      'blocking_procedure',
      'bool_to_string',
      'bytes_to_hex_string',
      'counter',
+     'counter_struct',
      'create_test_object',
      'deprecated_procedure',
      'deprecated_procedure_no_message',
@@ -394,6 +464,7 @@ function TestClient:test_test_service_service_members()
      'get_string_property_private_set',
      'increment_dictionary',
      'increment_list',
+     'increment_list_of_structs',
      'increment_nested_collection',
      'increment_set',
      'increment_tuple',
@@ -402,6 +473,7 @@ function TestClient:test_test_service_service_members()
      'int64_special_defaults',
      'int64_to_string',
      'list_default',
+     'nested_struct_echo',
      'not_nullable_object',
      'on_timer',
      'on_timer_using_lambda',
@@ -416,6 +488,9 @@ function TestClient:test_test_service_service_members()
      'set_string_property',
      'set_string_property_private_get',
      'string_to_int32',
+     'struct_default',
+     'struct_echo',
+     'struct_echo_nullable',
      'throw_argument_exception',
      'throw_argument_null_exception',
      'throw_argument_out_of_range_exception',

@@ -19,6 +19,11 @@ namespace KRPC.Server
         /// <summary>
         /// A server using Protocol Buffer messages over SerialIO.
         /// </summary>
-        ProtocolBuffersOverSerialIO
+        ProtocolBuffersOverSerialIO,
+        /// <summary>
+        /// A server using Protocol Buffer messages over a unix domain socket,
+        /// for clients running on the same machine.
+        /// </summary>
+        ProtocolBuffersOverLocalSocket
     }
 }

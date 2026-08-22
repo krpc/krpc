@@ -1,18 +1,20 @@
 #!/bin/bash
 # Test building the C++ client using CMake.
 # Accepts the release archive as the first argument.
-# Runs CMake build scenario(s):
+# Covers how the dependencies are provided:
 #   system) system-installed protobuf + ASIO
 #   fetch)  protobuf + ASIO + abseil fetched via FetchContent (KRPC_FETCH_DEPS=ON)
 # Each is followed by a consumer test using find_package(krpc CONFIG REQUIRED).
-# Usage: test-cmake-linux.sh ARCHIVE [system|fetch]  (default: run both)
+# Usage: test-cmake-linux.sh ARCHIVE [SCENARIO]  (default: run all)
 set -e
 set -o pipefail
 set -x
 set -o functrace
 
-archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [system|fetch]}")"
-mode="${2:-all}"
+scenarios="system fetch"
+
+archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [$(echo $scenarios | tr ' ' '|')]}")"
+scenario="${2:-all}"
 
 scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$scriptroot/../.."
@@ -72,55 +74,55 @@ function check_absent {
   fi
 }
 
-# Build a small consumer project that uses find_package(krpc CONFIG REQUIRED)
-# to verify the installed package config and targets work end-to-end.
+# Build the consumer project against the installed package, to verify the package config and
+# targets work end-to-end. The program opens a connection over each of the transports the client
+# offers, which is what proves both of them reach it through the package.
 function consumer_test {
   local install_dir=$1
-  local test_dir=$2
-  mkdir -p "$test_dir"
-
-  cat > "$test_dir/main.cpp" << 'EOF'
-#include <iostream>
-#include <krpc.hpp>
-#include <krpc/services/krpc.hpp>
-int main() {
-    // Compile+link test only — no server connection.
-    std::cout << "krpc library linked OK" << std::endl;
-    return 0;
-}
-EOF
-
-  cat > "$test_dir/CMakeLists.txt" << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_consumer_test LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
-find_package(krpc CONFIG REQUIRED)
-add_executable(test_app main.cpp)
-target_link_libraries(test_app PRIVATE krpc::krpc)
-EOF
-
-  mkdir -p "$test_dir/build"
-  cmake -S "$test_dir" -B "$test_dir/build" \
+  local build_dir=$2
+  cmake -S "$scriptroot/test-consumer" -B "$build_dir" \
     -DCMAKE_PREFIX_PATH="$install_dir" \
     -DCMAKE_BUILD_TYPE=Release
-  cmake --build "$test_dir/build" --parallel $(nproc)
+  cmake --build "$build_dir" --parallel $(nproc)
 }
 
-# 1) System-installed protobuf + ASIO
-if [[ "$mode" == "system" || "$mode" == "all" ]]; then
-  build_install "$out/system/build" "$out/system/install" "$out/system/configure.log"
-  check_present "$out/system/configure.log" "Found protobuf"
-  check_absent  "$out/system/configure.log" "Fetching protobuf via FetchContent"
-  check_absent  "$out/system/configure.log" "Fetching ASIO via FetchContent"
-  consumer_test "$out/system/install" "$out/system/consumer"
-fi
+# Build, install and consume the library for one scenario, named for how its dependencies are
+# provided.
+function run_scenario {
+  local name=$1
+  local dir="$out/$name"
+  local log="$dir/configure.log"
+  local options=()
 
-# 2) FetchContent protobuf + ASIO + abseil via global option
-if [[ "$mode" == "fetch" || "$mode" == "all" ]]; then
-  build_install "$out/fetch/build" "$out/fetch/install" "$out/fetch/configure.log" \
-    -DKRPC_FETCH_DEPS=ON
-  check_present "$out/fetch/configure.log" "Fetching protobuf via FetchContent"
-  check_present "$out/fetch/configure.log" "Fetching ASIO via FetchContent"
-  check_absent  "$out/fetch/configure.log" "Found protobuf"
-  consumer_test "$out/fetch/install" "$out/fetch/consumer"
+  case "$name" in
+    fetch)  options+=(-DKRPC_FETCH_DEPS=ON) ;;
+    system) ;;
+    *) echo "unknown scenario '$name'"; exit 1 ;;
+  esac
+
+  build_install "$dir/build" "$dir/install" "$log" "${options[@]}"
+
+  # Which of the two ways of providing the dependencies the configure step actually took
+  case "$name" in
+    fetch)
+      check_present "$log" "Fetching protobuf via FetchContent"
+      check_present "$log" "Fetching ASIO via FetchContent"
+      check_absent  "$log" "Found protobuf"
+      ;;
+    system)
+      check_present "$log" "Found protobuf"
+      check_absent  "$log" "Fetching protobuf via FetchContent"
+      check_absent  "$log" "Fetching ASIO via FetchContent"
+      ;;
+  esac
+
+  consumer_test "$dir/install" "$dir/consumer"
+}
+
+if [[ "$scenario" == "all" ]]; then
+  for name in $scenarios; do
+    run_scenario "$name"
+  done
+else
+  run_scenario "$scenario"
 fi

@@ -6,6 +6,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -60,7 +61,7 @@ class PythonLanguage(Language):
             return typ.python_type.__name__
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return self.shorten_ref(
                 "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
             )
@@ -91,6 +92,12 @@ class PythonLanguage(Language):
                 self.parse_type(typ),
                 self.parse_enum_value_name(value.name),
             )
+        if isinstance(typ, StructType):
+            values = [
+                self.parse_default_value(x, typ.field_types[i])
+                for i, x in enumerate(value)
+            ]
+            return "%s(%s)" % (self.parse_type(typ), ", ".join(values))
         if isinstance(typ, TupleType):
             values = [
                 self.parse_default_value(x, typ.value_types[i])

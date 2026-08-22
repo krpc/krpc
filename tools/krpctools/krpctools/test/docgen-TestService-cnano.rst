@@ -90,6 +90,20 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_CounterStruct(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const char * id)
+
+   Returns a struct whose IntField counts the number of times it has been called,
+   so that a stream on it changes on every update.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_CreateTestObject(krpc_connection_t connection, krpc_TestService_TestClass_t * result, const char * value)
 
 
@@ -360,6 +374,19 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_IncrementListOfStructs(krpc_connection_t connection, krpc_list_TestService_TestStruct_t * result, const krpc_list_TestService_TestStruct_t * l)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_IncrementNestedCollection(krpc_connection_t connection, krpc_dictionary_string_list_int32_t * result, const krpc_dictionary_string_list_int32_t * d)
 
 
@@ -454,6 +481,19 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_ListDefault(krpc_connection_t connection, krpc_list_int32_t * result, const krpc_list_int32_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_NestedStructEcho(krpc_connection_t connection, krpc_TestService_TestNestedStruct_t * result, const krpc_TestService_TestNestedStruct_t * x)
 
 
 
@@ -614,6 +654,45 @@ Service documentation string.
 
 
 .. function:: krpc_error_t krpc_TestService_StringToInt32(krpc_connection_t connection, int32_t * result, const char * value)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StructDefault(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const krpc_TestService_TestStruct_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StructEcho(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const krpc_TestService_TestStruct_t * x)
+
+
+
+   :Parameters:
+
+
+
+   
+
+
+
+
+.. function:: krpc_error_t krpc_TestService_StructEchoNullable(krpc_connection_t connection, krpc_TestService_TestStruct_t * result, const krpc_TestService_TestStruct_t * x)
 
 
 
@@ -901,6 +980,64 @@ Service documentation string.
 
       Deprecated enum ValueB documentation string.
 
+
+
+.. type:: krpc_TestService_TestStruct_t
+
+   Struct documentation string.
+
+
+   .. member:: int32_t int_field
+
+      Struct IntField documentation string.
+
+   .. member:: char * string_field
+
+
+
+   .. member:: krpc_TestService_TestEnum_t enum_field
+
+
+
+   .. member:: krpc_list_int32_t list_field
+
+
+
+
+.. type:: krpc_TestService_TestNestedStruct_t
+
+   Nested struct documentation string.
+
+
+   .. member:: krpc_TestService_TestStruct_t struct_field
+
+
+
+   .. member:: krpc_TestService_TestClass_t object_field
+
+
+
+   .. member:: char * string_field
+
+
+
+
+.. type:: krpc_TestService_DeprecatedStruct_t
+
+   .. warning:: Deprecated. Use :type:`krpc_TestService_TestStruct_t` instead.
+
+   Deprecated struct documentation string.
+
+
+   .. member:: int32_t value
+
+      Deprecated struct Value documentation string.
+
+   .. member:: int32_t old_value
+
+      .. warning:: Deprecated. Use :member:`krpc_TestService_DeprecatedStruct_t.value` instead.
+
+      Deprecated struct OldValue documentation string.
 
 
 Exception class CustomException

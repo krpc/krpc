@@ -4,6 +4,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -137,7 +138,7 @@ class JavaLanguage(Language):
             return "krpc.client.Event"
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "krpc.client.services.%s.%s" % (
                 typ.protobuf_type.service,
                 typ.protobuf_type.name,

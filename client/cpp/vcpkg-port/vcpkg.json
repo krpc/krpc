@@ -6,7 +6,7 @@
   "license": "LGPL-3.0-or-later",
   "dependencies": [
     "protobuf",
-    "asio",
+    { "name": "asio", "version>=": "1.20.0" },
     { "name": "vcpkg-cmake", "host": true },
     { "name": "vcpkg-cmake-config", "host": true }
   ]

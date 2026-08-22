@@ -28,6 +28,8 @@ return {% if is_static %}_client.{% else %}this->_client->{% endif %}build_call(
 {% for x in parameters %}{{x.type}} {{x.name}}{% if 'default_value' in x %} = {{x.default_value}}{%- endif %}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endmacro %}
 
+#include <cstddef>
+#include <functional>
 #include <limits>
 #include <map>
 #include <set>
@@ -39,6 +41,7 @@ return {% if is_static %}_client.{% else %}this->_client->{% endif %}build_call(
 #include <krpc/encoder.hpp>
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
+#include <krpc/hash.hpp>
 #include <krpc/object.hpp>
 #include <krpc/service.hpp>
 #include <krpc/stream.hpp>
@@ -54,6 +57,13 @@ class {{ service_name }} : public Service {
   // Class forward declarations
   {% for class_name in classes.keys() %}
   class {{ class_name }};
+  {% endfor %}
+  {% endif %}
+  {% if structs | length > 0 %}
+
+  // Structure forward declarations
+  {% for struct_name in structs.keys() %}
+  struct {{ struct_name }};
   {% endfor %}
   {% endif %}
   {% if exceptions | length > 0 %}
@@ -179,10 +189,60 @@ class {{ service_name }} : public Service {
     {% endfor %}
   };
   {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+{% if struct.documentation %}{{ struct.documentation | indent(width=2) }}
+{% endif %}
+  struct {% if struct.deprecated %}[[deprecated{% if struct.deprecated_reason %}("{{ struct.deprecated_reason }}"){% endif %}]] {% endif %}{{ struct_name }} {
+    {% for field in struct['fields'] %}
+{% if field.documentation %}{{ field.documentation | indent(width=4) }}
+{% endif %}
+    {{ field.type }} {{ field.name }}{% if field.deprecated %} [[deprecated{% if field.deprecated_reason %}("{{ field.deprecated_reason }}"){% endif %}]]{% endif %};
+    {% endfor %}
+
+    {{ struct_name }}() : {% for field in struct['fields'] %}{{ field.name }}(){% if not loop.last %}, {% endif %}{% endfor %} {}
+
+    {{ struct_name }}({% for field in struct['fields'] %}{{ field.type }} {{ field.name }}{% if not loop.last %}, {% endif %}{% endfor %}) :
+      {% for field in struct['fields'] %}{{ field.name }}({{ field.name }}){% if not loop.last %}, {% endif %}{% endfor %} {}
+
+    bool operator==(const {{ struct_name }}& other) const {
+      return {% for field in struct['fields'] %}this->{{ field.name }} == other.{{ field.name }}{% if not loop.last %} && {% endif %}{% endfor %};
+    }
+
+    bool operator!=(const {{ struct_name }}& other) const {
+      return !(*this == other);
+    }
+
+    // Ordered by the fields in turn, which is how a tuple of the same values orders
+    bool operator<(const {{ struct_name }}& other) const {
+      {% for field in struct['fields'] %}
+      if ({{ field.name }} < other.{{ field.name }})
+        return true;
+      {% if not loop.last %}
+      if (other.{{ field.name }} < {{ field.name }})
+        return false;
+      {% endif %}
+      {% endfor %}
+      return false;
+    }
+
+    bool operator>(const {{ struct_name }}& other) const {
+      return other < *this;
+    }
+
+    bool operator<=(const {{ struct_name }}& other) const {
+      return !(other < *this);
+    }
+
+    bool operator>=(const {{ struct_name }}& other) const {
+      return !(*this < other);
+    }
+  };
+  {% endfor %}
 };
 
 }  // namespace services
-{% if enumerations | length > 0 %}
+{% if enumerations | length > 0 or structs | length > 0 %}
 
 namespace encoder {
   {% for enum_name,enm in enumerations.items() %}
@@ -197,6 +257,31 @@ namespace encoder {
     return krpc::encoder::encode(static_cast<int32_t>(value));
   }
   {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  // A structure is sent as the values of its fields in order, which is the same encoding as
+  // a tuple of those values. See the note on the collection encoders for why the message it
+  // is sent in is kept between calls.
+  inline std::string encode(const services::{{ service_name }}::{{ struct_name }}& value) {
+    static thread_local krpc::schema::Tuple structMessage;
+    structMessage.Clear();
+    {% for field in struct['fields'] %}
+    structMessage.add_items(encode(value.{{ field.name }}));
+    {% endfor %}
+    return krpc::encoder::encode(structMessage);
+  }
+  {% if struct.deprecated %}
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
@@ -225,9 +310,57 @@ namespace decoder {
 #endif
   {% endif %}
   {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  // Fields are only ever appended to a structure, so a value from a newer server may carry
+  // more items than this client knows about, and those are ignored.
+  inline void decode(services::{{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
+    static thread_local krpc::schema::Tuple structMessage;
+    if (!structMessage.ParseFromString(data)) throw EncodingError("Failed to decode message");
+    if (structMessage.items_size() < {{ struct['fields'] | length }})
+      throw EncodingError("Value for {{ struct_name }} does not have all of its fields");
+    {% for field in struct['fields'] %}
+    decode(value.{{ field.name }}, structMessage.items({{ loop.index0 }}), client);
+    {% endfor %}
+  }
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endfor %}
 
 }  // namespace decoder
+{% if structs | length > 0 %}
 
+{% for struct_name,struct in structs.items() %}
+{% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+{% endif %}
+inline std::size_t hash_value(const services::{{ service_name }}::{{ struct_name }}& value) {
+  std::size_t seed = 0;
+  {% for field in struct['fields'] %}
+  hash_combine(&seed, hash_value(value.{{ field.name }}));
+  {% endfor %}
+  return seed;
+}
+{% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+{% endif %}
+
+{% endfor %}
+{% endif %}
 // The encoder and decoder for a collection call encode and decode on the type it
 // contains without qualifying them, so the ones above, which are declared after those
 // templates, are only reachable through argument dependent lookup. That searches the
@@ -250,6 +383,31 @@ namespace services {
     decoder::decode(value, data, client);
   }
   {% if enm.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+  {% endif %}
+  {% endfor %}
+  {% for struct_name,struct in structs.items() %}
+
+  {% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+  {% endif %}
+  inline std::string encode(const {{ service_name }}::{{ struct_name }}& value) {
+    return encoder::encode(value);
+  }
+
+  inline void decode({{ service_name }}::{{ struct_name }}& value, const std::string& data, Client* client) {
+    decoder::decode(value, data, client);
+  }
+
+  inline std::size_t hash_value(const {{ service_name }}::{{ struct_name }}& value) {
+    return krpc::hash_value(value);
+  }
+  {% if struct.deprecated %}
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif
@@ -369,3 +527,31 @@ inline ::krpc::schema::ProcedureCall {{ service_name }}::{{ class_name }}::{{ me
 }  // namespace services
 
 }  // namespace krpc
+{% if structs | length > 0 %}
+
+// A structure is a type of this program's own, so unlike a tuple it can be given a std::hash,
+// and an unordered container of one needs nothing further.
+namespace std {
+{% for struct_name,struct in structs.items() %}
+
+{% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#endif
+{% endif %}
+template <>
+struct hash<krpc::services::{{ service_name }}::{{ struct_name }}> {
+  std::size_t operator()(const krpc::services::{{ service_name }}::{{ struct_name }}& value) const {
+    return krpc::hash_value(value);
+  }
+};
+{% if struct.deprecated %}
+#if defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+{% endif %}
+{% endfor %}
+
+}  // namespace std
+{% endif %}

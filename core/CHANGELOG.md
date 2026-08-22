@@ -1,4 +1,15 @@
 ## [v0.7.0] - unreleased
+- Add structure types: a compound value with named fields, whose value is sent to the client in
+  full rather than as a reference to an object that stays on the server. A structure is declared
+  with `KRPCStruct` on a C# `struct`, its fields are the properties annotated with
+  `KRPCProperty`, and its value is encoded as the values of those fields in the order the
+  structure declares them (#1066)
+- Add a communication protocol carrying protocol buffer messages over a unix domain socket, for
+  clients running on the same machine as the game. It carries the same messages as the TCP/IP
+  protocol over a cheaper path: a client that makes many calls in quick succession completes
+  around 20% more of them per physics update, and around 35% more when the values are large.
+  A client that makes one call and then waits is unaffected, as the wait is governed by the
+  game's update rate. Available on Linux, macOS, and Windows 10 1803 and later (#1065)
 - Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are
   now read and written on their own threads rather than on the thread that runs the game. Data
   waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (#1035)

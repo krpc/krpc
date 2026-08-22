@@ -18,6 +18,7 @@ from krpc.types import (
     ClassType,
     EnumerationType,
     MessageType,
+    StructType,
     TupleType,
     ListType,
     SetType,
@@ -113,6 +114,22 @@ class Decoder:
             return tuple(
                 cls.decode(client, item, value_type)
                 for item, value_type in zip(msg.items, typ.value_types)
+            )
+        if isinstance(typ, StructType):
+            # A structure is encoded as the values of its fields in order, which is the
+            # same encoding as a tuple of those values
+            msg = cast(KRPC.Tuple, cls.decode_message(data, KRPC.Tuple))
+            if len(msg.items) < len(typ.field_types):
+                raise EncodingError(
+                    "Struct has wrong number of fields. "
+                    + "Expected at least %d, got %d."
+                    % (len(typ.field_types), len(msg.items))
+                )
+            return typ.python_type(
+                *[
+                    cls.decode(client, item, field_type)
+                    for item, field_type in zip(msg.items, typ.field_types)
+                ]
             )
         raise EncodingError("Cannot decode type %s" % str(typ))
 

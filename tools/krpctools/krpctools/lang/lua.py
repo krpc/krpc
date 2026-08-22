@@ -4,6 +4,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -57,7 +58,7 @@ class LuaLanguage(Language):
             return self.type_map[typ.protobuf_type.code]
         if isinstance(typ, MessageType):
             return "krpc.schema.KRPC.%s" % typ.python_type.__name__
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             return "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
         if isinstance(typ, ListType):
             return "List"
@@ -87,6 +88,14 @@ class LuaLanguage(Language):
                 self.parse_type(typ),
                 self.parse_enum_value_name(value.name),
             )
+        if isinstance(typ, StructType):
+            # A structure is written as its field values in order, which is the form the
+            # client coerces to one
+            values = (
+                self.parse_default_value(x, typ.field_types[i])
+                for i, x in enumerate(value)
+            )
+            return "{%s}" % ", ".join(values)
         if isinstance(typ, TupleType):
             values = (
                 self.parse_default_value(x, typ.value_types[i])

@@ -62,6 +62,8 @@ namespace KRPC.Server.ProtocolBuffers
                         stream.WriteBytes (ByteString.CopyFrom ((byte[])value));
                     else if (TypeUtils.IsAClassType (type))
                         stream.WriteUInt64 (ObjectStore.Instance.AddInstance (value));
+                    else if (TypeUtils.IsAStructType (type))
+                        WriteStruct (value, stream);
                     else if (TypeUtils.IsATupleCollectionType (type))
                         WriteTuple (value, stream);
                     else if (TypeUtils.IsAListCollectionType (type))
@@ -96,6 +98,27 @@ namespace KRPC.Server.ProtocolBuffers
                 }
             }
             encodedTuple.WriteTo (stream);
+        }
+
+        /// <summary>
+        /// Write a structure value as the values of its fields, in the order the structure
+        /// declares them, which is the same encoding as a tuple of those values.
+        /// </summary>
+        static void WriteStruct (object value, CodedOutputStream stream)
+        {
+            var encodedStruct = new Schema.KRPC.Tuple ();
+            var type = value.GetType ();
+            using (var internalBuffer = new MemoryStream ()) {
+                var internalStream = new CodedOutputStream (internalBuffer);
+                foreach (var field in TypeUtils.GetStructFields (type)) {
+                    var item = field.GetGetMethod ().Invoke (value, null);
+                    if (item == null)
+                        throw new ServiceException (
+                            "Field " + field.Name + " of " + type.Name + " is null; struct fields cannot be null");
+                    encodedStruct.Items.Add (EncodeObject (item, internalBuffer, internalStream));
+                }
+            }
+            encodedStruct.WriteTo (stream);
         }
 
         static void WriteList (object value, CodedOutputStream stream)
@@ -182,6 +205,8 @@ namespace KRPC.Server.ProtocolBuffers
                         return stream.ReadBytes ().ToByteArray ();
                     if (TypeUtils.IsAClassType (type))
                         return ObjectStore.Instance.GetInstance (stream.ReadUInt64 ());
+                    if (TypeUtils.IsAStructType (type))
+                        return DecodeStruct (stream, type);
                     if (TypeUtils.IsATupleCollectionType (type))
                         return DecodeTuple (stream, type);
                     if (TypeUtils.IsAListCollectionType (type))
@@ -213,6 +238,32 @@ namespace KRPC.Server.ProtocolBuffers
                 .GetConstructor (valueTypes)
                 .Invoke (values);
             return tuple;
+        }
+
+        /// <summary>
+        /// Read a structure value from the values of its fields, in the order the structure
+        /// declares them. Fields may only ever be appended to a structure, so items beyond the
+        /// ones the structure declares come from a newer definition and are ignored. A field is
+        /// never null, so a value that decodes one is rejected rather than passed to a service.
+        /// </summary>
+        static object DecodeStruct (CodedInputStream stream, Type type)
+        {
+            var encodedStruct = Schema.KRPC.Tuple.Parser.ParseFrom (stream);
+            var fields = TypeUtils.GetStructFields (type);
+            if (encodedStruct.Items.Count < fields.Count)
+                throw new ArgumentException (
+                    "Value for " + type.Name + " has " + encodedStruct.Items.Count +
+                    " fields; expected at least " + fields.Count);
+            var value = Activator.CreateInstance (type);
+            for (int i = 0; i < fields.Count; i++) {
+                var field = fields [i];
+                var item = Decode (encodedStruct.Items [i], field.PropertyType);
+                if (item == null)
+                    throw new ArgumentException (
+                        "Field " + field.Name + " of " + type.Name + " is null; struct fields cannot be null");
+                field.GetSetMethod ().Invoke (value, new [] { item });
+            }
+            return value;
         }
 
         static object DecodeList (CodedInputStream stream, Type type)

@@ -1,6 +1,11 @@
 ## [v0.7.0] - unreleased
 - **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility
   code for older versions of the game has been removed (#1048)
+- Servers can now use the local socket protocol, chosen in the server window like any other. The
+  RPC and stream sockets default to paths in a directory belonging to the user running the game,
+  and no network port is opened (#1065)
+- Fix the end of a long serial port name being neither visible nor editable in the server
+  window; the field now scrolls sideways to follow the caret (#1065)
 - The server is stopped whenever no game is loaded, so a client is disconnected when the player
   quits to the main menu rather than being left waiting on a call that never returns. It starts
   again with the next game if it is set to start automatically. State held for clients is released

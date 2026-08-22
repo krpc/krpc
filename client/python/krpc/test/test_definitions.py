@@ -2,6 +2,7 @@ import unittest
 from typing import Dict, Iterable, List
 from krpc.definitions import (
     ENUMERATION,
+    STRUCT,
     Definition,
     decode_default_value,
     register_all,
@@ -23,6 +24,14 @@ def enumeration_type(service: str, name: str) -> Type:
 def class_type(service: str, name: str) -> Type:
     protobuf_type = Type()
     protobuf_type.code = Type.CLASS
+    protobuf_type.service = service
+    protobuf_type.name = name
+    return protobuf_type
+
+
+def struct_type(service: str, name: str) -> Type:
+    protobuf_type = Type()
+    protobuf_type.code = Type.STRUCT
     protobuf_type.service = service
     protobuf_type.name = name
     return protobuf_type
@@ -142,6 +151,37 @@ class TestRegisterAll(unittest.TestCase):
             str(cm.exception),
         )
 
+    def test_struct_registered_after_the_types_of_its_fields(self) -> None:
+        # The struct B has a field whose type is the struct A, so A has to be registered
+        # first for the field to resolve
+        definitions = {
+            "A": self.definition("A", kind=STRUCT),
+            "B": self.definition("B", [struct_type("ServiceA", "A")], kind=STRUCT),
+        }
+        for order in (["A", "B"], ["B", "A"]):
+            self.registered = []
+            register_all(self.types, [definitions[name] for name in order])
+            self.assertEqual(["A", "B"], self.registered)
+
+    def test_struct_cycle(self) -> None:
+        # Neither struct can be registered first, as each has a field whose type is the
+        # other. The server rejects this, but definitions can come from anywhere
+        with self.assertRaises(RuntimeError) as cm:
+            register_all(
+                self.types,
+                [
+                    self.definition(
+                        "A", [list_type(struct_type("ServiceA", "B"))], kind=STRUCT
+                    ),
+                    self.definition("B", [struct_type("ServiceA", "A")], kind=STRUCT),
+                ],
+            )
+        self.assertEqual(
+            "Cyclic dependency: struct ServiceA.A -> struct ServiceA.B "
+            "-> struct ServiceA.A",
+            str(cm.exception),
+        )
+
     def test_defined_twice(self) -> None:
         with self.assertRaises(RuntimeError) as cm:
             register_all(self.types, [self.definition("A"), self.definition("A")])
@@ -212,6 +252,13 @@ class TestDecodeDefaultValue(unittest.TestCase):
             decode_default_value(None, b"", typ, self.location)
         self.assertIn(self.location, str(cm.exception))
         self.assertIn("ServiceA.Mode", str(cm.exception))
+
+    def test_struct_that_was_never_registered(self) -> None:
+        typ = self.types.struct_type("ServiceA", "Frobnicator")
+        with self.assertRaises(RuntimeError) as cm:
+            decode_default_value(None, b"", typ, self.location)
+        self.assertIn(self.location, str(cm.exception))
+        self.assertIn("ServiceA.Frobnicator", str(cm.exception))
 
     def test_value_the_enumeration_does_not_declare(self) -> None:
         with self.assertRaises(RuntimeError) as cm:

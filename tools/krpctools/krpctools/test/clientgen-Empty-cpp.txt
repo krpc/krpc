@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>
+#include <functional>
 #include <limits>
 #include <map>
 #include <set>
@@ -11,6 +13,7 @@
 #include <krpc/encoder.hpp>
 #include <krpc/error.hpp>
 #include <krpc/event.hpp>
+#include <krpc/hash.hpp>
 #include <krpc/object.hpp>
 #include <krpc/service.hpp>
 #include <krpc/stream.hpp>

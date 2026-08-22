@@ -25,11 +25,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         BaseField InternalField {
             get {
-                var field = Module.InternalModule.Fields [name];
-                if (field == null)
+                var partField = Module.InternalModule.Fields [name];
+                if (partField == null)
                     throw new ObjectDestroyedException (
                         "The part module no longer has a field called " + name + ".");
-                return field;
+                return partField;
             }
         }
 

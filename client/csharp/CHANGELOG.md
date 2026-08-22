@@ -1,7 +1,18 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. One
+  is generated as a `struct` carrying its fields as properties, with a constructor taking them
+  in the order the structure declares them. It implements `IEquatable` and `IComparable` and
+  carries the equality and relational operators, ordering by its fields in turn as a
+  `System.Tuple` of the same values does (#1066)
 - Stream expressions can be multiplied by a constant (#1062)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
+- Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
+  domain sockets rather than TCP/IP. The connection behaves identically once established
+  (#1065)
+- Add a `timeout` parameter to the `Connection` constructor, bounding how long a connection is
+  waited for. A network that drops a connection attempt rather than refusing it otherwise leaves
+  the client waiting indefinitely (#1065)
 - Reduce the cost of a remote procedure call. A value is encoded and decoded without a
   protobuf stream of its own, its bytes are written into a buffer of their own rather than one
   the thread keeps, a response is read a block at a time and parsed straight out of the read

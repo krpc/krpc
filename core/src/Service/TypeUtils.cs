@@ -31,7 +31,7 @@ namespace KRPC.Service
         /// </summary>
         public static bool IsAValidType (Type type)
         {
-            return IsAValueType (type) || IsAMessageType (type) || IsAClassType (type) || IsAnEnumType (type) || IsACollectionType (type);
+            return IsAValueType (type) || IsAMessageType (type) || IsAClassType (type) || IsAnEnumType (type) || IsAStructType (type) || IsACollectionType (type);
         }
 
         /// <summary>
@@ -88,6 +88,46 @@ namespace KRPC.Service
         {
             return Reflection.HasAttribute<KRPCEnumAttribute> (type) && Enum.GetUnderlyingType (type) == typeof(int);
         }
+
+        /// <summary>
+        /// Returns true if the given type can be used as a kRPC structure type.
+        /// </summary>
+        public static bool IsAStructType (ICustomAttributeProvider type)
+        {
+            return Reflection.HasAttribute<KRPCStructAttribute> (type);
+        }
+
+        /// <summary>
+        /// The properties that make up the fields of the given kRPC structure type, in the
+        /// order they are declared in. The fields are the public instance properties
+        /// annotated with the KRPCProperty attribute that have both a getter and a setter.
+        ///
+        /// The order is the order the wire encoding puts the field values in, so it has to
+        /// be the same every time it is asked for, whichever assembly the structure is in.
+        /// Reflection does not promise an order for the properties of a type, so they are
+        /// ordered by metadata token, which is assigned in declaration order.
+        /// </summary>
+        public static IList<PropertyInfo> GetStructFields (Type type)
+        {
+            lock (structFields) {
+                IList<PropertyInfo> fields;
+                if (structFields.TryGetValue (type, out fields))
+                    return fields;
+                fields = Reflection.GetPropertiesWith<KRPCPropertyAttribute> (type)
+                    .Where (property => property.IsPublic () && !property.IsStatic () &&
+                            property.GetGetMethod () != null && property.GetSetMethod () != null)
+                    .OrderBy (property => property.MetadataToken)
+                    .ToList ();
+                structFields [type] = fields;
+                return fields;
+            }
+        }
+
+        /// <summary>
+        /// The fields of every structure type they have been asked for. Encoding a structure
+        /// value needs them, which happens once per stream update per value.
+        /// </summary>
+        static readonly IDictionary<Type, IList<PropertyInfo>> structFields = new Dictionary<Type, IList<PropertyInfo>> ();
 
         /// <summary>
         /// Returns true if the given type can be used as a kRPC collection type.
@@ -297,6 +337,16 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Get the name of the service for the given KRPCStruct annotated type
+        /// </summary>
+        public static string GetStructServiceName (Type type)
+        {
+            ValidateKRPCStruct (type);
+            var attribute = Reflection.GetAttribute<KRPCStructAttribute> (type);
+            return attribute.Service ?? GetServiceName (type.DeclaringType);
+        }
+
+        /// <summary>
         /// Get the name of the service for the given KRPCException annotated type
         /// </summary>
         public static string GetExceptionServiceName (Type type)
@@ -461,6 +511,112 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Check the given type is a valid kRPC structure
+        /// 1. Must have KRPCStruct attribute
+        /// 2. Must have a valid identifier
+        /// 3. Must be a public non-generic value type
+        /// 4. Must be declared inside a kRPC service if it doesn't have the service explicity set
+        /// 5. Must not be declared inside a kRPC service if it does have the service explicity set
+        /// 6. Must have valid fields, see <see cref="ValidateStructFields"/>
+        /// </summary>
+        public static void ValidateKRPCStruct (Type type)
+        {
+            if (!Reflection.HasAttribute<KRPCStructAttribute> (type))
+                throw new ArgumentException (type + " does not have KRPCStruct attribute");
+            var attribute = Reflection.GetAttribute<KRPCStructAttribute> (type);
+            // Note: Type must already be a struct, due to AttributeUsage definition
+            // Validate the identifier.
+            ValidateIdentifier (type.Name);
+            // Check it's public and not generic
+            if (!(type.IsPublic || type.IsNestedPublic))
+                throw new ServiceException ("KRPCStruct " + type + " is not public");
+            if (type.IsGenericType)
+                throw new ServiceException ("KRPCStruct " + type + " is generic");
+            // If it doesn't have the Service property set, check the struct is defined directly inside a KRPCService
+            var declaringType = type.DeclaringType;
+            if (attribute.Service == null && (declaringType == null || !Reflection.HasAttribute<KRPCServiceAttribute> (declaringType)))
+                throw new ServiceException ("KRPCStruct " + type + " is not declared inside a KRPCService");
+            // If it does have the Service property set, check the struct isn't defined in a KRPCService
+            if (attribute.Service != null) {
+                ValidateIdentifier (attribute.Service);
+                while (declaringType != null) {
+                    if (Reflection.HasAttribute<KRPCServiceAttribute> (declaringType))
+                        throw new ServiceException ("KRPCStruct " + type + " is declared inside a KRPCService, but has the service name explicitly set");
+                    declaringType = declaringType.DeclaringType;
+                }
+            }
+            ValidateStructFields (type);
+        }
+
+        /// <summary>
+        /// Check the fields of the given structure type
+        /// 1. Every property marked as a field must have a valid identifier
+        /// 2. Every property marked as a field must be a public instance property with both a
+        ///    getter and a setter, so that a value can be both read and constructed
+        /// 3. Every field must have a valid kRPC type
+        /// 4. A field must not be nullable or restricted to a game scene
+        /// 5. There must be at least one field
+        /// 6. The structure must not contain itself, directly or through the fields of another
+        ///    structure
+        /// </summary>
+        public static void ValidateStructFields (Type type)
+        {
+            foreach (var property in Reflection.GetPropertiesWith<KRPCPropertyAttribute> (type)) {
+                ValidateIdentifier (property.Name);
+                if (!property.IsPublic () || property.IsStatic ())
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " is not a public instance property");
+                if (property.GetGetMethod () == null || property.GetSetMethod () == null)
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " does not have both a getter and a setter");
+                if (!IsAValidType (property.PropertyType))
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " has type " + property.PropertyType + ", which is not a valid kRPC type");
+                var propertyAttribute = Reflection.GetAttribute<KRPCPropertyAttribute> (property);
+                if (propertyAttribute.Nullable)
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " is nullable, which struct fields cannot be");
+                if (propertyAttribute.GameScene != GameScene.Inherit)
+                    throw new ServiceException ("KRPCStruct " + type + " field " + property.Name + " sets a game scene, which struct fields cannot do");
+            }
+            if (GetStructFields (type).Count == 0)
+                throw new ServiceException ("KRPCStruct " + type + " does not have any fields");
+            CheckStructIsNotRecursive (type, type, new List<Type> ());
+        }
+
+        /// <summary>
+        /// Check that none of the fields of the given structure type contain the structure type
+        /// the check started from, whether directly or through the fields of another structure.
+        /// A structure value is serialized inline, so a structure containing itself could not be
+        /// serialized at all.
+        /// </summary>
+        static void CheckStructIsNotRecursive (Type start, Type type, IList<Type> path)
+        {
+            path.Add (type);
+            foreach (var property in GetStructFields (type)) {
+                foreach (var fieldStructType in StructTypesIn (property.PropertyType)) {
+                    if (fieldStructType == start)
+                        throw new ServiceException ("KRPCStruct " + start + " contains itself, via " +
+                            string.Join (" -> ", path.Select (x => x.Name).Concat (new [] { start.Name }).ToArray ()));
+                    if (!path.Contains (fieldStructType))
+                        CheckStructIsNotRecursive (start, fieldStructType, path);
+                }
+            }
+            path.RemoveAt (path.Count - 1);
+        }
+
+        /// <summary>
+        /// The structure types that the given type is, or holds in a collection.
+        /// </summary>
+        static IEnumerable<Type> StructTypesIn (Type type)
+        {
+            if (IsAStructType (type)) {
+                yield return type;
+            } else if (IsACollectionType (type)) {
+                foreach (var argument in type.GetGenericArguments ()) {
+                    foreach (var structType in StructTypesIn (argument))
+                        yield return structType;
+                }
+            }
+        }
+
+        /// <summary>
         /// Check the given method is a valid kRPC class method
         /// 1. Must have KRPCMethod attribute
         /// 2. Must have a valid identifier
@@ -602,6 +758,10 @@ namespace KRPC.Service
             } else if (IsAnEnumType (type)) {
                 result["code"] = "ENUMERATION";
                 result["service"] = GetEnumServiceName (type);
+                result["name"] = type.Name;
+            } else if (IsAStructType (type)) {
+                result["code"] = "STRUCT";
+                result["service"] = GetStructServiceName (type);
                 result["name"] = type.Name;
             } else if (IsATupleCollectionType (type)) {
                 result["code"] = "TUPLE";

@@ -19,6 +19,11 @@ py_binary(
 )
 
 py_binary(
+    name = "render_template",
+    srcs = ["render_template.py"],
+)
+
+py_binary(
     name = "run_and_stamp",
     srcs = ["run_and_stamp.py"],
 )

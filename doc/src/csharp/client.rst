@@ -181,7 +181,7 @@ Client API Reference
    A connection to the kRPC server. All interaction with kRPC is performed via an instance of this
    class.
 
-   .. method:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
+   .. method:: Connection(string name = "", System.Net.IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, System.TimeSpan timeout = default)
 
       Connect to a kRPC server.
 
@@ -194,6 +194,26 @@ Client API Reference
          RPC port number of the server you want to connect to.
        * **stream_port** -- The port number of the Stream Server. Defaults to 50001. This should
          match the stream port number of the server you want to connect to.
+       * **timeout** -- How long to wait for a connection before giving up. Defaults to zero,
+         which waits indefinitely. A network that drops a connection attempt rather than refusing
+         it otherwise leaves the client waiting.
+
+   .. method:: static Connection ConnectLocal(string name = "", string rpcPath = "", string streamPath = "")
+
+      Connect to a kRPC server running on the same machine, over unix domain sockets rather than
+      TCP/IP. The connection behaves identically once established. Unix domain sockets are
+      available on Linux, macOS, and Windows 10 1803 and Windows Server 2019 or later.
+
+      :parameters:
+
+       * **name** -- A descriptive name for the connection. This is passed to the server and appears
+         in the in-game server window.
+       * **rpcPath** -- The path of the socket the RPC Server is listening on. This should match the
+         RPC socket path shown in the in-game server window. Leave empty for the path the server
+         uses unless it was configured with another.
+       * **streamPath** -- The path of the socket the Stream Server is listening on. This should
+         match the stream socket path shown in the in-game server window. Defaults as ``rpcPath``
+         does. Pass ``null`` to connect without stream support.
 
    .. method:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 

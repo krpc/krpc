@@ -49,6 +49,7 @@ boolean
 circularization
 clickable
 clientgen
+codec
 collidable
 collinear
 combusting
@@ -106,6 +107,8 @@ linux
 localhost
 lua
 luarocks
+luasocket
+macOS
 mach
 massless
 maths
@@ -186,6 +189,7 @@ unchecks
 undocked
 undocking
 undocks
+unix
 unowned
 unpaused
 unserialize

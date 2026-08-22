@@ -34,29 +34,12 @@ sed -i "s/\"version\": \"[^\"]*\"/\"version\": \"$version_semver\"/" "$tmpport/v
 # Install via the overlay port into a local directory
 "$vcpkg_bin" install krpc:x64-windows --overlay-ports="$tmpport" --x-install-root=vcpkg_installed
 
-# Consumer test
-mkdir -p consumer
-cat > consumer/main.cpp << 'EOF'
-#include <iostream>
-#include <krpc.hpp>
-#include <krpc/services/krpc.hpp>
-int main() {
-    // Compile+link test only — no server connection.
-    std::cout << "krpc library linked OK" << std::endl;
-    return 0;
-}
-EOF
-cat > consumer/CMakeLists.txt << 'EOF'
-cmake_minimum_required(VERSION 3.15)
-project(krpc_consumer_test LANGUAGES CXX)
-set(CMAKE_CXX_STANDARD 17)
-find_package(krpc CONFIG REQUIRED)
-add_executable(test_app main.cpp)
-target_link_libraries(test_app PRIVATE krpc::krpc)
-EOF
-cmake -S consumer -B consumer/build \
+# Build the consumer project against it, to verify the package config and targets work
+# end-to-end. The program opens a connection over each of the transports the client offers,
+# which is what proves both of them reach a program through the package vcpkg installed.
+cmake -S "$scriptroot/test-consumer" -B consumer \
   "-DCMAKE_TOOLCHAIN_FILE=$toolchain" \
   "-DVCPKG_INSTALLED_DIR=$(pwd)/vcpkg_installed" \
   -DVCPKG_TARGET_TRIPLET=x64-windows \
   -DCMAKE_BUILD_TYPE=Release
-cmake --build consumer/build --config Release --parallel
+cmake --build consumer --config Release --parallel

@@ -3,10 +3,9 @@ package krpc.client;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-/** Test suite for the kRPC Java client. */
+/** The client end to end against a server, which the harness running these starts. */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ConnectionTest.class, EncoderTest.class, EncoderTestSuite.class,
-                     EventTest.class, RemoteObjectTest.class,
+@Suite.SuiteClasses({ConnectionTest.class, EventTest.class, RemoteObjectTest.class,
                      StreamTest.class })
 public class TestSuite {
   /** Entry point for running the test suite directly. */

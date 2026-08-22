@@ -19,6 +19,7 @@ from krpc.types import (
     ClassType,
     EnumerationType,
     MessageType,
+    StructType,
     TupleType,
     ListType,
     SetType,
@@ -104,6 +105,21 @@ class Encoder:
                 for item, value_type in zip(tuple_obj, typ.value_types)
             )
             return tuple_msg.SerializeToString()
+        if isinstance(typ, StructType):
+            # A structure is encoded as the values of its fields in order, which is the
+            # same encoding as a tuple of those values
+            struct_msg = KRPC.Tuple()
+            struct_obj = cast(Collection[object], x)
+            if len(struct_obj) != len(typ.field_types):
+                raise EncodingError(
+                    "Struct has wrong number of fields. "
+                    + "Expected %d, got %d." % (len(typ.field_types), len(struct_obj))
+                )
+            struct_msg.items.extend(
+                cls.encode(item, field_type)
+                for item, field_type in zip(struct_obj, typ.field_types)
+            )
+            return struct_msg.SerializeToString()
         raise EncodingError("Cannot encode objects of type " + str(type(x)))
 
     @classmethod

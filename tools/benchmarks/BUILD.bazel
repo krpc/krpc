@@ -196,12 +196,18 @@ py_binary(
     deps = [":benchmarks_lib"],
 )
 
-# Measured over TCP/IP rather than the serial port this client is usually built for, since the
-# server reads a serial port on a poll whose interval is longer than everything this measures
-# put together.
+# Measured over a socket rather than the serial port this client is usually built for, since
+# the server reads a serial port on a poll whose interval is longer than everything this
+# measures put together. A program per transport, since this client is compiled for the one it
+# talks over rather than choosing when it connects.
 optimized_binary(
     name = "cnano_client",
     binary = "//client/cnano:benchmark",
+)
+
+optimized_binary(
+    name = "cnano_client_localsocket",
+    binary = "//client/cnano:benchmark-localsocket",
 )
 
 py_binary(
@@ -211,9 +217,11 @@ py_binary(
         "--name=cnano",
         "--server=$(rootpath //tools/TestServer)",
         "--client=$(rootpath :cnano_client)",
+        "--client-localsocket=$(rootpath :cnano_client_localsocket)",
     ],
     data = [
         ":cnano_client",
+        ":cnano_client_localsocket",
         "//tools/TestServer",
     ],
     main = "run_client.py",
@@ -238,9 +246,11 @@ py_binary(
         "--client=csharp=$(rootpath //client/csharp:benchmark)",
         "--client=lua=$(rootpath //client/lua:benchmark)",
         "--client=cnano=$(rootpath :cnano_client)",
+        "--client-localsocket=cnano=$(rootpath :cnano_client_localsocket)",
     ],
     data = [
         ":cnano_client",
+        ":cnano_client_localsocket",
         ":cpp_client",
         "//client/csharp:benchmark",
         "//client/java:benchmark",

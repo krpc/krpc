@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using KRPC.Server;
+using KRPC.Server.LocalSocket;
 using KRPC.Server.TCP;
 using UnityEngine;
 
@@ -38,10 +39,19 @@ namespace KRPC.UI
         const string invalidPortNameText = "Port name is empty";
         const string invalidBaudRateText = "Baud rate is not an integer";
         const string invalidDataBitsText = "Data bits must be between 5 and 8 inclusive";
+        const string rpcPathLabelText = "RPC socket:";
+        const string streamPathLabelText = "Stream socket:";
+        static readonly string invalidRPCPathText =
+            "RPC socket path must not be empty, and must take at most " +
+            LocalSocketServer.MaximumPathLength + " bytes";
+        static readonly string invalidStreamPathText =
+            "Stream socket path must not be empty, and must take at most " +
+            LocalSocketServer.MaximumPathLength + " bytes";
         string[] availableProtocols = {
             MainWindow.protobufOverTcpText,
             MainWindow.protobufOverWebSocketsText,
-            MainWindow.protobufOverSerialIOText
+            MainWindow.protobufOverSerialIOText,
+            MainWindow.protobufOverLocalSocketText
         };
         string[] parityOptions = {
             "None", "Odd", "Even", "Mark", "Space"
@@ -65,10 +75,23 @@ namespace KRPC.UI
         readonly object parityComboId = new object ();
         readonly object stopBitsComboId = new object ();
 
+        // Names for the fields whose value is too long for the field it is edited in, unique
+        // in the same way and for the same reason, and how far each has been scrolled
+        // sideways. The field is a window onto its value that follows the caret.
+        readonly string rpcPathFieldName;
+        readonly string streamPathFieldName;
+        readonly string portNameFieldName;
+        float rpcPathScroll;
+        float streamPathScroll;
+        float portNameScroll;
+
         public EditServer (MainWindow mainWindow, Configuration.Server server)
         {
             window = mainWindow;
             id = server.Id;
+            rpcPathFieldName = "rpc_path " + id;
+            streamPathFieldName = "stream_path " + id;
+            portNameFieldName = "port " + id;
 
             name = server.Name;
             protocol = server.Protocol;
@@ -158,6 +181,26 @@ namespace KRPC.UI
                     GUILayoutExtensions.ValidatedTextField (settings["stream_port"], portMaxLength, window.stretchyTextFieldStyle,
                         ValidPort (settings["stream_port"]), window.errorColor));
                 GUILayout.EndHorizontal();
+            } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
+                GUILayout.BeginHorizontal();
+                DrawFieldLabel (rpcPathLabelText);
+                if (!settings.ContainsKey("rpc_path"))
+                    settings["rpc_path"] = LocalSocketServer.DefaultPath ("rpc");
+                settings["rpc_path"] = GUILayoutExtensions.ValidatedScrollingTextField (
+                    rpcPathFieldName, settings["rpc_path"], ref rpcPathScroll,
+                    LocalSocketServer.MaximumPathLength, window.stretchyTextFieldStyle,
+                    ValidPath (settings["rpc_path"]), window.errorColor);
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+                DrawFieldLabel (streamPathLabelText);
+                if (!settings.ContainsKey("stream_path"))
+                    settings["stream_path"] = LocalSocketServer.DefaultPath ("stream");
+                settings["stream_path"] = GUILayoutExtensions.ValidatedScrollingTextField (
+                    streamPathFieldName, settings["stream_path"], ref streamPathScroll,
+                    LocalSocketServer.MaximumPathLength, window.stretchyTextFieldStyle,
+                    ValidPath (settings["stream_path"]), window.errorColor);
+                GUILayout.EndHorizontal();
             } else {
                 if (!settings.ContainsKey("baud_rate"))
                     settings["baud_rate"] = "9600";
@@ -168,8 +211,9 @@ namespace KRPC.UI
                 DrawFieldLabel (portLabelText);
                 if (!settings.ContainsKey("port"))
                     settings["port"] = new KRPC.IO.Ports.SerialPort ().PortName;
-                settings["port"] = GUILayoutExtensions.ValidatedTextField (
-                    settings["port"], portNameMaxLength, window.stretchyTextFieldStyle,
+                settings["port"] = GUILayoutExtensions.ValidatedScrollingTextField (
+                    portNameFieldName, settings["port"], ref portNameScroll,
+                    portNameMaxLength, window.stretchyTextFieldStyle,
                     settings["port"].Length > 0, window.errorColor);
                 GUILayout.EndHorizontal();
 
@@ -223,6 +267,14 @@ namespace KRPC.UI
             return ushort.TryParse (value, out port);
         }
 
+        static bool ValidPath (string value)
+        {
+            // The limit is on the bytes the path takes in a socket address, not on the
+            // characters it is written with
+            return value.Length > 0 &&
+                LocalSocketServer.PathLength (value) <= LocalSocketServer.MaximumPathLength;
+        }
+
         static bool ValidBaudRate (string value)
         {
             uint baudRate;
@@ -249,6 +301,12 @@ namespace KRPC.UI
                 if (!ValidPort (settings["stream_port"]))
                     window.Errors.Add(invalidStreamPortText);
                 allowedKeys = new List<string> { "address", "rpc_port", "stream_port" };
+            } else if (protocol == Protocol.ProtocolBuffersOverLocalSocket) {
+                if (!ValidPath (settings["rpc_path"]))
+                    window.Errors.Add(invalidRPCPathText);
+                if (!ValidPath (settings["stream_path"]))
+                    window.Errors.Add(invalidStreamPathText);
+                allowedKeys = new List<string> { "rpc_path", "stream_path" };
             } else {
                 if (settings["port"].Length == 0)
                     window.Errors.Add(invalidPortNameText);

@@ -14,6 +14,7 @@
 #include <string>
 #include <thread>  // NOLINT(build/c++11)
 #include <tuple>
+#include <unordered_set>
 #include <vector>
 
 #include "gtest/gtest.h"
@@ -49,8 +50,7 @@ static bool is_version(const char* value) {
 TEST_F(test_client, test_default_ctor) { krpc::Client client; }
 
 TEST_F(test_client, test_shared_ptr) {
-  auto client = std::make_shared<krpc::Client>("C++ClientTest", "localhost", get_rpc_port(),
-                                               get_stream_port());
+  auto client = std::make_shared<krpc::Client>(connect());
   krpc::services::KRPC krpc(client.get());
   krpc::schema::Status status = krpc.get_status();
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
@@ -59,7 +59,7 @@ TEST_F(test_client, test_shared_ptr) {
 
 TEST_F(test_client, test_std_container) {
   std::vector<krpc::Client> clients;
-  clients.push_back(krpc::connect("C++ClientTest", "localhost", get_rpc_port(), get_stream_port()));
+  clients.push_back(connect());
   krpc::services::KRPC krpc(&(clients[0]));
   krpc::schema::Status status = krpc.get_status();
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
@@ -70,43 +70,44 @@ TEST_F(test_client, test_version) {
   ASSERT_TRUE(is_version(status.version().c_str())) << status.version();
 }
 
+// These connect by port, so they are skipped where the server is listening on socket paths:
+// there is no port to get wrong then, and the one they would fall back on is a guess that
+// says nothing about the client.
 TEST_F(test_client, test_wrong_rpc_port) {
-  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost",
-                             get_rpc_port() ^ get_stream_port(), get_stream_port()),
+  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
+  ASSERT_THROW(krpc::connect("C++ClientTestWrongRpcPort", "localhost", unused_port(),
+                             get_stream_port(), connect_timeout),
                std::exception);
 }
 
 TEST_F(test_client, test_wrong_stream_port) {
+  if (get_rpc_path() != nullptr) GTEST_SKIP() << "the server is listening on socket paths";
   ASSERT_THROW(krpc::connect("C++ClientTestWrongStreamPort", "localhost", get_rpc_port(),
-                             get_rpc_port() ^ get_stream_port()),
+                             unused_port(), connect_timeout),
                std::exception);
 }
 
 TEST_F(test_client, test_wrong_rpc_server) {
-  auto fn = [this]() {
-    krpc::connect("C++ClientTestWrongRpcServer", "localhost", get_stream_port(), get_stream_port());
-  };
+  auto fn = [this]() { connect("C++ClientTestWrongRpcServer", "stream", "stream"); };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
   } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
                  "Connection request was for the rpc server, but this is the stream server. "
-                 "Did you connect to the wrong port number?");
+                 "Did you connect to the wrong port number or socket path?");
   }
 }
 
 TEST_F(test_client, test_wrong_stream_server) {
-  auto fn = [this]() {
-    krpc::connect("C++ClientTestWrongStreamServer", "localhost", get_rpc_port(), get_rpc_port());
-  };
+  auto fn = [this]() { connect("C++ClientTestWrongStreamServer", "rpc", "rpc"); };
   ASSERT_THROW(fn(), krpc::ConnectionError);
   try {
     fn();
   } catch (krpc::ConnectionError& e) {
     ASSERT_STREQ(e.what(),
                  "Connection request was for the stream server, but this is the rpc server. "
-                 "Did you connect to the wrong port number?");
+                 "Did you connect to the wrong port number or socket path?");
   }
 }
 
@@ -359,6 +360,75 @@ TEST_F(test_client, test_collections_of_objects) {
   ASSERT_EQ("value=bob", l3[1].get_value());
 }
 
+TEST_F(test_client, test_structs) {
+  krpc::services::TestService::TestStruct value(
+      42, "jeb", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
+  auto result = test_service.struct_echo(value);
+  ASSERT_EQ(value, result);
+  ASSERT_EQ(42, result.int_field);
+  ASSERT_EQ("jeb", result.string_field);
+  ASSERT_EQ(krpc::services::TestService::TestEnum::value_b, result.enum_field);
+  ASSERT_EQ(std::vector<int32_t>({1, 2, 3}), result.list_field);
+}
+
+TEST_F(test_client, test_nested_structs) {
+  auto obj = test_service.create_test_object("bob");
+  krpc::services::TestService::TestNestedStruct value(
+      krpc::services::TestService::TestStruct(1, "jeb",
+                                              krpc::services::TestService::TestEnum::value_a, {}),
+      obj, "bill");
+  auto result = test_service.nested_struct_echo(value);
+  ASSERT_EQ(value, result);
+  ASSERT_EQ(1, result.struct_field.int_field);
+  ASSERT_EQ(obj, result.object_field);
+  ASSERT_EQ("bill", result.string_field);
+}
+
+TEST_F(test_client, test_collections_of_structs) {
+  std::vector<krpc::services::TestService::TestStruct> values{
+      krpc::services::TestService::TestStruct(0, "jeb",
+                                              krpc::services::TestService::TestEnum::value_c, {}),
+      krpc::services::TestService::TestStruct(1, "bob",
+                                              krpc::services::TestService::TestEnum::value_c, {})};
+  auto result = test_service.increment_list_of_structs(values);
+  ASSERT_EQ(2, result.size());
+  ASSERT_EQ(1, result[0].int_field);
+  ASSERT_EQ(2, result[1].int_field);
+}
+
+TEST_F(test_client, test_struct_default_value) {
+  krpc::services::TestService::TestStruct value(
+      42, "jeb", krpc::services::TestService::TestEnum::value_b, {1, 2, 3});
+  ASSERT_EQ(value, test_service.struct_default());
+}
+
+TEST_F(test_client, test_struct_comparison) {
+  typedef krpc::services::TestService::TestStruct Struct;
+  Struct a(1, "jeb", krpc::services::TestService::TestEnum::value_a, {1, 2});
+  Struct b(1, "jeb", krpc::services::TestService::TestEnum::value_a, {1, 2});
+  Struct c(2, "jeb", krpc::services::TestService::TestEnum::value_a, {1, 2});
+
+  ASSERT_EQ(a, b);
+  ASSERT_NE(a, c);
+  // Ordered by the fields in turn, as a tuple of the same values is
+  ASSERT_LT(a, c);
+  ASSERT_GT(c, a);
+  ASSERT_LE(a, b);
+  ASSERT_GE(a, b);
+
+  std::set<Struct> set{c, a, b};
+  ASSERT_EQ(2u, set.size());
+  ASSERT_EQ(a, *set.begin());
+
+  // A structure is a type of our own, so it gets a std::hash and needs nothing further to be
+  // the key of an unordered container
+  std::unordered_set<Struct> hashed{a, b, c};
+  ASSERT_EQ(2u, hashed.size());
+  ASSERT_EQ(std::hash<Struct>()(a), std::hash<Struct>()(b));
+  // A collection of structures hashes too, through krpc::hash
+  ASSERT_EQ(krpc::hash_value(std::vector<Struct>{a}), krpc::hash_value(std::vector<Struct>{b}));
+}
+
 TEST_F(test_client, test_collections_default_values) {
   std::tuple<int, bool> t{1, false};
   ASSERT_EQ(t, test_service.tuple_default());
@@ -380,8 +450,7 @@ TEST_F(test_client, test_test_service_enum_members) {
 // thrower, and must be reported rather than looked up past the end of the map. This client
 // deliberately never constructs the TestService object, so nothing registers its exceptions.
 TEST_F(test_client, test_unknown_exception_type) {
-  krpc::Client client = krpc::connect("C++ClientTestUnknownExceptionType", "localhost",
-                                      get_rpc_port(), get_stream_port());
+  krpc::Client client = connect("C++ClientTestUnknownExceptionType");
   try {
     client.invoke("TestService", "ThrowCustomException");
     FAIL() << "expected an exception";

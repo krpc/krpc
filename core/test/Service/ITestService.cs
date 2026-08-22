@@ -75,6 +75,14 @@ namespace KRPC.Test.Service
 
         IDictionary<int,bool> DictionaryDefault (IDictionary<int,bool> x);
 
+        TestService.TestStruct EchoStruct (TestService.TestStruct x);
+
+        IList<TestService.TestStruct> EchoListOfStructs (IList<TestService.TestStruct> l);
+
+        TestService.TestNestedStruct EchoNestedStruct (TestService.TestNestedStruct x);
+
+        TestService.TestStruct StructDefault (TestService.TestStruct x);
+
         void ProcedureAvailableInInheritedGameScene();
 
         void ProcedureAvailableInSpecifiedGameScene();

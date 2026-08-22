@@ -414,8 +414,6 @@ java_binary_multiple(
     copts = [
         "-Werror",
         "-Xlint:all",
-        "-target 1.9",
-        "-source 1.9",
     ],
     deps = [
         "//client/java:krpc-jar",

@@ -2,6 +2,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -19,6 +20,8 @@ from .nodes import (
     ClassProperty,
     Enumeration,
     EnumerationValue,
+    Struct,
+    StructField,
 )
 from ..lang.lua import LuaLanguage
 
@@ -44,6 +47,8 @@ class LuaDomain(Domain):
             return ":class:`%s`" % self.type(typ)
         if isinstance(typ, EnumerationType):
             return ":class:`%s`" % self.type(typ)
+        if isinstance(typ, StructType):
+            return ":class:`%s`" % self.type(typ)
         if isinstance(typ, ListType):
             return "List"
         if isinstance(typ, DictionaryType):
@@ -65,6 +70,7 @@ class LuaDomain(Domain):
                 ClassStaticMethod,
                 ClassProperty,
                 EnumerationValue,
+                StructField,
             )
         ):
             name = name.split(".")
@@ -78,11 +84,11 @@ class LuaDomain(Domain):
         return name
 
     def see(self, obj):
-        if isinstance(obj, (Property, ClassProperty, EnumerationValue)):
+        if isinstance(obj, (Property, ClassProperty, EnumerationValue, StructField)):
             prefix = "attr"
         elif isinstance(obj, (Procedure, ClassMethod, ClassStaticMethod)):
             prefix = "meth"
-        elif isinstance(obj, (Class, Enumeration)):
+        elif isinstance(obj, (Class, Enumeration, Struct)):
             prefix = "class"
         else:
             raise RuntimeError(str(obj))
