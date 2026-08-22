@@ -104,6 +104,8 @@ namespace KRPC.Client.Test
                 Connection.AddStream (() => obj.IntProperty), x);
             Assert.AreEqual (
                 Connection.AddStream (() => obj.IntProperty * 2), x);
+            Assert.AreEqual (
+                Connection.AddStream (() => 2 * obj.IntProperty), x);
         }
 
         [Test]

@@ -11,7 +11,7 @@ namespace KRPC.Client
     {
         internal readonly StreamImpl stream;
         readonly Func<object, TReturnType> convert;
-        readonly string convertKey;
+        readonly object convertKey;
 
         internal Stream (Connection connection, ulong id)
         {
@@ -24,7 +24,7 @@ namespace KRPC.Client
         }
 
         internal Stream (Connection connection, ProcedureCall call, System.Type rpcReturnType,
-                         Func<object, TReturnType> convert, string convertKey)
+                         Func<object, TReturnType> convert, object convertKey)
         {
             stream = connection.StreamManager.AddStream (rpcReturnType, call);
             this.convert = convert;
@@ -50,7 +50,7 @@ namespace KRPC.Client
         public bool Equals (Stream<TReturnType> other)
         {
             return !ReferenceEquals (other, null) && stream.Id == other.stream.Id &&
-                convertKey == other.convertKey;
+                Equals (convertKey, other.convertKey);
         }
 
         /// <summary>

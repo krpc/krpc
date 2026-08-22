@@ -37,9 +37,6 @@ namespace KRPC.Client
 
         static bool FindStreamedRpc (Expression expression, ref Expression rpc)
         {
-            if (expression == null)
-                return true;
-
             var unary = expression as UnaryExpression;
             if (unary != null && (unary.NodeType == ExpressionType.Convert ||
                 unary.NodeType == ExpressionType.ConvertChecked))
@@ -70,48 +67,68 @@ namespace KRPC.Client
             return true;
         }
 
-        // The non-call side of a multiply must be a constant (or a conversion of one).
         internal static bool IsConstantMultiplyWrapper (Expression body, Expression rpc)
         {
-            if (ReferenceEquals (body, rpc))
-                return true;
-
-            var unary = body as UnaryExpression;
-            if (unary != null && (unary.NodeType == ExpressionType.Convert ||
-                unary.NodeType == ExpressionType.ConvertChecked))
-                return IsConstantMultiplyWrapper (unary.Operand, rpc);
-
-            var binary = body as BinaryExpression;
-            if (binary != null && (binary.NodeType == ExpressionType.Multiply ||
-                binary.NodeType == ExpressionType.MultiplyChecked)) {
-                if (IsConstantMultiplyWrapper (binary.Left, rpc))
-                    return IsConstantFactor (binary.Right);
-                if (IsConstantMultiplyWrapper (binary.Right, rpc))
-                    return IsConstantFactor (binary.Left);
-            }
-
-            return false;
+            return IsWrapper (body, rpc, IsConstantFactor);
         }
 
         internal static bool IsIdentityWrapper (Expression body, Expression rpc)
         {
+            return body.Type == rpc.Type && IsWrapper (body, rpc, IsMultiplicativeIdentity);
+        }
+
+        internal static object FoldedFactor (Expression body, Expression rpc)
+        {
             if (ReferenceEquals (body, rpc))
-                return true;
-            if (body.Type != rpc.Type)
-                return false;
+                return null;
 
             var unary = body as UnaryExpression;
             if (unary != null && (unary.NodeType == ExpressionType.Convert ||
-                unary.NodeType == ExpressionType.ConvertChecked))
-                return IsIdentityWrapper (unary.Operand, rpc);
+                unary.NodeType == ExpressionType.ConvertChecked)) {
+                var inner = FoldedFactor (unary.Operand, rpc);
+                if (inner == null)
+                    return null;
+                return Convert.ChangeType (inner, unary.Type);
+            }
 
             var binary = body as BinaryExpression;
             if (binary != null && (binary.NodeType == ExpressionType.Multiply ||
                 binary.NodeType == ExpressionType.MultiplyChecked)) {
-                if (IsIdentityWrapper (binary.Left, rpc))
-                    return IsMultiplicativeIdentity (binary.Right);
-                if (IsIdentityWrapper (binary.Right, rpc))
-                    return IsMultiplicativeIdentity (binary.Left);
+                object inner;
+                object factor;
+                if (IsWrapper (binary.Left, rpc, IsConstantFactor)) {
+                    inner = FoldedFactor (binary.Left, rpc);
+                    TryConstantValue (binary.Right, out factor);
+                } else {
+                    inner = FoldedFactor (binary.Right, rpc);
+                    TryConstantValue (binary.Left, out factor);
+                }
+                if (inner == null)
+                    return Convert.ChangeType (factor, binary.Type);
+                return Convert.ChangeType (
+                    Convert.ToDouble (inner) * Convert.ToDouble (factor), binary.Type);
+            }
+
+            return null;
+        }
+
+        static bool IsWrapper (Expression body, Expression rpc, Func<Expression, bool> factorOk)
+        {
+            if (ReferenceEquals (body, rpc))
+                return true;
+
+            var unary = body as UnaryExpression;
+            if (unary != null && (unary.NodeType == ExpressionType.Convert ||
+                unary.NodeType == ExpressionType.ConvertChecked))
+                return IsWrapper (unary.Operand, rpc, factorOk);
+
+            var binary = body as BinaryExpression;
+            if (binary != null && (binary.NodeType == ExpressionType.Multiply ||
+                binary.NodeType == ExpressionType.MultiplyChecked)) {
+                if (IsWrapper (binary.Left, rpc, factorOk))
+                    return factorOk (binary.Right);
+                if (IsWrapper (binary.Right, rpc, factorOk))
+                    return factorOk (binary.Left);
             }
 
             return false;

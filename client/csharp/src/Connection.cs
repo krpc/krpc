@@ -170,7 +170,8 @@ namespace KRPC.Client
                 return new Stream<TResult> (this, call);
 
             var convert = ExpressionUtils.CompileTransform<TResult> (expression.Body, rpc);
-            return new Stream<TResult> (this, call, rpc.Type, convert, expression.Body.ToString ());
+            return new Stream<TResult> (this, call, rpc.Type, convert,
+                ExpressionUtils.FoldedFactor (expression.Body, rpc));
         }
 
         /// <summary>
