@@ -2,6 +2,9 @@ import unittest
 
 import krpctest
 
+# The game's physics time step.
+TICK = 0.02
+
 
 class TestTickHold(krpctest.TestCase):
     """Holding a physics tick, which is what lets a control loop read the game state,
@@ -52,6 +55,21 @@ class TestTickHold(krpctest.TestCase):
     def test_releasing_a_tick_that_is_not_held_does_nothing(self):
         self.krpc.release_tick()
         self.krpc.release_tick()
+
+    def test_next_tick_takes_every_tick(self):
+        # Universal time counts the ticks the game ran, so a loop that misses none of them
+        # advances it by exactly one tick per iteration. Both readings are taken inside a
+        # hold, where the game is not moving.
+        iterations = 20
+        try:
+            self.krpc.next_tick()
+            start = self.space_center.ut
+            for _ in range(iterations):
+                self.krpc.next_tick()
+            elapsed = self.space_center.ut - start
+        finally:
+            self.krpc.release_tick()
+        self.assertAlmostEqual(iterations * TICK, elapsed, delta=TICK / 2)
 
 
 if __name__ == "__main__":
