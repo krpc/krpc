@@ -152,7 +152,7 @@ hdrs = glob(["include/**/*.h"]) + [
     ":services-kerbalalarmclock",
     ":services-remotetech",
     ":services-stdlib",
-        ":services-ui",
+    ":services-ui",
     ":services-lidar",
     ":services-debug",
     ":services-dockingcamera",
