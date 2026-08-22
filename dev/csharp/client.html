@@ -816,8 +816,8 @@ then repeatedly prints the position returned by the stream. The stream is automa
 the client disconnects.</p>
 <p>A stream can be created for any method call by calling <a class="reference internal" href="#method-Connection.AddStream" title="Connection.AddStream method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Connection.AddStream</span></code></a> and passing it
 a lambda expression that invokes the desired method. This lambda expression must take zero arguments
-and be either a method call expression or a parameter call expression. It returns a stream object of
-type <a class="reference internal" href="#class-Stream" title="Stream class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent value of the stream can be obtained by calling
+and be a method call or property access, which may be multiplied by a constant. It returns a stream
+object of type <a class="reference internal" href="#class-Stream" title="Stream class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Stream</span></code></a>. The most recent value of the stream can be obtained by calling
 <a class="reference internal" href="#method-Stream.Get" title="Stream.Get method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Get</span></code></a>. A stream can be stopped and removed from the server by calling
 <a class="reference internal" href="#method-Stream.Remove" title="Stream.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Stream.Remove</span></code></a> on the stream object. All of a clients streams are automatically stopped when
 it disconnects.</p>
