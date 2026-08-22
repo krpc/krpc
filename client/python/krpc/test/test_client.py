@@ -619,6 +619,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                 [
                     "krpc",
                     "test_service",
+                    # Owns the class that an extension member of TestService returns
+                    "test_service2",
                     # The server-side benchmarks the test server exposes. It has no
                     # pre-generated stubs, so this is also the client building a service
                     # from the definitions the server hands over.
