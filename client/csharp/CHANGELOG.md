@@ -4,6 +4,7 @@
   in the order the structure declares them. It implements `IEquatable` and `IComparable` and
   carries the equality and relational operators, ordering by its fields in turn as a
   `System.Tuple` of the same values does (#1066)
+- Stream expressions can be multiplied by a constant (#1062)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
 - Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix

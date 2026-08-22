@@ -10,6 +10,8 @@ namespace KRPC.Client
     public class Stream<TReturnType> : IEquatable<Stream<TReturnType>>
     {
         internal readonly StreamImpl stream;
+        readonly Func<object, TReturnType> convert;
+        readonly object convertKey;
 
         internal Stream (Connection connection, ulong id)
         {
@@ -19,6 +21,14 @@ namespace KRPC.Client
         internal Stream (Connection connection, ProcedureCall call)
         {
             stream = connection.StreamManager.AddStream (typeof(TReturnType), call);
+        }
+
+        internal Stream (Connection connection, ProcedureCall call, System.Type rpcReturnType,
+                         Func<object, TReturnType> convert, object convertKey)
+        {
+            stream = connection.StreamManager.AddStream (rpcReturnType, call);
+            this.convert = convert;
+            this.convertKey = convertKey;
         }
 
         /// <summary>
@@ -39,7 +49,8 @@ namespace KRPC.Client
         /// </summary>
         public bool Equals (Stream<TReturnType> other)
         {
-            return !ReferenceEquals (other, null) && stream.Id == other.stream.Id;
+            return !ReferenceEquals (other, null) && stream.Id == other.stream.Id &&
+                Equals (convertKey, other.convertKey);
         }
 
         /// <summary>
@@ -71,7 +82,10 @@ namespace KRPC.Client
         /// </summary>
         public override int GetHashCode ()
         {
-            return stream.GetHashCode ();
+            var hash = stream.GetHashCode ();
+            if (convertKey != null)
+                hash ^= convertKey.GetHashCode ();
+            return hash;
         }
 
         /// <summary>
@@ -109,6 +123,8 @@ namespace KRPC.Client
             var exn = value as System.Exception;
             if (exn != null)
                 throw exn;
+            if (convert != null)
+                return convert(value);
             return (TReturnType) value;
         }
 
@@ -135,6 +151,8 @@ namespace KRPC.Client
         /// Add a callback that is invoked whenever the stream is updated.
         /// </summary>
         public int AddCallback (Action<TReturnType> callback) {
+            if (convert != null)
+                return stream.AddCallback ((object x) => callback(convert(x)));
             return stream.AddCallback ((object x) => callback((TReturnType)x));
         }
 

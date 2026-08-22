@@ -219,11 +219,13 @@ namespace KRPC.Client
         /// <summary>
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
+        /// The expression must be a method call or property access, and may multiply that
+        /// call by a constant.
         /// </summary>
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            return new Stream<TResult> (this, GetCall (expression));
+            return AddStreamFromExpression<TResult> (expression);
         }
 
         /// <summary>
@@ -232,7 +234,19 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
-            return new Stream<TResult> (this, GetCall (expression));
+            return AddStreamFromExpression<TResult> (expression);
+        }
+
+        Stream<TResult> AddStreamFromExpression<TResult> (LambdaExpression expression)
+        {
+            Expression rpc;
+            var call = GetCall (expression, out rpc);
+            if (ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
+                return new Stream<TResult> (this, call);
+
+            var convert = ExpressionUtils.CompileTransform<TResult> (expression.Body, rpc);
+            return new Stream<TResult> (this, call, rpc.Type, convert,
+                ExpressionUtils.FoldedFactor (expression.Body, rpc));
         }
 
         /// <summary>
@@ -329,16 +343,30 @@ namespace KRPC.Client
         /// </summary>
         public static ProcedureCall GetCall (LambdaExpression expression)
         {
+            Expression rpc;
+            var call = GetCall (expression, out rpc);
+            if (!ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
+                throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
+            return call;
+        }
+
+        static ProcedureCall GetCall (LambdaExpression expression, out Expression rpc)
+        {
             if (ReferenceEquals (expression, null))
                 throw new ArgumentNullException (nameof (expression));
 
-            Expression body = expression.Body;
+            if (!ExpressionUtils.TryFindStreamedRpc (expression.Body, out rpc))
+                throw new ArgumentException ("Invalid expression. Cannot multiply two remote calls.");
+            if (rpc == null)
+                throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
+            if (!ExpressionUtils.IsConstantMultiplyWrapper (expression.Body, rpc))
+                throw new ArgumentException ("Invalid expression. The factor must be a constant.");
 
-            var methodCallExpression = body as MethodCallExpression;
+            var methodCallExpression = rpc as MethodCallExpression;
             if (methodCallExpression != null)
                 return GetCall (methodCallExpression);
 
-            var memberExpression = body as MemberExpression;
+            var memberExpression = rpc as MemberExpression;
             if (memberExpression != null)
                 return GetCall (memberExpression);
 
