@@ -1,6 +1,7 @@
 import unittest
 
 import krpctest
+from krpctest.geometry import norm
 
 
 class TestEditorParts(krpctest.TestCase):
@@ -102,10 +103,36 @@ class TestEditorParts(krpctest.TestCase):
             "thermal_mass",
             "dynamic_pressure",
             "shielded",
-            "reference_frame",
         ):
             self.assertRaises(RuntimeError, getattr, part, name)
         self.assertRaises(RuntimeError, getattr, self.parts, "controlling")
+        self.assertRaises(RuntimeError, part.bounding_box, part.reference_frame)
+        self.assertRaises(RuntimeError, part.direction, part.reference_frame)
+        self.assertRaises(RuntimeError, part.velocity, part.reference_frame)
+
+    def test_position(self):
+        root = self.parts.root
+        frame = root.reference_frame
+        self.assertAlmostEqual((0, 0, 0), root.position(frame), places=3)
+        self.assertAlmostEqual(
+            (0, 0, 0),
+            root.center_of_mass(root.center_of_mass_reference_frame),
+            places=3,
+        )
+        child = root.children[0]
+        self.assertGreater(norm(child.position(frame)), 0.01)
+        self.assertNotEqual(frame, child.reference_frame)
+
+    def test_center_of_mass_from_root(self):
+        # The vessel CoM minus the root part's origin is the offset the
+        # design is judged on, in the root part's own axes.
+        vessel = self.connect().space_center.editor.vessel
+        root = self.parts.root
+        frame = root.reference_frame
+        origin = root.position(frame)
+        com = vessel.center_of_mass(frame)
+        self.assertAlmostEqual((0, 0, 0), origin, places=3)
+        self.assertGreater(norm(com), 0.01)
 
     def test_engine_design_members(self):
         engine = self.parts.engines[0]

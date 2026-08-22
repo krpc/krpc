@@ -212,10 +212,15 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         }
 
         /// <summary>
-        /// Returns the position in world space of the center of mass of the part, or the parts transform position if it has no mass.
+        /// The world-space center of mass of the part. In flight that is the
+        /// rigidbody's, or the part's origin if it has none. In the editor the
+        /// rigidbody is an unconfigured placeholder, so the position is taken
+        /// from the part's CoMOffset.
         /// </summary>
         public static Vector3d CenterOfMass (this Part part)
         {
+            if (HighLogic.LoadedSceneIsEditor)
+                return part.WorldCenterOfMass ();
             return part.rb != null ? part.rb.worldCenterOfMass : part.transform.position;
         }
 
