@@ -64,5 +64,8 @@
     <Compile Include="$(bazel-bin)\client\csharp\Services\InfernalRobotics.cs">
       <Link>Services\InfernalRobotics.cs</Link>
     </Compile>
+    <Compile Include="$(bazel-bin)\client\csharp\Services\StdLib.cs">
+      <Link>Services\StdLib.cs</Link>
+    </Compile>
   </ItemGroup>
 </Project>
