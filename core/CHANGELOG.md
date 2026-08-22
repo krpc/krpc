@@ -10,6 +10,15 @@
   around 20% more of them per physics update, and around 35% more when the values are large.
   A client that makes one call and then waits is unaffected, as the wait is governed by the
   game's update rate. Available on Linux, macOS, and Windows 10 1803 and later (#1065)
+- Add `KRPC.HoldTick` and `KRPC.ReleaseTick`, which hold the game on its current physics tick so
+  that a program can read the game state, compute with it and write the result back without the
+  game advancing in between. Intended for control loops, which are otherwise served one RPC per
+  tick whenever they spend longer than the receive timeout between calls. The game runs no
+  physics and draws no frame while a tick is held, and a hold ends by itself after
+  `TickHoldTimeout` (#1070)
+- Add `KRPC.NextTick`, which releases the tick being held and holds the one after it, so that a
+  loop acts on consecutive physics ticks. A release and a hold made as two calls leave the
+  server free to advance between them; this closes that gap (#1070)
 - Fix the game freezing for as long as a serial connection takes to carry an RPC; serial ports are
   now read and written on their own threads rather than on the thread that runs the game. Data
   waiting to be sent is buffered up to 1 MB, beyond which the connection is dropped (#1035)
