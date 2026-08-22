@@ -303,8 +303,16 @@ namespace KRPC.SpaceCenter
             Clear ();
         }
 
+        // The physics tick the server last ran an update on, and whether the order of that
+        // update and the game's control input has been reported yet. Which of the two comes
+        // first decides whether a value written by a call in a tick is acted on in that tick.
+        // The server addon fixes that order, so the log says once what the game actually did.
+        static float lastUpdateFixedTime = float.NaN;
+        static bool reportedUpdateOrder;
+
         static void RunBeforeCalls (object sender, EventArgs args)
         {
+            lastUpdateFixedTime = Time.fixedTime;
             StepControllers (Services.AutoPilotUpdateMode.BeforeCalls);
         }
 
@@ -334,6 +342,8 @@ namespace KRPC.SpaceCenter
 
         static void Clear ()
         {
+            lastUpdateFixedTime = float.NaN;
+            reportedUpdateOrder = false;
             currentInputs.Clear ();
             manualInputs.Clear ();
             manualInputClients.Clear ();
@@ -459,6 +469,8 @@ namespace KRPC.SpaceCenter
 
         static void OnFlyByWire (Vessel vessel, FlightCtrlState state)
         {
+            ReportUpdateOrder ();
+
             var inputs = new ControlInputs (vessel, state);
 
             // Manual inputs
@@ -485,6 +497,22 @@ namespace KRPC.SpaceCenter
             if (!currentInputs.ContainsKey (vessel))
                 currentInputs [vessel] = new ControlInputs (vessel);
             currentInputs [vessel].CopyFrom (inputs);
+        }
+
+        static void ReportUpdateOrder ()
+        {
+            // Nothing to compare against until the server has run at least one update.
+            if (reportedUpdateOrder || float.IsNaN (lastUpdateFixedTime))
+                return;
+            reportedUpdateOrder = true;
+            var updateFirst = lastUpdateFixedTime == Time.fixedTime;
+            KRPC.Utils.Logger.WriteLine (
+                updateFirst
+                    ? "The server updates before the game collects control inputs, so a call's "
+                      + "effect is seen in the tick it is made in"
+                    : "The game collects control inputs before the server updates, so a call's "
+                      + "effect is not seen until the tick after it is made",
+                KRPC.Utils.Logger.Severity.Debug);
         }
 
         /// <summary>
