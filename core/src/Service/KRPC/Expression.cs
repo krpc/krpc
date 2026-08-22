@@ -1245,7 +1245,11 @@ namespace KRPC.Service.KRPC
         public static Expression Count (Expression arg)
         {
             CheckIsEnumerable (arg);
-            var count = arg.Type.GetProperty ("Count");
+            var count = GetCountProperty (arg.Type);
+            if (count == null)
+                throw new InvalidOperationException (
+                    "A lazily evaluated sequence does not have a count. " +
+                    "Convert it to a list or a set first.");
             return new Expression (LinqExpression.Property (arg, count));
         }
 
@@ -2008,6 +2012,19 @@ namespace KRPC.Service.KRPC
             if (expression.Type == typeof (string))
                 throw new InvalidOperationException (
                     "A string is not a collection. Use the string operations instead.");
+        }
+
+        /// <summary>
+        /// The Count property of a collection type. A service procedure returns an
+        /// interface type, which declares nothing itself and inherits the property
+        /// from ICollection, so the interfaces have to be searched as well.
+        /// </summary>
+        static PropertyInfo GetCountProperty (System.Type type)
+        {
+            return type.GetProperty ("Count") ??
+                type.GetInterfaces ()
+                    .Select (x => x.GetProperty ("Count"))
+                    .FirstOrDefault (property => property != null);
         }
 
         static System.Type GetEnumerableValueType (Expression collection)

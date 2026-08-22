@@ -135,6 +135,22 @@ class TestExpressionCompiler(ServerTestCase, unittest.TestCase):
         self.assertEqual(3, self.evaluate(lambda: max(o.int_property for o in objs)))
         self.assertEqual(3, self.evaluate(lambda: len([o.int_property for o in objs])))
 
+    def test_length_of_a_collection_returned_by_a_call(self):
+        self.assertEqual(
+            3,
+            self.evaluate(
+                lambda: len(self.conn.test_service.increment_list([0, 1, 2]))
+            ),
+        )
+        self.assertEqual(
+            2,
+            self.evaluate(
+                lambda: len(
+                    self.conn.test_service.increment_dictionary({"a": 0, "b": 1})
+                )
+            ),
+        )
+
     def test_lambda_written_inside_a_with_statement(self):
         obj = self.conn.test_service.create_test_object("with")
         obj.int_property = 7

@@ -1179,6 +1179,35 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void CountOfACollectionInterface ()
+        {
+            var values = Expression.Variable ("values", Type.ListType (Type.Int ()));
+            Assert.AreEqual (5, Eval<int> (Expression.BlockWithVariables (
+                new List<Expression> { values },
+                new List<Expression> {
+                    Expression.Assign (values, list),
+                    Expression.Count (values)
+                })));
+            var entries = Expression.Variable (
+                "entries", Type.DictionaryType (Type.String (), Type.Int ()));
+            Assert.AreEqual (3, Eval<int> (Expression.BlockWithVariables (
+                new List<Expression> { entries },
+                new List<Expression> {
+                    Expression.Assign (entries, dictionary),
+                    Expression.Count (entries)
+                })));
+        }
+
+        [Test]
+        public void CountOfALazySequence ()
+        {
+            var lazy = Expression.Skip (list, Expression.ConstantInt (1));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Count (lazy));
+            StringAssert.Contains ("lazily evaluated sequence", exn.Message);
+        }
+
+        [Test]
         public void Sum ()
         {
             Assert.AreEqual (1 + 2 + 3 + 4 + 5, Eval<int> (Expression.Sum (list)));
