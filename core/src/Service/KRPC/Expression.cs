@@ -1201,7 +1201,13 @@ namespace KRPC.Service.KRPC
             CheckIsNotAString (arg);
             var argType = arg.Type;
             if (argType.Name.StartsWith("Tuple`", StringComparison.Ordinal)) {
-                var tupleIndex = LinqExpression.Lambda<Func<int>> (index).Compile () ();
+                // The elements of a tuple differ in type, so which one is being read has
+                // to be known when the tree is built rather than when it is evaluated
+                var constant = index.internalExpression as ConstantExpression;
+                if (constant == null || !(constant.Value is int))
+                    throw new ArgumentException (
+                        "The index into a tuple must be a constant integer");
+                var tupleIndex = (int)constant.Value;
                 var property = argType.GetProperty ("Item" + (tupleIndex + 1));
                 if (property == null)
                     throw new ArgumentOutOfRangeException (nameof (index));

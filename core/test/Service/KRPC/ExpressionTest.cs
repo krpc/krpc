@@ -1153,6 +1153,15 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void GetTupleWithAComputedIndex ()
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Get (tuple, Expression.Add (
+                    Expression.ConstantInt (0), Expression.ConstantInt (1))));
+            StringAssert.Contains ("constant integer", exn.Message);
+        }
+
+        [Test]
         public void GetList ()
         {
             Assert.AreEqual (1, Eval<int> (Expression.Get (list, Expression.ConstantInt (0))));
