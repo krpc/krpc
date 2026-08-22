@@ -658,6 +658,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "set_stream_rate",
                     "remove_stream",
                     "add_event",
+                    "hold_tick",
+                    "release_tick",
                     "game_scene",
                     "current_game_scene",
                     "GameScene",

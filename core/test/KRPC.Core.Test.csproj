@@ -40,6 +40,8 @@
     </Compile>
     <Compile Include="ConfigurationTest.cs" />
     <Compile Include="CoreTest.cs" />
+    <Compile Include="ScriptedClient.cs" />
+    <Compile Include="TickHoldTest.cs" />
     <Compile Include="Server\ClientRequestingConnectionArgsTest.cs" />
     <Compile Include="Server\HTTP\RequestTest.cs" />
     <Compile Include="Server\HTTP\ResponseTest.cs" />
