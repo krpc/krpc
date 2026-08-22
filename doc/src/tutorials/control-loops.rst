@@ -108,6 +108,17 @@ This is a demonstration, not a recommendation: to actually fly a vessel, use the
 :ref:`autopilot <using-the-autopilot>`, which implements a far better control law than the
 one above.
 
+Where the autopilot fits
+------------------------
+
+The autopilot's own control loop also runs once per physics tick. By default it runs after
+the calls of that tick, so a target set inside a held tick is flown on that tick.
+
+For finer control, ``AutoPilot.update_mode`` chooses where in the tick the loop runs, and its
+manual mode hands the decision to the program: everything before ``update`` is what the loop
+flies the tick with, and everything after it can read what the loop just did. See
+:ref:`when the control loop runs <autopilot-update-mode>`.
+
 What it costs
 -------------
 
