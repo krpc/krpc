@@ -163,6 +163,57 @@ namespace KRPC.Test
         }
 
         [Test]
+        public void AReleaseAndAHoldInSeparateRequestsCanMissATick ()
+        {
+            // The hold is a call the server has to be waiting for when it looks, and a client
+            // that is not ready costs it a poll. Nothing holds the tick after the release, so
+            // the update it would have held ends without it.
+            var client = Connect (1, "HoldTick", "ReleaseTick", "HoldTick", "ReleaseTick");
+            core.Update ();
+            core.Update ();
+            Assert.AreEqual (2, client.Written.Count);
+            core.Update ();
+            // The tick this update ran is the one that was missed: the second hold is still
+            // waiting to be read.
+            Assert.AreEqual (2, client.Written.Count);
+            core.Update ();
+            Assert.AreEqual (4, client.Written.Count);
+            AssertNoErrors (client.Written);
+        }
+
+        [Test]
+        public void NextTickTakesTheFollowingTickWithoutBeingPolledFor ()
+        {
+            // The same script as above with one call in place of the two, and the same client
+            // that is never ready on the first poll.
+            var client = Connect (1, "HoldTick", "NextTick", "ReleaseTick");
+            core.Update ();
+            core.Update ();
+            // The hold has been answered and the tick released again, but the call that asked
+            // for the next tick is waiting in the server rather than on the wire.
+            Assert.AreEqual (1, client.Written.Count);
+            core.Update ();
+            // Carried on at the start of this update, ahead of any polling, so the tick after
+            // the one that was released is held rather than missed.
+            Assert.AreEqual (3, client.Written.Count);
+            AssertNoErrors (client.Written);
+        }
+
+        [Test]
+        public void ALoopOfNextTicksTakesOneTickPerIteration ()
+        {
+            var client = Connect (1, "HoldTick", "NextTick", "NextTick", "NextTick",
+                                  "ReleaseTick");
+            core.Update ();
+            // One call answered per update from here on, each in the tick after the last.
+            for (int answered = 1; answered <= 4; answered++) {
+                core.Update ();
+                Assert.AreEqual (answered == 4 ? 5 : answered, client.Written.Count);
+            }
+            AssertNoErrors (client.Written);
+        }
+
+        [Test]
         public void TheTickCannotBeHeldOutsideACall ()
         {
             var client = Connect (1);

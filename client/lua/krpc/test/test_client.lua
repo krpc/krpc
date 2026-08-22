@@ -415,6 +415,7 @@ function TestClient:test_krpc_service_members()
      'get_services',
      'get_status',
      'hold_tick',
+     'next_tick',
      'release_tick',
      'remove_stream',
      'set_game_scene',

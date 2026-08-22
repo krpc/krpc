@@ -317,5 +317,29 @@ namespace KRPC.Service.KRPC
         {
             Core.Instance.ReleaseTick (CallContext.Client);
         }
+
+        /// <summary>
+        /// Let the game move on from the tick being held and hold the one after it, so that a
+        /// program acts on consecutive physics ticks. Holds the soonest tick it can if no tick
+        /// is currently being held.
+        /// </summary>
+        /// <remarks>
+        /// A release and a hold made as two separate calls leave the server free to advance
+        /// between them, since the hold is a call it has to be waiting for when it looks. This
+        /// takes the next tick without that gap, so it is the call a loop that has to act on
+        /// every tick is built around: call it at the top of the loop, work, and come back to
+        /// it. The game advances one tick per call and no faster, so it runs at the rate of the
+        /// loop for as long as the loop runs, and the loop ends by calling
+        /// <see cref="ReleaseTick" />.
+        ///
+        /// Every other limit of <see cref="HoldTick" /> applies unchanged, the timeout
+        /// included. A hold lost to the timeout is not reported: the next call simply takes
+        /// whatever tick it lands on.
+        /// </remarks>
+        [KRPCProcedure]
+        public static void NextTick ()
+        {
+            Core.Instance.NextTick (CallContext.Client);
+        }
     }
 }

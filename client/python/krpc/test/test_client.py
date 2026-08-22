@@ -660,6 +660,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "add_event",
                     "hold_tick",
                     "release_tick",
+                    "next_tick",
                     "game_scene",
                     "current_game_scene",
                     "GameScene",

@@ -704,6 +704,20 @@ namespace KRPC
         }
 
         /// <summary>
+        /// Let the game move on from the current tick and hold the one after it, so that a
+        /// client works on consecutive ticks rather than on whichever it manages to ask for in
+        /// time. The hold on the next tick is taken by the yield the second call makes: the
+        /// caller's continuation waits in the server and is carried on at the start of the next
+        /// update, ahead of anything the server has to be polled for, so there is no window for
+        /// the game to advance through.
+        /// </summary>
+        internal void NextTick (IClient rpcClient)
+        {
+            ReleaseTick (rpcClient);
+            HoldTick (rpcClient);
+        }
+
+        /// <summary>
         /// Whether a client is holding the game on this tick. A hold that has run out of time,
         /// or whose client has gone away, ends here: the client cannot end it itself, and an
         /// update must not be left waiting for one that will never end.
