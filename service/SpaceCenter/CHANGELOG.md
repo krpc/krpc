@@ -44,8 +44,8 @@
   - `EditorVessel.Parts` gives the parts tree of the vessel under construction, as
     `Vessel.Parts` does in flight. The members of `Part` and of the part-type classes that
     describe the design are available; those that need a vessel in flight or running
-    physics, such as `Part.Position` and the thermal members, remain restricted to the
-    flight scene. `Engine.ThrustLimit` can be read and set from the editor (#1038)
+    physics, such as the thermal members, remain restricted to the flight scene.
+    `Engine.ThrustLimit` can be read and set from the editor (#1038)
   - `EditorVessel.Stages`, `EditorVessel.StageAt`, `EditorVessel.DecoupleStages` and
     `EditorVessel.DecoupleStageAt` give the vessel's stages, with the same stock delta-v,
     thrust, TWR, specific impulse and mass figures that `Stage` reports in flight, along

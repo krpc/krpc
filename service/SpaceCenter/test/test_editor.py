@@ -175,7 +175,7 @@ class TestEditorLaunchVessel(krpctest.TestCase):
                 delta=max(abs(moi[i]) * 0.05, 1),
             )
         root = flight.parts.root
-        flight_com = flight.center_of_mass(root.reference_frame)
+        flight_com = flight.position(root.reference_frame)
         flight_part_com = root.center_of_mass(root.reference_frame)
         for i in range(3):
             self.assertAlmostEqual(com[i], flight_com[i], delta=0.5)
