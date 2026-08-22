@@ -7,17 +7,22 @@ using System.Reflection;
 namespace KRPC.Service
 {
     /// <summary>
-    /// Used to invoke a static method with the KRPCMethod attribute.
+    /// Used to invoke a static method with the KRPCMethod attribute, and to invoke an
+    /// extension member of a class. An extension member is a static call taking the
+    /// instance as its first argument.
     /// </summary>
     sealed class ClassStaticMethodHandler : IProcedureHandler
     {
         readonly Func<object, object[], object> invoker;
         readonly ProcedureParameter[] parameters;
 
-        public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable)
+        public ClassStaticMethodHandler (MethodInfo methodInfo, bool returnIsNullable, bool isExtension = false)
         {
             invoker = BuildInvoker (methodInfo);
             parameters = methodInfo.GetParameters ().Select (x => new ProcedureParameter (x)).ToArray ();
+            // Clients expect the instance parameter of a class member to be named "this"
+            if (isExtension)
+                parameters [0] = new ProcedureParameter (parameters [0].Type, "this");
             ReturnType = methodInfo.ReturnType;
             ReturnIsNullable = returnIsNullable;
         }

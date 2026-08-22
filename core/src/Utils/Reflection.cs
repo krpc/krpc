@@ -7,12 +7,14 @@ namespace KRPC.Utils
 {
     static class Reflection
     {
-        static IEnumerable<Type> AllTypes ()
+        static IEnumerable<Type> AllTypes (Func<Assembly, bool> include = null)
         {
             foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) {
                 // Get all types that can be loaded from the assembly
                 // Note: We skip Assembly-CSharp as it causes a crash when running nunit tests.
                 if (assembly.FullName.Contains ("Assembly-CSharp"))
+                    continue;
+                if (include != null && !include (assembly))
                     continue;
                 Type[] types;
                 try {
@@ -60,6 +62,40 @@ namespace KRPC.Utils
                 if (method.IsDefined (typeof(TAttribute), inherit)) {
                     yield return method;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Whether the given assembly can declare the given attribute, which it can only do by
+        /// being, or by referencing, the assembly the attribute comes from.
+        /// </summary>
+        static bool CanDeclare (Assembly assembly, Assembly attributeAssembly)
+        {
+            if (assembly == attributeAssembly)
+                return true;
+            var name = attributeAssembly.GetName ().Name;
+            foreach (var reference in assembly.GetReferencedAssemblies ()) {
+                if (reference.Name == name)
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Returns all methods in static classes with the specified attribute. Only the
+        /// assemblies that can declare the attribute are searched, which leaves the rest of a
+        /// modded game untouched. A class that is not public is searched along with the rest, so
+        /// that the caller can report the members it puts out of reach.
+        /// </summary>
+        public static IEnumerable<MethodInfo> GetStaticClassMethodsWith<TAttribute> (bool inherit = false)
+            where TAttribute : Attribute
+        {
+            var attributeAssembly = typeof(TAttribute).Assembly;
+            foreach (var type in AllTypes (x => CanDeclare (x, attributeAssembly))) {
+                if (!type.IsStatic ())
+                    continue;
+                foreach (var method in GetMethodsWith<TAttribute> (type, inherit))
+                    yield return method;
             }
         }
 

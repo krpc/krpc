@@ -38,6 +38,24 @@ namespace KRPC.Test.Utils
         }
 
         [Test]
+        public void GetStaticClassMethodsWithAttribute ()
+        {
+            var methods = Reflection.GetStaticClassMethodsWith<KRPCMethodAttribute> ().ToList ();
+            Assert.AreEqual (6, methods.Count (x => x.DeclaringType == typeof(TestServiceExtensions)));
+            Assert.AreEqual (
+                5,
+                Reflection.GetStaticClassMethodsWith<KRPCPropertyAttribute> ()
+                .Count (x => x.DeclaringType == typeof(TestServiceExtensions)));
+            // A class that is not public is searched too, so that the scanner can report the
+            // members it puts out of reach, valid or not
+            Assert.AreEqual (5, methods.Count (x => x.DeclaringType == typeof(InvalidExtensions)));
+            CollectionAssert.Contains (methods.Select (x => x.Name).ToList (), "MethodWithoutThis");
+            // Only the assemblies that can declare the attribute are searched
+            var assemblies = methods.Select (x => x.DeclaringType.Assembly).Distinct ().ToList ();
+            CollectionAssert.DoesNotContain (assemblies, typeof(string).Assembly);
+        }
+
+        [Test]
         public void GetPropertiesWithAttribute ()
         {
             Assert.AreEqual (7, Reflection.GetPropertiesWith<KRPCPropertyAttribute> (typeof(TestService)).Count ());

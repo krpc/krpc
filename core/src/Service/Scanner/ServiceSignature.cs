@@ -68,6 +68,12 @@ namespace KRPC.Service.Scanner
         GameScene gameScene;
 
         /// <summary>
+        /// The type declaring each extension member added to this service, by procedure
+        /// name, used when reporting a clash.
+        /// </summary>
+        readonly Dictionary<string,Type> extensionMembers = new Dictionary<string, Type> ();
+
+        /// <summary>
         /// Create a service signature from a C# type annotated with the KRPCService attribute
         /// </summary>
         public ServiceSignature (Type type, uint id)
@@ -308,6 +314,89 @@ namespace KRPC.Service.Scanner
                 Name, cls + '_' + method.Name, NextProcedureId, property.GetDocumentation (), handler,
                 TypeUtils.GetClassPropertyGameScene(classType, property, classGameScene),
                 deprecated, deprecatedReason));
+        }
+
+        /// <summary>
+        /// Add an extension method to the given class in the given service for the given
+        /// method annotated with the KRPCMethod attribute.
+        /// </summary>
+        public void AddClassExtensionMethod (string cls, Type classType, MethodInfo method)
+        {
+            TypeUtils.ValidateIdentifier (cls);
+            TypeUtils.ValidateKRPCExtensionMethod (method);
+            CheckClassExists (cls);
+            var classGameScene = TypeUtils.GetClassGameScene (classType, gameScene);
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
+            AddExtensionProcedure (
+                cls + '_' + method.Name, method, method.GetDocumentation (),
+                new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), true),
+                TypeUtils.GetExtensionMethodGameScene (method, classGameScene),
+                deprecated, deprecatedReason);
+        }
+
+        /// <summary>
+        /// Add one accessor of an extension property to the given class in the given service
+        /// for the given method annotated with the KRPCProperty attribute.
+        /// </summary>
+        public void AddClassExtensionProperty (string cls, Type classType, MethodInfo method)
+        {
+            TypeUtils.ValidateIdentifier (cls);
+            TypeUtils.ValidateKRPCExtensionProperty (method);
+            CheckClassExists (cls);
+            var isSetter = TypeUtils.IsAnExtensionPropertySetter (method);
+            var property = TypeUtils.GetExtensionPropertyName (method);
+            CheckOtherAccessor (cls + (isSetter ? "_get_" : "_set_") + property, method);
+            var classGameScene = TypeUtils.GetClassGameScene (classType, gameScene);
+            string deprecatedReason;
+            var deprecated = TypeUtils.GetDeprecated (method, out deprecatedReason);
+            AddExtensionProcedure (
+                cls + (isSetter ? "_set_" : "_get_") + property,
+                method, method.GetDocumentation (),
+                new ClassStaticMethodHandler (method, TypeUtils.GetNullable (method), true),
+                TypeUtils.GetExtensionPropertyGameScene (method, classGameScene),
+                deprecated, deprecatedReason);
+        }
+
+        void CheckClassExists (string cls)
+        {
+            if (!Classes.ContainsKey (cls))
+                throw new ServiceException ("Class " + cls + " does not exist");
+        }
+
+        /// <summary>
+        /// Check that the other accessor of an extension property, if the class has one, comes
+        /// from the same extension. An accessor cannot be added to a property declared elsewhere.
+        /// </summary>
+        void CheckOtherAccessor (string procedureName, MethodInfo method)
+        {
+            if (!Procedures.ContainsKey (procedureName))
+                return;
+            Type owner;
+            if (extensionMembers.TryGetValue (procedureName, out owner) && owner == method.DeclaringType)
+                return;
+            throw Clash (procedureName, method);
+        }
+
+        ServiceException Clash (string procedureName, MethodInfo method)
+        {
+            Type owner;
+            var declaredBy = extensionMembers.TryGetValue (procedureName, out owner) ? owner.ToString () : "the class itself";
+            return new ServiceException (
+                "Extension member " + method.DeclaringType + "." + method.Name + " clashes with " +
+                Name + "." + procedureName + ", which is declared by " + declaredBy);
+        }
+
+        void AddExtensionProcedure (string procedureName, MethodInfo method, string documentation,
+                                    IProcedureHandler handler, GameScene procedureGameScene,
+                                    bool deprecated, string deprecatedReason)
+        {
+            if (Procedures.ContainsKey (procedureName))
+                throw Clash (procedureName, method);
+            AddProcedure (new ProcedureSignature (
+                Name, procedureName, NextProcedureId, documentation, handler,
+                procedureGameScene, deprecated, deprecatedReason));
+            extensionMembers [procedureName] = method.DeclaringType;
         }
 
         /// <summary>

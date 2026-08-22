@@ -77,10 +77,12 @@
     <Compile Include="Server\WebSockets\StreamServerTest.cs" />
     <Compile Include="Server\WebSockets\StreamStreamTest.cs" />
     <Compile Include="Service\ClassMethodHandlerTest.cs" />
+    <Compile Include="Service\ClassStaticMethodHandlerTest.cs" />
     <Compile Include="Service\DocumentationUtilsTest.cs" />
     <Compile Include="Service\GameSceneTest.cs" />
     <Compile Include="Service\GameStateTest.cs" />
     <Compile Include="Service\ITestService.cs" />
+    <Compile Include="Service\InvalidExtensions.cs" />
     <Compile Include="Service\KRPC\ExpressionTest.cs" />
     <Compile Include="Service\KRPC\KRPCTest.cs" />
     <Compile Include="Service\MessageAssert.cs" />
@@ -89,11 +91,13 @@
     <Compile Include="Service\ProcedureHandlerTest.cs" />
     <Compile Include="Service\ProcedureParameterTest.cs" />
     <Compile Include="Service\ScannerTest.cs" />
+    <Compile Include="Service\ServiceSignatureTest.cs" />
     <Compile Include="Service\ServicesTest.cs" />
     <Compile Include="Service\TestService.cs" />
     <Compile Include="Service\TestService2.cs" />
     <Compile Include="Service\TestService3.cs" />
     <Compile Include="Service\TestServiceDeprecated.cs" />
+    <Compile Include="Service\TestServiceExtensions.cs" />
     <Compile Include="Service\TestTopLevelClass.cs" />
     <Compile Include="Service\TypeUtilsTest.cs" />
     <Compile Include="Service\ValueUtilsTest.cs" />
