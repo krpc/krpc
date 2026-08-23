@@ -44,8 +44,8 @@
   - `EditorVessel.Parts` gives the parts tree of the vessel under construction, as
     `Vessel.Parts` does in flight. The members of `Part` and of the part-type classes that
     describe the design are available; those that need a vessel in flight or running
-    physics, such as `Part.Position` and the thermal members, remain restricted to the
-    flight scene. `Engine.ThrustLimit` can be read and set from the editor (#1038)
+    physics, such as the thermal members, remain restricted to the flight scene.
+    `Engine.ThrustLimit` can be read and set from the editor (#1038)
   - `EditorVessel.Stages`, `EditorVessel.StageAt`, `EditorVessel.DecoupleStages` and
     `EditorVessel.DecoupleStageAt` give the vessel's stages, with the same stock delta-v,
     thrust, TWR, specific impulse and mass figures that `Stage` reports in flight, along
@@ -77,6 +77,10 @@
     editor. The rigidbody the game attaches there is an unconfigured placeholder
     weighing Unity's default of one tonne, and the mass is now taken from the
     part itself, including crew (#1059)
+  - `Part.Position`, `Part.CenterOfMass`, `Part.ReferenceFrame` and
+    `Part.CenterOfMassReferenceFrame` are available in the editor, so the
+    center of mass of a design can be related to the parts it is made of
+    (#1064)
 
 - Vessels and crew
   - `Vessel.InertiaTensor` is restricted to the flight scene, as

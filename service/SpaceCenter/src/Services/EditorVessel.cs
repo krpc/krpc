@@ -121,9 +121,10 @@ namespace KRPC.SpaceCenter.Services
         /// position vector is in.</param>
         /// <remarks>
         /// This is the editor scene's world-space center of mass expressed in
-        /// <paramref name="referenceFrame"/>. A celestial body frame is not a
-        /// position on that body: the editor is not placed in the solar system
-        /// the way a vessel in flight is.
+        /// <paramref name="referenceFrame"/>. A part's
+        /// <see cref="Parts.Part.ReferenceFrame"/> reports the offset from that
+        /// part. A celestial body frame is not a position on that body: the
+        /// editor is not placed in the solar system the way a vessel in flight is.
         /// </remarks>
         [KRPCMethod]
         public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)

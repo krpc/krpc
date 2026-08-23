@@ -807,7 +807,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// It s not necessarily the same as the parts center of mass.
         /// Use <see cref="CenterOfMass"/> to get the parts center of mass.
         /// </remarks>
-        [KRPCMethod (GameScene = GameScene.Flight)]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 Position (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalPart.transform.position).ToTuple ();
@@ -815,12 +815,12 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         /// <summary>
         /// The position of the parts center of mass in the given reference frame.
-        /// If the part is physicsless, this is equivalent to <see cref="Position"/>.
+        /// If the part is physicsless in flight, this is equivalent to <see cref="Position"/>.
         /// </summary>
         /// <returns>The position as a vector.</returns>
         /// <param name="referenceFrame">The reference frame that the returned
         /// position vector is in.</param>
-        [KRPCMethod (GameScene = GameScene.Flight)]
+        [KRPCMethod (GameScene = GameScene.Flight | GameScene.Editor)]
         public Tuple3 CenterOfMass (ReferenceFrame referenceFrame)
         {
             return referenceFrame.PositionFromWorldSpace (InternalPart.CenterOfMass ()).ToTuple ();
@@ -1002,7 +1002,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// reference frame for the docking port, returned by
         /// <see cref="DockingPort.ReferenceFrame"/>.
         /// </remarks>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public ReferenceFrame ReferenceFrame {
             get { return ReferenceFrame.Object (InternalPart); }
         }
@@ -1023,7 +1023,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// reference frame for the docking port, returned by
         /// <see cref="DockingPort.ReferenceFrame"/>.
         /// </remarks>
-        [KRPCProperty (GameScene = GameScene.Flight)]
+        [KRPCProperty (GameScene = GameScene.Flight | GameScene.Editor)]
         public ReferenceFrame CenterOfMassReferenceFrame {
             get { return ReferenceFrame.ObjectCenterOfMass (InternalPart); }
         }
