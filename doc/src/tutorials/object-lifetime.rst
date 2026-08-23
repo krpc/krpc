@@ -42,6 +42,13 @@ roster no longer has, including the one the rename was made through. They all ra
 exception from then on, and an object for the renamed kerbal has to be obtained again under
 the new name.
 
+A reference frame built with ``ReferenceFrame.CreateRelative`` or
+``ReferenceFrame.CreateHybrid`` is the other case. It names nothing in the game, so nothing
+the game does ever finishes with it and the server holds it until the game is unloaded.
+Calling ``ReferenceFrame.Remove`` is what says a script is done with one; the frame is then
+gone, and so is any frame built on it. The server hands the same object to every client that
+builds the same frame, so a frame one of them removes is gone for the others too.
+
 A few members read nothing and so raise nothing: those that hand back what the object was
 built from, such as the part a part module belongs to, or the name of a field. They answer as
 they always did, and what they hand back raises the exception itself as soon as it is used.

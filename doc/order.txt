@@ -1329,6 +1329,7 @@ SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
 SpaceCenter.ReferenceFrame.CreateRelative
 SpaceCenter.ReferenceFrame.CreateHybrid
+SpaceCenter.ReferenceFrame.Remove
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode

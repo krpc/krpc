@@ -324,6 +324,13 @@ orbited (inherited from :attr:`CelestialBody.reference_frame`). Hybrid
 reference frames can be constructed by calling
 :meth:`ReferenceFrame.create_hybrid`.
 
+Each call returns a new frame, which the server holds until it is removed or the
+client that created it disconnects: such a frame names nothing in the game, so
+nothing the game does ever says it is finished with. Call
+:meth:`ReferenceFrame.remove` on one that is no longer needed. A frame that has
+to follow something that moves should inherit that component from the frame of
+the thing itself, rather than be constructed again on every update.
+
 The parent reference frame(s) of a custom reference frame can also be other
 custom reference frames. For example, you could combine the two example frames
 from above: construct a hybrid reference frame, centered on the vessel and

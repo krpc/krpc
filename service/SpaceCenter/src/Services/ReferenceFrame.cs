@@ -5,6 +5,7 @@ using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services.Parts;
 using KRPC.Utils;
 using UnityEngine;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using Tuple3 = System.Tuple<double, double, double>;
 using Tuple4 = System.Tuple<double, double, double, double>;
 
@@ -21,8 +22,8 @@ namespace KRPC.SpaceCenter.Services
     /// </list>
     /// </summary>
     /// <remarks>
-    /// This class does not contain any properties or methods. It is only
-    /// used as a parameter to other functions.
+    /// Apart from being created and removed, a reference frame is only used as a
+    /// parameter to other functions.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public class ReferenceFrame : Equatable<ReferenceFrame>, IGameObjectState
@@ -51,6 +52,10 @@ namespace KRPC.SpaceCenter.Services
         readonly ReferenceFrame hybridRotation;
         readonly ReferenceFrame hybridVelocity;
         readonly ReferenceFrame hybridAngularVelocity;
+        // Whether the client has let go of the frame. A frame a client creates stands
+        // for nothing in the game, so nothing the game destroys ever retires one and the
+        // client removing it or disconnecting is the only thing that can.
+        bool removed;
 
         ReferenceFrame (
             ReferenceFrameType type, global::CelestialBody body = null, global::Vessel vessel = null,
@@ -82,6 +87,10 @@ namespace KRPC.SpaceCenter.Services
 
         ReferenceFrame (ReferenceFrame parent, Vector3d relativePosition, QuaternionD relativeRotation, Vector3d relativeVelocity, Vector3d relativeAngularVelocity)
         {
+            // The frame is defined against its parent and has no meaning without one,
+            // so this is caught here rather than left to the first member that reads it.
+            if (ReferenceEquals (parent, null))
+                throw new ArgumentNullException (nameof (parent));
             type = ReferenceFrameType.Relative;
             this.parent = parent;
             this.relativePosition = relativePosition;
@@ -95,8 +104,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override bool Equals (ReferenceFrame other)
         {
+            if (ReferenceEquals (other, null))
+                return false;
+            if (Created || other.Created)
+                return ReferenceEquals (this, other);
             return
-            !ReferenceEquals (other, null) &&
             type == other.type &&
             body == other.body &&
             vesselId == other.vesselId &&
@@ -105,17 +117,7 @@ namespace KRPC.SpaceCenter.Services
             dockingPortRef == other.dockingPortRef &&
             thruster == other.thruster &&
             orbit == other.orbit &&
-            parent == other.parent &&
-            (type != ReferenceFrameType.Relative ||
-            (relativePosition == other.relativePosition &&
-            relativeRotation == other.relativeRotation &&
-            relativeVelocity == other.relativeVelocity &&
-            relativeAngularVelocity == other.relativeAngularVelocity)) &&
-            (type != ReferenceFrameType.Hybrid ||
-            (hybridPosition == other.hybridPosition &&
-            hybridRotation == other.hybridRotation &&
-            hybridVelocity == other.hybridVelocity &&
-            hybridAngularVelocity == other.hybridAngularVelocity));
+            parent == other.parent;
         }
 
         /// <summary>
@@ -123,7 +125,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            var hash = Hash.Of (type)
+            if (Created)
+                return RuntimeHelpers.GetHashCode (this);
+            return Hash.Of (type)
                 .And (bodyName)
                 .And (vesselId)
                 .And (node == null ? 0 : RuntimeHelpers.GetHashCode (node))
@@ -132,19 +136,18 @@ namespace KRPC.SpaceCenter.Services
                 .And (thruster)
                 .And (orbit)
                 .And (parent);
-            if (type == ReferenceFrameType.Relative)
-                hash = hash
-                    .And (relativePosition)
-                    .And (relativeRotation)
-                    .And (relativeVelocity)
-                    .And (relativeAngularVelocity);
-            if (type == ReferenceFrameType.Hybrid)
-                hash = hash
-                    .And (hybridPosition)
-                    .And (hybridRotation)
-                    .And (hybridVelocity)
-                    .And (hybridAngularVelocity);
-            return hash;
+        }
+
+        // Whether a client asked for the frame to be built, rather than it being named by
+        // something in the game. Such a frame is a distinct thing each time it is created,
+        // so it keeps the identity of the object itself: it is the client's to remove, and
+        // removing it must neither take away a frame another client built from the same
+        // values nor leave the next creation from those values handing back the one that
+        // has gone.
+        bool Created {
+            get {
+                return type == ReferenceFrameType.Relative || type == ReferenceFrameType.Hybrid;
+            }
         }
 
         /// <summary>
@@ -279,10 +282,13 @@ namespace KRPC.SpaceCenter.Services
         /// What the game holds for everything the frame is built from. A frame needs each
         /// of the vessel, part, maneuver node, thruster, orbit and other frames it is
         /// defined against, so it is as alive as the least alive of them; one defined
-        /// against a celestial body alone never dies.
+        /// against a celestial body alone never dies. A frame the client has removed is
+        /// gone whatever it was built from, and so is anything built on it.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
+                if (removed)
+                    return GameObjectState.Destroyed;
                 var state = GameObjectState.Live;
                 if (vesselId != Guid.Empty)
                     state = node == null
@@ -462,6 +468,12 @@ namespace KRPC.SpaceCenter.Services
         /// as a vector. This vector points in the direction of the axis of rotation,
         /// and its magnitude is the speed of the rotation in radians per second.
         /// Defaults to <math>(0, 0, 0)</math>.</param>
+        /// <remarks>
+        /// Each call returns a new frame, which is kept until <see cref="Remove"/> is
+        /// called on it or the client that created it disconnects, so a script that
+        /// creates one repeatedly, for example once per update, should remove each one
+        /// when it is finished with it.
+        /// </remarks>
         [KRPCMethod]
         public static ReferenceFrame CreateRelative (
             ReferenceFrame referenceFrame,
@@ -470,7 +482,11 @@ namespace KRPC.SpaceCenter.Services
             [KRPCDefaultValue(typeof(VectorZero))] Tuple3 velocity,
             [KRPCDefaultValue(typeof(VectorZero))] Tuple3 angularVelocity)
         {
-            return new ReferenceFrame (referenceFrame, position.ToVector (), rotation.ToQuaternion (), velocity.ToVector (), angularVelocity.ToVector ());
+            var frame = new ReferenceFrame (
+                referenceFrame, position.ToVector (), rotation.ToQuaternion (),
+                velocity.ToVector (), angularVelocity.ToVector ());
+            CreatedReferenceFramesAddon.Add (frame);
+            return frame;
         }
 
         /// <summary>
@@ -487,17 +503,91 @@ namespace KRPC.SpaceCenter.Services
         /// The <paramref name="position"/> reference frame is required but all other
         /// reference frames are optional. If omitted, they are set to the
         /// <paramref name="position"/> reference frame.
+        ///
+        /// Each call returns a new frame, which is kept until <see cref="Remove"/> is
+        /// called on it or the client that created it disconnects, so a script that
+        /// creates one repeatedly, for example once per update, should remove each one
+        /// when it is finished with it.
         /// </remarks>
         [KRPCMethod]
         public static ReferenceFrame CreateHybrid (ReferenceFrame position, ReferenceFrame rotation = null, ReferenceFrame velocity = null, ReferenceFrame angularVelocity = null)
         {
-            if (rotation == null)
-                rotation = position;
-            if (velocity == null)
-                velocity = position;
-            if (angularVelocity == null)
-                angularVelocity = position;
-            return new ReferenceFrame (ReferenceFrameType.Hybrid, hybridPosition: position, hybridRotation: rotation, hybridVelocity: velocity, hybridAngularVelocity: angularVelocity);
+            var frame = Hybrid (position, rotation, velocity, angularVelocity);
+            CreatedReferenceFramesAddon.Add (frame);
+            return frame;
+        }
+
+        /// <summary>
+        /// Build a hybrid reference frame for the server's own use, rather than for a
+        /// client that will remove it. The frame is as alive as the frames it is built
+        /// from, and is held by whatever is built on it rather than by any client.
+        /// </summary>
+        /// <remarks>
+        /// A component that is not given is taken from the position frame. Every one of
+        /// the four has to be a frame: the object is defined against all of them and
+        /// answers for the state of all of them, so a missing one would leave it unable
+        /// to say what it is worth without dereferencing nothing.
+        /// </remarks>
+        public static ReferenceFrame Hybrid (
+            ReferenceFrame position, ReferenceFrame rotation = null,
+            ReferenceFrame velocity = null, ReferenceFrame angularVelocity = null)
+        {
+            if (ReferenceEquals (position, null))
+                throw new ArgumentNullException (nameof (position));
+            return new ReferenceFrame (
+                ReferenceFrameType.Hybrid,
+                hybridPosition: position,
+                hybridRotation: rotation ?? position,
+                hybridVelocity: velocity ?? position,
+                hybridAngularVelocity: angularVelocity ?? position);
+        }
+
+        /// <summary>
+        /// Remove the reference frame, releasing the memory the server holds for it.
+        /// </summary>
+        /// <remarks>
+        /// Only a frame created by <see cref="CreateRelative"/> or
+        /// <see cref="CreateHybrid"/> can be removed. Every other frame is named by
+        /// something in the game, which is what says when it is finished with, and the
+        /// server holds one of each however often it is asked for.
+        ///
+        /// Any further use of this object throws an exception, as does use of a frame
+        /// built on it, which cannot be evaluated without it. A frame is removed for the
+        /// client that created it and is not shared with any other, and one whose client
+        /// disconnects is removed with it.
+        /// </remarks>
+        [KRPCMethod]
+        public void Remove ()
+        {
+            CheckExists ();
+            if (!Created)
+                throw new InvalidOperationException (
+                    "Only a reference frame created by CreateRelative or CreateHybrid " +
+                    "can be removed");
+            // The addon holds the frame on its client's behalf and has nothing left to do
+            // for one the client has finished with. Taking it out is also what asks for
+            // the sweep that drops it from the object store.
+            CreatedReferenceFramesAddon.Remove (this);
+            removed = true;
+        }
+
+        /// <summary>
+        /// Let go of a frame created for a client that has gone, so that it and anything
+        /// built on it leave the object store at the next sweep.
+        /// </summary>
+        internal void Release ()
+        {
+            removed = true;
+        }
+
+        /// <summary>
+        /// Raise if the frame has been removed.
+        /// </summary>
+        void CheckExists ()
+        {
+            if (removed)
+                throw new ObjectDestroyedException (
+                    "The reference frame no longer exists, as it has been removed.");
         }
 
         /// <summary>
@@ -505,6 +595,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Vector3d Position {
             get {
+                CheckExists ();
                 switch (type) {
                 case ReferenceFrameType.CelestialBody:
                 case ReferenceFrameType.CelestialBodyNonRotating:
@@ -561,6 +652,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public QuaternionD Rotation {
             get {
+                CheckExists ();
                 // For transform-backed frames use the Unity quaternion directly.
                 // Unity derives transform.up/forward from the quaternion, so
                 // q.Inverse * up == (0,1,0) to near double precision, avoiding
@@ -783,6 +875,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Vector3d Velocity {
             get {
+                CheckExists ();
                 switch (type) {
                 case ReferenceFrameType.CelestialBody:
                 case ReferenceFrameType.CelestialBodyNonRotating:
@@ -840,6 +933,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public Vector3d AngularVelocity {
             get {
+                CheckExists ();
                 switch (type) {
                 case ReferenceFrameType.CelestialBody:
                     return body.angularVelocity;
