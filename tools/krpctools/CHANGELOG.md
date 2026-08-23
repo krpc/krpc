@@ -1,4 +1,11 @@
 ## [v0.7.0] - unreleased
+- Fix the python stubs generated for a service that names a type the KRPC service defines
+  failing to import. The stubs import the module the naming service's types are in, and the
+  KRPC service's module is named `krpc`, which hid the `krpc` package the stubs read their
+  limits and schema from (#1069)
+- Java enumeration member names are no longer escaped before being upper-cased. Java's
+  keywords are all lower case so a constant's name cannot collide with one, and escaping
+  produced names such as `DOUBLE__` in place of `DOUBLE` (#1069)
 - Generate and document the structure types a service defines, for every client (#1066)
 - **Breaking:** A generator module given to `krpc-clientgen` by path is constructed with
   the definitions of every service that was loaded, rather than with those of the single

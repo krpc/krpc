@@ -237,6 +237,19 @@ expression returns true:
 
 .. literalinclude:: /scripts/client/cpp/Event.cpp
 
+Expression Streams
+------------------
+
+Expressions can also be used to stream the result of a computation from the server, by calling
+:func:`krpc::add_expression_stream` (defined in ``krpc/expression_stream.hpp``). Values are
+computed on the server on each stream update, so complex telemetry can be received without the
+round trip latency of multiple RPCs, and without the values changing between calls. The
+expression can evaluate to any type that can be sent to a client, including collections and
+objects; the template type must correspond to the expression's return type. For example, the
+following streams the vessel's altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/cpp/ExpressionStream.cpp
+
 Client API Reference
 --------------------
 
@@ -246,6 +259,19 @@ Client API Reference
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc::Client` object,
    through which the server can be communicated with.
+
+.. function:: template <typename T> Stream<T> add_expression_stream(const services::KRPC::Expression& expression)
+
+   Create a stream from a server side expression, defined in ``krpc/expression_stream.hpp``. On
+   each update, the value of the stream is the result of evaluating the expression on the
+   server. The template type must correspond to the expression's return type.
+
+.. function:: template <typename T> T run_function(const services::KRPC::Expression& expression)
+
+   Run a function on the server, within a single physics tick, and return the value it
+   produces. Defined in ``krpc/expression_stream.hpp``. The template type must correspond to
+   the expression's return type. An overload without the template type runs a function with
+   no result, for its effects.
 
    :parameters:
 

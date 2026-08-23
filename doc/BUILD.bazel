@@ -187,6 +187,7 @@ png_images(
 
 defs = [
     "//core:ServiceDefinitions",
+    "//core:StdLibServiceDefinitions",
     "//service/SpaceCenter:ServiceDefinitions",
     "//service/Drawing:ServiceDefinitions",
     "//service/InfernalRobotics:ServiceDefinitions",

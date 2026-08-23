@@ -86,9 +86,10 @@ then repeatedly prints the position returned by the stream. The stream is automa
 the client disconnects.
 
 A stream can be created for any method call by calling :meth:`Connection.AddStream` and passing it
-a lambda expression that invokes the desired method. This lambda expression must take zero arguments
-and be a method call or property access, which may be multiplied by a constant. It returns a stream
-object of type :type:`Stream`. The most recent value of the stream can be obtained by calling
+a lambda expression, taking zero arguments, that invokes the desired method. A lambda that is
+anything more than a single method call or property access is compiled into a server side
+expression, as described in `Compiling Lambdas to Expressions`_. It returns a stream object of
+type :type:`Stream`. The most recent value of the stream can be obtained by calling
 :meth:`Stream.Get`. A stream can be stopped and removed from the server by calling
 :meth:`Stream.Remove` on the stream object. All of a clients streams are automatically stopped when
 it disconnects.
@@ -169,6 +170,54 @@ expression returns true:
 
 .. literalinclude:: /scripts/client/csharp/Event.cs
 
+Expression Streams
+------------------
+
+Expressions can also be used to stream the result of a computation from the server, by calling
+:meth:`Connection.AddStream` with an expression object. Values are computed on the server on
+each stream update, so complex telemetry can be received without the round trip latency of
+multiple RPCs, and without the values changing between calls. The expression can evaluate to
+any type that can be sent to a client, including collections and objects; the type parameter
+must correspond to the expression's return type. For example, the following streams the
+vessel's altitude, converted to kilometers on the server:
+
+.. literalinclude:: /scripts/client/csharp/ExpressionStream.cs
+
+Compiling Lambdas to Expressions
+--------------------------------
+
+Instead of building an expression from the factory methods directly, a lambda expression that
+takes no arguments can be compiled into a server side expression using
+:meth:`Connection.CompileExpression`. :meth:`Connection.AddEvent` accepts a boolean lambda
+directly, and :meth:`Connection.AddStream` compiles any lambda that is not a single method call
+or property access:
+
+.. literalinclude:: /scripts/client/csharp/CompiledExpression.cs
+
+The compiler translates the lambda's expression tree into an expression that computes the same
+result on the server:
+
+* Remote procedure calls made by the lambda — property accesses and method calls on remote
+  objects and services — become calls embedded in the expression, re-invoked on each
+  evaluation. This includes calls on the elements of collections inside LINQ operators.
+* All other values — captured variables, literals, and any sub-expression that does not involve
+  the server — are evaluated once, when the expression is compiled, and embedded as constants.
+* Arithmetic, comparison and bitwise operators, boolean operators (note that ``&&`` and
+  ``||`` do not short-circuit when evaluated on the server), conditional expressions, casts,
+  string concatenation and ``ToString``, tuple and collection constructors, and indexing are
+  translated to the corresponding expression operators. Calls to ``System.Math`` methods with
+  server side arguments are compiled to the ``StdLib`` service's procedures.
+* The LINQ operators ``Select``, ``Where``, ``SelectMany``, ``Any``, ``All``, ``Count``,
+  ``Sum``, ``Min``, ``Max``, ``Average``, ``Contains``, ``OrderBy``, ``Concat``, ``Skip``,
+  ``Take``, ``ToDictionary``, ``ToList`` and ``ToHashSet`` are translated to the server's
+  collection operations. A lazily evaluated sequence produced at the top level of the lambda
+  is implicitly converted to a list.
+* Reading a field of a structure a service defines reads that field of it on the server, and
+  constructing one with ``new`` builds it there.
+
+Anything else cannot run on the server, and throws :type:`ExpressionCompilationException`
+describing the unsupported construct.
+
 Client API Reference
 --------------------
 
@@ -217,7 +266,38 @@ Client API Reference
 
    .. method:: Stream<ReturnType> AddStream<ReturnType>(LambdaExpression expression)
 
-      Create a new stream from the given lambda expression.
+      Create a new stream from the given lambda expression. A lambda consisting of a single
+      method call or property access is streamed as that remote procedure call. Any other
+      lambda is compiled into a server side expression using
+      :meth:`Connection.CompileExpression`, evaluated on the server on each stream update.
+
+   .. method:: KRPC.Client.Services.KRPC.Expression CompileExpression<ReturnType>(Expression<Func<ReturnType>> expression)
+
+      Compile a lambda expression, taking no arguments, into a server side expression that
+      computes the same result on the server. Remote procedure calls made by the lambda are
+      re-invoked on each evaluation of the expression; other values are captured when the
+      expression is compiled. Throws :type:`ExpressionCompilationException` for constructs
+      that cannot run on the server.
+
+   .. method:: Event AddEvent(Expression<Func<bool>> expression)
+
+      Create an event from a boolean lambda expression, compiled into a server side expression
+      using :meth:`Connection.CompileExpression`.
+
+   .. method:: ReturnType RunFunction<ReturnType>(Expression<Func<ReturnType>> expression)
+
+      Run a function on the server, within a single physics tick, and return the value it
+      produces. The lambda expression is compiled using :meth:`Connection.CompileExpression`.
+      Also callable with a server side expression object in place of the lambda. This is the
+      intended way to use functions with side effects, which would otherwise re-run on every
+      update of an event or stream.
+
+   .. method:: void RunFunction(Expression<Action> expression)
+
+      Run a function with no result on the server, within a single physics tick, for its
+      effects — for example a lambda that invokes a single remote method. Also callable with
+      a server side expression object, which may be a statement block built with the
+      expression API.
 
    .. method:: KRPC.Schema.KRPC.ProcedureCall GetCall(LambdaExpression expression)
 
@@ -228,6 +308,10 @@ Client API Reference
    .. method:: void Dispose()
 
       Closes the connection and frees the resources associated with it.
+
+.. class:: ExpressionCompilationException
+
+   Thrown when a lambda expression cannot be compiled into a server side expression.
 
 .. class:: Stream<ReturnType>
 

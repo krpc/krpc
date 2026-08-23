@@ -38,6 +38,7 @@ java_library(
         ":services-lidar",
         ":services-remotetech",
         ":services-spacecenter",
+        ":services-stdlib",
         ":services-ui",
         "//protobuf:java",
     ],
@@ -217,6 +218,13 @@ clientgen_java(
     out = "services/UI.java",
     defs = "//service/UI:ServiceDefinitions",
     service = "UI",
+)
+
+clientgen_java(
+    name = "services-stdlib",
+    out = "services/StdLib.java",
+    defs = "//core:StdLibServiceDefinitions",
+    service = "StdLib",
 )
 
 clientgen_java(

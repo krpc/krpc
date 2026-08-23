@@ -202,6 +202,21 @@ Service documentation string.
 
 
 
+.. function:: krpc_error_t krpc_TestService_DumpExpressionTree(krpc_connection_t connection, char * * result, krpc_KRPC_Expression_t expression)
+
+   Returns a dump of the expression tree of the given server side expression,
+   as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+   verify the trees that the expression API generates.
+
+   :Parameters:
+
+
+
+   
+
+
+
+
 .. function:: krpc_error_t krpc_TestService_EchoNullableInt(krpc_connection_t connection, int32_t * result, int32_t value)
 
 

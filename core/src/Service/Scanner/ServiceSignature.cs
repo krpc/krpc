@@ -180,7 +180,7 @@ namespace KRPC.Service.Scanner
                 throw new ServiceException ("Service " + Name + " contains duplicate classes " + name);
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (classType, out deprecatedReason);
-            Classes [name] = new ClassSignature (Name, name, classType.GetDocumentation (), deprecated, deprecatedReason);
+            Classes [name] = new ClassSignature (Name, name, classType, classType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 
@@ -202,7 +202,7 @@ namespace KRPC.Service.Scanner
             }
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (enumType, out deprecatedReason);
-            Enumerations [name] = new EnumerationSignature (Name, name, values, enumType.GetDocumentation (), deprecated, deprecatedReason);
+            Enumerations [name] = new EnumerationSignature (Name, name, enumType, values, enumType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 
@@ -226,7 +226,7 @@ namespace KRPC.Service.Scanner
             }
             string deprecatedReason;
             var deprecated = TypeUtils.GetDeprecated (structType, out deprecatedReason);
-            Structs [name] = new StructSignature (Name, name, fields, structType.GetDocumentation (), deprecated, deprecatedReason);
+            Structs [name] = new StructSignature (Name, name, structType, fields, structType.GetDocumentation (), deprecated, deprecatedReason);
             return name;
         }
 

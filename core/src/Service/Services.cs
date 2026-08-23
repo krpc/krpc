@@ -152,6 +152,33 @@ namespace KRPC.Service
         }
 
         /// <summary>
+        /// Checks that a procedure is available in the current game scene, throwing
+        /// RPCException if not. Called from compiled server-side expressions, which
+        /// invoke the procedure's method directly rather than through
+        /// <see cref="ExecuteCall(ProcedureSignature, Func{object})"/>, before each
+        /// invocation. The error is thrown rather than returned, so that it
+        /// propagates to the stream or event evaluating the expression.
+        /// </summary>
+        public static void CheckExpressionGameScene (ProcedureSignature procedure)
+        {
+            if ((CallContext.GameScene & procedure.GameScene) == 0)
+                throw new RPCException ("Procedure not available in game scene '" + GameSceneUtils.Name (CallContext.GameScene) + "'");
+        }
+
+        /// <summary>
+        /// Checks a return value produced by a procedure invoked from a compiled
+        /// server-side expression, throwing RPCException if it is null and the
+        /// procedure is not permitted to return null. The invocation is a direct,
+        /// statically typed call, so a null value is the only way the result can
+        /// fail to conform to the procedure's return type.
+        /// </summary>
+        public static void CheckExpressionReturnValue (ProcedureSignature procedure, object returnValue)
+        {
+            if (ReferenceEquals (returnValue, null))
+                CheckReturnValue (procedure, null);
+        }
+
+        /// <summary>
         /// Executes a procedure call and returns the result.
         /// Throws YieldException, containing a continuation, if the call yields.
         /// Throws RPCException if the call fails.

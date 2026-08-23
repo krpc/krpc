@@ -123,6 +123,15 @@
       :param double value:
    
 
+   .. method:: String dumpExpressionTree(KRPC.Expression expression)
+
+      Returns a dump of the expression tree of the given server side expression,
+      as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+      verify the trees that the expression API generates.
+
+      :param KRPC.Expression expression:
+   
+
    .. method:: int echoNullableInt(int value)
 
 

@@ -127,6 +127,14 @@ genrule(
     ],
 )
 
+service_definitions(
+    name = "StdLibServiceDefinitions",
+    out = "KRPC.StdLib.json",
+    assemblies = [":KRPC.Core"],
+    service = "StdLib",
+    visibility = ["//visibility:public"],
+)
+
 csharp_assembly_info(
     name = "TestAssemblyInfo",
     cls_compliant = False,

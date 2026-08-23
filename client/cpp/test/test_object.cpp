@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 #include "krpc/object.hpp"
+#include "krpc/services/krpc.hpp"
 #include "server_test.hpp"
 #include "services/test_service.hpp"
 

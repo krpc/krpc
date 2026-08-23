@@ -633,6 +633,17 @@ namespace TestServer
             return 0;
         }
 
+        /// <summary>
+        /// Returns a dump of the expression tree of the given server side expression,
+        /// as rendered by KRPC.Service.KRPC.ExpressionTreePrinter. Used by tests to
+        /// verify the trees that the expression API generates.
+        /// </summary>
+        [KRPCProcedure]
+        public static string DumpExpressionTree (KRPC.Service.KRPC.Expression expression)
+        {
+            return KRPC.Service.KRPC.ExpressionTreePrinter.Print (expression);
+        }
+
         [KRPCProcedure]
         public static KRPC.Service.Messages.Event OnTimer (uint milliseconds, uint repeats = 1) {
             var evnt = new KRPC.Service.Event ();

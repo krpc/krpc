@@ -42,6 +42,23 @@ TEST_F(test_stream, test_property) {
   }
 }
 
+TEST_F(test_stream, test_enumeration) {
+  auto x = test_service.enum_return_stream();
+  for (int i = 0; i < 5; i++) {
+    ASSERT_EQ(krpc::services::TestService::TestEnum::value_b, x());
+    wait();
+  }
+}
+
+TEST_F(test_stream, test_struct) {
+  auto x = test_service.struct_echo_stream(krpc::services::TestService::TestStruct(
+      1, "jeb", krpc::services::TestService::TestEnum::value_c, {1, 2}));
+  for (int i = 0; i < 5; i++) {
+    ASSERT_EQ("jeb", x().string_field);
+    wait();
+  }
+}
+
 TEST_F(test_stream, test_nullable) {
   auto x = test_service.echo_nullable_int_stream(std::nullopt);
   auto y = test_service.echo_nullable_string_stream(std::nullopt);

@@ -328,6 +328,19 @@ whether the stream should start sending data to the client immediately. The proc
 :ref:`communication-protocol-anatomy-of-a-request` for the format and contents of this message. See
 :ref:`communication-protocol-streams` for more information on working with streams.
 
+.. _communication-protocol-add-expression-stream:
+
+AddExpressionStream
+^^^^^^^^^^^^^^^^^^^
+
+The ``AddExpressionStream`` procedure adds a stream that evaluates a server side expression on
+each update and streams the value it evaluates to. Its first argument is an expression object,
+built using the ``KRPC.Expression`` class. The second argument is a boolean value indicating
+whether the stream should start sending data to the client immediately. The procedure returns a
+``Stream`` message describing the stream that was added. The type of the values sent over the
+stream is the expression's return type, which can be obtained from the expression object before
+starting the stream.
+
 .. _communication-protocol-start-stream:
 
 StartStream
