@@ -242,7 +242,7 @@ Client API Reference
 
 .. namespace:: krpc
 
-.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int rpc_port = 50000, unsigned int stream_port = 50001)
+.. function:: Client connect(const std::string& name = "", const std::string& address = "127.0.0.1", unsigned int rpc_port = 50000, unsigned int stream_port = 50001, std::chrono::milliseconds timeout = std::chrono::milliseconds::zero())
 
    This function creates a connection to a kRPC server. It returns a :class:`krpc::Client` object,
    through which the server can be communicated with.
@@ -257,6 +257,29 @@ Client API Reference
         should match the RPC port number of the server you want to connect to.
       * **stream_port** (*unsigned int*) -- The port number of the Stream Server. Defaults
         to 50001. This should match the stream port number of the server you want to connect to.
+      * **timeout** (*std::chrono::milliseconds*) -- How long to wait for a connection before
+        giving up. Defaults to zero, which waits indefinitely. A network that drops a connection
+        attempt rather than refusing it otherwise leaves the client waiting.
+
+.. function:: Client connect_local(const std::string& name = "", const std::string& rpc_path = "", const std::string& stream_path = "")
+
+   This function creates a connection to a kRPC server running on the same machine, over unix
+   domain sockets rather than TCP/IP. It returns a :class:`krpc::Client` object, just as
+   :func:`krpc::connect` does, and the connection behaves identically thereafter.
+
+   Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and Windows Server
+   2019 or later.
+
+   :parameters:
+
+      * **name** (*std::string*) -- A descriptive name for the connection. This is passed to the
+        server and appears in the in-game server window.
+      * **rpc_path** (*std::string*) -- The path of the socket the RPC Server is listening on. This
+        should match the RPC socket path shown in the in-game server window. Leave empty for the
+        path the server uses unless it was configured with another.
+      * **stream_path** (*std::string*) -- The path of the socket the Stream Server is listening
+        on. This should match the stream socket path shown in the in-game server window. Defaults
+        as ``rpc_path`` does.
 
 .. class:: Client
 
@@ -482,3 +505,20 @@ Client API Reference
    .. function:: operator bool()
 
       Returns whether the event object is bound to a stream.
+
+.. function:: template <typename T> std::size_t hash_value(const T& value)
+
+   Returns a hash of a value of any type the client carries: the arithmetic types, strings,
+   enumerations, class objects, tuples, and the list, set and dictionary collection types,
+   nested however deeply. A structure is also hashed by this function, and is given a
+   ``std::hash`` of its own, so an unordered container keyed by one needs nothing further.
+
+.. class:: hash
+
+   A function object that calls :func:`hash_value`, to give a standard container that takes
+   its hash as a template argument. The standard library hashes neither ``std::tuple`` nor
+   any of the collection types, so a container keyed by one needs this:
+
+   .. code-block:: cpp
+
+      std::unordered_set<std::tuple<double, double, double>, krpc::hash> points;

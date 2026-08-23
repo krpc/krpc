@@ -4,15 +4,17 @@
 # Covers the two things a build chooses between, crossed with each other:
 #   how nanopb is provided) system) the nanopb vcpkg installs
 #                           fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
-#   which transport)        serialio) a serial port, reached through the Windows file API
-#                           tcpip)    TCP/IP, reached through winsock (KRPC_COMMUNICATION_TCP=ON)
+#   which transport)        serialio)    a serial port, reached through the Windows file API
+#                           tcpip)       TCP/IP, through winsock (KRPC_COMMUNICATION_TCP=ON)
+#                           localsocket) a unix domain socket, also through winsock
+#                                        (KRPC_COMMUNICATION_LOCALSOCKET=ON)
 # Each is followed by a consumer test using find_package(krpc_cnano CONFIG REQUIRED).
-# Usage: test-cmake-windows.sh [system-serialio|system-tcpip|fetch-serialio|fetch-tcpip]
-#        (default: run all)
+# Usage: test-cmake-windows.sh [SCENARIO]  (default: run all)
 set -eo pipefail
 set -x
 
-scenarios="system-serialio system-tcpip fetch-serialio fetch-tcpip"
+scenarios="system-serialio system-tcpip system-localsocket \
+fetch-serialio fetch-tcpip fetch-localsocket"
 scenario="${1:-all}"
 
 scriptroot="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -46,8 +48,8 @@ function check_absent {
 
 # Build and install the library, then build the consumer project against the installed package
 # with find_package(krpc_cnano CONFIG REQUIRED), to verify the package config and targets work
-# end-to-end. Where the library is built for TCP/IP the program opens a connection, which is what
-# proves the transport, and the winsock library it needs, reach it through the package.
+# end-to-end. Where the library is built for a socket the program opens a connection, which is
+# what proves the transport, and the winsock library it needs, reach it through the package.
 function run_scenario {
   local name=$1
   local out="$root/$name"
@@ -61,7 +63,8 @@ function run_scenario {
     *) echo "unknown scenario '$name'"; exit 1 ;;
   esac
   case "$name" in
-    *-tcpip)    options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
+    *-tcpip)       options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
+    *-localsocket) options+=(-DKRPC_COMMUNICATION_LOCALSOCKET=ON) ;;
     *-serialio) ;;
     *) echo "unknown scenario '$name'"; exit 1 ;;
   esac

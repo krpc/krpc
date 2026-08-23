@@ -3,7 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq.Expressions;
+using System.Reflection;
 using Google.Protobuf;
+using KRPC.Client.Attributes;
 
 namespace KRPC.Client
 {
@@ -16,6 +18,7 @@ namespace KRPC.Client
         Unsupported,
         Bytes,
         Class,
+        Struct,
         Tuple,
         List,
         Set,
@@ -61,6 +64,12 @@ namespace KRPC.Client
             } else if (type.IsSubclassOf (typeof(RemoteObject))) {
                 Kind = TypeKind.Class;
                 NewObject = ObjectConstructor (type);
+            } else if (type.IsDefined (typeof(KRPCStructAttribute), false)) {
+                Kind = TypeKind.Struct;
+                var fields = StructFields (type);
+                Arguments = Array.ConvertAll (fields, field => field.PropertyType);
+                Items = StructItems (type, fields);
+                NewTuple = StructConstructor (type, Arguments);
             } else if (IsATupleType (type)) {
                 Kind = TypeKind.Tuple;
                 Arguments = type.GetGenericArguments ();
@@ -116,12 +125,14 @@ namespace KRPC.Client
         public Action<object, object> Add { get; private set; }
 
         /// <summary>
-        /// Build a tuple from its items, in the order <see cref="Arguments"/> names them.
+        /// Build a tuple, or a structure, from its items, in the order <see cref="Arguments"/>
+        /// names them.
         /// </summary>
         public Func<object[], object> NewTuple { get; private set; }
 
         /// <summary>
-        /// Take the items out of a tuple, in the order <see cref="Arguments"/> names them.
+        /// Take the items out of a tuple, or the fields out of a structure, in the order
+        /// <see cref="Arguments"/> names them.
         /// </summary>
         public Func<object, object>[] Items { get; private set; }
 
@@ -151,6 +162,46 @@ namespace KRPC.Client
                                      Expression.Convert (item, valueType)),
                     Expression.Empty ()),
                 set, item).Compile ();
+        }
+
+        /// <summary>
+        /// The properties that carry the fields of a structure type, in the order the type
+        /// declares them, which is the order their values are encoded in. Reflection does not
+        /// promise an order for the properties of a type, so they are ordered by metadata token,
+        /// which is assigned in declaration order.
+        /// </summary>
+        static PropertyInfo[] StructFields (Type type)
+        {
+            var fields = type.GetProperties (BindingFlags.Public | BindingFlags.Instance);
+            Array.Sort (fields, (x, y) => x.MetadataToken.CompareTo (y.MetadataToken));
+            return fields;
+        }
+
+        static Func<object[], object> StructConstructor (Type type, Type[] fieldTypes)
+        {
+            var values = Expression.Parameter (typeof(object[]));
+            var items = new Expression [fieldTypes.Length];
+            for (var i = 0; i < fieldTypes.Length; i++)
+                items [i] = Expression.Convert (
+                    Expression.ArrayIndex (values, Expression.Constant (i)), fieldTypes [i]);
+            return Expression.Lambda<Func<object[], object>> (
+                Expression.Convert (
+                    Expression.New (type.GetConstructor (fieldTypes), items), typeof(object)),
+                values).Compile ();
+        }
+
+        static Func<object, object>[] StructItems (Type type, PropertyInfo[] fields)
+        {
+            var items = new Func<object, object> [fields.Length];
+            for (var i = 0; i < fields.Length; i++) {
+                var value = Expression.Parameter (typeof(object));
+                items [i] = Expression.Lambda<Func<object, object>> (
+                    Expression.Convert (
+                        Expression.Property (Expression.Convert (value, type), fields [i]),
+                        typeof(object)),
+                    value).Compile ();
+            }
+            return items;
         }
 
         static Type TupleType (Type[] valueTypes)

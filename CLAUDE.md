@@ -27,8 +27,10 @@ Outputs in `bazel-bin`, test logs in `bazel-testlogs`.
 
 ### Tests and lint
 
- * `bazel test //:test` — full non-game suite. **The gate before proposing a change.**
+ * `bazel test //:test` — full non-game suite. **A gate before proposing a change.**
    `bazel test //...` does not work.
+ * `bazel build //...` — **the second gate**: `//:test` does not build every target. Its log must
+   be clean, build progress messages only, with no warnings or other output.
  * `//:lint` — Python, C++, C, Java, doc lint.
  * `//core:test`, `//client/python:test`, … — one package, when iterating.
  * `//doc:spelling` — American-English gate; `//doc:check-documented` — every RPC documented.

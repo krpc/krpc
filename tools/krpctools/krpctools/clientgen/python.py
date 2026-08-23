@@ -5,6 +5,7 @@ from krpc.types import (
     ClassType,
     EnumerationType,
     MessageType,
+    StructType,
     TupleType,
     ListType,
     SetType,
@@ -27,7 +28,7 @@ class StubLanguage(PythonLanguage):
         self.module = service
 
     def parse_type(self, typ):
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             name = typ.protobuf_type.name
             if typ.protobuf_type.service != self.module:
                 name = typ.protobuf_type.service.lower() + "." + name
@@ -71,6 +72,11 @@ class PythonGenerator(Generator):
                 typ.protobuf_type.service,
                 typ.protobuf_type.name,
             )
+        if isinstance(typ, StructType):
+            return 'self._client._types.struct_type("%s", "%s")' % (
+                typ.protobuf_type.service,
+                typ.protobuf_type.name,
+            )
         if isinstance(typ, TupleType):
             return "self._client._types.tuple_type(%s)" % ", ".join(
                 self.parse_python_type(x) for x in typ.value_types
@@ -100,7 +106,7 @@ class PythonGenerator(Generator):
                 spec = "Event"
             else:
                 return "KRPC_pb2.%s" % typ.python_type.__name__
-        elif isinstance(typ, (ClassType, EnumerationType)):
+        elif isinstance(typ, (ClassType, EnumerationType, StructType)):
             spec = self.language.parse_type(typ)
         elif isinstance(typ, TupleType):
             spec = "Tuple[%s]" % ",".join(
@@ -234,7 +240,10 @@ class PythonGenerator(Generator):
                         and context["service_name"] != ptype["service"]
                     ):
                         dependencies.add(ptype["service"])
+        dependencies |= self.struct_field_dependencies(context)
         context["dependencies"] = dependencies
+
+        self.add_struct_field_specifications(context)
 
         # Add type specifications to types
         procedures = (
@@ -310,6 +319,24 @@ class PythonGenerator(Generator):
         self.add_deprecated_docstrings(context)
         return context
 
+    @staticmethod
+    def struct_field_dependencies(context):
+        """The other services whose types the fields of this service's structures name, which
+        the generated module has to import to name them"""
+        dependencies = set()
+        for struct_info in context["structs"].values():
+            for field in struct_info["fields"]:
+                service = field["krpc_type"].protobuf_type.service
+                if service and service != context["service_name"]:
+                    dependencies.add(service)
+        return dependencies
+
+    def add_struct_field_specifications(self, context):
+        """Add the type annotation each field of a structure is declared with"""
+        for struct_info in context["structs"].values():
+            for field in struct_info["fields"]:
+                field["spec"] = self.parse_type_specification(field["krpc_type"])
+
     @classmethod
     def add_deprecated_docstrings(cls, context):
         # Prepend a "Deprecated:" line to the docstring of every deprecated member/type
@@ -321,9 +348,12 @@ class PythonGenerator(Generator):
                 for accessor in property.values()
             ]
             + list(context["enumerations"].values())
+            + list(context["structs"].values())
             + list(context["exceptions"].values())
             + list(context["classes"].values())
         )
+        for struct_info in context["structs"].values():
+            deprecatable += list(struct_info["fields"])
         for class_info in context["classes"].values():
             deprecatable += list(class_info["methods"].values())
             deprecatable += list(class_info["static_methods"].values())

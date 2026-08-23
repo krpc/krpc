@@ -1,6 +1,18 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. One
+  is generated as a class carrying its fields, with a constructor taking them in the order the
+  structure declares them, getters, `equals`, `hashCode` and `Comparable`, comparing its fields
+  in turn as a javatuples tuple of the same values does (#1066)
+- **Breaking:** Requires Java 17 or later, up from Java 9, for the unix domain sockets the
+  local socket protocol is carried over (#1065)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the boxed type
   (`Integer`, `Double`, …) (#1017)
+- Add `Connection.newLocalInstance`, which connects to a server on the same machine over unix
+  domain sockets rather than TCP/IP. The connection behaves identically once established
+  (#1065)
+- Add `Connection.newInstance` overloads taking a `timeout`, bounding how long a connection is
+  waited for. A network that drops a connection attempt rather than refusing it otherwise leaves
+  the client waiting indefinitely (#1065)
 
 ## [v0.6.0]
 - Update to protobuf v4.35.1, guava 33.4.8-jre, antlr4-runtime 4.13.2 (#850)

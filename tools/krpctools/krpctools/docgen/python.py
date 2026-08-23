@@ -2,6 +2,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -18,7 +19,7 @@ from .nodes import (
     ClassStaticMethod,
     ClassProperty,
 )
-from .nodes import Enumeration, EnumerationValue
+from .nodes import Enumeration, EnumerationValue, Struct, StructField
 from ..lang.python import PythonLanguage
 
 
@@ -49,6 +50,8 @@ class PythonDomain(Domain):
             return ":class:`%s`" % self.type(typ)
         if isinstance(typ, EnumerationType):
             return ":class:`%s`" % self.type(typ)
+        if isinstance(typ, StructType):
+            return ":class:`%s`" % self.type(typ)
         if isinstance(typ, ListType):
             return "list(%s)" % self.type_description(typ.value_type)
         if isinstance(typ, DictionaryType):
@@ -75,6 +78,7 @@ class PythonDomain(Domain):
                 ClassStaticMethod,
                 ClassProperty,
                 EnumerationValue,
+                StructField,
             )
         ):
             name = name.split(".")
@@ -84,14 +88,15 @@ class PythonDomain(Domain):
 
     def see(self, obj):
         if any(
-            isinstance(obj, cls) for cls in (Property, ClassProperty, EnumerationValue)
+            isinstance(obj, cls)
+            for cls in (Property, ClassProperty, EnumerationValue, StructField)
         ):
             prefix = "attr"
         elif any(
             isinstance(obj, cls) for cls in (Procedure, ClassMethod, ClassStaticMethod)
         ):
             prefix = "meth"
-        elif any(isinstance(obj, cls) for cls in (Class, Enumeration)):
+        elif any(isinstance(obj, cls) for cls in (Class, Enumeration, Struct)):
             prefix = "class"
         else:
             raise RuntimeError(str(obj))

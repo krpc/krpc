@@ -70,9 +70,9 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.IsFalse (eventArgs.Request.ShouldAllow);
             Assert.IsTrue (eventArgs.Request.ShouldDeny);
 
-            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 120, Status.WrongType,
+            TestingTools.CheckConnectionResponse (responseStream.ToArray (), 137, Status.WrongType,
                 "Connection request was for the rpc server, but this is the stream server. " +
-                "Did you connect to the wrong port number?", 0);
+                "Did you connect to the wrong port number or socket path?", 0);
         }
 
         [Test]

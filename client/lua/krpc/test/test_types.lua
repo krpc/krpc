@@ -210,6 +210,34 @@ function TestTypes:test_coerce_to()
   luaunit.assertError(types.coerce_to, types, List{1}, types:tuple_type({types:string_type()}))
 end
 
+function TestTypes:test_struct_comparison()
+  local types = Types()
+  local typ = types:struct_type('ServiceName', 'ComparableStruct')
+  typ:set_fields({{'count', types:uint32_type()}, {'name', types:string_type()}})
+  local one = typ.lua_type(1, 'jeb')
+  local same = typ.lua_type(1, 'jeb')
+  local two = typ.lua_type(2, 'jeb')
+  luaunit.assertTrue(one == same)
+  luaunit.assertTrue(one ~= two)
+  -- Ordered by the fields in turn
+  luaunit.assertTrue(one < two)
+  luaunit.assertTrue(two > one)
+  luaunit.assertTrue(one <= same)
+  luaunit.assertTrue(one >= same)
+  luaunit.assertFalse(two < one)
+end
+
+function TestTypes:test_struct_ordering_of_a_field_that_orders_neither_way()
+  local types = Types()
+  local typ = types:struct_type('ServiceName', 'NanStruct')
+  typ:set_fields({{'value', types:double_type()}, {'count', types:uint32_type()}})
+  -- A NaN is unequal to itself and orders neither way, so ordering moves on to the next
+  -- field rather than calling the two values ordered
+  local nan = 0/0
+  luaunit.assertTrue(typ.lua_type(nan, 1) < typ.lua_type(nan, 2))
+  luaunit.assertFalse(typ.lua_type(nan, 2) < typ.lua_type(nan, 1))
+end
+
 function TestTypes:test_none()
   luaunit.assertEquals(tostring(Types.none), 'none')
   luaunit.assertTrue(Types.none == Types.none)

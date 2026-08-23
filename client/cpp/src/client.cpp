@@ -19,10 +19,16 @@ class StreamImpl;
 Client::Client() : lock(new std::mutex), exception_throwers_lock(new std::mutex) {}
 
 Client::Client(const std::string& name, const std::string& address, unsigned int rpc_port,
-               unsigned int stream_port)
+               unsigned int stream_port, std::chrono::milliseconds timeout)
+    : Client(name, std::make_shared<Connection>(address, rpc_port, timeout),
+             stream_port == 0 ? nullptr
+                              : std::make_shared<Connection>(address, stream_port, timeout)) {}
+
+Client::Client(const std::string& name, std::shared_ptr<Connection> rpc,
+               const std::shared_ptr<Connection>& stream)
     : lock(new std::mutex), exception_throwers_lock(new std::mutex) {
   // Connect to RPC server
-  rpc_connection = std::make_shared<Connection>(address, rpc_port);
+  rpc_connection = std::move(rpc);
   rpc_connection->connect();
   schema::ConnectionRequest request;
   request.set_type(schema::ConnectionRequest::RPC);
@@ -33,20 +39,19 @@ Client::Client(const std::string& name, const std::string& address, unsigned int
   if (response.status() != schema::ConnectionResponse::OK)
     throw ConnectionError(response.message());
 
-  // Connect to Stream server
-  std::shared_ptr<Connection> stream_connection;
-  if (stream_port != 0) {
-    auto stream_connection = std::make_shared<Connection>(address, stream_port);
-    stream_connection->connect();
+  // Connect to Stream server. Only once the rpc connection has been accepted, so that a
+  // rejected connection does not leave a second one behind.
+  if (stream) {
+    stream->connect();
     schema::ConnectionRequest request;
     request.set_type(schema::ConnectionRequest::STREAM);
     request.set_client_identifier(response.client_identifier());
-    stream_connection->send(encoder::encode_message_with_size(request));
+    stream->send(encoder::encode_message_with_size(request));
     schema::ConnectionResponse response;
-    stream_connection->receive_message(response);
+    stream->receive_message(response);
     if (response.status() != schema::ConnectionResponse::OK)
       throw ConnectionError(response.message());
-    stream_manager = std::make_shared<StreamManager>(this, stream_connection);
+    stream_manager = std::make_shared<StreamManager>(this, stream);
   }
 }
 

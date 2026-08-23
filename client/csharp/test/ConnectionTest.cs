@@ -23,37 +23,48 @@ namespace KRPC.Client.Test
         [Test]
         public void WrongRpcPort ()
         {
+            SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongRPCPort",
-                rpcPort: RPCPort ^ StreamPort, streamPort: StreamPort));
+                rpcPort: UnusedPort (), streamPort: StreamPort, timeout: ConnectTimeout));
         }
 
         [Test]
         public void WrongStreamPort ()
         {
+            SkipWithoutPorts ();
             Assert.Throws<SocketException> (() => new Connection (
                 "CSharpClientTestWrongStreamPort",
-                rpcPort: RPCPort, streamPort: RPCPort ^ StreamPort));
+                rpcPort: RPCPort, streamPort: UnusedPort (), timeout: ConnectTimeout));
+        }
+
+        /// <summary>
+        /// Skip a test that connects by port when the server is listening on socket paths.
+        /// There is no port to get wrong then, and the one such a test would fall back on is
+        /// a guess that nothing is listening on, so it says nothing about the client.
+        /// </summary>
+        static void SkipWithoutPorts ()
+        {
+            if (RPCPath != null)
+                Assert.Ignore ("the server is listening on socket paths rather than on ports");
         }
 
         [Test]
         public void WrongRPCServer ()
         {
-            var exn = Assert.Throws<ConnectionException> (() => new Connection (
-                          "CSharpClientTestWrongRPCServer",
-                          rpcPort: StreamPort, streamPort: StreamPort));
+            var exn = Assert.Throws<ConnectionException> (() => Connect (
+                          "CSharpClientTestWrongRPCServer", rpc: "stream", stream: "stream"));
             Assert.AreEqual ("Connection request was for the rpc server, but this is the stream server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]
         public void WrongStreamServer ()
         {
-            var exn = Assert.Throws<ConnectionException> (() => new Connection (
-                          "CSharpClientTestWrongStreamServer",
-                          rpcPort: RPCPort, streamPort: RPCPort));
+            var exn = Assert.Throws<ConnectionException> (() => Connect (
+                          "CSharpClientTestWrongStreamServer", rpc: "rpc", stream: "rpc"));
             Assert.AreEqual ("Connection request was for the stream server, but this is the rpc server. " +
-            "Did you connect to the wrong port number?", exn.Message);
+            "Did you connect to the wrong port number or socket path?", exn.Message);
         }
 
         [Test]
@@ -336,6 +347,128 @@ namespace KRPC.Client.Test
             Assert.AreEqual (2, l.Count);
             Assert.AreEqual ("value=jeb", l [0].GetValue ());
             Assert.AreEqual ("value=bob", l [1].GetValue ());
+        }
+
+        [Test]
+        public void Structs ()
+        {
+            var value = new TestStruct (42, "jeb", TestEnum.ValueB, new List<int> { 1, 2, 3 });
+            var result = Connection.TestService ().StructEcho (value);
+            Assert.AreEqual (value, result);
+            Assert.AreEqual (value.GetHashCode (), result.GetHashCode ());
+            Assert.AreEqual (42, result.IntField);
+            Assert.AreEqual ("jeb", result.StringField);
+            Assert.AreEqual (TestEnum.ValueB, result.EnumField);
+            CollectionAssert.AreEqual (new List<int> { 1, 2, 3 }, result.ListField);
+        }
+
+        [Test]
+        public void NestedStructs ()
+        {
+            var obj = Connection.TestService ().CreateTestObject ("bob");
+            var value = new TestNestedStruct (
+                new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> ()), obj, "bill");
+            var result = Connection.TestService ().NestedStructEcho (value);
+            Assert.AreEqual (value, result);
+            Assert.AreEqual (1, result.StructField.IntField);
+            Assert.AreEqual (obj, result.ObjectField);
+            Assert.AreEqual ("bill", result.StringField);
+        }
+
+        [Test]
+        public void CollectionsOfStructs ()
+        {
+            var values = new List<TestStruct> {
+                new TestStruct (0, "jeb", TestEnum.ValueC, new List<int> ()),
+                new TestStruct (1, "bob", TestEnum.ValueC, new List<int> ())
+            };
+            var result = Connection.TestService ().IncrementListOfStructs (values);
+            CollectionAssert.AreEqual (
+                new List<TestStruct> {
+                    new TestStruct (1, "jeb", TestEnum.ValueC, new List<int> ()),
+                    new TestStruct (2, "bob", TestEnum.ValueC, new List<int> ())
+                },
+                result);
+        }
+
+        [Test]
+        public void NullableStructs ()
+        {
+            Assert.IsNull (Connection.TestService ().StructEchoNullable (null));
+            var value = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> ());
+            var result = Connection.TestService ().StructEchoNullable (value);
+            Assert.IsTrue (result.HasValue);
+            Assert.AreEqual (value, result.Value);
+        }
+
+        [Test]
+        public void StructDefaultValue ()
+        {
+            var result = Connection.TestService ().StructDefault ();
+            Assert.AreEqual (
+                new TestStruct (42, "jeb", TestEnum.ValueB, new List<int> { 1, 2, 3 }), result);
+            Assert.AreEqual (42, result.IntField);
+            Assert.AreEqual ("jeb", result.StringField);
+            Assert.AreEqual (TestEnum.ValueB, result.EnumField);
+            CollectionAssert.AreEqual (new List<int> { 1, 2, 3 }, result.ListField);
+        }
+
+        [Test]
+        public void StructComparison ()
+        {
+            var items = new List<int> ();
+            var a = new TestStruct (1, "jeb", TestEnum.ValueA, items);
+            var b = new TestStruct (1, "jeb", TestEnum.ValueA, items);
+            var c = new TestStruct (2, "jeb", TestEnum.ValueA, items);
+
+            Assert.IsTrue (a.Equals (b));
+            Assert.IsTrue (a == b);
+            Assert.IsTrue (a != c);
+            Assert.AreEqual (a.GetHashCode (), b.GetHashCode ());
+
+            // Ordered by the fields in turn, as a tuple of the same values is
+            Assert.IsTrue (a < c);
+            Assert.IsTrue (c > a);
+            Assert.IsTrue (a <= b);
+            Assert.IsTrue (a >= b);
+            Assert.AreEqual (0, a.CompareTo (b));
+            Assert.Less (a.CompareTo (c), 0);
+
+            var sorted = new List<TestStruct> { c, a };
+            sorted.Sort ();
+            Assert.AreEqual (a, sorted [0]);
+
+            var set = new HashSet<TestStruct> { a, b, c };
+            Assert.AreEqual (2, set.Count);
+        }
+
+        [Test]
+        public void StructEqualityOfACollectionFieldIsByContents ()
+        {
+            // A collection field is equal to one holding the same items, whatever object
+            // each of them is
+            // Asserted through Equals rather than through Assert.AreEqual, which compares
+            // collections structurally with a comparer of NUnit's own
+            var x = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
+            var y = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
+            var z = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 2 });
+            Assert.IsTrue (x.Equals (y));
+            Assert.AreEqual (x.GetHashCode (), y.GetHashCode ());
+            Assert.IsFalse (x.Equals (z));
+        }
+
+        [Test]
+        public void StructComparisonOfACollectionFieldThrows ()
+        {
+            // A collection has no ordering, so comparing two structures whose collection
+            // fields are different objects throws, as comparing two such tuples does
+            var a = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 1 });
+            var b = new TestStruct (1, "jeb", TestEnum.ValueA, new List<int> { 2 });
+            Assert.Throws<System.ArgumentException> (() => a.CompareTo (b));
+            Assert.Throws<System.ArgumentException> (
+                () => Comparer<Tuple<int, IList<int>>>.Default.Compare (
+                    new Tuple<int, IList<int>> (1, new List<int> { 1 }),
+                    new Tuple<int, IList<int>> (1, new List<int> { 2 })));
         }
 
         [Test]

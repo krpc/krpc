@@ -38,10 +38,12 @@ def single_line(string):
 def as_type(types, type_info):
     """Convert a type parsed from a JSON service definitions file
     into a type object"""
-    return types.as_type(_as_protobuf_type(types, type_info))
+    return types.as_type(as_protobuf_type(type_info))
 
 
-def _as_protobuf_type(types, type_info):
+def as_protobuf_type(type_info):
+    """Convert a type parsed from a JSON service definitions file
+    into a protocol buffer type"""
     protobuf_type = Type()
     protobuf_type.code = getattr(Type, type_info["code"])
     if "service" in type_info:
@@ -49,9 +51,7 @@ def _as_protobuf_type(types, type_info):
     if "name" in type_info:
         protobuf_type.name = type_info["name"]
     if "types" in type_info:
-        protobuf_type.types.extend(
-            [_as_protobuf_type(types, t) for t in type_info["types"]]
-        )
+        protobuf_type.types.extend([as_protobuf_type(t) for t in type_info["types"]])
     return protobuf_type
 
 

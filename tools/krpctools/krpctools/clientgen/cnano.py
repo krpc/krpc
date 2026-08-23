@@ -7,6 +7,7 @@ from krpc.types import (
     ClassType,
     EnumerationType,
     MessageType,
+    StructType,
     TupleType,
     ListType,
     SetType,
@@ -56,6 +57,11 @@ class CnanoGenerator(Generator):
             ctype = "krpc_tuple_%s_t" % "_".join(
                 self.parse_type_name(t) for t in typ.value_types
             )
+        elif isinstance(typ, StructType):
+            ctype = "krpc_%s_%s_t" % (
+                typ.protobuf_type.service,
+                typ.protobuf_type.name,
+            )
         elif isinstance(typ, (ClassType, EnumerationType)):
             if in_collection:
                 if isinstance(typ, ClassType):
@@ -99,22 +105,32 @@ class CnanoGenerator(Generator):
         }
 
     def parse_collection_type(self, typ):
+        # A structure carries the values of its fields in order, which is the same encoding as
+        # a tuple of those values, so both are generated as a C struct holding one member per
+        # value. The members of a tuple are named for their position; those of a structure are
+        # named for the field they carry.
         result = self.parse_type(typ)
         if isinstance(typ, TupleType):
-            result.update(
-                {
-                    "value_types": [
-                        self._parse_type(t, in_collection=True) for t in typ.value_types
-                    ]
-                }
-            )
+            members = [self._parse_type(t, in_collection=True) for t in typ.value_types]
+            for i, member in enumerate(members):
+                member["member"] = "e%d" % i
+            result.update({"kind": "tuple", "value_types": members})
+        elif isinstance(typ, StructType):
+            members = [self._parse_type(t, in_collection=True) for t in typ.field_types]
+            for name, member in zip(typ.field_names, members):
+                member["member"] = self.parse_name(snake_case(name))
+            result.update({"kind": "struct", "value_types": members})
         elif isinstance(typ, (ListType, SetType)):
             result.update(
-                {"value_type": self._parse_type(typ.value_type, in_collection=True)}
+                {
+                    "kind": "list" if isinstance(typ, ListType) else "set",
+                    "value_type": self._parse_type(typ.value_type, in_collection=True),
+                }
             )
         elif isinstance(typ, DictionaryType):
             result.update(
                 {
+                    "kind": "dictionary",
                     "key_type": self._parse_type(typ.key_type, in_collection=True),
                     "value_type": self._parse_type(typ.value_type, in_collection=True),
                 }
@@ -141,6 +157,8 @@ class CnanoGenerator(Generator):
             return "tuple_%s" % "_".join(
                 self.parse_type_name(t) for t in typ.value_types
             )
+        if isinstance(typ, StructType):
+            return "%s_%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
         if isinstance(typ, ClassType):
             return "object"
         if isinstance(typ, EnumerationType):

@@ -36,7 +36,9 @@ def client_test(
         **kwargs):
     # The serial transport is tested over a pair of pseudo-terminals that socat
     # links together, and socat has no Windows build. The other transports need
-    # nothing beyond the server and the client, so they run anywhere.
+    # nothing beyond the server and the client, so they run anywhere a client can
+    # reach a server over them; where one cannot, that client passes
+    # target_compatible_with rather than this deciding for every language at once.
     if server_type == "serialio":
         target_compatible_with = (target_compatible_with or []) + ["@platforms//os:linux"]
 

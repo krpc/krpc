@@ -25,7 +25,16 @@ build:windows --cxxopt=/permissive- --host_cxxopt=/permissive-
 build:linux --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
 build:macos --cxxopt=-Wno-unused-command-line-argument --host_cxxopt=-Wno-unused-command-line-argument
 
-build --java_runtime_version=remotejdk_11
+# Build and run java against the JDK bazel downloads, so the toolchain does not depend
+# on what is installed. The language version is the oldest release the client can be built
+# for, and so the oldest one it runs on: unix domain sockets arrived in Java 16, and 17 is
+# the oldest release a toolchain is registered for. The tool_ variants say the same for
+# anything built to be run by the build itself, such as the client jar staged into the
+# client test harness.
+build --java_runtime_version=remotejdk_25
+build --java_language_version=17
+build --tool_java_runtime_version=remotejdk_25
+build --tool_java_language_version=17
 
 # rules_python's default launcher is itself a python script, so every py_binary
 # and py_test starts under whatever python3 sits on PATH before handing over to

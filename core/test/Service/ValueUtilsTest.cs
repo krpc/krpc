@@ -130,5 +130,42 @@ namespace KRPC.Test.Service
                 x[keysY[i]] = valuesY[i];
             Assert.IsFalse(ValueUtils.Equal(x, y));
         }
+
+        static TestService.TestStruct MakeStruct(int intField, params string[] listField)
+        {
+            return new TestService.TestStruct {
+                IntField = intField,
+                StringField = "jeb",
+                EnumField = TestService.TestEnum.X,
+                ObjectField = null,
+                ListField = new List<string>(listField)
+            };
+        }
+
+        [Test]
+        public void StructsEqual()
+        {
+            // The list fields are equal but are separate objects, which the default equality
+            // of a C# struct would compare by reference
+            Assert.IsTrue(ValueUtils.Equal(MakeStruct(1, "a", "b"), MakeStruct(1, "a", "b")));
+        }
+
+        [Test]
+        public void StructsNotEqual()
+        {
+            Assert.IsFalse(ValueUtils.Equal(MakeStruct(1, "a"), MakeStruct(2, "a")));
+            Assert.IsFalse(ValueUtils.Equal(MakeStruct(1, "a"), MakeStruct(1, "b")));
+            Assert.IsFalse(ValueUtils.Equal(MakeStruct(1, "a"), MakeStruct(1)));
+        }
+
+        [Test]
+        public void NestedStructsEqual()
+        {
+            var x = new TestService.TestNestedStruct { StructField = MakeStruct(1, "a"), IntField = 2 };
+            var y = new TestService.TestNestedStruct { StructField = MakeStruct(1, "a"), IntField = 2 };
+            Assert.IsTrue(ValueUtils.Equal(x, y));
+            y.StructField = MakeStruct(1, "b");
+            Assert.IsFalse(ValueUtils.Equal(x, y));
+        }
     }
 }

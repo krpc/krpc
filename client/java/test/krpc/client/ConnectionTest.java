@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import krpc.client.TestUtils.Endpoint;
 import krpc.client.services.KRPC;
 import krpc.client.services.TestService;
 import krpc.schema.KRPC.Error;
@@ -46,35 +47,31 @@ public class ConnectionTest {
   }
 
   @Test(expected = IOException.class)
-  public void testWrongRpcPort() throws IOException {
-    Connection.newInstance("JavaClientTestWrongRpcPort", "localhost",
-        TestUtils.getRpcPort() ^ TestUtils.getStreamPort(), TestUtils.getStreamPort());
+  public void testNoServerOnRpcEndpoint() throws IOException {
+    TestUtils.connect("JavaClientTestNoRpcServer", Endpoint.NONE, Endpoint.STREAM);
   }
 
   @Test(expected = IOException.class)
-  public void testWrongStreamPort() throws IOException {
-    Connection.newInstance("JavaClientTestWrongStreamPort", "localhost",
-        TestUtils.getRpcPort(), TestUtils.getRpcPort() ^ TestUtils.getStreamPort());
+  public void testNoServerOnStreamEndpoint() throws IOException {
+    TestUtils.connect("JavaClientTestNoStreamServer", Endpoint.RPC, Endpoint.NONE);
   }
 
   @Test
   public void testWrongRpcServer() {
     ConnectionException e = assertThrows(ConnectionException.class, () ->
-        Connection.newInstance("JavaClientTestWrongRpcServer", "localhost",
-            TestUtils.getStreamPort(), TestUtils.getStreamPort()));
+        TestUtils.connect("JavaClientTestWrongRpcServer", Endpoint.STREAM, Endpoint.STREAM));
     assertTrue(e.getMessage().contains(
         "Connection request was for the rpc server, but this is the stream server. "
-        + "Did you connect to the wrong port number?"));
+        + "Did you connect to the wrong port number or socket path?"));
   }
 
   @Test
   public void testWrongStreamServer() {
     ConnectionException e = assertThrows(ConnectionException.class, () ->
-        Connection.newInstance("JavaClientTestWrongStreamServer", "localhost",
-            TestUtils.getRpcPort(), TestUtils.getRpcPort()));
+        TestUtils.connect("JavaClientTestWrongStreamServer", Endpoint.RPC, Endpoint.RPC));
     assertTrue(e.getMessage().contains(
         "Connection request was for the stream server, but this is the rpc server. "
-        + "Did you connect to the wrong port number?"));
+        + "Did you connect to the wrong port number or socket path?"));
   }
 
   @Test
@@ -249,6 +246,95 @@ public class ConnectionTest {
   public void testCollectionsTuple() throws RPCException {
     assertEquals(new Pair<Integer, Long>(2, 3L),
                  testService.incrementTuple(new Pair<Integer, Long>(1, 2L)));
+  }
+
+  @Test
+  public void testStructs() throws RPCException {
+    TestService.TestStruct value = new TestService.TestStruct(
+        42, "jeb", TestService.TestEnum.VALUE_B, Arrays.asList(new Integer[] { 1, 2, 3 }));
+    TestService.TestStruct result = testService.structEcho(value);
+    assertEquals(value, result);
+    assertEquals(42, result.getIntField());
+    assertEquals("jeb", result.getStringField());
+    assertEquals(TestService.TestEnum.VALUE_B, result.getEnumField());
+    assertEquals(Arrays.asList(new Integer[] { 1, 2, 3 }), result.getListField());
+  }
+
+  @Test
+  public void testNestedStructs() throws RPCException {
+    TestService.TestClass obj = testService.createTestObject("bob");
+    TestService.TestNestedStruct value = new TestService.TestNestedStruct(
+        new TestService.TestStruct(
+            1, "jeb", TestService.TestEnum.VALUE_A, new ArrayList<Integer>()),
+        obj, "bill");
+    TestService.TestNestedStruct result = testService.nestedStructEcho(value);
+    assertEquals(value, result);
+    assertEquals(1, result.getStructField().getIntField());
+    assertEquals(obj, result.getObjectField());
+    assertEquals("bill", result.getStringField());
+  }
+
+  @Test
+  public void testCollectionsOfStructs() throws RPCException {
+    List<TestService.TestStruct> values = Arrays.asList(
+        new TestService.TestStruct(
+            0, "jeb", TestService.TestEnum.VALUE_C, new ArrayList<Integer>()),
+        new TestService.TestStruct(
+            1, "bob", TestService.TestEnum.VALUE_C, new ArrayList<Integer>()));
+    List<TestService.TestStruct> result = testService.incrementListOfStructs(values);
+    assertEquals(2, result.size());
+    assertEquals(1, result.get(0).getIntField());
+    assertEquals(2, result.get(1).getIntField());
+  }
+
+  @Test
+  public void testNullableStructs() throws RPCException {
+    assertNull(testService.structEchoNullable(null));
+    TestService.TestStruct value = new TestService.TestStruct(
+        1, "jeb", TestService.TestEnum.VALUE_A, new ArrayList<Integer>());
+    assertEquals(value, testService.structEchoNullable(value));
+  }
+
+  @Test
+  public void testStructComparison() {
+    java.util.List<Integer> items = new ArrayList<Integer>();
+    TestService.TestStruct a =
+        new TestService.TestStruct(1, "jeb", TestService.TestEnum.VALUE_A, items);
+    TestService.TestStruct b =
+        new TestService.TestStruct(1, "jeb", TestService.TestEnum.VALUE_A, items);
+    final TestService.TestStruct c =
+        new TestService.TestStruct(2, "jeb", TestService.TestEnum.VALUE_A, items);
+
+    assertEquals(a, b);
+    assertEquals(a.hashCode(), b.hashCode());
+
+    // Ordered by the fields in turn, as a tuple of the same values is
+    assertEquals(0, a.compareTo(b));
+    assertTrue(a.compareTo(c) < 0);
+    assertTrue(c.compareTo(a) > 0);
+
+    java.util.List<TestService.TestStruct> sorted = new ArrayList<>(Arrays.asList(c, a));
+    java.util.Collections.sort(sorted);
+    assertEquals(a, sorted.get(0));
+
+    assertEquals(2, new HashSet<>(Arrays.asList(a, b, c)).size());
+  }
+
+  @Test
+  public void testStructComparisonOfCollectionFieldThrows() {
+    // A collection has no ordering, so comparing two structures whose collection fields
+    // differ throws, exactly as comparing two such tuples does
+    TestService.TestStruct a = new TestService.TestStruct(
+        1, "jeb", TestService.TestEnum.VALUE_A, Arrays.asList(new Integer[] { 1 }));
+    TestService.TestStruct b = new TestService.TestStruct(
+        1, "jeb", TestService.TestEnum.VALUE_A, Arrays.asList(new Integer[] { 2 }));
+    assertThrows(ClassCastException.class, () -> a.compareTo(b));
+    assertThrows(
+        ClassCastException.class,
+        () -> new Pair<Integer, java.util.List<Integer>>(1, Arrays.asList(new Integer[] { 1 }))
+            .compareTo(
+                new Pair<Integer, java.util.List<Integer>>(
+                    1, Arrays.asList(new Integer[] { 2 }))));
   }
 
   @Test

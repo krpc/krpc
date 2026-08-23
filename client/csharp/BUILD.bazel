@@ -64,10 +64,19 @@ deps = [
     "//tools/build/dotnet:System.Runtime.CompilerServices.Unsafe",
 ]
 
+# The test assemblies, which reach the internals of the client: the transport, the message
+# reader and the endpoint a unix domain socket is named by are not part of its public API.
+test_assemblies = [
+    "KRPC.Client.Test",
+    "KRPC.Client.Test.CommunicationLocalSocket",
+    "KRPC.Client.Test.CommunicationTCPIP",
+    "KRPC.Client.Test.Unit",
+]
+
 csharp_library(
     name = "KRPC.Client",
     srcs = srcs,
-    internals_visible_to = ["KRPC.Client.Test"],
+    internals_visible_to = test_assemblies,
     # CS1702: Google.Protobuf references an older System.Memory than the one
     # supplied; assembly unification handles this at runtime (MSBuild
     # suppresses this warning by default)
@@ -89,7 +98,7 @@ csharp_library(
     name = "KRPC.Client.net8",
     srcs = srcs,
     out = "KRPC.Client",
-    internals_visible_to = ["KRPC.Client.Test"],
+    internals_visible_to = test_assemblies,
     # CS1701: Google.Protobuf's net5.0 build references net5-era framework
     # assemblies; unification handles this at runtime (MSBuild suppresses
     # this warning by default)
@@ -189,19 +198,33 @@ clientgen_csharp(
 test_suite(
     name = "test",
     tests = [
-        ":client",
+        ":client-localsocket",
+        ":client-tcpip",
+        ":communication-localsocket",
+        ":communication-tcpip",
+        ":unit",
     ],
     visibility = ["//:__pkg__"],
 )
 
+# The client end to end against a TestServer, once per transport it can reach one over.
 client_test(
-    name = "client",
+    name = "client-tcpip",
     size = "medium",
     server_executable = "//tools/TestServer",
     tags = [
         "local",
         "requires-network",
     ],
+    test_executable = ":test-KRPC.Client",
+)
+
+client_test(
+    name = "client-localsocket",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    server_type = "localsocket",
+    tags = ["local"],
     test_executable = ":test-KRPC.Client",
 )
 
@@ -213,30 +236,101 @@ csharp_assembly_info(
     version = assembly_version,
 )
 
+# CS1701: Google.Protobuf/Moq reference net5/6-era framework assemblies; unification
+# handles this at runtime (MSBuild suppresses this warning by default). Matches the
+# KRPC.Core targets.
+test_nowarn = [
+    "CS1591",
+    "CS1573",
+    "CS1685",
+    "CS1701",
+]
+
+test_deps = [
+    ":KRPC.Client.net8",
+    "//tools/build/dotnet:Castle.Core",
+    "//tools/build/dotnet:Google.Protobuf",
+    "//tools/build/dotnet:Moq",
+]
+
+# What the client does regardless of the transport it talks over: encoding and decoding
+# values, taking a message out of the blocks a read brings in, and naming a unix domain
+# socket. It needs no server, so it runs on its own rather than under the harness that
+# starts one.
+csharp_nunit_test(
+    name = "unit",
+    size = "small",
+    srcs = [
+        "test/EncoderTest.cs",
+        "test/MessageReaderTest.cs",
+        "test/TestingTools.cs",
+        "test/UnixEndPointTest.cs",
+        ":TestAssemblyInfo",
+        ":services-testservice",
+    ],
+    out = "KRPC.Client.Test.Unit",
+    defines = ["CODE_ANALYSIS"],
+    nowarn = test_nowarn,
+    target_frameworks = ["net8.0"],
+    deps = test_deps,
+)
+
+# The transport, one test each. Both run against a server the test listens on itself, which
+# answers the handshake and every request after it, so neither needs a kRPC server. The
+# bodies are shared and each transport supplies only how a connection is opened.
+csharp_nunit_test(
+    name = "communication-tcpip",
+    size = "small",
+    srcs = [
+        "test/ConnectionTestCase.cs",
+        "test/StandInServer.cs",
+        "test/TCPIPConnectionTest.cs",
+        ":TestAssemblyInfo",
+    ],
+    out = "KRPC.Client.Test.CommunicationTCPIP",
+    defines = ["CODE_ANALYSIS"],
+    nowarn = test_nowarn,
+    tags = ["requires-network"],
+    target_frameworks = ["net8.0"],
+    deps = test_deps,
+)
+
+csharp_nunit_test(
+    name = "communication-localsocket",
+    size = "small",
+    srcs = [
+        "test/ConnectionTestCase.cs",
+        "test/LocalSocketConnectionTest.cs",
+        "test/StandInServer.cs",
+        ":TestAssemblyInfo",
+    ],
+    out = "KRPC.Client.Test.CommunicationLocalSocket",
+    defines = ["CODE_ANALYSIS"],
+    nowarn = test_nowarn,
+    target_frameworks = ["net8.0"],
+    deps = test_deps,
+)
+
 csharp_nunit_test(
     name = "test-KRPC.Client",
     size = "small",
-    srcs = glob(["test/**/*.cs"]) + [":TestAssemblyInfo"] + [":services-testservice"],
+    srcs = [
+        "test/ConnectionTest.cs",
+        "test/EventTest.cs",
+        "test/ObjectTest.cs",
+        "test/ServerTestCase.cs",
+        "test/StreamTest.cs",
+        "test/TestingTools.cs",
+        ":TestAssemblyInfo",
+        ":services-testservice",
+    ],
     out = "KRPC.Client.Test",
     defines = ["CODE_ANALYSIS"],
-    # CS1701: Google.Protobuf/Moq reference net5/6-era framework assemblies;
-    # unification handles this at runtime (MSBuild suppresses this warning by
-    # default). Matches the KRPC.Core targets.
-    nowarn = [
-        "CS1591",
-        "CS1573",
-        "CS1685",
-        "CS1701",
-    ],
+    nowarn = test_nowarn,
     tags = ["requires-network"],
     target_frameworks = ["net8.0"],
     visibility = ["//:__pkg__"],
-    deps = [
-        ":KRPC.Client.net8",
-        "//tools/build/dotnet:Castle.Core",
-        "//tools/build/dotnet:Google.Protobuf",
-        "//tools/build/dotnet:Moq",
-    ],
+    deps = test_deps,
 )
 
 # The benchmark program, run by //tools/benchmarks:csharp. Not a test: it measures.

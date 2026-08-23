@@ -57,6 +57,10 @@
     <Compile Include="Server\SerialIO\RPCServerTest.cs" />
     <Compile Include="Server\SerialIO\RPCStreamTest.cs" />
     <Compile Include="Server\SerialIO\TestingTools.cs" />
+    <Compile Include="Server\LocalSocket\AssumptionsTest.cs" />
+    <Compile Include="Server\LocalSocket\LocalSocketServerTest.cs" />
+    <Compile Include="Server\LocalSocket\UnixEndPointTest.cs" />
+    <Compile Include="Server\LocalSocket\UnixSocketTest.cs" />
     <Compile Include="Server\TCP\AssumptionsTest.cs" />
     <Compile Include="Server\TCP\NetworkInformationTest.cs" />
     <Compile Include="Server\TCP\TCPClientTest.cs" />

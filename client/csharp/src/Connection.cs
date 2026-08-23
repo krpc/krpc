@@ -17,8 +17,8 @@ namespace KRPC.Client
     public class Connection : IConnection, IDisposable
     {
         object invokeLock = new object ();
-        TcpClient rpcClient;
-        TcpClient streamClient;
+        Socket rpcSocket;
+        Socket streamSocket;
         NetworkStream rpcStream;
         CodedOutputStream codedRpcStream;
         MessageReader rpcReader;
@@ -37,22 +37,99 @@ namespace KRPC.Client
         /// Connect to a kRPC server on the specified IP address and port numbers. If
         /// streamPort is 0, does not connect to the stream server.
         /// Passes an optional name to the server to identify the client (up to 32 bytes of UTF-8 encoded text).
+        /// If timeout is non-zero, gives up after waiting that long for a connection, rather
+        /// than waiting indefinitely.
         /// </summary>
-        public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001)
+        public Connection (string name = "", IPAddress address = null, int rpcPort = 50000, int streamPort = 50001, TimeSpan timeout = default (TimeSpan))
+            : this (name, Connect (address ?? IPAddress.Loopback, rpcPort, timeout),
+                    streamPort == 0 ? null
+                    : new Func<Socket> (() => Connect (address ?? IPAddress.Loopback, streamPort, timeout)))
         {
-            if (address == null)
-                address = IPAddress.Loopback;
+        }
 
-            // Every request carries the one call, which is filled in for each of them.
-            request.Calls.Add (call);
+        /// <summary>
+        /// Connect to a kRPC server on the same machine, over unix domain sockets named by
+        /// the given paths rather than over TCP. An empty path stands for the one the server
+        /// uses unless it was configured with another. If streamPath is null, does not
+        /// connect to the stream server. The connection behaves identically once established.
+        /// Unix domain sockets are available on Linux, macOS, and Windows 10 1803 and later.
+        /// </summary>
+        public static Connection ConnectLocal (string name = "", string rpcPath = "", string streamPath = "")
+        {
+            return new Connection (
+                name, ConnectToPath (PathOrDefault (rpcPath, "rpc")),
+                streamPath == null ? null
+                : new Func<Socket> (() => ConnectToPath (PathOrDefault (streamPath, "stream"))));
+        }
 
-            rpcClient = new TcpClient ();
-            rpcClient.Connect (address, rpcPort);
+        /// <summary>
+        /// The path to connect to for a socket of the given name: the one asked for, or the
+        /// server's default where none was.
+        /// </summary>
+        static string PathOrDefault (string path, string name)
+        {
+            return string.IsNullOrEmpty (path) ? DefaultPath (name) : path;
+        }
+
+        static Socket Connect (IPAddress address, int port, TimeSpan timeout)
+        {
+            var socket = new Socket (address.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            if (timeout == TimeSpan.Zero) {
+                socket.Connect (address, port);
+            } else {
+                // A network that drops a connection attempt rather than refusing it leaves the
+                // client waiting, so bound the wait where one was asked for.
+                var pending = socket.BeginConnect (address, port, null, null);
+                if (!pending.AsyncWaitHandle.WaitOne (timeout)) {
+                    socket.Close ();
+                    throw new SocketException ((int)SocketError.TimedOut);
+                }
+                socket.EndConnect (pending);
+            }
             // A call writes a request and then waits for its response, so there is never a
             // second small write for Nagle's algorithm to hold the first one back for. Left on,
             // it can only delay a request the server is already waiting for.
-            rpcClient.NoDelay = true;
-            rpcStream = rpcClient.GetStream ();
+            socket.NoDelay = true;
+            return socket;
+        }
+
+        static Socket ConnectToPath (string path)
+        {
+            var socket = new Socket (AddressFamily.Unix, SocketType.Stream, ProtocolType.Unspecified);
+            socket.Connect (new UnixEndPoint (path));
+            return socket;
+        }
+
+        /// <summary>
+        /// A default path for a socket of the given name, matching the one the server uses
+        /// unless it was configured with another. The fallback names a fixed directory
+        /// rather than asking for the temporary one, which TMPDIR moves for the client
+        /// and not the server.
+        /// </summary>
+        static string DefaultPath (string name)
+        {
+            var windows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var directory = Environment.GetEnvironmentVariable (
+                windows ? "LOCALAPPDATA" : "XDG_RUNTIME_DIR");
+            if (!string.IsNullOrEmpty (directory))
+                return System.IO.Path.Combine (directory, "krpc", name);
+            var temporary = windows ? System.IO.Path.GetTempPath () : "/tmp";
+            return System.IO.Path.Combine (temporary, "krpc-" + Environment.UserName, name);
+        }
+
+        /// <summary>
+        /// Perform the connection handshake over an already opened rpc socket. The
+        /// handshake is the same whatever carries it. The stream socket is opened only once
+        /// the rpc connection has been accepted, so that a rejected connection does not
+        /// leave a second one behind.
+        /// </summary>
+        Connection (string name, Socket rpc, Func<Socket> openStreamSocket)
+        {
+            // Every request carries the one call, which is filled in for each of them.
+            request.Calls.Add (call);
+
+            rpcSocket = rpc;
+            rpcStream = new NetworkStream (rpcSocket);
             codedRpcStream = new CodedOutputStream (rpcStream, true);
             rpcReader = new MessageReader (rpcStream);
             var connectionRequest = new ConnectionRequest ();
@@ -67,11 +144,9 @@ namespace KRPC.Client
             if (response.Status != ConnectionResponse.Types.Status.Ok)
                 throw new ConnectionException (response.Message);
 
-            if (streamPort != 0) {
-                streamClient = new TcpClient ();
-                streamClient.Connect (address, streamPort);
-                streamClient.NoDelay = true;
-                var streamStream = streamClient.GetStream ();
+            if (openStreamSocket != null) {
+                streamSocket = openStreamSocket ();
+                var streamStream = new NetworkStream (streamSocket);
                 connectionRequest = new ConnectionRequest ();
                 connectionRequest.Type = Type.Stream;
                 connectionRequest.ClientIdentifier = response.ClientIdentifier;
@@ -120,9 +195,9 @@ namespace KRPC.Client
         {
             if (!disposed) {
                 if (disposing) {
-                    rpcClient.Close ();
-                    if (streamClient != null)
-                        streamClient.Close ();
+                    rpcSocket.Close ();
+                    if (streamSocket != null)
+                        streamSocket.Close ();
                     // Join the update thread, so that it has ended by the time this returns
                     // rather than at some later point of its own choosing. This has to come
                     // after the sockets are closed: the thread spends its time blocked in a
@@ -144,11 +219,13 @@ namespace KRPC.Client
         /// <summary>
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
+        /// The expression must be a method call or property access, and may multiply that
+        /// call by a constant.
         /// </summary>
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            return new Stream<TResult> (this, GetCall (expression));
+            return AddStreamFromExpression<TResult> (expression);
         }
 
         /// <summary>
@@ -157,7 +234,19 @@ namespace KRPC.Client
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
             CheckDisposed ();
-            return new Stream<TResult> (this, GetCall (expression));
+            return AddStreamFromExpression<TResult> (expression);
+        }
+
+        Stream<TResult> AddStreamFromExpression<TResult> (LambdaExpression expression)
+        {
+            Expression rpc;
+            var call = GetCall (expression, out rpc);
+            if (ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
+                return new Stream<TResult> (this, call);
+
+            var convert = ExpressionUtils.CompileTransform<TResult> (expression.Body, rpc);
+            return new Stream<TResult> (this, call, rpc.Type, convert,
+                ExpressionUtils.FoldedFactor (expression.Body, rpc));
         }
 
         /// <summary>
@@ -254,16 +343,30 @@ namespace KRPC.Client
         /// </summary>
         public static ProcedureCall GetCall (LambdaExpression expression)
         {
+            Expression rpc;
+            var call = GetCall (expression, out rpc);
+            if (!ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
+                throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
+            return call;
+        }
+
+        static ProcedureCall GetCall (LambdaExpression expression, out Expression rpc)
+        {
             if (ReferenceEquals (expression, null))
                 throw new ArgumentNullException (nameof (expression));
 
-            Expression body = expression.Body;
+            if (!ExpressionUtils.TryFindStreamedRpc (expression.Body, out rpc))
+                throw new ArgumentException ("Invalid expression. Cannot multiply two remote calls.");
+            if (rpc == null)
+                throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
+            if (!ExpressionUtils.IsConstantMultiplyWrapper (expression.Body, rpc))
+                throw new ArgumentException ("Invalid expression. The factor must be a constant.");
 
-            var methodCallExpression = body as MethodCallExpression;
+            var methodCallExpression = rpc as MethodCallExpression;
             if (methodCallExpression != null)
                 return GetCall (methodCallExpression);
 
-            var memberExpression = body as MemberExpression;
+            var memberExpression = rpc as MemberExpression;
             if (memberExpression != null)
                 return GetCall (memberExpression);
 

@@ -1,5 +1,16 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. A
+  value of one is built from the values of its fields in order and gives them named access; a
+  list with one element per field is accepted where one is expected. It compares for
+  equality and orders by its fields in turn (#1066)
+- A service definition that names a type this client does not know about, as one from a newer
+  server may, now skips the member that names it with a warning, rather than failing to
+  connect (#1066)
 - **Breaking:** Support `Types.none` for any nullable type (#1017)
+- Add `krpc.connect_local`, which connects to a server on the same machine over a unix
+  domain socket rather than TCP/IP. The connection behaves identically once established.
+  On Windows this needs luasocket's `socket.unix` module, which luasocket does not build
+  there, so the client now depends on the `luasocket-unix-windows` rock as well (#1065)
 - Fix a service failing to load when one of its procedures defaults to a member of an
   enumeration defined by a service that had not been loaded yet (#1044)
 - Add `krpc.limits`, naming the extremes of the numeric types kRPC carries over the wire,
@@ -14,6 +25,8 @@
   the size of a message is read directly rather than by handing each byte to a decoder until it
   stops raising an error, and the client connection disables Nagle's algorithm (#1056)
 - Require luasocket 3.0 or later (#1060)
+- Fix a type occasionally being built a second time rather than reused, which could leave
+  an enumeration or class type in a service unusable (#1068)
 
 ## [v0.6.0]
 - Fix `attributes` module to always return boolean for `is_a_class_member` and `is_a_class_property_accessor` (#850)

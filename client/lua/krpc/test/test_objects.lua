@@ -1,5 +1,6 @@
 local luaunit = require 'luaunit'
 local class = require 'pl.class'
+local ServerTest = require 'krpc.test.servertest'
 local none = require 'krpc.types'.none
 
 local TestObjects = class(ServerTest)

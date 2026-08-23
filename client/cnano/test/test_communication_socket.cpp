@@ -2,9 +2,10 @@
 
 #include "gtest/gtest.h"
 
-// The TCP transport is exercised over a socket pair, which behaves as a connected socket does
-// without needing a server to connect to. Winsock has no equivalent, so these are POSIX only.
-#if defined(KRPC_COMMUNICATION_TCP) && !defined(_WIN32)
+// The socket transports read and write through the same calls, so these cover both of them. They
+// run over a socket pair, which behaves as a connected socket does without needing a server to
+// connect to. Winsock has no equivalent, so these are POSIX only.
+#if (defined(KRPC_COMMUNICATION_TCP) || defined(KRPC_COMMUNICATION_LOCALSOCKET)) && !defined(_WIN32)
 
 #include <pthread.h>
 #include <signal.h>

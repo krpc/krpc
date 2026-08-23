@@ -19,16 +19,103 @@ namespace KRPC.UI
         /// </summary>
         public static string ValidatedTextField (string value, int maxLength, GUIStyle style, bool valid, Color invalidColor)
         {
-            var oldBackgroundColor = GUI.backgroundColor;
-            var oldContentColor = GUI.contentColor;
+            Color background, content;
+            BeginTint (valid, invalidColor, out background, out content);
+            var result = GUILayout.TextField (value, maxLength, style);
+            EndTint (background, content);
+            return result;
+        }
+
+        /// <summary>
+        /// A scrolling text field that is tinted with the given colour when its current value
+        /// is not valid.
+        /// </summary>
+        public static string ValidatedScrollingTextField (string name, string value, ref float offset, int maxLength, GUIStyle style, bool valid, Color invalidColor)
+        {
+            Color background, content;
+            BeginTint (valid, invalidColor, out background, out content);
+            var result = ScrollingTextField (name, value, ref offset, maxLength, style);
+            EndTint (background, content);
+            return result;
+        }
+
+        static void BeginTint (bool valid, Color invalidColor, out Color background, out Color content)
+        {
+            background = GUI.backgroundColor;
+            content = GUI.contentColor;
             if (!valid) {
                 GUI.backgroundColor = invalidColor;
                 GUI.contentColor = invalidColor;
             }
-            var result = GUILayout.TextField (value, maxLength, style);
-            GUI.backgroundColor = oldBackgroundColor;
-            GUI.contentColor = oldContentColor;
+        }
+
+        static void EndTint (Color background, Color content)
+        {
+            GUI.backgroundColor = background;
+            GUI.contentColor = content;
+        }
+
+        /// <summary>
+        /// A single line of text, for giving a field the height of one line whatever it holds.
+        /// </summary>
+        static readonly GUIContent singleLine = new GUIContent (" ");
+
+        /// <summary>
+        /// How much room to leave beyond the caret, so that it is never drawn against the edge
+        /// of the field and the character it sits after stays readable.
+        /// </summary>
+        const float caretRoom = 6f;
+
+        /// <summary>
+        /// A text field whose content scrolls sideways to keep the caret in view, for a value
+        /// too long to fit. A text field clips what it cannot fit and leaves the caret outside,
+        /// so the end of a long value can be neither seen nor edited.
+        ///
+        /// The field is drawn as wide as its content, inside a group the width of the field, so
+        /// that what is shown is a window onto it. The offset is how far that window has been
+        /// scrolled, and the caller keeps it so that each field scrolls on its own. The name has
+        /// to be unique within the window, as it is what tells whether this field has the
+        /// keyboard, and so whether there is a caret to follow.
+        /// </summary>
+        public static string ScrollingTextField (string name, string value, ref float offset, int maxLength, GUIStyle style)
+        {
+            var area = GUILayoutUtility.GetRect (singleLine, style, GUILayout.ExpandWidth (true));
+            var content = new GUIContent (value);
+            var width = Mathf.Max (area.width, style.CalcSize (content).x + caretRoom);
+            // How wide a field is is only settled once the layout has been worked out, so the
+            // window onto its content moves on the passes that know and holds still on the one
+            // that does not. Taking the width as nothing there would leave no room around the
+            // caret, pinning the window to it so that the text slid along behind a caret that
+            // never moved.
+            if (Event.current.type != EventType.Layout)
+                offset = Mathf.Clamp (ScrolledTo (name, content, style, area.width, width, offset), 0, width - area.width);
+            GUI.BeginGroup (area);
+            GUI.SetNextControlName (name);
+            var result = GUI.TextField (new Rect (-offset, 0, width, area.height), value, maxLength, style);
+            GUI.EndGroup ();
             return result;
+        }
+
+        /// <summary>
+        /// Where the window onto a field's content has to be for its caret to be visible: where
+        /// it already is, unless the caret has moved out of view, and then only as far as is
+        /// needed to bring it back. A field that does not have the keyboard has no caret to
+        /// follow, so its window stays where it was left.
+        /// </summary>
+        static float ScrolledTo (string name, GUIContent content, GUIStyle style, float visible, float width, float offset)
+        {
+            if (GUI.GetNameOfFocusedControl () != name)
+                return offset;
+            var editor = GUIUtility.GetStateObject (typeof (TextEditor), GUIUtility.keyboardControl) as TextEditor;
+            if (editor == null)
+                return offset;
+            var index = Mathf.Clamp (editor.cursorIndex, 0, content.text.Length);
+            var caret = style.GetCursorPixelPosition (new Rect (0, 0, width, 0), content, index).x;
+            if (offset > caret - caretRoom)
+                return caret - caretRoom;
+            if (offset < caret - visible + caretRoom)
+                return caret - visible + caretRoom;
+            return offset;
         }
 
         /// <summary>

@@ -12,18 +12,28 @@ function Connection:_init(address, port)
 end
 
 function Connection:connect()
+  local result, err = self:_open()
+  if result == nil then
+    error('Socket error: ' .. err)
+  end
+end
+
+function Connection:_open()
+  -- Open a socket to the server, and set whatever options it takes. Everything above this is
+  -- transport agnostic, so a different transport only has to replace this.
+  --
   -- The server listens on IPv4, so the socket is opened for that family rather than for
   -- whichever one an address resolves to first: a name commonly resolves to the IPv6
   -- loopback ahead of the IPv4 one, and the attempt on it is slow to give up.
   self._socket = socket.tcp4()
-  result,err = self._socket:connect(self._address, self._port)
-  if result == nil then
-    error('Socket error: ' .. err)
+  local result, err = self._socket:connect(self._address, self._port)
+  if result ~= nil then
+    -- A call writes a request and then waits for its response, so there is never a second small
+    -- write for Nagle's algorithm to hold the first one back for. Left on, it can only delay a
+    -- request the server is already waiting for.
+    self._socket:setoption('tcp-nodelay', true)
   end
-  -- A call writes a request and then waits for its response, so there is never a second small
-  -- write for Nagle's algorithm to hold the first one back for. Left on, it can only delay a
-  -- request the server is already waiting for.
-  self._socket:setoption('tcp-nodelay', true)
+  return result, err
 end
 
 function Connection:close()

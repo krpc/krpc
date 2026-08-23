@@ -4,6 +4,7 @@ from krpc.types import (
     ValueType,
     ClassType,
     EnumerationType,
+    StructType,
     MessageType,
     TupleType,
     ListType,
@@ -169,7 +170,7 @@ class CppLanguage(Language):
             return "std::tuple<%s>" % ", ".join(
                 self.parse_type(t) for t in typ.value_types
             )
-        if isinstance(typ, (ClassType, EnumerationType)):
+        if isinstance(typ, (ClassType, EnumerationType, StructType)):
             name = "%s.%s" % (typ.protobuf_type.service, typ.protobuf_type.name)
             return self.shorten_ref(name).replace(".", "::")
         raise RuntimeError("Unknown type '%s'" % str(typ))
@@ -196,6 +197,12 @@ class CppLanguage(Language):
         # A collection is written as a braced initializer list. Parentheses would name a
         # constructor instead, so std::vector<int32_t>(1, 2, 3) is not the vector of those
         # three values it appears to be.
+        if isinstance(typ, StructType):
+            values = (
+                self.parse_default_value(x, typ.field_types[i])
+                for i, x in enumerate(value)
+            )
+            return "%s{%s}" % (self.parse_type(typ), ", ".join(values))
         if isinstance(typ, TupleType):
             values = (
                 self.parse_default_value(x, typ.value_types[i])

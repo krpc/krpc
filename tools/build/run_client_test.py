@@ -7,8 +7,9 @@ test executables (runfiles-root-relative) and the server transport to use.
 
 The server picks its ports at startup and reports them on stdout, so the harness
 starts it, waits for it to say it is up, and passes the ports it printed to the
-test executable in the environment. For the serial transport there are no ports:
-socat pairs two pseudo-terminals and the server and test each get one end.
+test executable in the environment. The local socket transport reports the paths
+of its sockets in the same way. For the serial transport there is neither: socat
+pairs two pseudo-terminals and the server and test each get one end.
 
 The server's output only reaches the test log when something goes wrong -- on a
 failing test, or on the harness being killed, which is how the test runner
@@ -20,9 +21,11 @@ import argparse
 import json
 import os
 import re
+import shutil
 import signal
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 
@@ -86,6 +89,16 @@ class Reader:
                 )
 
 
+def socket_directory():
+    """A directory to put a socket in, short enough for the path of one to fit in a socket
+    address. The directory a test is given for its temporary files is nested far deeper than
+    an address has room for, so the platform's own is used directly."""
+    if sys.platform != "win32":
+        return "/tmp"
+    local = os.environ.get("LOCALAPPDATA")
+    return os.path.join(local, "Temp") if local else tempfile.gettempdir()
+
+
 def start(command, **kwargs):
     """Start a process with its stdout and stderr merged onto a readable pipe."""
     return subprocess.Popen(
@@ -109,12 +122,12 @@ def stop(process):
         process.kill()
 
 
-def port(output, name):
-    """Read a port the server reported, e.g. "rpc_port = 50000"."""
-    match = re.search(r"\b%s = (\d+)" % name, output)
+def setting(output, name):
+    """Read a value the server reported, e.g. "rpc_port = 50000"."""
+    match = re.search(r"\b%s = (.+)" % name, output)
     if match is None:
         raise RuntimeError("the server did not report %s:\n%s" % (name, output))
-    return match.group(1)
+    return match.group(1).strip()
 
 
 def start_socat():
@@ -151,6 +164,7 @@ def run(config):
     server = os.path.abspath(config["server"])
     test = os.path.abspath(config["test"])
     serial = config["server_type"] == "serialio"
+    local_socket = config["server_type"] == "localsocket"
 
     # The executables locate their own runfiles -- the .NET runtime and
     # assemblies, the python interpreter and its packages -- through RUNFILES_DIR
@@ -162,6 +176,7 @@ def run(config):
 
     socat = None
     server_process = None
+    sockets = None
     try:
         arguments = ["--type=" + config["server_type"]]
         test_environment = dict(environment)
@@ -175,6 +190,16 @@ def run(config):
             # the server's log, so ask for the detail needed to diagnose them.
             arguments += ["--debug", "--port=" + server_port]
             test_environment["PORT"] = client_port
+        elif local_socket:
+            # A socket address has to fit in the kernel's address structure, which
+            # leaves far less room than the sandbox's own directories take up, so
+            # the sockets go in a short temporary directory of their own rather
+            # than under the test's.
+            sockets = tempfile.mkdtemp(dir=socket_directory())
+            arguments += [
+                "--rpc-path=" + os.path.join(sockets, "rpc"),
+                "--stream-path=" + os.path.join(sockets, "stream"),
+            ]
 
         server_process = start([server] + arguments, env=environment)
         reader = Reader(server_process, SERVER_READY)
@@ -183,9 +208,18 @@ def run(config):
         if serial:
             time.sleep(SERIAL_SETTLE_TIME)
             print("Server started, port = %s" % server_port)
+        elif local_socket:
+            rpc_path = setting(reader.output, "rpc_path")
+            stream_path = setting(reader.output, "stream_path")
+            test_environment["RPC_PATH"] = rpc_path
+            test_environment["STREAM_PATH"] = stream_path
+            print(
+                "Server started, rpc socket = %s, stream socket = %s"
+                % (rpc_path, stream_path)
+            )
         else:
-            rpc_port = port(reader.output, "rpc_port")
-            stream_port = port(reader.output, "stream_port")
+            rpc_port = setting(reader.output, "rpc_port")
+            stream_port = setting(reader.output, "stream_port")
             test_environment["RPC_PORT"] = rpc_port
             test_environment["STREAM_PORT"] = stream_port
             print(
@@ -210,6 +244,8 @@ def run(config):
         for process in (server_process, socat):
             if process is not None:
                 stop(process)
+        if sockets is not None:
+            shutil.rmtree(sockets, ignore_errors=True)
 
 
 def report(output):

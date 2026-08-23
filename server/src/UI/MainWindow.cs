@@ -62,6 +62,7 @@ namespace KRPC.UI
         internal const string protobufOverTcpText = "Protobuf over TCP";
         internal const string protobufOverWebSocketsText = "Protobuf over WebSockets";
         internal const string protobufOverSerialIOText = "Protobuf over SerialIO";
+        internal const string protobufOverLocalSocketText = "Protobuf over local socket";
         const string unknownClientNameText = "<unknown>";
         const string noClientsConnectedText = "No clients connected";
         const string serverNotRunningText = "Server not running";
@@ -276,6 +277,8 @@ namespace KRPC.UI
                     protocol = protobufOverTcpText;
                 else if (server.Protocol == Protocol.ProtocolBuffersOverWebsockets)
                     protocol = protobufOverWebSocketsText;
+                else if (server.Protocol == Protocol.ProtocolBuffersOverLocalSocket)
+                    protocol = protobufOverLocalSocketText;
                 else
                     protocol = protobufOverSerialIOText;
                 DrawServerInfoRow (protocolText, protocol);

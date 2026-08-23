@@ -4,17 +4,18 @@
 # Covers the two things a build chooses between, crossed with each other:
 #   how nanopb is provided) system) a system-installed nanopb
 #                           fetch)  nanopb fetched via FetchContent (KRPC_FETCH_DEPS=ON)
-#   which transport)        serialio) a serial port, the default
-#                           tcpip)    TCP/IP (KRPC_COMMUNICATION_TCP=ON)
+#   which transport)        serialio)    a serial port, the default
+#                           tcpip)       TCP/IP (KRPC_COMMUNICATION_TCP=ON)
+#                           localsocket) a unix domain socket (KRPC_COMMUNICATION_LOCALSOCKET=ON)
 # Each is followed by a consumer test using find_package(krpc_cnano CONFIG REQUIRED).
-# Usage: test-cmake-linux.sh ARCHIVE [system-serialio|system-tcpip|fetch-serialio|fetch-tcpip]
-#        (default: run all)
+# Usage: test-cmake-linux.sh ARCHIVE [SCENARIO]  (default: run all)
 set -e
 set -o pipefail
 set -x
 set -o functrace
 
-scenarios="system-serialio system-tcpip fetch-serialio fetch-tcpip"
+scenarios="system-serialio system-tcpip system-localsocket \
+fetch-serialio fetch-tcpip fetch-localsocket"
 
 archive="$(realpath "${1:?Usage: test-cmake-linux.sh ARCHIVE [$(echo $scenarios | tr ' ' '|')]}")"
 scenario="${2:-all}"
@@ -78,7 +79,7 @@ function check_absent {
 }
 
 # Build the consumer project against the installed package, to verify the package config and
-# targets work end-to-end. Where the library is built for TCP/IP the program opens a connection,
+# targets work end-to-end. Where the library is built for a socket the program opens a connection,
 # which is what proves the transport reaches it through the package.
 function consumer_test {
   local install_dir=$1
@@ -103,7 +104,8 @@ function run_scenario {
     *) echo "unknown scenario '$name'"; exit 1 ;;
   esac
   case "$name" in
-    *-tcpip)    options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
+    *-tcpip)       options+=(-DKRPC_COMMUNICATION_TCP=ON) ;;
+    *-localsocket) options+=(-DKRPC_COMMUNICATION_LOCALSOCKET=ON) ;;
     *-serialio) ;;
     *) echo "unknown scenario '$name'"; exit 1 ;;
   esac

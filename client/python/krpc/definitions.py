@@ -18,6 +18,7 @@ from krpc.types import (
     EnumerationType,
     ListType,
     SetType,
+    StructType,
     TupleType,
     TypeBase,
     Types,
@@ -31,11 +32,13 @@ if TYPE_CHECKING:
 CLASS = "class"
 ENUMERATION = "enumeration"
 EXCEPTION = "exception"
+STRUCT = "struct"
 
 # The kind of definition that each named protocol buffer type refers to
 _KIND_FROM_CODE = {
     KRPC.Type.CLASS: CLASS,
     KRPC.Type.ENUMERATION: ENUMERATION,
+    KRPC.Type.STRUCT: STRUCT,
 }
 
 # What identifies a definition, and therefore what a reference to one resolves against
@@ -155,7 +158,8 @@ def decode_default_value(
 
 def _check_registered(typ: TypeBase, location: str) -> None:
     """Raise a RuntimeError if the given type, or a type it contains, is an enumeration whose
-    definition was never registered and whose values are therefore unknown."""
+    values, or a structure whose fields, were never registered and are therefore unknown.
+    """
     if isinstance(typ, EnumerationType):
         if not typ.has_values:
             service = typ.protobuf_type.service
@@ -164,6 +168,16 @@ def _check_registered(typ: TypeBase, location: str) -> None:
                 "%s were not provided"
                 % (location, service, typ.protobuf_type.name, service)
             )
+    elif isinstance(typ, StructType):
+        if not typ.has_fields:
+            service = typ.protobuf_type.service
+            raise RuntimeError(
+                "%s has the struct %s.%s in its type, but the definitions for service "
+                "%s were not provided"
+                % (location, service, typ.protobuf_type.name, service)
+            )
+        for field_type in typ.field_types:
+            _check_registered(field_type, location)
     elif isinstance(typ, TupleType):
         for value_type in typ.value_types:
             _check_registered(value_type, location)

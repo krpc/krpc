@@ -9,8 +9,6 @@ exports_files(["CHANGELOG.md"])
 copts = [
     "-Werror",
     "-Xlint:all",
-    "-target 1.9",
-    "-source 1.9",
 ]
 
 filegroup(
@@ -72,20 +70,53 @@ java_library(
     ],
 )
 
+test_runtime_deps = [
+    ":krpc",
+    ":testlib",
+    "@maven//:com_google_protobuf_protobuf_java",
+    "@maven//:junit_junit",
+    "@maven//:org_hamcrest_hamcrest",
+    "@maven//:org_javatuples_javatuples",
+]
+
+# What the client does regardless of the transport it talks over: encoding and decoding the
+# values a call carries. It needs no server, so it runs on its own rather than under the
+# harness that starts one.
+java_test(
+    name = "unit",
+    size = "small",
+    javacopts = copts,
+    main_class = "krpc.client.UnitTestSuite",
+    runtime_deps = test_runtime_deps,
+)
+
+# The transport, one test each. Both run against a server the test listens on itself, which
+# answers the handshake and every request after it, so neither needs a kRPC server.
+java_test(
+    name = "communication-tcpip",
+    size = "small",
+    javacopts = copts,
+    main_class = "krpc.client.TcpIpConnectionTestSuite",
+    tags = ["requires-network"],
+    runtime_deps = test_runtime_deps,
+)
+
+java_test(
+    name = "communication-localsocket",
+    size = "small",
+    javacopts = copts,
+    main_class = "krpc.client.LocalSocketConnectionTestSuite",
+    runtime_deps = test_runtime_deps,
+)
+
+# The tests that talk to a server, run end to end against a TestServer by the targets below
 java_test(
     name = "testexe",
     size = "medium",
     javacopts = copts,
     main_class = "krpc.client.TestSuite",
     tags = ["requires-network"],
-    runtime_deps = [
-        ":krpc",
-        ":testlib",
-        "@maven//:com_google_protobuf_protobuf_java",
-        "@maven//:junit_junit",
-        "@maven//:org_hamcrest_hamcrest",
-        "@maven//:org_javatuples_javatuples",
-    ],
+    runtime_deps = test_runtime_deps,
 )
 
 # The benchmark program, run by //tools/benchmarks:java. Not a test: it measures.
@@ -105,16 +136,30 @@ java_binary(
 test_suite(
     name = "test",
     tests = [
-        ":client",
+        ":client-localsocket",
+        ":client-tcpip",
+        ":communication-localsocket",
+        ":communication-tcpip",
         ":lint",
+        ":unit",
     ],
 )
 
+# The client end to end against a TestServer, once per transport it can reach one over.
 client_test(
-    name = "client",
+    name = "client-tcpip",
     size = "medium",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
+    test_executable = ":testexe",
+    visibility = ["//:__pkg__"],
+)
+
+client_test(
+    name = "client-localsocket",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    server_type = "localsocket",
     test_executable = ":testexe",
     visibility = ["//:__pkg__"],
 )

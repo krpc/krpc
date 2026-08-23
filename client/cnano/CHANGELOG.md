@@ -1,4 +1,6 @@
 ## [v0.7.0] - unreleased
+- Support structure types, which a service defines as a compound value with named fields. One
+  is generated as a C struct with a member per field, named for the field it carries (#1066)
 - **Breaking:** Support null for any nullable type; a nullable non-class return adds a `bool*
   returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)
 - Add `KRPC_COMMUNICATION_TCP`, which builds the library to communicate with a server over
@@ -9,6 +11,12 @@
   Windows (#1055)
 - Add a `tcp` feature to the vcpkg port, which installs the library built to communicate over
   TCP/IP; `vcpkg install "krpc-cnano[tcp]"` (#1055)
+- Add `KRPC_COMMUNICATION_LOCALSOCKET`, which builds the library to communicate over a unix
+  domain socket with a server on the same machine, opened with the path of the server's RPC
+  socket in place of a serial port name. CMake builds of the library ask for it with
+  `-DKRPC_COMMUNICATION_LOCALSOCKET=ON`, which also links the winsock library it needs on
+  Windows, and the vcpkg port with the `localsocket` feature;
+  `vcpkg install "krpc-cnano[localsocket]"` (#1065)
 - Add `KRPC_SINGLE_CONNECTION`, for a `KRPC_COMMUNICATION_CUSTOM` communication mechanism that
   opens a connection of its own to each server. Messages are then sent as they are, rather than
   wrapped in the multiplexed message a serial port needs to say which of the connections it

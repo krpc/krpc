@@ -177,7 +177,8 @@ namespace KRPC.Service
             var candidates = context.Assembly.GetTypes ()
                 .Where (t => Reflection.HasAttribute<KRPCServiceAttribute> (t) ||
                         Reflection.HasAttribute<KRPCClassAttribute> (t) ||
-                        Reflection.HasAttribute<KRPCEnumAttribute> (t))
+                        Reflection.HasAttribute<KRPCEnumAttribute> (t) ||
+                        Reflection.HasAttribute<KRPCStructAttribute> (t))
                 .Where (t => t.Name == name ||
                         (t.FullName != null && t.FullName.Replace ('+', '.').EndsWith ("." + name, StringComparison.Ordinal)))
                 .ToList ();
@@ -207,8 +208,12 @@ namespace KRPC.Service
             } else if (Reflection.HasAttribute<KRPCEnumAttribute> (type)) {
                 TypeUtils.ValidateKRPCEnum (type);
                 return "T:" + TypeUtils.GetEnumServiceName (type) + "." + name;
+            } else if (Reflection.HasAttribute<KRPCStructAttribute> (type)) {
+                TypeUtils.ValidateKRPCStruct (type);
+                return "T:" + TypeUtils.GetStructServiceName (type) + "." + name;
             }
-            throw new DocumentationException ("Type '" + name + "' is not a kRPC service, class or enumeration");
+            throw new DocumentationException (
+                "Type '" + name + "' is not a kRPC service, class, enumeration or structure");
         }
 
         static string ResolveMethodCref (string reference)
@@ -250,8 +255,12 @@ namespace KRPC.Service
                        Reflection.HasAttribute<KRPCPropertyAttribute> (property)) {
                 TypeUtils.ValidateKRPCClassProperty (type, property);
                 return "M:" + TypeUtils.GetClassServiceName (type) + "." + name;
+            } else if (Reflection.HasAttribute<KRPCStructAttribute> (type) &&
+                       Reflection.HasAttribute<KRPCPropertyAttribute> (property)) {
+                TypeUtils.ValidateKRPCStruct (type);
+                return "M:" + TypeUtils.GetStructServiceName (type) + "." + name;
             }
-            throw new DocumentationException ("'" + name + "' is not a kRPC property");
+            throw new DocumentationException ("'" + name + "' is not a kRPC property or structure field");
         }
 
         static string ResolveFieldCref (string reference)

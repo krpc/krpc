@@ -12,6 +12,9 @@
   "features": {
     "tcp": {
       "description": "Communicate with the server over TCP/IP rather than a serial port"
+    },
+    "localsocket": {
+      "description": "Communicate with a server on the same machine over a unix domain socket rather than a serial port. Needs Windows 10 1803 or later on Windows"
     }
   }
 }

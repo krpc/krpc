@@ -78,6 +78,7 @@ namespace KRPC.Client
                 return EncodeBytes ((byte[])value);
             case TypeKind.Class:
                 return Varint (((RemoteObject)value).id);
+            case TypeKind.Struct:
             case TypeKind.Tuple:
                 return EncodeTuple (value, info).ToByteString ();
             case TypeKind.List:
@@ -164,6 +165,7 @@ namespace KRPC.Client
                 return value => EncodeBytes ((byte[])value);
             case TypeKind.Class:
                 return value => Varint (((RemoteObject)value).id);
+            case TypeKind.Struct:
             case TypeKind.Tuple:
                 return value => EncodeTuple (value, info).ToByteString ();
             case TypeKind.List:
@@ -273,6 +275,7 @@ namespace KRPC.Client
                 if (client == null)
                     throw new ArgumentException ("Client not passed when decoding remote object");
                 return info.NewObject (client, ReadVarint (value));
+            case TypeKind.Struct:
             case TypeKind.Tuple:
                 return DecodeTuple (value, info, client);
             case TypeKind.List:
@@ -348,6 +351,7 @@ namespace KRPC.Client
                         throw new ArgumentException ("Client not passed when decoding remote object");
                     return info.NewObject (client, ReadVarint (value));
                 };
+            case TypeKind.Struct:
             case TypeKind.Tuple:
                 return (value, client) => DecodeTuple (value, info, client);
             case TypeKind.List:
@@ -373,10 +377,21 @@ namespace KRPC.Client
             }
         }
 
+        /// <remarks>
+        /// A structure carries the values of its fields in order, which is the same encoding as
+        /// a tuple of those values. Fields are only ever appended to a structure, so a value
+        /// from a newer server may carry more items than the type names, and the extra ones are
+        /// ignored. Fewer items than the type names is an error, as the missing ones cannot be
+        /// given a value.
+        /// </remarks>
         static object DecodeTuple (ByteString data, TypeInfo info, IConnection client)
         {
             var encodedTuple = Schema.KRPC.Tuple.Parser.ParseFrom (data);
             var values = new object [info.Arguments.Length];
+            if (encodedTuple.Items.Count < values.Length)
+                throw new ArgumentException (
+                    "Value has " + encodedTuple.Items.Count + " items; expected at least " +
+                    values.Length);
             for (int i = 0; i < values.Length; i++)
                 values [i] = Decode (encodedTuple.Items [i], info.Arguments [i], client);
             return info.NewTuple (values);

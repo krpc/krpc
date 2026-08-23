@@ -83,6 +83,10 @@
     <Compile Include="Server\ServerException.cs" />
     <Compile Include="Server\ServerStartedEventArgs.cs" />
     <Compile Include="Server\ServerStoppedEventArgs.cs" />
+    <Compile Include="Server\LocalSocket\LocalSocketClient.cs" />
+    <Compile Include="Server\LocalSocket\LocalSocketServer.cs" />
+    <Compile Include="Server\LocalSocket\UnixEndPoint.cs" />
+    <Compile Include="Server\LocalSocket\UnixSocket.cs" />
     <Compile Include="Server\TCP\NetworkInformation.cs" />
     <Compile Include="Server\TCP\TCPClient.cs" />
     <Compile Include="Server\TCP\TCPServer.cs" />
@@ -108,6 +112,7 @@
     <Compile Include="Service\Attributes\KRPCProcedureAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCPropertyAttribute.cs" />
     <Compile Include="Service\Attributes\KRPCServiceAttribute.cs" />
+    <Compile Include="Service\Attributes\KRPCStructAttribute.cs" />
     <Compile Include="Service\CallContext.cs" />
     <Compile Include="Service\ClassMethodHandler.cs" />
     <Compile Include="Service\ClassStaticMethodHandler.cs" />
@@ -148,6 +153,8 @@
     <Compile Include="Service\Messages\Stream.cs" />
     <Compile Include="Service\Messages\StreamResult.cs" />
     <Compile Include="Service\Messages\StreamUpdate.cs" />
+    <Compile Include="Service\Messages\Struct.cs" />
+    <Compile Include="Service\Messages\StructField.cs" />
     <Compile Include="Service\ObjectStore.cs" />
     <Compile Include="Service\ProcedureCallContinuation.cs" />
     <Compile Include="Service\ProcedureCallStream.cs" />
@@ -163,6 +170,8 @@
     <Compile Include="Service\Scanner\ProcedureSignature.cs" />
     <Compile Include="Service\Scanner\Scanner.cs" />
     <Compile Include="Service\Scanner\ServiceSignature.cs" />
+    <Compile Include="Service\Scanner\StructFieldSignature.cs" />
+    <Compile Include="Service\Scanner\StructSignature.cs" />
     <Compile Include="Service\ServiceException.cs" />
     <Compile Include="Service\Services.cs" />
     <Compile Include="Service\Stream.cs" />

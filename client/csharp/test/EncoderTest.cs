@@ -289,5 +289,15 @@ namespace KRPC.Client.Test
             var decodeResult = (Tuple<uint,string,bool>)Encoder.Decode (data.ToByteString (), value.GetType (), null);
             Assert.AreEqual (value, decodeResult);
         }
+
+        [Test]
+        public void TupleCollectionWithMissingItems ()
+        {
+            // The same decoder reads a structure, where too few items is what an older
+            // server sends for one this client has more fields for
+            const string data = "0a0101";
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), typeof(Tuple<uint,string>), null));
+        }
     }
 }

@@ -8,6 +8,9 @@ is the cost a program written against kRPC sees.
 Every figure is a time per operation, so lower is always better; the rates they work out to
 are in the notes under each block.
 
+Each case is measured over every transport the machine has, TCP/IP and a local socket, since
+which one carries a call is part of what the call costs.
+
     bazel run //tools/benchmarks:python -- --json before.json
 """
 
@@ -60,45 +63,52 @@ def main():
 
 
 def measure(server):
-    """Measure the client against a TestServer of its own, and say what it ran against.
+    """Measure the client over every transport, and say what it ran against.
 
-    The server is unpaced, so that a round trip is the client's cost rather than the update it
-    landed in. `run_client.py` has the long version.
+    A server per transport, each unpaced, so that a round trip is the client's cost rather than
+    the update it landed in. `run_client.py` has the long version.
     """
-    with testserver.connection("benchmark_python", server, frame_pacing=False) as (
-        conn,
-        pacing,
-    ):
-        testserver.warm_up(conn)
-        results = measure_calls(conn)
-        environment = {
-            "server": conn.krpc.get_status().version,
-            "measured against": testserver.settings(conn, pacing),
-        }
+    results = []
+    environment = {}
+    for transport in testserver.transports():
+        with testserver.connection(
+            "benchmark_python", server, frame_pacing=False, transport=transport
+        ) as (conn, pacing):
+            testserver.warm_up(conn)
+            results += measure_calls(conn, transport)
+            environment.setdefault("server", conn.krpc.get_status().version)
+            # What the server was told is the same whichever transport it serves, so the first
+            # one measured says it for the run.
+            environment.setdefault(
+                "measured against", testserver.settings(conn, pacing)
+            )
     return results, environment
 
 
-def measure_calls(conn):
+def measure_calls(conn, transport):
     """Round-trip time for a remote procedure call, with and without arguments to encode, and
     for one whose argument and result are a collection of values."""
     service = conn.test_service
     values = list(range(LIST_VALUES))
+    block = "%s over %s" % (SCENARIO, testserver.LABELS[transport])
     return [
-        round_trip("round trip", lambda: service.float_to_string(3.14159)),
+        round_trip(block, "round trip", lambda: service.float_to_string(3.14159)),
         round_trip(
+            block,
             "round trip, 3 arguments",
             lambda: service.add_multiple_values(3.14159, 1, 2),
         ),
         round_trip(
+            block,
             "round trip, list of %d values" % LIST_VALUES,
             lambda: service.increment_list(values),
         ),
     ]
 
 
-def round_trip(case, call):
+def round_trip(block, case, call):
     samples, settled = timed_loop(call)
-    return Result(SUITE, SCENARIO, case, samples, unit="ms", rate=RATE, settled=settled)
+    return Result(SUITE, block, case, samples, unit="ms", rate=RATE, settled=settled)
 
 
 def timed_loop(call):

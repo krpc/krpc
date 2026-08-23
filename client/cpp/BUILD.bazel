@@ -1,4 +1,4 @@
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library", "cc_test")
 load("//:config.bzl", "cmake_version", "version")
 load("//tools/build:client_test.bzl", "client_test")
 load("//tools/build:cpp.bzl", "clang_format_test", "clang_tidy_test")
@@ -163,8 +163,12 @@ cc_library(
 test_suite(
     name = "test",
     tests = [
-        ":client",
+        ":client-localsocket",
+        ":client-tcpip",
+        ":communication-localsocket",
+        ":communication-tcpip",
         ":lint",
+        ":unit",
     ],
 )
 
@@ -176,21 +180,89 @@ test_suite(
     ],
 )
 
+# What the client does regardless of the transport it talks over: encoding and decoding
+# values and messages. It needs no server, so it runs on its own rather than under the
+# harness that starts one.
+cc_test(
+    name = "unit",
+    size = "small",
+    srcs = [
+        "test/test_decoder.cpp",
+        "test/test_encode_decode.cpp",
+        "test/test_encoder.cpp",
+        "test/test_hash.cpp",
+        ":services-test-service",
+    ],
+    includes = ["test"],
+    deps = [
+        ":krpc",
+        "@cpp_googletest//:gmock",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The transport, one test each. Both run against a server the test listens on itself, so
+# neither needs a kRPC server. The bodies are shared and instantiated once per transport,
+# as only opening the connection differs between them.
+cc_test(
+    name = "communication-tcpip",
+    size = "small",
+    srcs = [
+        "test/connection_test.hpp",
+        "test/test_connection_tcpip.cpp",
+    ],
+    includes = ["test"],
+    tags = ["requires-network"],
+    deps = [
+        ":krpc",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+cc_test(
+    name = "communication-localsocket",
+    size = "small",
+    srcs = [
+        "test/connection_test.hpp",
+        "test/test_connection_localsocket.cpp",
+    ],
+    includes = ["test"],
+    deps = [
+        ":krpc",
+        "@cpp_googletest//:gtest",
+    ],
+)
+
+# The client end to end against a TestServer, once per transport it can reach one over.
 client_test(
-    name = "client",
+    name = "client-tcpip",
     size = "medium",
     server_executable = "//tools/TestServer",
     tags = ["requires-network"],
     test_executable = ":cpptest",
 )
 
-test_srcs = glob(["test/test_*.cpp"]) + [
+client_test(
+    name = "client-localsocket",
+    size = "medium",
+    server_executable = "//tools/TestServer",
+    server_type = "localsocket",
+    test_executable = ":cpptest",
+)
+
+test_srcs = [
+    "test/test_client.cpp",
+    "test/test_event.cpp",
+    "test/test_object.cpp",
+    "test/test_services.cpp",
+    "test/test_stream.cpp",
     ":services-test-service",
     "test/server_test.hpp",
 ]
 
 cc_binary(
     name = "cpptest",
+    testonly = True,
     srcs = test_srcs,
     includes = ["test"],
     deps = [

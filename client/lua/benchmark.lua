@@ -1,9 +1,10 @@
 -- Benchmarks for the lua client, run by //tools/benchmarks:lua.
 --
 -- Measures what this client costs from inside it: the round trip for a procedure call, and
--- what a call carrying a collection of values costs. The runner starts a TestServer, passes the
--- ports in the environment and reads the JSON printed here; see tools/benchmarks/run_client.py
--- for the contract and for what happens to these numbers.
+-- what a call carrying a collection of values costs. The runner starts a TestServer, says in
+-- the environment where it is listening and which transport that is, and reads the JSON printed
+-- here; see tools/benchmarks/run_client.py for the contract and for what happens to these
+-- numbers.
 
 local krpc = require 'krpc.init'
 local socket = require 'socket'
@@ -132,8 +133,18 @@ local function emit(cases)
   print(string.format('{"results": [%s]}', table.concat(parts, ', ')))
 end
 
-local conn = krpc.connect('lua_client_benchmark', 'localhost',
-                          port('RPC_PORT', 50000), port('STREAM_PORT', 50001))
+-- Connect over whichever transport the runner started the server with, which it names by socket
+-- path or by port. Both are measured, since which one carries a call is part of what it costs.
+local function connect()
+  local rpc_path = os.getenv('RPC_PATH')
+  if rpc_path ~= nil then
+    return krpc.connect_local('lua_client_benchmark', rpc_path)
+  end
+  return krpc.connect('lua_client_benchmark', 'localhost',
+                      port('RPC_PORT', 50000), port('STREAM_PORT', 50001))
+end
+
+local conn = connect()
 
 local values = {}
 for i = 1, LIST_VALUES do

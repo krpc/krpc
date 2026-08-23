@@ -369,6 +369,87 @@ namespace KRPC.Test.Service
             return Service.DictionaryDefault (x);
         }
 
+        /// <summary>
+        /// Documentation string for TestStruct.
+        /// </summary>
+        [KRPCStruct]
+        public struct TestStruct
+        {
+            /// <summary>
+            /// Documented struct field
+            /// </summary>
+            [KRPCProperty]
+            public int IntField { get; set; }
+
+            [KRPCProperty]
+            public string StringField { get; set; }
+
+            [KRPCProperty]
+            public TestEnum EnumField { get; set; }
+
+            [KRPCProperty]
+            public TestClass ObjectField { get; set; }
+
+            [KRPCProperty]
+            public IList<string> ListField { get; set; }
+
+            /// <summary>
+            /// A property that is not a field of the structure, as it is not marked as one.
+            /// </summary>
+            public int NotAField {
+                get { return IntField + 1; }
+            }
+        }
+
+        [KRPCStruct]
+        public struct TestNestedStruct
+        {
+            [KRPCProperty]
+            public TestStruct StructField { get; set; }
+
+            [KRPCProperty]
+            public int IntField { get; set; }
+        }
+
+        [KRPCProcedure]
+        public static TestStruct EchoStruct (TestStruct x)
+        {
+            return Service.EchoStruct (x);
+        }
+
+        [KRPCProcedure]
+        public static IList<TestStruct> EchoListOfStructs (IList<TestStruct> l)
+        {
+            return Service.EchoListOfStructs (l);
+        }
+
+        [KRPCProcedure]
+        public static TestNestedStruct EchoNestedStruct (TestNestedStruct x)
+        {
+            return Service.EchoNestedStruct (x);
+        }
+
+        public static class CreateStructDefault
+        {
+            public static object Create ()
+            {
+                return new TestStruct {
+                    IntField = 42,
+                    StringField = "jeb",
+                    EnumField = TestEnum.Y,
+                    ObjectField = new TestClass ("kerbin"),
+                    ListField = new List<string> { "a", "b" }
+                };
+            }
+        }
+
+        [KRPCProcedure]
+        public static TestStruct StructDefault (
+            [KRPCDefaultValue (typeof(CreateStructDefault))] TestStruct x)
+        {
+            return Service.StructDefault (x);
+        }
+
         [KRPCProcedure]
         public static void ProcedureAvailableInInheritedGameScene()
         {

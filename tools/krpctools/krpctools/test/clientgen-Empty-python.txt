@@ -1,7 +1,7 @@
 # pylint: disable=line-too-long,invalid-name,redefined-builtin,too-many-lines
 from __future__ import annotations
 import warnings
-from typing import Tuple, Set, Dict, List, Optional, TYPE_CHECKING
+from typing import Tuple, Set, Dict, List, NamedTuple, Optional, TYPE_CHECKING
 import krpc.limits
 import krpc.schema
 from krpc.schema import KRPC_pb2
@@ -15,12 +15,13 @@ class EmptyService:
 
     def __init__(self, client: Client) -> None:
         self._client = client
-        # The classes, enumerations and exceptions the service defines are put on the
-        # service here, so that reaching one is an ordinary attribute lookup and nothing
-        # has to intercept the lookups that do not name one - which is every call, as a
-        # call goes through a procedure or a property. A class is bound to the client it
-        # is reached through, so that its static methods use that client.
+        # The classes, enumerations, structures and exceptions the service defines are
+        # put on the service here, so that reaching one is an ordinary attribute lookup
+        # and nothing has to intercept the lookups that do not name one - which is every
+        # call, as a call goes through a procedure or a property. A class is bound to the
+        # client it is reached through, so that its static methods use that client.
         self.__dict__.update(self._enumerations)
+        self.__dict__.update(self._structs)
         self.__dict__.update(self._exceptions)
         for name, class_type in self._classes.items():
             self.__dict__[name] = WrappedClass(client, class_type)
@@ -44,6 +45,8 @@ class EmptyService:
     _classes = {
     }
     _enumerations = {
+    }
+    _structs = {
     }
     _exceptions = {
     }

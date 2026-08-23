@@ -281,5 +281,119 @@ namespace KRPC.Test.Server.ProtocolBuffers
             Assert.AreEqual (value.Item2, decodeResult.Item2);
             Assert.AreEqual (value.Item3, decodeResult.Item3);
         }
+
+        [Test]
+        public void Struct ()
+        {
+            var obj = new TestService.TestClass ("foo");
+            var value = new TestService.TestStruct {
+                IntField = 42,
+                StringField = "jeb",
+                EnumField = TestService.TestEnum.Z,
+                ObjectField = obj,
+                ListField = new List<string> { "a", "b" }
+            };
+            var data = Encoder.Encode (value).ToHexString ();
+            var decodeResult = (TestService.TestStruct)Encoder.Decode (
+                data.ToByteString (), typeof(TestService.TestStruct));
+            Assert.AreEqual (value.IntField, decodeResult.IntField);
+            Assert.AreEqual (value.StringField, decodeResult.StringField);
+            Assert.AreEqual (value.EnumField, decodeResult.EnumField);
+            Assert.AreSame (obj, decodeResult.ObjectField);
+            CollectionAssert.AreEqual (value.ListField, decodeResult.ListField);
+        }
+
+        [Test]
+        public void StructIsEncodedAsATupleOfItsFields ()
+        {
+            var value = new TestService.TestNestedStruct {
+                StructField = new TestService.TestStruct {
+                    IntField = 1,
+                    StringField = "jeb",
+                    EnumField = TestService.TestEnum.X,
+                    ObjectField = new TestService.TestClass ("foo"),
+                    ListField = new List<string> ()
+                },
+                IntField = 2
+            };
+            var expected = Encoder.Encode (Tuple.Create (value.StructField, value.IntField)).ToHexString ();
+            Assert.AreEqual (expected, Encoder.Encode (value).ToHexString ());
+        }
+
+        [Test]
+        public void NestedStruct ()
+        {
+            var value = new TestService.TestNestedStruct {
+                StructField = new TestService.TestStruct {
+                    IntField = 1,
+                    StringField = "jeb",
+                    EnumField = TestService.TestEnum.Y,
+                    ObjectField = new TestService.TestClass ("foo"),
+                    ListField = new List<string> { "a" }
+                },
+                IntField = 2
+            };
+            var data = Encoder.Encode (value).ToHexString ();
+            var decodeResult = (TestService.TestNestedStruct)Encoder.Decode (
+                data.ToByteString (), typeof(TestService.TestNestedStruct));
+            Assert.AreEqual (1, decodeResult.StructField.IntField);
+            Assert.AreEqual ("jeb", decodeResult.StructField.StringField);
+            Assert.AreEqual (2, decodeResult.IntField);
+        }
+
+        [Test]
+        public void EncodeStructWithNullField ()
+        {
+            var value = new TestService.TestStruct {
+                IntField = 42,
+                StringField = null,
+                EnumField = TestService.TestEnum.X,
+                ObjectField = new TestService.TestClass ("foo"),
+                ListField = new List<string> ()
+            };
+            Assert.Throws<ServiceException> (() => Encoder.Encode (value));
+        }
+
+        [Test]
+        public void DecodeStructWithMissingFields ()
+        {
+            var data = Encoder.Encode (Tuple.Create (42, "jeb")).ToHexString ();
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), typeof(TestService.TestStruct)));
+        }
+
+        [Test]
+        public void DecodeStructWithNullField ()
+        {
+            // The object id 0 decodes to a null object, which a structure field can never be
+            var data = Encoder.Encode (Tuple.Create (
+                42, "jeb", TestService.TestEnum.Z, (ulong)0, new List<string> ())).ToHexString ();
+            Assert.Throws<ArgumentException> (
+                () => Encoder.Decode (data.ToByteString (), typeof(TestService.TestStruct)));
+        }
+
+        [Test]
+        public void DecodeStructWithExtraFields ()
+        {
+            // A client generated against a newer definition of the structure sends the
+            // fields that were appended to it, which are ignored
+            var value = new TestService.TestStruct {
+                IntField = 42,
+                StringField = "jeb",
+                EnumField = TestService.TestEnum.Z,
+                ObjectField = new TestService.TestClass ("foo"),
+                ListField = new List<string> { "a" }
+            };
+            var extended = Tuple.Create (
+                value.IntField, value.StringField, value.EnumField, value.ObjectField,
+                value.ListField, "an appended field");
+            var data = Encoder.Encode (extended).ToHexString ();
+            var decodeResult = (TestService.TestStruct)Encoder.Decode (
+                data.ToByteString (), typeof(TestService.TestStruct));
+            Assert.AreEqual (value.IntField, decodeResult.IntField);
+            Assert.AreEqual (value.StringField, decodeResult.StringField);
+            Assert.AreEqual (value.EnumField, decodeResult.EnumField);
+            CollectionAssert.AreEqual (value.ListField, decodeResult.ListField);
+        }
     }
 }

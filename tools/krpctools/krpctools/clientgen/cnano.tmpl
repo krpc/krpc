@@ -93,20 +93,20 @@ typedef krpc_object_t krpc_{{ service_name }}_{{ class_name }}_t;
 #ifndef KRPC_TYPE_{{ typ.name | upper }}
 #define KRPC_TYPE_{{ typ.name | upper }}
 
-{% if typ.name.startswith('tuple_') %}
+{% if typ.kind in ('tuple', 'struct') %}
 typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
 struct krpc_{{ typ.name }}_s {
 {% for value_type in typ.value_types %}
-  {{ value_type.ctype }} e{{ loop.index0 }};
+  {{ value_type.ctype }} {{ value_type.member }};
 {% endfor %}
 };
-{% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
+{% elif typ.kind in ('list', 'set') %}
 typedef struct krpc_{{ typ.name }}_s krpc_{{ typ.name }}_t;
 struct krpc_{{ typ.name }}_s {
   size_t size;
   {{ typ.value_type.ctype }} * items;
 };
-{% elif typ.name.startswith('dictionary_') %}
+{% elif typ.kind == 'dictionary' %}
 typedef struct krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_s krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_t;
 struct krpc_dictionary_entry_{{ typ.key_type.name }}_{{ typ.value_type.name }}_s {
   {{ typ.key_type.ctype }} key;
@@ -193,7 +193,7 @@ static inline krpc_error_t krpc_{{ service_name }}_{{ class_name }}_{{ property_
 #ifndef KRPC_IMPL_TYPE_{{ typ.name | upper }}
 #define KRPC_IMPL_TYPE_{{ typ.name | upper }}
 
-{% if typ.name.startswith('tuple_') %}
+{% if typ.kind in ('tuple', 'struct') %}
 static inline bool krpc_encode_callback_items_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
@@ -202,15 +202,15 @@ static inline bool krpc_encode_callback_items_{{ typ.name }}(
     if (!pb_encode_tag_for_field(stream, field))
       KRPC_CALLBACK_RETURN_ERROR("encoding tag for tuple item");
     size_t size;
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ value_type.name }}(&size, {{ value_type.structgetval }}value->e{{ loop.index0 }}));
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_size_{{ value_type.name }}(&size, {{ value_type.structgetval }}value->{{ value_type.member }}));
     if (!pb_encode_varint(stream, size))
       KRPC_CALLBACK_RETURN_ERROR("encoding size for tuple item");
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ value_type.name }}(stream, {{ value_type.structgetval }}value->e{{ loop.index0 }}));
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_encode_{{ value_type.name }}(stream, {{ value_type.structgetval }}value->{{ value_type.member }}));
   }
   {% endfor %}
   return true;
 }
-{% elif typ.name.startswith('list_') %}
+{% elif typ.kind == 'list' %}
 static inline bool krpc_encode_callback_items_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
@@ -226,7 +226,7 @@ static inline bool krpc_encode_callback_items_{{ typ.name }}(
   }
   return true;
 }
-{% elif typ.name.startswith('set_') %}
+{% elif typ.kind == 'set' %}
 static inline bool krpc_encode_callback_items_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   const {{ typ.ctype }} * value = (const {{ typ.ctype }}*)(*arg);
@@ -242,7 +242,7 @@ static inline bool krpc_encode_callback_items_{{ typ.name }}(
   }
   return true;
 }
-{% elif typ.name.startswith('dictionary_') %}
+{% elif typ.kind == 'dictionary' %}
 static inline bool krpc_encode_callback_key_{{ typ.name }}(
   pb_ostream_t * stream, const pb_field_t * field, void * const * arg) {
   if (!pb_encode_tag_for_field(stream, field))
@@ -293,22 +293,22 @@ static inline bool krpc_encode_callback_entry_{{ typ.name }}(
 
 static inline krpc_error_t krpc_encode_{{ typ.name }}(
   pb_ostream_t * stream, {{ typ.ccvtype }} value) {
-{% if typ.name.startswith('tuple_') %}
+{% if typ.kind in ('tuple', 'struct') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
   message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
   KRPC_RETURN_ON_ERROR(krpc_encode_message_Tuple(stream, &message));
-{% elif typ.name.startswith('list_') %}
+{% elif typ.kind == 'list' %}
   krpc_schema_List message = krpc_schema_List_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
   message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
   KRPC_RETURN_ON_ERROR(krpc_encode_message_List(stream, &message));
-{% elif typ.name.startswith('set_') %}
+{% elif typ.kind == 'set' %}
   krpc_schema_Set message = krpc_schema_Set_init_default;
   message.items.funcs.encode = &krpc_encode_callback_items_{{ typ.name }};
   message.items.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
   KRPC_RETURN_ON_ERROR(krpc_encode_message_Set(stream, &message));
-{% elif typ.name.startswith('dictionary_') %}
+{% elif typ.kind == 'dictionary' %}
   krpc_schema_Dictionary message = krpc_schema_Dictionary_init_default;
   message.entries.funcs.encode = &krpc_encode_callback_entry_{{ typ.name }};
   message.entries.arg = {{ typ.removeconst }}{{ typ.getptr }}value;
@@ -338,7 +338,7 @@ static inline bool krpc_encode_callback_{{ typ.name }}(
   return true;
 }
 
-{% if typ.name.startswith('tuple_') %}
+{% if typ.kind in ('tuple', 'struct') %}
 static inline bool krpc_decode_callback_item_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   typedef struct State {size_t pos; {{ typ.ctype }} * value;} State;
@@ -347,16 +347,24 @@ static inline bool krpc_decode_callback_item_{{ typ.name }}(
   switch (state->pos) {
   {% for value_type in typ.value_types %}
   case {{ loop.index0 }}:
-    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ value_type.name }}(stream, {{ value_type.structgetptr }}value->e{{ loop.index0 }}));
+    KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ value_type.name }}(stream, {{ value_type.structgetptr }}value->{{ value_type.member }}));
     break;
   {% endfor %}
   default:
+{% if typ.kind == 'struct' %}
+    // Fields are only ever appended to a structure, so a value from a newer server may
+    // carry more items than this client knows about, and those are skipped
+    if (!pb_read(stream, NULL, stream->bytes_left))
+      KRPC_CALLBACK_RETURN_ERROR("skipping an appended struct field");
+    break;
+{% else %}
     KRPC_CALLBACK_RETURN_ERROR("unexpected tuple item");
+{% endif %}
   }
   state->pos++;
   return true;
 }
-{% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
+{% elif typ.kind in ('list', 'set') %}
 static inline bool krpc_decode_callback_item_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
@@ -370,7 +378,7 @@ static inline bool krpc_decode_callback_item_{{ typ.name }}(
   KRPC_CALLBACK_RETURN_ON_ERROR(krpc_decode_{{ typ.value_type.name }}(stream, {{ typ.value_type.structgetptr }}state->value->items[i]));
   return true;
 }
-{% elif typ.name.startswith('dictionary_') %}
+{% elif typ.kind == 'dictionary' %}
 static inline bool krpc_decode_callback_key_{{ typ.name }}(
   pb_istream_t * stream, const pb_field_t * field, void ** arg) {
   {{ typ.key_type.ctype }} * key = ({{ typ.key_type.ctype }}*)(*arg);
@@ -408,14 +416,18 @@ static inline bool krpc_decode_callback_entry_{{ typ.name }}(
 
 static inline krpc_error_t krpc_decode_{{ typ.name }}(
   pb_istream_t * stream, {{ typ.ctype }} * value) {
-{% if typ.name.startswith('tuple_') %}
+{% if typ.kind in ('tuple', 'struct') %}
   krpc_schema_Tuple message = krpc_schema_Tuple_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
   typedef struct State { size_t pos; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Tuple(stream, &message));
-{% elif typ.name.startswith('list_') or typ.name.startswith('set_') %}
+{% if typ.kind == 'struct' %}
+  if (state.pos < {{ typ.value_types | length }})
+    KRPC_RETURN_ERROR(DECODING_FAILED, "too few fields for a {{ typ.name }}");
+{% endif %}
+{% elif typ.kind in ('list', 'set') %}
   typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   value->size = 0;
@@ -423,18 +435,18 @@ static inline krpc_error_t krpc_decode_{{ typ.name }}(
     value->items = ({{ typ.value_type.ctype }}*)krpc_calloc(KRPC_ALLOC_BLOCK_SIZE, sizeof({{ typ.value_type.ctype }}));
     state.capacity = KRPC_ALLOC_BLOCK_SIZE;
   }
-  {% if typ.name.startswith('list_') %}
+  {% if typ.kind == 'list' %}
   krpc_schema_List message = krpc_schema_List_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_List(stream, &message));
-  {% elif typ.name.startswith('set_') %}
+  {% elif typ.kind == 'set' %}
   krpc_schema_Set message = krpc_schema_Set_init_default;
   message.items.funcs.decode = &krpc_decode_callback_item_{{ typ.name }};
   message.items.arg = &state;
   KRPC_RETURN_ON_ERROR(krpc_decode_message_Set(stream, &message));
   {% endif %}
-{% elif typ.name.startswith('dictionary_') %}
+{% elif typ.kind == 'dictionary' %}
   typedef struct State { size_t capacity; {{ typ.ctype }} * value; } State;
   State state = { 0, value };
   value->size = 0;

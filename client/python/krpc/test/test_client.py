@@ -1,4 +1,5 @@
 import math
+import os
 import unittest
 import socket
 import threading
@@ -21,51 +22,59 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertRegex(status.version, r"^[0-9]+\.[0-9]+\.[0-9]+$")
         self.assertGreater(status.bytes_read, 0)
 
+    @unittest.skipIf(
+        os.getenv("RPC_PATH") is not None,
+        "the server is listening on socket paths rather than on ports",
+    )
     def test_wrong_rpc_port(self) -> None:
         with self.assertRaises(socket.error):
             krpc.connect(
                 name="python_client_test_wrong_rpc_port",
                 address="localhost",
-                rpc_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
+                rpc_port=ServerTestCase.unused_port(),
                 stream_port=ServerTestCase.stream_port(),
+                timeout=ServerTestCase.CONNECT_TIMEOUT,
             )
 
+    @unittest.skipIf(
+        os.getenv("RPC_PATH") is not None,
+        "the server is listening on socket paths rather than on ports",
+    )
     def test_wrong_stream_port(self) -> None:
         with self.assertRaises(socket.error):
             krpc.connect(
                 name="python_client_test_wrong_stream_port",
                 address="localhost",
                 rpc_port=ServerTestCase.rpc_port(),
-                stream_port=ServerTestCase.rpc_port() ^ ServerTestCase.stream_port(),
+                stream_port=ServerTestCase.unused_port(),
+                timeout=ServerTestCase.CONNECT_TIMEOUT,
             )
 
     def test_wrong_rpc_server(self) -> None:
         with self.assertRaises(krpc.error.ConnectionError) as cm:
-            krpc.connect(
+            ServerTestCase.connect(
                 name="python_client_test_wrong_rpc_server",
-                address="localhost",
-                rpc_port=ServerTestCase.stream_port(),
-                stream_port=ServerTestCase.stream_port(),
+                rpc="stream",
+                stream="stream",
             )
         self.assertEqual(
             "Connection request was for the rpc server, "
             + "but this is the stream server. "
-            + "Did you connect to the wrong port number?",
+            + "Did you connect to the wrong port number or socket path?",
             str(cm.exception),
         )
 
     def test_wrong_stream_server(self) -> None:
         with self.assertRaises(krpc.error.ConnectionError) as cm:
-            krpc.connect(
+            ServerTestCase.connect(
                 name="python_client_test_wrong_stream_server",
-                address="localhost",
-                rpc_port=ServerTestCase.rpc_port(),
-                stream_port=ServerTestCase.rpc_port(),
+                rpc="rpc",
+                stream="rpc",
             )
         self.assertEqual(
             "Connection request was for the stream server, "
             + "but this is the rpc server. "
-            + "Did you connect to the wrong port number?",
+            + "Did you connect to the wrong port number or socket path?",
             str(cm.exception),
         )
 
@@ -121,11 +130,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
     # The runtime DeprecationWarning is a feature of the dynamically-created
     # services, so these tests use a connection without the pre-generated stubs.
     def test_deprecated_procedure_warns(self) -> None:
-        conn = krpc.connect(
+        conn = ServerTestCase.connect(
             name="python_client_test_dynamic",
-            address="localhost",
-            rpc_port=self.rpc_port(),
-            stream_port=self.stream_port(),
             use_pregenerated_stubs=False,
         )
         try:
@@ -418,6 +424,96 @@ class TestClient(ServerTestCase, unittest.TestCase):
         self.assertEqual("value=jeb", objs[0].get_value())
         self.assertEqual("value=bob", objs[1].get_value())
 
+    def test_structs(self) -> None:
+        service = self.conn.test_service
+        value = service.TestStruct(
+            int_field=42,
+            string_field="jeb",
+            enum_field=service.TestEnum.value_b,
+            list_field=[1, 2, 3],
+        )
+        result = service.struct_echo(value)
+        self.assertEqual(value, result)
+        # A structure has named fields, and is a tuple of their values
+        self.assertEqual(42, result.int_field)
+        self.assertEqual(service.TestEnum.value_b, result.enum_field)
+        self.assertEqual(
+            (42, "jeb", service.TestEnum.value_b, [1, 2, 3]), tuple(result)
+        )
+        # A tuple of the field values coerces to the structure
+        self.assertEqual(
+            value, service.struct_echo((42, "jeb", service.TestEnum.value_b, [1, 2, 3]))
+        )
+
+    def test_nested_structs(self) -> None:
+        service = self.conn.test_service
+        obj = service.create_test_object("bob")
+        value = service.TestNestedStruct(
+            struct_field=service.TestStruct(
+                int_field=1,
+                string_field="jeb",
+                enum_field=service.TestEnum.value_a,
+                list_field=[],
+            ),
+            object_field=obj,
+            string_field="bill",
+        )
+        result = service.nested_struct_echo(value)
+        self.assertEqual(value, result)
+        self.assertEqual(1, result.struct_field.int_field)
+        self.assertEqual("value=bob", result.object_field.get_value())
+
+    def test_collections_of_structs(self) -> None:
+        service = self.conn.test_service
+        values = [
+            service.TestStruct(
+                int_field=i,
+                string_field="jeb",
+                enum_field=service.TestEnum.value_c,
+                list_field=[i],
+            )
+            for i in range(3)
+        ]
+        result = service.increment_list_of_structs(values)
+        self.assertEqual([1, 2, 3], [x.int_field for x in result])
+
+    def test_nullable_structs(self) -> None:
+        service = self.conn.test_service
+        self.assertIsNone(service.struct_echo_nullable(None))
+        value = service.TestStruct(
+            int_field=1,
+            string_field="jeb",
+            enum_field=service.TestEnum.value_a,
+            list_field=[],
+        )
+        self.assertEqual(value, service.struct_echo_nullable(value))
+
+    def test_struct_default_value(self) -> None:
+        service = self.conn.test_service
+        self.assertEqual(
+            service.TestStruct(
+                int_field=42,
+                string_field="jeb",
+                enum_field=service.TestEnum.value_b,
+                list_field=[1, 2, 3],
+            ),
+            service.struct_default(),
+        )
+
+    def test_struct_comparison(self) -> None:
+        service = self.conn.test_service
+        value = service.TestStruct(
+            int_field=42,
+            string_field="jeb",
+            enum_field=service.TestEnum.value_b,
+            list_field=[1, 2, 3],
+        )
+        result = service.struct_echo(value)
+        other = service.struct_echo(value._replace(int_field=43))
+        self.assertEqual(value, result)
+        self.assertLess(result, other)
+        self.assertEqual([result, other], sorted([other, result]))
+
     def test_colllections_default_values(self) -> None:
         self.assertEqual((1, False), self.conn.test_service.tuple_default())
         self.assertEqual([1, 2, 3], self.conn.test_service.list_default())
@@ -623,6 +719,14 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "set_default",
                     "add_to_object_list",
                     "counter",
+                    "TestStruct",
+                    "TestNestedStruct",
+                    "struct_echo",
+                    "nested_struct_echo",
+                    "increment_list_of_structs",
+                    "struct_default",
+                    "struct_echo_nullable",
+                    "counter_struct",
                     "CustomException",
                     "throw_custom_exception",
                     "reset_custom_exception_later",
@@ -641,6 +745,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "DeprecatedClass",
                     "DeprecatedEnum",
                     "DeprecatedException",
+                    "DeprecatedStruct",
                     "double_special_defaults",
                     "float_special_defaults",
                     "int32_special_defaults",

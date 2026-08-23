@@ -48,8 +48,8 @@ The C-nano client is available from `vcpkg <https://vcpkg.io>`_. It can be insta
 
          vcpkg install krpc-cnano:x64-windows
 
-The library communicates over a serial port unless the ``tcp`` feature is asked for, which builds
-it to communicate over TCP/IP instead:
+The library communicates over a serial port unless a transport feature is asked for. The ``tcp``
+feature builds it to communicate over TCP/IP instead:
 
 .. tabs::
 
@@ -64,6 +64,13 @@ it to communicate over TCP/IP instead:
       .. code-block:: bash
 
          vcpkg install "krpc-cnano[tcp]:x64-windows"
+
+The ``localsocket`` feature builds it to communicate over a unix domain socket with a server on
+the same machine:
+
+.. code-block:: bash
+
+   vcpkg install "krpc-cnano[localsocket]"
 
 CMake
 ^^^^^
@@ -136,6 +143,14 @@ argument to the compiler.
     installs with the ``tcp`` feature, rather than by defining it directly, so that programs
     linking the library are built for the same transport and, on Windows, are linked against
     winsock along with it.
+  * ``KRPC_COMMUNICATION_LOCALSOCKET`` -- Specifies that the library should be built to
+    communicate over a unix domain socket, for a server running on the same machine. The
+    connection is opened with the path of the server's RPC socket in place of a serial port
+    name. Not auto-detected, as a serial port is the usual choice on the platforms that
+    provide both. CMake builds of the library should ask for it with
+    ``-DKRPC_COMMUNICATION_LOCALSOCKET=ON``, and vcpkg installs with the ``localsocket``
+    feature, rather than by defining it directly, so that programs linking the library are
+    built for the same transport.
   * ``KRPC_COMMUNICATION_CUSTOM`` -- Allows you to provide your own implementation for the
     communication mechanism.
   * ``KRPC_SINGLE_CONNECTION`` -- Only meaningful alongside ``KRPC_COMMUNICATION_CUSTOM``. A serial

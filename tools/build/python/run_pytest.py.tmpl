@@ -1,9 +1,9 @@
 """Extracts a python sdist and runs pytest on the package directory within it.
 
 Template instantiated by the py_test macro in //tools/build:python.bzl, which
-substitutes the sdist path and package directory name. The parameters are
-baked in rather than passed as arguments, as the test may be invoked via the
-client_test harness which does not forward arguments.
+substitutes the sdist path, the package directory name and which test files to
+run. The parameters are baked in rather than passed as arguments, as the test
+may be invoked via the client_test harness which does not forward arguments.
 
 Dependencies of the package under test must be provided as deps of the
 py_test target so they are already importable.
@@ -19,12 +19,19 @@ import pytest
 def main() -> int:
     sdist = "@SDIST@"
     pkg = "@PKG@"
+    tests = "@TESTS@".split()
     extract_dir = os.path.join(os.environ.get("TEST_TMPDIR", "."), "sdist")
     with tarfile.open(sdist) as tar:
         tar.extractall(extract_dir)
     pkg_dir = os.path.join(extract_dir, pkg)
     # Make the package under test importable
     sys.path.insert(0, pkg_dir)
+    # Which tests to run, named relative to the package directory. Naming none of
+    # them runs everything the package holds.
+    targets = [os.path.join(pkg_dir, test) for test in tests] or [pkg_dir]
+    for target in targets:
+        if not os.path.exists(target):
+            raise SystemExit("no such test: %s" % target)
     # Name the package's own pyproject.toml as the config file, which also makes
     # the package directory pytest's rootdir. Bazel extracts the sdist inside the
     # execroot, so left to search for one pytest settles on the repository root:
@@ -32,7 +39,7 @@ def main() -> int:
     # root collection at the execroot, where Bazel creates and deletes scratch
     # directories while other actions run.
     config = os.path.join(pkg_dir, "pyproject.toml")
-    return pytest.main(["--import-mode=importlib", "-c", config, pkg_dir])
+    return pytest.main(["--import-mode=importlib", "-c", config] + targets)
 
 
 if __name__ == "__main__":

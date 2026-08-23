@@ -1,13 +1,16 @@
 /* Benchmarks for the C-nano client, run by //tools/benchmarks:cnano.
  *
  * Measures what this client costs from inside it: the round trip for a procedure call, and what
- * a call carrying a collection of values costs. The runner starts a TestServer, passes the ports
- * in the environment and reads the JSON printed here; see tools/benchmarks/run_client.py for the
- * contract and for what happens to these numbers afterwards.
+ * a call carrying a collection of values costs. The runner starts a TestServer, says in the
+ * environment where it is listening, and reads the JSON printed here; see
+ * tools/benchmarks/run_client.py for the contract and for what happens to these numbers
+ * afterwards.
  *
- * The client is built for TCP/IP here rather than for a serial port, which is the only way the
+ * The client is built for a socket here rather than for a serial port, which is the only way the
  * figures mean anything next to the other clients': the server reads a serial port on a poll
- * whose interval is longer than everything measured here put together.
+ * whose interval is longer than everything measured here put together. Which socket is settled
+ * when this is compiled, as the cnano client picks its transport with a macro, so there is a
+ * program per transport and the runner runs both.
  */
 
 /* clock_gettime is POSIX rather than C. See the same note in src/communication.c. */
@@ -205,21 +208,52 @@ static void emit(const struct benchmark_case *cases, int count) {
   printf("]}\n");
 }
 
+/* Open the connection to the server the runner started, from wherever it said that is: the
+   socket path for the local socket build, the port for the TCP/IP one. */
+#if defined(KRPC_COMMUNICATION_LOCALSOCKET)
+
+/* A default path for the RPC socket, matching the one the server uses unless it was
+   configured with another. */
+static const char *default_rpc_path(void) {
+  static char path[256];
+  const char *directory = getenv("XDG_RUNTIME_DIR");
+  if (directory != NULL && directory[0] != '\0') {
+    snprintf(path, sizeof(path), "%s/krpc/rpc", directory);
+  } else {
+    const char *user = getenv("USER");
+    snprintf(path, sizeof(path), "/tmp/krpc-%s/rpc", user == NULL ? "" : user);
+  }
+  return path;
+}
+
+static krpc_error_t open_connection(void) {
+  const char *path = getenv("RPC_PATH");
+  return krpc_open(&connection, path == NULL ? default_rpc_path() : path);
+}
+
+#else
+
 static uint16_t port(const char *name, uint16_t fallback) {
   const char *value = getenv(name);
   return value == NULL ? fallback : (uint16_t)atoi(value);
 }
 
-int main(void) {
+static krpc_error_t open_connection(void) {
   krpc_connection_config_t config;
+  config.address = "127.0.0.1";
+  config.port = port("RPC_PORT", 50000);
+  return krpc_open(&connection, &config);
+}
+
+#endif
+
+int main(void) {
   struct benchmark_case cases[CASES];
   char list_name[64];
   int count = 0;
   int i;
 
-  config.address = "127.0.0.1";
-  config.port = port("RPC_PORT", 50000);
-  check(krpc_open(&connection, &config), "open");
+  check(open_connection(), "open");
   check(krpc_connect(connection, "cnano_client_benchmark"), "connect");
 
   list_argument.size = LIST_VALUES;

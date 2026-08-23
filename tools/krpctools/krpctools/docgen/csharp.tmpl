@@ -154,6 +154,25 @@
 {% endfor %}
 {% endmacro %}
 
+{% macro struct(x) %}{{ mark_documented(x) }}
+.. struct:: {{ x.name }}
+
+{% if x.deprecated %}{{ deprecated(x) | indent }}
+
+{% endif %}
+{{ gendoc(x.documentation) | indent }}
+
+{% if hasdoc(x.documentation, './remarks') %}{{ remarks(x.documentation) | indent }}{% endif %}
+{% for field in x.fields.values() %}{{ mark_documented(field) }}
+   .. property:: {{ domain.return_type(field.type) }} {{ field.name }} {{'{'}} get; set; {{'}'}}
+
+{% if field.deprecated %}{{ deprecated(field) | indent(width=6) }}
+
+{% endif %}
+{{ gendoc(field.documentation) | indent(width=6) }}
+{% endfor %}
+{% endmacro %}
+
 {% macro exception(x) %}{{ mark_documented(x) }}
 .. class:: {{ x.name }}
 

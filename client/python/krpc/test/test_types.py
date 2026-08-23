@@ -7,6 +7,7 @@ from krpc.types import (
     EnumerationType,
     MessageType,
     ClassBase,
+    StructType,
     TupleType,
     ListType,
     SetType,
@@ -94,6 +95,27 @@ class TestTypes(unittest.TestCase):
         self.assertEqual("doca", typ.python_type.a.__doc__)  # type: ignore[attr-defined]
         self.assertEqual("docb", typ.python_type.b.__doc__)  # type: ignore[attr-defined]
         self.assertEqual("docc", typ.python_type.c.__doc__)  # type: ignore[attr-defined]
+        typ2 = types.as_type(typ.protobuf_type)
+        self.assertEqual(typ, typ2)
+
+    def test_struct_types(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "StructName", "struct documentation")
+        self.assertTrue(isinstance(typ, StructType))
+        self.assertIsNone(typ.python_type)
+        self.assertFalse(typ.has_fields)
+        self.check_protobuf_type(
+            Type.STRUCT, "ServiceName", "StructName", 0, typ.protobuf_type
+        )
+        typ.set_fields([("count", types.uint32_type), ("name", types.string_type)])
+        self.assertTrue(typ.has_fields)
+        self.assertEqual(["count", "name"], typ.field_names)
+        self.assertEqual([types.uint32_type, types.string_type], list(typ.field_types))
+        self.assertEqual("struct documentation", typ.python_type.__doc__)
+        value = typ.python_type(count=42, name="jeb")
+        self.assertEqual(42, value.count)
+        self.assertEqual("jeb", value.name)
+        self.assertEqual((42, "jeb"), tuple(value))
         typ2 = types.as_type(typ.protobuf_type)
         self.assertEqual(typ, typ2)
 
@@ -204,6 +226,48 @@ class TestTypes(unittest.TestCase):
         self.assertTrue(isinstance(typ.value_type, ValueType))
         self.assertEqual(int, typ.value_type.python_type)
         self.check_protobuf_type(Type.UINT32, "", "", 0, typ.value_type.protobuf_type)
+
+    def test_struct_comparison(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "ComparableStruct")
+        typ.set_fields([("count", types.uint32_type), ("name", types.string_type)])
+        one = typ.python_type(1, "jeb")
+        same = typ.python_type(1, "jeb")
+        two = typ.python_type(2, "jeb")
+        self.assertEqual(one, same)
+        self.assertNotEqual(one, two)
+        # A structure is ordered and hashed as the tuple of its field values is, and equals
+        # that tuple
+        self.assertEqual((1, "jeb"), one)
+        self.assertLess(one, two)
+        self.assertGreater(two, one)
+        self.assertEqual([one, two], sorted([two, one]))
+        self.assertEqual(hash(one), hash(same))
+        self.assertEqual({one, two}, {one, same, two})
+
+    def test_struct_holding_an_unhashable_value(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "UnhashableStruct")
+        typ.set_fields([("items", types.list_type(types.sint32_type))])
+        value = typ.python_type([1, 2])
+        self.assertEqual(typ.python_type([1, 2]), value)
+        # A list cannot be hashed, so neither can a structure holding one, exactly as a
+        # tuple holding one cannot
+        self.assertRaises(TypeError, hash, value)
+        self.assertRaises(TypeError, hash, ([1, 2],))
+
+    def test_coerce_to_struct(self) -> None:
+        types = Types()
+        typ = types.struct_type("ServiceName", "StructName")
+        typ.set_fields([("count", types.uint32_type), ("name", types.string_type)])
+        expected = typ.python_type(count=42, name="jeb")
+        for value in ((42, "jeb"), [42, "jeb"]):
+            coerced_value = types.coerce_to(value, typ)
+            self.assertEqual(expected, coerced_value)
+            self.assertEqual(typ.python_type, type(coerced_value))
+        # A value with the wrong number of fields is not a value of the structure
+        self.assertRaises(ValueError, types.coerce_to, (42,), typ)
+        self.assertRaises(ValueError, types.coerce_to, (42, "jeb", 1), typ)
 
     def test_coerce_to(self) -> None:
         types = Types()

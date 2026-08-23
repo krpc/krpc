@@ -368,6 +368,7 @@ with the format:
      string documentation = 6;
      bool deprecated = 7;
      string deprecated_reason = 8;
+     repeated Struct structs = 9;
    }
 
 The fields are:
@@ -385,6 +386,9 @@ The fields are:
 * ``exceptions`` - A list of ``Exception`` messages, one for each :csharp:attr:`KRPCException`
   defined by the service.
 
+* ``structs`` - A list of ``Struct`` messages, one for each :csharp:attr:`KRPCStruct`
+  defined by the service.
+
 * ``documentation`` - Documentation for the service, as `C# XML documentation`_.
 
 * ``deprecated`` - Whether the service is deprecated. Deprecated services remain fully functional;
@@ -393,7 +397,7 @@ The fields are:
 * ``deprecated_reason`` - If the service is deprecated, the reason for its deprecation. May be empty.
 
 .. note:: See the :ref:`extending` documentation for more details about :csharp:attr:`KRPCClass`,
-          :csharp:attr:`KRPCEnum` and :csharp:attr:`KRPCException`.
+          :csharp:attr:`KRPCEnum`, :csharp:attr:`KRPCStruct` and :csharp:attr:`KRPCException`.
 
 Procedures
 ^^^^^^^^^^
@@ -561,6 +565,79 @@ The fields are:
 * ``deprecated_reason`` - If the enumeration is deprecated, the reason for its deprecation. May be
   empty.
 
+.. _communication-protocol-structures:
+
+Structures
+^^^^^^^^^^
+
+A structure is a compound value with named fields. Unlike a class, whose value on the wire is an
+identifier for an object that stays on the server, a structure's value is the values of its fields,
+sent inline. Details about each :csharp:attr:`KRPCStruct` are specified in a ``Struct`` message,
+with the format:
+
+.. code-block:: protobuf
+
+   message Struct {
+     string name = 1;
+     repeated StructField fields = 2;
+     string documentation = 3;
+     bool deprecated = 4;
+     string deprecated_reason = 5;
+   }
+
+   message StructField {
+     string name = 1;
+     Type type = 2;
+     string documentation = 3;
+     bool deprecated = 4;
+     string deprecated_reason = 5;
+   }
+
+The fields are:
+
+* ``name`` - The name of the structure.
+
+* ``fields`` - A list of ``StructField`` messages, one for each field of the structure, in the
+  order their values are encoded in. The fields are:
+
+  * ``name`` - The name of the field.
+
+  * ``type`` - The type of the field, as a :ref:`Type message
+    <communication-protocol-type>`. A field may have any type a parameter or return value may
+    have, including a class, a collection or another structure.
+
+  * ``documentation`` - Documentation for the field, as `C# XML documentation`_.
+
+  * ``deprecated`` - Whether the field is deprecated. Deprecated fields remain fully functional;
+    this field is informational.
+
+  * ``deprecated_reason`` - If the field is deprecated, the reason for its deprecation. May be
+    empty.
+
+* ``documentation`` - Documentation for the structure, as `C# XML documentation`_.
+
+* ``deprecated`` - Whether the structure is deprecated. Deprecated structures remain fully
+  functional; this field is informational.
+
+* ``deprecated_reason`` - If the structure is deprecated, the reason for its deprecation. May be
+  empty.
+
+A value of a structure type is encoded as a ``Tuple`` message whose items are the encoded values of
+the structure's fields, in the order the ``fields`` list gives them. This is the same encoding as a
+tuple of the field types, so a client can encode and decode a structure with the codec it already
+has for tuples, and the field names exist only in the definition above.
+
+Two rules follow from that encoding, and a client author should rely on them:
+
+* Fields are only ever appended to a structure. A value may therefore carry more items than the
+  fields a client knows about, when it was generated against an older definition of the structure,
+  and those extra items are to be ignored. Fewer items than the known fields means the definitions
+  do not match, and is an error.
+
+* A field is never null. Null is signaled out-of-band by the ``is_null`` field of the enclosing
+  ``Argument`` or ``ProcedureResult`` message, which can say that a whole structure value is null
+  but says nothing about its fields.
+
 Exceptions
 ^^^^^^^^^^
 
@@ -640,6 +717,7 @@ The ``GetServices`` procedure returns type information about parameters, return 
        // Objects
        CLASS = 100;
        ENUMERATION = 101;
+       STRUCT = 102;
 
        // Messages
        EVENT = 200;
@@ -659,9 +737,11 @@ The ``GetServices`` procedure returns type information about parameters, return 
 The ``code`` field specifies the type. ``NONE`` is used as the return type for procedures that do
 not return a value.
 
-For ``CLASS`` and ``ENUMERATION`` types the ``service`` and ``name`` fields specify the service that
-defines the class/enumeration and the name of the class/enumeration. For all other types these
-fields are empty.
+For ``CLASS``, ``ENUMERATION`` and ``STRUCT`` types the ``service`` and ``name`` fields specify the
+service that defines the class, enumeration or structure and its name. For all other types these
+fields are empty. A ``STRUCT`` type carries no more than that, so the fields of a structure have to
+be read from the :ref:`Struct message <communication-protocol-structures>` in the definition of the
+service that names it.
 
 For collection types the ``types`` repeated field will contain the sub-types:
 

@@ -23,6 +23,7 @@ Types.STRING = schema.TYPE_TYPECODE_STRING_ENUM.number
 Types.BYTES = schema.TYPE_TYPECODE_BYTES_ENUM.number
 Types.CLASS = schema.TYPE_TYPECODE_CLASS_ENUM.number
 Types.ENUMERATION = schema.TYPE_TYPECODE_ENUMERATION_ENUM.number
+Types.STRUCT = schema.TYPE_TYPECODE_STRUCT_ENUM.number
 Types.TUPLE = schema.TYPE_TYPECODE_TUPLE_ENUM.number
 Types.LIST = schema.TYPE_TYPECODE_LIST_ENUM.number
 Types.SET = schema.TYPE_TYPECODE_SET_ENUM.number
@@ -50,6 +51,24 @@ MESSAGE_TYPES:set(Types.PROCEDURE_CALL, schema.ProcedureCall)
 MESSAGE_TYPES:set(Types.STREAM, schema.Stream)
 MESSAGE_TYPES:set(Types.SERVICES, schema.Services)
 MESSAGE_TYPES:set(Types.STATUS, schema.Status)
+
+-- Every type code a type object can be built for. A definition from a newer server may name a
+-- type code that is not among them, which is what makes a definition partly unusable rather
+-- than malformed
+KNOWN_TYPE_CODES = Set{
+  Types.CLASS, Types.ENUMERATION, Types.STRUCT,
+  Types.TUPLE, Types.LIST, Types.SET, Types.DICTIONARY
+}
+for code in VALUE_TYPES:iter() do
+  KNOWN_TYPE_CODES[code] = true
+end
+for code in MESSAGE_TYPES:iter() do
+  KNOWN_TYPE_CODES[code] = true
+end
+
+--- The start of the error raised for a type this client cannot use. What names such a type is
+--- skipped rather than failing the whole service, so the error has to be recognizable.
+Types.UNKNOWN_TYPE_ERROR = 'Unknown type'
 
 CODE_TO_STRING = Map{}
 CODE_TO_STRING:set(Types.DOUBLE, 'double')
@@ -99,11 +118,23 @@ function _set_protobuf_type(src, dst)
   end
 end
 
+-- The key a type is cached under, built from the type code, the names and the types nested
+-- inside it in turn. It is built here rather than by serializing the message, as the protobuf
+-- library writes the fields of a message in the order its own table happens to hold them,
+-- which is not the same order every time.
+local function _type_key(protobuf_type)
+  local parts = { protobuf_type.code, protobuf_type.service, protobuf_type.name }
+  for _, typ in ipairs(protobuf_type.types) do
+    parts[#parts + 1] = '(' .. _type_key(typ) .. ')'
+  end
+  return table.concat(parts, ',')
+end
+
 function Types:as_type(protobuf_type)
   -- Return a type object given a protocol buffer type
 
   -- Get cached type
-  local key = protobuf_type:SerializeToString()
+  local key = _type_key(protobuf_type)
   if self._types:get(key) then
     return self._types:get(key)
   end
@@ -115,6 +146,8 @@ function Types:as_type(protobuf_type)
     typ = Types.ClassType(protobuf_type)
   elseif protobuf_type.code == Types.ENUMERATION then
     typ = Types.EnumerationType(protobuf_type)
+  elseif protobuf_type.code == Types.STRUCT then
+    typ = Types.StructType(protobuf_type)
   elseif protobuf_type.code == Types.TUPLE then
     typ = Types.TupleType(protobuf_type, self)
   elseif protobuf_type.code == Types.LIST then
@@ -126,7 +159,7 @@ function Types:as_type(protobuf_type)
   elseif MESSAGE_TYPES:get(protobuf_type.code) then
     typ = Types.MessageType(protobuf_type)
   else
-    error('Invalid type')
+    error(Types.UNKNOWN_TYPE_ERROR .. ' code ' .. tostring(protobuf_type.code))
   end
 
   self._types:set(key, typ)
@@ -186,6 +219,11 @@ end
 function Types:enumeration_type(service, name)
   -- Get an enumeration type
   return self:as_type(_protobuf_type(Types.ENUMERATION, service, name))
+end
+
+function Types:struct_type(service, name)
+  -- Get a struct type
+  return self:as_type(_protobuf_type(Types.STRUCT, service, name))
 end
 
 function Types:tuple_type(value_types)
@@ -266,6 +304,15 @@ function Types:coerce_to(value, typ)
     end
     return result
   end
+  -- Coerce lists (with one element per field) to structs, taking their elements as the
+  -- fields in order
+  if type(value) == 'table' and value._object_id ~= 0 and typ:is_a(Types.StructType) and #(value) == #(typ.field_types) then
+    local values = {}
+    for i, x in ipairs(value) do
+      values[i] = self:coerce_to(x, typ.field_types[i])
+    end
+    return typ.lua_type(unpack(values))
+  end
   error('Failed to coerce value ' .. tostring(value) .. ' of type ' .. type(value) .. ' to type ' .. tostring(typ))
 end
 
@@ -280,6 +327,14 @@ Types.Enum = class()
 
 function Types.Enum:_init(value)
   self.value = value
+end
+
+local function _create_struct_type(service_name, struct_name, field_names)
+  local cls = class(Types.StructBase)
+  cls['_service_name'] = service_name
+  cls['_struct_name'] = struct_name
+  cls['_field_names'] = field_names
+  return cls
 end
 
 local function _create_enum_type(service_name, class_name, values)
@@ -356,6 +411,40 @@ function Types.EnumerationType:set_values(values)
   self.lua_type = _create_enum_type(self._service_name, self._class_name, values)
 end
 
+Types.StructType = class(Types.TypeBase)
+
+function Types.StructType:_init(protobuf_type)
+  if protobuf_type.code ~= Types.STRUCT then
+    error('Not a struct type')
+  end
+  if protobuf_type.service == '' then
+    error('Struct type has no service name')
+  end
+  if protobuf_type.name == '' then
+    error('Struct type has no struct name')
+  end
+  self._service_name = protobuf_type.service
+  self._struct_name = protobuf_type.name
+  -- The names and types of the fields, in the order their values are encoded in. Empty until
+  -- set_fields is called, as the field list is not carried by the type itself
+  self.field_names = List{}
+  self.field_types = List{}
+  local type_string = 'Struct(' .. protobuf_type.service .. '.' .. protobuf_type.name .. ')'
+  self:super(protobuf_type, nil, type_string)
+end
+
+--- Set the fields of the structure, as a list of {name, type} pairs in the order the
+--- structure declares them
+function Types.StructType:set_fields(fields)
+  self.field_names = List{}
+  self.field_types = List{}
+  for _, field in ipairs(fields) do
+    self.field_names:append(field[1])
+    self.field_types:append(field[2])
+  end
+  self.lua_type = _create_struct_type(self._service_name, self._struct_name, self.field_names)
+end
+
 Types.TupleType = class(Types.TypeBase)
 
 function Types.TupleType:_init(protobuf_type, types)
@@ -426,6 +515,44 @@ function Types.MessageType:_init(protobuf_type)
   self:super(protobuf_type, MESSAGE_TYPES:get(protobuf_type.code), CODE_TO_STRING:get(protobuf_type.code))
 end
 
+--- Whether a type object can be built for the given protocol buffer type. It cannot when the
+--- type, or one it contains, has a type code this client does not know about.
+function Types.is_a_known_type(protobuf_type)
+  if not KNOWN_TYPE_CODES[protobuf_type.code] then
+    return false
+  end
+  for _, typ in ipairs(protobuf_type.types) do
+    if not Types.is_a_known_type(typ) then
+      return false
+    end
+  end
+  return true
+end
+
+--- Raise an error if the given type, or a type it contains, is a structure whose definition
+--- was skipped and whose fields are therefore not known. Whatever names such a type cannot be
+--- encoded or decoded, and is skipped in turn.
+function Types.check_type_is_known(typ)
+  if typ:is_a(Types.StructType) then
+    if typ.lua_type == nil then
+      error(Types.UNKNOWN_TYPE_ERROR .. ': the definition of the struct ' ..
+            typ._service_name .. '.' .. typ._struct_name .. ' was skipped')
+    end
+    for _, field_type in ipairs(typ.field_types) do
+      Types.check_type_is_known(field_type)
+    end
+  elseif typ:is_a(Types.TupleType) then
+    for _, value_type in ipairs(typ.value_types) do
+      Types.check_type_is_known(value_type)
+    end
+  elseif typ:is_a(Types.ListType) or typ:is_a(Types.SetType) then
+    Types.check_type_is_known(typ.value_type)
+  elseif typ:is_a(Types.DictionaryType) then
+    Types.check_type_is_known(typ.key_type)
+    Types.check_type_is_known(typ.value_type)
+  end
+end
+
 Types.DynamicType = class(class.properties)
 
 --- Add a method
@@ -451,6 +578,56 @@ function Types.DynamicType:_add_property(name, getter, setter)
   if setter then
     self['set_' .. name] = setter
   end
+end
+
+Types.StructBase = class()
+
+--- A structure value, built from the values of its fields in the order the structure
+--- declares them
+function Types.StructBase:_init(...)
+  local values = {...}
+  for i, name in ipairs(self._field_names) do
+    self[name] = values[i]
+  end
+end
+
+function Types.StructBase:__eq(other)
+  for _, name in ipairs(self._field_names) do
+    if self[name] ~= other[name] then
+      return false
+    end
+  end
+  return true
+end
+
+--- Ordered by the fields in turn, which is how a tuple of the same values would be ordered
+--- if Lua ordered tables. A field whose type Lua does not order, such as a collection or an
+--- enumeration value, raises when the two values differ. Two values that are unequal but
+--- order neither way, as two NaNs are, move on to the next field.
+function Types.StructBase:__lt(other)
+  for _, name in ipairs(self._field_names) do
+    if self[name] ~= other[name] then
+      if self[name] < other[name] then
+        return true
+      end
+      if other[name] < self[name] then
+        return false
+      end
+    end
+  end
+  return false
+end
+
+function Types.StructBase:__le(other)
+  return not (other < self)
+end
+
+function Types.StructBase:__tostring()
+  local parts = {}
+  for i, name in ipairs(self._field_names) do
+    parts[i] = name .. ' = ' .. tostring(self[name])
+  end
+  return self._struct_name .. '{' .. stringx.join(', ', parts) .. '}'
 end
 
 Types.ClassBase = class(Types.DynamicType)
