@@ -922,7 +922,7 @@ Part
    .. method:: center_of_mass(reference_frame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :meth:`SpaceCenter.Part.position`.
+      If the part is physicsless in flight, this is equivalent to :meth:`SpaceCenter.Part.position`.
 
       :param SpaceCenter.ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.

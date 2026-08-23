@@ -993,9 +993,10 @@ plane hangar reports the space plane hangar.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the editor scene’s world-space center of mass expressed in
-<em>referenceFrame</em>. A celestial body frame is not a
-position on that body: the editor is not placed in the solar system
-the way a vessel in flight is.</p>
+<em>referenceFrame</em>. A part’s
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_ReferenceFrame()</span></code> reports the offset from that
+part. A celestial body frame is not a position on that body: the
+editor is not placed in the solar system the way a vessel in flight is.</p>
 </div>
 </dd></dl>
 
@@ -1061,10 +1062,10 @@ that make up the vessel.</p>
 <p class="admonition-title">Note</p>
 <p>Only the parts of <a class="reference internal" href="parts.html#c.krpc_SpaceCenter_Part_t" title="krpc_SpaceCenter_Part_t"><code class="xref c c-type docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_t</span></code></a> that describe the design are
 available in the editor. Those that need a vessel in flight or running physics,
-such as <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Position()</span></code> and the thermal members, are
-restricted to the flight scene. <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia()</span></code>
-and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_InertiaTensor()</span></code> are available, as they can
-be worked out from the design.</p>
+such as the thermal members, are restricted to the flight scene.
+<code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_Position()</span></code>, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_CenterOfMass()</span></code>,
+the part’s reference frames, <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_MomentOfInertia()</span></code>
+and <code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Part_InertiaTensor()</span></code> are available.</p>
 </div>
 </dd></dl>
 

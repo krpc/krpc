@@ -920,7 +920,7 @@ Part
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -932,11 +932,11 @@ Part
    .. method:: org.javatuples.Triplet<Double,Double,Double> centerOfMass(ReferenceFrame referenceFrame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :meth:`Part.position(ReferenceFrame)`.
+      If the part is physicsless in flight, this is equivalent to :meth:`Part.position(ReferenceFrame)`.
 
       :param ReferenceFrame referenceFrame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: org.javatuples.Pair<org.javatuples.Triplet<Double,Double,Double>,org.javatuples.Triplet<Double,Double,Double>> boundingBox(ReferenceFrame referenceFrame)
 
@@ -1034,7 +1034,7 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1059,7 +1059,7 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::

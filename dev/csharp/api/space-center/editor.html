@@ -968,9 +968,10 @@ plane hangar reports the space plane hangar.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the editor scene’s world-space center of mass expressed in
-<em>referenceFrame</em>. A celestial body frame is not a
-position on that body: the editor is not placed in the solar system
-the way a vessel in flight is.</p>
+<em>referenceFrame</em>. A part’s
+<a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Part.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.ReferenceFrame</span></code></a> reports the offset from that
+part. A celestial body frame is not a position on that body: the
+editor is not placed in the solar system the way a vessel in flight is.</p>
 </div>
 </dd></dl>
 
@@ -1036,10 +1037,10 @@ that make up the vessel.</p>
 <p class="admonition-title">Note</p>
 <p>Only the parts of <a class="reference internal" href="parts.html#class-KRPC.Client.Services.SpaceCenter.Part" title="KRPC.Client.Services.SpaceCenter.Part class"><code class="xref csharp csharp-type docutils literal notranslate"><span class="pre">Part</span></code></a> that describe the design are
 available in the editor. Those that need a vessel in flight or running physics,
-such as <a class="reference internal" href="parts.html#method-KRPC.Client.Services.SpaceCenter.Part.Position" title="KRPC.Client.Services.SpaceCenter.Part.Position method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Part.Position</span></code></a> and the thermal members, are
-restricted to the flight scene. <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia" title="KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.MomentOfInertia</span></code></a>
-and <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.InertiaTensor" title="KRPC.Client.Services.SpaceCenter.Part.InertiaTensor property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.InertiaTensor</span></code></a> are available, as they can
-be worked out from the design.</p>
+such as the thermal members, are restricted to the flight scene.
+<a class="reference internal" href="parts.html#method-KRPC.Client.Services.SpaceCenter.Part.Position" title="KRPC.Client.Services.SpaceCenter.Part.Position method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Part.Position</span></code></a>, <a class="reference internal" href="parts.html#method-KRPC.Client.Services.SpaceCenter.Part.CenterOfMass" title="KRPC.Client.Services.SpaceCenter.Part.CenterOfMass method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Part.CenterOfMass</span></code></a>,
+the part’s reference frames, <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia" title="KRPC.Client.Services.SpaceCenter.Part.MomentOfInertia property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.MomentOfInertia</span></code></a>
+and <a class="reference internal" href="parts.html#property-KRPC.Client.Services.SpaceCenter.Part.InertiaTensor" title="KRPC.Client.Services.SpaceCenter.Part.InertiaTensor property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Part.InertiaTensor</span></code></a> are available.</p>
 </div>
 </dd></dl>
 

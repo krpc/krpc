@@ -844,7 +844,7 @@ Part
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -856,14 +856,14 @@ Part
    .. function:: std::tuple<double, double, double> center_of_mass(ReferenceFrame reference_frame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :func:`Part::position`.
+      If the part is physicsless in flight, this is equivalent to :func:`Part::position`.
 
       :Parameters:
 
        * **reference_frame** -- The reference frame that the returned position vector is in.
 
       :returns: The position as a vector.
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. function:: std::tuple<std::tuple<double, double, double>, std::tuple<double, double, double>> bounding_box(ReferenceFrame reference_frame)
 
@@ -976,7 +976,7 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1000,7 +1000,7 @@ Part
       * The axes rotate with the part.
       * The x, y and z axis directions depend on the design of the part.
 
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::

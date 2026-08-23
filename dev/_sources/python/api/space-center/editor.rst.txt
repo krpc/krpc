@@ -226,9 +226,10 @@ Editor
       .. note::
 
          This is the editor scene's world-space center of mass expressed in
-         *reference_frame*. A celestial body frame is not a
-         position on that body: the editor is not placed in the solar system
-         the way a vessel in flight is.
+         *reference_frame*. A part's
+         :attr:`Part.reference_frame` reports the offset from that
+         part. A celestial body frame is not a position on that body: the
+         editor is not placed in the solar system the way a vessel in flight is.
 
    .. attribute:: moment_of_inertia
 
@@ -278,10 +279,10 @@ Editor
 
       .. note:: Only the parts of :class:`Part` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
-                such as :meth:`Part.position` and the thermal members, are
-                restricted to the flight scene. :attr:`Part.moment_of_inertia`
-                and :attr:`Part.inertia_tensor` are available, as they can
-                be worked out from the design.
+                such as the thermal members, are restricted to the flight scene.
+                :meth:`Part.position`, :meth:`Part.center_of_mass`,
+                the part's reference frames, :attr:`Part.moment_of_inertia`
+                and :attr:`Part.inertia_tensor` are available.
 
    .. attribute:: resources
 

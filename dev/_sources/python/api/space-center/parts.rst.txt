@@ -1023,7 +1023,7 @@ Part
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1035,12 +1035,12 @@ Part
    .. method:: center_of_mass(reference_frame)
 
       The position of the parts center of mass in the given reference frame.
-      If the part is physicsless, this is equivalent to :meth:`Part.position`.
+      If the part is physicsless in flight, this is equivalent to :meth:`Part.position`.
 
       :param ReferenceFrame reference_frame: The reference frame that the returned position vector is in.
       :returns: The position as a vector.
       :rtype: tuple(float, float, float)
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
    .. method:: bounding_box(reference_frame)
 
@@ -1147,7 +1147,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ReferenceFrame`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::
@@ -1173,7 +1173,7 @@ Part
 
       :Attribute: Read-only, cannot be set
       :rtype: :class:`ReferenceFrame`
-      :Game Scenes: Flight
+      :Game Scenes: Flight, Editor Vab, Editor Sph
 
 
       .. note::

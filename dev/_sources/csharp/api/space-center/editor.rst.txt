@@ -212,9 +212,10 @@ Editor
       .. note::
 
          This is the editor scene's world-space center of mass expressed in
-         *referenceFrame*. A celestial body frame is not a
-         position on that body: the editor is not placed in the solar system
-         the way a vessel in flight is.
+         *referenceFrame*. A part's
+         :prop:`Part.ReferenceFrame` reports the offset from that
+         part. A celestial body frame is not a position on that body: the
+         editor is not placed in the solar system the way a vessel in flight is.
 
    .. property:: System.Tuple<double,double,double> MomentOfInertia { get; }
 
@@ -254,10 +255,10 @@ Editor
 
       .. note:: Only the parts of :type:`Part` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
-                such as :meth:`Part.Position` and the thermal members, are
-                restricted to the flight scene. :prop:`Part.MomentOfInertia`
-                and :prop:`Part.InertiaTensor` are available, as they can
-                be worked out from the design.
+                such as the thermal members, are restricted to the flight scene.
+                :meth:`Part.Position`, :meth:`Part.CenterOfMass`,
+                the part's reference frames, :prop:`Part.MomentOfInertia`
+                and :prop:`Part.InertiaTensor` are available.
 
    .. property:: Resources Resources { get; }
 

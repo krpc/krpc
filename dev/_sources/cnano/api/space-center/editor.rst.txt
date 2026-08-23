@@ -217,9 +217,10 @@ Editor
       .. note::
 
          This is the editor scene's world-space center of mass expressed in
-         *referenceFrame*. A celestial body frame is not a
-         position on that body: the editor is not placed in the solar system
-         the way a vessel in flight is.
+         *referenceFrame*. A part's
+         :func:`krpc_SpaceCenter_Part_ReferenceFrame` reports the offset from that
+         part. A celestial body frame is not a position on that body: the
+         editor is not placed in the solar system the way a vessel in flight is.
 
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_MomentOfInertia(krpc_connection_t connection, krpc_tuple_double_double_double_t * result)
 
@@ -259,10 +260,10 @@ Editor
 
       .. note:: Only the parts of :type:`krpc_SpaceCenter_Part_t` that describe the design are
                 available in the editor. Those that need a vessel in flight or running physics,
-                such as :func:`krpc_SpaceCenter_Part_Position` and the thermal members, are
-                restricted to the flight scene. :func:`krpc_SpaceCenter_Part_MomentOfInertia`
-                and :func:`krpc_SpaceCenter_Part_InertiaTensor` are available, as they can
-                be worked out from the design.
+                such as the thermal members, are restricted to the flight scene.
+                :func:`krpc_SpaceCenter_Part_Position`, :func:`krpc_SpaceCenter_Part_CenterOfMass`,
+                the part's reference frames, :func:`krpc_SpaceCenter_Part_MomentOfInertia`
+                and :func:`krpc_SpaceCenter_Part_InertiaTensor` are available.
 
    .. function:: krpc_error_t krpc_SpaceCenter_EditorVessel_Resources(krpc_connection_t connection, krpc_SpaceCenter_Resources_t * result)
 

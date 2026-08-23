@@ -993,9 +993,10 @@ plane hangar reports the space plane hangar.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This is the editor scene’s world-space center of mass expressed in
-<em>referenceFrame</em>. A celestial body frame is not a
-position on that body: the editor is not placed in the solar system
-the way a vessel in flight is.</p>
+<em>referenceFrame</em>. A part’s
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Part.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getReferenceFrame()</span></code></a> reports the offset from that
+part. A celestial body frame is not a position on that body: the
+editor is not placed in the solar system the way a vessel in flight is.</p>
 </div>
 </dd></dl>
 
@@ -1061,10 +1062,10 @@ that make up the vessel.</p>
 <p class="admonition-title">Note</p>
 <p>Only the parts of <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part" title="krpc.client.services.SpaceCenter.Part"><code class="xref java java-type docutils literal notranslate"><span class="pre">Part</span></code></a> that describe the design are
 available in the editor. Those that need a vessel in flight or running physics,
-such as <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.position(ReferenceFrame)</span></code></a> and the thermal members, are
-restricted to the flight scene. <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Part.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getMomentOfInertia()</span></code></a>
-and <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getInertiaTensor()" title="krpc.client.services.SpaceCenter.Part.getInertiaTensor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getInertiaTensor()</span></code></a> are available, as they can
-be worked out from the design.</p>
+such as the thermal members, are restricted to the flight scene.
+<a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.position(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.position(ReferenceFrame)</span></code></a>, <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.centerOfMass(ReferenceFrame)" title="krpc.client.services.SpaceCenter.Part.centerOfMass(ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.centerOfMass(ReferenceFrame)</span></code></a>,
+the part’s reference frames, <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getMomentOfInertia()" title="krpc.client.services.SpaceCenter.Part.getMomentOfInertia()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getMomentOfInertia()</span></code></a>
+and <a class="reference internal" href="parts.html#krpc.client.services.SpaceCenter.Part.getInertiaTensor()" title="krpc.client.services.SpaceCenter.Part.getInertiaTensor()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Part.getInertiaTensor()</span></code></a> are available.</p>
 </div>
 </dd></dl>
 
