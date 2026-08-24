@@ -1,7 +1,9 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -13,9 +15,10 @@ namespace KRPC.SpaceCenter.Services
     /// <remarks>
     /// The object names the approach rather than describing it once: each member
     /// estimates the time of closest approach from where the two orbits are now, and
-    /// describes the state at that time. The estimate moves as the game runs, and
-    /// members read one after another can differ a little as a result. Relative
-    /// quantities are the target relative to the orbiting object (target minus self).
+    /// describes the state at that time. The estimate moves as the game runs, so
+    /// members read at different moments can differ a little; members read in one
+    /// physics tick all describe the same estimate. Relative quantities are the target
+    /// relative to the orbiting object (target minus self).
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public class ClosestApproach : Equatable<ClosestApproach>, IGameObjectState
@@ -25,6 +28,12 @@ namespace KRPC.SpaceCenter.Services
         // Which of the successive approaches this is: the search covers one orbital
         // period, starting this many periods from now.
         readonly int orbitsAhead;
+        // The approach as it was last solved, with the physics tick and the game state it
+        // was solved in.
+        float solvedFixedTime = float.NaN;
+        uint solvedGeneration;
+        double solvedUT;
+        double solvedDistance;
 
         internal ClosestApproach (Orbit orbit, Orbit target, int orbitsAhead)
         {
@@ -84,11 +93,20 @@ namespace KRPC.SpaceCenter.Services
         }
 
         // The universal time of the closest approach, and the distance there, estimated
-        // from where the two orbits are now. Members that need both take them from one
-        // call, so that they describe the same moment.
+        // from where the two orbits are now. The estimate is a search over an orbital
+        // period, sampling both orbits at some seventy points, so it costs far more than
+        // any member that reads it. Nothing it reads moves within a physics tick, so it
+        // is solved once per tick: the members read in a tick share that one search, and
+        // all describe the same moment.
         double Solve (out double approachDistance)
         {
-            return Orbit.CalcClosestAproach (orbit, target, BeginTime, out approachDistance);
+            if (solvedFixedTime != Time.fixedTime || solvedGeneration != GameState.Generation) {
+                solvedUT = Orbit.CalcClosestAproach (orbit, target, BeginTime, out solvedDistance);
+                solvedFixedTime = Time.fixedTime;
+                solvedGeneration = GameState.Generation;
+            }
+            approachDistance = solvedDistance;
+            return solvedUT;
         }
 
         double Solve ()
