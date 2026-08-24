@@ -1,6 +1,8 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 
 namespace KRPC.SpaceCenter.Services
 {
@@ -14,14 +16,25 @@ namespace KRPC.SpaceCenter.Services
         // craft, so unlike the parts it is not something the game tears down.
         readonly PartResourceDefinition internalResource;
         readonly float transferRate;
+        // The game state the transfer was started in. A transfer is let go of when the
+        // flight it runs in is left as much as when its client removes it, and the two
+        // look the same to the object, so the state having moved on is what tells them
+        // apart when there is a client left to say it to.
+        readonly uint generation = GameState.Generation;
+        // Whether the client has removed the transfer. A finished transfer moves nothing
+        // and goes on standing for a pair of parts the game may keep for hours, so the
+        // client saying it is done with it is the only thing that can retire the object.
+        bool removed;
+        bool complete;
+        float amount;
 
-        ResourceTransfer (Part fromPart, Part toPart, PartResourceDefinition resource, float amount)
+        ResourceTransfer (Part fromPart, Part toPart, PartResourceDefinition resource, float maxAmount)
         {
             internalResource = resource;
             FromPart = new Parts.Part (fromPart);
             ToPart = new Parts.Part (toPart);
             Resource = resource.name;
-            TotalAmount = amount;
+            TotalAmount = maxAmount;
             // Compute the transfer rate (in units/sec) as one tenth the size of the destination tank (determined experimentally from the KSP transfer UI)
             var totalStorage = (float)toPart.Resources.Get (resource.id).maxAmount;
             transferRate = 0.1f * totalStorage;
@@ -30,10 +43,28 @@ namespace KRPC.SpaceCenter.Services
 
         /// <summary>
         /// What the game holds for the transfer, which needs both of the parts it runs
-        /// between and so is as alive as the less alive of them.
+        /// between and so is as alive as the less alive of them. A transfer the client
+        /// has removed is gone whatever the parts are doing.
         /// </summary>
         public GameObjectState GameObjectState {
-            get { return FromPart.GameObjectState.LeastAlive (ToPart.GameObjectState); }
+            get {
+                if (removed)
+                    return GameObjectState.Destroyed;
+                return FromPart.GameObjectState.LeastAlive (ToPart.GameObjectState);
+            }
+        }
+
+        /// <summary>
+        /// Raise if the transfer has been let go of.
+        /// </summary>
+        void CheckExists ()
+        {
+            if (!removed)
+                return;
+            throw new ObjectDestroyedException (
+                generation == GameState.Generation
+                ? "The resource transfer no longer exists, as it has been removed."
+                : "The resource transfer no longer exists, as the flight it ran in was left.");
         }
 
         /// <summary>
@@ -49,9 +80,11 @@ namespace KRPC.SpaceCenter.Services
         /// <param name="resource">The name of the resource to transfer.</param>
         /// <param name="maxAmount">The maximum amount of resource to transfer.</param>
         /// <remarks>
-        /// Use <see cref="Cancel"/> to stop the transfer before it finishes. The transfer is
-        /// also canceled if the client that started it disconnects. A canceled transfer is
-        /// marked as complete.
+        /// Use <see cref="Cancel"/> to stop the transfer before it finishes; a canceled
+        /// transfer is marked as complete. Use <see cref="Remove"/> to release the memory
+        /// the server holds for a transfer that is done with. A transfer is stopped and
+        /// removed if the client that started it disconnects, or if the flight it runs in
+        /// is left.
         /// </remarks>
         [KRPCMethod]
         public static ResourceTransfer Start (Parts.Part fromPart, Parts.Part toPart, string resource, float maxAmount)
@@ -99,12 +132,13 @@ namespace KRPC.SpaceCenter.Services
         public float TotalAmount { get; private set; }
 
         /// <summary>
-        /// Whether the transfer has completed. Also becomes true if the transfer is canceled,
-        /// either by calling <see cref="Cancel"/> or because the client that started it
-        /// disconnected.
+        /// Whether the transfer has completed. Also becomes true if the transfer is
+        /// canceled by calling <see cref="Cancel"/>.
         /// </summary>
         [KRPCProperty]
-        public bool Complete { get; private set; }
+        public bool Complete {
+            get { CheckExists (); return complete; }
+        }
 
         /// <summary>
         /// Cancel the transfer. No more of the resource is moved and
@@ -113,14 +147,49 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Cancel ()
         {
-            Complete = true;
+            CheckExists ();
+            complete = true;
+        }
+
+        /// <summary>
+        /// Remove the transfer, releasing the memory the server holds for it. The
+        /// transfer is canceled if it has not finished.
+        /// </summary>
+        /// <remarks>
+        /// Any further use of this object throws an exception. A transfer that is left is
+        /// held until the parts it runs between are gone, the flight it runs in is left,
+        /// or the client that started it disconnects, whichever comes first; the first of
+        /// those may be the rest of the flight away.
+        /// </remarks>
+        [KRPCMethod]
+        public void Remove ()
+        {
+            CheckExists ();
+            // The addon runs the transfer and has nothing left to do for one the client
+            // is finished with. Taking it out is also what asks for the sweep that drops
+            // it from the object store.
+            ResourceTransferAddon.Remove (this);
+            Release ();
+        }
+
+        /// <summary>
+        /// Stop the transfer and let go of it, so that it leaves the object store at the
+        /// next sweep. Called for a transfer the client that started it has finished
+        /// with, and for one whose client has disconnected.
+        /// </summary>
+        internal void Release ()
+        {
+            complete = true;
+            removed = true;
         }
 
         /// <summary>
         /// The amount of the resource that has been transferred.
         /// </summary>
         [KRPCProperty]
-        public float Amount { get; private set; }
+        public float Amount {
+            get { CheckExists (); return amount; }
+        }
 
         /// <summary>
         /// Update the transfer. Called once per fixed update.
@@ -131,7 +200,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         internal void Update (float deltaTime)
         {
-            if (Complete)
+            if (complete)
                 return;
             // A transfer runs from the game's fixed update, so it has to decide for itself
             // what to do about a part it can no longer reach rather than raise the error a
@@ -141,7 +210,7 @@ namespace KRPC.SpaceCenter.Services
             var fromState = FromPart.GameObjectState;
             var toState = ToPart.GameObjectState;
             if (fromState == GameObjectState.Destroyed || toState == GameObjectState.Destroyed) {
-                Cancel ();
+                complete = true;
                 return;
             }
             if (fromState != GameObjectState.Live || toState != GameObjectState.Live)
@@ -152,11 +221,11 @@ namespace KRPC.SpaceCenter.Services
             var storage = toPart.Resources.Get (internalResource.id);
             var storageAvailable = (float)(storage.maxAmount - storage.amount);
             var available = Math.Min (resourceAvailable, storageAvailable);
-            var amountToTransfer = Math.Min (available, Math.Min (TotalAmount - Amount, transferRate * deltaTime));
+            var amountToTransfer = Math.Min (available, Math.Min (TotalAmount - amount, transferRate * deltaTime));
             fromPart.TransferResource (internalResource.id, -amountToTransfer);
             toPart.TransferResource (internalResource.id, amountToTransfer);
-            Amount += amountToTransfer;
-            Complete |= amountToTransfer < 0.0001f;
+            amount += amountToTransfer;
+            complete |= amountToTransfer < 0.0001f;
         }
     }
 }

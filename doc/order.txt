@@ -1308,6 +1308,7 @@ SpaceCenter.ResourceFlowMode.None
 SpaceCenter.ResourceTransfer
 SpaceCenter.ResourceTransfer.Start
 SpaceCenter.ResourceTransfer.Cancel
+SpaceCenter.ResourceTransfer.Remove
 SpaceCenter.ResourceTransfer.Amount
 SpaceCenter.ResourceTransfer.Complete
 SpaceCenter.Node

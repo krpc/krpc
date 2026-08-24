@@ -45,14 +45,15 @@ the new name.
 The other case is an object a client asks the server to build, which names nothing in the
 game. Nothing the game does ever finishes with such an object, so the server holds it until
 the client says it is done with it: ``ReferenceFrame.Remove`` for a frame built with
-``ReferenceFrame.CreateRelative`` or ``ReferenceFrame.CreateHybrid``, and ``Orbit.Remove``
-for an orbit built with ``Orbit.CreateFromPositionAndVelocity`` or
-``Orbit.CreateFromOrbitalElements``. A frame defined against a removed frame or orbit goes
-with it, having nothing left to be evaluated against.
+``ReferenceFrame.CreateRelative`` or ``ReferenceFrame.CreateHybrid``, ``Orbit.Remove`` for an
+orbit built with ``Orbit.CreateFromPositionAndVelocity`` or
+``Orbit.CreateFromOrbitalElements``, and ``ResourceTransfer.Remove`` for a transfer between
+parts. A frame defined against a removed frame or orbit goes with it, having nothing left to
+be evaluated against.
 
-The server hands the same reference frame to every client that builds the same one, so a
-frame one of them removes is gone for the others too. A created orbit belongs to the client
-that asked for it, and goes when that client disconnects.
+Each of these belongs to the client that asked for it: two clients that build the same
+reference frame are given one each, so a frame one of them removes leaves the other's alone,
+and anything a client has not removed goes when it disconnects.
 
 A few members read nothing and so raise nothing: those that hand back what the object was
 built from, such as the part a part module belongs to, or the name of a field. They answer as

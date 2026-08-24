@@ -170,6 +170,71 @@ class TestResourceTransferCancel(krpctest.TestCase):
         self.assertAlmostEqual(amount, transfer.amount)
 
 
+class TestResourceTransferRemove(krpctest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.launch_vessel_from_vab("ResourceTransfer")
+        cls.remove_other_vessels()
+        cls.conn = cls.connect()
+        cls.sc = cls.conn.space_center
+        cls.parts = cls.sc.active_vessel.parts
+        cls.destroyed = cls.conn.krpc.ObjectDestroyedException
+
+    def test_remove(self):
+        from_part = self.parts.with_name("fuelTank")[0]
+        to_part = self.parts.with_name("fuelTankSmallFlat")[0]
+        # Obtained up front, so that the store holds them before its size is read
+        from_resources = from_part.resources
+        to_resources = to_part.resources
+
+        # A transfer that would take several seconds to complete
+        transfer = self.sc.ResourceTransfer.start(
+            from_part, to_part, "Oxidizer", float("inf")
+        )
+        self.wait(0.5)
+        self.assertFalse(transfer.complete)
+        before = self.conn.testing_tools.object_store_size
+
+        transfer.remove()
+        # Removing a transfer stops it and the object is gone, so there is nothing left
+        # to read the amount moved from
+        self.assertRaises(self.destroyed, getattr, transfer, "complete")
+        self.assertRaises(self.destroyed, getattr, transfer, "amount")
+        self.assertRaises(self.destroyed, transfer.cancel)
+        self.assertRaises(self.destroyed, transfer.remove)
+
+        # No more of the resource is moved
+        from_amount = from_resources.amount("Oxidizer")
+        to_amount = to_resources.amount("Oxidizer")
+        self.wait(1)
+        self.assertAlmostEqual(from_amount, from_resources.amount("Oxidizer"), places=2)
+        self.assertAlmostEqual(to_amount, to_resources.amount("Oxidizer"), places=2)
+
+        # A transfer names nothing the game destroys, so the removal is what has to get
+        # the object out of the store
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the removed transfer was not dropped from the object store",
+        )
+
+    def test_remove_when_complete(self):
+        from_part = self.parts.with_name("rcsTankRadialLong")[0]
+        to_part = self.parts.with_name("radialRCSTank")[0]
+        transfer = self.sc.ResourceTransfer.start(
+            from_part, to_part, "MonoPropellant", 5
+        )
+        while not transfer.complete:
+            self.wait()
+        before = self.conn.testing_tools.object_store_size
+        transfer.remove()
+        self.assertRaises(self.destroyed, getattr, transfer, "amount")
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the removed transfer was not dropped from the object store",
+        )
+
+
 class TestResourceTransferDisconnect(krpctest.TestCase):
     @classmethod
     def setUpClass(cls):
