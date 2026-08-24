@@ -63,7 +63,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ portRef.GetHashCode () ^ shieldRef.GetHashCode ();
+            return Hash.Of (Part).And (portRef).And (shieldRef);
         }
 
         /// <summary>

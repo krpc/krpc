@@ -161,9 +161,9 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode()
         {
-            var hash = contract.GetHashCode();
+            var hash = Hash.Of(contract);
             foreach (var index in path)
-                hash = hash * 31 + index;
+                hash = hash.And(index);
             return hash;
         }
 

@@ -94,7 +94,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode()
         {
-            return Part.GetHashCode() ^ wheelRef.GetHashCode();
+            return Hash.Of (Part).And (wheelRef);
         }
 
         void CheckBrakes()

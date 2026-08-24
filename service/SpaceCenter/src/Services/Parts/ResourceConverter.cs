@@ -63,9 +63,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int hash = Part.GetHashCode ();
+            var hash = Hash.Of (Part);
             foreach (var converter in converterRefs)
-                hash ^= converter.GetHashCode ();
+                hash = hash.And (converter);
             return hash;
         }
 

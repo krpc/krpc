@@ -47,8 +47,8 @@ namespace KRPC.InfernalRobotics
         public override int GetHashCode ()
         {
             // A group the mod names with nothing at all still has to hash, as the object
-            // store hashes every object it holds.
-            return vessel.GetHashCode () ^ (name == null ? 0 : name.GetHashCode ());
+            // store hashes every object it holds; a name of null counts as zero.
+            return Hash.Of (vessel).And (name);
         }
 
         /// <summary>

@@ -98,8 +98,13 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ editorVessel.GetHashCode () ^ stage.GetHashCode () ^
-            cumulative.GetHashCode () ^ decoupleStage.GetHashCode () ^ partId.GetHashCode ();
+            return Hash.Of (vesselId)
+                .And (editorVessel)
+                .And (stage)
+                .And (cumulative)
+                .And (decoupleStage)
+                .And (hasPart)
+                .And (partId);
         }
 
         /// <summary>

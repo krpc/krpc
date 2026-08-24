@@ -115,7 +115,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ start.GetHashCode () ^ end.GetHashCode ();
+            return Hash.Of (vesselId).And (start).And (end);
         }
 
         /// <summary>

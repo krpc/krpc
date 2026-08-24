@@ -40,7 +40,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return partId.GetHashCode () ^ resourceId.GetHashCode ();
+            return Hash.Of (partId).And (resourceId);
         }
 
         /// <summary>
