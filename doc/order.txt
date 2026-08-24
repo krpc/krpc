@@ -390,6 +390,7 @@ SpaceCenter.Flight.ThrustSpecificFuelConsumption
 SpaceCenter.Orbit
 SpaceCenter.Orbit.CreateFromPositionAndVelocity
 SpaceCenter.Orbit.CreateFromOrbitalElements
+SpaceCenter.Orbit.Remove
 SpaceCenter.Orbit.Body
 SpaceCenter.Orbit.ReferenceFrame
 SpaceCenter.Orbit.OrbitalReferenceFrame

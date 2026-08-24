@@ -247,6 +247,49 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertRaises(RuntimeError, vessel.reference_frame.remove)
         self.assertIsNotNone(vessel.position(vessel.reference_frame))
 
+    def test_removing_a_created_orbit(self):
+        # An orbit a client creates is arithmetic the server holds on its behalf. It
+        # stands for nothing in the game, so removing it is the only thing that says it
+        # is finished with.
+        kerbin = self.space_center.bodies["Kerbin"]
+        orbit = self.space_center.Orbit.create_from_orbital_elements(
+            kerbin, 900000, 0.1, 0, 0, 0, 0, self.space_center.ut
+        )
+        self.assertAlmostEqual(900000, orbit.semi_major_axis, delta=1)
+        before = self.conn.testing_tools.object_store_size
+        orbit.remove()
+        self.assertRaises(self.destroyed, getattr, orbit, "semi_major_axis")
+        self.assertRaises(self.destroyed, orbit.remove)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the removed orbit was not dropped from the object store",
+        )
+
+    def test_removing_an_orbit_a_reference_frame_is_defined_against(self):
+        kerbin = self.space_center.bodies["Kerbin"]
+        orbit = self.space_center.Orbit.create_from_orbital_elements(
+            kerbin, 1000000, 0, 0, 0, 0, 0, self.space_center.ut
+        )
+        frame = orbit.reference_frame
+        vessel = self.space_center.active_vessel
+        self.assertIsNotNone(vessel.position(frame))
+        before = self.conn.testing_tools.object_store_size
+        orbit.remove()
+        # The frame is centered on the point the orbit has reached, so it has nothing
+        # left to be evaluated against and goes with it.
+        self.assertRaises(self.destroyed, vessel.position, frame)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size <= before - 2,
+            message="the removed orbit and its frame were not dropped from the store",
+        )
+
+    def test_removing_an_orbit_the_client_did_not_create(self):
+        # The orbit of something in the game is shared and bounded: the server holds one
+        # of each however often it is asked for, so there is nothing to release.
+        vessel = self.space_center.active_vessel
+        self.assertRaises(RuntimeError, vessel.orbit.remove)
+        self.assertGreater(vessel.orbit.apoapsis, 0)
+
     def test_removing_a_force(self):
         # The command pod, which nothing here destroys: the tests run in name order and
         # the thermometer and the strut have both been destroyed by this point.
