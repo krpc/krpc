@@ -117,33 +117,27 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            var hash = type.GetHashCode ();
-            if (body != null)
-                hash ^= body.name.GetHashCode ();
-            hash ^= vesselId.GetHashCode ();
-            if (node != null)
-                hash ^= RuntimeHelpers.GetHashCode (node);
-            if (servicePart != null)
-                hash ^= servicePart.GetHashCode ();
-            hash ^= dockingPortRef.GetHashCode ();
-            if (thruster != null)
-                hash ^= thruster.GetHashCode ();
-            if (orbit != null)
-                hash ^= orbit.GetHashCode ();
-            if (parent != null)
-                hash ^= parent.GetHashCode ();
-            if (type == ReferenceFrameType.Relative) {
-                hash ^= relativePosition.GetHashCode ();
-                hash ^= relativeRotation.GetHashCode ();
-                hash ^= relativeVelocity.GetHashCode ();
-                hash ^= relativeAngularVelocity.GetHashCode ();
-            }
-            if (type == ReferenceFrameType.Hybrid) {
-                hash ^= hybridPosition.GetHashCode ();
-                hash ^= hybridRotation.GetHashCode ();
-                hash ^= hybridVelocity.GetHashCode ();
-                hash ^= hybridAngularVelocity.GetHashCode ();
-            }
+            var hash = Hash.Of (type)
+                .And (body == null ? null : body.name)
+                .And (vesselId)
+                .And (node == null ? 0 : RuntimeHelpers.GetHashCode (node))
+                .And (servicePart)
+                .And (dockingPortRef)
+                .And (thruster)
+                .And (orbit)
+                .And (parent);
+            if (type == ReferenceFrameType.Relative)
+                hash = hash
+                    .And (relativePosition)
+                    .And (relativeRotation)
+                    .And (relativeVelocity)
+                    .And (relativeAngularVelocity);
+            if (type == ReferenceFrameType.Hybrid)
+                hash = hash
+                    .And (hybridPosition)
+                    .And (hybridRotation)
+                    .And (hybridVelocity)
+                    .And (hybridAngularVelocity);
             return hash;
         }
 
