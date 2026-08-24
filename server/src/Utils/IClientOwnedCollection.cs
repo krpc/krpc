@@ -12,6 +12,11 @@ namespace KRPC.Utils
         void Sweep ();
 
         /// <summary>
+        /// Drop the entries whose object stands for something the game has destroyed.
+        /// </summary>
+        void RemoveDestroyed ();
+
+        /// <summary>
         /// Release all entries, whoever owns them.
         /// </summary>
         void Clear ();

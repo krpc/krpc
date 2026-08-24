@@ -109,12 +109,26 @@ namespace KRPC.Utils
         /// </summary>
         public void Sweep ()
         {
+            Drop (key => Destroyed (key) || ClientConnections.Disconnected (entries [key].Owner));
+        }
+
+        /// <summary>
+        /// Release the overrides whose key object has been destroyed, keeping those whose
+        /// client has merely gone: an override on an object that is still there is still
+        /// installed on it, and releasing it is what puts the object back.
+        /// </summary>
+        public void RemoveDestroyed ()
+        {
+            Drop (Destroyed);
+        }
+
+        void Drop (Func<TKey, bool> finished)
+        {
             foreach (var key in entries.Keys.ToList ()) {
-                var entry = entries [key];
-                if (Destroyed (key) || ClientConnections.Disconnected (entry.Owner)) {
-                    release (key, entry);
-                    entries.Remove (key);
-                }
+                if (!finished (key))
+                    continue;
+                release (key, entries [key]);
+                entries.Remove (key);
             }
         }
 

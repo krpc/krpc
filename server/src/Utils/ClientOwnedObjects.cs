@@ -115,9 +115,13 @@ namespace KRPC.Utils
         /// it is kept, as is one that is merely not loaded, which the game can bring back.
         /// </summary>
         /// <remarks>
-        /// An addon that acts on its objects every frame calls this first, so that a
-        /// destroyed object is dropped rather than reached into from the frame loop, where
-        /// there is no client call to report the failure to.
+        /// Called on every collection by the object store's sweep, so that a collection
+        /// never holds more than the store does; an addon that acts on its objects every
+        /// frame also calls it first, so that a destroyed object is dropped rather than
+        /// reached into from the frame loop, where there is no client call to report the
+        /// failure to. An addon with nothing to do to its objects per frame needs only the
+        /// sweep: classifying is allowed to search as widely as it needs to, so it is not
+        /// something to do to a whole collection on every frame.
         /// </remarks>
         public void RemoveDestroyed ()
         {

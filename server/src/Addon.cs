@@ -463,8 +463,14 @@ namespace KRPC
             }
             var settled = count > 0 && count == lastCount;
             lastCount = count;
-            if (settled)
+            if (settled) {
                 Service.GameState.Sweep ();
+                // After the store, so that the objects are classified with the game state
+                // settled, which is what the sweep itself records. A collection that drops
+                // something asks for a sweep, as letting go of an object always does, so
+                // this costs one further pass that finds nothing and asks for no more.
+                ClientOwnedState.RemoveDestroyed ();
+            }
         }
 
         // The number of vessels the game lists, or -1 if it is not listing them yet.
