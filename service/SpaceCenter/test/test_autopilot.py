@@ -2311,5 +2311,98 @@ class TestAutoPilotRevertToLaunch(krpctest.TestCase):
         auto_pilot.engaged = False
 
 
+class TestAutoPilotRemovedReferenceFrame(krpctest.TestCase):
+    """What the control loop does when the frame it measures in is removed.
+
+    The loop runs from the game's update rather than from a call, so there is nothing
+    there to raise at. A frame is a settable property, so it waits for a usable one.
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.new_save()
+        cls.remove_other_vessels()
+        cls.launch_vessel_from_vab("AutoPilot")
+        cls.set_orbit("Eve", 1070000, 0.15, 16.2, 70.5, 180.8, 1.83, 251.1)
+        cls.conn = cls.connect()
+        cls.space_center = cls.conn.space_center
+        cls.vessel = cls.space_center.active_vessel
+        cls.ap = cls.vessel.auto_pilot
+
+    def setUp(self):
+        self.ap.reset()
+        self.ap.sas = False
+
+    def tearDown(self):
+        self.ap.diagnostic_logging = False
+        self.ap.engaged = False
+
+    def steps(self):
+        """How many ticks the control loop has run to the end of, the log gaining a row
+        per tick that reached it."""
+        lines = [line for line in self.ap.diagnostic_log.splitlines() if line.strip()]
+        return max(0, len(lines) - 1)
+
+    def deflection(self):
+        """The largest control deflection the vessel is being flown with."""
+        control = self.vessel.control
+        return max(abs(control.pitch), abs(control.yaw), abs(control.roll))
+
+    def engage_across(self, frame):
+        """Engage on a target about 90 degrees from where the vessel points, in the given
+        frame, so the loop has an error it is nowhere near finished with."""
+        direction = self.vessel.direction(frame)
+        axis = (1, 0, 0) if abs(direction[0]) < 0.9 else (0, 1, 0)
+        across = (
+            direction[1] * axis[2] - direction[2] * axis[1],
+            direction[2] * axis[0] - direction[0] * axis[2],
+            direction[0] * axis[1] - direction[1] * axis[0],
+        )
+        length = math.sqrt(sum(x * x for x in across))
+        self.ap.reference_frame = frame
+        self.ap.target_direction = tuple(x / length for x in across)
+        self.ap.engaged = True
+
+    def test_removing_the_frame_holds_the_loop(self):
+        frame = self.space_center.ReferenceFrame.create_hybrid(
+            self.vessel.orbital_reference_frame
+        )
+        self.ap.diagnostic_logging = True
+        self.engage_across(frame)
+        self.wait(0.5)
+        self.assertGreater(self.steps(), 0)
+
+        # Removing the frame is a supported thing for a client to do and must not take
+        # the auto-pilot with it
+        frame.remove()
+        self.wait(0.5)
+        held = self.steps()
+        self.assertTrue(self.ap.engaged)
+
+        # Every quantity the loop reads is expressed in the frame, so it waits
+        self.wait(0.5)
+        self.assertEqual(held, self.steps())
+
+        # Pointing the auto-pilot at a frame that can be measured in picks it back up
+        self.ap.reference_frame = self.vessel.orbital_reference_frame
+        self.wait(0.5)
+        self.assertGreater(self.steps(), held)
+
+    def test_removing_the_frame_releases_the_controls(self):
+        frame = self.space_center.ReferenceFrame.create_hybrid(
+            self.vessel.orbital_reference_frame
+        )
+        self.engage_across(frame)
+        self.wait(0.5)
+        self.assertGreater(self.deflection(), 0.1)
+
+        # The loop stops producing an output, so the output hold time expires and the
+        # controls are released rather than the last command staying latched on the vessel
+        frame.remove()
+        self.wait(0.5)
+        self.assertTrue(self.ap.engaged)
+        self.assertEqual(0, self.deflection())
+
+
 if __name__ == "__main__":
     unittest.main()

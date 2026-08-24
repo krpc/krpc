@@ -2,6 +2,7 @@ using System;
 using KRPC.Server;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.SpaceCenter.Services;
+using KRPC.Utils;
 using UnityEngine;
 
 namespace KRPC.SpaceCenter.AutoPilot
@@ -38,11 +39,15 @@ namespace KRPC.SpaceCenter.AutoPilot
         // game), used to auto-disengage when that client disconnects.
         bool engaged;
         IClient engagedClient;
-        // The fixed time the control loop last ran at, NaN until it has run. Ticks are
+        // The fixed time the control loop last completed at, NaN until it has run. Ticks are
         // identified by Time.fixedTime rather than counted, because it is the same value for
         // every script in a physics tick however they are ordered, and does not advance while
         // the game is paused.
         float lastStepFixedTime = float.NaN;
+        // The fixed time the loop was last tried at, whether or not it got to the end. Held
+        // apart from lastStepFixedTime so that a step which fails part way through neither runs
+        // again in the same tick nor leaves the output it did not produce looking recent.
+        float lastAttemptFixedTime = float.NaN;
         // How long the last output stays usable. The loop runs once per tick, but the tick it is
         // applied in is not always the tick it ran in, and a program driving it by hand may miss
         // one; holding the last command over a short gap is smoother than dropping to zero.
@@ -699,6 +704,7 @@ namespace KRPC.SpaceCenter.AutoPilot
             engaged = false;
             engagedClient = null;
             lastStepFixedTime = float.NaN;
+            lastAttemptFixedTime = float.NaN;
         }
 
         /// <summary>
@@ -801,8 +807,9 @@ namespace KRPC.SpaceCenter.AutoPilot
 
         /// <summary>
         /// Run one tick of the control loop, writing its result to <see cref="Output"/>. Does
-        /// nothing while not engaged, or when it has already run on this physics tick. If the
-        /// client that engaged the auto-pilot has disconnected, disengages instead.
+        /// nothing while not engaged, when it has already been tried on this physics tick, or
+        /// while the reference frame cannot be measured in. If the client that engaged the
+        /// auto-pilot has disconnected, disengages instead.
         /// </summary>
         public void Step ()
         {
@@ -814,12 +821,21 @@ namespace KRPC.SpaceCenter.AutoPilot
             }
             // The loop's numerics assume one step per physics tick: the integrators, the rate
             // filters and the oscillation detectors all advance by a fixed dt.
-            if (lastStepFixedTime == Time.fixedTime)
+            if (lastAttemptFixedTime == Time.fixedTime)
                 return;
-            lastStepFixedTime = Time.fixedTime;
+            lastAttemptFixedTime = Time.fixedTime;
+            // Everything the loop measures is expressed in the reference frame, and there is no
+            // client call here to raise at, so a frame that cannot be measured in makes the loop
+            // wait rather than fail. The frame is a settable property, so the client can point
+            // the auto-pilot at another one, and the output hold time releases the controls in
+            // the meantime.
+            if (ReferenceFrame.GameObjectState != GameObjectState.Live)
+                return;
             // The auto-pilot fights stock SAS, so hold it off while engaged.
             vessel.InternalVessel.ActionGroups.SetGroup (KSPActionGroup.SAS, false);
             Update (Output);
+            // Only a step that got this far produced an output to fly the vessel with.
+            lastStepFixedTime = Time.fixedTime;
         }
 
         void Update (PilotAddon.ControlInputs state)
