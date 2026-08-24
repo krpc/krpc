@@ -865,7 +865,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public ClosestApproach NextClosestApproach (Orbit target)
         {
-            return new ClosestApproach (this, target, Planetarium.GetUniversalTime ());
+            CheckExists ();
+            return new ClosestApproach (this, target, 0);
         }
 
         /// <summary>
@@ -877,13 +878,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<ClosestApproach> ClosestApproaches (Orbit target, int orbits)
         {
+            CheckExists ();
             var approaches = new List<ClosestApproach> ();
-            double orbitstart = Planetarium.GetUniversalTime ();
-            double period = InternalOrbit.period;
-            for (int i = 0; i < orbits; i++) {
-                approaches.Add (new ClosestApproach (this, target, orbitstart));
-                orbitstart += period;
-            }
+            for (int i = 0; i < orbits; i++)
+                approaches.Add (new ClosestApproach (this, target, i));
             return approaches;
         }
 

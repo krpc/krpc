@@ -271,7 +271,8 @@ class TestClosestApproach(krpctest.TestCase):
         cls.set_orbit("Kerbin", 1600000, 0, 0, 0, 0, 0, 0)
         cls.launch_vessel_from_vab("Basic")
         cls.set_orbit("Kerbin", 1650000, 0, 0, 0, 0, 0.15, 0)
-        cls.sc = cls.connect().space_center
+        cls.conn = cls.connect()
+        cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.other = next(v for v in cls.sc.vessels if v != cls.vessel)
         cls.orbit = cls.vessel.orbit
@@ -355,6 +356,20 @@ class TestClosestApproach(krpctest.TestCase):
                 mu * ((2 / orbit.radius_at(approach.ut)) - (1 / orbit.semi_major_axis))
             )
             self.assertAlmostEqual(expected, speed, delta=1)
+
+    def test_asking_for_the_same_approach_twice(self):
+        # The object names which of the approaches between the two orbits it is, and
+        # reads the time and distance from the orbits as they are now. Asking for the
+        # same one again gives back the same object, rather than filling the object
+        # store with a snapshot per call.
+        first = self.orbit.next_closest_approach(self.target)
+        before = self.conn.testing_tools.object_store_size
+        for _ in range(5):
+            self.wait(0.1)
+            self.assertEqual(first, self.orbit.next_closest_approach(self.target))
+        self.assertEqual(before, self.conn.testing_tools.object_store_size)
+        # The first of the approaches per orbital period is the same one
+        self.assertEqual(first, self.orbit.closest_approaches(self.target, 3)[0])
 
     def test_closest_approaches(self):
         approaches = self.orbit.closest_approaches(self.target, 3)
