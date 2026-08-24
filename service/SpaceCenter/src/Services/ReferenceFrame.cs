@@ -29,6 +29,10 @@ namespace KRPC.SpaceCenter.Services
     {
         readonly ReferenceFrameType type;
         readonly global::CelestialBody body;
+        // The body's name, which is what the frame is hashed by. A body keeps its name for
+        // as long as it exists, and the game builds a new string every time it is asked for
+        // one, so it is taken once rather than on every hash.
+        readonly string bodyName;
         readonly Guid vesselId;
         readonly ManeuverNode node;
         // The part object finds the KSP part again, says whether it is still
@@ -57,6 +61,8 @@ namespace KRPC.SpaceCenter.Services
         {
             this.type = type;
             this.body = body;
+            if (body != null)
+                bodyName = body.name;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
             if (part != null)
@@ -118,7 +124,7 @@ namespace KRPC.SpaceCenter.Services
         public override int GetHashCode ()
         {
             var hash = Hash.Of (type)
-                .And (body == null ? null : body.name)
+                .And (bodyName)
                 .And (vesselId)
                 .And (node == null ? 0 : RuntimeHelpers.GetHashCode (node))
                 .And (servicePart)
