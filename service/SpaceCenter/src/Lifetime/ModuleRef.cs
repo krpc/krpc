@@ -225,7 +225,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         public override int GetHashCode ()
         {
-            return (name == null ? 0 : name.GetHashCode ()) ^ occurrence;
+            return Hash.Of (name).And (occurrence);
         }
 
         /// <summary>

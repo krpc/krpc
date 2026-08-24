@@ -19,13 +19,18 @@ namespace KRPC.SpaceCenter.Services
     {
         Orbit orbit;
 
+        // The body's name. A body keeps its name for as long as it exists, and the game
+        // builds a new string every time it is asked for one, so it is taken once.
+        readonly string bodyName;
+
         /// <summary>
         /// Construct from a KSP celestial body object.
         /// </summary>
         public CelestialBody (global::CelestialBody body)
         {
             InternalBody = body;
-            if (body.name != Planetarium.fetch.Sun.name)
+            bodyName = body.name;
+            if (bodyName != Planetarium.fetch.Sun.name)
                 orbit = new Orbit (this);
         }
 
@@ -55,7 +60,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public string Name {
-            get { return InternalBody.name; }
+            get { return bodyName; }
         }
 
         /// <summary>

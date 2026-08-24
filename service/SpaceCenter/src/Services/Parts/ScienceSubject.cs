@@ -48,7 +48,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return subjectId.GetHashCode () ^ (int)generation;
+            return Hash.Of (subjectId).And (generation);
         }
 
         /// <summary>

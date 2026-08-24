@@ -186,6 +186,7 @@
     <Compile Include="Utils\EventHandlerExtensions.cs" />
     <Compile Include="Utils\ExponentialMovingAverage.cs" />
     <Compile Include="Utils\GameObjectState.cs" />
+    <Compile Include="Utils\Hash.cs" />
     <Compile Include="Utils\IGameObjectState.cs" />
     <Compile Include="Utils\IScheduler.cs" />
     <Compile Include="Utils\Logger.cs" />

@@ -57,12 +57,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            int h = Part.GetHashCode ();
-            if (fairing != null)
-                h ^= fairing.GetHashCode();
-            if (proceduralFairing != null)
-                h ^= proceduralFairing.GetHashCode();
-            return h;
+            return Hash.Of (Part).And (fairing).And (proceduralFairing);
         }
 
         /// <summary>

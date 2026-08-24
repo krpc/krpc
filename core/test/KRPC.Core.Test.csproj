@@ -98,6 +98,7 @@
     <Compile Include="Utils\DocumentationExtensionsTest.cs" />
     <Compile Include="Utils\DynamicBufferTest.cs" />
     <Compile Include="Utils\EquatableTest.cs" />
+    <Compile Include="Utils\HashTest.cs" />
     <Compile Include="Utils\ReflectionTest.cs" />
     <Compile Include="Utils\RoundRobinSchedulerTest.cs" />
   </ItemGroup>

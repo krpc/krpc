@@ -105,12 +105,11 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return
-            Part.GetHashCode () ^
-            primaryRef.GetHashCode () ^
-            secondaryRef.GetHashCode () ^
-            multiModeRef.GetHashCode () ^
-            gimbalRef.GetHashCode ();
+            return Hash.Of (Part)
+                .And (primaryRef)
+                .And (secondaryRef)
+                .And (multiModeRef)
+                .And (gimbalRef);
         }
 
         /// <summary>

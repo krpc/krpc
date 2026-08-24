@@ -170,7 +170,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         public override int GetHashCode ()
         {
-            return id.GetHashCode () ^ inEditor.GetHashCode () ^ generation.GetHashCode ();
+            return Hash.Of (id).And (inEditor).And (generation);
         }
 
         /// <summary>

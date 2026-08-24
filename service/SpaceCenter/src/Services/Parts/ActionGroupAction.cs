@@ -48,12 +48,9 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            // module can be null for a part-level action (Part.Actions) that the Extended
-            // Action Groups mod has assigned to a group, so it is not included in the hash.
-            int hash = part.GetHashCode () ^ name.GetHashCode () ^ id.GetHashCode ();
-            if (module != null)
-                hash ^= module.GetHashCode ();
-            return hash;
+            // module is null for a part-level action (Part.Actions) that the Extended
+            // Action Groups mod has assigned to a group, and counts as zero.
+            return Hash.Of (part).And (name).And (id).And (module);
         }
 
         /// <summary>

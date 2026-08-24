@@ -62,7 +62,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return vesselId.GetHashCode () ^ editorVessel.GetHashCode ();
+            return Hash.Of (vesselId).And (editorVessel);
         }
 
         /// <summary>

@@ -68,10 +68,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return
-            Part.GetHashCode () ^
-            activeRadiatorRef.GetHashCode () ^
-            deployableRadiatorRef.GetHashCode ();
+            return Hash.Of (Part).And (activeRadiatorRef).And (deployableRadiatorRef);
         }
 
         /// <summary>

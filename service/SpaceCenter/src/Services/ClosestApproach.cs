@@ -51,7 +51,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return orbit.GetHashCode () ^ target.GetHashCode () ^ ut.GetHashCode ();
+            return Hash.Of (orbit).And (target).And (ut);
         }
 
         /// <summary>

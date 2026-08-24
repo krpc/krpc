@@ -129,14 +129,7 @@ namespace KRPC.SpaceCenter.Services
         {
             if (!ReferenceEquals (patch, null))
                 return RuntimeHelpers.GetHashCode (patch);
-            int hash = 0;
-            if (ownerVessel != null)
-                hash ^= ownerVessel.GetHashCode ();
-            if (ownerBody != null)
-                hash ^= ownerBody.GetHashCode ();
-            if (ownerNode != null)
-                hash ^= ownerNode.GetHashCode ();
-            return hash;
+            return Hash.Of (ownerVessel).And (ownerBody).And (ownerNode);
         }
 
         /// <summary>

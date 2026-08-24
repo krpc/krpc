@@ -30,6 +30,9 @@
     omni-decoupler such as a stack separator. Such a decoupler detaches at every node at
     once, leaving itself on a vessel of its own as well as the vessel it separated, and the
     two vessels this produced raised an exception (#1043)
+  - Working with many stages, vessel resources, communication links or resource converters
+    no longer slows the server down. Two such objects could share a hash code, and the
+    server then searched them one by one (#1071)
 
 - Editor
   - Add `SpaceCenter.Editor`, available in the vehicle assembly building and the space
@@ -163,6 +166,11 @@
   - Fix removing a maneuver node leaking the object for the rest of the session (#771)
 
 - Reference frames
+  - Creating many hybrid reference frames no longer slows the server down. A frame given
+    the same frame for two of its components, which the defaults of
+    `ReferenceFrame.CreateHybrid` do on their own, hashed the same as every other such
+    frame, and the server searched them one by one whenever a frame was passed to it or
+    returned (#1071)
   - A reference frame taken from a docking port keeps working across a quickload, and says the
     port is gone rather than failing with a null reference once its part is destroyed (#885,
     #764)

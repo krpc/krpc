@@ -76,7 +76,7 @@ namespace KRPC.SpaceCenter.Services
         {
             // The node's identity hash rather than its own: it is what the game holds, and
             // nothing about it may change while a client has this object.
-            return vesselId.GetHashCode () ^ RuntimeHelpers.GetHashCode (node);
+            return Hash.Of (vesselId).And (RuntimeHelpers.GetHashCode (node));
         }
 
         /// <summary>

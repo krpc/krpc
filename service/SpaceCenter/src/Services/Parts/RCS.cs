@@ -62,7 +62,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ rcsRef.GetHashCode ();
+            return Hash.Of (Part).And (rcsRef);
         }
 
         /// <summary>

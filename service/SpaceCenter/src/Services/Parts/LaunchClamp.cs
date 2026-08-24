@@ -52,7 +52,7 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         public override int GetHashCode ()
         {
-            return Part.GetHashCode () ^ launchClampRef.GetHashCode ();
+            return Hash.Of (Part).And (launchClampRef);
         }
 
         /// <summary>

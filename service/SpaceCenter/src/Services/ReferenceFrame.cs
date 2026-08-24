@@ -29,6 +29,10 @@ namespace KRPC.SpaceCenter.Services
     {
         readonly ReferenceFrameType type;
         readonly global::CelestialBody body;
+        // The body's name, which is what the frame is hashed by. A body keeps its name for
+        // as long as it exists, and the game builds a new string every time it is asked for
+        // one, so it is taken once rather than on every hash.
+        readonly string bodyName;
         readonly Guid vesselId;
         readonly ManeuverNode node;
         // The part object finds the KSP part again, says whether it is still
@@ -57,6 +61,8 @@ namespace KRPC.SpaceCenter.Services
         {
             this.type = type;
             this.body = body;
+            if (body != null)
+                bodyName = body.name;
             vesselId = vessel != null ? vessel.id : Guid.Empty;
             this.node = node;
             if (part != null)
@@ -117,33 +123,27 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            var hash = type.GetHashCode ();
-            if (body != null)
-                hash ^= body.name.GetHashCode ();
-            hash ^= vesselId.GetHashCode ();
-            if (node != null)
-                hash ^= RuntimeHelpers.GetHashCode (node);
-            if (servicePart != null)
-                hash ^= servicePart.GetHashCode ();
-            hash ^= dockingPortRef.GetHashCode ();
-            if (thruster != null)
-                hash ^= thruster.GetHashCode ();
-            if (orbit != null)
-                hash ^= orbit.GetHashCode ();
-            if (parent != null)
-                hash ^= parent.GetHashCode ();
-            if (type == ReferenceFrameType.Relative) {
-                hash ^= relativePosition.GetHashCode ();
-                hash ^= relativeRotation.GetHashCode ();
-                hash ^= relativeVelocity.GetHashCode ();
-                hash ^= relativeAngularVelocity.GetHashCode ();
-            }
-            if (type == ReferenceFrameType.Hybrid) {
-                hash ^= hybridPosition.GetHashCode ();
-                hash ^= hybridRotation.GetHashCode ();
-                hash ^= hybridVelocity.GetHashCode ();
-                hash ^= hybridAngularVelocity.GetHashCode ();
-            }
+            var hash = Hash.Of (type)
+                .And (bodyName)
+                .And (vesselId)
+                .And (node == null ? 0 : RuntimeHelpers.GetHashCode (node))
+                .And (servicePart)
+                .And (dockingPortRef)
+                .And (thruster)
+                .And (orbit)
+                .And (parent);
+            if (type == ReferenceFrameType.Relative)
+                hash = hash
+                    .And (relativePosition)
+                    .And (relativeRotation)
+                    .And (relativeVelocity)
+                    .And (relativeAngularVelocity);
+            if (type == ReferenceFrameType.Hybrid)
+                hash = hash
+                    .And (hybridPosition)
+                    .And (hybridRotation)
+                    .And (hybridVelocity)
+                    .And (hybridAngularVelocity);
             return hash;
         }
 
