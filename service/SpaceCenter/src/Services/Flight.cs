@@ -34,10 +34,16 @@ namespace KRPC.SpaceCenter.Services
         }
 
         /// <summary>
-        /// What the game holds for the vessel this belongs to.
+        /// What the game holds for the vessel this belongs to and the frame it is
+        /// measured in. Every member reads both, so it is as alive as the less alive of
+        /// them: a flight measured in a frame the client has removed has nothing left to
+        /// be expressed against.
         /// </summary>
         public GameObjectState GameObjectState {
-            get { return FlightGlobalsExtensions.VesselState (vesselId); }
+            get {
+                return FlightGlobalsExtensions.VesselState (vesselId)
+                    .LeastAlive (referenceFrame.GameObjectState);
+            }
         }
 
         /// <summary>

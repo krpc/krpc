@@ -290,6 +290,23 @@ class TestObjectLifetime(krpctest.TestCase):
         self.assertRaises(RuntimeError, vessel.orbit.remove)
         self.assertGreater(vessel.orbit.apoapsis, 0)
 
+    def test_a_flight_goes_with_the_frame_it_is_measured_in(self):
+        # A flight reads every quantity in its frame, so a frame the client removes
+        # leaves it with nothing to express anything against.
+        vessel = self.space_center.active_vessel
+        frame = self.space_center.ReferenceFrame.create_relative(
+            vessel.orbital_reference_frame, position=(7, 8, 9)
+        )
+        flight = vessel.flight(frame)
+        self.assertIsNotNone(flight.velocity)
+        before = self.conn.testing_tools.object_store_size
+        frame.remove()
+        self.assertRaises(self.destroyed, getattr, flight, "velocity")
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size <= before - 2,
+            message="the removed frame and the flight were not dropped from the store",
+        )
+
     def test_removing_a_force(self):
         # The command pod, which nothing here destroys: the tests run in name order and
         # the thermometer and the strut have both been destroyed by this point.

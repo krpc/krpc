@@ -48,8 +48,9 @@ the client says it is done with it: ``ReferenceFrame.Remove`` for a frame built 
 ``ReferenceFrame.CreateRelative`` or ``ReferenceFrame.CreateHybrid``, ``Orbit.Remove`` for an
 orbit built with ``Orbit.CreateFromPositionAndVelocity`` or
 ``Orbit.CreateFromOrbitalElements``, and ``ResourceTransfer.Remove`` for a transfer between
-parts. A frame defined against a removed frame or orbit goes with it, having nothing left to
-be evaluated against.
+parts. Whatever was built on what is removed goes with it, having nothing left to be
+evaluated against: a frame defined against a removed frame or orbit, and the flight
+information measured in a removed frame.
 
 Each of these belongs to the client that asked for it: two clients that build the same
 reference frame are given one each, so a frame one of them removes leaves the other's alone,
