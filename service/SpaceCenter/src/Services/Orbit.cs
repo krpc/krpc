@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using ObjectDestroyedException = KRPC.Service.KRPC.ObjectDestroyedException;
 using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -25,9 +26,12 @@ namespace KRPC.SpaceCenter.Services
         // game builds a new one whenever it builds the owner, and the object has to read
         // the loaded game rather than the state it was made in.
         readonly global::Orbit patch;
-        // Whether the client that constructed the orbit has gone. A constructed orbit is
-        // as valid on the last frame of the session as on the first, so it stands for
-        // nothing the game can destroy, and its client going is the only thing that can
+        // Whether a client asked for the orbit to be built, rather than it being the
+        // orbit of something in the game or a patch of one.
+        bool constructed;
+        // Whether the orbit has been let go of. A constructed orbit is as valid on the
+        // last frame of the session as on the first, so it stands for nothing the game
+        // can destroy, and the client removing it or going is the only thing that can
         // say the object is finished with.
         bool released;
 
@@ -78,7 +82,7 @@ namespace KRPC.SpaceCenter.Services
         /// <summary>
         /// What the game holds for the thing the orbit belongs to. An orbit built from a KSP
         /// orbit alone has no owner to ask, so it is kept, and an orbit constructed for a
-        /// client is kept until that client goes.
+        /// client is kept until it is removed or that client goes.
         /// </summary>
         public GameObjectState GameObjectState {
             get {
@@ -99,6 +103,45 @@ namespace KRPC.SpaceCenter.Services
         internal void Release ()
         {
             released = true;
+        }
+
+        /// <summary>
+        /// Remove the orbit, releasing the memory the server holds for it.
+        /// </summary>
+        /// <remarks>
+        /// Only an orbit created by <see cref="CreateFromPositionAndVelocity"/> or
+        /// <see cref="CreateFromOrbitalElements"/> can be removed. Every other orbit is
+        /// the orbit of something in the game, which is what says when it is finished
+        /// with, and the server holds one of each however often it is asked for.
+        ///
+        /// Any further use of this object throws an exception, as does use of a
+        /// reference frame defined against it. An orbit is removed for the client that
+        /// created it and is not shared with any other, and one whose client disconnects
+        /// is removed with it.
+        /// </remarks>
+        [KRPCMethod]
+        public void Remove ()
+        {
+            CheckExists ();
+            if (!constructed)
+                throw new InvalidOperationException (
+                    "Only an orbit created by CreateFromPositionAndVelocity or " +
+                    "CreateFromOrbitalElements can be removed");
+            // The addon holds the orbit on its client's behalf and has nothing left to
+            // do for one the client has finished with. Taking it out is also what asks
+            // for the sweep that drops it from the object store.
+            ConstructedOrbitsAddon.Remove (this);
+            released = true;
+        }
+
+        /// <summary>
+        /// Raise if the orbit has been removed.
+        /// </summary>
+        void CheckExists ()
+        {
+            if (released)
+                throw new ObjectDestroyedException (
+                    "The orbit no longer exists, as it has been removed.");
         }
 
         /// <summary>
@@ -140,6 +183,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public global::Orbit InternalOrbit {
             get {
+                CheckExists ();
                 if (!ReferenceEquals (patch, null))
                     return patch;
                 if (ownerVessel != null)
@@ -178,7 +222,7 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame ReferenceFrame {
-            get { return ReferenceFrame.NonRotating (this); }
+            get { CheckExists (); return ReferenceFrame.NonRotating (this); }
         }
 
         /// <summary>
@@ -204,7 +248,7 @@ namespace KRPC.SpaceCenter.Services
         /// </remarks>
         [KRPCProperty]
         public ReferenceFrame OrbitalReferenceFrame {
-            get { return ReferenceFrame.Orbital (this); }
+            get { CheckExists (); return ReferenceFrame.Orbital (this); }
         }
 
         // The reference frame used by the closest-approach members when the caller
@@ -470,9 +514,10 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
         /// the orbit as time passes.
         ///
-        /// The orbit that is returned is kept for as long as the server is running,
-        /// so creating one repeatedly, for example once per update, uses more and more
-        /// memory.
+        /// The orbit that is returned is kept until <see cref="Remove"/> is called on
+        /// it or the client that created it disconnects, so a script that creates one
+        /// repeatedly, for example once per update, should remove each one when it is
+        /// finished with it.
         /// </remarks>
         [KRPCMethod]
         public static Orbit CreateFromPositionAndVelocity (
@@ -559,9 +604,10 @@ namespace KRPC.SpaceCenter.Services
         /// <see cref="ReferenceFrame"/> and <see cref="OrbitalReferenceFrame"/> follow
         /// the orbit as time passes.
         ///
-        /// The orbit that is returned is kept for as long as the server is running,
-        /// so creating one repeatedly, for example once per update, uses more and more
-        /// memory.
+        /// The orbit that is returned is kept until <see cref="Remove"/> is called on
+        /// it or the client that created it disconnects, so a script that creates one
+        /// repeatedly, for example once per update, should remove each one when it is
+        /// finished with it.
         /// </remarks>
         [KRPCMethod]
         public static Orbit CreateFromOrbitalElements (
@@ -621,6 +667,7 @@ namespace KRPC.SpaceCenter.Services
         static Orbit Constructed (global::Orbit orbit)
         {
             var result = new Orbit (orbit);
+            result.constructed = true;
             ConstructedOrbitsAddon.Add (result);
             return result;
         }
@@ -818,7 +865,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public ClosestApproach NextClosestApproach (Orbit target)
         {
-            return new ClosestApproach (this, target, Planetarium.GetUniversalTime ());
+            CheckExists ();
+            return new ClosestApproach (this, target, 0);
         }
 
         /// <summary>
@@ -830,13 +878,10 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public IList<ClosestApproach> ClosestApproaches (Orbit target, int orbits)
         {
+            CheckExists ();
             var approaches = new List<ClosestApproach> ();
-            double orbitstart = Planetarium.GetUniversalTime ();
-            double period = InternalOrbit.period;
-            for (int i = 0; i < orbits; i++) {
-                approaches.Add (new ClosestApproach (this, target, orbitstart));
-                orbitstart += period;
-            }
+            for (int i = 0; i < orbits; i++)
+                approaches.Add (new ClosestApproach (this, target, i));
             return approaches;
         }
 

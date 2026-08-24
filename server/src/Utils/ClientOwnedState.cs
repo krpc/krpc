@@ -42,20 +42,41 @@ namespace KRPC.Utils
         public static void ReleaseAll ()
         {
             foreach (var collection in collections) {
-                Release (collection.Clear);
-                Release (collection.ReleaseDetached);
+                Guarded (collection.Clear, "Failed to release client-owned state");
+                Guarded (collection.ReleaseDetached, "Failed to release client-owned state");
             }
         }
 
-        static void Release (Action release)
+        /// <summary>
+        /// Drop from every collection the entries whose object stands for something the
+        /// game has destroyed, so that a collection holds no more than the object store
+        /// does.
+        /// </summary>
+        /// <remarks>
+        /// Called from the object store's sweep, which is the one point where classifying
+        /// an object is both meaningful and already being paid for: the game has finished
+        /// building the state it moved to, and the store is asking everything it holds the
+        /// same question. A collection cannot ask it every frame on its own account,
+        /// because classifying is allowed to search as widely as it needs to, and a
+        /// collection whose objects are not acted on every frame has nothing else to do
+        /// there.
+        /// </remarks>
+        public static void RemoveDestroyed ()
+        {
+            foreach (var collection in collections)
+                Guarded (
+                    collection.RemoveDestroyed,
+                    "Failed to drop destroyed client-owned state");
+        }
+
+        static void Guarded (Action action, string failure)
         {
             try {
-                release ();
+                action ();
             } catch (Exception exn) {
-                // Anything at all, as the release actions are supplied by the services and
-                // run here against state whose subject the game may already have destroyed.
-                Logger.WriteLine (
-                    "Failed to release client-owned state; " + exn, Logger.Severity.Error);
+                // Anything at all, as what runs here is supplied by the services and acts
+                // on state whose subject the game may already have destroyed.
+                Logger.WriteLine (failure + "; " + exn, Logger.Severity.Error);
             }
         }
     }

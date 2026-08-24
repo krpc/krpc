@@ -56,7 +56,7 @@ namespace KRPC.Drawing
         public static Line AddDirectionFromCom(Tuple3 direction, ReferenceFrame referenceFrame, float length = 10f, bool visible = true)
         {
             var activeVesselRefFrame = SpaceCenter.Services.SpaceCenter.ActiveVessel.ReferenceFrame;
-            referenceFrame = ReferenceFrame.CreateHybrid(
+            referenceFrame = ReferenceFrame.Hybrid(
                 activeVesselRefFrame,
                 referenceFrame,
                 referenceFrame,

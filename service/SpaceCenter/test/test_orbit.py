@@ -271,7 +271,8 @@ class TestClosestApproach(krpctest.TestCase):
         cls.set_orbit("Kerbin", 1600000, 0, 0, 0, 0, 0, 0)
         cls.launch_vessel_from_vab("Basic")
         cls.set_orbit("Kerbin", 1650000, 0, 0, 0, 0, 0.15, 0)
-        cls.sc = cls.connect().space_center
+        cls.conn = cls.connect()
+        cls.sc = cls.conn.space_center
         cls.vessel = cls.sc.active_vessel
         cls.other = next(v for v in cls.sc.vessels if v != cls.vessel)
         cls.orbit = cls.vessel.orbit
@@ -356,6 +357,20 @@ class TestClosestApproach(krpctest.TestCase):
             )
             self.assertAlmostEqual(expected, speed, delta=1)
 
+    def test_asking_for_the_same_approach_twice(self):
+        # The object names which of the approaches between the two orbits it is, and
+        # reads the time and distance from the orbits as they are now. Asking for the
+        # same one again gives back the same object, rather than filling the object
+        # store with a snapshot per call.
+        first = self.orbit.next_closest_approach(self.target)
+        before = self.conn.testing_tools.object_store_size
+        for _ in range(5):
+            self.wait(0.1)
+            self.assertEqual(first, self.orbit.next_closest_approach(self.target))
+        self.assertEqual(before, self.conn.testing_tools.object_store_size)
+        # The first of the approaches per orbital period is the same one
+        self.assertEqual(first, self.orbit.closest_approaches(self.target, 3)[0])
+
     def test_closest_approaches(self):
         approaches = self.orbit.closest_approaches(self.target, 3)
         self.assertEqual(3, len(approaches))
@@ -368,6 +383,19 @@ class TestClosestApproach(krpctest.TestCase):
         first = self.orbit.next_closest_approach(self.target)
         self.assertAlmostEqual(approaches[0].ut, first.ut, delta=1)
         self.assertAlmostEqual(approaches[0].distance, first.distance, delta=1)
+
+    def test_the_approach_is_solved_again_once_it_has_passed(self):
+        # The object names which approach it is, not when that approach was estimated to
+        # be, so the estimate has to be made again as the orbits move. Warping past the
+        # one it named is what says it was: a solve held from before the warp would still
+        # be naming a moment that is now in the past.
+        approach = self.orbit.next_closest_approach(self.target)
+        passed = approach.ut
+        self.assertGreater(passed, self.sc.ut)
+        self.sc.warp_to(passed + 60)
+        self.assertGreater(approach.ut, passed)
+        # The search runs forward from now, so whatever it lands on is not behind us
+        self.assertGreaterEqual(approach.time_to, 0)
 
 
 class TestCreateFromPositionAndVelocity(krpctest.TestCase):

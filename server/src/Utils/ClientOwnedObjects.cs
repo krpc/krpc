@@ -77,6 +77,29 @@ namespace KRPC.Utils
         }
 
         /// <summary>
+        /// Remove an object that the client making the current RPC owns, naming it as
+        /// given if it does not. The collection's release action is not invoked: the
+        /// caller is the object's own removal, so any teardown it needs is passed in and
+        /// runs only once the object is known to be the caller's.
+        /// </summary>
+        /// <remarks>
+        /// What a client may take out is what it put in, and everything else is one
+        /// error however it came about: an object another client owns, one that was
+        /// never here, and one the collection let go of on leaving a scene are alike
+        /// from here. So the message says only that this client did not create it,
+        /// rather than blaming another client for a collection that has been detached.
+        /// </remarks>
+        public void RemoveOwnedByCaller (T obj, string name, Action<T> teardown = null)
+        {
+            if (!OwnedByCaller (obj))
+                throw new InvalidOperationException (
+                    name + " not found among those created by this client");
+            if (teardown != null)
+                teardown (obj);
+            Remove (obj);
+        }
+
+        /// <summary>
         /// Remove all objects matching the predicate, without invoking the release
         /// action.
         /// </summary>
@@ -92,9 +115,13 @@ namespace KRPC.Utils
         /// it is kept, as is one that is merely not loaded, which the game can bring back.
         /// </summary>
         /// <remarks>
-        /// An addon that acts on its objects every frame calls this first, so that a
-        /// destroyed object is dropped rather than reached into from the frame loop, where
-        /// there is no client call to report the failure to.
+        /// Called on every collection by the object store's sweep, so that a collection
+        /// never holds more than the store does; an addon that acts on its objects every
+        /// frame also calls it first, so that a destroyed object is dropped rather than
+        /// reached into from the frame loop, where there is no client call to report the
+        /// failure to. An addon with nothing to do to its objects per frame needs only the
+        /// sweep: classifying is allowed to search as widely as it needs to, so it is not
+        /// something to do to a whole collection on every frame.
         /// </remarks>
         public void RemoveDestroyed ()
         {

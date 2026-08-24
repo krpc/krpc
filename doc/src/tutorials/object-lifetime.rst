@@ -42,6 +42,20 @@ roster no longer has, including the one the rename was made through. They all ra
 exception from then on, and an object for the renamed kerbal has to be obtained again under
 the new name.
 
+The other case is an object a client asks the server to build, which names nothing in the
+game. Nothing the game does ever finishes with such an object, so the server holds it until
+the client says it is done with it: ``ReferenceFrame.Remove`` for a frame built with
+``ReferenceFrame.CreateRelative`` or ``ReferenceFrame.CreateHybrid``, ``Orbit.Remove`` for an
+orbit built with ``Orbit.CreateFromPositionAndVelocity`` or
+``Orbit.CreateFromOrbitalElements``, and ``ResourceTransfer.Remove`` for a transfer between
+parts. Whatever was built on what is removed goes with it, having nothing left to be
+evaluated against: a frame defined against a removed frame or orbit, and the flight
+information measured in a removed frame.
+
+Each of these belongs to the client that asked for it: two clients that build the same
+reference frame are given one each, so a frame one of them removes leaves the other's alone,
+and anything a client has not removed goes when it disconnects.
+
 A few members read nothing and so raise nothing: those that hand back what the object was
 built from, such as the part a part module belongs to, or the name of a field. They answer as
 they always did, and what they hand back raises the exception itself as soon as it is used.

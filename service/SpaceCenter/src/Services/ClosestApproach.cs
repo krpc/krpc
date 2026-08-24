@@ -1,7 +1,9 @@
 using System;
+using KRPC.Service;
 using KRPC.Service.Attributes;
 using KRPC.SpaceCenter.ExtensionMethods;
 using KRPC.Utils;
+using UnityEngine;
 using Tuple3 = System.Tuple<double, double, double>;
 
 namespace KRPC.SpaceCenter.Services
@@ -11,20 +13,34 @@ namespace KRPC.SpaceCenter.Services
     /// <see cref="Orbit.NextClosestApproach"/> or <see cref="Orbit.ClosestApproaches"/>.
     /// </summary>
     /// <remarks>
-    /// A close approach is a snapshot: the time of closest approach is estimated once
-    /// when the object is created, and every member describes the state at that time.
-    /// Relative quantities are the target relative to the orbiting object (target minus
-    /// self).
+    /// The object names the approach rather than describing it once: each member
+    /// estimates the time of closest approach from where the two orbits are now, and
+    /// describes the state at that time. The estimate moves as the game runs, so
+    /// members read at different moments can differ a little; members read in one
+    /// physics tick all describe the same estimate. Relative quantities are the target
+    /// relative to the orbiting object (target minus self).
+    ///
+    /// The search runs forward over one orbital period from the current time. Once an
+    /// approach has passed and the two orbits are moving apart, the closest point in
+    /// that period is the current one, so the object reports the approach as now, at
+    /// the present separation, until the orbits bring another one within range.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public class ClosestApproach : Equatable<ClosestApproach>, IGameObjectState
     {
         readonly Orbit orbit;
         readonly Orbit target;
-        readonly double ut;
-        readonly double distance;
+        // Which of the successive approaches this is: the search covers one orbital
+        // period, starting this many periods from now.
+        readonly int orbitsAhead;
+        // The approach as it was last solved, with the physics tick and the game state it
+        // was solved in.
+        float solvedFixedTime = float.NaN;
+        uint solvedGeneration;
+        double solvedUT;
+        double solvedDistance;
 
-        internal ClosestApproach (Orbit orbit, Orbit target, double beginTime)
+        internal ClosestApproach (Orbit orbit, Orbit target, int orbitsAhead)
         {
             if (ReferenceEquals (orbit, null))
                 throw new ArgumentNullException (nameof (orbit));
@@ -32,18 +48,24 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentNullException (nameof (target));
             this.orbit = orbit;
             this.target = target;
-            ut = Orbit.CalcClosestAproach (orbit, target, beginTime, out distance);
+            this.orbitsAhead = orbitsAhead;
         }
 
         /// <summary>
         /// Returns true if the objects are equal.
         /// </summary>
+        /// <remarks>
+        /// What the object stands for is which approach between the two orbits it is,
+        /// so asking for the same one again gives back the same object. The estimated
+        /// time of the approach is not part of that: it is read from the orbits and
+        /// moves as they do.
+        /// </remarks>
         public override bool Equals (ClosestApproach other)
         {
             return !ReferenceEquals (other, null) &&
                    orbit.Equals (other.orbit) &&
                    target.Equals (other.target) &&
-                   ut == other.ut;
+                   orbitsAhead == other.orbitsAhead;
         }
 
         /// <summary>
@@ -51,20 +73,55 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            return Hash.Of (orbit).And (target).And (ut);
+            return Hash.Of (orbit).And (target).And (orbitsAhead);
         }
 
         /// <summary>
-        /// What the game holds for the approach. It describes the two orbits at a moment,
-        /// and every member reads both of them, so it needs both: it is as live, dormant or
-        /// destroyed as the less alive of the two.
+        /// What the game holds for the approach. Every member reads both of the orbits,
+        /// so it needs both: it is as live, dormant or destroyed as the less alive of
+        /// the two.
         /// </summary>
         public GameObjectState GameObjectState {
             get { return orbit.GameObjectState.LeastAlive (target.GameObjectState); }
         }
 
+        // The time the search for this approach starts from, which it covers one
+        // orbital period of the approaching object from. The next approach is searched
+        // for from now, and needs no period to step by; a hyperbolic orbit, which has
+        // none, therefore still has a next approach.
+        double BeginTime {
+            get {
+                if (orbitsAhead == 0)
+                    return SpaceCenter.UT;
+                return SpaceCenter.UT + orbitsAhead * orbit.InternalOrbit.period;
+            }
+        }
+
+        // The universal time of the closest approach, and the distance there, estimated
+        // from where the two orbits are now. The estimate is a search over an orbital
+        // period, sampling both orbits at some seventy points, so it costs far more than
+        // any member that reads it. Nothing it reads moves within a physics tick, so it
+        // is solved once per tick: the members read in a tick share that one search, and
+        // all describe the same moment.
+        double Solve (out double approachDistance)
+        {
+            if (solvedFixedTime != Time.fixedTime || solvedGeneration != GameState.Generation) {
+                solvedUT = Orbit.CalcClosestAproach (orbit, target, BeginTime, out solvedDistance);
+                solvedFixedTime = Time.fixedTime;
+                solvedGeneration = GameState.Generation;
+            }
+            approachDistance = solvedDistance;
+            return solvedUT;
+        }
+
+        double Solve ()
+        {
+            double approachDistance;
+            return Solve (out approachDistance);
+        }
+
         // The world-space position of the given orbit at the closest approach.
-        Vector3d WorldPosition (Orbit o)
+        Vector3d WorldPosition (Orbit o, double ut)
         {
             return o.InternalOrbit.getPositionAtUT (ut);
         }
@@ -76,7 +133,7 @@ namespace KRPC.SpaceCenter.Services
         // reference frame moves at, which is also the body's current one. Both objects
         // are treated the same way, so the relative quantities remain the difference of
         // the absolute ones.
-        Vector3d WorldVelocity (Orbit o)
+        Vector3d WorldVelocity (Orbit o, double ut)
         {
             var internalOrbit = o.InternalOrbit;
             return internalOrbit.getOrbitalVelocityAtUT (ut).SwapYZ () +
@@ -93,7 +150,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double UT {
-            get { return ut; }
+            get { return Solve (); }
         }
 
         /// <summary>
@@ -101,7 +158,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double TimeTo {
-            get { return ut - SpaceCenter.UT; }
+            get { return Solve () - SpaceCenter.UT; }
         }
 
         /// <summary>
@@ -109,7 +166,11 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double Distance {
-            get { return distance; }
+            get {
+                double approachDistance;
+                Solve (out approachDistance);
+                return approachDistance;
+            }
         }
 
         /// <summary>
@@ -119,7 +180,10 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         [KRPCProperty]
         public double RelativeSpeed {
-            get { return (WorldVelocity (target) - WorldVelocity (orbit)).magnitude; }
+            get {
+                var ut = Solve ();
+                return (WorldVelocity (target, ut) - WorldVelocity (orbit, ut)).magnitude;
+            }
         }
 
         /// <summary>
@@ -167,7 +231,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Position (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
-            return referenceFrame.PositionFromWorldSpace (WorldPosition (orbit)).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (WorldPosition (orbit, Solve ())).ToTuple ();
         }
 
         /// <summary>
@@ -181,7 +245,7 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 TargetPosition (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
-            return referenceFrame.PositionFromWorldSpace (WorldPosition (target)).ToTuple ();
+            return referenceFrame.PositionFromWorldSpace (WorldPosition (target, Solve ())).ToTuple ();
         }
 
         /// <summary>
@@ -195,7 +259,9 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 Velocity (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
-            return referenceFrame.VelocityFromWorldSpace (WorldPosition (orbit), WorldVelocity (orbit)).ToTuple ();
+            var ut = Solve ();
+            return referenceFrame.VelocityFromWorldSpace (
+                WorldPosition (orbit, ut), WorldVelocity (orbit, ut)).ToTuple ();
         }
 
         /// <summary>
@@ -209,7 +275,9 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 TargetVelocity (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
-            return referenceFrame.VelocityFromWorldSpace (WorldPosition (target), WorldVelocity (target)).ToTuple ();
+            var ut = Solve ();
+            return referenceFrame.VelocityFromWorldSpace (
+                WorldPosition (target, ut), WorldVelocity (target, ut)).ToTuple ();
         }
 
         /// <summary>
@@ -224,7 +292,9 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 RelativePosition (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
-            return referenceFrame.DirectionFromWorldSpace (WorldPosition (target) - WorldPosition (orbit)).ToTuple ();
+            var ut = Solve ();
+            return referenceFrame.DirectionFromWorldSpace (
+                WorldPosition (target, ut) - WorldPosition (orbit, ut)).ToTuple ();
         }
 
         /// <summary>
@@ -239,7 +309,9 @@ namespace KRPC.SpaceCenter.Services
         public Tuple3 RelativeVelocity (ReferenceFrame referenceFrame = null)
         {
             referenceFrame = DefaultedFrame (referenceFrame);
-            return referenceFrame.DirectionFromWorldSpace (WorldVelocity (target) - WorldVelocity (orbit)).ToTuple ();
+            var ut = Solve ();
+            return referenceFrame.DirectionFromWorldSpace (
+                WorldVelocity (target, ut) - WorldVelocity (orbit, ut)).ToTuple ();
         }
     }
 }

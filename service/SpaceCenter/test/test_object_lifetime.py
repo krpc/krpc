@@ -144,6 +144,196 @@ class TestObjectLifetime(krpctest.TestCase):
         )
         self.assertRaises(self.destroyed, getattr, force, "force_vector")
 
+    def test_removing_a_created_reference_frame(self):
+        # A frame a client creates stands for nothing in the game, so nothing the game
+        # destroys ever says it is finished with; removing it is the only thing that can.
+        vessel = self.space_center.active_vessel
+        frame = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, position=(1, 2, 3)
+        )
+        self.assertIsNotNone(vessel.position(frame))
+        before = self.conn.testing_tools.object_store_size
+        frame.remove()
+        self.assertRaises(self.destroyed, vessel.position, frame)
+        self.assertRaises(self.destroyed, frame.remove)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the removed reference frame was not dropped from the object store",
+        )
+
+    def test_removing_a_reference_frame_another_is_built_on(self):
+        vessel = self.space_center.active_vessel
+        relative = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, position=(4, 5, 6)
+        )
+        hybrid = self.space_center.ReferenceFrame.create_hybrid(
+            relative, vessel.orbit.body.non_rotating_reference_frame
+        )
+        self.assertIsNotNone(vessel.position(hybrid))
+        before = self.conn.testing_tools.object_store_size
+        relative.remove()
+        # The hybrid frame takes its position from the frame that has gone, so there is
+        # nothing left to evaluate it against and it goes too.
+        self.assertRaises(self.destroyed, vessel.position, hybrid)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size <= before - 2,
+            message="the removed frames were not dropped from the object store",
+        )
+
+    def test_creating_a_relative_frame_twice_gives_two_objects(self):
+        # A frame a client creates is its own to remove, so each call builds a new one
+        # rather than the store handing back one object for a set of values.
+        vessel = self.space_center.active_vessel
+        first = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, position=(1, 1, 1)
+        )
+        second = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, position=(1, 1, 1)
+        )
+        self.assertNotEqual(first, second)
+        first.remove()
+        # Removing one leaves the other alone, and a frame created afterwards from the
+        # same values is a working frame rather than the one that has gone
+        self.assertRaises(self.destroyed, vessel.position, first)
+        self.assertIsNotNone(vessel.position(second))
+        third = self.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, position=(1, 1, 1)
+        )
+        self.assertNotEqual(first, third)
+        self.assertIsNotNone(vessel.position(third))
+        second.remove()
+        third.remove()
+
+    def test_creating_a_hybrid_frame_twice_gives_two_objects(self):
+        vessel = self.space_center.active_vessel
+        body_frame = vessel.orbit.body.non_rotating_reference_frame
+        first = self.space_center.ReferenceFrame.create_hybrid(
+            vessel.reference_frame, body_frame
+        )
+        second = self.space_center.ReferenceFrame.create_hybrid(
+            vessel.reference_frame, body_frame
+        )
+        self.assertNotEqual(first, second)
+        first.remove()
+        self.assertRaises(self.destroyed, vessel.position, first)
+        self.assertIsNotNone(vessel.position(second))
+        second.remove()
+
+    def test_the_store_drops_a_created_frame_when_its_client_goes(self):
+        # A frame a client creates stands for nothing in the game, so nothing the game
+        # destroys ever says it is finished with. The client that asked for it going is
+        # the only thing that can, short of removing it.
+        conn = self.connect(use_cached=False)
+        vessel = conn.space_center.active_vessel
+        created = conn.space_center.ReferenceFrame.create_relative(
+            vessel.reference_frame, position=(2, 2, 2)
+        )
+        self.assertIsNotNone(vessel.position(created))
+        # A frame named by something in the game is shared by both connections, and must
+        # not go anywhere when one of them does
+        vessel_frame = self.space_center.active_vessel.reference_frame
+        before = self.conn.testing_tools.object_store_size
+        conn.close()
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the created reference frame was not dropped from the object store",
+        )
+        self.assertIsNotNone(self.space_center.active_vessel.position(vessel_frame))
+
+    def test_removing_an_object_another_client_created(self):
+        # A created object belongs to the client that asked for it. Ids come from one
+        # sequence and one store, so a client passed one out of band can reach the
+        # object, but it is not that client's to remove.
+        other = self.connect(use_cached=False)
+        theirs = other.space_center.ReferenceFrame.create_relative(
+            other.space_center.active_vessel.reference_frame, position=(9, 9, 9)
+        )
+        # The same object reached through this connection. Reading the id is what a
+        # client passing one to another out of band amounts to, which is the only way
+        # this comes up; taking the class from this connection is what makes the calls
+        # go out on it rather than on the other.
+        # pylint: disable=protected-access
+        ours = self.space_center.ReferenceFrame(self.conn, theirs._object_id)
+        vessel = self.space_center.active_vessel
+        self.assertIsNotNone(vessel.position(ours))
+
+        # Named as not this client's rather than as gone: the frame is still there, and
+        # every kind of object a client asks the server to build refuses it that way
+        self.assertRaisesRegex(
+            RuntimeError, "not found among those created by this client", ours.remove
+        )
+        # Refusing it leaves the frame working for the client it does belong to
+        self.assertIsNotNone(vessel.position(ours))
+        theirs.remove()
+        other.close()
+
+    def test_removing_a_reference_frame_the_client_did_not_create(self):
+        # A frame named by something in the game is shared and bounded: the server holds
+        # one of each however often it is asked for, so there is nothing to release.
+        vessel = self.space_center.active_vessel
+        self.assertRaises(RuntimeError, vessel.reference_frame.remove)
+        self.assertIsNotNone(vessel.position(vessel.reference_frame))
+
+    def test_removing_a_created_orbit(self):
+        # An orbit a client creates is arithmetic the server holds on its behalf. It
+        # stands for nothing in the game, so removing it is the only thing that says it
+        # is finished with.
+        kerbin = self.space_center.bodies["Kerbin"]
+        orbit = self.space_center.Orbit.create_from_orbital_elements(
+            kerbin, 900000, 0.1, 0, 0, 0, 0, self.space_center.ut
+        )
+        self.assertAlmostEqual(900000, orbit.semi_major_axis, delta=1)
+        before = self.conn.testing_tools.object_store_size
+        orbit.remove()
+        self.assertRaises(self.destroyed, getattr, orbit, "semi_major_axis")
+        self.assertRaises(self.destroyed, orbit.remove)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size < before,
+            message="the removed orbit was not dropped from the object store",
+        )
+
+    def test_removing_an_orbit_a_reference_frame_is_defined_against(self):
+        kerbin = self.space_center.bodies["Kerbin"]
+        orbit = self.space_center.Orbit.create_from_orbital_elements(
+            kerbin, 1000000, 0, 0, 0, 0, 0, self.space_center.ut
+        )
+        frame = orbit.reference_frame
+        vessel = self.space_center.active_vessel
+        self.assertIsNotNone(vessel.position(frame))
+        before = self.conn.testing_tools.object_store_size
+        orbit.remove()
+        # The frame is centered on the point the orbit has reached, so it has nothing
+        # left to be evaluated against and goes with it.
+        self.assertRaises(self.destroyed, vessel.position, frame)
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size <= before - 2,
+            message="the removed orbit and its frame were not dropped from the store",
+        )
+
+    def test_removing_an_orbit_the_client_did_not_create(self):
+        # The orbit of something in the game is shared and bounded: the server holds one
+        # of each however often it is asked for, so there is nothing to release.
+        vessel = self.space_center.active_vessel
+        self.assertRaises(RuntimeError, vessel.orbit.remove)
+        self.assertGreater(vessel.orbit.apoapsis, 0)
+
+    def test_a_flight_goes_with_the_frame_it_is_measured_in(self):
+        # A flight reads every quantity in its frame, so a frame the client removes
+        # leaves it with nothing to express anything against.
+        vessel = self.space_center.active_vessel
+        frame = self.space_center.ReferenceFrame.create_relative(
+            vessel.orbital_reference_frame, position=(7, 8, 9)
+        )
+        flight = vessel.flight(frame)
+        self.assertIsNotNone(flight.velocity)
+        before = self.conn.testing_tools.object_store_size
+        frame.remove()
+        self.assertRaises(self.destroyed, getattr, flight, "velocity")
+        self.wait_until(
+            lambda: self.conn.testing_tools.object_store_size <= before - 2,
+            message="the removed frame and the flight were not dropped from the store",
+        )
+
     def test_removing_a_force(self):
         # The command pod, which nothing here destroys: the tests run in name order and
         # the thermometer and the strut have both been destroyed by this point.

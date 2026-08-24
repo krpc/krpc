@@ -35,6 +35,15 @@ namespace KRPC.SpaceCenter
         }
 
         /// <summary>
+        /// Stop holding an orbit that its client has removed. Raises if the orbit is not one
+        /// this client constructed.
+        /// </summary>
+        static internal void Remove (Services.Orbit orbit)
+        {
+            orbits.RemoveOwnedByCaller (orbit, "Orbit");
+        }
+
+        /// <summary>
         /// Let go of the orbits of clients that have disconnected. This runs in Update
         /// rather than FixedUpdate, which stops while the game is paused, as nothing
         /// about an orbit a client constructed is tied to the physics step.

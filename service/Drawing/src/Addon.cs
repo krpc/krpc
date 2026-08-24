@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using KRPC.Service;
 using KRPC.Utils;
@@ -30,10 +29,7 @@ namespace KRPC.Drawing
 
         internal static void RemoveObject (IDrawable obj)
         {
-            if (!objects.OwnedByCaller (obj))
-                throw new ArgumentException ("Drawing object not found");
-            obj.Destroy ();
-            objects.Remove (obj);
+            objects.RemoveOwnedByCaller (obj, "Drawing object", x => x.Destroy ());
         }
 
         internal static void Clear (bool clientOnly)

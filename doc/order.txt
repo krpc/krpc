@@ -390,6 +390,7 @@ SpaceCenter.Flight.ThrustSpecificFuelConsumption
 SpaceCenter.Orbit
 SpaceCenter.Orbit.CreateFromPositionAndVelocity
 SpaceCenter.Orbit.CreateFromOrbitalElements
+SpaceCenter.Orbit.Remove
 SpaceCenter.Orbit.Body
 SpaceCenter.Orbit.ReferenceFrame
 SpaceCenter.Orbit.OrbitalReferenceFrame
@@ -1307,6 +1308,7 @@ SpaceCenter.ResourceFlowMode.None
 SpaceCenter.ResourceTransfer
 SpaceCenter.ResourceTransfer.Start
 SpaceCenter.ResourceTransfer.Cancel
+SpaceCenter.ResourceTransfer.Remove
 SpaceCenter.ResourceTransfer.Amount
 SpaceCenter.ResourceTransfer.Complete
 SpaceCenter.Node
@@ -1329,6 +1331,7 @@ SpaceCenter.Node.Direction
 SpaceCenter.ReferenceFrame
 SpaceCenter.ReferenceFrame.CreateRelative
 SpaceCenter.ReferenceFrame.CreateHybrid
+SpaceCenter.ReferenceFrame.Remove
 SpaceCenter.AutoPilot
 SpaceCenter.AutoPilot.SAS
 SpaceCenter.AutoPilot.SASMode

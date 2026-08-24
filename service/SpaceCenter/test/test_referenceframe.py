@@ -1316,6 +1316,21 @@ class TestReferenceFrame(krpctest.TestCase):
             (0, 0, 0, 1), self.vessel.rotation(ref), places=6
         )
 
+    def test_hybrid_missing_components_come_from_position(self):
+        # Passing a component explicitly as null is how a client asks for the default,
+        # and it has to give the same frame as leaving the argument out.
+        frames = self.space_center.ReferenceFrame
+        given = frames.create_hybrid(self.vessel.reference_frame, None, None, None)
+        left_out = frames.create_hybrid(self.vessel.reference_frame)
+        self.assertAlmostEqual(
+            self.vessel.direction(left_out), self.vessel.direction(given), places=6
+        )
+        self.assertAlmostEqual(
+            self.vessel.position(left_out), self.vessel.position(given), places=6
+        )
+        given.remove()
+        left_out.remove()
+
     def test_hybrid_position(self):
         ref = self.space_center.ReferenceFrame.create_hybrid(
             position=self.vessel.reference_frame
