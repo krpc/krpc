@@ -78,8 +78,9 @@ namespace KRPC.Utils
 
         /// <summary>
         /// Remove an object that the client making the current RPC owns, naming it as
-        /// given if it does not. The release action is not invoked: the caller is the
-        /// object's own removal, which does its own teardown.
+        /// given if it does not. The collection's release action is not invoked: the
+        /// caller is the object's own removal, so any teardown it needs is passed in and
+        /// runs only once the object is known to be the caller's.
         /// </summary>
         /// <remarks>
         /// What a client may take out is what it put in, and everything else is one
@@ -88,11 +89,13 @@ namespace KRPC.Utils
         /// from here. So the message says only that this client did not create it,
         /// rather than blaming another client for a collection that has been detached.
         /// </remarks>
-        public void RemoveOwnedByCaller (T obj, string name)
+        public void RemoveOwnedByCaller (T obj, string name, Action<T> teardown = null)
         {
             if (!OwnedByCaller (obj))
                 throw new InvalidOperationException (
                     name + " not found among those created by this client");
+            if (teardown != null)
+                teardown (obj);
             Remove (obj);
         }
 

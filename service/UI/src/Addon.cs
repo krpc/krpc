@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using KRPC.Service;
 using KRPC.Utils;
@@ -31,10 +30,7 @@ namespace KRPC.UI
 
         internal static void Remove (Object obj)
         {
-            if (!objects.OwnedByCaller (obj))
-                throw new ArgumentException ("UI object not found");
-            obj.Destroy ();
-            objects.Remove (obj);
+            objects.RemoveOwnedByCaller (obj, "UI object", x => x.Destroy ());
         }
 
         internal static void Clear (bool clientOnly)
