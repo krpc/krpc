@@ -154,6 +154,16 @@
     the second with the orbital prograde/normal/radial directions. Together with a
     constructed orbit these give a reference frame that follows a coasting object that
     need not exist (#1046)
+  - Add `Orbit.Remove`, which releases the memory the server holds for an orbit created
+    by `Orbit.CreateFromPositionAndVelocity` or `Orbit.CreateFromOrbitalElements`. Such an
+    orbit stands for nothing in the game, so nothing else says when it is finished with;
+    one that is not removed is held until the client that created it disconnects. A
+    reference frame defined against a removed orbit goes with it (#1072)
+  - **Breaking:** A `ClosestApproach` reads the two orbits as they are now rather than
+    describing the moment it was created, so its estimate follows them as the game runs.
+    Asking for the same approach again gives back the same object; the server previously
+    kept a separate one per call, so a script polling the approach to a target filled its
+    memory (#1072)
   - Add `Orbit.VelocityAt`, giving the velocity at a given time in a given reference
     frame, alongside the existing `Orbit.PositionAt` (#1046)
   - `Orbit.Epoch` is documented as the universal time at which the mean anomaly at epoch
@@ -166,6 +176,18 @@
   - Fix removing a maneuver node leaking the object for the rest of the session (#771)
 
 - Reference frames
+  - Add `ReferenceFrame.Remove`, which releases the memory the server holds for a frame
+    created by `ReferenceFrame.CreateRelative` or `ReferenceFrame.CreateHybrid`. Such a
+    frame stands for nothing in the game, so nothing else says when it is finished with,
+    and a script creating one repeatedly needed a reload of the game to get the memory
+    back. One that is not removed is held until the client that created it disconnects
+    (#1072)
+  - `ReferenceFrame.CreateRelative` and `ReferenceFrame.CreateHybrid` return a new frame
+    on each call, rather than one object shared by every client that asks for the same
+    frame. A frame is now each client's own to remove (#1072)
+  - `ReferenceFrame.CreateRelative` and `ReferenceFrame.CreateHybrid` raise an error when
+    given no frame to be defined against, rather than returning one that fails with a
+    `NullReferenceException` on first use (#1072)
   - Creating many hybrid reference frames no longer slows the server down. A frame given
     the same frame for two of its components, which the defaults of
     `ReferenceFrame.CreateHybrid` do on their own, hashed the same as every other such
@@ -275,6 +297,9 @@
   - Fix a resource transfer failing on every update, and never completing, once one of the
     parts it runs between is destroyed; the transfer is now canceled. A transfer whose vessel
     the game unloads waits for it rather than failing (#1051)
+  - Add `ResourceTransfer.Remove`, which stops a transfer and releases the memory the
+    server holds for it. A transfer that is left is held for as long as the game holds
+    the two parts it runs between, which may be the rest of the flight (#1072)
 
 - Camera
   - `Camera.NextCamera` and `Camera.PreviousCamera` now move the IVA view between the crew of
@@ -439,6 +464,8 @@
     in vacuum, or in atmospheric flight) (#914)
   - Fix `Part.Lift`, `Flight.Lift` and `Flight.AerodynamicForce` including stale body lift for
     parts whose body lift the game suppresses, e.g. a pod with a heatshield attached (#971)
+  - A `Flight` is freed once the reference frame it is measured in is gone, rather than
+    being kept for as long as its vessel exists (#1072)
 
 - Control
   - **Breaking:** `Control.SAS` now throws an exception when set to true while the autopilot is

@@ -1,5 +1,9 @@
 ## [v0.7.0] - unreleased
 
+- **Breaking:** Removing a user interface element another client created, or one the
+  server no longer holds, reports that it is not among those this client created, rather
+  than a bad argument. Every other object a client asks the server to build already
+  refused it that way (#1072)
 - **Breaking:** Colors are given as `(red, green, blue, alpha)` rather than
   `(red, green, blue)`, so that an element can be drawn translucent. Affects `Text.Color`
   and the color of a `UI.Message` (#1040)
