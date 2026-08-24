@@ -19,6 +19,11 @@ namespace KRPC.SpaceCenter.Services
     /// members read at different moments can differ a little; members read in one
     /// physics tick all describe the same estimate. Relative quantities are the target
     /// relative to the orbiting object (target minus self).
+    ///
+    /// The search runs forward over one orbital period from the current time. Once an
+    /// approach has passed and the two orbits are moving apart, the closest point in
+    /// that period is the current one, so the object reports the approach as now, at
+    /// the present separation, until the orbits bring another one within range.
     /// </remarks>
     [KRPCClass (Service = "SpaceCenter")]
     public class ClosestApproach : Equatable<ClosestApproach>, IGameObjectState
