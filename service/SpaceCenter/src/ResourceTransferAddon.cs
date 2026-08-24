@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using KRPC.SpaceCenter.Services;
 using KRPC.Utils;
@@ -39,10 +38,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         static internal void Remove (ResourceTransfer transfer)
         {
-            if (!transfers.OwnedByCaller (transfer))
-                throw new InvalidOperationException (
-                    "Resource transfer not found among those started by this client");
-            transfers.Remove (transfer);
+            transfers.RemoveOwnedByCaller (transfer, "Resource transfer");
         }
 
         /// <summary>

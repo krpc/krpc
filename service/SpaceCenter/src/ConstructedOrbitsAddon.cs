@@ -1,4 +1,3 @@
-using System;
 using KRPC.Utils;
 using UnityEngine;
 
@@ -41,10 +40,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         static internal void Remove (Services.Orbit orbit)
         {
-            if (!orbits.OwnedByCaller (orbit))
-                throw new InvalidOperationException (
-                    "Orbit not found among those created by this client");
-            orbits.Remove (orbit);
+            orbits.RemoveOwnedByCaller (orbit, "Orbit");
         }
 
         /// <summary>

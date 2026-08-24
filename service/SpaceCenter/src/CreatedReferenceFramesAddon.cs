@@ -1,4 +1,3 @@
-using System;
 using KRPC.Utils;
 using UnityEngine;
 
@@ -41,10 +40,7 @@ namespace KRPC.SpaceCenter
         /// </summary>
         static internal void Remove (Services.ReferenceFrame frame)
         {
-            if (!frames.OwnedByCaller (frame))
-                throw new InvalidOperationException (
-                    "Reference frame not found among those created by this client");
-            frames.Remove (frame);
+            frames.RemoveOwnedByCaller (frame, "Reference frame");
         }
 
         /// <summary>

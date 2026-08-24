@@ -240,6 +240,33 @@ class TestObjectLifetime(krpctest.TestCase):
         )
         self.assertIsNotNone(self.space_center.active_vessel.position(vessel_frame))
 
+    def test_removing_an_object_another_client_created(self):
+        # A created object belongs to the client that asked for it. Ids come from one
+        # sequence and one store, so a client passed one out of band can reach the
+        # object, but it is not that client's to remove.
+        other = self.connect(use_cached=False)
+        theirs = other.space_center.ReferenceFrame.create_relative(
+            other.space_center.active_vessel.reference_frame, position=(9, 9, 9)
+        )
+        # The same object reached through this connection. Reading the id is what a
+        # client passing one to another out of band amounts to, which is the only way
+        # this comes up; taking the class from this connection is what makes the calls
+        # go out on it rather than on the other.
+        # pylint: disable=protected-access
+        ours = self.space_center.ReferenceFrame(self.conn, theirs._object_id)
+        vessel = self.space_center.active_vessel
+        self.assertIsNotNone(vessel.position(ours))
+
+        # Named as not this client's rather than as gone: the frame is still there, and
+        # every kind of object a client asks the server to build refuses it that way
+        self.assertRaisesRegex(
+            RuntimeError, "not found among those created by this client", ours.remove
+        )
+        # Refusing it leaves the frame working for the client it does belong to
+        self.assertIsNotNone(vessel.position(ours))
+        theirs.remove()
+        other.close()
+
     def test_removing_a_reference_frame_the_client_did_not_create(self):
         # A frame named by something in the game is shared and bounded: the server holds
         # one of each however often it is asked for, so there is nothing to release.
