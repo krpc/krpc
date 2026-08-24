@@ -46,9 +46,10 @@ Orbit
          :func:`Orbit::reference_frame` and :func:`Orbit::orbital_reference_frame` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :func:`Orbit::remove` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
 
    .. function:: static Orbit create_from_orbital_elements(Client& connection, CelestialBody body, double semi_major_axis, double eccentricity, double inclination, double longitude_of_ascending_node, double argument_of_periapsis, double mean_anomaly_at_epoch, double epoch)
 
@@ -92,9 +93,29 @@ Orbit
          :func:`Orbit::reference_frame` and :func:`Orbit::orbital_reference_frame` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :func:`Orbit::remove` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
+
+   .. function:: void remove()
+
+      Remove the orbit, releasing the memory the server holds for it.
+
+
+   
+
+      .. note::
+
+         Only an orbit created by :func:`Orbit::create_from_position_and_velocity` or
+         :func:`Orbit::create_from_orbital_elements` can be removed. Every other orbit is
+         the orbit of something in the game, which is what says when it is finished
+         with, and the server holds one of each however often it is asked for.
+
+         Any further use of this object throws an exception, as does use of a
+         reference frame defined against it. An orbit is removed for the client that
+         created it and is not shared with any other, and one whose client disconnects
+         is removed with it.
 
    .. function:: CelestialBody body()
 

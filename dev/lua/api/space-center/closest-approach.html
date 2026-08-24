@@ -701,10 +701,16 @@
 <a class="reference internal" href="orbit.html#SpaceCenter.Orbit.next_closest_approach" title="SpaceCenter.Orbit.next_closest_approach"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.next_closest_approach()</span></code></a> or <a class="reference internal" href="orbit.html#SpaceCenter.Orbit.closest_approaches" title="SpaceCenter.Orbit.closest_approaches"><code class="xref lua lua-meth docutils literal notranslate"><span class="pre">SpaceCenter.Orbit.closest_approaches()</span></code></a>.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>A close approach is a snapshot: the time of closest approach is estimated once
-when the object is created, and every member describes the state at that time.
-Relative quantities are the target relative to the orbiting object (target minus
-self).</p>
+<p>The object names the approach rather than describing it once: each member
+estimates the time of closest approach from where the two orbits are now, and
+describes the state at that time. The estimate moves as the game runs, so
+members read at different moments can differ a little; members read in one
+physics tick all describe the same estimate. Relative quantities are the target
+relative to the orbiting object (target minus self).</p>
+<p>The search runs forward over one orbital period from the current time. Once an
+approach has passed and the two orbits are moving apart, the closest point in
+that period is the current one, so the object reports the approach as now, at
+the present separation, until the orbits bring another one within range.</p>
 </div>
 <dl class="lua attribute">
 <dt class="sig sig-object lua" id="SpaceCenter.SpaceCenter.ClosestApproach.ut">

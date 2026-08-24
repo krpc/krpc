@@ -736,9 +736,10 @@ nothing is moving along it. Use <a class="reference internal" href="#method-KRPC
 <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.TrueAnomalyAtUT</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.OrbitalReferenceFrame</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.Remove" title="KRPC.Client.Services.SpaceCenter.Orbit.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.Remove</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
 </div>
 </dd></dl>
 
@@ -785,9 +786,32 @@ nothing is moving along it. Use <a class="reference internal" href="#method-KRPC
 <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT" title="KRPC.Client.Services.SpaceCenter.Orbit.TrueAnomalyAtUT method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.TrueAnomalyAtUT</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.ReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.ReferenceFrame</span></code></a> and <a class="reference internal" href="#property-KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame" title="KRPC.Client.Services.SpaceCenter.Orbit.OrbitalReferenceFrame property"><code class="xref csharp csharp-prop docutils literal notranslate"><span class="pre">Orbit.OrbitalReferenceFrame</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.Remove" title="KRPC.Client.Services.SpaceCenter.Orbit.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.Remove</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.Orbit.Remove">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.Remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove the orbit, releasing the memory the server holds for it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only an orbit created by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity" title="KRPC.Client.Services.SpaceCenter.Orbit.CreateFromPositionAndVelocity method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.CreateFromPositionAndVelocity</span></code></a> or
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements" title="KRPC.Client.Services.SpaceCenter.Orbit.CreateFromOrbitalElements method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">Orbit.CreateFromOrbitalElements</span></code></a> can be removed. Every other orbit is
+the orbit of something in the game, which is what says when it is finished
+with, and the server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a
+reference frame defined against it. An orbit is removed for the client that
+created it and is not shared with any other, and one whose client disconnects
+is removed with it.</p>
 </div>
 </dd></dl>
 

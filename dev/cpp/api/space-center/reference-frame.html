@@ -708,8 +708,8 @@ velocities. Contains:</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This class does not contain any properties or methods. It is only
-used as a parameter to other functions.</p>
+<p>Apart from being created and removed, a reference frame is only used as a
+parameter to other functions.</p>
 </div>
 <dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame15create_relativeER6Client14ReferenceFrameNSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEENSt5tupleIdddEE">
@@ -727,6 +727,13 @@ whose components offset the components of a parent reference frame.</p>
 </ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new frame, which is kept until <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame6removeEv" title="krpc::services::SpaceCenter::ReferenceFrame::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::remove()</span></code></a> is
+called on it or the client that created it disconnects, so a script that
+creates one repeatedly, for example once per update, should remove each one
+when it is finished with it.</p>
+</div>
 </dd></dl>
 
 <dl class="cpp function">
@@ -749,6 +756,27 @@ whose components inherited from other reference frames.</p>
 <p>The <em>position</em> reference frame is required but all other
 reference frames are optional. If omitted, they are set to the
 <em>position</em> reference frame.</p>
+<p>Each call returns a new frame, which is kept until <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame6removeEv" title="krpc::services::SpaceCenter::ReferenceFrame::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::remove()</span></code></a> is
+called on it or the client that created it disconnects, so a script that
+creates one repeatedly, for example once per update, should remove each one
+when it is finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame6removeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter14ReferenceFrame6removeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter14ReferenceFrame6removeEv"></span><span id="krpc::services::SpaceCenter::ReferenceFrame::remove"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame6removeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Remove the reference frame, releasing the memory the server holds for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only a frame created by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame15create_relativeER6Client14ReferenceFrameNSt5tupleIdddEENSt5tupleIddddEENSt5tupleIdddEENSt5tupleIdddEE" title="krpc::services::SpaceCenter::ReferenceFrame::create_relative"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::create_relative()</span></code></a> or
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter14ReferenceFrame13create_hybridER6Client14ReferenceFrame14ReferenceFrame14ReferenceFrame14ReferenceFrame" title="krpc::services::SpaceCenter::ReferenceFrame::create_hybrid"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">ReferenceFrame::create_hybrid()</span></code></a> can be removed. Every other frame is named by
+something in the game, which is what says when it is finished with, and the
+server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a frame
+built on it, which cannot be evaluated without it. A frame is removed for the
+client that created it and is not shared with any other, and one whose client
+disconnects is removed with it.</p>
 </div>
 </dd></dl>
 

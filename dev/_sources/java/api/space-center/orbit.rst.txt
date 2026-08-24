@@ -43,9 +43,10 @@ Orbit
          :meth:`Orbit.getReferenceFrame()` and :meth:`Orbit.getOrbitalReferenceFrame()` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :meth:`Orbit.remove()` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
 
    .. method:: static Orbit createFromOrbitalElements(Connection connection, CelestialBody body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
 
@@ -86,9 +87,28 @@ Orbit
          :meth:`Orbit.getReferenceFrame()` and :meth:`Orbit.getOrbitalReferenceFrame()` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :meth:`Orbit.remove()` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
+
+   .. method:: void remove()
+
+      Remove the orbit, releasing the memory the server holds for it.
+
+   
+
+      .. note::
+
+         Only an orbit created by :meth:`Orbit.createFromPositionAndVelocity(CelestialBody, org.javatuples.Triplet<Double,Double,Double>, org.javatuples.Triplet<Double,Double,Double>, double, ReferenceFrame)` or
+         :meth:`Orbit.createFromOrbitalElements(CelestialBody, double, double, double, double, double, double, double)` can be removed. Every other orbit is
+         the orbit of something in the game, which is what says when it is finished
+         with, and the server holds one of each however often it is asked for.
+
+         Any further use of this object throws an exception, as does use of a
+         reference frame defined against it. An orbit is removed for the client that
+         created it and is not shared with any other, and one whose client disconnects
+         is removed with it.
 
    .. method:: CelestialBody getBody()
 

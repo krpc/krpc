@@ -174,9 +174,11 @@ Resources
 
       .. note::
 
-         Use :func:`krpc_SpaceCenter_ResourceTransfer_Cancel` to stop the transfer before it finishes. The transfer is
-         also canceled if the client that started it disconnects. A canceled transfer is
-         marked as complete.
+         Use :func:`krpc_SpaceCenter_ResourceTransfer_Cancel` to stop the transfer before it finishes; a canceled
+         transfer is marked as complete. Use :func:`krpc_SpaceCenter_ResourceTransfer_Remove` to release the memory
+         the server holds for a transfer that is done with. A transfer is stopped and
+         removed if the client that started it disconnects, or if the flight it runs in
+         is left.
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Cancel(krpc_connection_t connection)
 
@@ -186,6 +188,21 @@ Resources
 
    
 
+   .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Remove(krpc_connection_t connection)
+
+      Remove the transfer, releasing the memory the server holds for it. The
+      transfer is canceled if it has not finished.
+
+
+   
+
+      .. note::
+
+         Any further use of this object throws an exception. A transfer that is left is
+         held until the parts it runs between are gone, the flight it runs in is left,
+         or the client that started it disconnects, whichever comes first; the first of
+         those may be the rest of the flight away.
+
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Amount(krpc_connection_t connection, float * result)
 
       The amount of the resource that has been transferred.
@@ -194,9 +211,8 @@ Resources
 
    .. function:: krpc_error_t krpc_SpaceCenter_ResourceTransfer_Complete(krpc_connection_t connection, bool * result)
 
-      Whether the transfer has completed. Also becomes true if the transfer is canceled,
-      either by calling :func:`krpc_SpaceCenter_ResourceTransfer_Cancel` or because the client that started it
-      disconnected.
+      Whether the transfer has completed. Also becomes true if the transfer is
+      canceled by calling :func:`krpc_SpaceCenter_ResourceTransfer_Cancel`.
 
    
 

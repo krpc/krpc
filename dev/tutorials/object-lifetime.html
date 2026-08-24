@@ -645,6 +645,18 @@ setting <code class="docutils literal notranslate"><span class="pre">CrewMember.
 roster no longer has, including the one the rename was made through. They all raise the
 exception from then on, and an object for the renamed kerbal has to be obtained again under
 the new name.</p>
+<p>The other case is an object a client asks the server to build, which names nothing in the
+game. Nothing the game does ever finishes with such an object, so the server holds it until
+the client says it is done with it: <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.Remove</span></code> for a frame built with
+<code class="docutils literal notranslate"><span class="pre">ReferenceFrame.CreateRelative</span></code> or <code class="docutils literal notranslate"><span class="pre">ReferenceFrame.CreateHybrid</span></code>, <code class="docutils literal notranslate"><span class="pre">Orbit.Remove</span></code> for an
+orbit built with <code class="docutils literal notranslate"><span class="pre">Orbit.CreateFromPositionAndVelocity</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Orbit.CreateFromOrbitalElements</span></code>, and <code class="docutils literal notranslate"><span class="pre">ResourceTransfer.Remove</span></code> for a transfer between
+parts. Whatever was built on what is removed goes with it, having nothing left to be
+evaluated against: a frame defined against a removed frame or orbit, and the flight
+information measured in a removed frame.</p>
+<p>Each of these belongs to the client that asked for it: two clients that build the same
+reference frame are given one each, so a frame one of them removes leaves the other’s alone,
+and anything a client has not removed goes when it disconnects.</p>
 <p>A few members read nothing and so raise nothing: those that hand back what the object was
 built from, such as the part a part module belongs to, or the name of a field. They answer as
 they always did, and what they hand back raises the exception itself as soon as it is used.</p>

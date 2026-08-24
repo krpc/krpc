@@ -173,9 +173,11 @@ Resources
 
       .. note::
 
-         Use :meth:`ResourceTransfer.Cancel` to stop the transfer before it finishes. The transfer is
-         also canceled if the client that started it disconnects. A canceled transfer is
-         marked as complete.
+         Use :meth:`ResourceTransfer.Cancel` to stop the transfer before it finishes; a canceled
+         transfer is marked as complete. Use :meth:`ResourceTransfer.Remove` to release the memory
+         the server holds for a transfer that is done with. A transfer is stopped and
+         removed if the client that started it disconnects, or if the flight it runs in
+         is left.
 
    .. method:: void Cancel()
 
@@ -185,6 +187,22 @@ Resources
 
       :Game Scenes: All
 
+   .. method:: void Remove()
+
+      Remove the transfer, releasing the memory the server holds for it. The
+      transfer is canceled if it has not finished.
+
+
+      :Game Scenes: All
+
+
+      .. note::
+
+         Any further use of this object throws an exception. A transfer that is left is
+         held until the parts it runs between are gone, the flight it runs in is left,
+         or the client that started it disconnects, whichever comes first; the first of
+         those may be the rest of the flight away.
+
    .. property:: float Amount { get; }
 
       The amount of the resource that has been transferred.
@@ -193,9 +211,8 @@ Resources
 
    .. property:: bool Complete { get; }
 
-      Whether the transfer has completed. Also becomes true if the transfer is canceled,
-      either by calling :meth:`ResourceTransfer.Cancel` or because the client that started it
-      disconnected.
+      Whether the transfer has completed. Also becomes true if the transfer is
+      canceled by calling :meth:`ResourceTransfer.Cancel`.
 
       :Game Scenes: All
 

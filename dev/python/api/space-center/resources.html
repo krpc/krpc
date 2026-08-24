@@ -1016,9 +1016,11 @@ Use <a class="reference internal" href="#SpaceCenter.ResourceTransfer.amount" ti
 </dl>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Use <a class="reference internal" href="#SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ResourceTransfer.cancel()</span></code></a> to stop the transfer before it finishes. The transfer is
-also canceled if the client that started it disconnects. A canceled transfer is
-marked as complete.</p>
+<p>Use <a class="reference internal" href="#SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ResourceTransfer.cancel()</span></code></a> to stop the transfer before it finishes; a canceled
+transfer is marked as complete. Use <a class="reference internal" href="#SpaceCenter.ResourceTransfer.remove" title="SpaceCenter.ResourceTransfer.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ResourceTransfer.remove()</span></code></a> to release the memory
+the server holds for a transfer that is done with. A transfer is stopped and
+removed if the client that started it disconnects, or if the flight it runs in
+is left.</p>
 </div>
 </dd></dl>
 
@@ -1027,6 +1029,20 @@ marked as complete.</p>
 <span class="sig-name descname"><span class="pre">cancel</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ResourceTransfer.cancel" title="Link to this definition">#</a></dt>
 <dd><p>Cancel the transfer. No more of the resource is moved and
 <a class="reference internal" href="#SpaceCenter.ResourceTransfer.complete" title="SpaceCenter.ResourceTransfer.complete"><code class="xref py py-attr docutils literal notranslate"><span class="pre">ResourceTransfer.complete</span></code></a> becomes true.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.ResourceTransfer.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.ResourceTransfer.remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove the transfer, releasing the memory the server holds for it. The
+transfer is canceled if it has not finished.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Any further use of this object throws an exception. A transfer that is left is
+held until the parts it runs between are gone, the flight it runs in is left,
+or the client that started it disconnects, whichever comes first; the first of
+those may be the rest of the flight away.</p>
+</div>
 </dd></dl>
 
 <dl class="py attribute">
@@ -1046,9 +1062,8 @@ marked as complete.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="SpaceCenter.ResourceTransfer.complete">
 <span class="sig-name descname"><span class="pre">complete</span></span><a class="headerlink" href="#SpaceCenter.ResourceTransfer.complete" title="Link to this definition">#</a></dt>
-<dd><p>Whether the transfer has completed. Also becomes true if the transfer is canceled,
-either by calling <a class="reference internal" href="#SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ResourceTransfer.cancel()</span></code></a> or because the client that started it
-disconnected.</p>
+<dd><p>Whether the transfer has completed. Also becomes true if the transfer is
+canceled by calling <a class="reference internal" href="#SpaceCenter.ResourceTransfer.cancel" title="SpaceCenter.ResourceTransfer.cancel"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ResourceTransfer.cancel()</span></code></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Attribute<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Read-only, cannot be set</p>

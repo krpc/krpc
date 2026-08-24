@@ -708,8 +708,8 @@ velocities. Contains:</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This class does not contain any properties or methods. It is only
-used as a parameter to other functions.</p>
+<p>Apart from being created and removed, a reference frame is only used as a
+parameter to other functions.</p>
 </div>
 <dl class="java method">
 <dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ReferenceFrame.createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet)">
@@ -727,6 +727,13 @@ whose components offset the components of a parent reference frame.</p>
 </ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new frame, which is kept until <a class="reference internal" href="#krpc.client.services.SpaceCenter.ReferenceFrame.remove()" title="krpc.client.services.SpaceCenter.ReferenceFrame.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ReferenceFrame.remove()</span></code></a> is
+called on it or the client that created it disconnects, so a script that
+creates one repeatedly, for example once per update, should remove each one
+when it is finished with it.</p>
+</div>
 </dd></dl>
 
 <dl class="java method">
@@ -749,6 +756,27 @@ whose components inherited from other reference frames.</p>
 <p>The <em>position</em> reference frame is required but all other
 reference frames are optional. If omitted, they are set to the
 <em>position</em> reference frame.</p>
+<p>Each call returns a new frame, which is kept until <a class="reference internal" href="#krpc.client.services.SpaceCenter.ReferenceFrame.remove()" title="krpc.client.services.SpaceCenter.ReferenceFrame.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ReferenceFrame.remove()</span></code></a> is
+called on it or the client that created it disconnects, so a script that
+creates one repeatedly, for example once per update, should remove each one
+when it is finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.ReferenceFrame.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.ReferenceFrame.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the reference frame, releasing the memory the server holds for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only a frame created by <a class="reference internal" href="#krpc.client.services.SpaceCenter.ReferenceFrame.createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet)" title="krpc.client.services.SpaceCenter.ReferenceFrame.createRelative(Connection, ReferenceFrame, org.javatuples.Triplet, org.javatuples.Quartet, org.javatuples.Triplet, org.javatuples.Triplet)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ReferenceFrame.createRelative(ReferenceFrame,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Quartet&lt;Double,Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;)</span></code></a> or
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.ReferenceFrame.createHybrid(Connection, ReferenceFrame, ReferenceFrame, ReferenceFrame, ReferenceFrame)" title="krpc.client.services.SpaceCenter.ReferenceFrame.createHybrid(Connection, ReferenceFrame, ReferenceFrame, ReferenceFrame, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">ReferenceFrame.createHybrid(ReferenceFrame,</span> <span class="pre">ReferenceFrame,</span> <span class="pre">ReferenceFrame,</span> <span class="pre">ReferenceFrame)</span></code></a> can be removed. Every other frame is named by
+something in the game, which is what says when it is finished with, and the
+server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a frame
+built on it, which cannot be evaluated without it. A frame is removed for the
+client that created it and is not shared with any other, and one whose client
+disconnects is removed with it.</p>
 </div>
 </dd></dl>
 

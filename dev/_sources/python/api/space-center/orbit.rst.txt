@@ -44,9 +44,10 @@ Orbit
          :attr:`Orbit.reference_frame` and :attr:`Orbit.orbital_reference_frame` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :meth:`Orbit.remove` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
 
    .. staticmethod:: create_from_orbital_elements(body, semi_major_axis, eccentricity, inclination, longitude_of_ascending_node, argument_of_periapsis, mean_anomaly_at_epoch, epoch)
 
@@ -88,9 +89,28 @@ Orbit
          :attr:`Orbit.reference_frame` and :attr:`Orbit.orbital_reference_frame` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :meth:`Orbit.remove` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
+
+   .. method:: remove()
+
+      Remove the orbit, releasing the memory the server holds for it.
+
+   
+
+      .. note::
+
+         Only an orbit created by :meth:`Orbit.create_from_position_and_velocity` or
+         :meth:`Orbit.create_from_orbital_elements` can be removed. Every other orbit is
+         the orbit of something in the game, which is what says when it is finished
+         with, and the server holds one of each however often it is asked for.
+
+         Any further use of this object throws an exception, as does use of a
+         reference frame defined against it. An orbit is removed for the client that
+         created it and is not shared with any other, and one whose client disconnects
+         is removed with it.
 
    .. attribute:: body
 

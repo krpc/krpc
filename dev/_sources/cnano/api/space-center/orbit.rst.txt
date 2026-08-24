@@ -46,9 +46,10 @@ Orbit
          :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :func:`krpc_SpaceCenter_Orbit_Remove` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_CreateFromOrbitalElements(krpc_connection_t connection, krpc_SpaceCenter_Orbit_t * result, krpc_SpaceCenter_CelestialBody_t body, double semiMajorAxis, double eccentricity, double inclination, double longitudeOfAscendingNode, double argumentOfPeriapsis, double meanAnomalyAtEpoch, double epoch)
 
@@ -92,9 +93,29 @@ Orbit
          :func:`krpc_SpaceCenter_Orbit_ReferenceFrame` and :func:`krpc_SpaceCenter_Orbit_OrbitalReferenceFrame` follow
          the orbit as time passes.
 
-         The orbit that is returned is kept for as long as the server is running,
-         so creating one repeatedly, for example once per update, uses more and more
-         memory.
+         The orbit that is returned is kept until :func:`krpc_SpaceCenter_Orbit_Remove` is called on
+         it or the client that created it disconnects, so a script that creates one
+         repeatedly, for example once per update, should remove each one when it is
+         finished with it.
+
+   .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Remove(krpc_connection_t connection)
+
+      Remove the orbit, releasing the memory the server holds for it.
+
+
+   
+
+      .. note::
+
+         Only an orbit created by :func:`krpc_SpaceCenter_Orbit_CreateFromPositionAndVelocity` or
+         :func:`krpc_SpaceCenter_Orbit_CreateFromOrbitalElements` can be removed. Every other orbit is
+         the orbit of something in the game, which is what says when it is finished
+         with, and the server holds one of each however often it is asked for.
+
+         Any further use of this object throws an exception, as does use of a
+         reference frame defined against it. An orbit is removed for the client that
+         created it and is not shared with any other, and one whose client disconnects
+         is removed with it.
 
    .. function:: krpc_error_t krpc_SpaceCenter_Orbit_Body(krpc_connection_t connection, krpc_SpaceCenter_CelestialBody_t * result)
 

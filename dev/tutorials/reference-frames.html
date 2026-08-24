@@ -1003,6 +1003,12 @@ frame whose position is the center of mass of the vessel (inherited from
 orbited (inherited from <a class="reference internal" href="../python/api/space-center/celestial-body.html#SpaceCenter.CelestialBody.reference_frame" title="SpaceCenter.CelestialBody.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">CelestialBody.reference_frame</span></code></a>). Hybrid
 reference frames can be constructed by calling
 <a class="reference internal" href="../python/api/space-center/reference-frame.html#SpaceCenter.ReferenceFrame.create_hybrid" title="SpaceCenter.ReferenceFrame.create_hybrid"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ReferenceFrame.create_hybrid()</span></code></a>.</p>
+<p>Each call returns a new frame, which the server holds until it is removed or the
+client that created it disconnects: such a frame names nothing in the game, so
+nothing the game does ever says it is finished with. Call
+<a class="reference internal" href="../python/api/space-center/reference-frame.html#SpaceCenter.ReferenceFrame.remove" title="SpaceCenter.ReferenceFrame.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">ReferenceFrame.remove()</span></code></a> on one that is no longer needed. A frame that has
+to follow something that moves should inherit that component from the frame of
+the thing itself, rather than be constructed again on every update.</p>
 <p>The parent reference frame(s) of a custom reference frame can also be other
 custom reference frames. For example, you could combine the two example frames
 from above: construct a hybrid reference frame, centered on the vessel and

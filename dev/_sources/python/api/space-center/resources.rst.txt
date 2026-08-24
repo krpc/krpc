@@ -178,9 +178,11 @@ Resources
 
       .. note::
 
-         Use :meth:`ResourceTransfer.cancel` to stop the transfer before it finishes. The transfer is
-         also canceled if the client that started it disconnects. A canceled transfer is
-         marked as complete.
+         Use :meth:`ResourceTransfer.cancel` to stop the transfer before it finishes; a canceled
+         transfer is marked as complete. Use :meth:`ResourceTransfer.remove` to release the memory
+         the server holds for a transfer that is done with. A transfer is stopped and
+         removed if the client that started it disconnects, or if the flight it runs in
+         is left.
 
    .. method:: cancel()
 
@@ -188,6 +190,20 @@ Resources
       :attr:`ResourceTransfer.complete` becomes true.
 
    
+
+   .. method:: remove()
+
+      Remove the transfer, releasing the memory the server holds for it. The
+      transfer is canceled if it has not finished.
+
+   
+
+      .. note::
+
+         Any further use of this object throws an exception. A transfer that is left is
+         held until the parts it runs between are gone, the flight it runs in is left,
+         or the client that started it disconnects, whichever comes first; the first of
+         those may be the rest of the flight away.
 
    .. attribute:: amount
 
@@ -199,9 +215,8 @@ Resources
 
    .. attribute:: complete
 
-      Whether the transfer has completed. Also becomes true if the transfer is canceled,
-      either by calling :meth:`ResourceTransfer.cancel` or because the client that started it
-      disconnected.
+      Whether the transfer has completed. Also becomes true if the transfer is
+      canceled by calling :meth:`ResourceTransfer.cancel`.
 
       :Attribute: Read-only, cannot be set
       :rtype: bool

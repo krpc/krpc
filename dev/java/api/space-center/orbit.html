@@ -733,9 +733,10 @@ nothing is moving along it. Use <a class="reference internal" href="#krpc.client
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)" title="krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.trueAnomalyAtUT(double)</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Orbit.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getReferenceFrame()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getOrbitalReferenceFrame()" title="krpc.client.services.SpaceCenter.Orbit.getOrbitalReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getOrbitalReferenceFrame()</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.remove()" title="krpc.client.services.SpaceCenter.Orbit.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
 </div>
 </dd></dl>
 
@@ -779,9 +780,27 @@ nothing is moving along it. Use <a class="reference internal" href="#krpc.client
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)" title="krpc.client.services.SpaceCenter.Orbit.trueAnomalyAtUT(double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.trueAnomalyAtUT(double)</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getReferenceFrame()" title="krpc.client.services.SpaceCenter.Orbit.getReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getReferenceFrame()</span></code></a> and <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.getOrbitalReferenceFrame()" title="krpc.client.services.SpaceCenter.Orbit.getOrbitalReferenceFrame()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.getOrbitalReferenceFrame()</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.remove()" title="krpc.client.services.SpaceCenter.Orbit.remove()"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="java method">
+<dt class="sig sig-object java" id="krpc.client.services.SpaceCenter.Orbit.remove()">
+ <span class="pre">void</span> <span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#krpc.client.services.SpaceCenter.Orbit.remove()" title="Link to this definition">#</a></dt>
+<dd><p>Remove the orbit, releasing the memory the server holds for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only an orbit created by <a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.createFromPositionAndVelocity(Connection, CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, double, ReferenceFrame)" title="krpc.client.services.SpaceCenter.Orbit.createFromPositionAndVelocity(Connection, CelestialBody, org.javatuples.Triplet, org.javatuples.Triplet, double, ReferenceFrame)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.createFromPositionAndVelocity(CelestialBody,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">org.javatuples.Triplet&lt;Double,Double,Double&gt;,</span> <span class="pre">double,</span> <span class="pre">ReferenceFrame)</span></code></a> or
+<a class="reference internal" href="#krpc.client.services.SpaceCenter.Orbit.createFromOrbitalElements(Connection, CelestialBody, double, double, double, double, double, double, double)" title="krpc.client.services.SpaceCenter.Orbit.createFromOrbitalElements(Connection, CelestialBody, double, double, double, double, double, double, double)"><code class="xref java java-meth docutils literal notranslate"><span class="pre">Orbit.createFromOrbitalElements(CelestialBody,</span> <span class="pre">double,</span> <span class="pre">double,</span> <span class="pre">double,</span> <span class="pre">double,</span> <span class="pre">double,</span> <span class="pre">double,</span> <span class="pre">double)</span></code></a> can be removed. Every other orbit is
+the orbit of something in the game, which is what says when it is finished
+with, and the server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a
+reference frame defined against it. An orbit is removed for the client that
+created it and is not shared with any other, and one whose client disconnects
+is removed with it.</p>
 </div>
 </dd></dl>
 

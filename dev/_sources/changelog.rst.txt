@@ -88,6 +88,8 @@ SpaceCenter service
   * Fix ``ClosestApproach.Velocity`` and ``ClosestApproach.TargetVelocity``, which were both offset by the velocity of the frame the active vessel's reference body moves in, some 9284 m/s for a vessel in orbit around Kerbin. ``ClosestApproach.RelativeVelocity`` and ``ClosestApproach.RelativeSpeed`` are the difference of the two and were unaffected (:issue:`1047`)
   * Add ``Orbit.CreateFromPositionAndVelocity``, which builds the orbit that passes through a given position at a given velocity, and ``Orbit.CreateFromOrbitalElements``, which builds the orbit with a given semi-major axis, eccentricity, inclination, longitude of ascending node, argument of periapsis and mean anomaly at an epoch. Either way the orbit coasts freely under gravity, so it describes where an object left to fall from that state would be at any later time, without there being such an object in the game. (:issue:`1046`)
   * Add ``Orbit.ReferenceFrame`` and ``Orbit.OrbitalReferenceFrame``, centered on the point an orbit has reached at the current time. The first is oriented in a fixed direction and the second with the orbital prograde/normal/radial directions. Together with a constructed orbit these give a reference frame that follows a coasting object that need not exist (:issue:`1046`)
+  * Add ``Orbit.Remove``, which releases the memory the server holds for an orbit created by ``Orbit.CreateFromPositionAndVelocity`` or ``Orbit.CreateFromOrbitalElements``. Such an orbit stands for nothing in the game, so nothing else says when it is finished with; one that is not removed is held until the client that created it disconnects. A reference frame defined against a removed orbit goes with it (:issue:`1072`)
+  * :breaking:`Breaking` A ``ClosestApproach`` reads the two orbits as they are now rather than describing the moment it was created, so its estimate follows them as the game runs. Asking for the same approach again gives back the same object; the server previously kept a separate one per call, so a script polling the approach to a target filled its memory (:issue:`1072`)
   * Add ``Orbit.VelocityAt``, giving the velocity at a given time in a given reference frame, alongside the existing ``Orbit.PositionAt`` (:issue:`1046`)
   * ``Orbit.Epoch`` is documented as the universal time at which the mean anomaly at epoch is measured. It was described as the time since that point (:issue:`1046`)
 
@@ -98,6 +100,9 @@ SpaceCenter service
 
 * Reference frames
 
+  * Add ``ReferenceFrame.Remove``, which releases the memory the server holds for a frame created by ``ReferenceFrame.CreateRelative`` or ``ReferenceFrame.CreateHybrid``. Such a frame stands for nothing in the game, so nothing else says when it is finished with, and a script creating one repeatedly needed a reload of the game to get the memory back. One that is not removed is held until the client that created it disconnects (:issue:`1072`)
+  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` return a new frame on each call, rather than one object shared by every client that asks for the same frame. A frame is now each client's own to remove (:issue:`1072`)
+  * ``ReferenceFrame.CreateRelative`` and ``ReferenceFrame.CreateHybrid`` raise an error when given no frame to be defined against, rather than returning one that fails with a ``NullReferenceException`` on first use (:issue:`1072`)
   * Creating many hybrid reference frames no longer slows the server down. A frame given the same frame for two of its components, which the defaults of ``ReferenceFrame.CreateHybrid`` do on their own, hashed the same as every other such frame, and the server searched them one by one whenever a frame was passed to it or returned (:issue:`1071`)
   * A reference frame taken from a docking port keeps working across a quickload, and says the port is gone rather than failing with a null reference once its part is destroyed (:issue:`885`, :issue:`764`)
 
@@ -140,6 +145,7 @@ SpaceCenter service
 
   * Add ``ResourceTransfer.Cancel`` to stop a transfer before it finishes; no more of the resource is moved and the transfer is marked as complete (:issue:`1028`)
   * Fix a resource transfer failing on every update, and never completing, once one of the parts it runs between is destroyed; the transfer is now canceled. A transfer whose vessel the game unloads waits for it rather than failing (:issue:`1051`)
+  * Add ``ResourceTransfer.Remove``, which stops a transfer and releases the memory the server holds for it. A transfer that is left is held for as long as the game holds the two parts it runs between, which may be the rest of the flight (:issue:`1072`)
 
 * Camera
 
@@ -160,6 +166,7 @@ SpaceCenter service
 Drawing service
 ^^^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Removing a drawing object another client created, or one the server no longer holds, reports that it is not among those this client created, rather than a bad argument. Every other object a client asks the server to build already refused it that way (:issue:`1072`)
 * Line, polygon, text and navball marker objects raise ``KRPC.ObjectDestroyedException`` once the object they draw is gone, which removing it, ``Drawing.Clear``, the client that made it disconnecting and leaving the flight scene all do. They previously failed on a destroyed game object, and were kept for the rest of the session (:issue:`1051`)
 * A drawing object whose reference frame is defined against something the game has destroyed is not drawn, rather than failing on every frame (:issue:`1051`)
 * Add ``Drawing.AddNavballMarker``, which draws a marker on the navball pointing in a given direction, for example to show a script's target attitude while the player flies the vessel. The marker's icon, color and size can be changed, and it hides and fades as the navball's own markers do (:issue:`1037`)
@@ -168,6 +175,7 @@ Drawing service
 User Interface service
 ^^^^^^^^^^^^^^^^^^^^^^
 
+* :breaking:`Breaking` Removing a user interface element another client created, or one the server no longer holds, reports that it is not among those this client created, rather than a bad argument. Every other object a client asks the server to build already refused it that way (:issue:`1072`)
 * :breaking:`Breaking` Colors are given as ``(red, green, blue, alpha)`` rather than ``(red, green, blue)``, so that an element can be drawn translucent. Affects ``Text.Color`` and the color of a ``UI.Message`` (:issue:`1040`)
 * :breaking:`Breaking` ``InputField.Changed`` is only set when the user types in the field, and no longer when a client sets ``InputField.Value``. ``Changed`` on the controls added in this release behaves the same way (:issue:`1040`)
 * :breaking:`Breaking` User interface elements are drawn using the skin that the game draws its own interface in, so the size and color that ``Text`` starts out with are no longer fixed values (:issue:`1040`)
@@ -454,6 +462,7 @@ SpaceCenter service
   * Fix ``Flight.SimulateAerodynamicForceAt`` returning force in kilonewtons instead of newtons when FAR is installed (:issue:`915`)
   * Fix ``Flight.SimulateAerodynamicForceAt`` computing incorrect lift for command pods and other parts with a perpendicular-only lifting-surface module: cube body lift was applied even where the game disables it (a pod with a heatshield occupying its bottom node has none), and lifting-surface modules were evaluated against stale internal airflow state, so results depended on the game context the call was made from (landed, in vacuum, or in atmospheric flight) (:issue:`914`)
   * Fix ``Part.Lift``, ``Flight.Lift`` and ``Flight.AerodynamicForce`` including stale body lift for parts whose body lift the game suppresses, e.g. a pod with a heatshield attached (:issue:`971`)
+  * A ``Flight`` is freed once the reference frame it is measured in is gone, rather than being kept for as long as its vessel exists (:issue:`1072`)
 
 * Control
 

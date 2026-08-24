@@ -736,9 +736,10 @@ nothing is moving along it. Use <a class="reference internal" href="#SpaceCenter
 <a class="reference internal" href="#SpaceCenter.Orbit.true_anomaly_at_ut" title="SpaceCenter.Orbit.true_anomaly_at_ut"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#SpaceCenter.Orbit.reference_frame" title="SpaceCenter.Orbit.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Orbit.reference_frame</span></code></a> and <a class="reference internal" href="#SpaceCenter.Orbit.orbital_reference_frame" title="SpaceCenter.Orbit.orbital_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Orbit.orbital_reference_frame</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#SpaceCenter.Orbit.remove" title="SpaceCenter.Orbit.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
 </div>
 </dd></dl>
 
@@ -785,9 +786,27 @@ nothing is moving along it. Use <a class="reference internal" href="#SpaceCenter
 <a class="reference internal" href="#SpaceCenter.Orbit.true_anomaly_at_ut" title="SpaceCenter.Orbit.true_anomaly_at_ut"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#SpaceCenter.Orbit.reference_frame" title="SpaceCenter.Orbit.reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Orbit.reference_frame</span></code></a> and <a class="reference internal" href="#SpaceCenter.Orbit.orbital_reference_frame" title="SpaceCenter.Orbit.orbital_reference_frame"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Orbit.orbital_reference_frame</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#SpaceCenter.Orbit.remove" title="SpaceCenter.Orbit.remove"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="SpaceCenter.Orbit.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#SpaceCenter.Orbit.remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove the orbit, releasing the memory the server holds for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only an orbit created by <a class="reference internal" href="#SpaceCenter.Orbit.create_from_position_and_velocity" title="SpaceCenter.Orbit.create_from_position_and_velocity"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.create_from_position_and_velocity()</span></code></a> or
+<a class="reference internal" href="#SpaceCenter.Orbit.create_from_orbital_elements" title="SpaceCenter.Orbit.create_from_orbital_elements"><code class="xref py py-meth docutils literal notranslate"><span class="pre">Orbit.create_from_orbital_elements()</span></code></a> can be removed. Every other orbit is
+the orbit of something in the game, which is what says when it is finished
+with, and the server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a
+reference frame defined against it. An orbit is removed for the client that
+created it and is not shared with any other, and one whose client disconnects
+is removed with it.</p>
 </div>
 </dd></dl>
 

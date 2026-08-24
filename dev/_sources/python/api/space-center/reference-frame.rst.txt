@@ -18,8 +18,8 @@ ReferenceFrame
 
    .. note::
 
-      This class does not contain any properties or methods. It is only
-      used as a parameter to other functions.
+      Apart from being created and removed, a reference frame is only used as a
+      parameter to other functions.
 
    .. staticmethod:: create_relative(reference_frame, [position = (0.0, 0.0, 0.0)], [rotation = (0.0, 0.0, 0.0, 1.0)], [velocity = (0.0, 0.0, 0.0)], [angular_velocity = (0.0, 0.0, 0.0)])
 
@@ -33,6 +33,13 @@ ReferenceFrame
       :param tuple angular_velocity: The angular velocity to offset the parent frame by, as a vector. This vector points in the direction of the axis of rotation, and its magnitude is the speed of the rotation in radians per second. Defaults to :math:`(0, 0, 0)`.
       :rtype: :class:`ReferenceFrame`
    
+
+      .. note::
+
+         Each call returns a new frame, which is kept until :meth:`ReferenceFrame.remove` is
+         called on it or the client that created it disconnects, so a script that
+         creates one repeatedly, for example once per update, should remove each one
+         when it is finished with it.
 
    .. staticmethod:: create_hybrid(position, rotation, velocity, angular_velocity)
 
@@ -51,3 +58,26 @@ ReferenceFrame
          The *position* reference frame is required but all other
          reference frames are optional. If omitted, they are set to the
          *position* reference frame.
+
+         Each call returns a new frame, which is kept until :meth:`ReferenceFrame.remove` is
+         called on it or the client that created it disconnects, so a script that
+         creates one repeatedly, for example once per update, should remove each one
+         when it is finished with it.
+
+   .. method:: remove()
+
+      Remove the reference frame, releasing the memory the server holds for it.
+
+   
+
+      .. note::
+
+         Only a frame created by :meth:`ReferenceFrame.create_relative` or
+         :meth:`ReferenceFrame.create_hybrid` can be removed. Every other frame is named by
+         something in the game, which is what says when it is finished with, and the
+         server holds one of each however often it is asked for.
+
+         Any further use of this object throws an exception, as does use of a frame
+         built on it, which cannot be evaluated without it. A frame is removed for the
+         client that created it and is not shared with any other, and one whose client
+         disconnects is removed with it.

@@ -708,8 +708,8 @@ velocities. Contains:</p>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This class does not contain any properties or methods. It is only
-used as a parameter to other functions.</p>
+<p>Apart from being created and removed, a reference frame is only used as a
+parameter to other functions.</p>
 </div>
 <dl class="csharp method">
 <dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative">
@@ -730,6 +730,13 @@ whose components offset the components of a parent reference frame.</p>
 <dd class="field-even"><p>All</p>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Each call returns a new frame, which is kept until <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.Remove" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.Remove</span></code></a> is
+called on it or the client that created it disconnects, so a script that
+creates one repeatedly, for example once per update, should remove each one
+when it is finished with it.</p>
+</div>
 </dd></dl>
 
 <dl class="csharp method">
@@ -755,6 +762,32 @@ whose components inherited from other reference frames.</p>
 <p>The <em>position</em> reference frame is required but all other
 reference frames are optional. If omitted, they are set to the
 <em>position</em> reference frame.</p>
+<p>Each call returns a new frame, which is kept until <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.Remove" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.Remove method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.Remove</span></code></a> is
+called on it or the client that created it disconnects, so a script that
+creates one repeatedly, for example once per update, should remove each one
+when it is finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="csharp method">
+<dt class="sig sig-object csharp" id="method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.Remove">
+<span class="pre">void</span> <span class="sig-name descname"><span class="pre">Remove</span></span> <span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.Remove" title="Link to this definition">#</a></dt>
+<dd><p>Remove the reference frame, releasing the memory the server holds for it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Game Scenes<span class="colon">:</span></dt>
+<dd class="field-odd"><p>All</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only a frame created by <a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateRelative method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.CreateRelative</span></code></a> or
+<a class="reference internal" href="#method-KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateHybrid" title="KRPC.Client.Services.SpaceCenter.ReferenceFrame.CreateHybrid method"><code class="xref csharp csharp-meth docutils literal notranslate"><span class="pre">ReferenceFrame.CreateHybrid</span></code></a> can be removed. Every other frame is named by
+something in the game, which is what says when it is finished with, and the
+server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a frame
+built on it, which cannot be evaluated without it. A frame is removed for the
+client that created it and is not shared with any other, and one whose client
+disconnects is removed with it.</p>
 </div>
 </dd></dl>
 

@@ -733,9 +733,10 @@ nothing is moving along it. Use <a class="reference internal" href="#c.krpc_Spac
 <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_TrueAnomalyAtUT" title="krpc_SpaceCenter_Orbit_TrueAnomalyAtUT"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_TrueAnomalyAtUT()</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ReferenceFrame" title="krpc_SpaceCenter_Orbit_ReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_ReferenceFrame()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_OrbitalReferenceFrame" title="krpc_SpaceCenter_Orbit_OrbitalReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_OrbitalReferenceFrame()</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Remove" title="krpc_SpaceCenter_Orbit_Remove"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_Remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
 </div>
 </dd></dl>
 
@@ -779,9 +780,27 @@ nothing is moving along it. Use <a class="reference internal" href="#c.krpc_Spac
 <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_TrueAnomalyAtUT" title="krpc_SpaceCenter_Orbit_TrueAnomalyAtUT"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_TrueAnomalyAtUT()</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_ReferenceFrame" title="krpc_SpaceCenter_Orbit_ReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_ReferenceFrame()</span></code></a> and <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_OrbitalReferenceFrame" title="krpc_SpaceCenter_Orbit_OrbitalReferenceFrame"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_OrbitalReferenceFrame()</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Remove" title="krpc_SpaceCenter_Orbit_Remove"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_Remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="c function">
+<dt class="sig sig-object c" id="c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Remove">
+<a class="reference internal" href="../../client.html#c.krpc_error_t" title="krpc_error_t"><span class="n"><span class="pre">krpc_error_t</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">krpc_SpaceCenter_Orbit_Remove</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">krpc_connection_t</span></span><span class="w"> </span><span class="n"><span class="pre">connection</span></span><span class="sig-paren">)</span><a class="headerlink" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_Remove" title="Link to this definition">#</a><br /></dt>
+<dd><p>Remove the orbit, releasing the memory the server holds for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only an orbit created by <a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_CreateFromPositionAndVelocity" title="krpc_SpaceCenter_Orbit_CreateFromPositionAndVelocity"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_CreateFromPositionAndVelocity()</span></code></a> or
+<a class="reference internal" href="#c.krpc_SpaceCenter_Orbit_t.krpc_SpaceCenter_Orbit_CreateFromOrbitalElements" title="krpc_SpaceCenter_Orbit_CreateFromOrbitalElements"><code class="xref c c-func docutils literal notranslate"><span class="pre">krpc_SpaceCenter_Orbit_CreateFromOrbitalElements()</span></code></a> can be removed. Every other orbit is
+the orbit of something in the game, which is what says when it is finished
+with, and the server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a
+reference frame defined against it. An orbit is removed for the client that
+created it and is not shared with any other, and one whose client disconnects
+is removed with it.</p>
 </div>
 </dd></dl>
 

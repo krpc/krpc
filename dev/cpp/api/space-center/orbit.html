@@ -733,9 +733,10 @@ nothing is moving along it. Use <a class="reference internal" href="#_CPPv4N4krp
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd" title="krpc::services::SpaceCenter::Orbit::true_anomaly_at_ut"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv" title="krpc::services::SpaceCenter::Orbit::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::reference_frame()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Orbit::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::orbital_reference_frame()</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6removeEv" title="krpc::services::SpaceCenter::Orbit::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
 </div>
 </dd></dl>
 
@@ -779,9 +780,27 @@ nothing is moving along it. Use <a class="reference internal" href="#_CPPv4N4krp
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit18true_anomaly_at_utEd" title="krpc::services::SpaceCenter::Orbit::true_anomaly_at_ut"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::true_anomaly_at_ut()</span></code></a> to ask where it is at another time.
 <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit15reference_frameEv" title="krpc::services::SpaceCenter::Orbit::reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::reference_frame()</span></code></a> and <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit23orbital_reference_frameEv" title="krpc::services::SpaceCenter::Orbit::orbital_reference_frame"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::orbital_reference_frame()</span></code></a> follow
 the orbit as time passes.</p>
-<p>The orbit that is returned is kept for as long as the server is running,
-so creating one repeatedly, for example once per update, uses more and more
-memory.</p>
+<p>The orbit that is returned is kept until <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6removeEv" title="krpc::services::SpaceCenter::Orbit::remove"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::remove()</span></code></a> is called on
+it or the client that created it disconnects, so a script that creates one
+repeatedly, for example once per update, should remove each one when it is
+finished with it.</p>
+</div>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N4krpc8services11SpaceCenter5Orbit6removeEv">
+<span id="_CPPv3N4krpc8services11SpaceCenter5Orbit6removeEv"></span><span id="_CPPv2N4krpc8services11SpaceCenter5Orbit6removeEv"></span><span id="krpc::services::SpaceCenter::Orbit::remove"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">remove</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit6removeEv" title="Link to this definition">#</a><br /></dt>
+<dd><p>Remove the orbit, releasing the memory the server holds for it.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only an orbit created by <a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit33create_from_position_and_velocityER6Client13CelestialBodyNSt5tupleIdddEENSt5tupleIdddEEd14ReferenceFrame" title="krpc::services::SpaceCenter::Orbit::create_from_position_and_velocity"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::create_from_position_and_velocity()</span></code></a> or
+<a class="reference internal" href="#_CPPv4N4krpc8services11SpaceCenter5Orbit28create_from_orbital_elementsER6Client13CelestialBodyddddddd" title="krpc::services::SpaceCenter::Orbit::create_from_orbital_elements"><code class="xref cpp cpp-func docutils literal notranslate"><span class="pre">Orbit::create_from_orbital_elements()</span></code></a> can be removed. Every other orbit is
+the orbit of something in the game, which is what says when it is finished
+with, and the server holds one of each however often it is asked for.</p>
+<p>Any further use of this object throws an exception, as does use of a
+reference frame defined against it. An orbit is removed for the client that
+created it and is not shared with any other, and one whose client disconnects
+is removed with it.</p>
 </div>
 </dd></dl>
 
