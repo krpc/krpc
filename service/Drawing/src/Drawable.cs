@@ -13,9 +13,9 @@ namespace KRPC.Drawing
     public abstract class Drawable<T> : IDrawable
     {
         readonly Renderer renderer;
-        // Whether the drawable has been taken out of the scene. The game tears a game
-        // object down at the end of the frame, so this records that it is on its way out,
-        // and an object removed and read again in the same frame reports it gone.
+        // Whether the drawable has been taken out of the scene. The game tears a game object
+        // down at the end of the frame, so this records that it is going, and an object removed
+        // and read again in the same frame reports it gone
         bool removed;
 
         /// <summary>

@@ -14,8 +14,8 @@ namespace KRPC.DockingCamera
     [KRPCClass(Service = "DockingCamera")]
     public class Camera : Equatable<Camera>, IGameObjectState
     {
-        // The module that makes a part a camera. The mod's API takes the part rather than the
-        // module, so the part is what identifies this and all it has to reach.
+        // The module that makes a part a camera. The mod's API takes the part, so the part
+        // identifies the camera
         const string moduleName = "PartCameraModule";
 
         internal static bool Is(SpaceCenter.Services.Parts.Part part)

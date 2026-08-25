@@ -14,9 +14,8 @@ namespace KRPC.UI
     [KRPCClass (Service = "UI")]
     public class SizeFitter : Equatable<SizeFitter>, IGameObjectState
     {
-        // The game's size fitter, which is what this stands for: it belongs to the
-        // interface element it was taken from and lives exactly as long as that
-        // element, and the game gives it nothing else to be named by.
+        // The game's size fitter. It belongs to the interface element it was taken from and
+        // lives exactly as long as that element, and the game gives it no other name
         readonly UnityEngine.UI.ContentSizeFitter fitter;
 
         internal SizeFitter (UnityEngine.UI.ContentSizeFitter innerFitter)
@@ -38,8 +37,8 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            // The size fitter's identity hash rather than its own, so that nothing the game
-            // does to it can change it while a client holds this object.
+            // The size fitter's identity hash, so that nothing the game does to it changes it
+            // while a client holds this object
             return RuntimeHelpers.GetHashCode (fitter);
         }
 

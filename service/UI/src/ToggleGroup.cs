@@ -31,8 +31,7 @@ namespace KRPC.UI
         }
 
         internal UnityEngine.UI.ToggleGroup InnerGroup {
-            // Checked, so that a toggle joining a group the game no longer has says so
-            // rather than being tied to a torn down one.
+            // Checked, so that a toggle joining a group the game has dropped raises here
             get { return Internal; }
         }
 
@@ -84,9 +83,9 @@ namespace KRPC.UI
         /// </remarks>
         internal void Check (Toggle toggle, bool value)
         {
-            // Unity refuses to uncheck the last checked toggle of a group that does not
-            // allow being switched off. That rule is for the user, who can only check a
-            // different toggle; a client saying what a toggle is set to is obeyed.
+            // Unity keeps the last checked toggle of a group that does not allow being
+            // switched off. That rule is for the user, who can only check a different toggle,
+            // and a client setting a toggle directly is not bound by it
             var switchOff = Internal.allowSwitchOff;
             Internal.allowSwitchOff = true;
             try {

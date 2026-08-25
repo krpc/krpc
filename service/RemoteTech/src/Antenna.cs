@@ -12,9 +12,8 @@ namespace KRPC.RemoteTech
     [KRPCClass (Service = "RemoteTech")]
     public class Antenna : Equatable<Antenna>, IGameObjectState
     {
-        // The module that makes a part an antenna. An antenna is a part carrying it, so the
-        // part is what identifies the antenna, and the mod's API takes the part rather than
-        // the module.
+        // The module that makes a part an antenna. The mod's API takes the part, so the part
+        // identifies the antenna
         const string moduleName = "ModuleRTAntenna";
 
         readonly SpaceCenter.Services.Parts.Part part;

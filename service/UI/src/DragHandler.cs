@@ -31,10 +31,9 @@ namespace KRPC.UI
             var rect = GetComponent<UnityEngine.RectTransform> ();
             if (rect == null)
                 return;
-            // The pointer moves in screen pixels, while the panel is positioned in the
-            // canvas's own units, so the movement is divided by however much the canvas is
-            // scaled by. Without this the panel runs away from the pointer on a scaled
-            // interface.
+            // The pointer moves in screen pixels and the panel is positioned in the canvas's own
+            // units, so the movement is divided by the canvas scale. Otherwise the panel runs
+            // away from the pointer on a scaled interface
             var canvas = GetComponentInParent<UnityEngine.Canvas> ();
             var scale = canvas == null || canvas.scaleFactor <= 0 ? 1 : canvas.scaleFactor;
             rect.anchoredPosition += eventData.delta / scale;

@@ -15,13 +15,12 @@ namespace KRPC.InfernalRobotics
     [KRPCClass (Service = "InfernalRobotics")]
     public class ServoGroup : Equatable<ServoGroup>, IGameObjectState
     {
-        // The vessel the group belongs to and the name that picks it out among that
-        // vessel's groups, which is what the mod itself groups servos by. Both are fixed for
-        // the object's lifetime: the object store compares and hashes the objects it holds,
-        // so a name that moved would leave two objects naming one group, and the store
-        // unable to tell which entry belongs to which. The group object the mod hands out is
-        // built afresh every time the groups are listed, so holding one would instead leave
-        // two objects for one group comparing unequal.
+        // The vessel the group belongs to and the name that picks it out among that vessel's
+        // groups, which is how the mod itself groups servos. Both are fixed for the object's
+        // lifetime: the object store compares and hashes the objects it holds, so a name that
+        // moved leaves two objects naming one group. The group object the mod hands out is built
+        // afresh every time the groups are listed, so holding one leaves two objects for one
+        // group comparing unequal
         readonly SpaceCenter.Services.Vessel vessel;
         readonly string name;
 
@@ -79,9 +78,8 @@ namespace KRPC.InfernalRobotics
             return null;
         }
 
-        // The group the mod has on the vessel now. Every member reaches the mod through
-        // this, so a group taken before a game state was replaced drives the servos that
-        // stand in its place rather than the ones it was built from.
+        // The group the mod has on the vessel now. Every member reaches the mod through this, so
+        // a group taken before a game state was replaced drives the servos that stand in its place
         IRWrapper.IServoGroup Internal {
             get {
                 var group = Find ();

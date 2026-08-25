@@ -40,9 +40,8 @@ namespace KRPC.UI
                 var image = CheckedGameObject.GetComponent<UnityEngine.UI.Image> ();
                 if (image == null) {
                     image = Widgets.AddImage (GameObject, null);
-                    // It has no sprite yet, and Unity draws an image that has no sprite
-                    // as a rectangle filled with its color, so it is left undrawn until
-                    // a style gives it one.
+                    // Unity draws an image with no sprite as a rectangle filled with its color,
+                    // so the image is left undrawn until a style gives it one
                     image.enabled = false;
                 }
                 return image;
@@ -66,11 +65,9 @@ namespace KRPC.UI
                 background.sprite = sprite;
                 if (sprite != null)
                     background.type = UnityEngine.UI.Image.Type.Sliced;
-                // Unity draws an image that has no sprite as a rectangle filled with its
-                // color, so a panel is stopped from being drawn rather than left to fill
-                // itself in: one with no style, and one whose style the game gave no
-                // sprite for, which falls back to not being drawn rather than to a solid
-                // block hiding whatever is behind it.
+                // Unity draws an image with no sprite as a rectangle filled with its color, so a
+                // panel with no style, or whose style the game gave no sprite for, is left
+                // undrawn instead of filling itself with a solid block
                 background.enabled = sprite != null;
                 style = value;
             }

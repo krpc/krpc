@@ -19,9 +19,8 @@ namespace KRPC.UI
     [KRPCClass (Service = "UI")]
     public class LayoutElement : Equatable<LayoutElement>, IGameObjectState
     {
-        // The game's layout element, which is what this stands for: it belongs to the
-        // interface element it was taken from and lives exactly as long as that element,
-        // and the game gives it nothing else to be named by.
+        // The game's layout element. It belongs to the interface element it was taken from and
+        // lives exactly as long as that element, and the game gives it no other name
         readonly UnityEngine.UI.LayoutElement element;
 
         internal LayoutElement (UnityEngine.UI.LayoutElement innerElement)
@@ -43,8 +42,8 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            // The element's identity hash rather than its own, so that nothing the game
-            // does to it can change it while a client holds this object.
+            // The element's identity hash, so that nothing the game does to it changes it
+            // while a client holds this object
             return RuntimeHelpers.GetHashCode (element);
         }
 

@@ -131,9 +131,9 @@ namespace KRPC.Debug
             var internalVessel = ActiveVessel ();
             var celestialBody = body.InternalBody;
 
-            // Build the world-space attitude for the requested pitch/heading/roll using the same
-            // surface-frame convention (x = zenith, y = north, z = east) as the flight telemetry,
-            // evaluated at the target location rather than the vessel's current one.
+            // Build the world-space attitude for the requested pitch, heading and roll, using the
+            // same surface-frame convention as the flight telemetry (x = zenith, y = north,
+            // z = east), evaluated at the target location
             var worldPosition = celestialBody.GetWorldSurfacePosition (latitude, longitude, altitude);
             var positionFromBody = worldPosition - celestialBody.position;
             var toNorthPole = (celestialBody.position + (Vector3d)celestialBody.transform.up * celestialBody.Radius) - worldPosition;
@@ -612,7 +612,7 @@ namespace KRPC.Debug
             var orbit = new Orbit ();
             orbit.UpdateFromStateVectors (positionFromBody.xzy, worldVelocity.xzy, body, ut);
             // The throwaway orbit's epoch is now, so its mean anomaly at epoch is the mean anomaly
-            // at the current time, which is what the teleport wants.
+            // at the current time, which is what the teleport takes
             SetShipOrbit (
                 body, orbit.semiMajorAxis, orbit.eccentricity, orbit.inclination, orbit.LAN,
                 orbit.argumentOfPeriapsis, orbit.meanAnomalyAtEpoch);
@@ -629,8 +629,8 @@ namespace KRPC.Debug
             var meanAnomaly =
                 meanAnomalyAtEpoch + meanMotion * (Planetarium.GetUniversalTime () - epoch);
             if (eccentricity < 1) {
-                // A closed orbit repeats every revolution, so wrap instead of handing the game an
-                // angle of many thousands of radians for an epoch far in the past.
+                // A closed orbit repeats every revolution, so wrap the angle. An epoch far in the
+                // past otherwise gives the game many thousands of radians
                 meanAnomaly %= 2 * Math.PI;
                 if (meanAnomaly < 0)
                     meanAnomaly += 2 * Math.PI;
@@ -638,10 +638,10 @@ namespace KRPC.Debug
             return meanAnomaly;
         }
 
-        // A closed orbit (eccentricity below 1) has a positive semi-major axis and an open one has a
-        // negative semi-major axis. Given the two together the game cannot solve the orbit, and its
-        // patched-conic solver fills with NaN, which takes down the flight scene -- so derive the
-        // sign from the eccentricity rather than trusting the caller to supply it.
+        // A closed orbit (eccentricity below 1) has a positive semi-major axis and an open one has
+        // a negative semi-major axis. Given the two together the game cannot solve the orbit, its
+        // patched-conic solver fills with NaN, and the flight scene goes down. Derive the sign from
+        // the eccentricity.
         static double SignedSemiMajorAxis (double semiMajorAxis, double eccentricity)
         {
             var axis = Math.Abs (semiMajorAxis);
@@ -659,8 +659,8 @@ namespace KRPC.Debug
         }
 
         // Stop a vessel rotating without changing its attitude. SetRotation only reorients the part
-        // transforms; it leaves each rigidbody's angular velocity untouched, so without SAS the
-        // vessel keeps tumbling from the new attitude.
+        // transforms and leaves each rigidbody's angular velocity untouched, so without SAS the
+        // vessel keeps tumbling from the new attitude
         static void ZeroAngularVelocity (global::Vessel internalVessel)
         {
             SetWorldAngularVelocity (internalVessel, Vector3.zero);
@@ -715,7 +715,7 @@ namespace KRPC.Debug
         }
 
         // The vessel is placed with its lowest point just clear of the terrain, then falls the last
-        // fraction of a metre. Damp its motion each tick so it settles quickly instead of bouncing.
+        // fraction of a meter. Damp its motion each tick so it settles quickly
         static void WaitForLanded (int tick)
         {
             var active = FlightGlobals.ActiveVessel;
@@ -725,7 +725,7 @@ namespace KRPC.Debug
                     return;
                 active.ChangeWorldVelocity ((active.srf_velocity + active.upAxis) * -0.5);
             }
-            // Give up rather than wait forever if the vessel never settles.
+            // Give up if the vessel never settles
             if (tick < 1000)
                 throw new YieldException<Action> (() => WaitForLanded (tick + 1));
         }

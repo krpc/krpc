@@ -17,9 +17,8 @@ namespace KRPC.UI
     [KRPCClass (Service = "UI")]
     public class RectTransform : Equatable<RectTransform>, IGameObjectState
     {
-        // The game's rect transform, which is what this stands for: it belongs to the
-        // interface element it was taken from and lives exactly as long as that element,
-        // and the game gives it nothing else to be named by.
+        // The game's rect transform. It belongs to the interface element it was taken from and
+        // lives exactly as long as that element, and the game gives it no other name
         readonly UnityEngine.RectTransform rectTransform;
 
         internal RectTransform (UnityEngine.RectTransform innerRectTransform)
@@ -43,8 +42,8 @@ namespace KRPC.UI
         /// </summary>
         public override int GetHashCode ()
         {
-            // The transform's identity hash rather than its own, so that nothing the game
-            // does to it can change it while a client holds this object.
+            // The transform's identity hash, so that nothing the game does to it changes it
+            // while a client holds this object
             return RuntimeHelpers.GetHashCode (rectTransform);
         }
 

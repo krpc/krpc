@@ -148,9 +148,8 @@ namespace KRPC.UI
         public int SelectedIndex {
             get { return Internal.value; }
             set {
-                // Unity moves a position outside the list to the nearest one that is in
-                // it, so a client that asked for the wrong one would be left reading back
-                // a value it did not set and no way to tell that it had happened.
+                // Unity moves a position outside the list to the nearest one inside it, so
+                // check the range here and report it
                 if (value < 0 || value >= Internal.options.Count)
                     throw new ArgumentOutOfRangeException (
                         nameof (value), "The dropdown does not have that option");

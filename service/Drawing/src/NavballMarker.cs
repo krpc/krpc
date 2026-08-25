@@ -17,7 +17,7 @@ namespace KRPC.Drawing
     [KRPCClass (Service = "Drawing")]
     public class NavballMarker : IDrawable
     {
-        // Where the icons that a marker can be drawn with live in the game database.
+        // The game database directory holding the icons a marker can be drawn with
         const string iconDirectory = "Squad/Contracts/Icons/";
 
         // The game object for one of the navball's own markers, which is cloned to make a new one.
@@ -32,9 +32,9 @@ namespace KRPC.Drawing
         readonly UnityEngine.Material material;
         // The scale at which the game draws the navball's own markers, which a size of 1 matches.
         readonly Vector3 stockScale;
-        // Whether the marker has been taken out of the scene. The game tears a game object
-        // down at the end of the frame, so this records that it is on its way out, and a
-        // marker removed and read again in the same frame reports it gone.
+        // Whether the marker has been taken out of the scene. The game tears a game object down
+        // at the end of the frame, so this records that it is going, and a marker removed and
+        // read again in the same frame reports it gone
         bool removed;
         Vector3d direction;
         Tuple3 color;
@@ -88,9 +88,8 @@ namespace KRPC.Drawing
         /// </summary>
         public void Update ()
         {
-            // A marker is left where it is, rather than removed, when the frame its
-            // direction is measured in is defined against something the game has
-            // destroyed: the client can point it at another frame.
+            // A marker whose frame is defined against something the game has destroyed is left
+            // where it is, so the client can point it at another frame
             if (GameObjectState != GameObjectState.Live ||
                 ReferenceFrame.GameObjectState != GameObjectState.Live) {
                 GameObject.SetActive (false);
@@ -99,8 +98,8 @@ namespace KRPC.Drawing
             Vector3 worldDirection = ReferenceFrame.DirectionToWorldSpace (direction).normalized;
             var position = navBall.attitudeGymbal * (worldDirection * navBall.VectorUnitScale);
             GameObject.transform.localPosition = position;
-            // The marker faces the navball camera wherever on the ball it sits, so its
-            // rotation is fixed in world space rather than relative to the ball.
+            // The marker faces the navball camera wherever on the ball it sits, so its rotation
+            // is fixed in world space
             GameObject.transform.rotation = stockRotation;
             // A marker on the far side of the ball is hidden, and one near the edge fades out,
             // as the navball's own markers do.

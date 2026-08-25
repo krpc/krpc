@@ -14,8 +14,8 @@ namespace KRPC.LiDAR
     [KRPCClass(Service = "LiDAR")]
     public class Laser : Equatable<Laser>, IGameObjectState
     {
-        // The module that makes a part a laser. The mod's API takes the part rather than
-        // the module, so the part is what identifies this and all it has to reach.
+        // The module that makes a part a laser. The mod's API takes the part, so the part
+        // identifies the laser
         const string moduleName = "LiDARModule";
 
         internal static bool Is(SpaceCenter.Services.Parts.Part part)
