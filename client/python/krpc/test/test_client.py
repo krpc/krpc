@@ -727,6 +727,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
             set(
                 [
                     "krpc",
+                    "std_lib",
                     "test_service",
                     # Owns the class that an extension member of TestService returns
                     "test_service2",
@@ -736,6 +737,11 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "benchmark",
                     "stream",
                     "add_stream",
+                    "function_stream",
+                    "add_function_stream",
+                    "add_event",
+                    "compile_function",
+                    "run_function",
                     "stream_update_condition",
                     "wait_for_stream_update",
                     "add_stream_update_callback",
@@ -765,6 +771,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
                     "get_services",
                     "get_status",
                     "add_stream",
+                    "add_function_stream",
+                    "run_function",
                     "start_stream",
                     "set_stream_rate",
                     "remove_stream",
