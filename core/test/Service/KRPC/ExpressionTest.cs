@@ -1111,8 +1111,31 @@ namespace KRPC.Test.Service.KRPC
             var bytes = global::KRPC.Service.KRPC.KRPC.RunFunction (
                 Expression.Multiply (Expression.ConstantInt (6), Expression.ConstantInt (7)));
             var value = global::KRPC.Server.ProtocolBuffers.Encoder.Decode (
-                Google.Protobuf.ByteString.CopyFrom (bytes), typeof (int));
+                Google.Protobuf.ByteString.CopyFrom (bytes),
+                global::KRPC.Service.TypeSpec.Create (typeof (int)));
             Assert.AreEqual (42, value);
+        }
+
+        [Test]
+        public void RunFunctionNullValue ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("run");
+            var expr = Expression.Call (BuildProcedureCall (
+                "TestClass_get_ObjectProperty", new Argument (0, obj)));
+            Assert.IsNull (global::KRPC.Service.KRPC.KRPC.RunFunction (expr));
+            // The same function is not null once the property holds a value
+            obj.ObjectProperty = new global::KRPC.Test.Service.TestService.TestClass ("other");
+            Assert.IsNotNull (global::KRPC.Service.KRPC.KRPC.RunFunction (expr));
+        }
+
+        [Test]
+        public void RunFunctionIsNullable ()
+        {
+            // A null value is carried by the result's is_null flag, which the procedure
+            // only gets to set by declaring the return nullable
+            var procedure = global::KRPC.Service.Services.Instance
+                .Signatures ["KRPC"].Procedures ["RunFunction"];
+            Assert.IsTrue (procedure.ReturnSpec.Nullable);
         }
 
         [Test]
@@ -1125,6 +1148,21 @@ namespace KRPC.Test.Service.KRPC
                     "TestClass_set_IntProperty", new Argument (0, obj), new Argument (1, 5))));
             Assert.AreEqual (0, bytes.Length);
             Assert.AreEqual (5, obj.IntProperty);
+        }
+
+        [Test]
+        public void RunFunctionChecksTheReturnTypeBeforeEvaluating ()
+        {
+            var obj = new global::KRPC.Test.Service.TestService.TestClass ("run");
+            obj.IntProperty = 1;
+            var expr = Expression.Block (new List<Expression> {
+                Expression.Call (BuildProcedureCall (
+                    "TestClass_set_IntProperty", new Argument (0, obj), new Argument (1, 5))),
+                Expression.Skip (list, Expression.ConstantInt (1))
+            });
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => global::KRPC.Service.KRPC.KRPC.RunFunction (expr));
+            Assert.AreEqual (1, obj.IntProperty);
         }
 
         [Test]
