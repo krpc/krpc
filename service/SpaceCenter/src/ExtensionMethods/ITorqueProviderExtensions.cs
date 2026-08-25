@@ -37,7 +37,7 @@ namespace KRPC.SpaceCenter
             var pos = Vector3d.zero;
             var neg = Vector3d.zero;
             foreach (var torque in torques) {
-                // Use abs() to normalise sign conventions: KSP's ITorqueProvider implementations
+                // Use abs() to normalize sign conventions: KSP's ITorqueProvider implementations
                 // are inconsistent (e.g. ModuleControlSurface negates the roll axis, while
                 // ModuleReactionWheel returns the same positive value in both pos and neg).
                 // This matches how KSP's own VesselSAS.GetTotalVesselTorque uses Max(pos,neg).

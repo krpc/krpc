@@ -12,11 +12,11 @@ namespace KRPC.SpaceCenter.Services
     [KRPCClass(Service = "SpaceCenter")]
     public class ContractParameter : Equatable<ContractParameter>, IGameObjectState
     {
-        // The contract the parameter belongs to, and the indices that lead to it: a
-        // contract's parameters are an ordered list and so are each parameter's own, so the
-        // path names the parameter for as long as the contract exists. The game gives a
-        // parameter nothing else to be named by, and builds new parameter objects whenever
-        // it builds the contract.
+        // The contract the parameter belongs to, and the indices that lead to it. A
+        // contract's parameters are an ordered list, and so are each parameter's own, so
+        // the path names the parameter for as long as the contract exists. The game gives a
+        // parameter no other name, and builds new parameter objects whenever it builds the
+        // contract
         readonly Contract contract;
         readonly int[] path;
 

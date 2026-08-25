@@ -138,8 +138,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         // The following three helpers match on the display name, which the game translates.
-        // They exist to serve the guiName-keyed public API and must not be used to identify a
-        // known event from within kRPC -- use the ById helpers below for that.
+        // They serve the guiName-keyed public API. To identify a known event from within
+        // kRPC, use the ById helpers below
 
         internal IEnumerable<string> VisibleEventNames {
             get { return AllEvents.Select (x => x.guiName); }
@@ -155,8 +155,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             AllEvents.First (x => x.guiName == name).Invoke ();
         }
 
-        // Events are identified by their id -- the name of the method implementing them -- which
-        // the game does not translate, unlike the display name.
+        // Events are identified by their id, the name of the method implementing them, which
+        // the game does not translate, unlike the display name
 
         internal bool HasVisibleEventById (string id)
         {

@@ -181,9 +181,9 @@ namespace KRPC.SpaceCenter.Services.Parts
                 flowMultiplier *= engine.velCurve.Evaluate ((float)engine.vessel.mach);
 
             // Apply KSP's soft cap on the flow multiplier. Above flowMultCap the excess is
-            // compressed (so extra ram flow gives diminishing returns rather than growing
-            // without bound), then a lower bound is enforced. Without this the reported
-            // thrust of air-breathing engines is overstated at high Mach.
+            // compressed, so extra ram flow gives diminishing returns, and then a lower
+            // bound is enforced. Without this the reported thrust of air-breathing engines
+            // is overstated at high Mach
             if (flowMultiplier > engine.flowMultCap) {
                 float excess = flowMultiplier - engine.flowMultCap;
                 flowMultiplier = engine.flowMultCap +

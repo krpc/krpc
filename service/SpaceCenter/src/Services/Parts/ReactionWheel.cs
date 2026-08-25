@@ -123,11 +123,11 @@ namespace KRPC.SpaceCenter.Services.Parts
 
         internal TupleV3 AvailableTorqueVectors {
             get {
-                // Computed from the wheel's torque fields rather than ModuleReactionWheel's
-                // ITorqueProvider implementation, whose handling of the authority limiter
-                // varies between the stock module and modded replacements of it. The
-                // conditions under which the wheel produces no torque match the stock ones:
-                // the module must be enabled and active, and actuator mode 2 disables it.
+                // Computed from the wheel's torque fields. ModuleReactionWheel's
+                // ITorqueProvider implementation handles the authority limiter differently
+                // between the stock module and modded replacements of it. The conditions
+                // under which the wheel produces no torque match the stock ones: the module
+                // must be enabled and active, and actuator mode 2 disables it
                 var reactionWheel = InternalReactionWheel;
                 if (!reactionWheel.moduleIsEnabled || !Active || reactionWheel.actuatorModeCycle == 2)
                     return ITorqueProviderExtensions.zero;

@@ -67,13 +67,12 @@ namespace KRPC.SpaceCenter.Services.Parts
         /// </summary>
         internal double BoiloffRate {
             get {
-                // RealFuels accumulates the mass boiled off during an update, in tonnes,
-                // rather than a rate, so divide by the length of that update to get one. It
-                // runs off the flight integrator's thermal step, which is shorter than the
-                // fixed update only when the game is stepping faster than the minimum the
-                // integrator honors - never in practice, as the minimum is well below one
-                // frame. Under time warp both scale together, so this stays a rate per second
-                // of in-game time.
+                // RealFuels accumulates the mass boiled off during an update, in tonnes, so
+                // divide by the length of that update to get a rate. It runs off the flight
+                // integrator's thermal step, which is shorter than the fixed update only
+                // when the game steps faster than the minimum the integrator honors, well
+                // below one frame. Under time warp both scale together, so this stays a rate
+                // per second of in-game time
                 var delta = TimeWarp.fixedDeltaTime;
                 if (delta <= 0)
                     return 0;

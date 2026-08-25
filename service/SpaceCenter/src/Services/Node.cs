@@ -22,9 +22,9 @@ namespace KRPC.SpaceCenter.Services
         /// The x-component is the radial component.
 
         readonly Guid vesselId;
-        // The game's own maneuver node. It offers nothing to identify a node by, so this is
-        // held rather than found again; a node the game no longer has in the vessel's flight
-        // plan, which includes every node after a game is loaded, is reclaimed instead.
+        // The game's own maneuver node. The game offers no way to identify a node, so the
+        // node is held. A node the game does not have in the vessel's flight plan, which
+        // includes every node after a game is loaded, is reclaimed
         readonly ManeuverNode node;
 
         internal Node (global::Vessel vessel, double ut, double prograde, double normal, double radial)
@@ -74,8 +74,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            // The node's identity hash rather than its own: it is what the game holds, and
-            // nothing about it may change while a client has this object.
+            // The node's identity hash: the game holds the node itself, and nothing about
+            // it may change while a client has this object
             return Hash.Of (vesselId).And (RuntimeHelpers.GetHashCode (node));
         }
 

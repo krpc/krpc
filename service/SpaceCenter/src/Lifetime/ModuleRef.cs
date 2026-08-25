@@ -33,8 +33,7 @@ namespace KRPC.SpaceCenter
         readonly string name;
         readonly int occurrence;
         // The game's own name for the module, and where the module was in the part's module
-        // list, or 0 and -1 while it has not been found. Both are ways of finding it, neither
-        // is what the reference stands for.
+        // list, or 0 and -1 while it has not been found. Both are ways of finding the module
         uint id;
         int index;
 
@@ -102,12 +101,12 @@ namespace KRPC.SpaceCenter
             var modules = part.Modules;
             if (index >= 0 && index < modules.Count) {
                 var module = modules [index];
-                // The id is unique among the modules of a part from the moment the game hands
-                // it out, so what carries it and is of the reference's class is the module.
-                // Where it sits is only where it was, and says nothing on its own: a change to
-                // the list that leaves its length alone moves modules under it. The class is
-                // what an id loaded from a game state, which no uniqueness was enforced on,
-                // has to agree with before it can be believed.
+                // The id is unique among the modules of a part from the moment the game
+                // hands it out, so the module is the one carrying it that is of the
+                // reference's class. The index is only where the module was: a change that
+                // leaves the list length alone moves the modules under it. An id loaded from
+                // a game state had no uniqueness enforced on it, so the class has to agree
+                // as well
                 if (module != null && module.PersistentId == id && module.moduleName == name)
                     return module;
             }
@@ -159,8 +158,8 @@ namespace KRPC.SpaceCenter
                 for (var i = 0; i < moduleCount; i++) {
                     var module = modules [i];
                     // An id is unique among the modules of a part only from the moment the
-                    // game hands it out, so what carries one loaded from a game state has to
-                    // be of the reference's class before it can be its module.
+                    // game hands it out, so one loaded from a game state has to be of the
+                    // reference's class as well
                     if (module == null || module.PersistentId != id || module.moduleName != name)
                         continue;
                     index = i;

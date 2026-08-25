@@ -218,21 +218,20 @@ namespace KRPC.SpaceCenter.Services
             } else {
                 var flightState = HighLogic.CurrentGame.flightState;
                 // A vessel's protovessel object is replaced every time it is backed up or
-                // unloaded, so the one the flight state holds is not necessarily the one the
-                // vessel points at now, and the game drops only the object it is handed. Drop
-                // every entry for this vessel by id instead: one left behind still records the
-                // vessel as standing where it was, and the next thing to read the list, such as
-                // the launch site check, recovers it a second time.
+                // unloaded, so the one the flight state holds may not be the one the vessel
+                // points at now, and the game drops only the object it is handed. Drop every
+                // entry for this vessel by id: one left behind still records the vessel as
+                // standing where it was, and the next read of the list, such as the launch
+                // site check, recovers it a second time
                 flightState.protoVessels.RemoveAll (x => x.vesselID == vessel.id);
                 // Recovery is computed from the protovessel, which for a loaded vessel still
                 // describes it as it was when the scene was entered or the game last saved.
                 // Back it up so that the crew, parts and resources recovered are the ones the
                 // vessel actually has.
                 vessel.BackupVessel ();
-                // Recovering quickly awards the same crew, funds and science, and differs only
-                // in showing no mission summary. That dialog belongs to a player who pressed
-                // recover and is waiting to read it; here it would sit over the flight with
-                // nobody to dismiss it.
+                // Recovering quickly awards the same crew, funds and science, and differs
+                // only in showing no mission summary. That dialog would sit over the flight
+                // with nobody to dismiss it
                 ShipConstruction.RecoverVesselFromFlight (vessel.protoVessel, flightState, true);
             }
         }
@@ -269,8 +268,8 @@ namespace KRPC.SpaceCenter.Services
         static IEnumerator TerminateVesselCoroutine (global::Vessel vessel)
         {
             yield return new WaitUntil (() => true);
-            // What the tracking station's terminate button fires, so that contracts and mods
-            // watching for a vessel to be terminated see this the same way.
+            // The event the tracking station's terminate button fires, so that contracts and
+            // mods watching for a vessel to be terminated see this the same way
             GameEvents.onVesselTerminated.Fire (vessel.protoVessel);
             // The crew go missing rather than being killed, which is how the game treats the
             // crew of a vessel terminated from the tracking station. The list an unloaded
@@ -279,11 +278,11 @@ namespace KRPC.SpaceCenter.Services
             var crew = vessel.GetVesselCrew ().ToList ();
             foreach (var member in crew)
                 member.StartRespawnPeriod ();
-            // Destroying an unloaded vessel kills its crew outright, which would override the
-            // respawn period just started, report the deaths to contracts watching for them,
-            // and drop any tourists aboard from the roster entirely. That reads the crew off
-            // the protovessel, which is going with the vessel, so emptying it leaves nobody
-            // to kill.
+            // Destroying an unloaded vessel kills its crew outright, which would override
+            // the respawn period just started, report the deaths to contracts watching for
+            // them, and drop any tourists aboard from the roster entirely. It reads the crew
+            // off the protovessel, which is going with the vessel, so emptying it leaves the
+            // crew alone
             if (!vessel.loaded)
                 foreach (var member in crew)
                     vessel.protoVessel.RemoveCrew (member);

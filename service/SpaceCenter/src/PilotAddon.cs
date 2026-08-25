@@ -195,10 +195,9 @@ namespace KRPC.SpaceCenter
                 if (other.ThrottleUpdated)
                     state.mainThrottle = other.state.mainThrottle;
                 ThrottleUpdated |= other.ThrottleUpdated;
-                // Custom axes are absolute axis positions, so they override (like the
-                // throttle) rather than accumulate. The flight control state is not
-                // reset each frame for non-active vessels, so accumulating them across
-                // frames would run away.
+                // Custom axes are absolute axis positions, so they override like the
+                // throttle. The flight control state is not reset each frame for non-active
+                // vessels, so accumulating them across frames would run away
                 for (int i = 0; i < 4; i++) {
                     if (other.customAxisUpdated[i])
                         state.custom_axes[i] = other.state.custom_axes[i];
@@ -269,7 +268,7 @@ namespace KRPC.SpaceCenter
         static HashSet<Vessel> remoteTechSanctionedDelegates = new HashSet<Vessel> ();
         /// <summary>
         /// The attitude controller for each vessel. Owned here rather than by the AutoPilot
-        /// service objects — those are transient API surface objects, so controller state (the
+        /// service objects, which are transient API surface objects, so controller state (the
         /// autotuner, the oscillation detector's persistent structural level, ...) must not be
         /// tied to their lifetime. Held per vessel for the duration of the flight session,
         /// however many AutoPilot objects come and go.
@@ -304,9 +303,9 @@ namespace KRPC.SpaceCenter
         }
 
         // The physics tick the server last ran an update on, and whether the order of that
-        // update and the game's control input has been reported yet. Which of the two comes
-        // first decides whether a value written by a call in a tick is acted on in that tick.
-        // The server addon fixes that order, so the log says once what the game actually did.
+        // update and the game's control input has been reported yet. The order decides
+        // whether a value written by a call in a tick is acted on in that tick, and the
+        // server addon fixes it, so the log reports it once
         static float lastUpdateFixedTime = float.NaN;
         static bool reportedUpdateOrder;
 
@@ -479,9 +478,9 @@ namespace KRPC.SpaceCenter
             HandleThrottle (vessel, manualInputs [vessel]);
             inputs.Add (manualInputs [vessel]);
 
-            // Auto-pilot inputs. The control loop itself runs at the point in the server's
-            // update that the vessel's update mode selects; this applies whatever it last
-            // produced. With no server running nothing else drives it, so it runs here.
+            // Auto-pilot inputs. The control loop runs at the point in the server's update
+            // that the vessel's update mode selects, and this applies whatever it last
+            // produced. With no server running nothing else drives it, so it runs here
             var attitudeController = FindAttitudeController (vessel.id);
             if (attitudeController != null) {
                 if (!Core.Instance.AnyRunning)
@@ -545,9 +544,8 @@ namespace KRPC.SpaceCenter
             if (FlightGlobals.ActiveVessel != vessel)
                 return;
             // If RemoteTech is controlling the vessel and there is no control connection,
-            // drop the input rather than applying it. Note this must consume the input
-            // (rather than just returning) so that it is not subsequently re-applied via
-            // the per-frame FlightCtrlState in ControlInputs.Add.
+            // drop the input. Note: the input has to be consumed, or the per-frame
+            // FlightCtrlState in ControlInputs.Add re-applies it
             if (!HasControlConnection (vessel)) {
                 inputs.Throttle = 0f;
                 inputs.ThrottleUpdated = false;

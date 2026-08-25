@@ -203,10 +203,9 @@ namespace KRPC.SpaceCenter
             var inputs = PilotAddon.Get (vessel);
             var transform = eva.transform;
 
-            // On foot the kerbal walks; off it, the jetpack flies it. The two are driven by
-            // the same inputs, and which one has any effect is left to the game: it walks
-            // the kerbal only while it is on a surface, and thrusts only while the jetpack
-            // is deployed.
+            // On foot the kerbal walks, and off it the jetpack flies it. Both are driven by
+            // the same inputs: the game walks the kerbal only while it is on a surface, and
+            // thrusts only while the jetpack is deployed
             var onFoot = vessel.LandedOrSplashed;
             var walking = onFoot && (inputs.Forward != 0f || inputs.Right != 0f);
 
@@ -217,11 +216,10 @@ namespace KRPC.SpaceCenter
             if (translate != Vector3.zero)
                 Set (Commands.Translation, eva, Get (Commands.Translation, eva) + translate);
 
-            // On foot a kerbal can only turn, and only while it is walking, and on a
-            // ladder it is held by its hands and cannot turn at all, so the rotation
-            // inputs are the free-flying jetpack's alone. On a ladder it also cannot be
-            // stopped, so trying would leave the torque command latched on against
-            // whatever motion the ladder imposes.
+            // On foot a kerbal can only turn, and only while walking. On a ladder it is
+            // held by its hands and cannot turn at all, so the rotation inputs are the
+            // jetpack's alone. A command sent on a ladder would stay latched against the
+            // motion the ladder imposes
             if (onFoot || eva.OnALadder)
                 ReleaseRotation (eva);
             else

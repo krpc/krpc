@@ -562,8 +562,8 @@ namespace KRPC.SpaceCenter.Services
             get { return (float)CurrentPitchHeadingRoll ().x; }
         }
 
-        // Total pointing error (degrees) between the vessel and a target. rollControlled selects the
-        // full-rotation error (honouring roll) versus the direction-only error.
+        // Total pointing error (degrees) between the vessel and a target. rollControlled
+        // selects the full-rotation error, which includes roll, over the direction-only error.
         float TotalError (QuaternionD targetRotation, Vector3d targetDirection, bool rollControlled)
         {
             if (rollControlled) {

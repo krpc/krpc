@@ -366,9 +366,9 @@ def _make_autopilot_test_class(
             # roll angles reports spurious large values. roll_error is measured about
             # the nose axis instead, which stays well-defined as long as the vessel and
             # target share a nose direction. The direction is ~1 degree off straight up
-            # (surface +x is the zenith) with a fixed heading, so the vertical plane —
-            # and hence the roll angle — is still defined (exactly vertical is
-            # inherently degenerate between heading and roll; see AutoPilot.TargetRoll).
+            # (surface +x is the zenith) with a fixed heading, so the vertical plane, and
+            # with it the roll angle, is still defined. Exactly vertical is inherently
+            # degenerate between heading and roll, see AutoPilot.TargetRoll.
             set_roll = 40
             offset = math.radians(1)
             direction = normalize((math.cos(offset), math.sin(offset), 0))
@@ -507,10 +507,10 @@ def _make_autopilot_test_class(
             self.assertAlmostEqual(self.ap.target_direction, direction, delta=1e-3)
 
         def test_roll_defined_through_vertical(self):
-            # The #564 fix at the API level: with an up reference off the flight path,
-            # roll stays well-defined as the nose sweeps through the exact vertical —
-            # where the default (zenith) reference is singular. Command roll 0 at each
-            # step and confirm it reads back 0 continuously, including at the pole.
+            # The #564 fix at the API level: with an up reference off the flight path, roll
+            # stays well-defined as the nose sweeps through the exact vertical, where the
+            # default zenith reference is singular. Command roll 0 at each step and confirm
+            # it reads back 0 continuously, including at the pole.
             self.ap.reset()
             self.ap.reference_frame = self.vessel.surface_reference_frame
             north = (0, 1, 0)  # perpendicular to the zenith-east sweep plane
@@ -583,8 +583,8 @@ def _make_autopilot_test_class(
         def test_hold_through_vertical_with_fixed_up(self):
             # Physics companion to test_roll_defined_through_vertical: hold an orientation
             # whose nose sits at the vertical using an up reference off the path, and
-            # confirm the tracked roll error stays bounded — where the old vertical-plane
-            # roll returned spurious values up to ~180 deg (#564).
+            # confirm the tracked roll error stays bounded, where the vertical-plane roll is
+            # singular and returns spurious values up to 180 degrees (#564).
             self.cheat_orientation_to(88, 90, 0)
             self.ap.reference_frame = self.vessel.surface_reference_frame
             north = (0, 1, 0)  # perpendicular to the zenith-east sweep plane
@@ -1065,7 +1065,7 @@ def _make_autopilot_test_class(
         def test_target_smoothing_ramp(self):
             # With target_smoothing_time set, a step change to the target must not reach
             # the *effective* control target until ~smoothing seconds (of game time)
-            # have elapsed -- the slew ramps the setpoint there rather than stepping
+            # have elapsed, as the slew ramps the setpoint there instead of stepping
             # instantly. Asserts on the logged effective target (eff_tgt), so it is
             # craft-independent (it measures the setpoint, not how the vessel tracks
             # it). The assertion is on elapsed game time rather than ramp shape so it is
@@ -1348,8 +1348,8 @@ def _make_autopilot_test_class(
         def test_oscillation_force_on(self):
             # Forcing a rate-filter tool (Notch on pitch/yaw, LowPass on roll) applies
             # that filtering unconditionally at the group's manual frequency, bypassing
-            # the detector -- it does not depend on (or require) a latch (contrast the
-            # Automatic path in test_oscillation_auto_detection). Forcing the other
+            # the detector, so it needs no latch. Contrast the Automatic path in
+            # test_oscillation_auto_detection. Forcing the other
             # mitigations engages them fully regardless of the detector. This checks the
             # forced modes are accepted, persist across an engage, and the autopilot
             # still drives to and holds the target. Craft-independent.
@@ -1369,11 +1369,10 @@ def _make_autopilot_test_class(
         def test_oscillation_force_off(self):
             # Forcing every mitigation Off disables all oscillation handling, even on a
             # structurally flexible craft: the craft is controlled with full authority
-            # (and may wobble). The detector keeps observing -- the latch and level
-            # observables are unaffected by the modes -- so unlike the pre-redesign
-            # semantics no assertion is made on them here. Uses capture_recovery (which
-            # does not raise on a non-settle) rather than wait_for_autopilot, since
-            # forcing Off means accepting the wobble; only that the modes persist is
+            # (and may wobble). The detector keeps observing, and the latch and level
+            # observables are unaffected by the modes, so no assertion is made on them
+            # here. Uses capture_recovery, which does not raise on a non-settle, since
+            # forcing Off means accepting the wobble. Only that the modes persist is
             # required.
             rfm = self.rate_filter_mode
             mm = self.mitigation_mode
@@ -2024,9 +2023,9 @@ TestAutoPilotFlightGull = _make_autopilot_flight_test_class(
 # Re-entry attitude-hold tests for stock spaceplanes: place the craft descending through the
 # upper atmosphere at supersonic speed, nose held slightly above the flight path (a small
 # positive angle of attack), and confirm the autopilot holds that attitude steadily against the
-# high dynamic-pressure aero moments -- keeping the angle of attack small and positive -- without
-# tumbling or breaking up. Unpowered (engines flame out in the thin air anyway); RCS is enabled as
-# a re-entry vehicle would use it, though the aero surfaces carry most of the authority.
+# high dynamic-pressure aero moments, keeping the angle of attack small and positive, without
+# tumbling or breaking up. Unpowered, as engines flame out in the thin air anyway. RCS is enabled
+# as a re-entry vehicle would use it, though the aero surfaces carry most of the authority.
 # pylint: disable=too-many-statements,too-many-arguments,too-many-positional-arguments,too-many-locals
 def _make_autopilot_reentry_test_class(
     test_name,
@@ -2239,12 +2238,11 @@ class TestAutoPilotOtherVessel(krpctest.TestCase):
 
 
 class TestAutoPilotRevertToLaunch(krpctest.TestCase):
-    # Regression for the auto-pilot no longer engaging after a Revert to Launch. A client
-    # that keeps its auto-pilot handle across the revert (a persistent connection, or a
-    # script re-run without reconnecting) must be able to re-engage and actually control
-    # the vessel — previously the handle pointed at an orphaned controller that the
-    # per-tick pilot loop never drove, so the vessel was left uncontrolled until a game
-    # restart.
+    # Regression for the auto-pilot failing to engage after a Revert to Launch. A client
+    # that keeps its auto-pilot handle across the revert, over a persistent connection or a
+    # script re-run without reconnecting, must be able to re-engage and control the vessel.
+    # A handle pointing at an orphaned controller that the per-tick pilot loop never drives
+    # leaves the vessel uncontrolled until a game restart.
 
     @classmethod
     def setUpClass(cls):
@@ -2271,8 +2269,8 @@ class TestAutoPilotRevertToLaunch(krpctest.TestCase):
         # An engaged auto-pilot that the per-tick pilot loop is actually driving forces the
         # stock SAS action group off every physics tick. Enabling SAS and watching it clear
         # is a ground-independent signal that the engaged handle is wired to the vessel's
-        # live controller — a revert leaves the craft on the launch pad, where it cannot be
-        # slewed to a target, so this checks the drive path rather than actual rotation.
+        # live controller. A revert leaves the craft on the launch pad, where it cannot be
+        # slewed to a target, so this checks the drive path and not actual rotation.
         #
         # SAS can only be enabled while the auto-pilot is disengaged, so the sequence is
         # disengage, arm SAS, then engage and watch the pilot loop clear it.

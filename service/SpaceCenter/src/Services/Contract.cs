@@ -16,8 +16,7 @@ namespace KRPC.SpaceCenter.Services
     {
         // The guid the game gives a contract, which it writes into the save and reads back,
         // so it names the contract across a load. The contract system builds new contract
-        // objects for a game it loads, so holding one would leave this reading a contract
-        // out of a game state that is no longer loaded.
+        // objects for a game it loads, so the contract object itself is not held
         readonly Guid contractGuid;
 
         /// <summary>

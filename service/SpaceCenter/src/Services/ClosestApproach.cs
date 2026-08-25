@@ -30,8 +30,8 @@ namespace KRPC.SpaceCenter.Services
     {
         readonly Orbit orbit;
         readonly Orbit target;
-        // Which of the successive approaches this is: the search covers one orbital
-        // period, starting this many periods from now.
+        // The index of this approach among the successive ones: the search covers one
+        // orbital period, starting this many periods from now
         readonly int orbitsAhead;
         // The approach as it was last solved, with the physics tick and the game state it
         // was solved in.
@@ -84,10 +84,9 @@ namespace KRPC.SpaceCenter.Services
             get { return orbit.GameObjectState.LeastAlive (target.GameObjectState); }
         }
 
-        // The time the search for this approach starts from, which it covers one
-        // orbital period of the approaching object from. The next approach is searched
-        // for from now, and needs no period to step by; a hyperbolic orbit, which has
-        // none, therefore still has a next approach.
+        // The time the search for this approach starts from, covering one orbital period
+        // of the approaching object. The next approach is searched for from now and needs
+        // no period to step by, so a hyperbolic orbit still has one
         double BeginTime {
             get {
                 if (orbitsAhead == 0)
@@ -97,11 +96,9 @@ namespace KRPC.SpaceCenter.Services
         }
 
         // The universal time of the closest approach, and the distance there, estimated
-        // from where the two orbits are now. The estimate is a search over an orbital
-        // period, sampling both orbits at some seventy points, so it costs far more than
-        // any member that reads it. Nothing it reads moves within a physics tick, so it
-        // is solved once per tick: the members read in a tick share that one search, and
-        // all describe the same moment.
+        // from where the two orbits are now. The estimate searches an orbital period,
+        // sampling both orbits at some seventy points, so it is solved once per physics
+        // tick and shared by the members read in that tick
         double Solve (out double approachDistance)
         {
             if (solvedFixedTime != Time.fixedTime || solvedGeneration != GameState.Generation) {
@@ -125,13 +122,12 @@ namespace KRPC.SpaceCenter.Services
             return o.InternalOrbit.getPositionAtUT (ut);
         }
 
-        // The world-space velocity of the given orbit at the closest approach: the
-        // motion around its reference body then, plus the motion of that body now. The
-        // body is taken as it is now to match WorldPosition above, which places the
-        // orbit against the body's current position, and to match the velocity a
-        // reference frame moves at, which is also the body's current one. Both objects
-        // are treated the same way, so the relative quantities remain the difference of
-        // the absolute ones.
+        // The world-space velocity of the given orbit at the closest approach: the motion
+        // around its reference body then, plus the motion of that body now. The body is
+        // taken as it is now to match WorldPosition, which places the orbit against the
+        // body's current position, and the velocity a reference frame moves at. Both
+        // objects are treated the same way, so the relative quantities stay the difference
+        // of the absolute ones
         Vector3d WorldVelocity (Orbit o, double ut)
         {
             var internalOrbit = o.InternalOrbit;

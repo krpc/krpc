@@ -30,15 +30,14 @@ namespace KRPC.SpaceCenter.Services
     {
         readonly ReferenceFrameType type;
         readonly global::CelestialBody body;
-        // The body's name, which is what the frame is hashed by. A body keeps its name for
-        // as long as it exists, and the game builds a new string every time it is asked for
-        // one, so it is taken once rather than on every hash.
+        // The body's name, which the frame is hashed by. A body keeps its name for as long
+        // as it exists, and the game builds a new string on every read, so it is taken once
         readonly string bodyName;
         readonly Guid vesselId;
         readonly ManeuverNode node;
-        // The part object finds the KSP part again, says whether it is still
-        // there, and is what the frame is identified by. A part is named by
-        // flight id in flight and by craft id in the editor.
+        // The part object finds the KSP part again, says whether it is still there, and
+        // identifies the frame. A part is named by flight id in flight and by craft id in
+        // the editor
         readonly Parts.Part servicePart;
         ModuleRef dockingPortRef;
         readonly Thruster thruster;
@@ -52,9 +51,8 @@ namespace KRPC.SpaceCenter.Services
         readonly ReferenceFrame hybridRotation;
         readonly ReferenceFrame hybridVelocity;
         readonly ReferenceFrame hybridAngularVelocity;
-        // Whether the client has let go of the frame. A frame a client creates stands
-        // for nothing in the game, so nothing the game destroys ever retires one and the
-        // client removing it or disconnecting is the only thing that can.
+        // Whether the client has let go of the frame. A frame a client creates stands for
+        // nothing in the game, so only the client removing it or disconnecting retires one
         bool removed;
 
         ReferenceFrame (
@@ -87,8 +85,8 @@ namespace KRPC.SpaceCenter.Services
 
         ReferenceFrame (ReferenceFrame parent, Vector3d relativePosition, QuaternionD relativeRotation, Vector3d relativeVelocity, Vector3d relativeAngularVelocity)
         {
-            // The frame is defined against its parent and has no meaning without one,
-            // so this is caught here rather than left to the first member that reads it.
+            // The frame is defined against its parent and has no meaning without one, so
+            // this is caught here
             if (ReferenceEquals (parent, null))
                 throw new ArgumentNullException (nameof (parent));
             type = ReferenceFrameType.Relative;
@@ -138,12 +136,10 @@ namespace KRPC.SpaceCenter.Services
                 .And (parent);
         }
 
-        // Whether a client asked for the frame to be built, rather than it being named by
-        // something in the game. Such a frame is a distinct thing each time it is created,
-        // so it keeps the identity of the object itself: it is the client's to remove, and
-        // removing it must neither take away a frame another client built from the same
-        // values nor leave the next creation from those values handing back the one that
-        // has gone.
+        // Whether a client asked for the frame to be built. Such a frame is a distinct
+        // thing each time it is created, so it keeps the identity of the object itself: it
+        // is the client's to remove, removing it leaves a frame another client built from
+        // the same values alone, and the next creation from those values gives a new frame
         bool Created {
             get {
                 return type == ReferenceFrameType.Relative || type == ReferenceFrameType.Hybrid;
@@ -333,8 +329,8 @@ namespace KRPC.SpaceCenter.Services
         }
 
         // The navball speed mode frames take their orientation from the velocity they
-        // measure, so they are singular when it is zero -- as is the navball's prograde
-        // marker, which the game stops drawing at zero speed.
+        // measure, so they are singular when it is zero, as is the navball's prograde
+        // marker, which the game stops drawing at zero speed
         static void CheckSpeedNotSingular (Vector3d velocity, string name, string description)
         {
             if (velocity.sqrMagnitude < 0.01d)
@@ -563,8 +559,8 @@ namespace KRPC.SpaceCenter.Services
                     "Only a reference frame created by CreateRelative or CreateHybrid " +
                     "can be removed");
             // The addon holds the frame on its client's behalf and has nothing left to do
-            // for one the client has finished with. Taking it out is also what asks for
-            // the sweep that drops it from the object store.
+            // for one the client has finished with. Taking it out also requests the sweep
+            // that drops it from the object store
             CreatedReferenceFramesAddon.Remove (this);
             removed = true;
         }
@@ -621,9 +617,9 @@ namespace KRPC.SpaceCenter.Services
                     }
                 case ReferenceFrameType.OrbitNonRotating:
                 case ReferenceFrameType.OrbitOrbital:
-                    // An orbit is not attached to anything in the scene, so it has no
-                    // transform position to correct this towards the way a maneuver node,
-                    // which belongs to a vessel, does. The orbit is the whole of it.
+                    // An orbit is not attached to anything in the scene, so there is no
+                    // transform position to correct towards, as there is for a maneuver
+                    // node that belongs to a vessel
                     return orbit.InternalOrbit.getPositionAtUT (Planetarium.GetUniversalTime ());
                 case ReferenceFrameType.Part:
                     return InternalPart.transform.position;
@@ -953,11 +949,11 @@ namespace KRPC.SpaceCenter.Services
                 }
                 case ReferenceFrameType.VesselSurface: {
                     // The surface frame's orientation tracks the vessel's inertial
-                    // position (zenith points from the body centre to the vessel) and
-                    // the body's spin axis (north), so its angular velocity is the rate
-                    // at which that basis rotates -- not the body's rotation rate. It is
+                    // position (zenith points from the body center to the vessel) and the
+                    // body's spin axis (north), so its angular velocity is the rate at
+                    // which that basis rotates, and not the body's rotation rate. It is
                     // the orbital sweep of the zenith axis plus the twist of the north
-                    // direction about the zenith as the vessel's latitude changes.
+                    // direction about the zenith as the vessel's latitude changes
                     var vessel = InternalVessel;
                     var mainBody = vessel.mainBody;
                     var r = vessel.CoM - mainBody.position;
@@ -980,7 +976,7 @@ namespace KRPC.SpaceCenter.Services
                     var srf_vel = vessel.srf_velocity;
                     if (srf_vel.sqrMagnitude < 0.01d)
                         return vessel.mainBody.angularVelocity;
-                    // d(srf_vel)/dt ≈ grav − body.ω × v_orbital
+                    // d(srf_vel)/dt is approximately grav - body.omega x v_orbital
                     var grav = (Vector3d)FlightGlobals.getGeeForceAtPosition (vessel.CoM);
                     var v_orb = vessel.GetOrbit ().GetVel ();
                     var a_srf = grav - Vector3d.Cross (vessel.mainBody.angularVelocity, v_orb);
@@ -990,7 +986,7 @@ namespace KRPC.SpaceCenter.Services
                     var vessel = InternalVessel;
                     var srfVelocity = vessel.srf_velocity;
                     CheckSpeedNotSingular (srfVelocity, "VesselSurfaceSpeed", "surface velocity");
-                    // d(srf_vel)/dt ≈ grav − body.ω × v_orbital
+                    // d(srf_vel)/dt is approximately grav - body.omega x v_orbital
                     var grav = (Vector3d)FlightGlobals.getGeeForceAtPosition (vessel.CoM);
                     var acceleration = grav - Vector3d.Cross (
                         vessel.mainBody.angularVelocity, vessel.GetOrbit ().GetVel ());
@@ -1004,9 +1000,9 @@ namespace KRPC.SpaceCenter.Services
                     // Vessel and target are both in free fall, so their relative velocity
                     // turns with the difference in gravity between the two positions. Each
                     // is taken against the body that object orbits, as the gravity of a
-                    // body at its own center -- where a targeted body sits -- is undefined.
+                    // body at its own center, where a targeted body sits, is undefined.
                     // Whatever pulls on both of them cancels in the difference. Thrust and
-                    // drag on either of them are not accounted for.
+                    // drag on either of them are not accounted for
                     var target = InternalTarget;
                     var targetOrbit = target.GetOrbit ();
                     var acceleration =
@@ -1017,9 +1013,10 @@ namespace KRPC.SpaceCenter.Services
                     return SpeedModeAngularVelocity (vessel, relativeVelocity, acceleration);
                 }
                 case ReferenceFrameType.Maneuver: {
-                    // The burn vector is stored in prograde/normal/radial components, so it rotates
-                    // with the orbital frame. The z-axis (arbitrary inertial projection) introduces
-                    // a small spin correction about ŷ that is neglected here.
+                    // The burn vector is stored in prograde/normal/radial components, so it
+                    // rotates with the orbital frame. The z-axis (arbitrary inertial
+                    // projection) introduces a small spin correction about the y-axis that
+                    // is neglected here
                     var r = node.patch.getRelativePositionAtUT (node.UT).SwapYZ ();
                     var v = node.patch.getOrbitalVelocityAtUT (node.UT).SwapYZ ();
                     return Vector3d.Cross (r, v) / r.sqrMagnitude;
@@ -1059,10 +1056,10 @@ namespace KRPC.SpaceCenter.Services
         /// the given velocity, which is changing at the given acceleration.
         /// </summary>
         /// <remarks>
-        /// The basis is ŷ along the velocity, ẑ along the velocity crossed with the zenith
-        /// and x̂ the remaining axis. For a basis whose axes obey ė = ω × e, the angular
-        /// velocity is ω = (ŷ × dŷ/dt) + ŷ (x̂ · dẑ/dt): the swing of the velocity direction,
-        /// plus the roll about it as the plane through the velocity and the zenith turns.
+        /// The basis is y along the velocity, z along the velocity crossed with the zenith and x
+        /// the remaining axis. For a basis whose axes obey de/dt = omega x e, the angular velocity
+        /// is omega = (y x dy/dt) + y (x * dz/dt): the swing of the velocity direction, plus the
+        /// roll about it as the plane through the velocity and the zenith turns.
         /// </remarks>
         static Vector3d SpeedModeAngularVelocity (
             global::Vessel vessel, Vector3d velocity, Vector3d acceleration)

@@ -142,11 +142,10 @@ namespace KRPC.SpaceCenter.Services.Parts
         {
             CheckConverterExists (index);
             var converter = Converter (index);
-            // Use IsActivated for the active/idle distinction rather than matching
-            // the localized "Inactive" status string. A running converter reports
-            // either "<x>% load" (while thermally throttled) or "Operational" (at
-            // full capacity), so anything active that isn't reporting a problem is
-            // treated as running.
+            // Use IsActivated for the active/idle distinction. The localized "Inactive"
+            // status string is not matched: a running converter reports either "<x>% load"
+            // while thermally throttled or "Operational" at full capacity, so anything
+            // active that is not reporting a problem is treated as running
             if (!converter.IsActivated)
                 return ResourceConverterState.Idle;
             var status = converter.status;
@@ -162,8 +161,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         }
 
         // The messages the game builds a converter's status out of. It reports the status
-        // already translated, so these are the tags for the same messages rather than the
-        // English text, which only matches when the game is running in English.
+        // already translated, so these are the tags for the same messages, as the English
+        // text only matches a game running in English
         static readonly string[] MissingResourceMessages = {
             "#autoLOC_261263", "#autoLOC_261304", // missing <resource>
             "#autoLOC_258451", "#autoLOC_259933"  // insufficient power

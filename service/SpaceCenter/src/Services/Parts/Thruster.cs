@@ -22,7 +22,7 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         // A thruster belongs either to an engine or to a set of RCS thrusters, so one of
-        // these two references stands for nothing.
+        // these two references is unset
         ModuleRef engineRef;
         ModuleRef rcsRef;
         ModuleRef gimbalRef;

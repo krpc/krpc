@@ -17,9 +17,8 @@ namespace KRPC.SpaceCenter.Services.Parts
         Vector3 force;
         Vector3 position;
         ReferenceFrame frame;
-        // Whether the force has been taken off the part. The object goes on standing for
-        // an instruction the game is no longer given, so it says it is gone rather than
-        // reporting a force that is not being applied.
+        // Whether the force has been taken off the part. The object outlives the force it
+        // stands for, so this marks it as gone
         bool removed;
 
         internal Force (Part part, Tuple3 forceVector, Tuple3 forcePosition, ReferenceFrame referenceFrame)

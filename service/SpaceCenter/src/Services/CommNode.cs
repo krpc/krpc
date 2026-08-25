@@ -54,8 +54,8 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         public override int GetHashCode ()
         {
-            // The node's identity hash rather than its own, so that nothing the game does to
-            // the node can change it while a client holds this object.
+            // The node's identity hash, so that nothing the game does to the node changes
+            // it while a client holds this object
             return RuntimeHelpers.GetHashCode (InternalNode);
         }
 

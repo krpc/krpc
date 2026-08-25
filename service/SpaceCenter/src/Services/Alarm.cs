@@ -398,8 +398,8 @@ namespace KRPC.SpaceCenter.Services
         [KRPCMethod]
         public void Remove()
         {
-            // Resolve first, so that removing an alarm the game does not have reports that
-            // rather than passing an id the alarm clock knows nothing about.
+            // Resolve first, so that removing an alarm the game does not have is reported
+            // here, and not as an unknown id from the alarm clock
             var alarm = InternalAlarm;
             AlarmClockScenario.DeleteAlarm(alarm.Id);
         }

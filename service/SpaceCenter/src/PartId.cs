@@ -100,9 +100,8 @@ namespace KRPC.SpaceCenter
             get {
                 if (Find () != null)
                     return GameObjectState.Live;
-                // The editor holds nothing that is not in the vessel it has open, so a
-                // part it does not have is gone as soon as it is known to have one, and a
-                // part of a vessel it has loaded over is gone whatever it has open now.
+                // The editor holds nothing outside the vessel it has open, so a part it
+                // does not have is gone, and so is a part of a vessel it has loaded over
                 if (inEditor) {
                     if (!OfLoadedShip)
                         return GameObjectState.Destroyed;

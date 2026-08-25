@@ -20,7 +20,7 @@ namespace KRPC.SpaceCenter.Services
         Orbit orbit;
 
         // The body's name. A body keeps its name for as long as it exists, and the game
-        // builds a new string every time it is asked for one, so it is taken once.
+        // builds a new string on every read, so it is taken once
         readonly string bodyName;
 
         /// <summary>
@@ -341,7 +341,7 @@ namespace KRPC.SpaceCenter.Services
         /// </summary>
         Vector3d TerrainNormal (double latitude, double longitude, Func<double, double, double> height)
         {
-            // How far apart to take the samples. Far enough that the height difference between
+            // The distance between samples. Far enough that the height difference between
             // them survives rounding, close enough to follow the local shape of the terrain.
             const double sampleDistance = 10;
             var up = InternalBody.GetSurfaceNVector (latitude, longitude);

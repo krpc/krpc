@@ -13,10 +13,9 @@ namespace KRPC.SpaceCenter.Services.Parts
     {
         readonly Part part;
         ModuleRef experimentRef;
-        // The game's own record of the data. It is a plain object rather than something in
-        // the scene, and the game offers nothing to identify it by, so it is the one thing
-        // here that is held on to rather than found again. When the game replaces it, which
-        // it does whenever it rebuilds the experiment, this object is reclaimed instead.
+        // The game's own record of the data. It is a plain object with nothing to identify
+        // it by, so it is held rather than found again. The game replaces it whenever it
+        // rebuilds the experiment, and this object is then reclaimed
         readonly global::ScienceData data;
 
         internal ScienceData (Part dataPart, ModuleScienceExperiment experimentModule, global::ScienceData scienceData)

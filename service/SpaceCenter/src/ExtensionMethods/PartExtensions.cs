@@ -236,14 +236,14 @@ namespace KRPC.SpaceCenter.ExtensionMethods
         public static Bounds GetBounds (this Part part, ReferenceFrame referenceFrame)
         {
             var bounds = new Bounds (referenceFrame.PositionFromWorldSpace (part.WCoM), Vector3.zero);
-            // Only the parts own model, the same subtree KSP measures a part against. Searching
-            // the whole part transform instead would pick up the models of physicsless child
-            // parts, which hang off it, along with any object a mod parents to the part.
+            // Only the part's own model, the same subtree KSP measures a part against. The
+            // whole part transform also holds the models of physicsless child parts, which
+            // hang off it, and any object a mod parents to the part
             var meshes = part.FindModelComponents<MeshFilter> ();
             for (int i = 0; i < meshes.Count; i++) {
                 var mesh = meshes [i];
                 // The model subtree is walked in full, so meshes that are currently switched
-                // off - a hidden part variant, a stowed animation state - have to be skipped.
+                // off, such as a hidden part variant or a stowed animation state, are skipped
                 if (!mesh.gameObject.activeInHierarchy)
                     continue;
                 // sharedMesh, not mesh: the latter instantiates a private copy of the mesh

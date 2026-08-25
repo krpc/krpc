@@ -11,7 +11,7 @@ namespace KRPC.SpaceCenter
     /// <remarks>
     /// KSP assigns <c>Vessel.vesselRanges</c> only in <c>Vessel.Awake</c>, copying
     /// <c>PhysicsGlobals.VesselRangesDefault</c>, and never saves it. A vessel rebuilt from its
-    /// protovessel — after a scene change, or when it comes back into loading range — therefore
+    /// protovessel, after a scene change or when it comes back into loading range, therefore
     /// starts again at the stock ranges. The requested range is held here, keyed by vessel id so
     /// that it outlives the vessel object, and re-applied so it survives those rebuilds.
     ///
@@ -81,7 +81,7 @@ namespace KRPC.SpaceCenter
 
         /// <summary>
         /// Re-apply the requested ranges, so that they survive a vessel being rebuilt from its
-        /// protovessel — on entering the scene, or on coming back into loading range.
+        /// protovessel, on entering the scene or on coming back into loading range.
         /// </summary>
         public void FixedUpdate ()
         {

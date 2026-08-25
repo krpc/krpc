@@ -34,10 +34,10 @@ namespace KRPC.SpaceCenter
             var active = FlightGlobals.ActiveVessel;
             if (active != null && active.id == id)
                 return active;
-            // A game that is not listing vessels has none to find. Answering that, rather
-            // than raising, is what leaves VesselsKnown to say what the absence means, and
-            // it has to be an answer: the object store asks every vessel it holds for its
-            // state in one pass, and one that raises must not stop the rest being checked.
+            // A game that is not listing vessels has none to find. Return an empty list,
+            // which leaves VesselsKnown to say what the absence means: the object store
+            // checks every vessel it holds in one pass, and one that raises must not stop
+            // the rest
             var vessels = FlightGlobals.Vessels;
             if (vessels == null)
                 return null;

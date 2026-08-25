@@ -4,7 +4,7 @@
 # so even a single-frame gap (~20 ms) introduces tens of metres of error.
 # Affected tests use delta=200 (metres) rather than the default 7-place tolerance.
 # Tests that check a single value from one RPC (e.g. direction in own frame) are
-# not affected by the race, but are limited to places=6 by float→double precision
+# not affected by the race, but are limited to places=6 by float to double precision
 # loss when Unity float Vector3 values are promoted for double-precision arithmetic.
 
 import math
@@ -643,8 +643,8 @@ class TestReferenceFrame(krpctest.TestCase):
         which is only valid at the equator.  Off the equator it produced a
         surface velocity error of ~52 m/s.
         """
-        # Inclination 45°, observed a quarter orbit past the ascending node
-        # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        # Inclination 45 degrees, observed a quarter orbit past the ascending node
+        # (mean anomaly pi/2) so the vessel sits near its peak latitude.
         self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
         self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
         expected = self._expected_surface_speed()
@@ -668,8 +668,8 @@ class TestReferenceFrame(krpctest.TestCase):
         Before the #454 fix the buggy ω×r correction was rotation-frame
         dependent, so the two speeds diverged away from the equator.
         """
-        # Inclination 45°, observed a quarter orbit past the ascending node
-        # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        # Inclination 45 degrees, observed a quarter orbit past the ascending node
+        # (mean anomaly pi/2) so the vessel sits near its peak latitude.
         self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
         self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
         hybrid = self.space_center.ReferenceFrame.create_hybrid(
@@ -865,8 +865,8 @@ class TestReferenceFrame(krpctest.TestCase):
         surface speed frame is correct away from the equator too. Checked at ~45°
         latitude in an inclined orbit, where the co-rotation velocity is neither
         aligned with nor perpendicular to the orbital velocity."""
-        # Inclination 45°, observed a quarter orbit past the ascending node
-        # (mean anomaly π/2) so the vessel sits near its peak latitude.
+        # Inclination 45 degrees, observed a quarter orbit past the ascending node
+        # (mean anomaly pi/2) so the vessel sits near its peak latitude.
         self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
         self.set_orbit("Kerbin", 700000, 0, 45, 0, 0, math.pi / 2, 0)
         expected = self._expected_surface_speed()
@@ -1099,7 +1099,7 @@ class TestReferenceFrame(krpctest.TestCase):
         ang_vel = self.vessel.angular_velocity(self.vessel.surface_reference_frame)
         orbital_angular_speed = 2 * math.pi / self.vessel.orbit.period
         self.assertAlmostEqual(orbital_angular_speed, norm(ang_vel), delta=1e-4)
-        # Locks out the old body.angularVelocity behaviour (~1x rotational speed).
+        # Locks out the body.angularVelocity reading, at one times rotational speed.
         self.assertGreater(norm(ang_vel), 5 * self.kerbin.rotational_speed)
         # No twist about the zenith (x-axis) on an equatorial orbit.
         self.assertAlmostEqual(0.0, ang_vel[0], delta=5e-5)
@@ -1110,9 +1110,9 @@ class TestReferenceFrame(krpctest.TestCase):
         vessel's angular velocity has a large zenith (x-axis) component. A sweep-only
         model (Cross(r, v) / r^2) would miss this term and report ~zero there.
         """
-        # 60 deg inclination, argument of periapsis 90 deg, and epoch = now so the
-        # vessel is teleported to periapsis -- its highest latitude (= inclination),
-        # independent of orbital phase.
+        # 60 deg inclination, argument of periapsis 90 deg, and an epoch of now, so the
+        # vessel is teleported to periapsis, its highest latitude, independent of orbital
+        # phase.
         self.addCleanup(self.set_circular_orbit, "Kerbin", 100000)
         self.set_orbit(
             "Kerbin", 700000, 0.0, 60.0, 0.0, 90.0, 0.0, self.space_center.ut

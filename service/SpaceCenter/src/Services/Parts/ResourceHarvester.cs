@@ -129,9 +129,8 @@ namespace KRPC.SpaceCenter.Services.Parts
             get { return InternalHarvester.IsActivated; }
             set {
                 if (!Deployed) {
-                    // The converter cannot start until the deploy animation has
-                    // finished; defer the requested state until then rather than
-                    // silently dropping it.
+                    // The converter cannot start until the deploy animation has finished,
+                    // so defer the requested state until then
                     if (State == DeployableState.Deploying)
                         ResourceHarvesterAddon.Request (InternalHarvester, InternalAnimator, value);
                     return;

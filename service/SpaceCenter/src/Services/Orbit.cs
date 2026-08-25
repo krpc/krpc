@@ -20,19 +20,16 @@ namespace KRPC.SpaceCenter.Services
         readonly Vessel ownerVessel;
         readonly CelestialBody ownerBody;
         readonly Node ownerNode;
-        // The KSP orbit, held only where it is not the orbit of the thing the object
-        // belongs to and so cannot be asked for again: a patch, or an orbit a caller
-        // handed in. An orbit that has an owner is looked up on it instead, because the
-        // game builds a new one whenever it builds the owner, and the object has to read
-        // the loaded game rather than the state it was made in.
+        // The KSP orbit, held only for an orbit that cannot be looked up again: a patch, or
+        // an orbit a caller handed in. An orbit that has an owner is looked up on the
+        // owner, because the game builds a new one whenever it builds the owner, and the
+        // object has to read the loaded game
         readonly global::Orbit patch;
-        // Whether a client asked for the orbit to be built, rather than it being the
-        // orbit of something in the game or a patch of one.
+        // Whether a client asked for the orbit to be built
         bool constructed;
-        // Whether the orbit has been let go of. A constructed orbit is as valid on the
-        // last frame of the session as on the first, so it stands for nothing the game
-        // can destroy, and the client removing it or going is the only thing that can
-        // say the object is finished with.
+        // Whether the orbit has been let go of. A constructed orbit is as valid on the last
+        // frame of the session as on the first, so only the client removing it or going
+        // marks the object as finished with
         bool released;
 
         internal Orbit (Vessel vessel)
@@ -125,9 +122,9 @@ namespace KRPC.SpaceCenter.Services
                 throw new InvalidOperationException (
                     "Only an orbit created by CreateFromPositionAndVelocity or " +
                     "CreateFromOrbitalElements can be removed");
-            // The addon holds the orbit on its client's behalf and has nothing left to
-            // do for one the client has finished with. Taking it out is also what asks
-            // for the sweep that drops it from the object store.
+            // The addon holds the orbit on its client's behalf and has nothing left to do
+            // for one the client has finished with. Taking it out also requests the sweep
+            // that drops it from the object store
             ConstructedOrbitsAddon.Remove (this);
             released = true;
         }
@@ -271,9 +268,9 @@ namespace KRPC.SpaceCenter.Services
             get { return ownerVessel; }
         }
 
-        // The celestial body this orbit belongs to (the orbiting body, not the parent
-        // it orbits — that is Body), or null if it belongs to something else or the
-        // owner is unknown.
+        // The celestial body this orbit belongs to (the orbiting body, not the parent it
+        // orbits, which is Body), or null if it belongs to something else or the owner is
+        // unknown.
         internal CelestialBody OwnerBody {
             get { return ownerBody; }
         }
@@ -542,9 +539,8 @@ namespace KRPC.SpaceCenter.Services
             orbit.UpdateFromStateVectors (
                 relativePosition.SwapYZ (), relativeVelocity.SwapYZ (), internalBody, ut);
             // Init derives the mean motion, period and anomalies that the orbit is
-            // propagated from; without it the orbit only carries its shape. Stepping it
-            // to the epoch then fills in where along the orbit it has got to, which
-            // nothing else will do for an orbit that no object is following.
+            // propagated from, and without it the orbit only carries its shape. Stepping it
+            // to the epoch then fills in where along the orbit it has got to
             orbit.Init ();
             orbit.UpdateFromUT (ut);
             if (!IsFinite (orbit.semiMajorAxis) || !IsFinite (orbit.eccentricity))
@@ -632,17 +628,16 @@ namespace KRPC.SpaceCenter.Services
                 throw new ArgumentException (
                     "An eccentricity above one is a hyperbola, which needs a negative " +
                     "semi-major axis, got " + semiMajorAxis);
-            // The game states the three orientation angles in degrees, and the mean
-            // anomaly in radians, which is what this reports them in.
+            // The game states the three orientation angles in degrees, and the mean anomaly
+            // in radians, and they are reported the same way
             var orbit = new global::Orbit (
                 GeometryExtensions.ToDegrees (inclination), eccentricity, semiMajorAxis,
                 GeometryExtensions.ToDegrees (longitudeOfAscendingNode),
                 GeometryExtensions.ToDegrees (argumentOfPeriapsis), meanAnomalyAtEpoch,
                 epoch, body.InternalBody);
-            // The constructor derives the mean motion, period and anomalies that the
-            // orbit is propagated from. Stepping it to the epoch then fills in where
-            // along the orbit it has got to, which nothing else will do for an orbit
-            // that no object is following.
+            // The constructor derives the mean motion, period and anomalies that the orbit
+            // is propagated from. Stepping it to the epoch then fills in where along the
+            // orbit it has got to
             orbit.UpdateFromUT (epoch);
             // Nothing solved a following patch for this orbit, and a sphere-of-influence
             // change is reported as one in the past. Zero, the value an orbit is built
@@ -653,9 +648,8 @@ namespace KRPC.SpaceCenter.Services
 
         // The object for an orbit a client asked to be built, recorded as the client's so
         // that it is let go of when the client is. An orbit read off a vessel, a body or a
-        // maneuver node is not recorded: it is named by the thing whose orbit it is, so
-        // the object store gives back one object for it however often it is asked for,
-        // and dropping it when one client goes would take it away from the others.
+        // maneuver node is not recorded: it is named by the thing whose orbit it is, so the
+        // object store gives back one object for it, shared by every client
         static Orbit Constructed (global::Orbit orbit)
         {
             var result = new Orbit (orbit);
