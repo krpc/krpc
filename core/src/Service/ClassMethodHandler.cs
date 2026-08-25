@@ -19,6 +19,7 @@ namespace KRPC.Service
 
         public ClassMethodHandler (Type classType, MethodInfo methodInfo, bool returnIsNullable, IEnumerable<IList<Position>> returnNullablePaths = null)
         {
+            Method = methodInfo;
             invoker = BuildInvoker (classType, methodInfo);
             var parameterList = methodInfo.GetParameters ().Select (x => new ProcedureParameter (x)).ToList ();
             parameterList.Insert (0, new ProcedureParameter (classType, "this"));
@@ -29,6 +30,8 @@ namespace KRPC.Service
         }
 
         public bool HasInstance { get => true; }
+
+        public MethodInfo Method { get; private set; }
 
         /// <summary>
         /// Invokes a method on an object. The first parameter must be the object's instance,

@@ -262,44 +262,178 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// An RPC call.
+        /// The instance the call is made on, and the values of its arguments,
+        /// are fixed when the expression is created.
+        /// A call to a procedure that does not return a value can be used as a
+        /// statement, for example within a <see cref="Block"/>, for its effects.
         /// </summary>
         /// <param name="call"></param>
         [KRPCMethod]
         public static Expression Call(ProcedureCall call)
         {
+            return BuildCall (call, null);
+        }
+
+        /// <summary>
+        /// An RPC call, where some or all of the arguments are computed by expressions.
+        /// The expressions in <paramref name="args"/> provide the call's arguments,
+        /// keyed by the position of the parameter they supply, where position 0 is the
+        /// instance the call is made on for class methods and properties. A position
+        /// with no expression takes the argument encoded in the call, or the
+        /// parameter's default value. This allows, for example, a call to be applied to
+        /// each value of a collection, by passing a function parameter as the instance
+        /// argument.
+        /// </summary>
+        /// <param name="call">The RPC to call.</param>
+        /// <param name="args">Expressions computing the call's arguments, by position.</param>
+        [KRPCMethod]
+        public static Expression CallWithArguments (ProcedureCall call, IDictionary<int, Expression> args)
+        {
+            if (ReferenceEquals (args, null))
+                throw new ArgumentNullException (nameof (args));
+            return BuildCall (call, args);
+        }
+
+        static Expression BuildCall (ProcedureCall call, IDictionary<int, Expression> args)
+        {
             if (ReferenceEquals (call, null))
                 throw new ArgumentNullException (nameof (call));
             var services = Services.Instance;
             var procedure = services.GetProcedureSignature(call);
-            if (!procedure.HasReturnType)
-                throw new InvalidOperationException(
-                    "Cannot use a procedure that does not return a value.");
-            var allArguments = services.GetArguments(procedure, call.Arguments);
-            object instance = null;
-            object[] arguments;
-            if (procedure.Handler.HasInstance) {
-                instance = allArguments[0];
-                arguments = allArguments.Skip(1).ToArray();
-            } else {
-                arguments = allArguments;
+
+            var parameters = procedure.Parameters;
+            var numParameters = parameters.Count;
+            var suppliedValues = new object [numParameters];
+            var isSupplied = new bool [numParameters];
+            foreach (var argument in call.Arguments) {
+                if (argument.Position >= numParameters)
+                    throw new ArgumentException (
+                        "Argument position " + argument.Position + " out of range" +
+                        " for " + procedure.FullyQualifiedName);
+                suppliedValues [argument.Position] = argument.Value;
+                isSupplied [argument.Position] = true;
             }
 
-            var servicesExpr = LinqExpression.Constant(services);
-            var executeCallMethod = typeof(Services).GetMethod(
-                "ExecuteCall", new[] { typeof(Scanner.ProcedureSignature), typeof(object), typeof(object[]) });
-            var procedureExpr = LinqExpression.Constant(procedure);
-            var instanceExpr = LinqExpression.Constant(instance, typeof(object));
-            var argumentsExpr = LinqExpression.Constant(arguments);
+            if (args != null) {
+                foreach (var position in args.Keys) {
+                    if (position < 0 || position >= numParameters)
+                        throw new ArgumentException (
+                            "Argument position " + position + " out of range" +
+                            " for " + procedure.FullyQualifiedName);
+                }
+            }
 
-            var result = LinqExpression.Call(
-                servicesExpr, executeCallMethod,
-                new[] { procedureExpr, instanceExpr, argumentsExpr });
+            // For each parameter, the argument is either an expression or a
+            // constant value known when the expression is created
+            var constValues = new object [numParameters];
+            var exprValues = new LinqExpression [numParameters];
+            for (int i = 0; i < numParameters; i++) {
+                var parameter = parameters [i];
+                Expression argument;
+                if (args != null && args.TryGetValue (i, out argument) &&
+                    !ReferenceEquals (argument, null)) {
+                    exprValues [i] = ConvertArgumentExpression (argument, parameter, procedure);
+                } else if (isSupplied [i]) {
+                    CheckArgumentValue (procedure, parameter, suppliedValues [i]);
+                    constValues [i] = suppliedValues [i];
+                } else if (parameter.HasDefaultValue) {
+                    constValues [i] = parameter.DefaultValue;
+                } else {
+                    throw new ArgumentException (
+                        "Argument not specified for parameter " + parameter.Name +
+                        " in " + procedure.FullyQualifiedName);
+                }
+            }
+
+            // Invoke the procedure's method directly, with typed arguments, so the
+            // arguments stay unboxed and the JIT can inline the method. The game
+            // scene and null return value checks match those made for ordinary RPCs
+            var hasInstance = procedure.Handler.HasInstance;
+            var method = procedure.Handler.Method;
+            var firstArgument = hasInstance ? 1 : 0;
+            var methodParameters = method.GetParameters ();
+            var arguments = new LinqExpression [numParameters - firstArgument];
+            for (int i = firstArgument; i < numParameters; i++) {
+                // A nullable value-type parameter is declared as its underlying type T,
+                // so build the argument as the method's own Nullable<T> parameter type
+                var parameterType = methodParameters [i - firstArgument].ParameterType;
+                var expr = exprValues [i];
+                if (expr == null)
+                    arguments [i - firstArgument] =
+                        LinqExpression.Constant (constValues [i], parameterType);
+                else
+                    arguments [i - firstArgument] = expr.Type == parameterType
+                        ? expr : LinqExpression.Convert (expr, parameterType);
+            }
+            LinqExpression callExpr;
+            if (hasInstance) {
+                var instanceExpr = exprValues [0] ??
+                    LinqExpression.Constant (constValues [0], parameters [0].Spec.Type);
+                callExpr = LinqExpression.Call (instanceExpr, method, arguments);
+            } else {
+                callExpr = LinqExpression.Call (method, arguments);
+            }
+
+            var procedureExpr = LinqExpression.Constant (procedure);
+            var sceneCheck = LinqExpression.Call (
+                typeof (Services).GetMethod (nameof (Services.CheckExpressionGameScene)),
+                procedureExpr);
+
+            if (!procedure.HasReturnType)
+                return new Expression (LinqExpression.Block (typeof (void), sceneCheck, callExpr));
+
             // The declared type of a nullable value-type return is Nullable<T>, which keeps a
             // null representable
             var returnType = procedure.ReturnSpec.DeclaredType;
-            var value = LinqExpression.Convert(
-                LinqExpression.Property(result, "Value"), returnType);
-            return new Expression(value);
+            if (returnType.IsValueType || procedure.ReturnSpec.Nullable)
+                return new Expression (LinqExpression.Block (sceneCheck, callExpr));
+
+            // The return type is a reference type that must not be null; check the
+            // value on every evaluation
+            var returnValue = LinqExpression.Variable (returnType, "returnValue");
+            var returnValueCheck = LinqExpression.Call (
+                typeof (Services).GetMethod (nameof (Services.CheckExpressionReturnValue)),
+                procedureExpr, returnValue);
+            return new Expression (LinqExpression.Block (
+                new [] { returnValue },
+                sceneCheck,
+                LinqExpression.Assign (returnValue, callExpr),
+                returnValueCheck,
+                returnValue));
+        }
+
+        /// <summary>
+        /// Convert an argument expression to the parameter's type, allowing
+        /// upcasts and implicit numeric conversions.
+        /// </summary>
+        static LinqExpression ConvertArgumentExpression (Expression expression, Scanner.ParameterSignature parameter, Scanner.ProcedureSignature procedure)
+        {
+            LinqExpression expr = expression;
+            var type = parameter.Spec.Type;
+            if (expr.Type == type)
+                return expr;
+            if (type.IsAssignableFrom (expr.Type) ||
+                (IsNumericType (expr.Type) && IsNumericType (type) && CommonNumericType (expr.Type, type) == type))
+                return LinqExpression.Convert (expr, type);
+            throw new InvalidOperationException (
+                "Incorrect expression type for parameter " + parameter.Name +
+                " in " + procedure.FullyQualifiedName + ". " +
+                "Expected an expression of type " + type + ", got " + expr.Type);
+        }
+
+        static void CheckArgumentValue (Scanner.ProcedureSignature procedure, Scanner.ParameterSignature parameter, object value)
+        {
+            var type = parameter.Spec.Type;
+            if (value != null && !type.IsInstanceOfType (value))
+                throw new ArgumentException (
+                    "Incorrect argument type for parameter " + parameter.Name +
+                    " in " + procedure.FullyQualifiedName + ". " +
+                    "Expected an argument of type " + type + ", got " + value.GetType ());
+            if (value == null && !parameter.Spec.Nullable)
+                throw new ArgumentException (
+                    "Incorrect argument type for parameter " + parameter.Name +
+                    " in " + procedure.FullyQualifiedName + ". " +
+                    "Expected an argument of type " + type + ", got null");
         }
 
         /// <summary>
