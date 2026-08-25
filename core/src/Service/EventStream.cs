@@ -36,10 +36,27 @@ namespace KRPC.Service
         }
 
         public override void UpdateInternal() {
-            if (continuation != null && continuation())
-                Trigger();
+            if (continuation != null) {
+                try {
+                    if (continuation ())
+                        Trigger ();
+                } catch (YieldException e) {
+                    SetError (new InvalidOperationException (
+                        global::KRPC.Service.KRPC.Expression.YieldedMessage, e));
+                } catch (System.Exception e) {
+                    SetError (e);
+                }
+            }
             if (shouldRemove)
                 Core.Instance.RemoveStream (Id);
+        }
+
+        void SetError (System.Exception exn)
+        {
+            var result = Result;
+            result.Reset ();
+            result.Error = Services.Instance.HandleException (exn);
+            Changed = true;
         }
 
         public void Trigger () {
@@ -55,7 +72,7 @@ namespace KRPC.Service
         public override void Sent () {
             Changed = false;
             var result = Result;
-            if ((bool)result.Value)
+            if (result.HasValue && (bool)result.Value)
                 result.Value = false;
         }
     }

@@ -269,12 +269,46 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Create an event from a server side expression.
+        /// Add a stream that evaluates a server side function on each update and
+        /// streams its value, and return the stream's identifier. The type of the
+        /// stream's values is given by <see cref="Expression.ReturnType"/>.
         /// </summary>
+        /// <remarks>
+        /// Each update is evaluated within a single physics tick, so procedures that
+        /// pause execution and resume on a later tick cannot be used within the
+        /// function. Calling one produces an error on the stream.
+        /// </remarks>
         [KRPCProcedure]
-        public static Messages.Event AddEvent(Expression expression)
+        public static Messages.Stream AddFunctionStream (Expression function, bool start = true)
         {
-            var func = LinqExpression.Lambda<Func<bool>>(expression).Compile();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            var functionStream = new FunctionStream (function);
+            var core = Core.Instance;
+            var stream = new Messages.Stream (core.AddStream (CallContext.Client, functionStream, false));
+            if (start)
+                core.StartStream (CallContext.Client, stream.Id);
+            return stream;
+        }
+
+        /// <summary>
+        /// Create an event from a server side function.
+        /// The function must evaluate to a boolean value.
+        /// </summary>
+        /// <remarks>
+        /// Each update is evaluated within a single physics tick, so procedures that
+        /// pause execution and resume on a later tick cannot be used within the
+        /// function. Calling one produces an error on the event's stream.
+        /// </remarks>
+        [KRPCProcedure]
+        public static Messages.Event AddEvent(Expression function)
+        {
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            if (((LinqExpression)function).Type != typeof(bool))
+                throw new ArgumentException ("The function must evaluate to a boolean value");
+            function.CheckMarkersBound ();
+            var func = LinqExpression.Lambda<Func<bool>>(function).Compile();
             return new Event((evnt) => func()).Message;
         }
 

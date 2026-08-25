@@ -18,6 +18,8 @@ namespace KRPC.Service.KRPC
     public class Expression
     {
         readonly LinqExpression internalExpression;
+
+        Func<object> evaluator;
         bool markersChecked;
 
         internal Expression(LinqExpression expression)
@@ -47,6 +49,60 @@ namespace KRPC.Service.KRPC
 
         internal System.Type Type {
             get { return internalExpression.Type; }
+        }
+
+        /// <summary>
+        /// Reported when a procedure called by a function pauses execution to
+        /// resume on a later tick. Resuming would mean evaluating the function
+        /// again from the start, repeating everything it already did.
+        /// </summary>
+        internal const string YieldedMessage =
+            "A procedure called by the function paused execution, to resume on a " +
+            "later tick. A function is evaluated within a single tick, so a " +
+            "procedure that does this cannot be called from one.";
+
+        /// <summary>
+        /// A delegate that evaluates the expression and returns its value.
+        /// Compiled on first use and reused afterwards, so that evaluating the same
+        /// expression repeatedly pays the cost of compiling it once.
+        /// </summary>
+        internal Func<object> Evaluator {
+            get {
+                if (evaluator == null)
+                    evaluator = LinqExpression.Lambda<Func<object>> (
+                        LinqExpression.Convert (internalExpression, typeof (object))).Compile ();
+                return evaluator;
+            }
+        }
+
+
+        /// <summary>
+        /// The type of the value the expression evaluates to.
+        /// </summary>
+        /// <remarks>
+        /// Throws if the expression evaluates to a value that cannot be sent to a
+        /// client, for example the lazily evaluated collection produced by
+        /// <see cref="Select"/> or <see cref="Where"/>. Use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert such a collection to a concrete one.
+        /// </remarks>
+        [KRPCProperty]
+        public Type ReturnType {
+            get { return new Type (GetValidReturnType ()); }
+        }
+
+
+        /// <summary>
+        /// The expression's type, checked to be a type that can be sent to a client.
+        /// </summary>
+        internal System.Type GetValidReturnType ()
+        {
+            var type = internalExpression.Type;
+            if (!TypeUtils.IsAValidType (type))
+                throw new InvalidOperationException (
+                    "The expression evaluates to a value of type " + type + ", " +
+                    "which cannot be sent to a client. If the value is a lazily " +
+                    "evaluated collection, use ToList or ToSet to convert it.");
+            return type;
         }
 
         /// <summary>
