@@ -825,7 +825,9 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// A named parameter of type double.
+        /// A named parameter, for use within a function.
+        /// Bind a value to it by name using <see cref="Invoke"/>, or by using it
+        /// as a parameter of a <see cref="Lambda"/>.
         /// </summary>
         /// <returns>A named parameter.</returns>
         /// <param name="name">The name of the parameter.</param>
@@ -1253,6 +1255,10 @@ namespace KRPC.Service.KRPC
         /// <summary>
         /// Access an element in a tuple, list or dictionary.
         /// </summary>
+        /// <remarks>
+        /// The elements of a tuple differ in type, so the index into one must be a
+        /// constant integer rather than a computed value.
+        /// </remarks>
         /// <returns>The element.</returns>
         /// <param name="arg">The tuple, list or dictionary.</param>
         /// <param name="index">The index of the element to access.
@@ -1396,10 +1402,12 @@ namespace KRPC.Service.KRPC
 
         /// <summary>
         /// Run a function on every element in the collection.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
         /// </summary>
-        /// <returns>The modified collection.</returns>
+        /// <returns>The collection of function results.</returns>
         /// <param name="arg">The list or set.</param>
-        /// <param name="func">The function.</param>
+        /// <param name="func">The function, taking an element of the collection.</param>
         [KRPCMethod]
         public static Expression Select (Expression arg, Expression func)
         {
@@ -1417,11 +1425,14 @@ namespace KRPC.Service.KRPC
         }
 
         /// <summary>
-        /// Run a function on every element in the collection.
+        /// Keep the elements of a collection for which a boolean predicate function
+        /// returns true.
+        /// The result is a lazily evaluated sequence; use <see cref="ToList"/> or
+        /// <see cref="ToSet"/> to convert it to a concrete collection.
         /// </summary>
-        /// <returns>The modified collection.</returns>
+        /// <returns>The filtered collection.</returns>
         /// <param name="arg">The list or set.</param>
-        /// <param name="func">The function.</param>
+        /// <param name="func">The predicate function, taking an element of the collection.</param>
         [KRPCMethod]
         public static Expression Where (Expression arg, Expression func)
         {
