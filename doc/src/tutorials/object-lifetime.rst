@@ -2,10 +2,10 @@ Object Lifetime
 ===============
 
 Many remote procedures return an object: a vessel, a part, a part module, a maneuver node, a
-reference frame. Such an object is a *name* for something in the game, not a copy of it and
-not a pointer into the game's memory. Every call made through it looks the thing up in the
-game again, which is what lets an object outlive the game tearing down and rebuilding what it
-names, and what lets the server say clearly when the thing is gone.
+reference frame. Each of these identifies something in the game, and every call made through
+it looks up that game state. An object therefore keeps working when the game destroys and
+rebuilds what it identifies, and raises ``KRPC.ObjectDestroyedException`` once it has been
+destroyed for good.
 
 Objects follow the game
 -----------------------
@@ -147,10 +147,9 @@ across a load; removing an alarm or a waypoint leaves the object for it gone. A 
 client creates is not written into the save, so it does not outlive the game state it was
 created in.
 
-A comm link is a hop in a vessel's control path, and reports that path as it is now rather
-than as it was when the object was obtained. A path that no longer takes the hop has lost
-contact rather than destroyed anything, so the link reports itself as not currently connected,
-which is the not-loaded case above, and works again if the path takes it again.
+A comm link is a hop in a vessel's control path, and reports the path as it currently is. If
+the path stops using that hop, the link reports itself as not connected, which is the
+not-loaded case above. It works again once the path uses the hop again.
 
 Where a mod is not installed, or is not ready to be asked, its objects report themselves as
 unavailable rather than gone, for the same reason a part that is not loaded does: nothing that
