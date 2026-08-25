@@ -1,4 +1,8 @@
 ## [v0.7.0] - unreleased
+- Add `krpc::run_function`, which runs a server side function on the server within a single
+  physics tick and returns the value it produces, given as a template argument (#1069)
+- Add `krpc::add_function_stream`, which streams the value a server side function computes,
+  given as a template argument (#1069)
 - Fix a stream of a value whose type a service defines, such as an enumeration or a structure,
   failing to compile (#1094)
 - Support a nullable structure field, list element, tuple item and dictionary value (#1091)

@@ -1,10 +1,25 @@
 ## [v0.7.0] - unreleased
+- Add `Connection.CompileFunction`, which compiles a lambda taking no arguments into a server
+  side function: its remote calls run on the server, and everything else once, when compiling
+  (#1069)
+- Accept operators, conditionals, casts, `System.Math` methods, string operations, collection,
+  tuple and structure constructors, and the LINQ operators (#1069)
+- Throw `FunctionCompilationException` naming an unsupported construct (#1069)
+- Add `Connection.RunFunction`, which runs a server side function on the server within a single
+  physics tick and returns the value it produces (#1069)
+- Add a `Connection.AddStream<T>` overload taking a server side function, which streams the
+  value one computes (#1069)
+- Add `Connection.AddEvent`, which creates an event from a lambda compiled into a server side
+  function (#1069)
+- Compile a lambda passed directly to `RunFunction` or `AddStream`, so a stream can compute any
+  value the compiler accepts (#1069)
+- Add `Function.Defer`, which starts a call to a procedure that pauses execution, such as
+  `SpaceCenter.WarpTo`, without waiting for it (#1069)
 - Support a nullable structure field, list element, tuple item and dictionary value; a
   value-typed one uses the nullable form (`int?`) (#1091)
 - Support structure types, a compound value with named fields a service defines, generated as
   a `struct` with a constructor, `IEquatable`, `IComparable` and the comparison operators over
   its fields (#1066)
-- Stream expressions can be multiplied by a constant (#1062)
 - **Breaking:** Support `null` for any nullable type; nullable value types use the nullable
   form (`int?`) (#1017)
 - Add `Connection.ConnectLocal`, which connects to a server on the same machine over unix
