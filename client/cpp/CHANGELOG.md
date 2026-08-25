@@ -1,34 +1,20 @@
 ## [v0.7.0] - unreleased
-- Support structure types, which a service defines as a compound value with named fields. One
-  is generated as a `struct` carrying its fields as members, with a constructor taking them in
-  the order the structure declares them, and equality, ordering and a `std::hash` over them,
-  comparing its fields in turn as a `std::tuple` of the same values does (#1066)
+- Support structure types, a compound value with named fields a service defines, generated as
+  a `struct` with a constructor, equality, ordering and a `std::hash` over its fields (#1066)
 - Add `krpc::hash_value` and the `krpc::hash` function object, which hash any type the client
-  carries. The standard library hashes neither `std::tuple` nor its containers, which is what a
-  kRPC tuple and the collection types are, so a tuple could not be the key of an unordered
-  container: `std::unordered_set<std::tuple<double, double, double>, krpc::hash>` now can be
-  (#1067)
+  carries, so a tuple or a collection can key an unordered container (#1067)
 - **Breaking:** Support null for any nullable type; nullable non-class values use
   `std::optional`, changing generated signatures (#1017)
-- Add `krpc::connect_local`, which connects to a server on the same machine over unix
-  domain sockets rather than TCP/IP. The connection behaves identically once established
+- Add `krpc::connect_local`, which connects to a server on the same machine over unix domain
+  sockets (#1065)
+- Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for
   (#1065)
-- Add a `timeout` parameter to `krpc::connect`, bounding how long a connection is waited for. A
-  network that drops a connection attempt rather than refusing it otherwise leaves the client
-  waiting indefinitely (#1065)
 - Fix a service with a collection of enumerations in a procedure signature failing to
   compile (#1044)
-- Fix `krpc::Connection::close` failing to link; it was declared but never defined (#1065)
-- Reduce the cost of a remote procedure call. A response is read a block at a time and
-  parsed straight out of the read buffer, the request a call is built into and the response
-  it is answered by are kept from one call to the next, the arguments of a call are sized up
-  front, and the client connections disable Nagle's algorithm. `Client::invoke`,
-  `Client::build_request` and `Client::build_call` name a service and a procedure with
-  `std::string_view`, so a call no longer builds a string for either (#1056)
-- Reduce the cost of a call that carries a collection. A value is read without setting up a
-  protobuf stream for it, the message a collection is carried in is kept from one call to the
-  next rather than allocated and freed for each, and a list is given room for its values up
-  front (#1056)
+- Fix `krpc::Connection::close` failing to link (#1065)
+- Reduce the cost of a remote procedure call, reusing the request and response messages and
+  parsing a response straight out of the read buffer (#1056)
+- Reduce the cost of a call that carries a collection (#1056)
 
 ## [v0.6.0]
 - Update to protobuf v35.1 (#850)

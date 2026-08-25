@@ -1,10 +1,7 @@
 ## [v0.7.0] - unreleased
 
-- An alarm keeps working across a quickload, reading the alarm Kerbal Alarm Clock rebuilt
-  rather than the one it was obtained from, and raises `KRPC.ObjectDestroyedException` once
-  the mod no longer has an alarm with its id, which is what `Alarm.Remove` leaves behind. It
-  reports that it is unavailable, rather than gone, while the mod is not ready. Alarm
-  objects are freed rather than kept for the rest of the session (#1051)
+- An alarm keeps working across a quickload, and raises `KRPC.ObjectDestroyedException` once
+  the mod no longer has an alarm with its id (#1051)
 
 ## [v0.6.0]
 - Make available in all game scenes (#944)

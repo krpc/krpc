@@ -1,34 +1,18 @@
 ## [v0.7.0] - unreleased
-- Support structure types, which a service defines as a compound value with named fields. One
-  is generated as a C struct with a member per field, named for the field it carries (#1066)
-- **Breaking:** Support null for any nullable type; a nullable non-class return adds a `bool*
-  returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)
-- Add `KRPC_COMMUNICATION_TCP`, which builds the library to communicate with a server over
-  TCP/IP rather than over a serial port, leaving the server on its default protocol. A
-  connection is opened with the address and port the server is listening on, held in a
-  `krpc_connection_config_t`, in place of the name of a port. CMake builds of the library ask
-  for it with `-DKRPC_COMMUNICATION_TCP=ON`, which also links the winsock library it needs on
-  Windows (#1055)
-- Add a `tcp` feature to the vcpkg port, which installs the library built to communicate over
-  TCP/IP; `vcpkg install "krpc-cnano[tcp]"` (#1055)
-- Add `KRPC_COMMUNICATION_LOCALSOCKET`, which builds the library to communicate over a unix
-  domain socket with a server on the same machine, opened with the path of the server's RPC
-  socket in place of a serial port name. CMake builds of the library ask for it with
-  `-DKRPC_COMMUNICATION_LOCALSOCKET=ON`, which also links the winsock library it needs on
-  Windows, and the vcpkg port with the `localsocket` feature;
-  `vcpkg install "krpc-cnano[localsocket]"` (#1065)
-- Add `KRPC_SINGLE_CONNECTION`, for a `KRPC_COMMUNICATION_CUSTOM` communication mechanism that
-  opens a connection of its own to each server. Messages are then sent as they are, rather than
-  wrapped in the multiplexed message a serial port needs to say which of the connections it
-  carries a message belongs to (#1055)
-- Reduce the cost of a remote procedure call. A message is sent and received through a buffer
-  rather than a piece at a time, taking a call from tens of reads and writes down to one write
-  and two reads, and a message is measured as it is encoded rather than by a pass over it
-  first (#1056)
-- Add `KRPC_BUFFER_SIZE`, how much of a message to hold in memory while it is written to or
-  read from the connection. It bounds the memory a call costs and never the size of a message,
-  but a message that fits is cheaper to send, so it is worth setting above the largest call a
-  program makes. Defaults to 1024 bytes, and to 128 on Arduino (#1056)
+- Support structure types, generated as a C struct with a member per field (#1066)
+- **Breaking:** Support null for any nullable type; a nullable non-class return adds a
+  `bool* returnValueIsNull` out-parameter and a nullable argument is a pointer (#1017)
+- Add `KRPC_COMMUNICATION_TCP`, building the library to communicate over TCP/IP. A connection
+  is opened with a `krpc_connection_config_t` in place of a port name (#1055)
+- Add a `tcp` feature to the vcpkg port; `vcpkg install "krpc-cnano[tcp]"` (#1055)
+- Add `KRPC_COMMUNICATION_LOCALSOCKET` and a `localsocket` vcpkg feature, building the library
+  to communicate over a unix domain socket (#1065)
+- Add `KRPC_SINGLE_CONNECTION`, for a `KRPC_COMMUNICATION_CUSTOM` mechanism that opens its own
+  connection to each server (#1055)
+- Reduce the cost of a remote procedure call, from tens of reads and writes to one write and
+  two reads (#1056)
+- Add `KRPC_BUFFER_SIZE`, how much of a message to hold in memory while it is sent or
+  received. Defaults to 1024 bytes, and to 128 on Arduino (#1056)
 
 ## [v0.6.0]
 - Distribute via vcpkg (#874)

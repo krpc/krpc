@@ -1,28 +1,19 @@
 ## [v0.7.0] - unreleased
 - Add the `TickHoldTimeout` setting, which bounds how long a client may hold the game on one
-  physics tick using `KRPC.HoldTick` (#1070)
-- The server now updates before the game collects control inputs, so a control input written by
-  a call takes effect on the tick the call is made in rather than on the tick after (#1070)
-- **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum. Compatibility
-  code for older versions of the game has been removed (#1048)
-- Servers can now use the local socket protocol, chosen in the server window like any other. The
-  RPC and stream sockets default to paths in a directory belonging to the user running the game,
-  and no network port is opened (#1065)
+  physics tick (#1070)
+- The server updates before the game collects control inputs, so a control input takes effect
+  on the tick the call is made in (#1070)
+- **Breaking:** KSP 1.12.5 is the minimum supported version, matching the maximum (#1048)
+- Servers can use the local socket protocol, chosen in the server window like any other. No
+  network port is opened (#1065)
 - Fix the end of a long serial port name being neither visible nor editable in the server
-  window; the field now scrolls sideways to follow the caret (#1065)
-- The server is stopped whenever no game is loaded, so a client is disconnected when the player
-  quits to the main menu rather than being left waiting on a call that never returns. It starts
-  again with the next game if it is set to start automatically. State held for clients is released
-  at the same time, so user interface elements no longer stay on the screen for the whole of the
-  main menu (#1041)
+  window (#1065)
+- The server is stopped whenever no game is loaded, so a client is disconnected when the
+  player quits to the main menu (#1041)
 - Fix setting `KRPC.GameScene` from one editor straight to the other leaving the flight camera
-  unable to follow a vessel for the rest of the session. The switch also keeps the vessel that is
-  being constructed now, as the game's own switch editor button does (#1038)
+  unable to follow a vessel for the rest of the session (#1038)
 - Sweep objects whose game objects no longer exist out of the object store when the game
-  loads, quickloads or reverts a game state, or changes scene, when it destroys a part or a
-  vessel, and when a client removes something it owns such as a drawing, a user interface
-  element or a force, so an object that has become useless is let go of promptly rather than
-  at the next load (#1051)
+  loads, changes scene or destroys a part or a vessel (#1051)
 
 ## [v0.6.0]
 - Fix server version reported to clients (read from `KRPC.dll` not `KRPC.Core.dll`) (#848)
