@@ -16,8 +16,8 @@ from krpc.version import __version__
 DEFAULT_ADDRESS = "127.0.0.1"
 DEFAULT_RPC_PORT = 50000
 DEFAULT_STREAM_PORT = 50001
-# An empty path stands for the path the server uses unless it was configured with
-# another, which is worked out when the connection is made rather than on import
+# An empty path stands for the server's own default path, which is worked out when the
+# connection is made
 DEFAULT_RPC_PATH = ""
 DEFAULT_STREAM_PATH = ""
 

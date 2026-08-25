@@ -11,8 +11,8 @@ class TestDocumentation(ServerTestCase, unittest.TestCase):
         super(TestDocumentation, cls).setUpClass()
 
     def check_doc(self, expected: str, obj: object) -> None:
-        # Normalise with cleandoc rather than strip: pre-generated stubs indent
-        # multi-line docstrings, whereas dynamically-created services do not.
+        # Normalize with cleandoc, as pre-generated stubs indent multi-line docstrings
+        # where dynamically-created services do not.
         doc = cast(str, obj.__doc__)
         self.assertEqual(expected, inspect.cleandoc(doc))
 

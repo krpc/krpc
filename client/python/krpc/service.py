@@ -312,7 +312,7 @@ def service_definitions(service: KRPC.Service) -> Iterator[Definition]:
 
         def register(types: Types) -> None:
             # A structure whose fields cannot all be resolved is left without any, so that
-            # whatever names it is skipped rather than the whole service failing to build
+            # whatever names it is skipped and the service still builds
             if not all(is_a_known_type(field.type) for field in struct.fields):
                 warnings.warn(
                     "Skipping the struct %s.%s, as the type of one of its fields is not a "

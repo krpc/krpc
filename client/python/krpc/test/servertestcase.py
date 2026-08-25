@@ -8,9 +8,9 @@ from krpc.client import Client
 class ServerTestCase:
     conn: Client = None  # type: ignore[assignment]
 
-    # How long a connection to a port nothing is listening on is waited for. It is
-    # normally refused at once; where the system drops the attempt instead, this bounds
-    # the wait rather than leaving the test to hang.
+    # The wait for a connection to a port nothing is listening on. It is normally refused
+    # at once, and where the system drops the attempt instead, this bounds the wait so that
+    # the test does not hang.
     CONNECT_TIMEOUT = 10
 
     @classmethod

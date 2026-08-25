@@ -167,8 +167,8 @@ class TestEncodeDecode(unittest.TestCase):
             ]
         )
         value = typ.python_type(count=1, name="jeb", flag=False)
-        # A structure carries the values of its fields in order, which is what a tuple of
-        # those values encodes to
+        # A structure carries the values of its fields in order, the same encoding as a
+        # tuple of those values
         cases: List[Tuple[object, str]] = [(value, "0a01010a04036a65620a0100")]
         self._run_test_encode_value(typ, cases)
         self._run_test_decode_value(typ, cases)

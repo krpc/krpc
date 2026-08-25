@@ -524,8 +524,8 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_special_default_values(self) -> None:
         # The special values of the numeric types survive the round trip from the
-        # declaration in the service, through the generated client, to the server, and
-        # the client's own constants for them are what the defaults apply
+        # declaration in the service, through the generated client, to the server, and the
+        # defaults apply the client's own constants for them
         values = self.conn.test_service.double_special_defaults()
         self.assertTrue(math.isnan(values[0]))
         self.assertEqual(
@@ -568,7 +568,7 @@ class TestClient(ServerTestCase, unittest.TestCase):
 
     def test_unknown_exception_type(self) -> None:
         # An error naming a service or type this client does not know about still reports
-        # what went wrong, rather than failing while building the exception for it
+        # what went wrong, and does not fail while building the exception for it
         for service, name in (
             ("NotAService", "NotAnException"),
             ("KRPC", "NotAnException"),
