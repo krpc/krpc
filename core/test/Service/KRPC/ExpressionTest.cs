@@ -788,6 +788,28 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void DictionariesAreNotCollectionsOfValues ()
+        {
+            var parameter = Expression.Parameter ("x", Type.String ());
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.ToList (dictionary),
+                () => Expression.Select (dictionary, Expression.Lambda (
+                    new List<Expression> { parameter }, parameter)),
+                () => Expression.ForEach (parameter, dictionary, Expression.ListClear (list)),
+                () => Expression.ListAdd (dictionary, Expression.ConstantString ("a"))
+            }) {
+                var exn = Assert.Catch (build);
+                StringAssert.Contains (
+                    "dictionary cannot be used as a collection of values", exn.Message);
+            }
+            // Reading the keys or the values gives a list, and counting works directly
+            Assert.AreEqual (3, Eval<int> (Expression.Count (dictionary)));
+            Assert.AreEqual (
+                new List<string> { "a", "b", "c" },
+                Eval<IList<string>> (Expression.DictionaryKeys (dictionary)));
+        }
+
+        [Test]
         public void Throw ()
         {
             var expr = Expression.Throw (
@@ -1014,6 +1036,29 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void DictionaryKeysAreWidenedNotNarrowed ()
+        {
+            var values = Expression.Variable (
+                "values", Type.DictionaryType (Type.Long (), Type.Int ()));
+            var widened = Expression.BlockWithVariables (
+                new List<Expression> { values },
+                new List<Expression> {
+                    Expression.Assign (values, Expression.CreateEmptyDictionary (
+                        Type.Long (), Type.Int ())),
+                    Expression.DictionarySet (
+                        values, Expression.ConstantInt (1), Expression.ConstantInt (2)),
+                    Expression.Get (values, Expression.ConstantInt (1))
+                });
+            Assert.AreEqual (2, Eval<int> (widened));
+
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Get (
+                    Expression.CreateEmptyDictionary (Type.UInt (), Type.Int ()),
+                    Expression.ConstantInt (1)));
+            StringAssert.Contains ("No implicit conversion", exn.Message);
+        }
+
+        [Test]
         public void AssignedValuesAreWidenedNotNarrowed ()
         {
             var total = Expression.Variable ("total", Type.Double ());
@@ -1129,6 +1174,37 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void ReturnOfAValuelessExpression ()
+        {
+            var statement = Expression.Call (BuildProcedureCall (
+                "ProcedureSingleArgNoReturn", new Argument (0, "foo")));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Return (statement));
+            StringAssert.Contains ("must be given a value", exn.Message);
+        }
+
+        [Test]
+        public void GetWithoutAnIndex ()
+        {
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentNullException> (
+                () => Expression.Get (tuple, null));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentNullException> (
+                () => Expression.Get (list, null));
+        }
+
+        [Test]
+        public void IndexesMustBeIntegers ()
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Get (list, Expression.ConstantDouble (0)));
+            StringAssert.Contains ("Expected an integer", exn.Message);
+            var numbers = Expression.Variable ("numbers", Type.ListType (Type.Int ()));
+            Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.ListSet (
+                    numbers, Expression.ConstantDouble (0), Expression.ConstantInt (1)));
+        }
+
+        [Test]
         public void ConstantObject ()
         {
             var obj = new global::KRPC.Test.Service.TestService.TestClass ("foo");
@@ -1138,6 +1214,47 @@ namespace KRPC.Test.Service.KRPC
             Assert.AreSame (obj, Eval<global::KRPC.Test.Service.TestService.TestClass> (expr));
             Assert.IsTrue (Eval<bool> (Expression.Equal (
                 Expression.ConstantObject (id), Expression.ConstantObject (id))));
+        }
+
+        [Test]
+        public void OperationsThatDoNotApplyAreReported ()
+        {
+            var strings = Expression.CreateList (new List<Expression> {
+                Expression.ConstantString ("a"),
+                Expression.ConstantString ("b")
+            });
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Sum (strings));
+            StringAssert.Contains ("Sum is not defined", exn.Message);
+
+            exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Get (Expression.ConstantInt (1), Expression.ConstantInt (0)));
+            StringAssert.Contains ("accessed by index", exn.Message);
+
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.Lambda (
+                    new List<Expression> { Expression.ConstantInt (1) },
+                    Expression.ConstantInt (2)));
+        }
+
+        [Test]
+        public void CollectionValuesMustShareAType ()
+        {
+            var mixed = new List<Expression> {
+                Expression.ConstantInt (1),
+                Expression.ConstantString ("a")
+            };
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateList (mixed));
+            StringAssert.Contains ("values of a list", exn.Message);
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateSet (new HashSet<Expression> (mixed)));
+            Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateDictionary (
+                    mixed, new List<Expression> {
+                        Expression.ConstantInt (1),
+                        Expression.ConstantInt (2)
+                    }));
         }
 
         [Test]
@@ -1162,6 +1279,119 @@ namespace KRPC.Test.Service.KRPC
                                 store.AddInstance (Expression.ConstantDouble (-0.0)));
             Assert.AreNotEqual (store.AddInstance (Expression.ConstantFloat (0)),
                                 store.AddInstance (Expression.ConstantFloat (-0.0f)));
+        }
+
+        [Test]
+        public void StringIsNotACollection ()
+        {
+            var text = Expression.ConstantString ("hello");
+            var builders = new System.Func<Expression> [] {
+                () => Expression.Count (text),
+                () => Expression.ToList (text),
+                () => Expression.Contains (text, Expression.ConstantString ("h")),
+                () => Expression.Get (text, Expression.ConstantInt (0))
+            };
+            foreach (var build in builders) {
+                var builder = build;
+                var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                    () => builder ());
+                StringAssert.Contains ("A string is not a collection", exn.Message);
+            }
+        }
+
+        [Test]
+        public void BytesIsNotACollection ()
+        {
+            var data = Expression.Variable ("data", Type.Bytes ());
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.Count (data),
+                () => Expression.ToList (data),
+                () => Expression.First (data),
+                () => Expression.Contains (data, Expression.ConstantInt (0))
+            }) {
+                var exn = Assert.Catch (build);
+                StringAssert.Contains ("A bytes value is not a collection", exn.Message);
+            }
+        }
+
+        [Test]
+        public void OperationsGivenAValueInPlaceOfAFunction ()
+        {
+            var x = Expression.Parameter ("x", Type.Int ());
+            var func = Expression.Lambda (new List<Expression> { x }, x);
+            var value = Expression.ConstantInt (1);
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.Select (list, value),
+                () => Expression.SelectMany (list, value),
+                () => Expression.Where (list, value),
+                () => Expression.OrderBy (list, value),
+                () => Expression.GroupBy (list, value),
+                () => Expression.All (list, value),
+                () => Expression.Any (list, value),
+                () => Expression.BuildDictionary (list, value, func),
+                () => Expression.BuildDictionary (list, func, value),
+                () => Expression.Zip (list, list, value),
+                // A function of the wrong arity is reported the same way
+                () => Expression.Zip (list, list, func)
+            }) {
+                var exn = Assert.Catch (build);
+                StringAssert.Contains ("Expected a function taking", exn.Message);
+            }
+            // SelectMany takes a function producing a collection
+            var flatten = Assert.Catch (() => Expression.SelectMany (list, func));
+            StringAssert.Contains ("must return a collection", flatten.Message);
+        }
+
+        [Test]
+        public void OperationsGivenNoFunction ()
+        {
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.Select (list, null),
+                () => Expression.SelectMany (list, null),
+                () => Expression.OrderBy (list, null),
+                () => Expression.All (list, null),
+                () => Expression.Any (list, null),
+                () => Expression.Zip (list, list, null)
+            })
+                Assert.Throws<global::KRPC.Service.KRPC.ArgumentNullException> (build);
+        }
+
+        [Test]
+        public void BlockVariablesMustBeVariables ()
+        {
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.BlockWithVariables (
+                    new List<Expression> { Expression.ConstantInt (1) },
+                    new List<Expression> { Expression.ConstantInt (2) }));
+            StringAssert.Contains ("Expected a variable, created with Variable", exn.Message);
+        }
+
+        [Test]
+        public void CollectionsGivenANullElement ()
+        {
+            var one = Expression.ConstantInt (1);
+            foreach (var build in new List<TestDelegate> {
+                () => Expression.CreateTuple (new List<Expression> { one, null }),
+                () => Expression.CreateList (new List<Expression> { one, null }),
+                () => Expression.CreateSet (new HashSet<Expression> { one, null }),
+                () => Expression.CreateDictionary (
+                    new List<Expression> { Expression.ConstantString ("a"), null },
+                    new List<Expression> { one, one }),
+                () => Expression.CreateDictionary (
+                    new List<Expression> { Expression.ConstantString ("a") },
+                    new List<Expression> { null }),
+                () => Expression.CreateStruct (
+                    Type.StructType ("TestService", "TestNestedStruct"),
+                    new List<Expression> { null, one }),
+                () => Expression.StringConcat (new List<Expression> { one, null }),
+                () => Expression.Block (new List<Expression> { one, null }),
+                () => Expression.BlockWithVariables (
+                    new List<Expression> { Expression.Variable ("x", Type.Int ()) },
+                    new List<Expression> { one, null })
+            }) {
+                var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (build);
+                StringAssert.Contains ("cannot be null", exn.Message);
+            }
         }
 
         [Test]
@@ -1505,11 +1735,46 @@ namespace KRPC.Test.Service.KRPC
         }
 
         [Test]
+        public void InvokeArgumentsAreWidenedNotNarrowed ()
+        {
+            var x = Expression.Parameter ("x", Type.Double ());
+            var widening = Expression.Lambda (
+                new List<Expression> { x },
+                Expression.Multiply (x, Expression.ConstantDouble (2)));
+            Assert.AreEqual (6.0, Eval<double> (Expression.Invoke (
+                widening, new Dictionary<string, Expression> {
+                    { "x", Expression.ConstantInt (3) }})));
+
+            var count = Expression.Parameter ("count", Type.Int ());
+            var narrowing = Expression.Lambda (new List<Expression> { count }, count);
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.InvalidOperationException> (
+                () => Expression.Invoke (narrowing, new Dictionary<string, Expression> {
+                    { "count", Expression.ConstantDouble (1.5) }}));
+            StringAssert.Contains ("No implicit conversion", exn.Message);
+        }
+
+        [Test]
         public void CreateTuple ()
         {
             Assert.AreEqual (
                 System.Tuple.Create (1, false),
                 Eval<System.Tuple<int, bool>> (tuple));
+        }
+
+        [Test]
+        public void CreateTupleElementCount ()
+        {
+            var elements = new List<Expression> ();
+            for (var i = 0; i < 7; i++)
+                elements.Add (Expression.ConstantInt (i));
+            Assert.DoesNotThrow (() => Expression.CreateTuple (elements));
+            elements.Add (Expression.ConstantInt (7));
+            var exn = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateTuple (elements));
+            StringAssert.Contains ("cannot have more than 7 elements", exn.Message);
+            var empty = Assert.Throws<global::KRPC.Service.KRPC.ArgumentException> (
+                () => Expression.CreateTuple (new List<Expression> ()));
+            StringAssert.Contains ("at least one element", empty.Message);
         }
 
         [Test]
