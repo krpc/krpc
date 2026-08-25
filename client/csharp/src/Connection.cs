@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Net;
@@ -28,6 +29,17 @@ namespace KRPC.Client
         readonly Request request = new Request ();
         readonly ProcedureCall call = new ProcedureCall ();
         readonly List<Argument> callArguments = new List<Argument> ();
+
+        // Building the KRPC.Type object that names a type costs a round trip. Every
+        // function compiled on this connection shares the objects built for it
+        readonly IDictionary<System.Type, Services.KRPC.Type> expressionRemoteTypes =
+            new ConcurrentDictionary<System.Type, Services.KRPC.Type> ();
+
+        // The type of the values each server side function evaluates to, by the function's
+        // object id, and null for one that evaluates to no value. Introspecting a type costs a
+        // round trip per property, and a function's return type does not change
+        internal readonly ConcurrentDictionary<ulong, global::KRPC.Schema.KRPC.Type> functionReturnTypes =
+            new ConcurrentDictionary<ulong, global::KRPC.Schema.KRPC.Type> ();
 
         internal StreamManager StreamManager {
             get;
@@ -218,13 +230,29 @@ namespace KRPC.Client
         /// <summary>
         /// Create a new stream from the given lambda expression.
         /// Returns a stream object that can be used to obtain the latest value of the stream.
-        /// The expression must be a method call or property access, and may multiply that
-        /// call by a constant.
+        /// A lambda consisting of a single method call or property accessor is streamed as
+        /// that remote procedure call. Any other lambda is compiled into a server side
+        /// function, evaluated on the server on each stream update.
         /// </summary>
         public Stream<TResult> AddStream<TResult> (LambdaExpression expression)
         {
             CheckDisposed ();
-            return AddStreamFromExpression<TResult> (expression);
+            if (ReferenceEquals (expression, null))
+                throw new ArgumentNullException (nameof (expression));
+            ProcedureCall call = null;
+            Expression rpc = null;
+            try {
+                call = GetCall (expression, out rpc);
+            } catch (ArgumentException) {
+                // Not a single remote procedure call; compile it into a server side function
+            }
+            if (call != null)
+                return new Stream<TResult> (
+                    this, call, ProcedureSpecs.ReturnSpec (GetRPCAttribute (rpc), rpc.Type));
+            // A compiled lambda evaluates to values of the lambda's own result type
+            var decodedType = DecodedType (typeof (TResult));
+            var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes);
+            return AddCheckedStream<TResult> (compiled, decodedType);
         }
 
         /// <summary>
@@ -232,21 +260,173 @@ namespace KRPC.Client
         /// </summary>
         public Stream<TResult> AddStream<TResult> (Expression<Func<TResult>> expression)
         {
-            CheckDisposed ();
-            return AddStreamFromExpression<TResult> (expression);
+            return AddStream<TResult> ((LambdaExpression)expression);
         }
 
-        Stream<TResult> AddStreamFromExpression<TResult> (LambdaExpression expression)
+        /// <summary>
+        /// Compile a lambda expression, taking no arguments, into a server side function
+        /// that computes the same result on the server. Remote procedure calls made by the
+        /// lambda are re-invoked on each evaluation; other values are captured when the
+        /// function is compiled.
+        /// </summary>
+        public Services.KRPC.Expression CompileFunction<TResult> (Expression<Func<TResult>> expression)
         {
-            Expression rpc;
-            var call = GetCall (expression, out rpc);
-            var returnSpec = ProcedureSpecs.ReturnSpec (GetRPCAttribute (rpc), rpc.Type);
-            if (ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
-                return new Stream<TResult> (this, call, returnSpec);
+            CheckDisposed ();
+            return FunctionCompiler.Compile (this, expression, expressionRemoteTypes);
+        }
 
-            var convert = ExpressionUtils.CompileTransform<TResult> (expression.Body, rpc);
-            return new Stream<TResult> (this, call, returnSpec, convert,
-                ExpressionUtils.FoldedFactor (expression.Body, rpc));
+        /// <summary>
+        /// Create an event from a boolean lambda expression, compiled into a server side
+        /// function that is evaluated on the server on each stream update.
+        /// </summary>
+        public Event AddEvent (Expression<Func<bool>> expression)
+        {
+            CheckDisposed ();
+            var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes);
+            return Services.KRPC.ExtensionMethods.KRPC (this).AddEvent (compiled);
+        }
+
+        /// <summary>
+        /// Run a function on the server, within a single physics tick, and return the
+        /// value it produces. The type parameter must correspond to the function's
+        /// return type, and must be a reference type or a nullable value type for a
+        /// function whose value is null.
+        /// </summary>
+        public TResult RunFunction<TResult> (Services.KRPC.Expression function)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            CheckReturnType<TResult> (function);
+            return RunCheckedFunction<TResult> (function, typeof (TResult));
+        }
+
+        TResult RunCheckedFunction<TResult> (Services.KRPC.Expression function, System.Type decodedType)
+        {
+            var data = Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (function);
+            // A null value is signaled out of band by is_null, which the stub reports as
+            // no data at all
+            if (data == null) {
+                if (typeof (TResult).IsValueType &&
+                    System.Nullable.GetUnderlyingType (typeof (TResult)) == null)
+                    throw new InvalidOperationException (
+                        "The function produced a null value, which " + typeof (TResult) +
+                        " cannot hold. Use a nullable type for the result.");
+                return default (TResult);
+            }
+            return (TResult)Encoder.Decode (
+                ByteString.CopyFrom (data), TypeSpec.For (decodedType), this);
+        }
+
+        /// <summary>
+        /// Run a function on the server, within a single physics tick, and return the
+        /// value it produces. The lambda expression is compiled using
+        /// <see ref="CompileFunction"/>.
+        /// </summary>
+        public TResult RunFunction<TResult> (Expression<Func<TResult>> expression)
+        {
+            // A compiled lambda evaluates to values of the lambda's own result type
+            var decodedType = DecodedType (typeof (TResult));
+            return RunCheckedFunction<TResult> (CompileFunction (expression), decodedType);
+        }
+
+        /// <summary>
+        /// Run a function with no result on the server, within a single physics tick,
+        /// for its effects. The lambda expression is compiled using
+        /// <see ref="CompileFunction"/>.
+        /// </summary>
+        public void RunFunction (Expression<Action> expression)
+        {
+            CheckDisposed ();
+            var compiled = FunctionCompiler.Compile (this, expression, expressionRemoteTypes);
+            Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (compiled);
+        }
+
+        /// <summary>
+        /// Run a function with no result on the server, within a single physics tick,
+        /// for its effects.
+        /// </summary>
+        public void RunFunction (Services.KRPC.Expression function)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            Services.KRPC.ExtensionMethods.KRPC (this).RunFunction (function);
+        }
+
+        /// <summary>
+        /// Create a stream from a server side function. On each update, the value
+        /// of the stream is the result of evaluating the function on the server.
+        /// The type parameter must correspond to the function's return type.
+        /// </summary>
+        public Stream<TResult> AddStream<TResult> (Services.KRPC.Expression function)
+        {
+            CheckDisposed ();
+            if (ReferenceEquals (function, null))
+                throw new ArgumentNullException (nameof (function));
+            CheckReturnType<TResult> (function);
+            return AddCheckedStream<TResult> (function, typeof (TResult));
+        }
+
+        Stream<TResult> AddCheckedStream<TResult> (Services.KRPC.Expression function, System.Type decodedType)
+        {
+            var stream = Services.KRPC.ExtensionMethods.KRPC (this).AddFunctionStream (function, false);
+            return new Stream<TResult> (this, stream.Id, TypeSpec.For (decodedType));
+        }
+
+        /// <summary>
+        /// The type a compiled lambda's values are decoded as. The compiler converts a lazily
+        /// evaluated sequence to a list, which an IEnumerable holds.
+        /// </summary>
+        static System.Type DecodedType (System.Type resultType)
+        {
+            if (!resultType.IsGenericType)
+                return resultType;
+            var definition = resultType.GetGenericTypeDefinition ();
+            if (definition == typeof (IEnumerable<>))
+                return typeof (IList<>).MakeGenericType (resultType.GetGenericArguments ());
+            if (definition == typeof (System.Linq.IOrderedEnumerable<>))
+                throw new FunctionCompilationException (
+                    "The function evaluates to an ordered sequence, which is sent as a list. " +
+                    "Call ToList() to evaluate to the list.");
+            return resultType;
+        }
+
+        /// <summary>
+        /// Throw unless the type parameter holds the values the function evaluates to.
+        /// </summary>
+        void CheckReturnType<TResult> (Services.KRPC.Expression function)
+        {
+            global::KRPC.Schema.KRPC.Type type;
+            if (!functionReturnTypes.TryGetValue (function.id, out type)) {
+                type = function.HasReturnType ? BuildType (function.ReturnType) : null;
+                functionReturnTypes [function.id] = type;
+            }
+            if (type == null)
+                throw new InvalidOperationException (
+                    "The function does not evaluate to a value. Run it with RunFunction " +
+                    "without a type parameter.");
+            if (!FunctionCompiler.Describes (typeof (TResult), type))
+                throw new InvalidOperationException (
+                    "The function evaluates to a value that " + typeof (TResult) + " cannot hold");
+        }
+
+        /// <summary>
+        /// The protocol buffer message describing a type, built by introspecting it on the server.
+        /// </summary>
+        static global::KRPC.Schema.KRPC.Type BuildType (Services.KRPC.Type remote)
+        {
+            var type = new global::KRPC.Schema.KRPC.Type {
+                Code = (global::KRPC.Schema.KRPC.Type.Types.TypeCode)(int)remote.Code
+            };
+            var service = remote.Service;
+            if (service.Length > 0) {
+                type.Service = service;
+                type.Name = remote.Name;
+            }
+            foreach (var element in remote.Types)
+                type.Types_.Add (BuildType (element));
+            return type;
         }
 
         /// <summary>
@@ -344,10 +524,7 @@ namespace KRPC.Client
         public static ProcedureCall GetCall (LambdaExpression expression)
         {
             Expression rpc;
-            var call = GetCall (expression, out rpc);
-            if (!ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
-                throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
-            return call;
+            return GetCall (expression, out rpc);
         }
 
         static ProcedureCall GetCall (LambdaExpression expression, out Expression rpc)
@@ -355,12 +532,9 @@ namespace KRPC.Client
             if (ReferenceEquals (expression, null))
                 throw new ArgumentNullException (nameof (expression));
 
-            if (!ExpressionUtils.TryFindStreamedRpc (expression.Body, out rpc))
-                throw new ArgumentException ("Invalid expression. Cannot multiply two remote calls.");
-            if (rpc == null)
+            if (!ExpressionUtils.TryFindStreamedRpc (expression.Body, out rpc) || rpc == null ||
+                !ExpressionUtils.IsIdentityWrapper (expression.Body, rpc))
                 throw new ArgumentException ("Invalid expression. Must consist of a method call or property accessor only.");
-            if (!ExpressionUtils.IsConstantMultiplyWrapper (expression.Body, rpc))
-                throw new ArgumentException ("Invalid expression. The factor must be a constant.");
 
             var methodCallExpression = rpc as MethodCallExpression;
             if (methodCallExpression != null)
